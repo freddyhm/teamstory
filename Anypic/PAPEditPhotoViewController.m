@@ -76,13 +76,34 @@
     layer.shadowOpacity = 0.5f;
     layer.shouldRasterize = YES;
     
-    // Added filter - testing core image manipulation
-    CIImage *inputImage = [CIImage imageWithCGImage:[self.image CGImage]];
-    CIFilter *filter = [CIFilter filterWithName:@"CIPhotoEffectNoir"];
-    [filter setValue:inputImage forKey:kCIInputImageKey];
-    UIImage *outputImage = [UIImage imageWithCIImage:filter.outputImage];
+    /****Start of Filters*****/
     
-    [photoImageView setImage:outputImage];
+    // init filters, orginal image, and filtered images
+    NSArray *filters = @[@"CIPhotoEffectChrome", @"CIPhotoEffectFade", @"CIPhotoEffectInstant",
+                 @"CIPhotoEffectMono", @"CIPhotoEffectNoir", @"CIPhotoEffectProcess",
+                 @"CIPhotoEffectTonal", @"CIPhotoEffectTransfer"];
+    
+    // create corelmage type with image's core graphics
+    CIImage *originalImage = [CIImage imageWithCGImage:[self.image CGImage]];
+    NSMutableArray *filteredImages = [NSMutableArray new];
+    
+    for(NSString *filterName in filters) {
+        
+        // Filter the image
+        CIFilter *filter = [CIFilter filterWithName:filterName];
+        [filter setValue:originalImage forKey:kCIInputImageKey];
+         UIImage *filteredImage = [UIImage imageWithCIImage:filter.outputImage];
+        
+        // add to our filtered array
+        [filteredImages addObject:filteredImage];
+    }
+    
+    // set our filtered image
+    [photoImageView setImage:filteredImages[2]];
+    
+    
+    /****End of Filters*****/
+    
     
     [self.scrollView addSubview:photoImageView];
     
