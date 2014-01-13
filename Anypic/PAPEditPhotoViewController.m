@@ -76,6 +76,14 @@
     layer.shadowOpacity = 0.5f;
     layer.shouldRasterize = YES;
     
+    // Added filter - testing core image manipulation
+    CIImage *inputImage = [CIImage imageWithCGImage:[self.image CGImage]];
+    CIFilter *filter = [CIFilter filterWithName:@"CIPhotoEffectNoir"];
+    [filter setValue:inputImage forKey:kCIInputImageKey];
+    UIImage *outputImage = [UIImage imageWithCIImage:filter.outputImage];
+    
+    [photoImageView setImage:outputImage];
+    
     [self.scrollView addSubview:photoImageView];
     
     CGRect footerRect = [PAPPhotoDetailsFooterView rectForView];
@@ -90,6 +98,7 @@
 }
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
 
     [self.navigationItem setHidesBackButton:YES];
@@ -102,6 +111,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 
     [self shouldUploadImage:self.image];
+    
+
 }
 
 #pragma mark - UITextFieldDelegate
@@ -121,7 +132,8 @@
 
 #pragma mark - ()
 
-- (BOOL)shouldUploadImage:(UIImage *)anImage {    
+- (BOOL)shouldUploadImage:(UIImage *)anImage {
+    
     UIImage *resizedImage = [anImage resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(560.0f, 560.0f) interpolationQuality:kCGInterpolationHigh];
     UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:10.0f interpolationQuality:kCGInterpolationDefault];
     

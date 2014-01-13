@@ -221,6 +221,7 @@
 		C4F102E2156C58440061BC3E /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4F102DF156C58440061BC3E /* Entitlements.plist */; };
 		C4F102E7156C58570061BC3E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C4F102E5156C58570061BC3E /* InfoPlist.strings */; };
 		C4F102EF156C58E00061BC3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102EC156C58E00061BC3E /* main.m */; };
+		D50CD6B71884763B0077099F /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D50CD6B61884763B0077099F /* CoreImage.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -479,6 +480,7 @@
 		C4F102EB156C58E00061BC3E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		C4F102EC156C58E00061BC3E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
 		C4F102ED156C58E00061BC3E /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = SOURCE_ROOT; };
+		D50CD6B61884763B0077099F /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -486,6 +488,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D50CD6B71884763B0077099F /* CoreImage.framework in Frameworks */,
 				C4C9B94816B877AE00BB2862 /* AdSupport.framework in Frameworks */,
 				C4C9B94916B877AE00BB2862 /* Social.framework in Frameworks */,
 				C4C9B94516B877AE00BB2862 /* Accounts.framework in Frameworks */,
@@ -534,6 +537,7 @@
 		09ABC07013A1D52D009C3FCF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D50CD6B61884763B0077099F /* CoreImage.framework */,
 				C4C9B94616B877AE00BB2862 /* AdSupport.framework */,
 				C4C9B94716B877AE00BB2862 /* Social.framework */,
 				C4CD219815ED790500BC387F /* libsqlite3.dylib */,
