@@ -13,7 +13,7 @@
 #import "PAPEditPhotoViewController.h"
 
 
-@interface PAPProfileSettingViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, MBProgressHUDDelegate, UITextFieldDelegate, UINavigationControllerDelegate> {
+@interface PAPProfileSettingViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, MBProgressHUDDelegate, UITextFieldDelegate, UINavigationControllerDelegate, UIActionSheetDelegate> {
     
     MBProgressHUD *HUD;
     MBProgressHUD *refreshHUD;

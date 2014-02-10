@@ -16,11 +16,11 @@
 
     self = [super initWithCustomView:settingsButton];
     if (self) {
-        [settingsButton setBackgroundImage:[UIImage imageNamed:@"ButtonSettings.png"] forState:UIControlStateNormal];
+        [settingsButton setFrame:CGRectMake(0.0f, 0.0f, 22.0f, 22.0f)];
+        [settingsButton setImage:[UIImage imageNamed:@"button_setting.png"] forState:UIControlStateNormal];
+        [settingsButton setImage:[UIImage imageNamed:@"button_setting_selected.png"] forState:UIControlStateHighlighted];
         [settingsButton addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
-        [settingsButton setFrame:CGRectMake(0.0f, 0.0f, 35.0f, 32.0f)];
-        [settingsButton setImage:[UIImage imageNamed:@"ButtonImageSettings.png"] forState:UIControlStateNormal];
-        [settingsButton setImage:[UIImage imageNamed:@"ButtonImageSettingsSelected.png"] forState:UIControlStateHighlighted];
+        [settingsButton setBackgroundImage:[UIImage imageNamed:nil] forState:UIControlStateNormal];
     }
     
     return self;

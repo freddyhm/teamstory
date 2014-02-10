@@ -61,10 +61,10 @@
 - (void)loadView {
     self.scrollView = [[UIScrollView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
     self.scrollView.delegate = self;
-    self.scrollView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundLeather.png"]];
+    self.scrollView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     self.view = self.scrollView;
     
-    UIImageView *photoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20.0f, 42.0f, 280.0f, 280.0f)];
+    UIImageView *photoImageView = [[UIImageView alloc] initWithFrame:CGRectMake( 7.5f, 42.0f, 305.0f, 305.0f)];
     [photoImageView setBackgroundColor:[UIColor blackColor]];
     [photoImageView setImage:self.image];
     [photoImageView setContentMode:UIViewContentModeScaleAspectFit];
@@ -75,35 +75,6 @@
     layer.shadowOffset = CGSizeMake(0.0f, 2.0f);
     layer.shadowOpacity = 0.5f;
     layer.shouldRasterize = YES;
-    
-    /****Start of Filters*****/
-    
-    // init filters, orginal image, and filtered images
-    NSArray *filters = @[@"CIPhotoEffectChrome", @"CIPhotoEffectFade", @"CIPhotoEffectInstant",
-                 @"CIPhotoEffectMono", @"CIPhotoEffectNoir", @"CIPhotoEffectProcess",
-                 @"CIPhotoEffectTonal", @"CIPhotoEffectTransfer"];
-    
-    // create corelmage type with image's core graphics
-    CIImage *originalImage = [CIImage imageWithCGImage:[self.image CGImage]];
-    NSMutableArray *filteredImages = [NSMutableArray new];
-    
-    for(NSString *filterName in filters) {
-        
-        // Filter the image
-        CIFilter *filter = [CIFilter filterWithName:filterName];
-        [filter setValue:originalImage forKey:kCIInputImageKey];
-         UIImage *filteredImage = [UIImage imageWithCIImage:filter.outputImage];
-        
-        // add to our filtered array
-        [filteredImages addObject:filteredImage];
-    }
-    
-    // set our filtered image
-    [photoImageView setImage:filteredImages[2]];
-    
-    
-    /****End of Filters*****/
-    
     
     [self.scrollView addSubview:photoImageView];
     
@@ -119,7 +90,6 @@
 }
 
 - (void)viewDidLoad {
-    
     [super viewDidLoad];
 
     [self.navigationItem setHidesBackButton:YES];
@@ -132,8 +102,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 
     [self shouldUploadImage:self.image];
-    
-
 }
 
 #pragma mark - UITextFieldDelegate
@@ -153,8 +121,7 @@
 
 #pragma mark - ()
 
-- (BOOL)shouldUploadImage:(UIImage *)anImage {
-    
+- (BOOL)shouldUploadImage:(UIImage *)anImage {    
     UIImage *resizedImage = [anImage resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(560.0f, 560.0f) interpolationQuality:kCGInterpolationHigh];
     UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:10.0f interpolationQuality:kCGInterpolationDefault];
     

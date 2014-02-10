@@ -16,6 +16,7 @@
 #import "PAPActivityFeedViewController.h"
 #import "PAPPhotoDetailsViewController.h"
 #import "PAPProfileSettingViewController.h"
+#import "discoverPageViewController.h"
 
 
 
@@ -31,6 +32,7 @@
 @property (nonatomic, strong) PAPAccountViewController *accountViewController_tabBar;
 @property (nonatomic, strong) PAPLogInViewController *loginviewcontroller;
 @property (nonatomic, strong) emailLoginViewController *emailoginviewcontroller;
+@property (nonatomic, strong) discoverPageViewController *discoverViewController;
 
 
 @property (nonatomic, strong) MBProgressHUD *hud;
@@ -59,6 +61,7 @@
 @synthesize accountViewController_tabBar;
 @synthesize loginviewcontroller;
 @synthesize emailoginviewcontroller;
+@synthesize discoverViewController;
 
 @synthesize hud;
 @synthesize autoFollowTimer;
@@ -255,12 +258,14 @@
 
 - (void)presentTabBarController {
     NSLog(@"Welcome TeamStory");
+    NSInteger imageOffset = 6.0f;
+    
     self.tabBarController = [[PAPTabBarController alloc] init];
     self.homeViewController = [[PAPHomeViewController alloc] initWithStyle:UITableViewStylePlain];
     [self.homeViewController setFirstLaunch:firstLaunch];
     self.activityViewController = [[PAPActivityFeedViewController alloc] initWithStyle:UITableViewStylePlain];
-    self.profileSettingViewController = [[PAPProfileSettingViewController alloc] init];
     self.accountViewController_tabBar = [[PAPAccountViewController alloc] initWithStyle:UITableViewStylePlain];
+    self.discoverViewController = [[discoverPageViewController alloc] initWithStyle:UITableViewStylePlain];
     
     // special user setting function for accountviewcontroller.
     [accountViewController_tabBar setUser:[PFUser currentUser]];
@@ -268,23 +273,29 @@
     UINavigationController *homeNavigationController = [[UINavigationController alloc] initWithRootViewController:self.homeViewController];
     UINavigationController *emptyNavigationController = [[UINavigationController alloc] init];
     UINavigationController *activityFeedNavigationController = [[UINavigationController alloc] initWithRootViewController:self.activityViewController];
-    UINavigationController *perksNavigationController = [[UINavigationController alloc] init];
+    UINavigationController *perksNavigationController = [[UINavigationController alloc] initWithRootViewController:self.discoverViewController];
     UINavigationController *accountNavigationController = [[UINavigationController alloc] initWithRootViewController:self.accountViewController_tabBar];
 
     
-    UITabBarItem *homeTabBarItem = [[UITabBarItem alloc] initWithTitle:@"Home" image:nil tag:0];
+    UITabBarItem *homeTabBarItem = [[UITabBarItem alloc] init];
     [homeTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"IconHomeSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"IconHome.png"]];
-    [homeTabBarItem setTitleTextAttributes: @{ UITextAttributeTextColor: [UIColor colorWithRed:0.0f/255.0f green:55.0f/255.0f blue:42.0f/255.0f alpha:1.0f] } forState:UIControlStateNormal];
-    [homeTabBarItem setTitleTextAttributes: @{ UITextAttributeTextColor: [UIColor colorWithRed:129.0f/255.0f green:99.0f/255.0f blue:69.0f/255.0f alpha:1.0f] } forState:UIControlStateSelected];
+    homeTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
+    //[homeTabBarItem setTitleTextAttributes: @{ UITextAttributeTextColor: [UIColor colorWithRed:0.0f/255.0f green:55.0f/255.0f blue:42.0f/255.0f alpha:1.0f] } forState:UIControlStateNormal];
+    //[homeTabBarItem setTitleTextAttributes: @{ UITextAttributeTextColor: [UIColor colorWithRed:129.0f/255.0f green:99.0f/255.0f blue:69.0f/255.0f alpha:1.0f] } forState:UIControlStateSelected];
     
-    UITabBarItem *activityFeedTabBarItem = [[UITabBarItem alloc] initWithTitle:@"" image:nil tag:0];
-    [activityFeedTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"IconTimelineSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"IconTimeline.png"]];
+    UITabBarItem *activityFeedTabBarItem = [[UITabBarItem alloc] init];
+    [activityFeedTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"IconActivitySelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"IconActivity.png"]];
+    activityFeedTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
+
     
-    UITabBarItem *perksTabBarItem = [[UITabBarItem alloc] initWithTitle:@"" image:nil tag:0];
-    [perksTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"IconPerksSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"IconPerks.png"]];
+    UITabBarItem *perksTabBarItem = [[UITabBarItem alloc] init];
+    [perksTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"IconDiscoverSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"IconDiscover.png"]];
+    perksTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
+
     
-    UITabBarItem *accountTabBarItem = [[UITabBarItem alloc] initWithTitle:@"" image:nil tag:0];
+    UITabBarItem *accountTabBarItem = [[UITabBarItem alloc] init];
     [accountTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"IconProfileSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"IconProfile.png"]];
+    accountTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
     
     
     [homeNavigationController setTabBarItem:homeTabBarItem];
@@ -293,7 +304,6 @@
     [accountNavigationController setTabBarItem:accountTabBarItem];
 
 
-    
     self.tabBarController.delegate = self;
     self.tabBarController.viewControllers = @[ homeNavigationController, perksNavigationController, emptyNavigationController, activityFeedNavigationController, accountNavigationController ];
     
@@ -355,11 +365,11 @@
     [[UIButton appearanceWhenContainedIn:[UINavigationBar class], nil] setBackgroundImage:[UIImage imageNamed:@"ButtonNavigationBarSelected.png"] forState:UIControlStateHighlighted];
     [[UIButton appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
     
-    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[UIImage imageNamed:@"ButtonBack.png"]
+    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[UIImage imageNamed:@"button_back.png"]
                                                       forState:UIControlStateNormal
                                                     barMetrics:UIBarMetricsDefault];
     
-    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[UIImage imageNamed:@"ButtonBackSelected.png"]
+    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"]
                                                       forState:UIControlStateSelected
                                                     barMetrics:UIBarMetricsDefault];
 

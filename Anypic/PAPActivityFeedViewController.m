@@ -6,7 +6,6 @@
 //
 
 #import "PAPActivityFeedViewController.h"
-#import "PAPSettingsActionSheetDelegate.h"
 #import "PAPActivityCell.h"
 #import "PAPAccountViewController.h"
 #import "PAPPhotoDetailsViewController.h"
@@ -18,14 +17,12 @@
 
 @interface PAPActivityFeedViewController ()
 
-@property (nonatomic, strong) PAPSettingsActionSheetDelegate *settingsActionSheetDelegate;
 @property (nonatomic, strong) NSDate *lastRefresh;
 @property (nonatomic, strong) UIView *blankTimelineView;
 @end
 
 @implementation PAPActivityFeedViewController
 
-@synthesize settingsActionSheetDelegate;
 @synthesize lastRefresh;
 @synthesize blankTimelineView;
 
@@ -66,13 +63,10 @@
     [super viewDidLoad];
     
     UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
-    [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundLeather.png"]]];
+    [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]]];
     self.tableView.backgroundView = texturedBackgroundView;
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
-
-    // Add Settings button
-    self.navigationItem.rightBarButtonItem = [[PAPSettingsButtonItem alloc] initWithTarget:self action:@selector(settingsButtonAction:)];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidReceiveRemoteNotification:) name:PAPAppDelegateApplicationDidReceiveRemoteNotification object:nil];
     
@@ -288,14 +282,6 @@
 
 
 #pragma mark - ()
-
-- (void)settingsButtonAction:(id)sender {
-    settingsActionSheetDelegate = [[PAPSettingsActionSheetDelegate alloc] initWithNavigationController:self.navigationController];
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:settingsActionSheetDelegate cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:NSLocalizedString(@"My Profile", nil), NSLocalizedString(@"Find Friends", nil), NSLocalizedString(@"Log Out", nil), nil];
-    
-    [actionSheet showFromTabBar:self.tabBarController.tabBar];
-}
-
 - (void)inviteFriendsButtonAction:(id)sender {
     PAPFindFriendsViewController *detailViewController = [[PAPFindFriendsViewController alloc] init];
     [self.navigationController pushViewController:detailViewController animated:YES];

@@ -7,9 +7,10 @@
 
 #import "PAPAccountViewController.h"
 #import "PAPPhotoCell.h"
-#import "TTTTimeIntervalFormatter.h"
 #import "PAPLoadMoreCell.h"
 #import "PAPProfileSettingViewController.h"
+#import "PAPSettingsButtonItem.h"
+#import "PAPSettingsActionSheetDelegate.h"
 
 @interface PAPAccountViewController()
 @property (nonatomic, strong) UIView *headerView;
@@ -22,6 +23,7 @@
 @property (nonatomic, strong) PFImageView *profilePictureImageView;
 @property (nonatomic, strong) UIView *profilePictureBackgroundView;
 @property (nonatomic, strong) PFUser *currentUser;
+@property (nonatomic, strong) PAPSettingsActionSheetDelegate *settingsActionSheetDelegate;
 
 
 @end
@@ -39,6 +41,7 @@
 @synthesize currentUser;
 @synthesize descriptionInfo;
 @synthesize descriptionLabel;
+@synthesize settingsActionSheetDelegate;
 
 
 #pragma mark - Initialization
@@ -53,20 +56,19 @@
         [NSException raise:NSInvalidArgumentException format:@"user cannot be nil"];
     }
     
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
+    UIColor *textColor = [UIColor colorWithRed:158.0f/255.0f green:158.0f/255.0f blue:158.0f/255.0f alpha:1.0f];
     
-    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [backButton setFrame:CGRectMake( 0.0f, 0.0f, 52.0f, 32.0f)];
-    [backButton setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0] forState:UIControlStateNormal];
-    [[backButton titleLabel] setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
-    [backButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
-    [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [backButton setBackgroundImage:[UIImage imageNamed:@"ButtonBack.png"] forState:UIControlStateNormal];
-    [backButton setBackgroundImage:[UIImage imageNamed:@"ButtonBackSelected.png"] forState:UIControlStateHighlighted];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ProfileNavigationBar.png"]];
+    self.navigationItem.rightBarButtonItem = [[PAPSettingsButtonItem alloc] initWithTarget:self action:@selector(settingsButtonAction:)];
+    //self.navigationItem.rightBarButtonItem.style = UIbuttonty;
     
     self.headerView = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 140.0f)];
-    [self.headerView setBackgroundColor:[UIColor clearColor]];//[UIColor colorWithWhite:0.0f alpha:0.2f]]; // should be clear, this will be the container for our avatar, photo count, follower count, following count, and so on
+    [self.headerView setBackgroundColor:[UIColor clearColor]]; // should be clear, this will be the container for our avatar, photo count, follower count, following count, and so on
+    
+    UIView *whiteBackground = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, headerView.bounds.size.height - 10.0f)];
+    [whiteBackground setBackgroundColor:[UIColor whiteColor]];
+    [self.headerView addSubview:whiteBackground];
     
     profilePictureBackgroundView = [[UIView alloc] initWithFrame:CGRectMake( 10.0f, 10.0f, 70.0f, 70.0f)];
     [profilePictureBackgroundView setBackgroundColor:[UIColor darkGrayColor]];
@@ -109,10 +111,10 @@
     }
 
     if (locationInfo) {
-        locationLabel = [[UILabel alloc] initWithFrame:CGRectMake( 115.0f, 30.0f, self.headerView.bounds.size.width, 16.0f )];
+        locationLabel = [[UILabel alloc] initWithFrame:CGRectMake( 110.0f, 30.0f, self.headerView.bounds.size.width, 16.0f )];
         [locationLabel setText:locationInfo];
         [locationLabel setBackgroundColor:[UIColor clearColor]];
-        [locationLabel setTextColor:[UIColor grayColor]];
+        [locationLabel setTextColor:textColor];
         [locationLabel setFont:[UIFont boldSystemFontOfSize:12.0f]];
         [self.headerView addSubview:locationLabel];
     } else {
@@ -120,67 +122,57 @@
     }
     
     if (descriptionInfo) {
-        descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake( 10.0f, 90.0f, self.headerView.bounds.size.width, 30.0f )];
+        descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake( 10.0f, 83.0f, self.headerView.bounds.size.width, 30.0f )];
         [descriptionLabel setText:descriptionInfo];
         [descriptionLabel setBackgroundColor:[UIColor clearColor]];
-        [descriptionLabel setTextColor:[UIColor grayColor]];
-        [descriptionLabel setFont:[UIFont boldSystemFontOfSize:12.0f]];
+        [descriptionLabel setTextColor:[UIColor colorWithRed:178.0f/255.0f green:184.0f/255.0f blue:189.0f/255.0f alpha:1.0f]];
+        [descriptionLabel setFont:[UIFont systemFontOfSize:12.0f]];
         [self.headerView addSubview:descriptionLabel];
     } else {
         NSLog(@"locationInfo Not found");
     }
     
-    
-    UIButton *backButtonTest = [UIButton buttonWithType:UIButtonTypeCustom];
-    [backButtonTest setFrame:CGRectMake( 0.0f, 0.0f, 52.0f, 32.0f)];
-    [backButtonTest setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0] forState:UIControlStateNormal];
-    [[backButtonTest titleLabel] setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
-    //[backButtonTest setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
-    [backButtonTest setTitle:@"Edit" forState:UIControlStateNormal];
-    [backButtonTest addTarget:self action:@selector(backButtonActionTest:) forControlEvents:UIControlEventTouchUpInside];
-    //[backButtonTest setBackgroundImage:[UIImage imageNamed:@"ButtonBack.png"] forState:UIControlStateNormal];
-    //[backButtonTest setBackgroundImage:[UIImage imageNamed:@"ButtonBackSelected.png"] forState:UIControlStateHighlighted];
-    //backButtonTest.transform = CGAffineTransformMakeScale(-1, -1);
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButtonTest];
-    
+     
     UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
-    [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundLeather.png"]]];
+    [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]]];
     self.tableView.backgroundView = texturedBackgroundView;
     
-    UIImageView *photoCountIconImageView = [[UIImageView alloc] initWithImage:nil];
-    [photoCountIconImageView setImage:[UIImage imageNamed:@"IconPics.png"]];
-    [photoCountIconImageView setFrame:CGRectMake( 90.0f, 45.0f, 20.0f, 15.0f)];
-    [self.headerView addSubview:photoCountIconImageView];
-    
-    UILabel *photoCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 115.0f, 45.0f, 92.0f, 22.0f)];
+    UILabel *photoCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 110.0f, 45.0f, 92.0f, 22.0f)];
     [photoCountLabel setBackgroundColor:[UIColor clearColor]];
-    [photoCountLabel setTextColor:[UIColor grayColor]];
+    [photoCountLabel setTextColor:textColor];
     [photoCountLabel setFont:[UIFont boldSystemFontOfSize:12.0f]];
     [self.headerView addSubview:photoCountLabel];
     
+    UIImageView *photoCountIconImageView = [[UIImageView alloc] initWithImage:nil];
+    [photoCountIconImageView setImage:[UIImage imageNamed:@"iconpics.png"]];
+    [photoCountIconImageView setFrame:CGRectMake( 90.0f, 47.50f, 15.0f, 15.0f)];
+    [self.headerView addSubview:photoCountIconImageView];
+    
     UIImageView *followersIconImageView = [[UIImageView alloc] initWithImage:nil];
-    [followersIconImageView setImage:[UIImage imageNamed:@"IconFollowers.png"]];
-    [followersIconImageView setFrame:CGRectMake( 90.0f, 65.0f, 20.0f, 15.0f)];
+    [followersIconImageView setImage:[UIImage imageNamed:@"iconfollowers.png"]];
+    [followersIconImageView setFrame:CGRectMake( 90.0f, 65.0f, 15.0f, 15.0f)];
     [self.headerView addSubview:followersIconImageView];
     
-    UILabel *followerCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 115.0f, 65.0f, self.headerView.bounds.size.width, 16.0f)];
+    UIImageView *locationIconImageView = [[UIImageView alloc] initWithImage:nil];
+    [locationIconImageView setImage:[UIImage imageNamed:@"iconlocation.png"]];
+    [locationIconImageView setFrame:CGRectMake( 90.0f, 30.0f, 15.0f, 15.0f)];
+    [self.headerView addSubview:locationIconImageView];
+    
+    UILabel *followerCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 110.0f, 65.0f, self.headerView.bounds.size.width, 16.0f)];
     [followerCountLabel setBackgroundColor:[UIColor clearColor]];
-    [followerCountLabel setTextColor:[UIColor grayColor]];
+    [followerCountLabel setTextColor:textColor];
     [followerCountLabel setFont:[UIFont boldSystemFontOfSize:12.0f]];
     [self.headerView addSubview:followerCountLabel];
     
-    UILabel *followingCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 195.0f, 65.0f, self.headerView.bounds.size.width, 16.0f)];
+    UILabel *followingCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 193.0f, 65.0f, self.headerView.bounds.size.width, 16.0f)];
     [followingCountLabel setBackgroundColor:[UIColor clearColor]];
-    [followingCountLabel setTextColor:[UIColor grayColor]];
+    [followingCountLabel setTextColor:textColor];
     [followingCountLabel setFont:[UIFont boldSystemFontOfSize:12.0f]];
     [self.headerView addSubview:followingCountLabel];
     
-    UILabel *userDisplayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(90.0f, 12.0f, self.headerView.bounds.size.width, 10.0f)];
-    //[userDisplayNameLabel setTextAlignment:NSTextAlignmentCenter];
+    UILabel *userDisplayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94.0f, 12.0f, self.headerView.bounds.size.width, 10.0f)];
     [userDisplayNameLabel setBackgroundColor:[UIColor clearColor]];
-    [userDisplayNameLabel setTextColor:[UIColor blueColor]];
-    //[userDisplayNameLabel setShadowColor:[UIColor colorWithWhite:0.0f alpha:0.300f]];
-    //[userDisplayNameLabel setShadowOffset:CGSizeMake( 0.0f, -1.0f)];
+    [userDisplayNameLabel setTextColor:[UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
     [userDisplayNameLabel setText:[self.user objectForKey:@"displayName"]];
     [userDisplayNameLabel setFont:[UIFont boldSystemFontOfSize:13.0f]];
     [self.headerView addSubview:userDisplayNameLabel];
@@ -254,6 +246,15 @@
 }
 
 
+- (void)settingsButtonAction:(id)sender {
+    self.settingsActionSheetDelegate = [[PAPSettingsActionSheetDelegate alloc] initWithNavigationController:self.navigationController];
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self.settingsActionSheetDelegate cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Edit Profile",@"Find Friends",@"Privacy Policy",@"Terms of Service",@"About This Version",@"Log Out", nil];
+    
+    [actionSheet showFromTabBar:self.tabBarController.tabBar];
+}
+
+
+
 #pragma mark - PFQueryTableViewController
 
 - (void)objectsDidLoad:(NSError *)error {
@@ -320,20 +321,6 @@
     [self configureFollowButton];
 
     [PAPUtility unfollowUserEventually:self.user];
-}
-
-- (void)backButtonAction:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-
-- (void)backButtonActionTest:(id)sender {
-    UINavigationController *profileNavigationController = self.tabBarController.viewControllers[PAPHomeTabBarItemIndex];
-    self.tabBarController.selectedViewController = profileNavigationController;
-    
-    PAPProfileSettingViewController *accountViewController = [[PAPProfileSettingViewController alloc] init];
-    [profileNavigationController pushViewController:accountViewController animated:YES];
-    
 }
 
 

@@ -7,6 +7,7 @@
 #import "PAPAccountViewController.h"
 #import "AppDelegate.h"
 #import "UIImage+ResizeAdditions.h"
+
 #define SUCCESSFUL 1
 #define IMAGE_NIL 2
 
@@ -29,6 +30,7 @@
 @property (nonatomic, strong) NSString *website_user;
 @property (nonatomic, strong) NSString *displayName_user;
 @property (nonatomic, strong) NSString *description_user;
+
 
 @end
 
@@ -76,18 +78,28 @@
     dropDownSelection = self.user[@"userType"];
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
-    
+        
     UIGraphicsBeginImageContext(self.view.frame.size);
-    [[UIImage imageNamed:@"backgroundleather.png"] drawInRect:self.view.bounds];
+    [[UIImage imageNamed:@"bg.png"] drawInRect:self.view.bounds];
     UIImage *backgroundImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
     self.view.backgroundColor = [UIColor colorWithPatternImage:backgroundImage];
     
+    // Initialization
+    UIColor *backgroundColor = [UIColor whiteColor];
+    UIColor *lineColor = [UIColor colorWithWhite:245.0f/255.0f alpha:1.0];
+    UIFont *fonts = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    
+    UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 220.0f, self.view.bounds.size.width, self.view.bounds.size.height - 220.0f)];
+    [backgroundView setBackgroundColor:backgroundColor];
+    [self.view addSubview:backgroundView];
+    
     
     UIButton *profileImagePicker = [UIButton buttonWithType:UIButtonTypeCustom];
-    profileImagePicker.frame = CGRectMake( 50.0f, 50.0f, 100.0f, 100.0f );
-    [profileImagePicker setImage:[UIImage imageNamed:@"profilePic.png"] forState:UIControlStateNormal];
+    profileImagePicker.frame = CGRectMake( 110.0f, 90.0f, 100.0f, 100.0f );
+    //[profileImagePicker setBackgroundColor:[UIColor redColor]];
+    [profileImagePicker setImage:[UIImage imageNamed:@"profilepicture.png"] forState:UIControlStateNormal];
     //[cameraButton setImage:[UIImage imageNamed:@"ButtonCameraSelected.png"] forState:UIControlStateHighlighted];
     [profileImagePicker addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:profileImagePicker];
@@ -99,95 +111,87 @@
     
     
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [backButton setFrame:CGRectMake( 0.0f, 0.0f, 52.0f, 32.0f)];
-    [backButton setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0] forState:UIControlStateNormal];
-    [[backButton titleLabel] setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
-    [backButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
+    [backButton setFrame:CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f)];
     [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [backButton setBackgroundImage:[UIImage imageNamed:@"ButtonBack.png"] forState:UIControlStateNormal];
-    [backButton setBackgroundImage:[UIImage imageNamed:@"ButtonBackSelected.png"] forState:UIControlStateHighlighted];
+    [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
+    [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     
+     
     UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [saveButton setFrame:CGRectMake( self.view.bounds.size.width - 50.0f, 10.0f, 52.0f, 32.0f)];
-    [saveButton setTitle:@"Save" forState:UIControlStateNormal];
-    [saveButton setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0] forState:UIControlStateNormal];
-    //[saveButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [saveButton setFrame:CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f)];
     [[saveButton titleLabel] setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
     [saveButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
     [saveButton addTarget:self action:@selector(saveButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [saveButton setBackgroundImage:[UIImage imageNamed:@"ButtonNavigationBar.png"] forState:UIControlStateNormal];
-    [saveButton setBackgroundImage:[UIImage imageNamed:@"ButtonNavigationBarSelected.png"] forState:UIControlStateHighlighted];
+    [saveButton setBackgroundImage:[UIImage imageNamed:@"button_done.png"] forState:UIControlStateNormal];
+    [saveButton setBackgroundImage:[UIImage imageNamed:@"button_done_selected.png"] forState:UIControlStateHighlighted];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:saveButton];
     
     dropDownButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [dropDownButton setFrame:CGRectMake( 80.0f, 160.0f, 205.0f, 25.0f)];
-    [dropDownButton setBackgroundImage:[UIImage imageNamed:@"dropDownMenu.png"] forState:UIControlStateNormal];
+    [dropDownButton setFrame:CGRectMake( 80.0f, 226.0f, 220.0f, 30.0f)];
+    [dropDownButton setBackgroundImage:[UIImage imageNamed:@"dropdown_arrow.png"] forState:UIControlStateNormal];
+    [dropDownButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
     [dropDownButton setTitle:@"Select User Type" forState:UIControlStateNormal];
-    [saveButton setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0] forState:UIControlStateNormal];
+    [dropDownButton setTitleColor:[UIColor colorWithWhite:200.0f/255.0f alpha:1.0] forState:UIControlStateNormal];
+    dropDownButton.titleLabel.font = fonts;
     [dropDownButton addTarget:self action:@selector(dropDownButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:dropDownButton];
     
-    UIImageView *profilePicture = [[UIImageView alloc] initWithImage:nil];
-    [profilePicture setImage:[UIImage imageNamed:@"profileAddNew.png"]];
-    [profilePicture setFrame:CGRectMake( 0.0f, 0.0f, 320.0f, 145.0f)];
-    [self.view addSubview:profilePicture];
-    
     UIImageView *userTypeImageview = [[UIImageView alloc] initWithImage:nil];
-    [userTypeImageview setImage:[UIImage imageNamed:@"companyName.png"]];
-    [userTypeImageview setFrame:CGRectMake( 15.0f, 147.0f, 50.0f, 50.0f)];
+    [userTypeImageview setImage:[UIImage imageNamed:@"profileType.png"]];
+    [userTypeImageview setFrame:CGRectMake( 15.0f, 213.0f, 50.0f, 50.0f)];
     [self.view addSubview:userTypeImageview];
     
     UIImageView *companyImageView = [[UIImageView alloc] initWithImage:nil];
     [companyImageView setImage:[UIImage imageNamed:@"companyName.png"]];
-    [companyImageView setFrame:CGRectMake( 15.0f, 187.0f, 50.0f, 50.0f)];
+    [companyImageView setFrame:CGRectMake( 15.0f, 253.0f, 50.0f, 50.0f)];
     [self.view addSubview:companyImageView];
     
     UIImageView *descriptionImageView = [[UIImageView alloc] initWithImage:nil];
     [descriptionImageView setImage:[UIImage imageNamed:@"profileDescription.png"]];
-    [descriptionImageView setFrame:CGRectMake( 15.0f, 227.0f, 50.0f, 50.0f)];
+    [descriptionImageView setFrame:CGRectMake( 15.0f, 293.0f, 50.0f, 50.0f)];
     [self.view addSubview:descriptionImageView];
     
     UIImageView *locationImageView = [[UIImageView alloc] initWithImage:nil];
     [locationImageView setImage:[UIImage imageNamed:@"profileLocation.png"]];
-    [locationImageView setFrame:CGRectMake( 15.0f, 267.0f, 50.0f, 50.0f)];
+    [locationImageView setFrame:CGRectMake( 15.0f, 333.0f, 50.0f, 50.0f)];
     [self.view addSubview:locationImageView];
     
     UIImageView *websiteImageView = [[UIImageView alloc] initWithImage:nil];
     [websiteImageView setImage:[UIImage imageNamed:@"profileWebsite.png"]];
-    [websiteImageView setFrame:CGRectMake( 15.0f, 307.0f, 50.0f, 50.0f)];
+    [websiteImageView setFrame:CGRectMake( 15.0f, 373.0f, 50.0f, 50.0f)];
     [self.view addSubview:websiteImageView];
-    
-    /*
-    UIImageView *collaboratorImageView = [[UIImageView alloc] initWithImage:nil];
-    [collaboratorImageView setImage:[UIImage imageNamed:@"profileCollaborator.png"]];
-    [collaboratorImageView setFrame:CGRectMake( 15.0f, 307.0f, 50.0f, 50.0f)];
-    [self.view addSubview:collaboratorImageView];
-     */
     
     NSLog(@"%@", displayName_user);
     NSLog(@"%@", location_user);
     NSLog(@"%@", description_user);
     NSLog(@"%@", website_user);
     
-    
-    CGRect companyName_frame = CGRectMake( 80.0f, 200.0f, 205.0f, 25.0f);
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 260.0f, self.view.bounds.size.width, 1)];
+    lineView.backgroundColor = lineColor;
+    [self.view addSubview:lineView];
+
+    CGRect companyName_frame = CGRectMake( 80.0f, 266.0f, 205.0f, 25.0f);
     companyName = [[UITextField alloc] initWithFrame:companyName_frame];
-    [companyName setBackgroundColor:[UIColor whiteColor]];
-    [companyName setFont:[UIFont systemFontOfSize:10]];
-    companyName.borderStyle = UITextBorderStyleRoundedRect;
+    [companyName setBackgroundColor:backgroundColor];
+    [companyName setFont:fonts];
+    //companyName.borderStyle = UITextBorderStyleRoundedRect;
     companyName.placeholder = displayName_user;
     //[companyName setText:[self.appUserInfo objectForKey:@"companyName"]];
     companyName.userInteractionEnabled = YES;
     companyName.delegate = self;
     //companyName.keyboardAppearance = UIKeyboardAppearanceDefault;
     [self.view addSubview:companyName];
+    
+    UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 297.0f, self.view.bounds.size.width, 1)];
+    lineView1.backgroundColor = lineColor;
+    [self.view addSubview:lineView1];
 
-    CGRect location_frame = CGRectMake( 80.0f, 240.0f, 205.0f, 25.0f);
+    CGRect location_frame = CGRectMake( 80.0f, 306.0f, 205.0f, 25.0f);
     location = [[UITextField alloc] initWithFrame:location_frame];
-    [location setBackgroundColor:[UIColor whiteColor]];
-    [location setFont:[UIFont systemFontOfSize:10]];
-    location.borderStyle = UITextBorderStyleRoundedRect;
+    [location setBackgroundColor:backgroundColor];
+    [location setFont:fonts];
+    //location.borderStyle = UITextBorderStyleRoundedRect;
     location.placeholder = location_user;
     location.userInteractionEnabled = YES;
     location.delegate = self;
@@ -195,11 +199,15 @@
     [location resignFirstResponder];
     [self.view addSubview:location];
     
-    CGRect description_frame = CGRectMake( 80.0f, 280.0f, 205.0f, 25.0f);
+    UIView *lineView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 336.0f, self.view.bounds.size.width, 1)];
+    lineView2.backgroundColor = lineColor;
+    [self.view addSubview:lineView2];
+    
+    CGRect description_frame = CGRectMake( 80.0f, 346.0f, 205.0f, 25.0f);
     description = [[UITextField alloc] initWithFrame:description_frame];
-    [description setBackgroundColor:[UIColor whiteColor]];
-    [description setFont:[UIFont systemFontOfSize:10]];
-    description.borderStyle = UITextBorderStyleRoundedRect;
+    [description setBackgroundColor:backgroundColor];
+    [description setFont:fonts];
+    //description.borderStyle = UITextBorderStyleRoundedRect;
     description.placeholder = description_user;
     description.userInteractionEnabled = YES;
     description.delegate = self;
@@ -207,11 +215,15 @@
     [description resignFirstResponder];
     [self.view addSubview:description];
     
-    CGRect website_frame = CGRectMake( 80.0f, 320.0f, 205.0f, 25.0f);
+    UIView *lineView3 = [[UIView alloc] initWithFrame:CGRectMake(0, 377.0f, self.view.bounds.size.width, 1)];
+    lineView3.backgroundColor = lineColor;
+    [self.view addSubview:lineView3];
+    
+    CGRect website_frame = CGRectMake( 80.0f, 386.0f, 205.0f, 25.0f);
     website = [[UITextField alloc] initWithFrame:website_frame];
-    [website setBackgroundColor:[UIColor whiteColor]];
-    [website setFont:[UIFont systemFontOfSize:10]];
-    website.borderStyle = UITextBorderStyleRoundedRect;
+    [website setBackgroundColor:backgroundColor];
+    [website setFont:fonts];
+    //website.borderStyle = UITextBorderStyleRoundedRect;
     website.placeholder = website_user;
     website.userInteractionEnabled = YES;
     website.delegate = self;
@@ -225,6 +237,7 @@
     
     [self.view addGestureRecognizer:tapOutside];
 }
+
 
 #pragma mark - UIImagePickerDelegate
 
@@ -255,9 +268,10 @@
     imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
 
     UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    cameraButton.frame = CGRectMake( 50.0f, 50.0f, 100.0f, 100.0f );
+    cameraButton.frame = CGRectMake( 110.0f, 90.0f, 100.0f, 100.0f );
     [cameraButton setImage:image forState:UIControlStateNormal];
-    //[cameraButton setImage:[UIImage imageNamed:@"ButtonC34ameraSelected.png"] forState:UIControlStateHighlighted];
+    cameraButton.layer.cornerRadius = 2;
+    cameraButton.clipsToBounds = YES;
     [cameraButton addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:cameraButton];
     
@@ -351,8 +365,8 @@
     BOOL photoLibraryAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
     
     if (cameraDeviceAvailable && photoLibraryAvailable) {
-        //UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take Photo", @"Choose Photo", nil];
-        //[actionSheet showFromTabBar:self.tabBar];
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take Photo", @"Choose Photo", nil];
+        [actionSheet showInView:self.view];
     } else {
         // if we don't have at least two options, we automatically show whichever is available (camera or roll)
         [self shouldPresentPhotoCaptureController];
@@ -552,29 +566,40 @@
 
 - (void) dropDownButtonAction:(id) sender {
     NSLog(@"dropdown button pressed");
+    UIFont *fonts = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    dropDownButton.enabled = NO;
     
     dropDownButton1 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [dropDownButton1 setFrame:CGRectMake( 80.0f, 185.0f, 205.0f, 25.0f)];
-    [dropDownButton1 setBackgroundImage:[UIImage imageNamed:@"dropDownMenu.png"] forState:UIControlStateNormal];
+    [dropDownButton1 setFrame:CGRectMake( 80.0f, 257.0f, 200.0f, 30.0f)];
+    [dropDownButton1 setBackgroundImage:[UIImage imageNamed:@"bg_dropdown.png"] forState:UIControlStateNormal];
     [dropDownButton1 setTitle:@"Prospect" forState:UIControlStateNormal];
     //[dropDownButton1 setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0] forState:UIControlStateNormal];
     [dropDownButton1 addTarget:self action:@selector(dropDownButtonPressedAction1:) forControlEvents:UIControlEventTouchUpInside];
+    [dropDownButton1 setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+    dropDownButton1.titleLabel.font = fonts;
+    [dropDownButton1 setTitleEdgeInsets:UIEdgeInsetsMake(0.0f, 10.0f, 0.0f, 0.0f)];
     [self.view addSubview:dropDownButton1];
     
     dropDownButton2 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [dropDownButton2 setFrame:CGRectMake( 80.0f, 210.0f, 205.0f, 25.0f)];
-    [dropDownButton2 setBackgroundImage:[UIImage imageNamed:@"dropDownMenu.png"] forState:UIControlStateNormal];
+    [dropDownButton2 setFrame:CGRectMake( 80.0f, 287.0f, 200.0f, 30.0f)];
+    [dropDownButton2 setBackgroundImage:[UIImage imageNamed:@"bg_dropdown.png"] forState:UIControlStateNormal];
     [dropDownButton2 setTitle:@"Entrepreneur & Start Up" forState:UIControlStateNormal];
     //[dropDownButton2 setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0] forState:UIControlStateNormal];
     [dropDownButton2 addTarget:self action:@selector(dropDownButtonPressedAction2:) forControlEvents:UIControlEventTouchUpInside];
+    [dropDownButton2 setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+    dropDownButton2.titleLabel.font = fonts;
+    [dropDownButton2 setTitleEdgeInsets:UIEdgeInsetsMake(0.0f, 10.0f, 0.0f, 0.0f)];
     [self.view addSubview:dropDownButton2];
     
     dropDownButton3 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [dropDownButton3 setFrame:CGRectMake( 80.0f, 235.0f, 205.0f, 25.0f)];
-    [dropDownButton3 setBackgroundImage:[UIImage imageNamed:@"dropDownMenu.png"] forState:UIControlStateNormal];
+    [dropDownButton3 setFrame:CGRectMake( 80.0f, 317.0f, 200.0f, 30.0f)];
+    [dropDownButton3 setBackgroundImage:[UIImage imageNamed:@"bg_dropdown.png"] forState:UIControlStateNormal];
     [dropDownButton3 setTitle:@"Incubator" forState:UIControlStateNormal];
     //[dropDownButton3 setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0] forState:UIControlStateNormal];
     [dropDownButton3 addTarget:self action:@selector(dropDownButtonPressedAction3:) forControlEvents:UIControlEventTouchUpInside];
+    [dropDownButton3 setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+    dropDownButton3.titleLabel.font = fonts;
+    [dropDownButton3 setTitleEdgeInsets:UIEdgeInsetsMake(0.0f, 10.0f, 0.0f, 0.0f)];
     [self.view addSubview:dropDownButton3];
 }
 
@@ -584,13 +609,17 @@
     [dropDownButton3 removeFromSuperview];
     dropDownSelection = @"Prospect";
     [dropDownButton removeFromSuperview];
+    UIFont *fonts = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+
     
     
     dropDownButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [dropDownButton setFrame:CGRectMake( 80.0f, 160.0f, 205.0f, 25.0f)];
-    [dropDownButton setBackgroundImage:[UIImage imageNamed:@"dropDownMenu.png"] forState:UIControlStateNormal];
-    [dropDownButton setTitle:@"Prospect" forState:UIControlStateNormal];
-    //[dropDownButton setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0] forState:UIControlStateNormal];
+    [dropDownButton setFrame:CGRectMake( 80.0f, 226.0f, 220.0f, 30.0f)];
+    [dropDownButton setBackgroundImage:[UIImage imageNamed:@"dropdown_arrow.png"] forState:UIControlStateNormal];
+    [dropDownButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+    [dropDownButton setTitle:dropDownSelection forState:UIControlStateNormal];
+    [dropDownButton setTitleColor:[UIColor colorWithWhite:200.0f/255.0f alpha:1.0] forState:UIControlStateNormal];
+    dropDownButton.titleLabel.font = fonts;
     [dropDownButton addTarget:self action:@selector(dropDownButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:dropDownButton];
 }
@@ -601,13 +630,17 @@
     [dropDownButton3 removeFromSuperview];
     dropDownSelection = @"Entrepreneur & Start Up";
     [dropDownButton removeFromSuperview];
+    UIFont *fonts = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+
     
     
     dropDownButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [dropDownButton setFrame:CGRectMake( 80.0f, 160.0f, 205.0f, 25.0f)];
-    [dropDownButton setBackgroundImage:[UIImage imageNamed:@"dropDownMenu.png"] forState:UIControlStateNormal];
-    [dropDownButton setTitle:@"Entrepreneur & Start Up" forState:UIControlStateNormal];
-    //[dropDownButton setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0] forState:UIControlStateNormal];
+    [dropDownButton setFrame:CGRectMake( 80.0f, 226.0f, 220.0f, 30.0f)];
+    [dropDownButton setBackgroundImage:[UIImage imageNamed:@"dropdown_arrow.png"] forState:UIControlStateNormal];
+    [dropDownButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+    [dropDownButton setTitle:dropDownSelection forState:UIControlStateNormal];
+    [dropDownButton setTitleColor:[UIColor colorWithWhite:200.0f/255.0f alpha:1.0] forState:UIControlStateNormal];
+    dropDownButton.titleLabel.font = fonts;
     [dropDownButton addTarget:self action:@selector(dropDownButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:dropDownButton];
 }
@@ -618,13 +651,17 @@
     [dropDownButton3 removeFromSuperview];
     dropDownSelection = @"Incubator";
     [dropDownButton removeFromSuperview];
+    UIFont *fonts = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+
     
     
     dropDownButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [dropDownButton setFrame:CGRectMake( 80.0f, 160.0f, 205.0f, 25.0f)];
-    [dropDownButton setBackgroundImage:[UIImage imageNamed:@"dropDownMenu.png"] forState:UIControlStateNormal];
-    [dropDownButton setTitle:@"Incubator" forState:UIControlStateNormal];
-    //[dropDownButton setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0] forState:UIControlStateNormal];
+    [dropDownButton setFrame:CGRectMake( 80.0f, 226.0f, 220.0f, 30.0f)];
+    [dropDownButton setBackgroundImage:[UIImage imageNamed:@"dropdown_arrow.png"] forState:UIControlStateNormal];
+    [dropDownButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+    [dropDownButton setTitle:dropDownSelection forState:UIControlStateNormal];
+    [dropDownButton setTitleColor:[UIColor colorWithWhite:200.0f/255.0f alpha:1.0] forState:UIControlStateNormal];
+    dropDownButton.titleLabel.font = fonts;
     [dropDownButton addTarget:self action:@selector(dropDownButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:dropDownButton];
     

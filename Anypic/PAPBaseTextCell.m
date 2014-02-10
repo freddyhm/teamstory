@@ -57,7 +57,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.backgroundColor = [UIColor clearColor];
         
         mainView = [[UIView alloc] initWithFrame:self.contentView.frame];
-        [mainView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundComments.png"]]];
+        //[mainView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundComments.png"]]];
+        [mainView setBackgroundColor:[UIColor whiteColor]];
         
         self.avatarImageView = [[PAPProfileImageView alloc] init];
         [self.avatarImageView setBackgroundColor:[UIColor clearColor]];
@@ -66,32 +67,32 @@ static TTTTimeIntervalFormatter *timeFormatter;
                 
         self.nameButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.nameButton setBackgroundColor:[UIColor clearColor]];
-        [self.nameButton setTitleColor:[UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
-        [self.nameButton setTitleColor:[UIColor colorWithRed:134.0f/255.0f green:100.0f/255.0f blue:65.0f/255.0f alpha:1.0f] forState:UIControlStateHighlighted];
+        [self.nameButton setTitleColor:[UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
+        //[self.nameButton setTitleColor:[UIColor colorWithRed:134.0f/255.0f green:100.0f/255.0f blue:65.0f/255.0f alpha:1.0f] forState:UIControlStateHighlighted];
         [self.nameButton.titleLabel setFont:[UIFont boldSystemFontOfSize:13]];
         [self.nameButton.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
-        [self.nameButton setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [self.nameButton setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateSelected];
-        [self.nameButton.titleLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
+        //[self.nameButton setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        //[self.nameButton setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateSelected];
+        //[self.nameButton.titleLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
         [self.nameButton addTarget:self action:@selector(didTapUserButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [mainView addSubview:self.nameButton];
         
         self.contentLabel = [[UILabel alloc] init];
         [self.contentLabel setFont:[UIFont systemFontOfSize:13.0f]];
-        [self.contentLabel setTextColor:[UIColor colorWithRed:73./255. green:55./255. blue:35./255. alpha:1.000]];
+        [self.contentLabel setTextColor:[UIColor colorWithRed:119.0f/255.0f green:119.0f/255.0f blue:119.0f/255.0f alpha:1.0f]];
         [self.contentLabel setNumberOfLines:0];
         [self.contentLabel setLineBreakMode:NSLineBreakByWordWrapping];
         [self.contentLabel setBackgroundColor:[UIColor clearColor]];
-        [self.contentLabel setShadowColor:[UIColor colorWithWhite:1.0f alpha:0.70f]];
-        [self.contentLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
+        //[self.contentLabel setShadowColor:[UIColor colorWithWhite:1.0f alpha:0.70f]];
+        //[self.contentLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
         [mainView addSubview:self.contentLabel];
         
         self.timeLabel = [[UILabel alloc] init];
         [self.timeLabel setFont:[UIFont systemFontOfSize:11]];
         [self.timeLabel setTextColor:[UIColor grayColor]];
         [self.timeLabel setBackgroundColor:[UIColor clearColor]];
-        [self.timeLabel setShadowColor:[UIColor colorWithWhite:1.0f alpha:0.70f]];
-        [self.timeLabel setShadowOffset:CGSizeMake(0, 1)];
+        //[self.timeLabel setShadowColor:[UIColor colorWithWhite:1.0f alpha:0.70f]];
+        //[self.timeLabel setShadowOffset:CGSizeMake(0, 1)];
         [mainView addSubview:self.timeLabel];
         
         
@@ -116,7 +117,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    [mainView setFrame:CGRectMake(cellInsetWidth, self.contentView.frame.origin.y, self.contentView.frame.size.width-2*cellInsetWidth, self.contentView.frame.size.height)];
+    [mainView setFrame:CGRectMake(cellInsetWidth, self.contentView.frame.origin.y, 305.0f, self.contentView.frame.size.height)];
+    
+    //[mainView setFrame:CGRectMake(cellInsetWidth, self.contentView.frame.origin.y, self.contentView.frame.size.width-2*cellInsetWidth, self.contentView.frame.size.height)];
+    
     
     // Layout avatar image
     [self.avatarImageView setFrame:CGRectMake(avatarX, avatarY, avatarDim, avatarDim)];

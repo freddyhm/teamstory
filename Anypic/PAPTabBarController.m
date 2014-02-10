@@ -21,6 +21,7 @@
     [super viewDidLoad];
 
     [[self tabBar] setBackgroundImage:[UIImage imageNamed:@"BackgroundTabBar.png"]];
+    [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
     //[[self tabBar] setSelectionIndicatorImage:[UIImage imageNamed:@"BackgroundTabBarItemSelected.png"]];
     
     self.navController = [[UINavigationController alloc] init];
@@ -34,7 +35,7 @@
     [super setViewControllers:viewControllers animated:animated];
     
     UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    cameraButton.frame = CGRectMake( (self.tabBar.bounds.size.width / 5) * 2, 0.0f, self.tabBar.bounds.size.width / 5, self.tabBar.bounds.size.height);
+    cameraButton.frame = CGRectMake( (self.tabBar.bounds.size.width / 5) * 2, -12.0f, 67.0f, 60.0f);
     [cameraButton setImage:[UIImage imageNamed:@"ButtonCamera.png"] forState:UIControlStateNormal];
     [cameraButton setImage:[UIImage imageNamed:@"ButtonCameraSelected.png"] forState:UIControlStateHighlighted];
     [cameraButton addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];

@@ -37,6 +37,7 @@
         
         mainView = [[UIView alloc] initWithFrame:self.contentView.frame];
         [mainView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundComments.png"]]];
+        [mainView setBackgroundColor:[UIColor whiteColor]];
         
         self.loadMoreImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"CellLoadMore.png"]];
         [mainView addSubview:self.loadMoreImageView];

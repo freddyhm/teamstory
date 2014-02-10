@@ -26,7 +26,7 @@ enum ActionSheetTags {
 @property (nonatomic, assign) BOOL likersQueryInProgress;
 @end
 
-static const CGFloat kPAPCellInsetWidth = 20.0f;
+static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 @implementation PAPPhotoDetailsViewController
 
@@ -78,19 +78,15 @@ static const CGFloat kPAPCellInsetWidth = 20.0f;
     self.navigationItem.hidesBackButton = YES;
 
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    backButton.frame = CGRectMake( 0.0f, 0.0f, 52.0f, 32.0f);
-    backButton.titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
-    backButton.titleEdgeInsets = UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f);
-    [backButton setTitle:@"Back" forState:UIControlStateNormal];
-    [backButton setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0] forState:UIControlStateNormal];
+    backButton.frame = CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f);
     [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [backButton setBackgroundImage:[UIImage imageNamed:@"ButtonBack.png"] forState:UIControlStateNormal];
-    [backButton setBackgroundImage:[UIImage imageNamed:@"ButtonBackSelected.png"] forState:UIControlStateHighlighted];
+    [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
+    [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     
     // Set table view properties
     UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
-    texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundLeather.png"]];
+    texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     self.tableView.backgroundView = texturedBackgroundView;
     
     // Set table header
@@ -105,13 +101,22 @@ static const CGFloat kPAPCellInsetWidth = 20.0f;
     commentTextField.delegate = self;
     self.tableView.tableFooterView = footerView;
 
+    
     if (NSClassFromString(@"UIActivityViewController")) {
         // Use UIActivityViewController if it is available (iOS 6 +)
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(activityButtonAction:)];
+        //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(activityButtonAction:)];
+        
+        UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        shareButton.frame = CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f);
+        [shareButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [shareButton setBackgroundImage:[UIImage imageNamed:@"share.png"] forState:UIControlStateNormal];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
+        
     } else if ([self currentUserOwnsPhoto]) {
         // Else we only want to show an action button if the user owns the photo and has permission to delete it.
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonAction:)];
     }
+    
     
     if (NSClassFromString(@"UIRefreshControl")) {
         // Use the new iOS 6 refresh control.

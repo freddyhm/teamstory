@@ -16,6 +16,9 @@
 @interface emailLoginViewController ()
 @property (nonatomic, strong) PAPWelcomeViewController *welcomeViewController;
 @property (nonatomic, strong) UINavigationController *navController;
+@property (nonatomic, strong) UIButton *cancelButton;
+@property (nonatomic, strong) UIButton *loginButton;
+@property (nonatomic, strong) UIButton *pwForgotButton;
 @end
 
 @implementation emailLoginViewController
@@ -25,97 +28,86 @@
 @synthesize welcomeViewController;
 @synthesize navController;
 @synthesize window;
+@synthesize cancelButton;
+@synthesize loginButton;
+@synthesize pwForgotButton;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    pwForgotButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    
     // There is no documentation on how to handle assets with the taller iPhone 5 screen as of 9/13/2012
     if ([UIScreen mainScreen].bounds.size.height > 480.0f) {
         // for the iPhone 5
-        self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-intro2-iphone5.png"]];
+        self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"login_iphone5.png"]];
     } else {
-        self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-intro2-iphone4.png"]];
+        self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"login_iphone4.png"]];
         
-        CGRect emailTextField_frame = CGRectMake( 55.0f, 340.0f, 220.0f, 40.0f);
-        emailTextField = [[UITextField alloc] initWithFrame:emailTextField_frame];
-        [emailTextField setBackgroundColor:[UIColor whiteColor]];
-        [emailTextField setFont:[UIFont systemFontOfSize:13]];
-        //emailTextField.borderStyle = UITextBorderStyleRoundedRect;
-        emailTextField.placeholder = @"Email";
-        emailTextField.userInteractionEnabled = YES;
-        emailTextField.delegate = self;
-        emailTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        //companyName.keyboardAppearance = UIKeyboardAppearanceDefault;
-        [emailTextField resignFirstResponder];
-        [self.view addSubview:emailTextField];
-        
-        CGRect pwTextField_frame = CGRectMake( 55.0f, 400.0f, 220.0f, 40.0f);
-        pwTextField = [[UITextField alloc] initWithFrame:pwTextField_frame];
-        [pwTextField setBackgroundColor:[UIColor whiteColor]];
-        [pwTextField setFont:[UIFont systemFontOfSize:13]];
-        //pwTextField.borderStyle = UITextBorderStyleRoundedRect;
-        pwTextField.placeholder = @"Password";
-        pwTextField.userInteractionEnabled = YES;
-        pwTextField.delegate = self;
-        pwTextField.secureTextEntry = YES;
-        pwTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        //companyName.keyboardAppearance = UIKeyboardAppearanceDefault;
-        [pwTextField resignFirstResponder];
-        [self.view addSubview:pwTextField];
-        
-        UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [cancelButton setFrame:CGRectMake( 10.0f, self.view.bounds.size.height - 33.0f, 52.0f, 32.0f)];
-        [cancelButton setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:0.7] forState:UIControlStateNormal];
-        [[cancelButton titleLabel] setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
-        [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
-        [cancelButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
-        [cancelButton addTarget:self action:@selector(cancelButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-        //[cancelButton setBackgroundImage:[UIImage imageNamed:@"ButtonBack.png"] forState:UIControlStateNormal];
-        //[cancelButton setBackgroundImage:[UIImage imageNamed:@"ButtonBackSelected.png"] forState:UIControlStateHighlighted];
-        [self.view addSubview:cancelButton];
-        
-        UIButton *loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [loginButton setFrame:CGRectMake( self.view.bounds.size.width - 60.0f, self.view.bounds.size.height - 33.0f, 52.0f, 32.0f)];
-        [loginButton setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:0.7] forState:UIControlStateNormal];
-        [[loginButton titleLabel] setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
-        [loginButton setTitle:@"Log In" forState:UIControlStateNormal];
-        [loginButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
-        [loginButton addTarget:self action:@selector(loginButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-        //[cancelButton setBackgroundImage:[UIImage imageNamed:@"ButtonBack.png"] forState:UIControlStateNormal];
-        //[cancelButton setBackgroundImage:[UIImage imageNamed:@"ButtonBackSelected.png"] forState:UIControlStateHighlighted];
-        [self.view addSubview:loginButton];
-        
-        /*
-        UIButton *signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [signUpButton setFrame:CGRectMake( self.view.bounds.size.width - 60.0f, self.view.bounds.size.height - 33.0f, 52.0f, 32.0f)];
-        [signUpButton setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:0.7] forState:UIControlStateNormal];
-        [[signUpButton titleLabel] setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
-        [signUpButton setTitle:@"Sign Up" forState:UIControlStateNormal];
-        [signUpButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
-        [signUpButton addTarget:self action:@selector(signUpButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-        //[cancelButton setBackgroundImage:[UIImage imageNamed:@"ButtonBack.png"] forState:UIControlStateNormal];
-        //[cancelButton setBackgroundImage:[UIImage imageNamed:@"ButtonBackSelected.png"] forState:UIControlStateHighlighted];
-        [self.view addSubview:signUpButton];
-         */
-        
-        UIButton *pwForgotButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [pwForgotButton setFrame:CGRectMake( (self.view.bounds.size.width / 2 ) - 90.0f, self.view.bounds.size.height - 33.0f, 200.0f, 32.0f)];
-        [pwForgotButton setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:0.7] forState:UIControlStateNormal];
-        [[pwForgotButton titleLabel] setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
-        [pwForgotButton setTitle:@"Forgot Your Password?" forState:UIControlStateNormal];
-        [pwForgotButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
-        [pwForgotButton addTarget:self action:@selector(cancelButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-        //[cancelButton setBackgroundImage:[UIImage imageNamed:@"ButtonBack.png"] forState:UIControlStateNormal];
-        //[cancelButton setBackgroundImage:[UIImage imageNamed:@"ButtonBackSelected.png"] forState:UIControlStateHighlighted];
-        [self.view addSubview:pwForgotButton];
-        
-        UIImageView *logo = [[UIImageView alloc] initWithImage:nil];
-        [logo setImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
-        [logo setFrame:CGRectMake(40.0f, 50.0f, 260.0f, 60.0f)];
-        [self.view addSubview:logo];
-
-        
+        emailTextField = [[UITextField alloc] initWithFrame:CGRectMake( 35.0f, 320.0f, 250.0f, 50.0f)];
+        pwTextField = [[UITextField alloc] initWithFrame:CGRectMake( 35.0f, 390.0f, 250.0f, 50.0f)];
+        [cancelButton setFrame:CGRectMake( 20.0f, self.view.bounds.size.height - 36.0f, 70.0f, 32.0f)];
+        [loginButton setFrame:CGRectMake( 236.0f, self.view.bounds.size.height - 36.0f, 52.0f, 32.0f)];
+        [pwForgotButton setFrame:CGRectMake( (self.view.bounds.size.width / 2 ) - 98.0f, self.view.bounds.size.height - 36.0f, 200.0f, 32.0f)];
     }
+    
+    UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];
+    UIView *paddingView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];
+    UIColor *color = [UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:0.9];
+    
+    [emailTextField setBackgroundColor:[UIColor whiteColor]];
+    [emailTextField setFont:[UIFont systemFontOfSize:15]];
+    emailTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email" attributes:@{NSForegroundColorAttributeName: color, NSFontAttributeName:@"HelveticaNeue-Thin"}];
+    emailTextField.userInteractionEnabled = YES;
+    emailTextField.leftView = paddingView;
+    emailTextField.leftViewMode = UITextFieldViewModeAlways;
+    emailTextField.delegate = self;
+    emailTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    [emailTextField resignFirstResponder];
+    [self.view addSubview:emailTextField];
+    
+    [pwTextField setBackgroundColor:[UIColor whiteColor]];
+    [pwTextField setFont:[UIFont systemFontOfSize:15]];
+    pwTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{NSForegroundColorAttributeName: color, NSFontAttributeName:@"HelveticaNeue-Thin"}];
+    pwTextField.userInteractionEnabled = YES;
+    pwTextField.leftView = paddingView2;
+    pwTextField.leftViewMode = UITextFieldViewModeAlways;
+    pwTextField.delegate = self;
+    pwTextField.secureTextEntry = YES;
+    pwTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    [pwTextField resignFirstResponder];
+    [self.view addSubview:pwTextField];
+    
+    [cancelButton setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:0.8] forState:UIControlStateNormal];
+    [[cancelButton titleLabel] setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:15.0]];
+    [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [cancelButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
+    [cancelButton addTarget:self action:@selector(cancelButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    //[cancelButton setBackgroundImage:[UIImage imageNamed:@"ButtonBack.png"] forState:UIControlStateNormal];
+    //[cancelButton setBackgroundImage:[UIImage imageNamed:@"ButtonBackSelected.png"] forState:UIControlStateHighlighted];
+    [self.view addSubview:cancelButton];
+    
+    [loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [[loginButton titleLabel] setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:15.0]];
+    [loginButton setTitle:@"Log In" forState:UIControlStateNormal];
+    [loginButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
+    [loginButton addTarget:self action:@selector(loginButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    //[cancelButton setBackgroundImage:[UIImage imageNamed:@"ButtonBack.png"] forState:UIControlStateNormal];
+    //[cancelButton setBackgroundImage:[UIImage imageNamed:@"ButtonBackSelected.png"] forState:UIControlStateHighlighted];
+    [self.view addSubview:loginButton];
+
+    [pwForgotButton setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:0.8] forState:UIControlStateNormal];
+    [[pwForgotButton titleLabel] setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:15.0]];
+    [pwForgotButton setTitle:@"Need Help?" forState:UIControlStateNormal];
+    [pwForgotButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
+    [pwForgotButton addTarget:self action:@selector(cancelButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    //[cancelButton setBackgroundImage:[UIImage imageNamed:@"ButtonBack.png"] forState:UIControlStateNormal];
+    //[cancelButton setBackgroundImage:[UIImage imageNamed:@"ButtonBackSelected.png"] forState:UIControlStateHighlighted];
+    [self.view addSubview:pwForgotButton];
+
+    
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
@@ -123,6 +115,20 @@
     
     [self.view addGestureRecognizer:tapOutside];
     
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    // If there is text in the text field
+    if (textField.text.length + (string.length - range.length) > 0) {
+        // Set textfield font
+        textField.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:15];
+    } else {
+        // Set textfield placeholder font (or so it appears)
+        textField.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:15];
+    }
+    
+    return YES;
 }
 
 
@@ -211,7 +217,7 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     NSLog(@"Return Key Pressed");
     if (textField == emailTextField) {
-        [emailTextField resignFirstResponder];
+        [pwTextField becomeFirstResponder];
     } else {
         [pwTextField resignFirstResponder];
     }

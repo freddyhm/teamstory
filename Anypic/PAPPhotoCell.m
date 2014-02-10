@@ -17,15 +17,17 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
  
     if (self) {
-        // Initialization code
+        // Initialization code.
         self.opaque = NO;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.accessoryType = UITableViewCellAccessoryNone;
         self.clipsToBounds = NO;
 
+        // removing shadow.
+        /*
         UIView *dropshadowView = [[UIView alloc] init];
         dropshadowView.backgroundColor = [UIColor whiteColor];
-        dropshadowView.frame = CGRectMake( 20.0f, -44.0f, 280.0f, 322.0f);
+        dropshadowView.frame = CGRectMake( 7.5f, -44.0f, 305.0f, 322.0f);
         [self.contentView addSubview:dropshadowView];
         
         CALayer *layer = dropshadowView.layer;
@@ -34,14 +36,15 @@
         layer.shadowOpacity = 0.5f;
         layer.shadowOffset = CGSizeMake( 0.0f, 1.0f);
         layer.shouldRasterize = YES;
+         */
         
-        self.imageView.frame = CGRectMake( 20.0f, 0.0f, 280.0f, 280.0f);
+        self.imageView.frame = CGRectMake( 7.5f, 0.0f, 305.0f, 305.0f);
         self.imageView.backgroundColor = [UIColor blackColor];
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
         
         self.photoButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        self.photoButton.frame = CGRectMake( 20.0f, 0.0f, 280.0f, 280.0f);
-        self.photoButton.backgroundColor = [UIColor clearColor];
+        self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 305.0f, 305.0f);
+        self.photoButton.backgroundColor = [UIColor blackColor];
         [self.contentView addSubview:self.photoButton];
         
         [self.contentView bringSubviewToFront:self.imageView];
@@ -55,8 +58,8 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    self.imageView.frame = CGRectMake( 20.0f, 0.0f, 280.0f, 280.0f);
-    self.photoButton.frame = CGRectMake( 20.0f, 0.0f, 280.0f, 280.0f);
+    self.imageView.frame = CGRectMake( 7.5f, 0.0f, 305.0f, 305.0f);
+    self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 305.0f, 305.0f);
 }
 
 @end

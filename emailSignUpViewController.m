@@ -11,6 +11,10 @@
 
 @interface emailSignUpViewController ()
 
+@property (nonatomic, strong) UIButton *cancelButton;
+@property (nonatomic, strong) UIButton *signUpButton;
+@property (nonatomic, strong) UIButton *policy;
+
 @end
 
 @implementation emailSignUpViewController
@@ -18,87 +22,96 @@
 @synthesize signUpEmailTextField;
 @synthesize signUpPWTextField;
 @synthesize signUpPWTextField_confirm;
+@synthesize cancelButton;
+@synthesize signUpButton;
+@synthesize policy;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    policy = [UIButton buttonWithType:UIButtonTypeCustom];
+    
     // There is no documentation on how to handle assets with the taller iPhone 5 screen as of 9/13/2012
     if ([UIScreen mainScreen].bounds.size.height > 480.0f) {
         // for the iPhone 5
-        self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-intro2-iphone5.png"]];
+        self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"register_iphone5.png"]];
     } else {
-        self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-intro2-iphone4.png"]];
+        self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"register_iphone4.png"]];
         
-        CGRect signUpEmailTextField_frame = CGRectMake( 55.0f, 200.0f, 220.0f, 40.0f);
-        signUpEmailTextField = [[UITextField alloc] initWithFrame:signUpEmailTextField_frame];
-        [signUpEmailTextField setBackgroundColor:[UIColor whiteColor]];
-        [signUpEmailTextField setFont:[UIFont systemFontOfSize:13]];
-        //emailTextField.borderStyle = UITextBorderStyleRoundedRect;
-        signUpEmailTextField.placeholder = @"Email";
-        signUpEmailTextField.userInteractionEnabled = YES;
-        signUpEmailTextField.delegate = self;
-        signUpEmailTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        //companyName.keyboardAppearance = UIKeyboardAppearanceDefault;
-        [signUpEmailTextField resignFirstResponder];
-        [self.view addSubview:signUpEmailTextField];
-        
-        CGRect signUpPWTextField_frame = CGRectMake( 55.0f, 300.0f, 220.0f, 40.0f);
-        signUpPWTextField = [[UITextField alloc] initWithFrame:signUpPWTextField_frame];
-        [signUpPWTextField setBackgroundColor:[UIColor whiteColor]];
-        [signUpPWTextField setFont:[UIFont systemFontOfSize:13]];
-        //pwTextField.borderStyle = UITextBorderStyleRoundedRect;
-        signUpPWTextField.placeholder = @"Password";
-        signUpPWTextField.userInteractionEnabled = YES;
-        signUpPWTextField.delegate = self;
-        signUpPWTextField.secureTextEntry = YES;
-        signUpPWTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        //companyName.keyboardAppearance = UIKeyboardAppearanceDefault;
-        [signUpPWTextField resignFirstResponder];
-        [self.view addSubview:signUpPWTextField];
-        
-        CGRect signUpPWTextField_confirm_frame = CGRectMake( 55.0f, 400.0f, 220.0f, 40.0f);
-        signUpPWTextField_confirm = [[UITextField alloc] initWithFrame:signUpPWTextField_confirm_frame];
-        [signUpPWTextField_confirm setBackgroundColor:[UIColor whiteColor]];
-        [signUpPWTextField_confirm setFont:[UIFont systemFontOfSize:13]];
-        //pwTextField.borderStyle = UITextBorderStyleRoundedRect;
-        signUpPWTextField_confirm.placeholder = @"Confirm Password";
-        signUpPWTextField_confirm.userInteractionEnabled = YES;
-        signUpPWTextField_confirm.delegate = self;
-        signUpPWTextField_confirm.secureTextEntry = YES;
-        signUpPWTextField_confirm.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        //companyName.keyboardAppearance = UIKeyboardAppearanceDefault;
-        [signUpPWTextField_confirm resignFirstResponder];
-        [self.view addSubview:signUpPWTextField_confirm];
-        
-        UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [cancelButton setFrame:CGRectMake( 10.0f, self.view.bounds.size.height - 33.0f, 52.0f, 32.0f)];
-        [cancelButton setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:0.7] forState:UIControlStateNormal];
-        [[cancelButton titleLabel] setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
-        [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
-        [cancelButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
-        [cancelButton addTarget:self action:@selector(cancelButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-        //[cancelButton setBackgroundImage:[UIImage imageNamed:@"ButtonBack.png"] forState:UIControlStateNormal];
-        //[cancelButton setBackgroundImage:[UIImage imageNamed:@"ButtonBackSelected.png"] forState:UIControlStateHighlighted];
-        [self.view addSubview:cancelButton];
-        
-        UIButton *signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [signUpButton setFrame:CGRectMake( self.view.bounds.size.width - 60.0f, self.view.bounds.size.height - 33.0f, 52.0f, 32.0f)];
-        [signUpButton setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:0.7] forState:UIControlStateNormal];
-        [[signUpButton titleLabel] setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
-        [signUpButton setTitle:@"Sign Up" forState:UIControlStateNormal];
-        [signUpButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
-        [signUpButton addTarget:self action:@selector(signUpButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-        //[cancelButton setBackgroundImage:[UIImage imageNamed:@"ButtonBack.png"] forState:UIControlStateNormal];
-        //[cancelButton setBackgroundImage:[UIImage imageNamed:@"ButtonBackSelected.png"] forState:UIControlStateHighlighted];
-        [self.view addSubview:signUpButton];
-        
-        UIImageView *logo = [[UIImageView alloc] initWithImage:nil];
-        [logo setImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
-        [logo setFrame:CGRectMake(40.0f, 50.0f, 260.0f, 60.0f)];
-        [self.view addSubview:logo];
-        
+        signUpEmailTextField = [[UITextField alloc] initWithFrame:CGRectMake( 35.0f, 200.0f, 250.0f, 50.0f)];
+        signUpPWTextField = [[UITextField alloc] initWithFrame:CGRectMake( 35.0f, 270.0f, 250.0f, 50.0f)];
+        signUpPWTextField_confirm = [[UITextField alloc] initWithFrame:CGRectMake( 35.0f, 340.0f, 250.0f, 50.0f)];
+        [cancelButton setFrame:CGRectMake( 29.0f, 395.0f, 52.0f, 32.0f)];
+        [signUpButton setFrame:CGRectMake( self.view.bounds.size.width - 99.0f, 395.0f, 70.0f, 32.0f)];
+        [policy setFrame:CGRectMake(35.0f, self.view.bounds.size.height - 40.0f, 252.0f, 23.0f)];
         
     }
+    
+    UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];
+    UIView *paddingView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];
+    UIView *paddingView3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];
+    
+    [policy setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
+    [policy setBackgroundImage:[UIImage imageNamed:@"privacy.png"] forState:UIControlStateNormal];
+    [policy addTarget:self action:@selector(policyButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:policy];
+    
+    [signUpEmailTextField setBackgroundColor:[UIColor whiteColor]];
+    [signUpEmailTextField setFont:[UIFont systemFontOfSize:13]];
+    //emailTextField.borderStyle = UITextBorderStyleRoundedRect;
+    signUpEmailTextField.placeholder = @"Email";
+    signUpEmailTextField.leftView = paddingView;
+    signUpEmailTextField.leftViewMode = UITextFieldViewModeAlways;
+    signUpEmailTextField.userInteractionEnabled = YES;
+    signUpEmailTextField.delegate = self;
+    signUpEmailTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    //companyName.keyboardAppearance = UIKeyboardAppearanceDefault;
+    [signUpEmailTextField resignFirstResponder];
+    [self.view addSubview:signUpEmailTextField];
+    
+    [signUpPWTextField setBackgroundColor:[UIColor whiteColor]];
+    [signUpPWTextField setFont:[UIFont systemFontOfSize:13]];
+    //pwTextField.borderStyle = UITextBorderStyleRoundedRect;
+    signUpPWTextField.placeholder = @"Password";
+    signUpPWTextField.userInteractionEnabled = YES;
+    signUpPWTextField.leftView = paddingView2;
+    signUpPWTextField.leftViewMode = UITextFieldViewModeAlways;
+    signUpPWTextField.delegate = self;
+    signUpPWTextField.secureTextEntry = YES;
+    signUpPWTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    //companyName.keyboardAppearance = UIKeyboardAppearanceDefault;
+    [signUpPWTextField resignFirstResponder];
+    [self.view addSubview:signUpPWTextField];
+    
+    [signUpPWTextField_confirm setBackgroundColor:[UIColor whiteColor]];
+    [signUpPWTextField_confirm setFont:[UIFont systemFontOfSize:13]];
+    //pwTextField.borderStyle = UITextBorderStyleRoundedRect;
+    signUpPWTextField_confirm.placeholder = @"Confirm Password";
+    signUpPWTextField_confirm.userInteractionEnabled = YES;
+    signUpPWTextField_confirm.delegate = self;
+    signUpPWTextField_confirm.leftView = paddingView3;
+    signUpPWTextField_confirm.leftViewMode = UITextFieldViewModeAlways;
+    signUpPWTextField_confirm.secureTextEntry = YES;
+    signUpPWTextField_confirm.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    //companyName.keyboardAppearance = UIKeyboardAppearanceDefault;
+    [signUpPWTextField_confirm resignFirstResponder];
+    [self.view addSubview:signUpPWTextField_confirm];
+    
+    [cancelButton setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:0.7] forState:UIControlStateNormal];
+    [[cancelButton titleLabel] setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:15.0]];
+    [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [cancelButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
+    [cancelButton addTarget:self action:@selector(cancelButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:cancelButton];
+    
+    [signUpButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [[signUpButton titleLabel] setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:15.0]];
+    [signUpButton setTitle:@"Register" forState:UIControlStateNormal];
+    [signUpButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
+    [signUpButton addTarget:self action:@selector(signUpButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:signUpButton];
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
@@ -106,6 +119,20 @@
     
     [self.view addGestureRecognizer:tapOutside];
     
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    // If there is text in the text field
+    if (textField.text.length + (string.length - range.length) > 0) {
+        // Set textfield font
+        textField.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:15];
+    } else {
+        // Set textfield placeholder font (or so it appears)
+        textField.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:15];
+    }
+    
+    return YES;
 }
 
 
@@ -126,13 +153,13 @@
     float movementDuration = 0.3f; // tweak as needed
     
     if (textField == signUpEmailTextField) {
-        movementDistance = 0; // tweak as needed
+        movementDistance = 170; // tweak as needed
     }
     else if (textField == signUpPWTextField) {
-        movementDistance = 100; // tweak as needed
+        movementDistance = 170; // tweak as needed
     }
     else if (textField == signUpPWTextField_confirm) {
-        movementDistance = 180; // tweak as needed
+        movementDistance = 170; // tweak as needed
     }
     
     int movement = (up ? -movementDistance : movementDistance);
@@ -151,6 +178,10 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     [self animateTextField: textField up: NO];
+}
+
+- (void)policyButtonAction:(id)sender {
+    
 }
 
 -(void)signUpButtonAction:(id)sender {
@@ -199,11 +230,11 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     NSLog(@"Return Key Pressed");
     if (textField == signUpEmailTextField) {
-        [signUpEmailTextField resignFirstResponder];
+        [signUpPWTextField becomeFirstResponder];
     } else if (textField == signUpPWTextField) {
-        [signUpPWTextField resignFirstResponder];
+        [signUpPWTextField_confirm becomeFirstResponder];
     } else {
-        [signUpPWTextField_confirm resignFirstResponder];
+        [signUpPWTextField_confirm becomeFirstResponder];
     }
     
     return YES;

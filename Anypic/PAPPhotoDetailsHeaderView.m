@@ -9,8 +9,8 @@
 #import "PAPProfileImageView.h"
 #import "TTTTimeIntervalFormatter.h"
 
-#define baseHorizontalOffset 20.0f
-#define baseWidth 280.0f
+#define baseHorizontalOffset 7.5f
+#define baseWidth 305.0f
 
 #define horiBorderSpacing 6.0f
 #define horiMediumSpacing 8.0f
@@ -30,7 +30,7 @@
 
 #define nameLabelX avatarImageX+avatarImageDim+horiMediumSpacing
 #define nameLabelY avatarImageY+vertSmallSpacing
-#define nameLabelMaxWidth 280.0f - (horiBorderSpacing+avatarImageDim+horiMediumSpacing+horiBorderSpacing)
+#define nameLabelMaxWidth 305.0f - (horiBorderSpacing+avatarImageDim+horiMediumSpacing+horiBorderSpacing)
 
 #define timeLabelX nameLabelX
 #define timeLabelMaxWidth nameLabelMaxWidth
@@ -38,7 +38,7 @@
 #define mainImageX baseHorizontalOffset
 #define mainImageY nameHeaderHeight
 #define mainImageWidth baseWidth
-#define mainImageHeight 280.0f
+#define mainImageHeight 305.0f
 
 #define likeBarX baseHorizontalOffset
 #define likeBarY nameHeaderHeight + mainImageHeight
@@ -237,6 +237,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
      */
     self.nameHeaderView = [[UIView alloc] initWithFrame:CGRectMake(nameHeaderX, nameHeaderY, nameHeaderWidth, nameHeaderHeight)];
     self.nameHeaderView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundComments.png"]];
+    //self.nameHeaderView.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.nameHeaderView];
     
     CALayer *layer = self.nameHeaderView.layer;
@@ -267,8 +268,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [userButton setBackgroundColor:[UIColor clearColor]];
             [[userButton titleLabel] setFont:[UIFont boldSystemFontOfSize:15.0f]];
             [userButton setTitle:nameString forState:UIControlStateNormal];
-            [userButton setTitleColor:[UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
-            [userButton setTitleColor:[UIColor colorWithRed:134.0f/255.0f green:100.0f/255.0f blue:65.0f/255.0f alpha:1.0f] forState:UIControlStateHighlighted];
+            [userButton setTitleColor:[UIColor colorWithRed:87.0f/255.0f green:185.0f/255.0f blue:159.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
+            //[userButton setTitleColor:[UIColor colorWithRed:134.0f/255.0f green:100.0f/255.0f blue:65.0f/255.0f alpha:1.0f] forState:UIControlStateHighlighted];
             [[userButton titleLabel] setLineBreakMode:NSLineBreakByTruncatingTail];
             [[userButton titleLabel] setShadowOffset:CGSizeMake(0.0f, 1.0f)];
             [userButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
@@ -304,7 +305,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
      Create bottom section fo the header view; the likes
      */
     likeBarView = [[UIView alloc] initWithFrame:CGRectMake(likeBarX, likeBarY, likeBarWidth, likeBarHeight)];
-    [likeBarView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundComments.png"]]];
+    //[likeBarView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundComments.png"]]];
+    [likeBarView setBackgroundColor:[UIColor whiteColor]];
     [self addSubview:likeBarView];
     
     // Create the heart-shaped like button
