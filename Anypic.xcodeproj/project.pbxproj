@@ -1876,7 +1876,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SYSTEM_APPS_DIR)/MAMP/htdocs/ios-projects/teamstory/External/Konotor",
+					"$(SRCROOT)/External/Konotor",
 				);
 				PRODUCT_NAME = Anypic;
 				PROVISIONING_PROFILE = "";
@@ -1908,7 +1908,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SYSTEM_APPS_DIR)/MAMP/htdocs/ios-projects/teamstory/External/Konotor",
+					"$(SRCROOT)/External/Konotor",
 				);
 				PRODUCT_NAME = Anypic;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -1967,7 +1967,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SYSTEM_APPS_DIR)/MAMP/htdocs/ios-projects/teamstory/External/Konotor",
+					"$(SRCROOT)/External/Konotor",
 				);
 				PRODUCT_NAME = Anypic;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -2026,7 +2026,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SYSTEM_APPS_DIR)/MAMP/htdocs/ios-projects/teamstory/External/Konotor",
+					"$(SRCROOT)/External/Konotor",
 				);
 				PRODUCT_NAME = Anypic;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
