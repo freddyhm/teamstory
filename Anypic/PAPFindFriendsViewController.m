@@ -327,7 +327,7 @@ static NSUInteger const kPAPCellPhotoNumLabelTag = 5;
 
 /* Called when the user cancels the address book view controller. We simply dismiss it. */
 - (void)peoplePickerNavigationControllerDidCancel:(ABPeoplePickerNavigationController *)peoplePicker {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 /* Called when a member of the address book is selected, we return YES to display the member's details. */
@@ -373,7 +373,7 @@ static NSUInteger const kPAPCellPhotoNumLabelTag = 5;
 
 /* Simply dismiss the MFMailComposeViewController when the user sends an email or cancels */
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
-    [self dismissModalViewControllerAnimated:YES];  
+    [self dismissViewControllerAnimated:YES completion:nil];  
 }
 
 
@@ -381,7 +381,7 @@ static NSUInteger const kPAPCellPhotoNumLabelTag = 5;
 
 /* Simply dismiss the MFMessageComposeViewController when the user sends a text or cancels */
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -417,7 +417,7 @@ static NSUInteger const kPAPCellPhotoNumLabelTag = 5;
         addressBook.displayedProperties = [NSArray arrayWithObject:[NSNumber numberWithInt:kABPersonPhoneProperty]];
     }
 
-    [self presentModalViewController:addressBook animated:YES];
+    [self presentViewController:addressBook animated:YES completion:nil];
 }
 
 - (void)followAllFriendsButtonAction:(id)sender {
@@ -521,8 +521,8 @@ static NSUInteger const kPAPCellPhotoNumLabelTag = 5;
     // Dismiss the current modal view controller and display the compose email one.
     // Note that we do not animate them. Doing so would require us to present the compose
     // mail one only *after* the address book is dismissed.
-    [self dismissModalViewControllerAnimated:NO];
-    [self presentModalViewController:composeEmailViewController animated:NO];
+    [self dismissViewControllerAnimated:NO completion:nil];
+    [self presentViewController:composeEmailViewController animated:NO completion:nil];
 }
 
 - (void)presentMessageComposeViewController:(NSString *)recipient {
@@ -536,8 +536,8 @@ static NSUInteger const kPAPCellPhotoNumLabelTag = 5;
     
     // Dismiss the current modal view controller and display the compose text one.
     // See previous use for reason why these are not animated.
-    [self dismissModalViewControllerAnimated:NO];
-    [self presentModalViewController:composeTextViewController animated:NO];
+    [self dismissViewControllerAnimated:NO completion:nil];
+    [self presentViewController:composeTextViewController animated:NO completion:nil];
 }
 
 - (void)followUsersTimerFired:(NSTimer *)timer {

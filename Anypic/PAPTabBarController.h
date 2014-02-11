@@ -12,11 +12,13 @@
 @interface PAPTabBarController : UITabBarController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate>
 
 - (BOOL)shouldPresentPhotoCaptureController;
+- (void)shouldPresentControler:(NSString *)typeController;
 
 @end
 
 @protocol PAPTabBarControllerDelegate <NSObject>
 
 - (void)tabBarController:(UITabBarController *)tabBarController cameraButtonTouchUpInsideAction:(UIButton *)button;
+
 
 @end

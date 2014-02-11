@@ -71,7 +71,7 @@
             [self.commentButton setTitleEdgeInsets:UIEdgeInsetsMake( -2.0f, 0.0f, 0.0f, 0.0f)];
             [[self.commentButton titleLabel] setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
             [[self.commentButton titleLabel] setFont:[UIFont systemFontOfSize:9.0f]];
-            [[self.commentButton titleLabel] setMinimumFontSize:11.0f];
+            //[[self.commentButton titleLabel] setMinimumFontSize:11.0f];
             [[self.commentButton titleLabel] setAdjustsFontSizeToFitWidth:YES];
             [self.commentButton setBackgroundImage:[UIImage imageNamed:@"IconComment.png"] forState:UIControlStateNormal];
             [self.commentButton setSelected:NO];
@@ -91,7 +91,7 @@
             [self.likeButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
             [[self.likeButton titleLabel] setShadowOffset:CGSizeMake(0.0f, 1.0f)];
             [[self.likeButton titleLabel] setFont:[UIFont systemFontOfSize:9.0f]];
-            [[self.likeButton titleLabel] setMinimumFontSize:11.0f];
+            //[[self.likeButton titleLabel] setMinimumFontSize:11.0f];
             [[self.likeButton titleLabel] setAdjustsFontSizeToFitWidth:YES];
             [self.likeButton setAdjustsImageWhenHighlighted:NO];
             [self.likeButton setAdjustsImageWhenDisabled:NO];

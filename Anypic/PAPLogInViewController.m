@@ -78,7 +78,7 @@
     
     UINavigationController *signUpNav = [[UINavigationController alloc] initWithRootViewController:signUpController];
     signUpNav.navigationBarHidden = YES;
-    [self presentModalViewController:signUpNav animated:YES];
+    [self presentViewController:signUpNav animated:YES completion:nil];
 }
 
 
@@ -86,7 +86,7 @@
     emailLoginViewController *emailLoginController = [[emailLoginViewController alloc] init];
     UINavigationController *emailNav = [[UINavigationController alloc] initWithRootViewController:emailLoginController];
     emailNav.navigationBarHidden = YES;
-    [self presentModalViewController:emailNav animated:YES];
+    [self presentViewController:emailNav animated:YES completion:nil];
 }
 
 

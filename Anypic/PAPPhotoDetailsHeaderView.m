@@ -319,7 +319,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
     [likeButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.750f] forState:UIControlStateSelected];
     [likeButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
     [[likeButton titleLabel] setFont:[UIFont systemFontOfSize:12.0f]];
-    [[likeButton titleLabel] setMinimumFontSize:11.0f];
+    //deprecated
+    //[[likeButton titleLabel] setMinimumFontSize:11.0f];
     [[likeButton titleLabel] setAdjustsFontSizeToFitWidth:YES];
     [[likeButton titleLabel] setShadowOffset:CGSizeMake(0.0f, 1.0f)];
     [likeButton setAdjustsImageWhenDisabled:NO];

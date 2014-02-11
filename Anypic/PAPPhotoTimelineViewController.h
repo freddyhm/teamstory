@@ -7,7 +7,7 @@
 
 #import "PAPPhotoHeaderView.h"
 
-@interface PAPPhotoTimelineViewController : PFQueryTableViewController <PAPPhotoHeaderViewDelegate>
+@interface PAPPhotoTimelineViewController : PFQueryTableViewController <PAPPhotoHeaderViewDelegate, UIScrollViewDelegate>
 
 - (PAPPhotoHeaderView *)dequeueReusableSectionHeaderView;
 

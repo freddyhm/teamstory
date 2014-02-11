@@ -145,7 +145,7 @@
 
 
 - (void)cancelButtonAction:(id)sender {
-    [self.parentViewController dismissModalViewControllerAnimated:YES];
+    [self.parentViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) animateTextField: (UITextField*) textField up: (BOOL) up {
@@ -243,7 +243,7 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (alertView.tag == SUCCESSFUL) {
         if (buttonIndex == 0) {
-            [self.parentViewController dismissModalViewControllerAnimated:YES];
+            [self.parentViewController dismissViewControllerAnimated:YES completion:nil];
         }
     }
 }

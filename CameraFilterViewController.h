@@ -8,14 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CameraFilterViewController : UIViewController
+@interface CameraFilterViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource>
 
+@property (nonatomic,strong) NSString *imageSource;
 @property (nonatomic,strong) UIImage *croppedImage;
 @property (nonatomic,strong) IBOutlet UIImageView *croppedImageView;
-@property (strong, nonatomic) IBOutlet UIButton *test;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *cancelEditBtn;
-- (IBAction)cancelEdit:(UIBarButtonItem *)sender;
-- (IBAction)removeFilter:(id)sender;
-- (IBAction)saveEdit:(id)sender;
+@property (nonatomic, strong) IBOutlet UICollectionView *filterList;
+
+
+
+- (id)initWithImage:(UIImage *)aImage nib:(NSString *)nibNameOrNil source:(NSString *)imgSource;
+
 
 @end

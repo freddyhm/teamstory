@@ -515,4 +515,14 @@
     [self loadObjects];
 }
 
+// see if scrolling near end, refresh when decelerating if so
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    
+    float bottomEdge = scrollView.contentOffset.y + scrollView.frame.size.height;
+    
+    if (bottomEdge >= (scrollView.contentSize.height * 0.78)) {
+        [self loadNextPage];
+    }
+}
+
 @end

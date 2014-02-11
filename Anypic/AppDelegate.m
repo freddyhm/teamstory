@@ -238,7 +238,7 @@
     loginViewController.fields = PFLogInFieldsFacebook;
     loginViewController.facebookPermissions = @[ @"user_about_me" ];
     
-    [self.welcomeViewController presentModalViewController:loginViewController animated:NO];
+    [self.welcomeViewController presentViewController:loginViewController animated:NO completion:nil];
 }
 
 - (void)presentLoginViewController {
@@ -351,7 +351,7 @@
 #pragma mark - ()
 
 - (void)setupAppearance {
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:0.498f green:0.388f blue:0.329f alpha:1.0f]];
     [[UINavigationBar appearance] setTitleTextAttributes:@{
@@ -443,7 +443,7 @@
         [MBProgressHUD hideHUDForView:self.navController.presentedViewController.view animated:YES];
         [self presentTabBarController];
 
-        [self.navController dismissModalViewControllerAnimated:YES];
+        [self.navController dismissViewControllerAnimated:YES completion:nil];
         return YES;
     }
     

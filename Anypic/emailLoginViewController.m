@@ -139,7 +139,7 @@
 
 
 - (void)cancelButtonAction:(id)sender {
-    [self.parentViewController dismissModalViewControllerAnimated:YES];
+    [self.parentViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) animateTextField: (UITextField*) textField up: (BOOL) up {
@@ -169,7 +169,7 @@
     
     UINavigationController *signUpNav = [[UINavigationController alloc] initWithRootViewController:signUpController];
     signUpNav.navigationBarHidden = YES;
-    [self presentModalViewController:signUpNav animated:YES];
+    [self presentViewController:signUpNav animated:YES completion:nil];
     
     //UINavigationController *navigationController = [(AppDelegate*)[[UIApplication sharedApplication] delegate] navController];
     //[navigationController pushViewController:signUpController animated:YES];
@@ -203,7 +203,7 @@
                                                 
                                                 UINavigationController *profileSettingNav = [[UINavigationController alloc] initWithRootViewController:accountViewController];
                                                 //profileSettingNav.navigationBarHidden = YES;
-                                                [self presentModalViewController:profileSettingNav animated:YES];
+                                                [self presentViewController:profileSettingNav animated:YES completion:nil];
                                             }
                                             
                                         } else {
@@ -226,6 +226,11 @@
 }
 
 
+//reset password
+-(void)forgotPasswordAction:(id)sender{
+    
+    [PFUser requestPasswordResetForEmailInBackground:@"me@freddyhm.com"];
+}
 
 
 @end
