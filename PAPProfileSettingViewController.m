@@ -77,6 +77,20 @@
     description_user = self.user[@"description"];
     dropDownSelection = self.user[@"userType"];
     
+    if ([location_user length] == 0) {
+        location_user = @"Location";
+    }
+    if ([website_user length] == 0) {
+        website_user = @"Website";
+    }
+    if ([displayName_user length] == 0) {
+        displayName_user = @"Display Name";
+    }
+    if ([description_user length] == 0) {
+        description_user = @"Description";
+    }
+    
+    
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
         
     UIGraphicsBeginImageContext(self.view.frame.size);
@@ -477,9 +491,9 @@
     NSString* location_input = self.location.text;
     NSString* description_input = self.description.text;
     NSString* website_input = self.website.text;
+    bool profileExist_user = self.user[@"profileExist"];
     
-    if ([companyName_input length] > 0 && [location_input length] > 0 && [description_input length] > 0 && [website_input length] > 0) {
-        
+    if (profileExist_user == YES) {
         if (!imageData_picker) {
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"You did not select any image. Would you like to update the image?" delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES", nil];
             alert.alertViewStyle = UIAlertViewStyleDefault;
@@ -503,16 +517,43 @@
         alert.alertViewStyle = UIAlertViewStyleDefault;
         alert.tag = SUCCESSFUL;
         [alert show];
-        
-        //Checking profile existence.
-        bool profileExist = YES; // either YES or NO
-        NSNumber *profileBoolNum = [NSNumber numberWithBool: profileExist];
-        [[PFUser currentUser] setObject: profileBoolNum forKey: @"profileExist"];
-        
     } else {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please update all of your information" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        alert.alertViewStyle = UIAlertViewStyleDefault;
-        [alert show];
+        if ([companyName_input length] > 0 && [location_input length] > 0 && [description_input length] > 0 && [website_input length] > 0) {
+            
+            if (!imageData_picker) {
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"You did not select any image. Would you like to update the image?" delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES", nil];
+                alert.alertViewStyle = UIAlertViewStyleDefault;
+                alert.tag = IMAGE_NIL;
+                [alert show];
+                return;
+                
+            } else {
+                smallImage = NO;
+                [self uploadImage:imageData_picker];
+                [self uploadImage:imageData_picker_small];
+            }
+            
+            self.user[@"displayName"] = companyName_input;
+            self.user[@"location"] = location_input;
+            self.user[@"description"] = description_input;
+            self.user[@"website"] = website_input;
+            self.user[@"userType"] = dropDownSelection;
+            
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            alert.alertViewStyle = UIAlertViewStyleDefault;
+            alert.tag = SUCCESSFUL;
+            [alert show];
+            
+            //Checking profile existence.
+            bool profileExist = YES; // either YES or NO
+            NSNumber *profileBoolNum = [NSNumber numberWithBool: profileExist];
+            [[PFUser currentUser] setObject: profileBoolNum forKey: @"profileExist"];
+            
+        } else {
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please update all of your information" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            alert.alertViewStyle = UIAlertViewStyleDefault;
+            [alert show];
+        }
     }
     
 }
