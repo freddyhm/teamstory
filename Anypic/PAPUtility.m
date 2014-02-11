@@ -169,7 +169,7 @@
         PFFile *fileMediumImage = [PFFile fileWithData:mediumImageData];
         [fileMediumImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (!error) {
-                [[PFUser currentUser] setObject:fileMediumImage forKey:kPAPUserProfilePicMediumKey];
+                //[[PFUser currentUser] setObject:fileMediumImage forKey:kPAPUserProfilePicMediumKey];
                 [[PFUser currentUser] saveEventually];
             }
         }];
@@ -179,7 +179,7 @@
         PFFile *fileSmallRoundedImage = [PFFile fileWithData:smallRoundedImageData];
         [fileSmallRoundedImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (!error) {
-                [[PFUser currentUser] setObject:fileSmallRoundedImage forKey:kPAPUserProfilePicSmallKey];    
+                //[[PFUser currentUser] setObject:fileSmallRoundedImage forKey:kPAPUserProfilePicSmallKey];
                 [[PFUser currentUser] saveEventually];
             }
         }];
@@ -190,13 +190,14 @@
     NSString *facebookId = [user objectForKey:kPAPUserFacebookIDKey];
     return (facebookId && facebookId.length > 0);
 }
-
+/*
 + (BOOL)userHasProfilePictures:(PFUser *)user {
-    PFFile *profilePictureMedium = [user objectForKey:kPAPUserProfilePicMediumKey];
-    PFFile *profilePictureSmall = [user objectForKey:kPAPUserProfilePicSmallKey];
+    //PFFile *profilePictureMedium = [user objectForKey:kPAPUserProfilePicMediumKey];
+    //PFFile *profilePictureSmall = [user objectForKey:kPAPUserProfilePicSmallKey];
     
     return (profilePictureMedium && profilePictureSmall);
 }
+ */
 
 
 #pragma mark Display Name

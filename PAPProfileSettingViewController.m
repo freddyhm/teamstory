@@ -176,11 +176,6 @@
     [websiteImageView setFrame:CGRectMake( 15.0f, 373.0f, 50.0f, 50.0f)];
     [self.view addSubview:websiteImageView];
     
-    NSLog(@"%@", displayName_user);
-    NSLog(@"%@", location_user);
-    NSLog(@"%@", description_user);
-    NSLog(@"%@", website_user);
-    
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 260.0f, self.view.bounds.size.width, 1)];
     lineView.backgroundColor = lineColor;
     [self.view addSubview:lineView];
@@ -315,10 +310,10 @@
         if (!error) {
             if (smallImage == YES) {
                 smallImage = NO;
-                user[@"profilePictureSmall"] = imageFile;
+                user[@"profilePictureMedium"] = imageFile;
             } else if (smallImage == NO) {
                 smallImage = YES;
-                user[@"profilePic"] = imageFile;
+                user[@"profilePictureSmall"] = imageFile;
             }
             
                 NSLog(@"Picture has been uploaded successfully (NO HUD)");
@@ -506,12 +501,22 @@
             [self uploadImage:imageData_picker];
             [self uploadImage:imageData_picker_small];
         }
-        
-        self.user[@"displayName"] = companyName_input;
-        self.user[@"location"] = location_input;
-        self.user[@"description"] = description_input;
-        self.user[@"website"] = website_input;
-        self.user[@"userType"] = dropDownSelection;
+        if ([companyName_input length] > 0) {
+            self.user[@"displayName"] = companyName_input;
+        }
+        if ([location_input length] > 0) {
+            self.user[@"location"] = location_input;
+        }
+        if ([description_input length] > 0) {
+            self.user[@"description"] = description_input;
+
+        }
+        if ([website_input length] > 0) {
+            self.user[@"website"] = website_input;
+        }
+        if ([dropDownSelection length] > 0) {
+            self.user[@"userType"] = dropDownSelection;
+        }
         
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         alert.alertViewStyle = UIAlertViewStyleDefault;

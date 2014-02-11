@@ -196,11 +196,11 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 - (void)setLikeButtonState:(BOOL)selected {
     if (selected) {
-        [likeButton setTitleEdgeInsets:UIEdgeInsetsMake( -1.0f, 0.0f, 0.0f, 0.0f)];
-        [[likeButton titleLabel] setShadowOffset:CGSizeMake( 0.0f, -1.0f)];
+        [likeButton setTitleEdgeInsets:UIEdgeInsetsMake(1.0f, 0.5f, -1.0f, -0.5f)];
+        //[[likeButton titleLabel] setShadowOffset:CGSizeMake( 0.0f, -1.0f)];
     } else {
-        [likeButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 0.0f, 0.0f, 0.0f)];
-        [[likeButton titleLabel] setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
+        [likeButton setTitleEdgeInsets:UIEdgeInsetsMake(1.0f, 0.5f, -1.0f, -0.5f)];
+        //[[likeButton titleLabel] setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
     }
     [likeButton setSelected:selected];
 }
@@ -317,10 +317,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
     [likeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
     [likeButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
     [likeButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.750f] forState:UIControlStateSelected];
-    [likeButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
-    [[likeButton titleLabel] setFont:[UIFont systemFontOfSize:12.0f]];
-    //deprecated
-    //[[likeButton titleLabel] setMinimumFontSize:11.0f];
+    [likeButton setTitleEdgeInsets:UIEdgeInsetsMake(50.0f, 0.0f, 50.0f, 0.0f)];
+    [[likeButton titleLabel] setFont:[UIFont systemFontOfSize:9.0f]];
+
     [[likeButton titleLabel] setAdjustsFontSizeToFitWidth:YES];
     [[likeButton titleLabel] setShadowOffset:CGSizeMake(0.0f, 1.0f)];
     [likeButton setAdjustsImageWhenDisabled:NO];

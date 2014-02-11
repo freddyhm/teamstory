@@ -108,7 +108,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         
         UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
         shareButton.frame = CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f);
-        [shareButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [shareButton addTarget:self action:@selector(activityButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [shareButton setBackgroundImage:[UIImage imageNamed:@"share.png"] forState:UIControlStateNormal];
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
         
