@@ -102,7 +102,7 @@
     [[pwForgotButton titleLabel] setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:15.0]];
     [pwForgotButton setTitle:@"Need Help?" forState:UIControlStateNormal];
     [pwForgotButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
-    [pwForgotButton addTarget:self action:@selector(cancelButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [pwForgotButton addTarget:self action:@selector(forgotPasswordAction:) forControlEvents:UIControlEventTouchUpInside];
     //[cancelButton setBackgroundImage:[UIImage imageNamed:@"ButtonBack.png"] forState:UIControlStateNormal];
     //[cancelButton setBackgroundImage:[UIImage imageNamed:@"ButtonBackSelected.png"] forState:UIControlStateHighlighted];
     [self.view addSubview:pwForgotButton];
@@ -229,7 +229,28 @@
 //reset password
 -(void)forgotPasswordAction:(id)sender{
     
-    [PFUser requestPasswordResetForEmailInBackground:@"me@freddyhm.com"];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Forgot Password?" message:@"Enter your email" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    [alert show];
+}
+
+
+#pragma mark - UIAlertView Delegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    if(buttonIndex != 0){
+        
+        // there should be a check if input is email
+        
+        // check if email is in our system
+        
+        [PFUser requestPasswordResetForEmailInBackground:[[alertView textFieldAtIndex:0] text]];
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"You will receive an email with a link to reset your password" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        alert.alertViewStyle = UIAlertViewStyleDefault;
+        [alert show];
+    }
 }
 
 
