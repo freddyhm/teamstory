@@ -263,24 +263,20 @@
     // Dismiss controller
     [picker dismissViewControllerAnimated:YES completion:nil];
     
-    UIImage *smallRoundedImage = [image thumbnailImage:64 transparentBorder:0 cornerRadius:9 interpolationQuality:kCGInterpolationLow];
-    
-    // Resize image
-    UIGraphicsBeginImageContext(CGSizeMake(250, 250));
-    [image drawInRect: CGRectMake(0, 0, 640, 640)];
-    
-    //UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
+    UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:3.0f interpolationQuality:kCGInterpolationHigh];
+    UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(200.0f, 200.0f) interpolationQuality:kCGInterpolationHigh];
     
     // Upload image
-    imageData_picker = UIImageJPEGRepresentation(image, 0.05f);
+    imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
     imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
 
     UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    cameraButton.frame = CGRectMake( 110.0f, 90.0f, 100.0f, 100.0f );
-    [cameraButton setImage:image forState:UIControlStateNormal];
+    cameraButton.frame = CGRectMake( 110.0f, 90.0f, 100.0f, 100.0f);
+    cameraButton.center = CGPointMake(160.0f, 140.0f);
+    cameraButton.frame = CGRectIntegral(cameraButton.frame);
+    [cameraButton setImage:resizedImage forState:UIControlStateNormal];
     cameraButton.layer.cornerRadius = 2;
-    cameraButton.clipsToBounds = YES;
+    //cameraButton.clipsToBounds = YES;
     [cameraButton addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:cameraButton];
     
@@ -291,8 +287,8 @@
 
 }
 
--(void)uploadImage:(NSData *)imageData {
-    PFFile *imageFile = [PFFile fileWithName:@"profilePic.jpg" data:imageData];
+-(void)uploadImage_small:(NSData *)imageData {
+    PFFile *imageFile = [PFFile fileWithName:nil data:imageData];
     
     //HUD creation here (see example for code)
     refreshHUD = [[MBProgressHUD alloc] initWithView:self.view];
@@ -307,14 +303,9 @@
     
     // Save PFFile
     [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+              
         if (!error) {
-            if (smallImage == YES) {
-                smallImage = NO;
-                user[@"profilePictureMedium"] = imageFile;
-            } else if (smallImage == NO) {
-                smallImage = YES;
-                user[@"profilePictureSmall"] = imageFile;
-            }
+            user[@"profilePictureSmall"] = imageFile;
             
                 NSLog(@"Picture has been uploaded successfully (NO HUD)");
                 //profilePic.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
@@ -343,6 +334,55 @@
         HUD.progress = (float)percentDone/100;
     }];
 }
+
+-(void)uploadImage_medium:(NSData *)imageData {
+    PFFile *imageFile = [PFFile fileWithName:nil data:imageData];
+    
+    //HUD creation here (see example for code)
+    refreshHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:refreshHUD];
+    
+    // Register for HUD callbacks so we can remove it from the window at the right time
+    refreshHUD.delegate = self;
+    
+    // Show the HUD while the provided method executes in a new thread
+    [refreshHUD show:YES];
+    
+    
+    // Save PFFile
+    [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        
+        if (!error) {
+            user[@"profilePictureMedium"] = imageFile;
+            
+            NSLog(@"Picture has been uploaded successfully (NO HUD)");
+            //profilePic.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+            
+            [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (!error) {
+                    [user refresh];
+                    [self refreshView];
+                    NSLog(@"Picture has been uploaded successfully (WITH HUD)");
+                }
+                else{
+                    // Log details of the failure
+                    NSLog(@"Error: %@ %@", error, [error userInfo]);
+                }
+            }];
+            [refreshHUD removeFromSuperview];
+            
+        }
+        else{
+            [HUD hide:YES];
+            // Log details of the failure
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+    } progressBlock:^(int percentDone) {
+        // Update your progress spinner here. percentDone will be between 0 and 100.
+        HUD.progress = (float)percentDone/100;
+    }];
+}
+
 
 #pragma mark - UIActionSheetDelegate
 
@@ -497,10 +537,10 @@
             return;
             
         } else {
-            smallImage = NO;
-            [self uploadImage:imageData_picker];
-            [self uploadImage:imageData_picker_small];
+            [self uploadImage_medium:imageData_picker];
+            [self uploadImage_small:imageData_picker_small];
         }
+        
         if ([companyName_input length] > 0) {
             self.user[@"displayName"] = companyName_input;
         }
@@ -523,7 +563,7 @@
         alert.tag = SUCCESSFUL;
         [alert show];
     } else {
-        if ([companyName_input length] > 0 && [location_input length] > 0 && [description_input length] > 0 && [website_input length] > 0) {
+        if ([companyName_input length] > 0 && [location_input length] > 0 && [dropDownSelection length] > 0) {
             
             if (!imageData_picker) {
                 UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"You did not select any image. Would you like to update the image?" delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES", nil];
@@ -533,9 +573,8 @@
                 return;
                 
             } else {
-                smallImage = NO;
-                [self uploadImage:imageData_picker];
-                [self uploadImage:imageData_picker_small];
+                [self uploadImage_medium:imageData_picker];
+                [self uploadImage_small:imageData_picker_small];
             }
             
             self.user[@"displayName"] = companyName_input;
@@ -544,20 +583,31 @@
             self.user[@"website"] = website_input;
             self.user[@"userType"] = dropDownSelection;
             
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            alert.alertViewStyle = UIAlertViewStyleDefault;
-            alert.tag = SUCCESSFUL;
-            [alert show];
-            
             //Checking profile existence.
             bool profileExist = YES; // either YES or NO
             NSNumber *profileBoolNum = [NSNumber numberWithBool: profileExist];
             [[PFUser currentUser] setObject: profileBoolNum forKey: @"profileExist"];
             
-        } else {
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please update all of your information" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             alert.alertViewStyle = UIAlertViewStyleDefault;
+            alert.tag = SUCCESSFUL;
             [alert show];
+
+        } else {
+            if ([companyName_input length] == 0) {
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter Display Name." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                alert.alertViewStyle = UIAlertViewStyleDefault;
+                [alert show];
+                
+            } else if ([location_input length] == 0) {
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter your Location." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                alert.alertViewStyle = UIAlertViewStyleDefault;
+                [alert show];
+            } else {
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please choose User Type." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                alert.alertViewStyle = UIAlertViewStyleDefault;
+                [alert show];
+            }
         }
     }
     
@@ -579,11 +629,49 @@
             NSString* location_input = self.location.text;
             NSString* description_input = self.description.text;
             NSString* website_input = self.website.text;
+            bool profileExist_user = self.user[@"profileExist"];
             
-            self.user[@"displayName"] = companyName_input;
-            self.user[@"location"] = location_input;
-            self.user[@"description"] = description_input;
-            self.user[@"website"] = website_input;
+            if ([companyName_input length] > 0) {
+                self.user[@"displayName"] = companyName_input;
+            }
+            if ([location_input length] > 0) {
+                self.user[@"location"] = location_input;
+            }
+            if ([description_input length] > 0) {
+                self.user[@"description"] = description_input;
+                
+            }
+            if ([website_input length] > 0) {
+                self.user[@"website"] = website_input;
+            }
+            if ([dropDownSelection length] > 0) {
+                self.user[@"userType"] = dropDownSelection;
+            }
+            
+            if (profileExist_user == NO) {
+                UIImage *image = [UIImage imageNamed:@"default-pic.png"];
+                
+                UIImage *smallRoundedImage = [image thumbnailImage:86.0f transparentBorder:0 cornerRadius:3.0f interpolationQuality:kCGInterpolationLow];
+                
+                // Resize image
+                UIGraphicsBeginImageContext(CGSizeMake(305.0f, 305.0f));
+                [image drawInRect: CGRectMake(0, 0, 305.0f, 305.0f)];
+                
+                //UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
+                UIGraphicsEndImageContext();
+                
+                // Upload image
+                imageData_picker = UIImageJPEGRepresentation(image, 0.05f);
+                imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
+                
+                [self uploadImage_small:imageData_picker_small];
+                [self uploadImage_medium:imageData_picker];
+            }
+            
+            bool profileExist = YES; // either YES or NO
+            NSNumber *profileBoolNum = [NSNumber numberWithBool: profileExist];
+            [[PFUser currentUser] setObject: profileBoolNum forKey: @"profileExist"];
+            
             
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             alert.alertViewStyle = UIAlertViewStyleDefault;
@@ -591,19 +679,6 @@
             [alert show];
         }
     }
-    /*
-    if (buttonIndex == 0) {
-
-        UINavigationController *backToAccountView = self.tabBarController.viewControllers[PAPProfileTabBarItemIndex];
-        self.tabBarController.selectedViewController = backToAccountView;
-
-        [accountViewController_tabBar setUser:[PFUser currentUser]];
-        [backToAccountView pushViewController:accountViewController_tabBar animated:YES];
-        
-        //[self.navigationController popViewControllerAnimated:YES];
-
-    }
-     */
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
