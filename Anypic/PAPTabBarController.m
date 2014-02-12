@@ -99,6 +99,9 @@
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
     
+    // keep status bar white, in ios7 changes in imagepicker
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
     // set nav controller to picker's nav controller so we can access it in backToPhotoAlbum
     self.navController = navigationController;
     
@@ -124,7 +127,6 @@
     [viewController.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
     
 }
-
 
 #pragma mark - PAPTabBarController
 
