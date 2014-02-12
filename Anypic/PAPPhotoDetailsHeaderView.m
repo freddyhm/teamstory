@@ -239,7 +239,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     self.nameHeaderView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundComments.png"]];
     //self.nameHeaderView.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.nameHeaderView];
-    
+    /*
     CALayer *layer = self.nameHeaderView.layer;
     layer.backgroundColor = [UIColor whiteColor].CGColor;
     layer.masksToBounds = NO;
@@ -249,6 +249,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     layer.shouldRasterize = YES;
     
     layer.shadowPath = [UIBezierPath bezierPathWithRect:CGRectMake( 0.0f, self.nameHeaderView.frame.size.height - 4.0f, self.nameHeaderView.frame.size.width, 4.0f)].CGPath;
+     */
     
             // Load data for header
         [self.photographer fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {

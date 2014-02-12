@@ -122,7 +122,7 @@
 #pragma mark - ()
 
 - (BOOL)shouldUploadImage:(UIImage *)anImage {    
-    UIImage *resizedImage = [anImage resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(560.0f, 560.0f) interpolationQuality:kCGInterpolationHigh];
+    UIImage *resizedImage = [anImage resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(610.0f, 610.0f) interpolationQuality:kCGInterpolationHigh];
     UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:10.0f interpolationQuality:kCGInterpolationDefault];
     
     // JPEG to decrease file size and enable faster uploads & downloads

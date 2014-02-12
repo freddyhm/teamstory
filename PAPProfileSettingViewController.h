@@ -30,7 +30,8 @@
 
 - (void)refreshView;
 - (BOOL)shouldPresentPhotoCaptureController;
-- (void)uploadImage:(NSData *)imageData;
+- (void)uploadImage_small:(NSData *)imageData;
+- (void)uploadImage_medium:(NSData *)imageData;
 
 
 @end
