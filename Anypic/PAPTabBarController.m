@@ -231,7 +231,7 @@
     [self.navController popViewControllerAnimated:YES];
 }
 
--(void)shouldPresentControler:(NSString *)typeController{
+-(void)shouldPresentController:(NSString *)typeController{
     
     if ([typeController isEqualToString:@"Camera"]) {
         [self shouldStartCameraController];

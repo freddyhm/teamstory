@@ -17,14 +17,14 @@
                     <button opaque="NO" tag="100" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DR4-bb-EAr">
                         <rect key="frame" x="6" y="7" width="46" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <state key="normal" title="Button">
+                        <state key="normal" title="Filter">
+                            <color key="titleColor" red="0.43626434949999998" green="0.42964785129999999" blue="0.42868338439999998" alpha="1" colorSpace="calibratedRGB"/>
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                     </button>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
-            <color key="backgroundColor" red="0.2717120415" green="0.79908721299999996" blue="0.77306180970000005" alpha="1" colorSpace="calibratedRGB"/>
             <size key="customSize" width="65" height="46"/>
         </collectionViewCell>
     </objects>

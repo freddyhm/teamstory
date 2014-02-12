@@ -68,15 +68,11 @@
 {
     [super viewDidLoad];
     
+    // collectionview cell setup for filters
     UINib *cellNib = [UINib nibWithNibName:@"FilterCell" bundle:nil];
     [self.filterList registerNib:cellNib forCellWithReuseIdentifier:@"cvCell"];
-    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    [flowLayout setItemSize:CGSizeMake(100, 20)];
-    [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-    [self.filterList setCollectionViewLayout:flowLayout];
         
     // needed for img manipulation (re-init context everytime slows filter selection down so stored as class variable instead)
-    
     self.editableImage = [CIImage imageWithCGImage:[self.croppedImage CGImage]];
     
     // creates a context using GPU for faster processing
@@ -106,18 +102,16 @@
     self.didCancel = NO;
     
     // init filters, orginal image, and filtered images
-    self.filters = [[NSDictionary alloc] initWithObjectsAndKeys:
-                    @"CIPhotoEffectChrome", @"Chrome", @"CIPhotoEffectFade",
-                    @"Fade",@"CIPhotoEffectInstant", @"Instant", @"CIPhotoEffectMono",
-                    @"Mono",@"CIPhotoEffectProcess", @"Process", @"CIPhotoEffectTransfer",
-                    @"Transfer", nil];
+    self.filters = [[NSDictionary alloc] initWithObjectsAndKeys: @"", @"Normal",
+                    @"CIPhotoEffectChrome", @"Silicon Valley", @"CIPhotoEffectFade",
+                    @"NYC",@"CIPhotoEffectInstant", @"London", @"CIPhotoEffectMono",
+                    @"Paris",@"CIPhotoEffectProcess", @"LA", @"CIPhotoEffectTransfer",
+                    @"Vancouver", @"CIPhotoEffectNoir", @"Toronto", @"CIPhotoEffectTonal", @"Waterloo", nil];
     
   [self.croppedImageView setImage:self.croppedImage];
 }
 
 - (IBAction)selectFilter:(id)sender{
-    
-    self.currentButton = (UIButton *)sender;
     
     // get name of filter through button title, set selected image
     self.currentButton = (UIButton *)sender;
@@ -133,7 +127,7 @@
     self.prevButton = self.currentButton;
     
     // treat original as removal of filter, set to initial image
-    if([selectedFilter isEqualToString:@"Original"]){
+    if([selectedFilter isEqualToString:@"Normal"]){
         [self.croppedImageView setImage:self.croppedImage];
     }else{
     
@@ -176,7 +170,7 @@
 // Collection
 - (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section
 {
-    return 8;
+    return [self.filters count];
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -186,20 +180,21 @@
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    //NSMutableArray *data = [self.dataArray objectAtIndex:indexPath.section];
-    
-   // NSString *cellData = [data objectAtIndex:indexPath.row];
-    
+    // define order for filter names
+    NSArray *sortedFilterNames = [[NSArray alloc] initWithObjects:@"Normal", @"Silicon Valley", @"NYC", @"London", @"Paris", @"Toronto", @"LA", @"Waterloo", @"Vancouver", nil];
+    NSString *filterName = [sortedFilterNames objectAtIndex:indexPath.row];
+   
     static NSString *cellIdentifier = @"cvCell";
     
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     
-    UIButton *filter = (UIButton *)[cell viewWithTag:100];
-    [filter setTitle:@"New York" forState:UIControlStateNormal];
-    filter.titleLabel.adjustsFontSizeToFitWidth = TRUE;
+    // set filter button
+    UIButton *filterBtn = (UIButton *)[cell viewWithTag:100];
+    [filterBtn setTitle:filterName forState:UIControlStateNormal];
+    [filterBtn addTarget:self action:@selector(selectFilter:) forControlEvents:UIControlEventTouchUpInside];
+    filterBtn.titleLabel.adjustsFontSizeToFitWidth = TRUE;
     
     return cell;
-    
 }
 
 
