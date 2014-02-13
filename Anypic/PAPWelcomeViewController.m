@@ -23,7 +23,6 @@
     } else {
         //Iphone 3.5inch
         [backgroundImageView setImage:[UIImage imageNamed:@"Default.png"]];
-        NSLog(@"%f", [UIScreen mainScreen].bounds.size.height);
     }
     
    // NSLog(@"%@", backgroundImageView);
@@ -33,17 +32,24 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+    PFUser *user = [PFUser currentUser];
+
     // If not logged in, present login view controller
-    if (![PFUser currentUser]) {
+    if (!user) {
         [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentLoginViewControllerAnimated:NO];
         return;
     }
-    // Present Anypic UI
-    [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBarController];
+    bool profileExist = user[@"profileExist"];
     
-    // Refresh current user with server side data -- checks if user is still valid and so on
-    [[PFUser currentUser] refreshInBackgroundWithTarget:self selector:@selector(refreshCurrentUserCallbackWithResult:error:)];
+    if (user && profileExist == true) {
+        // Present Anypic UI
+        [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBarController];
+        
+        // Refresh current user with server side data -- checks if user is still valid and so on
+        [[PFUser currentUser] refreshInBackgroundWithTarget:self selector:@selector(refreshCurrentUserCallbackWithResult:error:)];
+    } else {
+        [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentAccountViewController];
+    }
 }
 
 #pragma mark - ()

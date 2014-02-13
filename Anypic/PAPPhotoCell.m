@@ -21,6 +21,7 @@
         self.opaque = NO;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.accessoryType = UITableViewCellAccessoryNone;
+        self.backgroundColor = [UIColor clearColor];
         self.clipsToBounds = NO;
 
         // removing shadow.

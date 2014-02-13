@@ -127,11 +127,12 @@
         CALayer *layer = [containerView layer];
         layer.backgroundColor = [[UIColor whiteColor] CGColor];
         layer.masksToBounds = NO;
-        layer.shadowRadius = 1.0f;
-        layer.shadowOffset = CGSizeMake( 0.0f, 2.0f);
+        layer.shadowRadius = 0.5f;
+        layer.shadowOffset = CGSizeMake( 0.0f, 1.0f);
         layer.shadowOpacity = 0.5f;
         layer.shouldRasterize = YES;
         layer.shadowPath = [UIBezierPath bezierPathWithRect:CGRectMake( 0.0f, containerView.frame.size.height - 4.0f, containerView.frame.size.width, 4.0f)].CGPath;
+        
     }
 
     return self;

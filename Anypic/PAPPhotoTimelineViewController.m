@@ -277,7 +277,12 @@
     [photosFromCurrentUserQuery whereKey:kPAPPhotoUserKey equalTo:[PFUser currentUser]];
     [photosFromCurrentUserQuery whereKeyExists:kPAPPhotoPictureKey];
 
+    /*
     PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:photosFromFollowedUsersQuery, photosFromCurrentUserQuery, nil]];
+    [query includeKey:kPAPPhotoUserKey];
+    [query orderByDescending:@"createdAt"];
+     */
+    PFQuery *query = [PFQuery queryWithClassName:kPAPPhotoClassKey];
     [query includeKey:kPAPPhotoUserKey];
     [query orderByDescending:@"createdAt"];
 
