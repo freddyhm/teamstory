@@ -124,12 +124,16 @@
     [profileImagePicker addGestureRecognizer:swipeUpGestureRecognizer];
     
     
-    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [backButton setFrame:CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f)];
-    [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
-    [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    // Do not display back button if user is first time logging in.
+    bool profileExist = self.user[@"profileExist"];
+    if (profileExist == true) {
+        UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [backButton setFrame:CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f)];
+        [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
+        [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    }
     
      
     UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -651,17 +655,11 @@
             if (profileExist_user == NO) {
                 UIImage *image = [UIImage imageNamed:@"default-pic.png"];
                 
-                UIImage *smallRoundedImage = [image thumbnailImage:86.0f transparentBorder:0 cornerRadius:3.0f interpolationQuality:kCGInterpolationLow];
-                
-                // Resize image
-                UIGraphicsBeginImageContext(CGSizeMake(305.0f, 305.0f));
-                [image drawInRect: CGRectMake(0, 0, 305.0f, 305.0f)];
-                
-                //UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
-                UIGraphicsEndImageContext();
+                UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:3.0f interpolationQuality:kCGInterpolationHigh];
+                UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(200.0f, 200.0f) interpolationQuality:kCGInterpolationHigh];
                 
                 // Upload image
-                imageData_picker = UIImageJPEGRepresentation(image, 0.05f);
+                imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
                 imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
                 
                 [self uploadImage_small:imageData_picker_small];

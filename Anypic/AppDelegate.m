@@ -203,7 +203,20 @@
     
     [FBRequestConnection startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
         if (!error) {
-            [self facebookRequestDidLoad:result];
+            PFUser *user = [PFUser currentUser];
+            
+            // verifying for FBuser
+            bool isFBuser = YES; // either YES or NO
+            NSNumber *profileBoolNum = [NSNumber numberWithBool: isFBuser];
+            [user setObject: profileBoolNum forKey: @"isFBuser"];
+            
+            bool profileExist = user[@"profileExist"];
+            
+            if (profileExist != true) {
+                [self settingRootViewAsAccountSettingController];
+            } else {
+                [self facebookRequestDidLoad:result];
+            }
         } else {
             [self facebookRequestDidFailWithError:error];
         }
@@ -230,6 +243,23 @@
 
 - (BOOL)isParseReachable {
     return self.networkStatus != NotReachable;
+}
+
+- (void)settingRootViewAsAccountSettingController {
+    self.navController = [[UINavigationController alloc] initWithRootViewController:self.welcomeViewController];
+    self.navController.navigationBarHidden = YES;
+    
+    self.window.rootViewController = self.navController;
+    
+    [self.window makeKeyAndVisible];
+    
+    [self presentAccountViewController];
+}
+
+- (void) presentAccountViewController {
+    PAPProfileSettingViewController *accountViewController = [[PAPProfileSettingViewController alloc] init];
+    UINavigationController *profileSettingNav = [[UINavigationController alloc] initWithRootViewController:accountViewController];
+    [self.welcomeViewController presentViewController:profileSettingNav animated:YES completion:nil];
 }
 
 - (void)presentLoginViewControllerAnimated:(BOOL)animated {
@@ -596,14 +626,17 @@
         }
     } else {
         self.hud.labelText = NSLocalizedString(@"Creating Profile", nil);
-
+        
+        
         if (user) {
+            /*
             NSString *facebookName = result[@"name"];
             if (facebookName && [facebookName length] != 0) {
                 [user setObject:facebookName forKey:kPAPUserDisplayNameKey];
             } else {
                 [user setObject:@"Someone" forKey:kPAPUserDisplayNameKey];
             }
+            */
             
             NSString *facebookId = result[@"id"];
             if (facebookId && [facebookId length] != 0) {
