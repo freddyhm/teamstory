@@ -62,6 +62,7 @@
     self.scrollView = [[UIScrollView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
     self.scrollView.delegate = self;
     self.scrollView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
+    [self.scrollView setShowsVerticalScrollIndicator:NO];
     self.view = self.scrollView;
     
     UIImageView *photoImageView = [[UIImageView alloc] initWithFrame:CGRectMake( 7.5f, 42.0f, 305.0f, 305.0f)];

@@ -75,6 +75,8 @@
     UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
     texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     self.tableView.backgroundView = texturedBackgroundView;
+    
+    [self.tableView setShowsVerticalScrollIndicator:NO];
 
     if (NSClassFromString(@"UIRefreshControl")) {
         // Use the new iOS 6 refresh control.
