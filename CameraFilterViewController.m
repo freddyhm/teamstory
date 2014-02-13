@@ -72,6 +72,7 @@
     // collectionview cell setup for filters
     UINib *cellNib = [UINib nibWithNibName:@"FilterCell" bundle:nil];
     [self.filterList registerNib:cellNib forCellWithReuseIdentifier:@"cvCell"];
+    self.filterList.delegate = self;
         
     // needed for img manipulation (re-init context everytime slows filter selection down so stored as class variable instead)
     self.editableImage = [CIImage imageWithCGImage:[self.croppedImage CGImage]];
@@ -119,14 +120,15 @@
     NSString *selectedFilter = self.currentButton.currentTitle;
     
     // swap button colors for active/non-active
-    
-    //grey-ish
-    [self.prevButton setTitleColor:[UIColor colorWithRed:(154/255.0) green:(154/255.0) blue:(154/255.0) alpha:1] forState:UIControlStateNormal];
+
+    if(self.prevButton != nil){
+        //grey-ish
+        [self.prevButton setTitleColor:[UIColor colorWithRed:(154/255.0) green:(154/255.0) blue:(154/255.0) alpha:1] forState:UIControlStateNormal];
+    }
     
     //aqua-ish
-    [self.currentButton setTitleColor:[UIColor colorWithRed:(69/255.0) green:(204/255.0) blue:(197/255.0) alpha:1] forState:UIControlStateNormal];
-    self.prevButton = self.currentButton;
-    
+    //[self.currentButton setTitleColor:[UIColor colorWithRed:(69/255.0) green:(204/255.0) blue:(197/255.0) alpha:1] forState:UIControlStateNormal];
+        
     // treat original as removal of filter, set to initial image
     if([selectedFilter isEqualToString:@"Normal"]){
         [self.croppedImageView setImage:self.croppedImage];
@@ -146,6 +148,8 @@
         
         CGImageRelease(cgimg);
     }
+    
+   // self.prevButton = self.currentButton;
 }
 
 - (IBAction)saveEdit:(id)sender{
@@ -178,11 +182,18 @@
     return 1;
 }
 
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+
+    [self selectFilter:self];
+}
+
+
+
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     // define order for filter names
-    NSArray *sortedFilterNames = [[NSArray alloc] initWithObjects:@"Normal", @"Silicon Valley", @"NYC", @"London", @"Paris", @"Toronto", @"LA", @"Waterloo", @"Vancouver", nil];
+   NSArray *sortedFilterNames = [[NSArray alloc] initWithObjects:@"Normal", @"Silicon Valley", @"NYC", @"London", @"Paris", @"Toronto", @"LA", @"Waterloo", @"Vancouver", nil];
     NSString *filterName = [sortedFilterNames objectAtIndex:indexPath.row];
    
     static NSString *cellIdentifier = @"cvCell";
@@ -190,10 +201,9 @@
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     
     // set filter button
-    UIButton *filterBtn = (UIButton *)[cell viewWithTag:100];
-    [filterBtn setTitle:filterName forState:UIControlStateNormal];
-    [filterBtn addTarget:self action:@selector(selectFilter:) forControlEvents:UIControlEventTouchUpInside];
-    filterBtn.titleLabel.adjustsFontSizeToFitWidth = TRUE;
+    UILabel *filterLabel = (UILabel *)[cell viewWithTag:100];
+    filterLabel.adjustsFontSizeToFitWidth = YES;
+    [filterLabel setText:filterName];
     
     return cell;
 }
