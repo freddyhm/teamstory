@@ -50,7 +50,7 @@
         pwTextField = [[UITextField alloc] initWithFrame:CGRectMake( 35.0f, 390.0f, 250.0f, 50.0f)];
         [cancelButton setFrame:CGRectMake( 20.0f, self.view.bounds.size.height - 36.0f, 70.0f, 32.0f)];
         [loginButton setFrame:CGRectMake( 236.0f, self.view.bounds.size.height - 36.0f, 52.0f, 32.0f)];
-        [pwForgotButton setFrame:CGRectMake( (self.view.bounds.size.width / 2 ) - 98.0f, self.view.bounds.size.height - 36.0f, 200.0f, 32.0f)];
+        [pwForgotButton setFrame:CGRectMake( (self.view.bounds.size.width / 2 ) - 38.0f, self.view.bounds.size.height - 36.0f, 80.0f, 32.0f)];
     }
     
     UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];
@@ -207,7 +207,7 @@
                                             }
                                             
                                         } else {
-                                            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Please check your email address or password" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                                            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Wrong Email" message:@"Please check your email address or password" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                                             alert.alertViewStyle = UIAlertViewStyleDefault;
                                             [alert show];
                                         }
@@ -229,7 +229,7 @@
 //reset password
 -(void)forgotPasswordAction:(id)sender{
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Forgot Password?" message:@"Enter your email" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Forgot Password" message:@"Enter your email" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
     alert.alertViewStyle = UIAlertViewStylePlainTextInput;
     [alert show];
 }
@@ -239,18 +239,49 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     
-    if(buttonIndex != 0){
+    NSString *alertTitle = [alertView title];
+    
+    // specific action based on active alert
+    if([alertTitle isEqualToString:@"Forgot Password"]){
         
-        // there should be a check if input is email
+        NSString *input = [[alertView textFieldAtIndex:0] text];
         
-        // check if email is in our system
+        // button response
+        if(buttonIndex != 0){
+            
+            // check if email is properly formatted
+            if([self NSStringIsValidEmail:input]){
+                
+                [PFUser requestPasswordResetForEmailInBackground:input block:^(BOOL succeeded, NSError *error) {
+                    if (succeeded == TRUE){
+                        UIAlertView *successAlert = [[UIAlertView alloc] initWithTitle:@"Reset Password" message:@"You will receive an email with a link to reset your password" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                        [successAlert show];
+                        
+                    }else{
+                        UIAlertView *failureAlert = [[UIAlertView alloc] initWithTitle:@"Missing User" message:@"No user account is linked to this email" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                        [failureAlert show];
+                    }
+                }];
+            }else{
+                
+                UIAlertView *notEmailFormat = [[UIAlertView alloc] initWithTitle:@"Invalid Email" message:@"Make sure you enter a valid email address" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                [notEmailFormat show];
+            }
+        }
         
-        [PFUser requestPasswordResetForEmailInBackground:[[alertView textFieldAtIndex:0] text]];
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" message:@"You will receive an email with a link to reset your password" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        alert.alertViewStyle = UIAlertViewStyleDefault;
-        [alert show];
+        [self dismissKeyboard];
     }
+}
+
+
+-(BOOL)NSStringIsValidEmail:(NSString *)checkString
+{
+    BOOL stricterFilter = YES;
+    NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";
+    NSString *laxString = @".+@([A-Za-z0-9]+\\.)+[A-Za-z]{2}[A-Za-z]*";
+    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:checkString];
 }
 
 
