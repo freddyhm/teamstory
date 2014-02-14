@@ -10,6 +10,6 @@
 
 @interface FilterCell : UICollectionViewCell
 
-@property (strong, nonatomic) IBOutlet UIButton *filter;
+@property (strong, nonatomic) UILabel *filter;
 
 @end

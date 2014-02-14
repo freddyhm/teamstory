@@ -291,7 +291,6 @@
 		D5FC095518A9B543000D85F1 /* CameraFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095418A9B543000D85F1 /* CameraFilterViewController.m */; };
 		D5FC095818A9B552000D85F1 /* FilterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095718A9B552000D85F1 /* FilterCell.m */; };
 		D5FC095C18A9B586000D85F1 /* CameraFilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FC095918A9B586000D85F1 /* CameraFilterViewController.xib */; };
-		D5FC095D18A9B586000D85F1 /* FilterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FC095A18A9B586000D85F1 /* FilterCell.xib */; };
 		D5FC095E18A9B586000D85F1 /* BFViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FC095B18A9B586000D85F1 /* BFViewController.xib */; };
 		D5FC099A18A9BFF4000D85F1 /* KonotorConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC096518A9BFF4000D85F1 /* KonotorConversationViewController.m */; };
 		D5FC099B18A9BFF4000D85F1 /* KonotorConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FC096618A9BFF4000D85F1 /* KonotorConversationViewController.xib */; };
@@ -676,7 +675,6 @@
 		D5FC095618A9B552000D85F1 /* FilterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterCell.h; sourceTree = SOURCE_ROOT; };
 		D5FC095718A9B552000D85F1 /* FilterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterCell.m; sourceTree = SOURCE_ROOT; };
 		D5FC095918A9B586000D85F1 /* CameraFilterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraFilterViewController.xib; sourceTree = SOURCE_ROOT; };
-		D5FC095A18A9B586000D85F1 /* FilterCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterCell.xib; sourceTree = SOURCE_ROOT; };
 		D5FC095B18A9B586000D85F1 /* BFViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BFViewController.xib; sourceTree = SOURCE_ROOT; };
 		D5FC096218A9BFF4000D85F1 /* Konotor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Konotor.h; sourceTree = "<group>"; };
 		D5FC096418A9BFF4000D85F1 /* KonotorConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorConversationViewController.h; sourceTree = "<group>"; };
@@ -1135,7 +1133,6 @@
 				C4F102A5156C57620061BC3E /* PAPPhotoDetailsFooterView.h */,
 				C4F102A6156C57620061BC3E /* PAPPhotoDetailsFooterView.m */,
 				D5FC095918A9B586000D85F1 /* CameraFilterViewController.xib */,
-				D5FC095A18A9B586000D85F1 /* FilterCell.xib */,
 				D5FC095B18A9B586000D85F1 /* BFViewController.xib */,
 			);
 			name = PhotoDetailsViews;
@@ -1714,7 +1711,6 @@
 				462FCB71188C7A6E005059F3 /* IconDiscoverSelected.png in Resources */,
 				C4DE99CC1603D11600BC968A /* Default-fbFACEBOOK_APP_ID.png in Resources */,
 				C4DE99CD1603D11600BC968A /* Default-fbFACEBOOK_APP_ID@2x.png in Resources */,
-				D5FC095D18A9B586000D85F1 /* FilterCell.xib in Resources */,
 				462FCB86188C8533005059F3 /* button_back@2x.png in Resources */,
 				C499A3041725E6DD0089D40A /* FacebookSDKResources.bundle in Resources */,
 				D5FC09AF18A9BFF4000D85F1 /* konotor_profile@2x.png in Resources */,
