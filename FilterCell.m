@@ -17,7 +17,7 @@
     if (self) {
         
         //create label, set parameters
-        self.filter = [[UILabel alloc]initWithFrame:CGRectMake(0, 12, 68, 21)];
+        self.filter = [[UILabel alloc]initWithFrame:CGRectMake(-15, 12, 68, 21)];
         self.filter.textColor = [UIColor colorWithRed:(154/255.0) green:(154/255.0) blue:(154/255.0) alpha:1];
         [self.filter setFont:[UIFont systemFontOfSize:11]];
         [self.filter setTextAlignment:NSTextAlignmentCenter];
