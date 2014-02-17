@@ -6,6 +6,8 @@
 
 #import "AppDelegate.h"
 
+#import "Konotor.h"
+#import "KonotorEventHandler.h"
 #import "Reachability.h"
 #import "MBProgressHUD.h"
 #import "PAPHomeViewController.h"
@@ -75,6 +77,21 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    
+    // Konotor setup
+    [Konotor InitWithAppID:@"ab785be6-9398-4b6a-8ae6-4d83431edad9" AppKey:@"3784ef60-6e0f-48fc-9a6c-3ac71c127dcb" withDelegate:[KonotorEventHandler sharedInstance]];
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+     (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+    
+    [self.window makeKeyAndVisible]; // or similar code to set a visible view
+    
+    // Set your view before the following snippet executes
+    NSDictionary* payload=[launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    if(payload!=nil)
+        [Konotor handleRemoteNotification:payload withShowScreen:YES];
+    
+    
 
     // ****************************************************************************
     // Parse initialization
@@ -125,6 +142,10 @@
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
+    
+    // konotor notifications setup
+    [Konotor addDeviceToken:newDeviceToken];
+    
     [PFPush storeDeviceToken:newDeviceToken];
 
     if (application.applicationIconBadgeNumber != 0) {
@@ -141,6 +162,14 @@
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    
+    // konotor
+    if([application applicationState]==UIApplicationStateActive)
+        [Konotor handleRemoteNotification:userInfo withShowScreen:NO];
+    else
+        [Konotor handleRemoteNotification:userInfo withShowScreen:YES];
+    
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:PAPAppDelegateApplicationDidReceiveRemoteNotification object:nil userInfo:userInfo];
     
     if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
@@ -167,6 +196,10 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
+    
+    // initiate konotor
+    [Konotor newSession];
+
 
     // Clear badge and update installation, required for auto-incrementing badges.
     if (application.applicationIconBadgeNumber != 0) {
@@ -381,6 +414,7 @@
 #pragma mark - ()
 
 - (void)setupAppearance {
+    
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:0.498f green:0.388f blue:0.329f alpha:1.0f]];
@@ -409,7 +443,7 @@
                          UITextAttributeTextShadowOffset: [NSValue valueWithCGSize:CGSizeMake(0.0f, 1.0f)]
      } forState:UIControlStateNormal];
     
-    [[UISearchBar appearance] setTintColor:[UIColor colorWithRed:32.0f/255.0f green:19.0f/255.0f blue:16.0f/255.0f alpha:1.0f]];
+    [[UISearchBar appearance] setTintColor:[UIColor colorWithRed:32.0f/255.0f green:19.0f/255.0f blue:16.0f/255.0f alpha:1.0f]];    
 }
 
 - (void)monitorReachability {

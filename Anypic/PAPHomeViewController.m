@@ -10,6 +10,7 @@
 #import "PAPSettingsButtonItem.h"
 #import "PAPFindFriendsViewController.h"
 #import "MBProgressHUD.h"
+#import "KonotorUI.h"
 
 @interface PAPHomeViewController ()
 @property (nonatomic, strong) PAPSettingsActionSheetDelegate *settingsActionSheetDelegate;
@@ -27,10 +28,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
 
-    //self.navigationItem.rightBarButtonItem = [[PAPSettingsButtonItem alloc] initWithTarget:self action:@selector(settingsButtonAction:)];
+    // button image for feedback
+    UIImageView *feedbackImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"button-feedback.png"]];
+    UIBarButtonItem *promptTrigger = [[UIBarButtonItem alloc] initWithCustomView:feedbackImgView];
+    feedbackImgView.userInteractionEnabled = YES;
+    [feedbackImgView addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(promptFeedback:)]];
     
+    self.navigationItem.rightBarButtonItem = promptTrigger;
+
     self.blankTimelineView = [[UIView alloc] initWithFrame:self.tableView.bounds];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -78,4 +86,9 @@
     PAPFindFriendsViewController *detailViewController = [[PAPFindFriendsViewController alloc] init];
     [self.navigationController pushViewController:detailViewController animated:YES];
 }
+
+- (void)promptFeedback:(id)sender{
+    [KonotorFeedbackScreen showFeedbackScreen];
+}
+
 @end

@@ -288,6 +288,8 @@
 		C4F102E2156C58440061BC3E /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4F102DF156C58440061BC3E /* Entitlements.plist */; };
 		C4F102E7156C58570061BC3E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C4F102E5156C58570061BC3E /* InfoPlist.strings */; };
 		C4F102EF156C58E00061BC3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102EC156C58E00061BC3E /* main.m */; };
+		D55497CC18B1B7BA00DE4192 /* button-feedback@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D55497CA18B1B7BA00DE4192 /* button-feedback@2x.png */; };
+		D55497CD18B1B7BA00DE4192 /* button-feedback.png in Resources */ = {isa = PBXBuildFile; fileRef = D55497CB18B1B7BA00DE4192 /* button-feedback.png */; };
 		D5FC095118A9B518000D85F1 /* BFCropInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC094E18A9B518000D85F1 /* BFCropInterface.m */; };
 		D5FC095218A9B518000D85F1 /* BFViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095018A9B518000D85F1 /* BFViewController.m */; };
 		D5FC095518A9B543000D85F1 /* CameraFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095418A9B543000D85F1 /* CameraFilterViewController.m */; };
@@ -670,6 +672,8 @@
 		C4F102EB156C58E00061BC3E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		C4F102EC156C58E00061BC3E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
 		C4F102ED156C58E00061BC3E /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = SOURCE_ROOT; };
+		D55497CA18B1B7BA00DE4192 /* button-feedback@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback@2x.png"; sourceTree = "<group>"; };
+		D55497CB18B1B7BA00DE4192 /* button-feedback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback.png"; sourceTree = "<group>"; };
 		D5FC094D18A9B518000D85F1 /* BFCropInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFCropInterface.h; sourceTree = SOURCE_ROOT; };
 		D5FC094E18A9B518000D85F1 /* BFCropInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFCropInterface.m; sourceTree = SOURCE_ROOT; };
 		D5FC094F18A9B518000D85F1 /* BFViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFViewController.h; sourceTree = SOURCE_ROOT; };
@@ -886,6 +890,8 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				D55497CA18B1B7BA00DE4192 /* button-feedback@2x.png */,
+				D55497CB18B1B7BA00DE4192 /* button-feedback.png */,
 				46ABD72D18AADFFB008F5AAB /* default-pic.png */,
 				46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */,
 				465A4EE318A83D5100E43DC6 /* share.png */,
@@ -1574,6 +1580,7 @@
 				C4BE6786157FC7F700A291C2 /* ButtonCameraSelected@2x.png in Resources */,
 				46B31EEC184E35150028D11C /* profileDescription.png in Resources */,
 				46ABD73018AADFFB008F5AAB /* default-pic@2x.png in Resources */,
+				D55497CC18B1B7BA00DE4192 /* button-feedback@2x.png in Resources */,
 				C4BE678B157FC7F700A291C2 /* ButtonFollow.png in Resources */,
 				C4BE678C157FC7F700A291C2 /* ButtonFollow@2x.png in Resources */,
 				D5FC09A818A9BFF4000D85F1 /* konotor_cross.png in Resources */,
@@ -1583,6 +1590,7 @@
 				465A4EDE18A8382900E43DC6 /* comingsoon.png in Resources */,
 				C4BE6790157FC7F700A291C2 /* ButtonFollowingSelected@2x.png in Resources */,
 				C4BE6791157FC7F700A291C2 /* ButtonFollowSelected.png in Resources */,
+				D55497CD18B1B7BA00DE4192 /* button-feedback.png in Resources */,
 				C4BE6792157FC7F700A291C2 /* ButtonFollowSelected@2x.png in Resources */,
 				D5FC09A618A9BFF4000D85F1 /* konotor_chatbubble_ios7_you.png in Resources */,
 				462FCB7C188C806C005059F3 /* button_done@2x.png in Resources */,
