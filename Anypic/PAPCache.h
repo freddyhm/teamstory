@@ -1,8 +1,7 @@
 //
 //  PAPCache.h
-//  Anypic
+//  Teamstory
 //
-//  Created by Héctor Ramos on 5/31/12.
 //
 
 #import <Foundation/Foundation.h>

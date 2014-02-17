@@ -1,6 +1,6 @@
 //
 //  FilterCell.m
-//  Anypic
+//  Teamstory
 //
 //  Created by Freddy Hidalgo-Monchez on 2/6/2014.
 //

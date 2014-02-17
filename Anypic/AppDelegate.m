@@ -596,7 +596,7 @@
                 [user setObject:@YES forKey:kPAPUserAlreadyAutoFollowedFacebookFriendsKey];
                 NSError *error = nil;
                 
-                // find common Facebook friends already using Anypic
+                // find common Facebook friends already using Teamstory
                 PFQuery *facebookFriendsQuery = [PFUser query];
                 [facebookFriendsQuery whereKey:kPAPUserFacebookIDKey containedIn:facebookIds];
                 
@@ -607,10 +607,10 @@
                 // combined query
                 PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:autoFollowAccountsQuery,facebookFriendsQuery, nil]];
                 
-                NSArray *anypicFriends = [query findObjects:&error];
+                NSArray *TeamstoryFriends = [query findObjects:&error];
                 
                 if (!error) {
-                    [anypicFriends enumerateObjectsUsingBlock:^(PFUser *newFriend, NSUInteger idx, BOOL *stop) {
+                    [TeamstoryFriends enumerateObjectsUsingBlock:^(PFUser *newFriend, NSUInteger idx, BOOL *stop) {
                         PFObject *joinActivity = [PFObject objectWithClassName:kPAPActivityClassKey];
                         [joinActivity setObject:user forKey:kPAPActivityFromUserKey];
                         [joinActivity setObject:newFriend forKey:kPAPActivityToUserKey];
@@ -643,7 +643,7 @@
                 
                 if (!error) {
                     [MBProgressHUD hideHUDForView:self.navController.presentedViewController.view animated:NO];
-                    if (anypicFriends.count > 0) {
+                    if (TeamstoryFriends.count > 0) {
                         self.hud = [MBProgressHUD showHUDAddedTo:self.homeViewController.view animated:NO];
                         self.hud.dimBackground = YES;
                         self.hud.labelText = NSLocalizedString(@"Following Friends", nil);

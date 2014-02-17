@@ -1,6 +1,6 @@
 //
 //  emailSignUpViewController.h
-//  Anypic
+//  Teamstory
 //
 //  Created by Tobok Lee on 12/16/13.
 //

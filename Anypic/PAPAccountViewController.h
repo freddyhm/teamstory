@@ -1,8 +1,7 @@
 //
 //  PAPAccountViewController.h
-//  Anypic
+//  Teamstory
 //
-//  Created by Héctor Ramos on 5/3/12.
 //
 
 #import "PAPPhotoTimelineViewController.h"

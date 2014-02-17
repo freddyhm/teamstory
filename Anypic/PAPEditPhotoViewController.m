@@ -1,8 +1,7 @@
 //
 //  PAPEditPhotoViewController.m
-//  Anypic
+//  Teamstory
 //
-//  Created by Héctor Ramos on 5/3/12.
 //
 
 #import "PAPEditPhotoViewController.h"
@@ -153,7 +152,7 @@
         [[UIApplication sharedApplication] endBackgroundTask:self.fileUploadBackgroundTaskId];
     }];
     
-    NSLog(@"Requested background expiration task with id %d for Anypic photo upload", self.fileUploadBackgroundTaskId);
+    NSLog(@"Requested background expiration task with id %d for Teamstory photo upload", self.fileUploadBackgroundTaskId);
     [self.photoFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             NSLog(@"Photo uploaded successfully");

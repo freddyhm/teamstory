@@ -1,8 +1,7 @@
 //
 //  PAPWelcomeViewController.h
-//  Anypic
+//  Teamstory
 //
-//  Created by Héctor Ramos on 5/10/12.
 //
 
 @interface PAPWelcomeViewController : UIViewController <UINavigationControllerDelegate>

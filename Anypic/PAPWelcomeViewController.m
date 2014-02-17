@@ -1,8 +1,7 @@
 //
 //  PAPWelcomeViewController.m
-//  Anypic
+//  Teamstory
 //
-//  Created by Héctor Ramos on 5/10/12.
 //
 
 #import "PAPWelcomeViewController.h"
@@ -42,7 +41,7 @@
     bool profileExist = user[@"profileExist"];
     
     if (user && profileExist == true) {
-        // Present Anypic UI
+        // Present Teamstory UI
         [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBarController];
         
         // Refresh current user with server side data -- checks if user is still valid and so on

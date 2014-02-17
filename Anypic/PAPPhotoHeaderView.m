@@ -1,8 +1,7 @@
 //
 //  PAPPhotoHeaderView.m
-//  Anypic
+//  Teamstory
 //
-//  Created by Héctor Ramos on 5/15/12.
 //
 
 #import "PAPPhotoHeaderView.h"

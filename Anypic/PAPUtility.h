@@ -1,8 +1,7 @@
 //
 //  PAPUtility.h
-//  Anypic
+//  Teamstory
 //
-//  Created by Mattieu Gamache-Asselin on 5/18/12.
 //
 
 @interface PAPUtility : NSObject

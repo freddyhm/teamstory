@@ -1,6 +1,6 @@
 //
 //  CameraFilterViewController.h
-//  Anypic
+//  Teamstory
 //
 //  Created by Freddy Hidalgo-Monchez on 1/15/2014.
 //
