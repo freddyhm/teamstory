@@ -73,8 +73,10 @@
     [self.filterList registerClass:[FilterCell class] forCellWithReuseIdentifier:@"FilterCell"];
     self.filterList.delegate = self;
     
+    
+    
     //custom colors
-    self.selectedStateColor = [UIColor colorWithRed:(69/255.0) green:(204/255.0) blue:(197/255.0) alpha:1];
+    self.selectedStateColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
     self.defaultStateColor = [UIColor colorWithRed:(154/255.0) green:(154/255.0) blue:(154/255.0) alpha:1];
         
     // needed for img manipulation (re-init context everytime slows filter selection down so stored as class variable instead)
