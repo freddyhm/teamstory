@@ -10,16 +10,18 @@
 #import "PAPEditPhotoViewController.h"
 #import "PAPTabBarController.h"
 #import "UIImage+ResizeAdditions.h"
+#import "FilterCell.h"
 
 @interface CameraFilterViewController ()
 
 @property (nonatomic, assign) BOOL didCancel;
 @property (nonatomic, strong) NSDictionary *filters;
 @property (nonatomic, strong) NSMutableDictionary *filteredImages;
-
-
-@property (nonatomic, strong) UIButton *prevButton;
-@property (nonatomic, strong) UIButton *currentButton;
+@property (nonatomic, strong) NSArray *sortedFilterNames;
+@property (nonatomic,strong) NSString *imageSource;
+@property (nonatomic,strong) UIImage *croppedImage;
+@property (nonatomic,strong) UIColor *selectedStateColor;
+@property (nonatomic,strong) UIColor *defaultStateColor;
 @property (nonatomic, strong) CIContext *context;
 @property (nonatomic, strong) CIImage *editableImage;
 
@@ -37,8 +39,6 @@
 @synthesize croppedImage;
 @synthesize croppedImageView;
 @synthesize imageSource;
-@synthesize prevButton;
-@synthesize currentButton;
 @synthesize filterList;
 
 
@@ -64,19 +64,22 @@
     }
 }
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    UINib *cellNib = [UINib nibWithNibName:@"FilterCell" bundle:nil];
-    [self.filterList registerNib:cellNib forCellWithReuseIdentifier:@"cvCell"];
-    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    [flowLayout setItemSize:CGSizeMake(100, 20)];
-    [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-    [self.filterList setCollectionViewLayout:flowLayout];
+    // collectionview cell setup for filters
+    [self.filterList registerClass:[FilterCell class] forCellWithReuseIdentifier:@"FilterCell"];
+    self.filterList.delegate = self;
+    
+    
+    
+    //custom colors
+    self.selectedStateColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
+    self.defaultStateColor = [UIColor colorWithRed:(154/255.0) green:(154/255.0) blue:(154/255.0) alpha:1];
         
     // needed for img manipulation (re-init context everytime slows filter selection down so stored as class variable instead)
-    
     self.editableImage = [CIImage imageWithCGImage:[self.croppedImage CGImage]];
     
     // creates a context using GPU for faster processing
@@ -101,39 +104,28 @@
     
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
     [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
-    
+
     // flag used to signal user exit
     self.didCancel = NO;
     
-    // init filters, orginal image, and filtered images
-    self.filters = [[NSDictionary alloc] initWithObjectsAndKeys:
-                    @"CIPhotoEffectChrome", @"Chrome", @"CIPhotoEffectFade",
-                    @"Fade",@"CIPhotoEffectInstant", @"Instant", @"CIPhotoEffectMono",
-                    @"Mono",@"CIPhotoEffectProcess", @"Process", @"CIPhotoEffectTransfer",
-                    @"Transfer", nil];
+    // filter system names and their custom names
+    self.filters = [[NSDictionary alloc] initWithObjectsAndKeys: @"", @"Normal",
+                    @"CIPhotoEffectChrome", @"Silicon Valley", @"CIPhotoEffectFade",
+                    @"New York",@"CIPhotoEffectInstant", @"London", @"CIPhotoEffectMono",
+                    @"Paris",@"CIPhotoEffectProcess", @"Los Angeles", @"CIPhotoEffectTransfer",
+                    @"Vancouver", @"CIPhotoEffectNoir", @"Toronto", @"CIPhotoEffectTonal", @"Waterloo", nil];
+    
+    
+    // define order of appearance for filter names
+    self.sortedFilterNames = [[NSArray alloc] initWithObjects: @"Normal", @"London", @"Paris", @"New York", @"Los Angeles", @"Vancouver", @"Toronto", @"Waterloo", @"Silicon Valley", nil];
     
   [self.croppedImageView setImage:self.croppedImage];
 }
 
-- (IBAction)selectFilter:(id)sender{
+- (IBAction)selectFilter:(NSString *)selectedFilter{
     
-    self.currentButton = (UIButton *)sender;
-    
-    // get name of filter through button title, set selected image
-    self.currentButton = (UIButton *)sender;
-    NSString *selectedFilter = self.currentButton.currentTitle;
-    
-    // swap button colors for active/non-active
-    
-    //grey-ish
-    [self.prevButton setTitleColor:[UIColor colorWithRed:(154/255.0) green:(154/255.0) blue:(154/255.0) alpha:1] forState:UIControlStateNormal];
-    
-    //aqua-ish
-    [self.currentButton setTitleColor:[UIColor colorWithRed:(69/255.0) green:(204/255.0) blue:(197/255.0) alpha:1] forState:UIControlStateNormal];
-    self.prevButton = self.currentButton;
-    
-    // treat original as removal of filter, set to initial image
-    if([selectedFilter isEqualToString:@"Original"]){
+       // treat original as removal of filter, set to initial image
+    if([selectedFilter isEqualToString:@"Normal"]){
         [self.croppedImageView setImage:self.croppedImage];
     }else{
     
@@ -176,30 +168,40 @@
 // Collection
 - (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section
 {
-    return 8;
+    return [self.sortedFilterNames count];
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
 }
 
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    FilterCell *selectedCell =(FilterCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    selectedCell.filter.textColor = self.selectedStateColor;
+    [self selectFilter:selectedCell.filter.text];
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    FilterCell *selectedCell =(FilterCell *) [collectionView cellForItemAtIndexPath:indexPath];
+    selectedCell.filter.textColor = self.defaultStateColor;
+    [self selectFilter:selectedCell.filter.text];
+}
+
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    //NSMutableArray *data = [self.dataArray objectAtIndex:indexPath.section];
+    NSString *filterName = [self.sortedFilterNames objectAtIndex:indexPath.row];
     
-   // NSString *cellData = [data objectAtIndex:indexPath.row];
+    // create custom filter cell
+    FilterCell *cell = (FilterCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"FilterCell" forIndexPath:indexPath];
     
-    static NSString *cellIdentifier = @"cvCell";
-    
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
-    
-    UIButton *filter = (UIButton *)[cell viewWithTag:100];
-    [filter setTitle:@"New York" forState:UIControlStateNormal];
-    filter.titleLabel.adjustsFontSizeToFitWidth = TRUE;
-    
+    // set name and color based on state
+    cell.filter.text = filterName;
+    cell.filter.textColor = cell.selected ? self.selectedStateColor : self.defaultStateColor;
+
     return cell;
-    
 }
 
 

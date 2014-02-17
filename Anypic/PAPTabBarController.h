@@ -12,7 +12,7 @@
 @interface PAPTabBarController : UITabBarController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate>
 
 - (BOOL)shouldPresentPhotoCaptureController;
-- (void)shouldPresentControler:(NSString *)typeController;
+- (void)shouldPresentController:(NSString *)typeController;
 
 @end
 

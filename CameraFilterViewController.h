@@ -10,8 +10,6 @@
 
 @interface CameraFilterViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource>
 
-@property (nonatomic,strong) NSString *imageSource;
-@property (nonatomic,strong) UIImage *croppedImage;
 @property (nonatomic,strong) IBOutlet UIImageView *croppedImageView;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *cancelEditBtn;
 @property (nonatomic, strong) IBOutlet UICollectionView *filterList;
