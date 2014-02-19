@@ -15,7 +15,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         UIScrollView *headerScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 100.0f)];
-        [headerScrollView setContentSize:CGSizeMake(395.0f, 36.0f)];
+        [headerScrollView setContentSize:CGSizeMake(525.0f, 36.0f)];
         
         UIButton *newsButton_1 = [[UIButton alloc] initWithFrame:CGRectMake(5.0f, 5.0f, 125.0f, 90.0f)];
         [newsButton_1 setImage:[UIImage imageNamed:@"news1.png"] forState:UIControlStateNormal];
@@ -29,6 +29,10 @@
         UIButton *newsButton_3 = [[UIButton alloc] initWithFrame:CGRectMake(265.0f, 5.0f, 125.0f, 90.0f)];
         [newsButton_3 setImage:[UIImage imageNamed:@"news3.png"] forState:UIControlStateNormal];
         [headerScrollView addSubview:newsButton_3];
+        
+        UIButton *newsButton_4 = [[UIButton alloc] initWithFrame:CGRectMake(395.0f, 5.0f, 125.0f, 90.0f)];
+        [newsButton_4 setImage:[UIImage imageNamed:@"news4.png"] forState:UIControlStateNormal];
+        [headerScrollView addSubview:newsButton_4];
         
         [headerScrollView setShowsHorizontalScrollIndicator:NO];
         [self addSubview:headerScrollView];

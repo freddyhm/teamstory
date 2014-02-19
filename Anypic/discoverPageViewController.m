@@ -69,7 +69,7 @@ NSInteger selection = 1;
 }
 
 - (void) displayPerksView {
-    perksView = [[PAPperksView alloc] initWithFrame:CGRectMake(0.0f, 160.0f, self.view.bounds.size.width, self.view.bounds.size.height - 102.0f)];
+    perksView = [[PAPperksView alloc] initWithFrame:CGRectMake(0.0f, 146.0f, self.view.bounds.size.width, self.view.bounds.size.height - 146.0f)];
     [self.view addSubview:perksView];
 }
 

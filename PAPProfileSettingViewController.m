@@ -552,8 +552,7 @@
             self.user[@"location"] = location_input;
         }
         if ([description_input length] > 0) {
-            self.user[@"description"] = description_input;
-
+           self.user[@"description"] = description_input;
         }
         if ([website_input length] > 0) {
             self.user[@"website"] = website_input;
@@ -582,10 +581,10 @@
             }
             
             self.user[@"displayName"] = companyName_input;
-            self.user[@"location"] = location_input;
             self.user[@"description"] = description_input;
             self.user[@"website"] = website_input;
             self.user[@"userType"] = dropDownSelection;
+            self.user[@"description"] = description_input;
             
             //Checking profile existence.
             bool profileExist = YES; // either YES or NO
@@ -643,7 +642,6 @@
             }
             if ([description_input length] > 0) {
                 self.user[@"description"] = description_input;
-                
             }
             if ([website_input length] > 0) {
                 self.user[@"website"] = website_input;
