@@ -95,6 +95,17 @@
 		4688686F185F8B78002BA081 /* emailSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4688686E185F8B78002BA081 /* emailSignUpViewController.m */; };
 		46ABD72F18AADFFB008F5AAB /* default-pic.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD72D18AADFFB008F5AAB /* default-pic.png */; };
 		46ABD73018AADFFB008F5AAB /* default-pic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */; };
+		46ABD73318B12E01008F5AAB /* PAPperksoverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 46ABD73218B12E01008F5AAB /* PAPperksoverlay.m */; };
+		46ABD73818B13671008F5AAB /* deezer-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD73418B13671008F5AAB /* deezer-logo@2x.png */; };
+		46ABD73918B13671008F5AAB /* deezer-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD73518B13671008F5AAB /* deezer-logo.png */; };
+		46ABD73E18B1381D008F5AAB /* discover-content-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD73C18B1381D008F5AAB /* discover-content-button.png */; };
+		46ABD73F18B1381D008F5AAB /* discover-content-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD73D18B1381D008F5AAB /* discover-content-button@2x.png */; };
+		46ABD74418B143A4008F5AAB /* news4.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD74018B143A4008F5AAB /* news4.png */; };
+		46ABD74518B143A4008F5AAB /* news4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD74118B143A4008F5AAB /* news4@2x.png */; };
+		46ABD74A18B144D4008F5AAB /* news2.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD74818B144D4008F5AAB /* news2.png */; };
+		46ABD74B18B144D4008F5AAB /* news2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD74918B144D4008F5AAB /* news2@2x.png */; };
+		46ABD74E18B147FC008F5AAB /* button_cancel_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD74C18B147FC008F5AAB /* button_cancel_selected.png */; };
+		46ABD74F18B147FC008F5AAB /* button_cancel_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD74D18B147FC008F5AAB /* button_cancel_selected@2x.png */; };
 		46B31EDA184D696B0028D11C /* IconProfileSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B31ED2184D696B0028D11C /* IconProfileSelected.png */; };
 		46B31EDB184D696B0028D11C /* IconProfileSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B31ED3184D696B0028D11C /* IconProfileSelected@2x.png */; };
 		46B31EDE184D696B0028D11C /* IconProfile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B31ED6184D696B0028D11C /* IconProfile@2x.png */; };
@@ -131,8 +142,6 @@
 		46FB0A8A1888BAF700E978CD /* PAPdiscoveryHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 46FB0A891888BAF700E978CD /* PAPdiscoveryHeaderView.m */; };
 		46FB0A911888BBF400E978CD /* news1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A8B1888BBF400E978CD /* news1@2x.png */; };
 		46FB0A921888BBF400E978CD /* news1.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A8C1888BBF400E978CD /* news1.png */; };
-		46FB0A931888BBF400E978CD /* news2.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A8D1888BBF400E978CD /* news2.png */; };
-		46FB0A941888BBF400E978CD /* news2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A8E1888BBF400E978CD /* news2@2x.png */; };
 		46FB0A951888BBF400E978CD /* news3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A8F1888BBF400E978CD /* news3@2x.png */; };
 		46FB0A961888BBF400E978CD /* news3.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A901888BBF400E978CD /* news3.png */; };
 		46FB0A991888E4C200E978CD /* bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A971888E4C200E978CD /* bg@2x.png */; };
@@ -200,10 +209,6 @@
 		C4BE6790157FC7F700A291C2 /* ButtonFollowingSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE6738157FC7E900A291C2 /* ButtonFollowingSelected@2x.png */; };
 		C4BE6791157FC7F700A291C2 /* ButtonFollowSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE6739157FC7EA00A291C2 /* ButtonFollowSelected.png */; };
 		C4BE6792157FC7F700A291C2 /* ButtonFollowSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE673A157FC7EA00A291C2 /* ButtonFollowSelected@2x.png */; };
-		C4BE6793157FC7F700A291C2 /* ButtonImageSettings.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE673B157FC7EA00A291C2 /* ButtonImageSettings.png */; };
-		C4BE6794157FC7F700A291C2 /* ButtonImageSettings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE673C157FC7EA00A291C2 /* ButtonImageSettings@2x.png */; };
-		C4BE6795157FC7F700A291C2 /* ButtonImageSettingsSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE673D157FC7EB00A291C2 /* ButtonImageSettingsSelected.png */; };
-		C4BE6796157FC7F700A291C2 /* ButtonImageSettingsSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE673E157FC7EB00A291C2 /* ButtonImageSettingsSelected@2x.png */; };
 		C4BE6797157FC7F700A291C2 /* ButtonLike.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE673F157FC7EB00A291C2 /* ButtonLike.png */; };
 		C4BE6798157FC7F700A291C2 /* ButtonLike@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE6740157FC7EC00A291C2 /* ButtonLike@2x.png */; };
 		C4BE6799157FC7F700A291C2 /* ButtonLikeSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE6741157FC7EC00A291C2 /* ButtonLikeSelected.png */; };
@@ -438,6 +443,18 @@
 		4688686E185F8B78002BA081 /* emailSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = emailSignUpViewController.m; sourceTree = SOURCE_ROOT; };
 		46ABD72D18AADFFB008F5AAB /* default-pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-pic.png"; sourceTree = "<group>"; };
 		46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-pic@2x.png"; sourceTree = "<group>"; };
+		46ABD73118B12E01008F5AAB /* PAPperksoverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPperksoverlay.h; path = Anypic/PAPperksoverlay.h; sourceTree = SOURCE_ROOT; };
+		46ABD73218B12E01008F5AAB /* PAPperksoverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPperksoverlay.m; path = Anypic/PAPperksoverlay.m; sourceTree = SOURCE_ROOT; };
+		46ABD73418B13671008F5AAB /* deezer-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "deezer-logo@2x.png"; sourceTree = "<group>"; };
+		46ABD73518B13671008F5AAB /* deezer-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "deezer-logo.png"; sourceTree = "<group>"; };
+		46ABD73C18B1381D008F5AAB /* discover-content-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "discover-content-button.png"; sourceTree = "<group>"; };
+		46ABD73D18B1381D008F5AAB /* discover-content-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "discover-content-button@2x.png"; sourceTree = "<group>"; };
+		46ABD74018B143A4008F5AAB /* news4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = news4.png; sourceTree = "<group>"; };
+		46ABD74118B143A4008F5AAB /* news4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "news4@2x.png"; sourceTree = "<group>"; };
+		46ABD74818B144D4008F5AAB /* news2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = news2.png; sourceTree = "<group>"; };
+		46ABD74918B144D4008F5AAB /* news2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "news2@2x.png"; sourceTree = "<group>"; };
+		46ABD74C18B147FC008F5AAB /* button_cancel_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_cancel_selected.png; sourceTree = "<group>"; };
+		46ABD74D18B147FC008F5AAB /* button_cancel_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_cancel_selected@2x.png"; sourceTree = "<group>"; };
 		46B31ED2184D696B0028D11C /* IconProfileSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconProfileSelected.png; path = Resources/Assets/IconProfileSelected.png; sourceTree = SOURCE_ROOT; };
 		46B31ED3184D696B0028D11C /* IconProfileSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "IconProfileSelected@2x.png"; path = "Resources/Assets/IconProfileSelected@2x.png"; sourceTree = SOURCE_ROOT; };
 		46B31ED6184D696B0028D11C /* IconProfile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "IconProfile@2x.png"; path = "Resources/Assets/IconProfile@2x.png"; sourceTree = SOURCE_ROOT; };
@@ -479,8 +496,6 @@
 		46FB0A891888BAF700E978CD /* PAPdiscoveryHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPdiscoveryHeaderView.m; sourceTree = SOURCE_ROOT; };
 		46FB0A8B1888BBF400E978CD /* news1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "news1@2x.png"; path = "Resources/Assets/news1@2x.png"; sourceTree = SOURCE_ROOT; };
 		46FB0A8C1888BBF400E978CD /* news1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = news1.png; path = Resources/Assets/news1.png; sourceTree = SOURCE_ROOT; };
-		46FB0A8D1888BBF400E978CD /* news2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = news2.png; path = Resources/Assets/news2.png; sourceTree = SOURCE_ROOT; };
-		46FB0A8E1888BBF400E978CD /* news2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "news2@2x.png"; path = "Resources/Assets/news2@2x.png"; sourceTree = SOURCE_ROOT; };
 		46FB0A8F1888BBF400E978CD /* news3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "news3@2x.png"; path = "Resources/Assets/news3@2x.png"; sourceTree = SOURCE_ROOT; };
 		46FB0A901888BBF400E978CD /* news3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = news3.png; path = Resources/Assets/news3.png; sourceTree = SOURCE_ROOT; };
 		46FB0A971888E4C200E978CD /* bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg@2x.png"; path = "Resources/Assets/bg@2x.png"; sourceTree = SOURCE_ROOT; };
@@ -555,10 +570,6 @@
 		C4BE6738157FC7E900A291C2 /* ButtonFollowingSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonFollowingSelected@2x.png"; sourceTree = "<group>"; };
 		C4BE6739157FC7EA00A291C2 /* ButtonFollowSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonFollowSelected.png; sourceTree = "<group>"; };
 		C4BE673A157FC7EA00A291C2 /* ButtonFollowSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonFollowSelected@2x.png"; sourceTree = "<group>"; };
-		C4BE673B157FC7EA00A291C2 /* ButtonImageSettings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonImageSettings.png; sourceTree = "<group>"; };
-		C4BE673C157FC7EA00A291C2 /* ButtonImageSettings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonImageSettings@2x.png"; sourceTree = "<group>"; };
-		C4BE673D157FC7EB00A291C2 /* ButtonImageSettingsSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonImageSettingsSelected.png; sourceTree = "<group>"; };
-		C4BE673E157FC7EB00A291C2 /* ButtonImageSettingsSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonImageSettingsSelected@2x.png"; sourceTree = "<group>"; };
 		C4BE673F157FC7EB00A291C2 /* ButtonLike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonLike.png; sourceTree = "<group>"; };
 		C4BE6740157FC7EC00A291C2 /* ButtonLike@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonLike@2x.png"; sourceTree = "<group>"; };
 		C4BE6741157FC7EC00A291C2 /* ButtonLikeSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonLikeSelected.png; sourceTree = "<group>"; };
@@ -873,6 +884,8 @@
 		46FB0A3F1888769000E978CD /* discoverViews */ = {
 			isa = PBXGroup;
 			children = (
+				46ABD73118B12E01008F5AAB /* PAPperksoverlay.h */,
+				46ABD73218B12E01008F5AAB /* PAPperksoverlay.m */,
 				46FB0A49188879C500E978CD /* PAPstartUpsView.h */,
 				46FB0A4A188879C500E978CD /* PAPstartUpsView.m */,
 				46FB0A40188876C400E978CD /* PAPperksView.h */,
@@ -888,6 +901,14 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				46ABD74818B144D4008F5AAB /* news2.png */,
+				46ABD74918B144D4008F5AAB /* news2@2x.png */,
+				46ABD74018B143A4008F5AAB /* news4.png */,
+				46ABD74118B143A4008F5AAB /* news4@2x.png */,
+				46ABD73C18B1381D008F5AAB /* discover-content-button.png */,
+				46ABD73D18B1381D008F5AAB /* discover-content-button@2x.png */,
+				46ABD73418B13671008F5AAB /* deezer-logo@2x.png */,
+				46ABD73518B13671008F5AAB /* deezer-logo.png */,
 				46ABD72D18AADFFB008F5AAB /* default-pic.png */,
 				46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */,
 				465A4EE318A83D5100E43DC6 /* share.png */,
@@ -912,6 +933,8 @@
 				462FCB82188C8533005059F3 /* button_back@2x.png */,
 				462FCB73188C806C005059F3 /* button_cancel.png */,
 				462FCB74188C806C005059F3 /* button_cancel@2x.png */,
+				46ABD74C18B147FC008F5AAB /* button_cancel_selected.png */,
+				46ABD74D18B147FC008F5AAB /* button_cancel_selected@2x.png */,
 				462FCB75188C806C005059F3 /* button_done.png */,
 				462FCB76188C806C005059F3 /* button_done@2x.png */,
 				462FCB77188C806C005059F3 /* button_setting.png */,
@@ -932,8 +955,6 @@
 				46FB0A981888E4C200E978CD /* bg.png */,
 				46FB0A8B1888BBF400E978CD /* news1@2x.png */,
 				46FB0A8C1888BBF400E978CD /* news1.png */,
-				46FB0A8D1888BBF400E978CD /* news2.png */,
-				46FB0A8E1888BBF400E978CD /* news2@2x.png */,
 				46FB0A8F1888BBF400E978CD /* news3@2x.png */,
 				46FB0A901888BBF400E978CD /* news3.png */,
 				46FB0A701888989700E978CD /* tab-product-unselected.png */,
@@ -1024,10 +1045,6 @@
 				C4BE6738157FC7E900A291C2 /* ButtonFollowingSelected@2x.png */,
 				C4BE6739157FC7EA00A291C2 /* ButtonFollowSelected.png */,
 				C4BE673A157FC7EA00A291C2 /* ButtonFollowSelected@2x.png */,
-				C4BE673B157FC7EA00A291C2 /* ButtonImageSettings.png */,
-				C4BE673C157FC7EA00A291C2 /* ButtonImageSettings@2x.png */,
-				C4BE673D157FC7EB00A291C2 /* ButtonImageSettingsSelected.png */,
-				C4BE673E157FC7EB00A291C2 /* ButtonImageSettingsSelected@2x.png */,
 				C4BE673F157FC7EB00A291C2 /* ButtonLike.png */,
 				C4BE6740157FC7EC00A291C2 /* ButtonLike@2x.png */,
 				C4BE6741157FC7EC00A291C2 /* ButtonLikeSelected.png */,
@@ -1471,6 +1488,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46ABD74E18B147FC008F5AAB /* button_cancel_selected.png in Resources */,
 				C45C260715671D730035BCA6 /* PlaceholderPhoto.png in Resources */,
 				46FB0A911888BBF400E978CD /* news1@2x.png in Resources */,
 				C45C260815671D730035BCA6 /* PlaceholderPhoto@2x.png in Resources */,
@@ -1557,7 +1575,6 @@
 				C4BE677D157FC7F700A291C2 /* BackgroundTabBarItemSelected.png in Resources */,
 				D5FC09B618A9BFF4000D85F1 /* konotor_sent.png in Resources */,
 				C4BE677E157FC7F700A291C2 /* BackgroundTabBarItemSelected@2x.png in Resources */,
-				46FB0A931888BBF400E978CD /* news2.png in Resources */,
 				464A3543185A979A006E951E /* bg-intro2-iphone4.png in Resources */,
 				462FCB5F188C6AE9005059F3 /* ProfileNavigationBar.png in Resources */,
 				C4BE6783157FC7F700A291C2 /* ButtonCamera.png in Resources */,
@@ -1567,11 +1584,13 @@
 				C4BE6784157FC7F700A291C2 /* ButtonCamera@2x.png in Resources */,
 				46B31EF4184E3D340028D11C /* profileCollaborator.png in Resources */,
 				46D1E717186FA398009CC230 /* dropDownMenu.png in Resources */,
+				46ABD74F18B147FC008F5AAB /* button_cancel_selected@2x.png in Resources */,
 				C4BE6785157FC7F700A291C2 /* ButtonCameraSelected.png in Resources */,
 				D5FC09BA18A9BFF4000D85F1 /* konotor_supportprofile.png in Resources */,
 				465A4ED918A8222A00E43DC6 /* iconlocation.png in Resources */,
 				465A4EDD18A8382900E43DC6 /* comingsoon@2x.png in Resources */,
 				D5FC095E18A9B586000D85F1 /* BFViewController.xib in Resources */,
+				46ABD74418B143A4008F5AAB /* news4.png in Resources */,
 				46FB0A9A1888E4C200E978CD /* bg.png in Resources */,
 				465DE3461895983A00C37EF8 /* profileType.png in Resources */,
 				C4BE6786157FC7F700A291C2 /* ButtonCameraSelected@2x.png in Resources */,
@@ -1589,12 +1608,9 @@
 				C4BE6792157FC7F700A291C2 /* ButtonFollowSelected@2x.png in Resources */,
 				D5FC09A618A9BFF4000D85F1 /* konotor_chatbubble_ios7_you.png in Resources */,
 				462FCB7C188C806C005059F3 /* button_done@2x.png in Resources */,
-				C4BE6793157FC7F700A291C2 /* ButtonImageSettings.png in Resources */,
-				C4BE6794157FC7F700A291C2 /* ButtonImageSettings@2x.png in Resources */,
-				C4BE6795157FC7F700A291C2 /* ButtonImageSettingsSelected.png in Resources */,
+				46ABD74B18B144D4008F5AAB /* news2@2x.png in Resources */,
 				4671548A188342380000C0CA /* registerbutton.png in Resources */,
 				46B31EEA184E35150028D11C /* profileWebsite.png in Resources */,
-				C4BE6796157FC7F700A291C2 /* ButtonImageSettingsSelected@2x.png in Resources */,
 				464A3544185A979A006E951E /* bg-intro2-iphone4@2x.png in Resources */,
 				464A3546185A979A006E951E /* bg-intro2-iphone5@2x.png in Resources */,
 				C4BE6797157FC7F700A291C2 /* ButtonLike.png in Resources */,
@@ -1605,11 +1621,13 @@
 				462FCB84188C8533005059F3 /* button_back_selected@2x.png in Resources */,
 				46715479188333860000C0CA /* intro_iphone5@2x.png in Resources */,
 				C4BE679A157FC7F700A291C2 /* ButtonLikeSelected@2x.png in Resources */,
+				46ABD73E18B1381D008F5AAB /* discover-content-button.png in Resources */,
 				D5FC099F18A9BFF4000D85F1 /* KonotorFeedbackScreenViewController.xib in Resources */,
 				46FB0A801888989800E978CD /* tab-startup-unselected.png in Resources */,
 				C4BE679B157FC7F700A291C2 /* ButtonNavigationBar.png in Resources */,
 				C4BE679C157FC7F700A291C2 /* ButtonNavigationBar@2x.png in Resources */,
 				C4BE679D157FC7F700A291C2 /* ButtonNavigationBarSelected.png in Resources */,
+				46ABD74518B143A4008F5AAB /* news4@2x.png in Resources */,
 				467154B6188368350000C0CA /* Default@2x.png in Resources */,
 				D5FC099B18A9BFF4000D85F1 /* KonotorConversationViewController.xib in Resources */,
 				D5FC09B418A9BFF4000D85F1 /* konotor_send.png in Resources */,
@@ -1627,9 +1645,9 @@
 				C4BE67A3157FC7F700A291C2 /* IconArrow.png in Resources */,
 				46B31EED184E35150028D11C /* profileDescription@2x.png in Resources */,
 				46715498188346750000C0CA /* login_iphone4.png in Resources */,
-				46FB0A941888BBF400E978CD /* news2@2x.png in Resources */,
 				D5FC09B918A9BFF4000D85F1 /* konotor_stop@2x.png in Resources */,
 				D5FC09B118A9BFF4000D85F1 /* konotor_progress_black@2x.png in Resources */,
+				46ABD73F18B1381D008F5AAB /* discover-content-button@2x.png in Resources */,
 				C4BE67A4157FC7F700A291C2 /* IconArrow@2x.png in Resources */,
 				C4BE67A5157FC7F700A291C2 /* IconComment.png in Resources */,
 				C4BE67A6157FC7F700A291C2 /* IconComment@2x.png in Resources */,
@@ -1652,6 +1670,7 @@
 				46B31EEB184E35150028D11C /* profileWebsite@2x.png in Resources */,
 				46B31EF5184E3D340028D11C /* profileCollaborator@2x.png in Resources */,
 				462FCB6A188C7848005059F3 /* IconActivity@2x.png in Resources */,
+				46ABD73918B13671008F5AAB /* deezer-logo.png in Resources */,
 				462FCB6D188C79E1005059F3 /* IconActivitySelected.png in Resources */,
 				C4BE67AD157FC7F700A291C2 /* IconPics.png in Resources */,
 				462FCB72188C7A6E005059F3 /* IconDiscoverSelected@2x.png in Resources */,
@@ -1663,6 +1682,7 @@
 				464A353F185A979A006E951E /* bg-intro3-iphone4.png in Resources */,
 				C4BE67B0157FC7F700A291C2 /* IconTick@2x.png in Resources */,
 				46715489188342380000C0CA /* loginbutton@2x.png in Resources */,
+				46ABD74A18B144D4008F5AAB /* news2.png in Resources */,
 				C4BE67B1157FC7F700A291C2 /* IconTickSelected.png in Resources */,
 				C4BE67B2157FC7F700A291C2 /* IconTickSelected@2x.png in Resources */,
 				464A3541185A979A006E951E /* bg-intro3-iphone5.png in Resources */,
@@ -1675,6 +1695,7 @@
 				D5FC09B018A9BFF4000D85F1 /* konotor_progress_black.png in Resources */,
 				C4BE67B7157FC7F700A291C2 /* LogoNavigationBar.png in Resources */,
 				467154B7188368350000C0CA /* Default.png in Resources */,
+				46ABD73818B13671008F5AAB /* deezer-logo@2x.png in Resources */,
 				4671548B188342380000C0CA /* registerbutton@2x.png in Resources */,
 				C4BE67B8157FC7F700A291C2 /* LogoNavigationBar@2x.png in Resources */,
 				46FB0A811888989800E978CD /* tab-startup-unselected@2x.png in Resources */,
@@ -1756,6 +1777,7 @@
 				C4F102B4156C57820061BC3E /* PAPBaseTextCell.m in Sources */,
 				46FB0A4B188879C500E978CD /* PAPstartUpsView.m in Sources */,
 				D5FC099D18A9BFF4000D85F1 /* KonotorFeedbackScreen.m in Sources */,
+				46ABD73318B12E01008F5AAB /* PAPperksoverlay.m in Sources */,
 				C4F102B5156C57820061BC3E /* PAPLoadMoreCell.m in Sources */,
 				464A354D185A9F6C006E951E /* emailLoginViewController.m in Sources */,
 				C4F102B6156C57820061BC3E /* PAPPhotoCell.m in Sources */,
