@@ -293,12 +293,13 @@
 		C4F102E2156C58440061BC3E /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4F102DF156C58440061BC3E /* Entitlements.plist */; };
 		C4F102E7156C58570061BC3E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C4F102E5156C58570061BC3E /* InfoPlist.strings */; };
 		C4F102EF156C58E00061BC3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102EC156C58E00061BC3E /* main.m */; };
+		D55497CC18B1B7BA00DE4192 /* button-feedback@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D55497CA18B1B7BA00DE4192 /* button-feedback@2x.png */; };
+		D55497CD18B1B7BA00DE4192 /* button-feedback.png in Resources */ = {isa = PBXBuildFile; fileRef = D55497CB18B1B7BA00DE4192 /* button-feedback.png */; };
 		D5FC095118A9B518000D85F1 /* BFCropInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC094E18A9B518000D85F1 /* BFCropInterface.m */; };
 		D5FC095218A9B518000D85F1 /* BFViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095018A9B518000D85F1 /* BFViewController.m */; };
 		D5FC095518A9B543000D85F1 /* CameraFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095418A9B543000D85F1 /* CameraFilterViewController.m */; };
 		D5FC095818A9B552000D85F1 /* FilterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095718A9B552000D85F1 /* FilterCell.m */; };
 		D5FC095C18A9B586000D85F1 /* CameraFilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FC095918A9B586000D85F1 /* CameraFilterViewController.xib */; };
-		D5FC095D18A9B586000D85F1 /* FilterCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FC095A18A9B586000D85F1 /* FilterCell.xib */; };
 		D5FC095E18A9B586000D85F1 /* BFViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FC095B18A9B586000D85F1 /* BFViewController.xib */; };
 		D5FC099A18A9BFF4000D85F1 /* KonotorConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC096518A9BFF4000D85F1 /* KonotorConversationViewController.m */; };
 		D5FC099B18A9BFF4000D85F1 /* KonotorConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FC096618A9BFF4000D85F1 /* KonotorConversationViewController.xib */; };
@@ -356,7 +357,7 @@
 		092354B613A1D83C00DA740F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		095ACE8513C68EA300566243 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		099CCEAC13F9E3760039A464 /* libz.1.1.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.1.3.dylib; path = usr/lib/libz.1.1.3.dylib; sourceTree = SDKROOT; };
-		09ABC06D13A1D52D009C3FCF /* Anypic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Anypic.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		09ABC06D13A1D52D009C3FCF /* Teamstory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Teamstory.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		09ABC07113A1D52D009C3FCF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		09ABC07313A1D52D009C3FCF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		09ABC07513A1D52D009C3FCF /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -682,6 +683,8 @@
 		C4F102EB156C58E00061BC3E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		C4F102EC156C58E00061BC3E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
 		C4F102ED156C58E00061BC3E /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = SOURCE_ROOT; };
+		D55497CA18B1B7BA00DE4192 /* button-feedback@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback@2x.png"; sourceTree = "<group>"; };
+		D55497CB18B1B7BA00DE4192 /* button-feedback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback.png"; sourceTree = "<group>"; };
 		D5FC094D18A9B518000D85F1 /* BFCropInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFCropInterface.h; sourceTree = SOURCE_ROOT; };
 		D5FC094E18A9B518000D85F1 /* BFCropInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFCropInterface.m; sourceTree = SOURCE_ROOT; };
 		D5FC094F18A9B518000D85F1 /* BFViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFViewController.h; sourceTree = SOURCE_ROOT; };
@@ -691,7 +694,6 @@
 		D5FC095618A9B552000D85F1 /* FilterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterCell.h; sourceTree = SOURCE_ROOT; };
 		D5FC095718A9B552000D85F1 /* FilterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterCell.m; sourceTree = SOURCE_ROOT; };
 		D5FC095918A9B586000D85F1 /* CameraFilterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraFilterViewController.xib; sourceTree = SOURCE_ROOT; };
-		D5FC095A18A9B586000D85F1 /* FilterCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterCell.xib; sourceTree = SOURCE_ROOT; };
 		D5FC095B18A9B586000D85F1 /* BFViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BFViewController.xib; sourceTree = SOURCE_ROOT; };
 		D5FC096218A9BFF4000D85F1 /* Konotor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Konotor.h; sourceTree = "<group>"; };
 		D5FC096418A9BFF4000D85F1 /* KonotorConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorConversationViewController.h; sourceTree = "<group>"; };
@@ -793,7 +795,7 @@
 		09ABC06213A1D52D009C3FCF = {
 			isa = PBXGroup;
 			children = (
-				09ABC07713A1D52D009C3FCF /* Anypic */,
+				09ABC07713A1D52D009C3FCF /* Teamstory */,
 				C4A0B4FF156C5B9F00E48554 /* External */,
 				09ABC07013A1D52D009C3FCF /* Frameworks */,
 				09ABC06E13A1D52D009C3FCF /* Products */,
@@ -803,7 +805,7 @@
 		09ABC06E13A1D52D009C3FCF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				09ABC06D13A1D52D009C3FCF /* Anypic.app */,
+				09ABC06D13A1D52D009C3FCF /* Teamstory.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -840,7 +842,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		09ABC07713A1D52D009C3FCF /* Anypic */ = {
+		09ABC07713A1D52D009C3FCF /* Teamstory */ = {
 			isa = PBXGroup;
 			children = (
 				C4A89497155879FC00DC57D3 /* Views */,
@@ -856,7 +858,7 @@
 				C4B60864155B085600EFA90C /* Resources */,
 				09ABC07813A1D52D009C3FCF /* Supporting Files */,
 			);
-			name = Anypic;
+			name = Teamstory;
 			path = ParseStarterProject;
 			sourceTree = "<group>";
 		};
@@ -1158,7 +1160,6 @@
 				C4F102A5156C57620061BC3E /* PAPPhotoDetailsFooterView.h */,
 				C4F102A6156C57620061BC3E /* PAPPhotoDetailsFooterView.m */,
 				D5FC095918A9B586000D85F1 /* CameraFilterViewController.xib */,
-				D5FC095A18A9B586000D85F1 /* FilterCell.xib */,
 				D5FC095B18A9B586000D85F1 /* BFViewController.xib */,
 			);
 			name = PhotoDetailsViews;
@@ -1441,9 +1442,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		09ABC06C13A1D52D009C3FCF /* Anypic */ = {
+		09ABC06C13A1D52D009C3FCF /* Teamstory */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 09ABC08E13A1D52E009C3FCF /* Build configuration list for PBXNativeTarget "Anypic" */;
+			buildConfigurationList = 09ABC08E13A1D52E009C3FCF /* Build configuration list for PBXNativeTarget "Teamstory" */;
 			buildPhases = (
 				09ABC06913A1D52D009C3FCF /* Sources */,
 				09ABC06A13A1D52D009C3FCF /* Frameworks */,
@@ -1453,9 +1454,9 @@
 			);
 			dependencies = (
 			);
-			name = Anypic;
+			name = Teamstory;
 			productName = ParseStarterProject;
-			productReference = 09ABC06D13A1D52D009C3FCF /* Anypic.app */;
+			productReference = 09ABC06D13A1D52D009C3FCF /* Teamstory.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1466,7 +1467,7 @@
 			attributes = {
 				LastUpgradeCheck = 0500;
 			};
-			buildConfigurationList = 09ABC06713A1D52D009C3FCF /* Build configuration list for PBXProject "Anypic" */;
+			buildConfigurationList = 09ABC06713A1D52D009C3FCF /* Build configuration list for PBXProject "Teamstory" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -1478,7 +1479,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				09ABC06C13A1D52D009C3FCF /* Anypic */,
+				09ABC06C13A1D52D009C3FCF /* Teamstory */,
 			);
 		};
 /* End PBXProject section */
@@ -1596,6 +1597,7 @@
 				C4BE6786157FC7F700A291C2 /* ButtonCameraSelected@2x.png in Resources */,
 				46B31EEC184E35150028D11C /* profileDescription.png in Resources */,
 				46ABD73018AADFFB008F5AAB /* default-pic@2x.png in Resources */,
+				D55497CC18B1B7BA00DE4192 /* button-feedback@2x.png in Resources */,
 				C4BE678B157FC7F700A291C2 /* ButtonFollow.png in Resources */,
 				C4BE678C157FC7F700A291C2 /* ButtonFollow@2x.png in Resources */,
 				D5FC09A818A9BFF4000D85F1 /* konotor_cross.png in Resources */,
@@ -1605,6 +1607,7 @@
 				465A4EDE18A8382900E43DC6 /* comingsoon.png in Resources */,
 				C4BE6790157FC7F700A291C2 /* ButtonFollowingSelected@2x.png in Resources */,
 				C4BE6791157FC7F700A291C2 /* ButtonFollowSelected.png in Resources */,
+				D55497CD18B1B7BA00DE4192 /* button-feedback.png in Resources */,
 				C4BE6792157FC7F700A291C2 /* ButtonFollowSelected@2x.png in Resources */,
 				D5FC09A618A9BFF4000D85F1 /* konotor_chatbubble_ios7_you.png in Resources */,
 				462FCB7C188C806C005059F3 /* button_done@2x.png in Resources */,
@@ -1743,7 +1746,6 @@
 				462FCB71188C7A6E005059F3 /* IconDiscoverSelected.png in Resources */,
 				C4DE99CC1603D11600BC968A /* Default-fbFACEBOOK_APP_ID.png in Resources */,
 				C4DE99CD1603D11600BC968A /* Default-fbFACEBOOK_APP_ID@2x.png in Resources */,
-				D5FC095D18A9B586000D85F1 /* FilterCell.xib in Resources */,
 				462FCB86188C8533005059F3 /* button_back@2x.png in Resources */,
 				C499A3041725E6DD0089D40A /* FacebookSDKResources.bundle in Resources */,
 				D5FC09AF18A9BFF4000D85F1 /* konotor_profile@2x.png in Resources */,
@@ -1908,7 +1910,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/External/Konotor",
 				);
-				PRODUCT_NAME = Anypic;
+				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1940,7 +1942,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/External/Konotor",
 				);
-				PRODUCT_NAME = Anypic;
+				PRODUCT_NAME = Teamstory;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
@@ -1999,7 +2001,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/External/Konotor",
 				);
-				PRODUCT_NAME = Anypic;
+				PRODUCT_NAME = Teamstory;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
@@ -2058,7 +2060,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/External/Konotor",
 				);
-				PRODUCT_NAME = Anypic;
+				PRODUCT_NAME = Teamstory;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
@@ -2068,7 +2070,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		09ABC06713A1D52D009C3FCF /* Build configuration list for PBXProject "Anypic" */ = {
+		09ABC06713A1D52D009C3FCF /* Build configuration list for PBXProject "Teamstory" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				09ABC08C13A1D52E009C3FCF /* Debug */,
@@ -2079,7 +2081,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Distribution;
 		};
-		09ABC08E13A1D52E009C3FCF /* Build configuration list for PBXNativeTarget "Anypic" */ = {
+		09ABC08E13A1D52E009C3FCF /* Build configuration list for PBXNativeTarget "Teamstory" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				09ABC08F13A1D52E009C3FCF /* Debug */,

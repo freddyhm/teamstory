@@ -1,8 +1,7 @@
 //
 //  PAPTabBarController.h
-//  Anypic
+//  Teamstory
 //
-//  Created by Héctor Ramos on 5/15/12.
 //
 
 #import "PAPEditPhotoViewController.h"
@@ -12,7 +11,7 @@
 @interface PAPTabBarController : UITabBarController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate>
 
 - (BOOL)shouldPresentPhotoCaptureController;
-- (void)shouldPresentControler:(NSString *)typeController;
+- (void)shouldPresentController:(NSString *)typeController;
 
 @end
 

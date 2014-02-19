@@ -1,8 +1,7 @@
 //
 //  PAPPhotoDetailsFooterView.h
-//  Anypic
+//  Teamstory
 //
-//  Created by Mattieu Gamache-Asselin on 5/16/12.
 //
 
 @interface PAPPhotoDetailsFooterView : UIView

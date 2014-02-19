@@ -1,8 +1,7 @@
 //
 //  PAPConstants.h
-//  Anypic
+//  Teamstory
 //
-//  Created by Mattieu Gamache-Asselin on 5/25/12.
 //
 
 typedef enum {

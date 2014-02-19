@@ -1,8 +1,7 @@
 //
 //  PAPPhotoDetailViewController.h
-//  Anypic
+//  Teamstory
 //
-//  Created by Mattieu Gamache-Asselin on 5/15/12.
 //
 
 #import "PAPPhotoDetailsHeaderView.h"

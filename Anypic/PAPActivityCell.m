@@ -1,8 +1,7 @@
 //
 //  PAPActivityCell.m
-//  Anypic
+//  Teamstory
 //
-//  Created by Mattieu Gamache-Asselin on 5/14/12.
 //
 
 #import "PAPActivityCell.h"

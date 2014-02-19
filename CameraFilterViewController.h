@@ -1,6 +1,6 @@
 //
 //  CameraFilterViewController.h
-//  Anypic
+//  Teamstory
 //
 //  Created by Freddy Hidalgo-Monchez on 1/15/2014.
 //
@@ -10,8 +10,6 @@
 
 @interface CameraFilterViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource>
 
-@property (nonatomic,strong) NSString *imageSource;
-@property (nonatomic,strong) UIImage *croppedImage;
 @property (nonatomic,strong) IBOutlet UIImageView *croppedImageView;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *cancelEditBtn;
 @property (nonatomic, strong) IBOutlet UICollectionView *filterList;

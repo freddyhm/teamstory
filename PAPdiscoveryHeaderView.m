@@ -1,6 +1,6 @@
 //
 //  PAPdiscoveryHeaderView.m
-//  Anypic
+//  Teamstory
 //
 //  Created by Tobok Lee on 1/16/14.
 //

@@ -1,8 +1,7 @@
 //
 //  PAPSettingsActionSheetDelegate.m
-//  Anypic
+//  Teamstory
 //
-//  Created by Mattieu Gamache-Asselin on 5/9/12.
 //
 
 #import "PAPSettingsActionSheetDelegate.h"

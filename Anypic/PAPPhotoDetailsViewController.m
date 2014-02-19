@@ -1,8 +1,7 @@
 //
 //  PAPPhotoDetailViewController.m
-//  Anypic
+//  Teamstory
 //
-//  Created by Mattieu Gamache-Asselin on 5/15/12.
 //
 
 #import "PAPPhotoDetailsViewController.h"
@@ -373,7 +372,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             }
             
             [activityItems addObject:[UIImage imageWithData:data]];
-            [activityItems addObject:[NSURL URLWithString:[NSString stringWithFormat:@"https://anypic.org/#pic/%@", self.photo.objectId]]];
+            [activityItems addObject:[NSURL URLWithString:[NSString stringWithFormat:@"https://Teamstory.org/#pic/%@", self.photo.objectId]]];
             
             UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
             [self.navigationController presentViewController:activityViewController animated:YES completion:nil];

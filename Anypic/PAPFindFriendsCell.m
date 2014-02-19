@@ -1,8 +1,7 @@
 //
 //  PAPFindFriendsCell.m
-//  Anypic
+//  Teamstory
 //
-//  Created by Mattieu Gamache-Asselin on 5/31/12.
 //
 
 #import "PAPFindFriendsCell.h"

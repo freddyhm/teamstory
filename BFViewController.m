@@ -142,7 +142,7 @@
     
     // get tab bar from root nav stack and return to camera
     PAPTabBarController *tabBarController = [[self.navigationController viewControllers] objectAtIndex:1];
-    [tabBarController shouldPresentControler:self.imageSource];
+    [tabBarController shouldPresentController:self.imageSource];
     
     // return to camera flag
     self.didCancel = YES;

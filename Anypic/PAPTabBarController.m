@@ -1,8 +1,7 @@
 //
 //  PAPTabBarController.m
-//  Anypic
+//  Teamstory
 //
-//  Created by Héctor Ramos on 5/15/12.
 //
 
 #import "PAPTabBarController.h"
@@ -99,6 +98,9 @@
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
     
+    // keep status bar white, in ios7 changes in imagepicker
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
     // set nav controller to picker's nav controller so we can access it in backToPhotoAlbum
     self.navController = navigationController;
     
@@ -124,7 +126,6 @@
     [viewController.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
     
 }
-
 
 #pragma mark - PAPTabBarController
 
@@ -231,7 +232,7 @@
     [self.navController popViewControllerAnimated:YES];
 }
 
--(void)shouldPresentControler:(NSString *)typeController{
+-(void)shouldPresentController:(NSString *)typeController{
     
     if ([typeController isEqualToString:@"Camera"]) {
         [self shouldStartCameraController];

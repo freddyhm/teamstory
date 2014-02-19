@@ -1,8 +1,7 @@
 //
 //  PAPSettingsButtonItem.m
-//  Anypic
+//  Teamstory
 //
-//  Created by Héctor Ramos on 5/18/12.
 //
 
 #import "PAPSettingsButtonItem.h"

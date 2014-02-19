@@ -1,8 +1,7 @@
 //
 //  PAPSettingsButtonItem.h
-//  Anypic
+//  Teamstory
 //
-//  Created by Héctor Ramos on 5/18/12.
 //
 
 @interface PAPSettingsButtonItem : UIBarButtonItem

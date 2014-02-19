@@ -1,8 +1,7 @@
 //
 //  AppDelegate.h
-//  Anypic
+//  Teamstory
 //
-//  Created by Héctor Ramos on 5/04/12.
 //
 
 #import "PAPTabBarController.h"

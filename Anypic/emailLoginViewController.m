@@ -1,6 +1,6 @@
 //
 //  emailLoginViewController.m
-//  Anypic
+//  Teamstory
 //
 //  Created by Tobok Lee on 12/12/13.
 //

@@ -1,6 +1,6 @@
 //
 //  FilterCell.h
-//  Anypic
+//  Teamstory
 //
 //  Created by Freddy Hidalgo-Monchez on 2/6/2014.
 //
@@ -10,6 +10,6 @@
 
 @interface FilterCell : UICollectionViewCell
 
-@property (strong, nonatomic) IBOutlet UIButton *filter;
+@property (strong, nonatomic) UILabel *filter;
 
 @end

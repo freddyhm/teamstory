@@ -1,8 +1,7 @@
 //
 //  PAPActivityFeedViewController.m
-//  Anypic
+//  Teamstory
 //
-//  Created by Mattieu Gamache-Asselin on 5/9/12.
 //
 
 #import "PAPActivityFeedViewController.h"
@@ -274,7 +273,7 @@
     } else if ([activityType isEqualToString:kPAPActivityTypeComment]) {
         return NSLocalizedString(@"commented on your photo", nil);
     } else if ([activityType isEqualToString:kPAPActivityTypeJoined]) {
-        return NSLocalizedString(@"joined Anypic", nil);
+        return NSLocalizedString(@"joined Teamstory", nil);
     } else {
         return nil;
     }
