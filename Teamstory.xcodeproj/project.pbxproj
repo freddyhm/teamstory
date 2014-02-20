@@ -295,6 +295,7 @@
 		C4F102EF156C58E00061BC3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102EC156C58E00061BC3E /* main.m */; };
 		D55497CC18B1B7BA00DE4192 /* button-feedback@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D55497CA18B1B7BA00DE4192 /* button-feedback@2x.png */; };
 		D55497CD18B1B7BA00DE4192 /* button-feedback.png in Resources */ = {isa = PBXBuildFile; fileRef = D55497CB18B1B7BA00DE4192 /* button-feedback.png */; };
+		D5D1042818B5C7AF0084C901 /* konotor.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042718B5C7AF0084C901 /* konotor.png */; };
 		D5FC095118A9B518000D85F1 /* BFCropInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC094E18A9B518000D85F1 /* BFCropInterface.m */; };
 		D5FC095218A9B518000D85F1 /* BFViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095018A9B518000D85F1 /* BFViewController.m */; };
 		D5FC095518A9B543000D85F1 /* CameraFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095418A9B543000D85F1 /* CameraFilterViewController.m */; };
@@ -685,6 +686,7 @@
 		C4F102ED156C58E00061BC3E /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = SOURCE_ROOT; };
 		D55497CA18B1B7BA00DE4192 /* button-feedback@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback@2x.png"; sourceTree = "<group>"; };
 		D55497CB18B1B7BA00DE4192 /* button-feedback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback.png"; sourceTree = "<group>"; };
+		D5D1042718B5C7AF0084C901 /* konotor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor.png; sourceTree = "<group>"; };
 		D5FC094D18A9B518000D85F1 /* BFCropInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFCropInterface.h; sourceTree = SOURCE_ROOT; };
 		D5FC094E18A9B518000D85F1 /* BFCropInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFCropInterface.m; sourceTree = SOURCE_ROOT; };
 		D5FC094F18A9B518000D85F1 /* BFViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFViewController.h; sourceTree = SOURCE_ROOT; };
@@ -903,6 +905,7 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				D5D1042718B5C7AF0084C901 /* konotor.png */,
 				46ABD74818B144D4008F5AAB /* news2.png */,
 				46ABD74918B144D4008F5AAB /* news2@2x.png */,
 				46ABD74018B143A4008F5AAB /* news4.png */,
@@ -1709,6 +1712,7 @@
 				D5FC09AD18A9BFF4000D85F1 /* konotor_play@2x.png in Resources */,
 				C4BE67B9157FC7F700A291C2 /* ProfilePictureStroke.png in Resources */,
 				462FCB89188C863E005059F3 /* button_setting_selected.png in Resources */,
+				D5D1042818B5C7AF0084C901 /* konotor.png in Resources */,
 				D5FC09B718A9BFF4000D85F1 /* konotor_sent@2x.png in Resources */,
 				C4BE67BA157FC7F700A291C2 /* ProfilePictureStroke@2x.png in Resources */,
 				C4BE67BB157FC7F700A291C2 /* SeparatorComments.png in Resources */,
