@@ -293,6 +293,8 @@
 		C4F102E2156C58440061BC3E /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4F102DF156C58440061BC3E /* Entitlements.plist */; };
 		C4F102E7156C58570061BC3E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C4F102E5156C58570061BC3E /* InfoPlist.strings */; };
 		C4F102EF156C58E00061BC3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102EC156C58E00061BC3E /* main.m */; };
+		D531F7CC18B5DE11008AE73F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D531F7CB18B5DE11008AE73F /* CoreVideo.framework */; };
+		D531F7CE18B5DE44008AE73F /* Appsee.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D531F7CD18B5DE44008AE73F /* Appsee.framework */; };
 		D5D1042818B5C7AF0084C901 /* konotor.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042718B5C7AF0084C901 /* konotor.png */; };
 		D5D1042B18B5CF4E0084C901 /* button-feedback.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042918B5CF4E0084C901 /* button-feedback.png */; };
 		D5D1042C18B5CF4E0084C901 /* button-feedback@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */; };
@@ -684,6 +686,8 @@
 		C4F102EB156C58E00061BC3E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		C4F102EC156C58E00061BC3E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
 		C4F102ED156C58E00061BC3E /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = SOURCE_ROOT; };
+		D531F7CB18B5DE11008AE73F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		D531F7CD18B5DE44008AE73F /* Appsee.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Appsee.framework; path = External/Appsee.framework; sourceTree = "<group>"; };
 		D5D1042718B5C7AF0084C901 /* konotor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor.png; sourceTree = "<group>"; };
 		D5D1042918B5CF4E0084C901 /* button-feedback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback.png"; sourceTree = "<group>"; };
 		D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback@2x.png"; sourceTree = "<group>"; };
@@ -762,6 +766,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D531F7CE18B5DE44008AE73F /* Appsee.framework in Frameworks */,
+				D531F7CC18B5DE11008AE73F /* CoreVideo.framework in Frameworks */,
 				D5FC09CC18A9C2FF000D85F1 /* OpenGLES.framework in Frameworks */,
 				D5FC09CA18A9C2C2000D85F1 /* CoreImage.framework in Frameworks */,
 				D5FC09C818A9C272000D85F1 /* CoreData.framework in Frameworks */,
@@ -815,6 +821,8 @@
 		09ABC07013A1D52D009C3FCF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D531F7CD18B5DE44008AE73F /* Appsee.framework */,
+				D531F7CB18B5DE11008AE73F /* CoreVideo.framework */,
 				D5FC09CB18A9C2FF000D85F1 /* OpenGLES.framework */,
 				D5FC09C918A9C2C2000D85F1 /* CoreImage.framework */,
 				D5FC09C718A9C272000D85F1 /* CoreData.framework */,
@@ -1899,8 +1907,7 @@
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/External\"",
+					"$(SRCROOT)/**",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1914,7 +1921,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/External/Konotor",
+					"$(SRCROOT)/**",
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "";
@@ -1932,12 +1939,7 @@
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/External\"",
-					"\"$(SRCROOT)/../hungry/ios-client/ParseStarterProject\"",
-					"\"$(SRCROOT)/../../Downloads\"",
-					"\"$(SRCROOT)/../../Desktop\"",
-					"\"$(SRCROOT)/../../Documents/FacebookSDK\"",
+					"$(SRCROOT)/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
@@ -1946,7 +1948,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/External/Konotor",
+					"$(SRCROOT)/**",
 				);
 				PRODUCT_NAME = Teamstory;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -1990,12 +1992,7 @@
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/External\"",
-					"\"$(SRCROOT)/../hungry/ios-client/ParseStarterProject\"",
-					"\"$(SRCROOT)/../../Downloads\"",
-					"\"$(SRCROOT)/../../Desktop\"",
-					"\"$(SRCROOT)/../../Documents/FacebookSDK\"",
+					"$(SRCROOT)/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
@@ -2005,7 +2002,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/External/Konotor",
+					"$(SRCROOT)/**",
 				);
 				PRODUCT_NAME = Teamstory;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -2049,12 +2046,7 @@
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/External\"",
-					"\"$(SRCROOT)/../hungry/ios-client/ParseStarterProject\"",
-					"\"$(SRCROOT)/../../Downloads\"",
-					"\"$(SRCROOT)/../../Desktop\"",
-					"\"$(SRCROOT)/../../Documents/FacebookSDK\"",
+					"$(SRCROOT)/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
@@ -2064,7 +2056,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/External/Konotor",
+					"$(SRCROOT)/**",
 				);
 				PRODUCT_NAME = Teamstory;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";

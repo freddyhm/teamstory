@@ -6,6 +6,7 @@
 
 #import "AppDelegate.h"
 
+#import <Appsee/Appsee.h>
 #import "Konotor.h"
 #import "KonotorEventHandler.h"
 #import "Reachability.h"
@@ -78,6 +79,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
+    // Appsee setup
+    [Appsee start:@"5bfb3fafb8424fe9b3d070d3022bee41"];
     
     // Konotor setup
     [Konotor InitWithAppID:@"ab785be6-9398-4b6a-8ae6-4d83431edad9" AppKey:@"3784ef60-6e0f-48fc-9a6c-3ac71c127dcb" withDelegate:[KonotorEventHandler sharedInstance]];
