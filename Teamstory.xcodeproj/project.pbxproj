@@ -135,6 +135,10 @@
 		46B31EF5184E3D340028D11C /* profileCollaborator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B31EF3184E3D340028D11C /* profileCollaborator@2x.png */; };
 		46B31EF8184E3DCB0028D11C /* profileAddNew.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B31EF6184E3DCB0028D11C /* profileAddNew.png */; };
 		46B31EF9184E3DCB0028D11C /* profileAddNew@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B31EF7184E3DCB0028D11C /* profileAddNew@2x.png */; };
+		46B568A918B6BBAD00471030 /* follow.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B568A518B6BBAD00471030 /* follow.png */; };
+		46B568AA18B6BBAD00471030 /* follow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B568A618B6BBAD00471030 /* follow@2x.png */; };
+		46B568AB18B6BBAD00471030 /* unfollow.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B568A718B6BBAD00471030 /* unfollow.png */; };
+		46B568AC18B6BBAD00471030 /* unfollow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B568A818B6BBAD00471030 /* unfollow@2x.png */; };
 		46D1E717186FA398009CC230 /* dropDownMenu.png in Resources */ = {isa = PBXBuildFile; fileRef = 46D1E716186FA398009CC230 /* dropDownMenu.png */; };
 		46E1EB6F183BCA6300F64274 /* PAPProfileSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E1EB6E183BCA6300F64274 /* PAPProfileSettingViewController.m */; };
 		46FB0A42188876C400E978CD /* PAPperksView.m in Sources */ = {isa = PBXBuildFile; fileRef = 46FB0A41188876C400E978CD /* PAPperksView.m */; };
@@ -489,6 +493,10 @@
 		46B31EF3184E3D340028D11C /* profileCollaborator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "profileCollaborator@2x.png"; path = "Resources/Assets/profileCollaborator@2x.png"; sourceTree = SOURCE_ROOT; };
 		46B31EF6184E3DCB0028D11C /* profileAddNew.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = profileAddNew.png; path = Resources/Assets/profileAddNew.png; sourceTree = SOURCE_ROOT; };
 		46B31EF7184E3DCB0028D11C /* profileAddNew@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "profileAddNew@2x.png"; path = "Resources/Assets/profileAddNew@2x.png"; sourceTree = SOURCE_ROOT; };
+		46B568A518B6BBAD00471030 /* follow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = follow.png; sourceTree = "<group>"; };
+		46B568A618B6BBAD00471030 /* follow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "follow@2x.png"; sourceTree = "<group>"; };
+		46B568A718B6BBAD00471030 /* unfollow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unfollow.png; sourceTree = "<group>"; };
+		46B568A818B6BBAD00471030 /* unfollow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unfollow@2x.png"; sourceTree = "<group>"; };
 		46D1E716186FA398009CC230 /* dropDownMenu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dropDownMenu.png; path = Resources/Assets/dropDownMenu.png; sourceTree = SOURCE_ROOT; };
 		46E1EB6D183BCA6300F64274 /* PAPProfileSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPProfileSettingViewController.h; sourceTree = SOURCE_ROOT; };
 		46E1EB6E183BCA6300F64274 /* PAPProfileSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPProfileSettingViewController.m; sourceTree = SOURCE_ROOT; };
@@ -919,6 +927,10 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				46B568A518B6BBAD00471030 /* follow.png */,
+				46B568A618B6BBAD00471030 /* follow@2x.png */,
+				46B568A718B6BBAD00471030 /* unfollow.png */,
+				46B568A818B6BBAD00471030 /* unfollow@2x.png */,
 				46159CB818B5486E008747C8 /* browser-button-forward-no.png */,
 				46159CB918B5486E008747C8 /* browser-button-forward-no@2x.png */,
 				46159CBA18B5486E008747C8 /* browser-button-forward-normal.png */,
@@ -1533,11 +1545,13 @@
 				D5FC09A018A9BFF4000D85F1 /* konotor_cancel.png in Resources */,
 				462FCB83188C8533005059F3 /* button_back_selected.png in Resources */,
 				465DE3561895AA9600C37EF8 /* dropdown_arrow.png in Resources */,
+				46B568A918B6BBAD00471030 /* follow.png in Resources */,
 				D5FC09A218A9BFF4000D85F1 /* konotor_chatbox.png in Resources */,
 				C4BE66FB157FC52F00A291C2 /* ShadowProfilePicture-29.png in Resources */,
 				46B31EEF184E35150028D11C /* profileLocation@2x.png in Resources */,
 				C4BE66FC157FC52F00A291C2 /* ShadowProfilePicture-29@2x.png in Resources */,
 				C4BE66FD157FC52F00A291C2 /* ShadowProfilePicture-35.png in Resources */,
+				46B568AB18B6BBAD00471030 /* unfollow.png in Resources */,
 				462FCB85188C8533005059F3 /* button_back.png in Resources */,
 				467154A618835E470000C0CA /* privacy.png in Resources */,
 				C4BE66FE157FC52F00A291C2 /* ShadowProfilePicture-35@2x.png in Resources */,
@@ -1570,6 +1584,7 @@
 				D5FC09BB18A9BFF4000D85F1 /* konotor_supportprofile@2x.png in Resources */,
 				C4BE676D157FC7F700A291C2 /* BackgroundComments.png in Resources */,
 				465DE3471895983A00C37EF8 /* profileType@2x.png in Resources */,
+				46B568AC18B6BBAD00471030 /* unfollow@2x.png in Resources */,
 				C4BE676E157FC7F700A291C2 /* BackgroundComments@2x.png in Resources */,
 				4671548D188342380000C0CA /* fbbutton@2x.png in Resources */,
 				D5FC09A318A9BFF4000D85F1 /* konotor_chatbox@2x.png in Resources */,
@@ -1648,6 +1663,7 @@
 				462FCB84188C8533005059F3 /* button_back_selected@2x.png in Resources */,
 				46715479188333860000C0CA /* intro_iphone5@2x.png in Resources */,
 				C4BE679A157FC7F700A291C2 /* ButtonLikeSelected@2x.png in Resources */,
+				46B568AA18B6BBAD00471030 /* follow@2x.png in Resources */,
 				46ABD73E18B1381D008F5AAB /* discover-content-button.png in Resources */,
 				46159CBF18B5486E008747C8 /* browser-button-forward-normal@2x.png in Resources */,
 				D5FC099F18A9BFF4000D85F1 /* KonotorFeedbackScreenViewController.xib in Resources */,
