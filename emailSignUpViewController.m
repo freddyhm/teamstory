@@ -39,15 +39,15 @@
         self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"register_iphone5.png"]];
     } else {
         self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"register_iphone4.png"]];
-        
-        signUpEmailTextField = [[UITextField alloc] initWithFrame:CGRectMake( 35.0f, 200.0f, 250.0f, 50.0f)];
-        signUpPWTextField = [[UITextField alloc] initWithFrame:CGRectMake( 35.0f, 270.0f, 250.0f, 50.0f)];
-        signUpPWTextField_confirm = [[UITextField alloc] initWithFrame:CGRectMake( 35.0f, 340.0f, 250.0f, 50.0f)];
-        [cancelButton setFrame:CGRectMake( 29.0f, 395.0f, 52.0f, 32.0f)];
-        [signUpButton setFrame:CGRectMake( self.view.bounds.size.width - 99.0f, 395.0f, 70.0f, 32.0f)];
-        [policy setFrame:CGRectMake(35.0f, self.view.bounds.size.height - 40.0f, 252.0f, 23.0f)];
-        
     }
+    
+    signUpEmailTextField = [[UITextField alloc] initWithFrame:CGRectMake( 35.0f, self.view.bounds.size.height - 280.0f, 250.0f, 50.0f)];
+    signUpPWTextField = [[UITextField alloc] initWithFrame:CGRectMake( 35.0f, self.view.bounds.size.height - 210.0f, 250.0f, 50.0f)];
+    signUpPWTextField_confirm = [[UITextField alloc] initWithFrame:CGRectMake( 35.0f, self.view.bounds.size.height - 140.0f, 250.0f, 50.0f)];
+    [cancelButton setFrame:CGRectMake( 29.0f, self.view.bounds.size.height - 75.0f, 52.0f, 32.0f)];
+    [signUpButton setFrame:CGRectMake( self.view.bounds.size.width - 99.0f, self.view.bounds.size.height - 75.0f, 70.0f, 32.0f)];
+    [policy setFrame:CGRectMake(35.0f, self.view.bounds.size.height - 40.0f, 252.0f, 23.0f)];
+
     
     UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];
     UIView *paddingView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];

@@ -285,7 +285,6 @@
     self.window.rootViewController = self.navController;
     
     [self.window makeKeyAndVisible];
-    
     [self presentAccountViewController];
 }
 
@@ -315,7 +314,6 @@
     self.window.rootViewController = self.navController;
     
     [self.window makeKeyAndVisible];
-    
     [self presentTabBarController];
 }
 
