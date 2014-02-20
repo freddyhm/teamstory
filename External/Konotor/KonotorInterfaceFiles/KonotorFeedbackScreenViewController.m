@@ -61,7 +61,7 @@
 #endif
 
     [headerView setBackgroundColor:KONOTOR_UIBUTTON_COLOR];
-    [headerView setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:26.0]];
+    [headerView setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:15.0]];
     [headerView setText:@"Feedback"];
     [headerView setEditable:NO];
     
@@ -83,9 +83,9 @@
     [closeButton setBackgroundColor:[UIColor clearColor]];
     [closeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
    // [closeButton setBackgroundImage:[UIImage imageNamed:@"konotor_cross.png"] forState:UIControlStateNormal];
-    [closeButton setImage:[UIImage imageNamed:@"konotor_cross.png"] forState:UIControlStateNormal];
+    [closeButton setImage:[UIImage imageNamed:@"button_cancel.png"] forState:UIControlStateNormal];
    // [closeButton setTitle:@"X" forState:UIControlStateNormal];
-    [closeButton setFrame:CGRectMake(8,8,28,28)];
+    [closeButton setFrame:CGRectMake(headerView.frame.size.width-8-36, 8, 28, 28)];
     [closeButton addTarget:[KonotorFeedbackScreen class] action:@selector(dismissScreen) forControlEvents:UIControlEventTouchUpInside];
     
     [headerView addSubview:closeButton];

@@ -18,7 +18,7 @@
 #ifndef KonotorSampleApp_KonotorUI_h
 #define KonotorSampleApp_KonotorUI_h
 
-#define KONOTOR_UIBUTTON_COLOR_DEFAULT ([UIColor colorWithRed:0.39216 green:0.78824 blue:1.0 alpha:1.0])
+#define KONOTOR_UIBUTTON_COLOR_DEFAULT ([UIColor colorWithRed:(79.0f/255.0f) green:(182.0f/255.0f) blue:(154.0f/255.0f) alpha:1.0])
 
 #define KONOTOR_UIBUTTON_COLOR KONOTOR_UIBUTTON_COLOR_DEFAULT
 //([UIColor blackColor])

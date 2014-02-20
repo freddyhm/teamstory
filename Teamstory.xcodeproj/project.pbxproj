@@ -293,9 +293,11 @@
 		C4F102E2156C58440061BC3E /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4F102DF156C58440061BC3E /* Entitlements.plist */; };
 		C4F102E7156C58570061BC3E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C4F102E5156C58570061BC3E /* InfoPlist.strings */; };
 		C4F102EF156C58E00061BC3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102EC156C58E00061BC3E /* main.m */; };
-		D55497CC18B1B7BA00DE4192 /* button-feedback@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D55497CA18B1B7BA00DE4192 /* button-feedback@2x.png */; };
-		D55497CD18B1B7BA00DE4192 /* button-feedback.png in Resources */ = {isa = PBXBuildFile; fileRef = D55497CB18B1B7BA00DE4192 /* button-feedback.png */; };
 		D5D1042818B5C7AF0084C901 /* konotor.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042718B5C7AF0084C901 /* konotor.png */; };
+		D5D1042B18B5CF4E0084C901 /* button-feedback.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042918B5CF4E0084C901 /* button-feedback.png */; };
+		D5D1042C18B5CF4E0084C901 /* button-feedback@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */; };
+		D5D1043718B5D6A40084C901 /* konotor_cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1043518B5D6A40084C901 /* konotor_cancel.png */; };
+		D5D1043818B5D6A40084C901 /* konotor_cancel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1043618B5D6A40084C901 /* konotor_cancel@2x.png */; };
 		D5FC095118A9B518000D85F1 /* BFCropInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC094E18A9B518000D85F1 /* BFCropInterface.m */; };
 		D5FC095218A9B518000D85F1 /* BFViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095018A9B518000D85F1 /* BFViewController.m */; };
 		D5FC095518A9B543000D85F1 /* CameraFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095418A9B543000D85F1 /* CameraFilterViewController.m */; };
@@ -308,8 +310,6 @@
 		D5FC099D18A9BFF4000D85F1 /* KonotorFeedbackScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC096A18A9BFF4000D85F1 /* KonotorFeedbackScreen.m */; };
 		D5FC099E18A9BFF4000D85F1 /* KonotorFeedbackScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC096C18A9BFF4000D85F1 /* KonotorFeedbackScreenViewController.m */; };
 		D5FC099F18A9BFF4000D85F1 /* KonotorFeedbackScreenViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FC096D18A9BFF4000D85F1 /* KonotorFeedbackScreenViewController.xib */; };
-		D5FC09A018A9BFF4000D85F1 /* konotor_cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = D5FC096F18A9BFF4000D85F1 /* konotor_cancel.png */; };
-		D5FC09A118A9BFF4000D85F1 /* konotor_cancel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5FC097018A9BFF4000D85F1 /* konotor_cancel@2x.png */; };
 		D5FC09A218A9BFF4000D85F1 /* konotor_chatbox.png in Resources */ = {isa = PBXBuildFile; fileRef = D5FC097118A9BFF4000D85F1 /* konotor_chatbox.png */; };
 		D5FC09A318A9BFF4000D85F1 /* konotor_chatbox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5FC097218A9BFF4000D85F1 /* konotor_chatbox@2x.png */; };
 		D5FC09A418A9BFF4000D85F1 /* konotor_chatbubble_ios7_other.png in Resources */ = {isa = PBXBuildFile; fileRef = D5FC097318A9BFF4000D85F1 /* konotor_chatbubble_ios7_other.png */; };
@@ -684,9 +684,11 @@
 		C4F102EB156C58E00061BC3E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		C4F102EC156C58E00061BC3E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
 		C4F102ED156C58E00061BC3E /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = SOURCE_ROOT; };
-		D55497CA18B1B7BA00DE4192 /* button-feedback@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback@2x.png"; sourceTree = "<group>"; };
-		D55497CB18B1B7BA00DE4192 /* button-feedback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback.png"; sourceTree = "<group>"; };
 		D5D1042718B5C7AF0084C901 /* konotor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor.png; sourceTree = "<group>"; };
+		D5D1042918B5CF4E0084C901 /* button-feedback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback.png"; sourceTree = "<group>"; };
+		D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback@2x.png"; sourceTree = "<group>"; };
+		D5D1043518B5D6A40084C901 /* konotor_cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_cancel.png; sourceTree = "<group>"; };
+		D5D1043618B5D6A40084C901 /* konotor_cancel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_cancel@2x.png"; sourceTree = "<group>"; };
 		D5FC094D18A9B518000D85F1 /* BFCropInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFCropInterface.h; sourceTree = SOURCE_ROOT; };
 		D5FC094E18A9B518000D85F1 /* BFCropInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFCropInterface.m; sourceTree = SOURCE_ROOT; };
 		D5FC094F18A9B518000D85F1 /* BFViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFViewController.h; sourceTree = SOURCE_ROOT; };
@@ -708,8 +710,6 @@
 		D5FC096B18A9BFF4000D85F1 /* KonotorFeedbackScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorFeedbackScreenViewController.h; sourceTree = "<group>"; };
 		D5FC096C18A9BFF4000D85F1 /* KonotorFeedbackScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorFeedbackScreenViewController.m; sourceTree = "<group>"; };
 		D5FC096D18A9BFF4000D85F1 /* KonotorFeedbackScreenViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KonotorFeedbackScreenViewController.xib; sourceTree = "<group>"; };
-		D5FC096F18A9BFF4000D85F1 /* konotor_cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_cancel.png; sourceTree = "<group>"; };
-		D5FC097018A9BFF4000D85F1 /* konotor_cancel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_cancel@2x.png"; sourceTree = "<group>"; };
 		D5FC097118A9BFF4000D85F1 /* konotor_chatbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_chatbox.png; sourceTree = "<group>"; };
 		D5FC097218A9BFF4000D85F1 /* konotor_chatbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_chatbox@2x.png"; sourceTree = "<group>"; };
 		D5FC097318A9BFF4000D85F1 /* konotor_chatbubble_ios7_other.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_chatbubble_ios7_other.png; sourceTree = "<group>"; };
@@ -905,6 +905,8 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				D5D1042918B5CF4E0084C901 /* button-feedback.png */,
+				D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */,
 				D5D1042718B5C7AF0084C901 /* konotor.png */,
 				46ABD74818B144D4008F5AAB /* news2.png */,
 				46ABD74918B144D4008F5AAB /* news2@2x.png */,
@@ -1408,8 +1410,8 @@
 		D5FC096E18A9BFF4000D85F1 /* KonotorImageResources */ = {
 			isa = PBXGroup;
 			children = (
-				D5FC096F18A9BFF4000D85F1 /* konotor_cancel.png */,
-				D5FC097018A9BFF4000D85F1 /* konotor_cancel@2x.png */,
+				D5D1043518B5D6A40084C901 /* konotor_cancel.png */,
+				D5D1043618B5D6A40084C901 /* konotor_cancel@2x.png */,
 				D5FC097118A9BFF4000D85F1 /* konotor_chatbox.png */,
 				D5FC097218A9BFF4000D85F1 /* konotor_chatbox@2x.png */,
 				D5FC097318A9BFF4000D85F1 /* konotor_chatbubble_ios7_other.png */,
@@ -1496,7 +1498,6 @@
 				C45C260715671D730035BCA6 /* PlaceholderPhoto.png in Resources */,
 				46FB0A911888BBF400E978CD /* news1@2x.png in Resources */,
 				C45C260815671D730035BCA6 /* PlaceholderPhoto@2x.png in Resources */,
-				D5FC09A118A9BFF4000D85F1 /* konotor_cancel@2x.png in Resources */,
 				C4F101F4156C2D800061BC3E /* ActivityFeedBlank.png in Resources */,
 				D5FC09AC18A9BFF4000D85F1 /* konotor_play.png in Resources */,
 				4671548C188342380000C0CA /* fbbutton.png in Resources */,
@@ -1508,12 +1509,12 @@
 				C4F101FC156C35EE0061BC3E /* CellLoadMore.png in Resources */,
 				C4F101FD156C35EE0061BC3E /* CellLoadMore@2x.png in Resources */,
 				C4F102E2156C58440061BC3E /* Entitlements.plist in Resources */,
+				D5D1042C18B5CF4E0084C901 /* button-feedback@2x.png in Resources */,
 				C4F102E7156C58570061BC3E /* InfoPlist.strings in Resources */,
 				46715488188342380000C0CA /* loginbutton.png in Resources */,
 				465DE34E1895A56200C37EF8 /* bg_dropdown.png in Resources */,
 				D5FC09A718A9BFF4000D85F1 /* konotor_chatbubble_ios7_you@2x.png in Resources */,
 				46B31EF0184E35150028D11C /* companyName.png in Resources */,
-				D5FC09A018A9BFF4000D85F1 /* konotor_cancel.png in Resources */,
 				462FCB83188C8533005059F3 /* button_back_selected.png in Resources */,
 				465DE3561895AA9600C37EF8 /* dropdown_arrow.png in Resources */,
 				D5FC09A218A9BFF4000D85F1 /* konotor_chatbox.png in Resources */,
@@ -1547,10 +1548,12 @@
 				C4BE6713157FC7D000A291C2 /* Icon@2x.png in Resources */,
 				C4BE6714157FC7D000A291C2 /* iTunesArtwork in Resources */,
 				46FB0A991888E4C200E978CD /* bg@2x.png in Resources */,
+				D5D1043718B5D6A40084C901 /* konotor_cancel.png in Resources */,
 				462FCB7A188C806C005059F3 /* button_cancel@2x.png in Resources */,
 				D5FC09BB18A9BFF4000D85F1 /* konotor_supportprofile@2x.png in Resources */,
 				C4BE676D157FC7F700A291C2 /* BackgroundComments.png in Resources */,
 				465DE3471895983A00C37EF8 /* profileType@2x.png in Resources */,
+				D5D1043818B5D6A40084C901 /* konotor_cancel@2x.png in Resources */,
 				C4BE676E157FC7F700A291C2 /* BackgroundComments@2x.png in Resources */,
 				4671548D188342380000C0CA /* fbbutton@2x.png in Resources */,
 				D5FC09A318A9BFF4000D85F1 /* konotor_chatbox@2x.png in Resources */,
@@ -1562,6 +1565,7 @@
 				C4BE6772157FC7F700A291C2 /* BackgroundHeaderPicture@2x.png in Resources */,
 				462FCB61188C6AE9005059F3 /* DiscoverNavigationBar.png in Resources */,
 				C4BE6773157FC7F700A291C2 /* BackgroundLeather.png in Resources */,
+				D5D1042B18B5CF4E0084C901 /* button-feedback.png in Resources */,
 				462FCB60188C6AE9005059F3 /* ProfileNavigationBar@2x.png in Resources */,
 				46715499188346750000C0CA /* login_iphone4@2x.png in Resources */,
 				D5FC09B218A9BFF4000D85F1 /* konotor_progress_blue.png in Resources */,
@@ -1600,7 +1604,6 @@
 				C4BE6786157FC7F700A291C2 /* ButtonCameraSelected@2x.png in Resources */,
 				46B31EEC184E35150028D11C /* profileDescription.png in Resources */,
 				46ABD73018AADFFB008F5AAB /* default-pic@2x.png in Resources */,
-				D55497CC18B1B7BA00DE4192 /* button-feedback@2x.png in Resources */,
 				C4BE678B157FC7F700A291C2 /* ButtonFollow.png in Resources */,
 				C4BE678C157FC7F700A291C2 /* ButtonFollow@2x.png in Resources */,
 				D5FC09A818A9BFF4000D85F1 /* konotor_cross.png in Resources */,
@@ -1610,7 +1613,6 @@
 				465A4EDE18A8382900E43DC6 /* comingsoon.png in Resources */,
 				C4BE6790157FC7F700A291C2 /* ButtonFollowingSelected@2x.png in Resources */,
 				C4BE6791157FC7F700A291C2 /* ButtonFollowSelected.png in Resources */,
-				D55497CD18B1B7BA00DE4192 /* button-feedback.png in Resources */,
 				C4BE6792157FC7F700A291C2 /* ButtonFollowSelected@2x.png in Resources */,
 				D5FC09A618A9BFF4000D85F1 /* konotor_chatbubble_ios7_you.png in Resources */,
 				462FCB7C188C806C005059F3 /* button_done@2x.png in Resources */,
