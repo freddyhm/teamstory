@@ -9,13 +9,12 @@
 #import "PAPAccountViewController.h"
 #import "AppDelegate.h"
 #import "PAPProfileSettingViewController.h"
+#import "PAPwebviewViewController.h"
 
 // ActionSheet button indexes
 typedef enum {
 	kPAPSettingsProfile = 0,
-	kPAPSettingsFindFriends,
-    kPAPPrivacyPolicy,
-    kPAPTermsOfService,
+    kPAPTermsandPolicy,
     kPAPAboutThisVersion,
     kPAPSettingsLogout,
     kPAPSettingsNumberOfButtons
@@ -65,25 +64,28 @@ typedef enum {
             [navController pushViewController:profileViewController animated:YES];
             break;
         }
+            /*
         case kPAPSettingsFindFriends:
         {
             PAPFindFriendsViewController *findFriendsVC = [[PAPFindFriendsViewController alloc] init];
             [navController pushViewController:findFriendsVC animated:YES];
             break;
         }
+             */
         case kPAPSettingsLogout:
         {
             // Log out user and present the login view controller
             [(AppDelegate *)[[UIApplication sharedApplication] delegate] logOut];
             break;
         }
-        case kPAPPrivacyPolicy:
+        case kPAPTermsandPolicy:
         {
+            PAPwebviewViewController *webviewController = [[PAPwebviewViewController alloc] init];
+            webviewController.hidesBottomBarWhenPushed = YES;
+            [navController pushViewController:webviewController animated:YES];
+            break;
         }
         case kPAPAboutThisVersion:
-        {
-        }
-        case kPAPTermsOfService:
         {
         }
         default:
