@@ -21,10 +21,6 @@
 		46159CBD18B5486E008747C8 /* browser-button-forward-no@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46159CB918B5486E008747C8 /* browser-button-forward-no@2x.png */; };
 		46159CBE18B5486E008747C8 /* browser-button-forward-normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 46159CBA18B5486E008747C8 /* browser-button-forward-normal.png */; };
 		46159CBF18B5486E008747C8 /* browser-button-forward-normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46159CBB18B5486E008747C8 /* browser-button-forward-normal@2x.png */; };
-		46159CC418B56137008747C8 /* follow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46159CC018B56137008747C8 /* follow@2x.png */; };
-		46159CC518B56137008747C8 /* follow.png in Resources */ = {isa = PBXBuildFile; fileRef = 46159CC118B56137008747C8 /* follow.png */; };
-		46159CC618B56137008747C8 /* unfollow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46159CC218B56137008747C8 /* unfollow@2x.png */; };
-		46159CC718B56137008747C8 /* unfollow.png in Resources */ = {isa = PBXBuildFile; fileRef = 46159CC318B56137008747C8 /* unfollow.png */; };
 		462B363E1880AB5D008C28AE /* discoverPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 462B363D1880AB5D008C28AE /* discoverPageViewController.m */; };
 		462FCB5F188C6AE9005059F3 /* ProfileNavigationBar.png in Resources */ = {isa = PBXBuildFile; fileRef = 462FCB5B188C6AE9005059F3 /* ProfileNavigationBar.png */; };
 		462FCB60188C6AE9005059F3 /* ProfileNavigationBar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 462FCB5C188C6AE9005059F3 /* ProfileNavigationBar@2x.png */; };
@@ -374,10 +370,6 @@
 		46159CB918B5486E008747C8 /* browser-button-forward-no@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "browser-button-forward-no@2x.png"; sourceTree = "<group>"; };
 		46159CBA18B5486E008747C8 /* browser-button-forward-normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "browser-button-forward-normal.png"; sourceTree = "<group>"; };
 		46159CBB18B5486E008747C8 /* browser-button-forward-normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "browser-button-forward-normal@2x.png"; sourceTree = "<group>"; };
-		46159CC018B56137008747C8 /* follow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "follow@2x.png"; sourceTree = "<group>"; };
-		46159CC118B56137008747C8 /* follow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = follow.png; sourceTree = "<group>"; };
-		46159CC218B56137008747C8 /* unfollow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unfollow@2x.png"; sourceTree = "<group>"; };
-		46159CC318B56137008747C8 /* unfollow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unfollow.png; sourceTree = "<group>"; };
 		462B363C1880AB5D008C28AE /* discoverPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = discoverPageViewController.h; path = Anypic/discoverPageViewController.h; sourceTree = SOURCE_ROOT; };
 		462B363D1880AB5D008C28AE /* discoverPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = discoverPageViewController.m; path = Anypic/discoverPageViewController.m; sourceTree = SOURCE_ROOT; };
 		462FCB5B188C6AE9005059F3 /* ProfileNavigationBar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProfileNavigationBar.png; sourceTree = "<group>"; };
@@ -927,10 +919,6 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				46159CC018B56137008747C8 /* follow@2x.png */,
-				46159CC118B56137008747C8 /* follow.png */,
-				46159CC218B56137008747C8 /* unfollow@2x.png */,
-				46159CC318B56137008747C8 /* unfollow.png */,
 				46159CB818B5486E008747C8 /* browser-button-forward-no.png */,
 				46159CB918B5486E008747C8 /* browser-button-forward-no@2x.png */,
 				46159CBA18B5486E008747C8 /* browser-button-forward-normal.png */,
@@ -1596,7 +1584,6 @@
 				462FCB60188C6AE9005059F3 /* ProfileNavigationBar@2x.png in Resources */,
 				46715499188346750000C0CA /* login_iphone4@2x.png in Resources */,
 				46ABD76918B54456008F5AAB /* browser-button-normal.png in Resources */,
-				46159CC518B56137008747C8 /* follow.png in Resources */,
 				D5FC09B218A9BFF4000D85F1 /* konotor_progress_blue.png in Resources */,
 				C4BE6774157FC7F700A291C2 /* BackgroundLeather@2x.png in Resources */,
 				D5FC095C18A9B586000D85F1 /* CameraFilterViewController.xib in Resources */,
@@ -1623,7 +1610,6 @@
 				46B31EF4184E3D340028D11C /* profileCollaborator.png in Resources */,
 				46D1E717186FA398009CC230 /* dropDownMenu.png in Resources */,
 				46ABD74F18B147FC008F5AAB /* button_cancel_selected@2x.png in Resources */,
-				46159CC618B56137008747C8 /* unfollow@2x.png in Resources */,
 				C4BE6785157FC7F700A291C2 /* ButtonCameraSelected.png in Resources */,
 				D5FC09BA18A9BFF4000D85F1 /* konotor_supportprofile.png in Resources */,
 				465A4ED918A8222A00E43DC6 /* iconlocation.png in Resources */,
@@ -1687,7 +1673,6 @@
 				C4BE67A5157FC7F700A291C2 /* IconComment.png in Resources */,
 				C4BE67A6157FC7F700A291C2 /* IconComment@2x.png in Resources */,
 				465A4EDA18A8222A00E43DC6 /* iconlocation@2x.png in Resources */,
-				46159CC718B56137008747C8 /* unfollow.png in Resources */,
 				46B31EF8184E3DCB0028D11C /* profileAddNew.png in Resources */,
 				D5FC09A418A9BFF4000D85F1 /* konotor_chatbubble_ios7_other.png in Resources */,
 				C4BE67A7157FC7F700A291C2 /* IconFollowers.png in Resources */,
@@ -1755,7 +1740,6 @@
 				C4BE67BD157FC7F700A291C2 /* SeparatorTimeline.png in Resources */,
 				46B31EF1184E35150028D11C /* companyName@2x.png in Resources */,
 				465DE3571895AA9600C37EF8 /* dropdown_arrow@2x.png in Resources */,
-				46159CC418B56137008747C8 /* follow@2x.png in Resources */,
 				C4BE67BE157FC7F700A291C2 /* SeparatorTimeline@2x.png in Resources */,
 				462FCB62188C6AE9005059F3 /* DiscoverNavigationBar@2x.png in Resources */,
 				C4BE67BF157FC7F700A291C2 /* SeparatorTimelineDark.png in Resources */,
