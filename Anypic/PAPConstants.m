@@ -1,13 +1,13 @@
 //
 //  PAPConstants.m
-//  Teamstory
+//  anypic
 //
 //
 
 #import "PAPConstants.h"
 
-NSString *const kPAPUserDefaultsActivityFeedViewControllerLastRefreshKey    = @"com.parse.Teamstory.userDefaults.activityFeedViewController.lastRefresh";
-NSString *const kPAPUserDefaultsCacheFacebookFriendsKey                     = @"com.parse.Teamstory.userDefaults.cache.facebookFriends";
+NSString *const kPAPUserDefaultsActivityFeedViewControllerLastRefreshKey    = @"com.parse.anypic.userDefaults.activityFeedViewController.lastRefresh";
+NSString *const kPAPUserDefaultsCacheFacebookFriendsKey                     = @"com.parse.anypic.userDefaults.cache.facebookFriends";
 
 
 #pragma mark - Launch URLs
@@ -17,15 +17,15 @@ NSString *const kPAPLaunchURLHostTakePicture = @"camera";
 
 #pragma mark - NSNotification
 
-NSString *const PAPAppDelegateApplicationDidReceiveRemoteNotification           = @"com.parse.Teamstory.appDelegate.applicationDidReceiveRemoteNotification";
-NSString *const PAPUtilityUserFollowingChangedNotification                      = @"com.parse.Teamstory.utility.userFollowingChanged";
-NSString *const PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification     = @"com.parse.Teamstory.utility.userLikedUnlikedPhotoCallbackFinished";
-NSString *const PAPUtilityDidFinishProcessingProfilePictureNotification         = @"com.parse.Teamstory.utility.didFinishProcessingProfilePictureNotification";
-NSString *const PAPTabBarControllerDidFinishEditingPhotoNotification            = @"com.parse.Teamstory.tabBarController.didFinishEditingPhoto";
-NSString *const PAPTabBarControllerDidFinishImageFileUploadNotification         = @"com.parse.Teamstory.tabBarController.didFinishImageFileUploadNotification";
-NSString *const PAPPhotoDetailsViewControllerUserDeletedPhotoNotification       = @"com.parse.Teamstory.photoDetailsViewController.userDeletedPhoto";
-NSString *const PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotification  = @"com.parse.Teamstory.photoDetailsViewController.userLikedUnlikedPhotoInDetailsViewNotification";
-NSString *const PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification   = @"com.parse.Teamstory.photoDetailsViewController.userCommentedOnPhotoInDetailsViewNotification";
+NSString *const PAPAppDelegateApplicationDidReceiveRemoteNotification           = @"com.parse.anypic.appDelegate.applicationDidReceiveRemoteNotification";
+NSString *const PAPUtilityUserFollowingChangedNotification                      = @"com.parse.anypic.utility.userFollowingChanged";
+NSString *const PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification     = @"com.parse.anypic.utility.userLikedUnlikedPhotoCallbackFinished";
+NSString *const PAPUtilityDidFinishProcessingProfilePictureNotification         = @"com.parse.anypic.utility.didFinishProcessingProfilePictureNotification";
+NSString *const PAPTabBarControllerDidFinishEditingPhotoNotification            = @"com.parse.anypic.tabBarController.didFinishEditingPhoto";
+NSString *const PAPTabBarControllerDidFinishImageFileUploadNotification         = @"com.parse.anypic.tabBarController.didFinishImageFileUploadNotification";
+NSString *const PAPPhotoDetailsViewControllerUserDeletedPhotoNotification       = @"com.parse.anypic.photoDetailsViewController.userDeletedPhoto";
+NSString *const PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotification  = @"com.parse.anypic.photoDetailsViewController.userLikedUnlikedPhotoInDetailsViewNotification";
+NSString *const PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification   = @"com.parse.anypic.photoDetailsViewController.userCommentedOnPhotoInDetailsViewNotification";
 
 
 #pragma mark - User Info Keys

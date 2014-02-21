@@ -104,7 +104,7 @@
     // ****************************************************************************
     
     // Track app open.
-    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+    //[PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
 
     if (application.applicationIconBadgeNumber != 0) {
         application.applicationIconBadgeNumber = 0;
