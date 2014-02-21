@@ -288,7 +288,6 @@
     self.window.rootViewController = self.navController;
     
     [self.window makeKeyAndVisible];
-    
     [self presentAccountViewController];
 }
 
@@ -318,7 +317,6 @@
     self.window.rootViewController = self.navController;
     
     [self.window makeKeyAndVisible];
-    
     [self presentTabBarController];
 }
 
@@ -420,16 +418,19 @@
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
+    
     [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:0.498f green:0.388f blue:0.329f alpha:1.0f]];
+    
+    
     [[UINavigationBar appearance] setTitleTextAttributes:@{
                                 UITextAttributeTextColor: [UIColor whiteColor],
                           UITextAttributeTextShadowColor: [UIColor colorWithWhite:0.0f alpha:0.750f],
                          UITextAttributeTextShadowOffset: [NSValue valueWithCGSize:CGSizeMake(0.0f, 1.0f)]
      }];
+     
+    
     [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"BackgroundNavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
     
-    [[UIButton appearanceWhenContainedIn:[UINavigationBar class], nil] setBackgroundImage:[UIImage imageNamed:@"ButtonNavigationBar.png"] forState:UIControlStateNormal];
-    [[UIButton appearanceWhenContainedIn:[UINavigationBar class], nil] setBackgroundImage:[UIImage imageNamed:@"ButtonNavigationBarSelected.png"] forState:UIControlStateHighlighted];
     [[UIButton appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
     
     [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[UIImage imageNamed:@"button_back.png"]
@@ -445,6 +446,7 @@
                           UITextAttributeTextShadowColor: [UIColor colorWithWhite:0.0f alpha:0.750f],
                          UITextAttributeTextShadowOffset: [NSValue valueWithCGSize:CGSizeMake(0.0f, 1.0f)]
      } forState:UIControlStateNormal];
+ 
     
     [[UISearchBar appearance] setTintColor:[UIColor colorWithRed:32.0f/255.0f green:19.0f/255.0f blue:16.0f/255.0f alpha:1.0f]];    
 }

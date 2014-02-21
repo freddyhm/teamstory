@@ -27,7 +27,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
 
     // button image for feedback

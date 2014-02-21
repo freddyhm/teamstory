@@ -45,13 +45,14 @@
         self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"login_iphone5.png"]];
     } else {
         self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"login_iphone4.png"]];
-        
-        emailTextField = [[UITextField alloc] initWithFrame:CGRectMake( 35.0f, 320.0f, 250.0f, 50.0f)];
-        pwTextField = [[UITextField alloc] initWithFrame:CGRectMake( 35.0f, 390.0f, 250.0f, 50.0f)];
-        [cancelButton setFrame:CGRectMake( 20.0f, self.view.bounds.size.height - 36.0f, 70.0f, 32.0f)];
-        [loginButton setFrame:CGRectMake( 236.0f, self.view.bounds.size.height - 36.0f, 52.0f, 32.0f)];
-        [pwForgotButton setFrame:CGRectMake( (self.view.bounds.size.width / 2 ) - 38.0f, self.view.bounds.size.height - 36.0f, 80.0f, 32.0f)];
     }
+    
+    emailTextField = [[UITextField alloc] initWithFrame:CGRectMake( 35.0f, self.view.bounds.size.height - 160.0f, 250.0f, 50.0f)];
+    pwTextField = [[UITextField alloc] initWithFrame:CGRectMake( 35.0f, self.view.bounds.size.height - 90.0f, 250.0f, 50.0f)];
+    [cancelButton setFrame:CGRectMake( 20.0f, self.view.bounds.size.height - 36.0f, 70.0f, 32.0f)];
+    [loginButton setFrame:CGRectMake( 236.0f, self.view.bounds.size.height - 36.0f, 52.0f, 32.0f)];
+    [pwForgotButton setFrame:CGRectMake( (self.view.bounds.size.width / 2 ) - 38.0f, self.view.bounds.size.height - 36.0f, 80.0f, 32.0f)];
+
     
     UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];
     UIView *paddingView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];

@@ -10,6 +10,7 @@
 #import "PAPSettingsButtonItem.h"
 #import "PAPSettingsActionSheetDelegate.h"
 #import "MBProgressHUD.h"
+#import "PAPwebviewViewController.h"
 
 @interface PAPAccountViewController()
 @property (nonatomic, strong) UIView *headerView;
@@ -45,6 +46,7 @@
 @synthesize settingsActionSheetDelegate;
 @synthesize hud;
 @synthesize websiteInfo;
+@synthesize navController;
 
 
 #pragma mark - Initialization
@@ -95,6 +97,15 @@
         UIView *whiteBackground = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, self.headerView.bounds.size.height - 10.0f)];
         [whiteBackground setBackgroundColor:[UIColor whiteColor]];
         [self.headerView addSubview:whiteBackground];
+        
+        if (self.user != [PFUser currentUser]){
+            UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            [backButton setFrame:CGRectMake(0, 0, 22.0f, 22.0f)];
+            [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+            [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
+            [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
+            self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+        }
         
         profilePictureBackgroundView = [[UIView alloc] initWithFrame:CGRectMake( 10.0f, 10.0f, 70.0f, 70.0f)];
         [profilePictureBackgroundView setBackgroundColor:[UIColor darkGrayColor]];
@@ -266,17 +277,25 @@
 
 }
 
+- (void)backButtonAction:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (void)websiteLinkAction:(id)sender{
     NSString *http = @"http://";
     //window does not work with only urls. Must append "http://".
     self.websiteInfo = [NSString stringWithFormat:@"%@%@", http, self.websiteInfo];
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.websiteInfo]];
+    
+    PAPwebviewViewController *webviewController = [[PAPwebviewViewController alloc] initWithWebsite:self.websiteInfo];
+    webviewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:webviewController animated:YES];
+
 }
 
 
 - (void)settingsButtonAction:(id)sender {
     self.settingsActionSheetDelegate = [[PAPSettingsActionSheetDelegate alloc] initWithNavigationController:self.navigationController];
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self.settingsActionSheetDelegate cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Edit Profile",@"Find Friends",@"Privacy Policy",@"Terms of Service",@"About This Version",@"Log Out", nil];
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self.settingsActionSheetDelegate cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Edit Profile",@"Terms & Policy",@"About This Version",@"Log Out", nil];
     
     [actionSheet showFromTabBar:self.tabBarController.tabBar];
 }
@@ -353,12 +372,28 @@
 
 
 - (void)configureFollowButton {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Follow" style:UIBarButtonItemStyleBordered target:self action:@selector(followButtonAction:)];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setBackgroundImage:[UIImage imageNamed:@"follow.png"] forState:UIControlStateNormal];
+    button.frame=CGRectMake(0,0, 22.0f, 22.0f);
+    [button addTarget:self action:@selector(followButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+    self.navigationItem.rightBarButtonItem = followButton;
+    
+    //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow.png"] style:UIBarButtonItemStylePlain target:self action:@selector(followButtonAction:)];
     [[PAPCache sharedCache] setFollowStatus:NO user:self.user];
 }
 
 - (void)configureUnfollowButton {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Unfollow" style:UIBarButtonItemStyleBordered target:self action:@selector(unfollowButtonAction:)];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setBackgroundImage:[UIImage imageNamed:@"unfollow.png"] forState:UIControlStateNormal];
+    button.frame=CGRectMake(0,0, 22.0f, 22.0f);
+    [button addTarget:self action:@selector(unfollowButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *unfollowButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+    self.navigationItem.rightBarButtonItem = unfollowButton;
+    
+    //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"unfollow.png"] style:UIBarButtonItemStylePlain target:self action:@selector(unfollowButtonAction:)];
     [[PAPCache sharedCache] setFollowStatus:YES user:self.user];
 }
 

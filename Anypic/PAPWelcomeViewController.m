@@ -11,23 +11,6 @@
 
 
 #pragma mark - UIViewController
-- (void)loadView {
-    
-    UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
-    
-    if ([UIScreen mainScreen].bounds.size.height > 480.0f) {
-        //Iphone 4inch
-        [backgroundImageView setImage:[UIImage imageNamed:@"splash_iphone5.png"]];
-        NSLog(@"iphone5");
-    } else {
-        //Iphone 3.5inch
-        [backgroundImageView setImage:[UIImage imageNamed:@"Default.png"]];
-    }
-    
-   // NSLog(@"%@", backgroundImageView);
-    self.view = backgroundImageView;
-    
-}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];

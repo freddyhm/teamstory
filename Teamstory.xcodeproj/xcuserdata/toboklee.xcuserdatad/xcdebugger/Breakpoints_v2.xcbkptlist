@@ -86,11 +86,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/PAPWelcomeViewController.m"
-            timestampString = "413940216.974029"
+            timestampString = "414622464.923415"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "57"
-            endingLineNumber = "57"
+            startingLineNumber = "40"
+            endingLineNumber = "40"
             landmarkName = "-refreshCurrentUserCallbackWithResult:error:"
             landmarkType = "5">
          </BreakpointContent>
@@ -210,13 +210,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/PAPAccountViewController.m"
-            timestampString = "414473357.726246"
+            timestampString = "414551271.227334"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "33"
-            endingLineNumber = "33"
-            landmarkName = "@implementation PAPAccountViewController"
-            landmarkType = "3">
+            startingLineNumber = "34"
+            endingLineNumber = "34"
+            landmarkName = "headerView"
+            landmarkType = "19">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -247,8 +247,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "84"
             endingLineNumber = "84"
-            landmarkName = "@implementation PAPLogInViewController"
-            landmarkType = "3">
+            landmarkName = "-emailLoginAction:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -274,11 +274,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/emailLoginViewController.m"
-            timestampString = "411259791.254299"
+            timestampString = "414622056.95588"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "168"
-            endingLineNumber = "168"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
             landmarkName = "-signUpButtonAction:"
             landmarkType = "5">
          </BreakpointContent>
@@ -290,11 +290,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/AppDelegate.m"
-            timestampString = "413939648.405118"
+            timestampString = "414623269.829199"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "329"
-            endingLineNumber = "329"
+            startingLineNumber = "327"
+            endingLineNumber = "327"
             landmarkName = "-presentTabBarController"
             landmarkType = "5">
          </BreakpointContent>
@@ -306,11 +306,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/AppDelegate.m"
-            timestampString = "413939648.405118"
+            timestampString = "414623269.829199"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "338"
-            endingLineNumber = "338"
+            startingLineNumber = "336"
+            endingLineNumber = "336"
             landmarkName = "-presentTabBarController"
             landmarkType = "5">
          </BreakpointContent>
@@ -327,7 +327,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "271"
             endingLineNumber = "271"
-            landmarkName = "-presentLoginViewControllerAnimated:"
+            landmarkName = "-connectionDidFinishLoading:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -384,11 +384,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/emailLoginViewController.m"
-            timestampString = "411259916.874333"
+            timestampString = "414622056.95588"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
+            startingLineNumber = "93"
+            endingLineNumber = "93"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
@@ -432,11 +432,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/PAPAccountViewController.m"
-            timestampString = "414473357.726246"
+            timestampString = "414551667.115588"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "142"
-            endingLineNumber = "142"
+            startingLineNumber = "153"
+            endingLineNumber = "153"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
