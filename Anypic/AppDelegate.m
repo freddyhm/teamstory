@@ -103,7 +103,7 @@
         [PFFacebookUtils initializeFacebook];
     // ****************************************************************************
     
-    // Track app open.
+    // Track app open. ** Crashing app because it's currently receiving a bad response **
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
 
     if (application.applicationIconBadgeNumber != 0) {
