@@ -32,11 +32,11 @@
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.teamstoryapp</string>
+	<string>com.growple.teamstory</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>StartupLife</string>
+	<string>Teamstory</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
