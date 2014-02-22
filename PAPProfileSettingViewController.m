@@ -575,7 +575,7 @@
             self.user[@"description"] = description_input;
             self.user[@"website"] = website_input;
             self.user[@"userType"] = dropDownSelection;
-            self.user[@"description"] = description_input;
+            self.user[@"location"] = location_input;
             
             //Checking profile existence.
             bool profileExist = YES; // either YES or NO
