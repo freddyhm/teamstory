@@ -159,15 +159,18 @@
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-	if ([error code] != 3010) { // 3010 is for the iPhone Simulator
+	/*
+    if ([error code] != 3010) { // 3010 is for the iPhone Simulator
         NSLog(@"Application failed to register for push notifications: %@", error);
 	}
+     */
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     
+    NSLog(@"notification");
     // konotor
-    if([application applicationState]==UIApplicationStateActive)
+    if([application applicationState] == UIApplicationStateActive)
         [Konotor handleRemoteNotification:userInfo withShowScreen:NO];
     else
         [Konotor handleRemoteNotification:userInfo withShowScreen:YES];
@@ -185,6 +188,8 @@
             UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
             
             NSString *currentBadgeValue = tabBarItem.badgeValue;
+            
+            NSLog(@"BadgeValue is: %@", currentBadgeValue);
             
             if (currentBadgeValue && currentBadgeValue.length > 0) {
                 NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];

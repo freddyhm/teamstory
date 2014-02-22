@@ -156,15 +156,15 @@
     [companyImageView setFrame:CGRectMake( 15.0f, 46.0f, 40.0f, 40.0f)];
     [backgroundView addSubview:companyImageView];
     
-    UIImageView *descriptionImageView = [[UIImageView alloc] initWithImage:nil];
-    [descriptionImageView setImage:[UIImage imageNamed:@"profileDescription.png"]];
-    [descriptionImageView setFrame:CGRectMake( 15.0f, 87.0f, 40.0f, 40.0f)];
-    [backgroundView addSubview:descriptionImageView];
-    
     UIImageView *locationImageView = [[UIImageView alloc] initWithImage:nil];
     [locationImageView setImage:[UIImage imageNamed:@"profileLocation.png"]];
-    [locationImageView setFrame:CGRectMake( 15.0f, 128.0f, 40.0f, 40.0f)];
+    [locationImageView setFrame:CGRectMake( 15.0f, 87.0f, 40.0f, 40.0f)];
     [backgroundView addSubview:locationImageView];
+    
+    UIImageView *descriptionImageView = [[UIImageView alloc] initWithImage:nil];
+    [descriptionImageView setImage:[UIImage imageNamed:@"profileDescription.png"]];
+    [descriptionImageView setFrame:CGRectMake( 15.0f, 128.0f, 40.0f, 40.0f)];
+    [backgroundView addSubview:descriptionImageView];
     
     UIImageView *websiteImageView = [[UIImageView alloc] initWithImage:nil];
     [websiteImageView setImage:[UIImage imageNamed:@"profileWebsite.png"]];
