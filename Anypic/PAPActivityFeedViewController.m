@@ -74,8 +74,8 @@
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setBackgroundImage:[UIImage imageNamed:@"ActivityFeedBlank.png"] forState:UIControlStateNormal];
-    [button setFrame:CGRectMake(24.0f, 113.0f, 271.0f, 140.0f)];
-    [button addTarget:self action:@selector(inviteFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [button setFrame:CGRectMake(0.0f, 113.0f, 320.0f, 160.0f)];
+    //[button addTarget:self action:@selector(inviteFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.blankTimelineView addSubview:button];
     
 

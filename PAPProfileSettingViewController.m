@@ -104,13 +104,17 @@
     
     NSLog(@"%f", self.view.bounds.size.height);
     
-    backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, self.view.bounds.size.height - 210.0f, self.view.bounds.size.width, 210.0f)];
+    backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, self.view.bounds.size.height - 270.0f, self.view.bounds.size.width, 270.0f)];
     [backgroundView setBackgroundColor:backgroundColor];
     [self.view addSubview:backgroundView];
     
     
     UIButton *profileImagePicker = [UIButton buttonWithType:UIButtonTypeCustom];
-    profileImagePicker.frame = CGRectMake( 110.0f, 90.0f, 100.0f, 100.0f );
+    if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
+        profileImagePicker.frame = CGRectMake( 110.0f, 87.0f, 100.0f, 100.0f );
+    } else {
+        profileImagePicker.frame = CGRectMake( 110.0f, 130.0f, 100.0f, 100.0f );
+    }
     //[profileImagePicker setBackgroundColor:[UIColor redColor]];
     [profileImagePicker setImage:[UIImage imageNamed:@"profilepicture.png"] forState:UIControlStateNormal];
     //[cameraButton setImage:[UIImage imageNamed:@"ButtonCameraSelected.png"] forState:UIControlStateHighlighted];
@@ -148,34 +152,34 @@
     
     UIImageView *userTypeImageview = [[UIImageView alloc] initWithImage:nil];
     [userTypeImageview setImage:[UIImage imageNamed:@"profileType.png"]];
-    [userTypeImageview setFrame:CGRectMake( 15.0f, 5.0f, 40.0f, 40.0f)];
+    [userTypeImageview setFrame:CGRectMake( 15.0f, 7.0f, 40.0f, 40.0f)];
     [backgroundView addSubview:userTypeImageview];
     
     UIImageView *companyImageView = [[UIImageView alloc] initWithImage:nil];
     [companyImageView setImage:[UIImage imageNamed:@"companyName.png"]];
-    [companyImageView setFrame:CGRectMake( 15.0f, 46.0f, 40.0f, 40.0f)];
+    [companyImageView setFrame:CGRectMake( 15.0f, 61.0f, 40.0f, 40.0f)];
     [backgroundView addSubview:companyImageView];
     
     UIImageView *locationImageView = [[UIImageView alloc] initWithImage:nil];
     [locationImageView setImage:[UIImage imageNamed:@"profileLocation.png"]];
-    [locationImageView setFrame:CGRectMake( 15.0f, 87.0f, 40.0f, 40.0f)];
+    [locationImageView setFrame:CGRectMake( 15.0f, 115.0f, 40.0f, 40.0f)];
     [backgroundView addSubview:locationImageView];
     
     UIImageView *descriptionImageView = [[UIImageView alloc] initWithImage:nil];
     [descriptionImageView setImage:[UIImage imageNamed:@"profileDescription.png"]];
-    [descriptionImageView setFrame:CGRectMake( 15.0f, 128.0f, 40.0f, 40.0f)];
+    [descriptionImageView setFrame:CGRectMake( 15.0f, 169.0f, 40.0f, 40.0f)];
     [backgroundView addSubview:descriptionImageView];
     
     UIImageView *websiteImageView = [[UIImageView alloc] initWithImage:nil];
     [websiteImageView setImage:[UIImage imageNamed:@"profileWebsite.png"]];
-    [websiteImageView setFrame:CGRectMake( 15.0f, 169.0f, 40.0f, 40.0f)];
+    [websiteImageView setFrame:CGRectMake( 15.0f, 223.0f, 40.0f, 40.0f)];
     [backgroundView addSubview:websiteImageView];
     
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 46.0f, self.view.bounds.size.width, 1)];
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 54.0f, self.view.bounds.size.width, 1)];
     lineView.backgroundColor = lineColor;
     [backgroundView addSubview:lineView];
 
-    CGRect companyName_frame = CGRectMake( 80.0f, 53.0f, 205.0f, 25.0f);
+    CGRect companyName_frame = CGRectMake( 80.0f, 68.0f, 205.0f, 25.0f);
     companyName = [[UITextField alloc] initWithFrame:companyName_frame];
     [companyName setBackgroundColor:backgroundColor];
     [companyName setFont:fonts];
@@ -187,11 +191,11 @@
     //companyName.keyboardAppearance = UIKeyboardAppearanceDefault;
     [backgroundView addSubview:companyName];
     
-    UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 86.0f, self.view.bounds.size.width, 1)];
+    UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 108.0f, self.view.bounds.size.width, 1)];
     lineView1.backgroundColor = lineColor;
     [backgroundView addSubview:lineView1];
 
-    CGRect location_frame = CGRectMake( 80.0f, 93.0f, 205.0f, 25.0f);
+    CGRect location_frame = CGRectMake( 80.0f, 122.0f, 205.0f, 25.0f);
     location = [[UITextField alloc] initWithFrame:location_frame];
     [location setBackgroundColor:backgroundColor];
     [location setFont:fonts];
@@ -203,11 +207,11 @@
     [location resignFirstResponder];
     [backgroundView addSubview:location];
     
-    UIView *lineView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 125.0f, self.view.bounds.size.width, 1)];
+    UIView *lineView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 162.0f, self.view.bounds.size.width, 1)];
     lineView2.backgroundColor = lineColor;
     [backgroundView addSubview:lineView2];
     
-    CGRect description_frame = CGRectMake( 80.0f, 133.0f, 205.0f, 25.0f);
+    CGRect description_frame = CGRectMake( 80.0f, 176.0f, 205.0f, 25.0f);
     description = [[UITextField alloc] initWithFrame:description_frame];
     [description setBackgroundColor:backgroundColor];
     [description setFont:fonts];
@@ -219,11 +223,11 @@
     [description resignFirstResponder];
     [backgroundView addSubview:description];
     
-    UIView *lineView3 = [[UIView alloc] initWithFrame:CGRectMake(0, 167.0f, self.view.bounds.size.width, 1)];
+    UIView *lineView3 = [[UIView alloc] initWithFrame:CGRectMake(0, 216.0f, self.view.bounds.size.width, 1)];
     lineView3.backgroundColor = lineColor;
     [backgroundView addSubview:lineView3];
     
-    CGRect website_frame = CGRectMake( 80.0f, 175.0f, 205.0f, 25.0f);
+    CGRect website_frame = CGRectMake( 80.0f, 230.0f, 205.0f, 25.0f);
     website = [[UITextField alloc] initWithFrame:website_frame];
     [website setBackgroundColor:backgroundColor];
     [website setFont:fonts];
@@ -266,7 +270,12 @@
     imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
 
     UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    cameraButton.frame = CGRectMake( 110.0f, 90.0f, 100.0f, 100.0f);
+    
+    if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
+        cameraButton.frame = CGRectMake( 110.0f, 87.0f, 100.0f, 100.0f );
+    } else {
+        cameraButton.frame = CGRectMake( 110.0f, 130.0f, 100.0f, 100.0f );
+    }
     cameraButton.center = CGPointMake(160.0f, 140.0f);
     cameraButton.frame = CGRectIntegral(cameraButton.frame);
     [cameraButton setImage:resizedImage forState:UIControlStateNormal];
@@ -674,7 +683,7 @@
 
 - (void) createdropDownButton:(NSString *) userType {
     dropDownButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [dropDownButton setFrame:CGRectMake( 80.0f, 7.0f, 220.0f, 30.0f)];
+    [dropDownButton setFrame:CGRectMake( 80.0f, 12.0f, 220.0f, 30.0f)];
     [dropDownButton setBackgroundImage:[UIImage imageNamed:@"dropdown_arrow.png"] forState:UIControlStateNormal];
     [dropDownButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
     [dropDownButton setTitle:userType forState:UIControlStateNormal];
@@ -763,19 +772,19 @@
 }
 
 - (void) animateTextField: (UITextField*) textField up: (BOOL) up {
-    float movementDuration = 0.3f; // tweak as needed
+    float movementDuration = 0.2f; // tweak as needed
     
     if (textField == companyName) {
-        movementDistance = 50; // tweak as needed
+        movementDistance = 104; // tweak as needed
     }
     else if (textField == location) {
-        movementDistance = 100; // tweak as needed
+        movementDistance = 158; // tweak as needed
      }
     else if (textField == description) {
-        movementDistance = 150; // tweak as needed
+        movementDistance = 214; // tweak as needed
     }
     else if (textField == website) {
-        movementDistance = 150; // tweak as needed
+        movementDistance = 214; // tweak as needed
     }
 
     int movement = (up ? -movementDistance : movementDistance);
