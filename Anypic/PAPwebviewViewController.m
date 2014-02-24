@@ -40,18 +40,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    /*
-    NSString *userWebsite = self.user[@"website"];
-    NSString *website;
-    
-    if ([userWebsite length] > 0) {
-        NSString *http = @"http://";
-        //window does not work with only urls. Must append "http://".
-        website = [NSString stringWithFormat:@"%@%@", http, userWebsite];
-    }
-     */
-    
+
     UIView *mainView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 64.0f, 320.0f, [UIScreen mainScreen].bounds.size.height - 64.0f)];
     [mainView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:mainView];

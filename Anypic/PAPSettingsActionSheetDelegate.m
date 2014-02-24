@@ -61,6 +61,7 @@ typedef enum {
         case kPAPSettingsProfile:
         {
             PAPProfileSettingViewController *profileViewController = [[PAPProfileSettingViewController alloc] init];
+            profileViewController.hidesBottomBarWhenPushed = YES;
             [navController pushViewController:profileViewController animated:YES];
             break;
         }
