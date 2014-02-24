@@ -9,6 +9,7 @@
 #import "BFViewController.h"
 #import "PAPTabBarController.h"
 #import "CameraFilterViewController.h"
+#import "UIImage+ResizeAdditions.h"
 #import "MBProgressHUD.h"
 
 @interface BFViewController ()
@@ -153,7 +154,7 @@
     //Resize cropped image
     
     // Create a graphics image context
-    CGSize newSize = CGSizeMake(280, 280);
+    CGSize newSize = CGSizeMake(1000, 1000);
     UIGraphicsBeginImageContext(newSize);
     // Tell the old image to draw in this new context, with the desired
     // new size

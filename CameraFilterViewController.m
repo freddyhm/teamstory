@@ -9,7 +9,6 @@
 #import "CameraFilterViewController.h"
 #import "PAPEditPhotoViewController.h"
 #import "PAPTabBarController.h"
-#import "UIImage+ResizeAdditions.h"
 #import "FilterCell.h"
 
 @interface CameraFilterViewController ()
