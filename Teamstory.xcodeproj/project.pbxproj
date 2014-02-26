@@ -139,6 +139,10 @@
 		467154B6188368350000C0CA /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 467154B4188368350000C0CA /* Default@2x.png */; };
 		467154B7188368350000C0CA /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 467154B5188368350000C0CA /* Default.png */; };
 		4688686F185F8B78002BA081 /* emailSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4688686E185F8B78002BA081 /* emailSignUpViewController.m */; };
+		4691B4E218BE994800B7DF6A /* asana@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B4DE18BE994700B7DF6A /* asana@2x.png */; };
+		4691B4E318BE994800B7DF6A /* asana.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B4DF18BE994800B7DF6A /* asana.png */; };
+		4691B4E418BE994800B7DF6A /* asana-popup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B4E018BE994800B7DF6A /* asana-popup@2x.png */; };
+		4691B4E518BE994800B7DF6A /* asana-popup.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B4E118BE994800B7DF6A /* asana-popup.png */; };
 		46ABD72F18AADFFB008F5AAB /* default-pic.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD72D18AADFFB008F5AAB /* default-pic.png */; };
 		46ABD73018AADFFB008F5AAB /* default-pic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */; };
 		46ABD73318B12E01008F5AAB /* PAPperksoverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 46ABD73218B12E01008F5AAB /* PAPperksoverlay.m */; };
@@ -522,6 +526,10 @@
 		467154B5188368350000C0CA /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		4688686D185F8B78002BA081 /* emailSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = emailSignUpViewController.h; sourceTree = SOURCE_ROOT; };
 		4688686E185F8B78002BA081 /* emailSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = emailSignUpViewController.m; sourceTree = SOURCE_ROOT; };
+		4691B4DE18BE994700B7DF6A /* asana@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "asana@2x.png"; sourceTree = "<group>"; };
+		4691B4DF18BE994800B7DF6A /* asana.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = asana.png; sourceTree = "<group>"; };
+		4691B4E018BE994800B7DF6A /* asana-popup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "asana-popup@2x.png"; sourceTree = "<group>"; };
+		4691B4E118BE994800B7DF6A /* asana-popup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "asana-popup.png"; sourceTree = "<group>"; };
 		46ABD72D18AADFFB008F5AAB /* default-pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-pic.png"; sourceTree = "<group>"; };
 		46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-pic@2x.png"; sourceTree = "<group>"; };
 		46ABD73118B12E01008F5AAB /* PAPperksoverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPperksoverlay.h; path = Anypic/PAPperksoverlay.h; sourceTree = SOURCE_ROOT; };
@@ -985,6 +993,10 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				4691B4DE18BE994700B7DF6A /* asana@2x.png */,
+				4691B4DF18BE994800B7DF6A /* asana.png */,
+				4691B4E018BE994800B7DF6A /* asana-popup@2x.png */,
+				4691B4E118BE994800B7DF6A /* asana-popup.png */,
 				4602FCFE18BD553B0097DBEC /* foundersuite-popup.png */,
 				4602FCFF18BD553B0097DBEC /* foundersuite-popup@2x.png */,
 				4602FD0018BD553B0097DBEC /* foundersuite-logo.png */,
@@ -1840,9 +1852,11 @@
 				467154B7188368350000C0CA /* Default.png in Resources */,
 				46ABD73818B13671008F5AAB /* deezer-logo@2x.png in Resources */,
 				4671548B188342380000C0CA /* registerbutton@2x.png in Resources */,
+				4691B4E518BE994800B7DF6A /* asana-popup.png in Resources */,
 				C4BE67B8157FC7F700A291C2 /* LogoNavigationBar@2x.png in Resources */,
 				46FB0A811888989800E978CD /* tab-startup-unselected@2x.png in Resources */,
 				46ABD72F18AADFFB008F5AAB /* default-pic.png in Resources */,
+				4691B4E218BE994800B7DF6A /* asana@2x.png in Resources */,
 				46FB0A951888BBF400E978CD /* news3@2x.png in Resources */,
 				462FCB8D188C8892005059F3 /* button_done_selected.png in Resources */,
 				4671549E188355430000C0CA /* register_iphone4.png in Resources */,
@@ -1855,6 +1869,7 @@
 				C4BE67BB157FC7F700A291C2 /* SeparatorComments.png in Resources */,
 				C4BE67BC157FC7F700A291C2 /* SeparatorComments@2x.png in Resources */,
 				4602FD2218BD553B0097DBEC /* konotor-popup.png in Resources */,
+				4691B4E418BE994800B7DF6A /* asana-popup@2x.png in Resources */,
 				D5FC09BD18A9BFF4000D85F1 /* konotor_uploading@2x.png in Resources */,
 				C4BE67BD157FC7F700A291C2 /* SeparatorTimeline.png in Resources */,
 				46B31EF1184E35150028D11C /* companyName@2x.png in Resources */,
@@ -1881,6 +1896,7 @@
 				C463AF9115BF1DAF007F834E /* AvatarPlaceholder@2x.png in Resources */,
 				46FB0A921888BBF400E978CD /* news1.png in Resources */,
 				465B19B218B81FE500EDBCFC /* browser-button-no@2x.png in Resources */,
+				4691B4E318BE994800B7DF6A /* asana.png in Resources */,
 				465B19A218B81DD000EDBCFC /* bg-browser-bar@2x.png in Resources */,
 				D5FC09B518A9BFF4000D85F1 /* konotor_send@2x.png in Resources */,
 				46FB0A861888989800E978CD /* tab-people-selected.png in Resources */,
