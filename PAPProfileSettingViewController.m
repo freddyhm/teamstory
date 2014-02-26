@@ -529,7 +529,7 @@
     NSString* companyName_input = self.companyName.text;
     NSString* location_input = self.location.text;
     NSString* description_input = self.description.text;
-    NSString* website_input = self.website.text;
+    NSString* website_input = [self.website.text lowercaseString];
     bool profileExist_user = self.user[@"profileExist"];
     
     if (profileExist_user == YES) {
@@ -631,7 +631,7 @@
             NSString* companyName_input = self.companyName.text;
             NSString* location_input = self.location.text;
             NSString* description_input = self.description.text;
-            NSString* website_input = self.website.text;
+            NSString* website_input = [self.website.text lowercaseString];
             bool profileExist_user = self.user[@"profileExist"];
             
             if ([companyName_input length] > 0) {
