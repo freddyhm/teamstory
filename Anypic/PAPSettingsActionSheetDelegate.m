@@ -14,8 +14,9 @@
 // ActionSheet button indexes
 typedef enum {
 	kPAPSettingsProfile = 0,
-    kPAPTermsandPolicy,
     kPAPAboutThisVersion,
+    kPAPPrivacyPolicy,
+    kPAPTermsofUse,
     kPAPSettingsLogout,
     kPAPSettingsNumberOfButtons
 } kPAPSettingsActionSheetButtons;
@@ -79,15 +80,26 @@ typedef enum {
             [(AppDelegate *)[[UIApplication sharedApplication] delegate] logOut];
             break;
         }
-        case kPAPTermsandPolicy:
+        case kPAPPrivacyPolicy:
         {
-            PAPwebviewViewController *webviewController = [[PAPwebviewViewController alloc] init];
+            PAPwebviewViewController *webviewController = [[PAPwebviewViewController alloc] initWithWebsite:@"http://teamstoryapp.com/privacy"];
+            webviewController.hidesBottomBarWhenPushed = YES;
+            [navController pushViewController:webviewController animated:YES];
+            break;
+        }
+        case kPAPTermsofUse:
+        {
+            PAPwebviewViewController *webviewController = [[PAPwebviewViewController alloc] initWithWebsite:@"http://teamstoryapp.com/terms"];
             webviewController.hidesBottomBarWhenPushed = YES;
             [navController pushViewController:webviewController animated:YES];
             break;
         }
         case kPAPAboutThisVersion:
         {
+            PAPwebviewViewController *webviewController = [[PAPwebviewViewController alloc] initWithWebsite:@"http://teamstoryapp.com/version"];
+            webviewController.hidesBottomBarWhenPushed = YES;
+            [navController pushViewController:webviewController animated:YES];
+            break;
         }
         default:
             break;

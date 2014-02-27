@@ -26,6 +26,7 @@ NSInteger selection = 1;
 @property (nonatomic, strong) PAPpeopleView *peopleView;
 @property (nonatomic, strong) PAPstartUpsView *startUpsView;
 @property (nonatomic, strong) PAPdiscoveryHeaderView *discoveryHeaderView;
+@property (nonatomic, strong) UINavigationController *navController;
 
 
 
@@ -42,6 +43,7 @@ NSInteger selection = 1;
 @synthesize peopleView;
 @synthesize startUpsView;
 @synthesize discoveryHeaderView;
+@synthesize navController;
 
 - (void)viewDidLoad
 {
@@ -69,7 +71,8 @@ NSInteger selection = 1;
 }
 
 - (void) displayPerksView {
-    perksView = [[PAPperksView alloc] initWithFrame:CGRectMake(0.0f, 146.0f, self.view.bounds.size.width, self.view.bounds.size.height - 146.0f)];
+    perksView = [[PAPperksView alloc] initWithNavigationController:self.navigationController];
+    [perksView setFrame:CGRectMake(0.0f, 146.0f, self.view.bounds.size.width, self.view.bounds.size.height - 146.0f)];
     [self.view addSubview:perksView];
 }
 

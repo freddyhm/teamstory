@@ -155,7 +155,7 @@
     // and then subsequently do a query against the network.
     //
     // If there is no network connection, we will hit the cache first.
-    SEL isParseReachableSelector = sel_registerName("isParseReachable");
+    SEL isParseReachableSelector = NSSelectorFromString(@"isParseReachable");
     if (self.objects.count == 0 || ![[UIApplication sharedApplication].delegate performSelector:isParseReachableSelector]) {
         [query setCachePolicy:kPFCachePolicyCacheThenNetwork];
     }
@@ -198,6 +198,7 @@
                 unreadCount++;
             }
         }
+        NSLog(@"unreadcount %ld", (long)unreadCount);
         
         if (unreadCount > 0) {
             self.navigationController.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d",unreadCount];

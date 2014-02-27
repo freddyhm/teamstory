@@ -129,7 +129,7 @@
             [profilePictureImageView setFile:imageFile];
             [profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {
                 if (!error) {
-                    [UIView animateWithDuration:0.1f animations:^{
+                    [UIView animateWithDuration:0.05f animations:^{
                         profilePictureBackgroundView.alpha = 1.0f;
                         profilePictureImageView.alpha = 1.0f;
                     }];
@@ -295,7 +295,7 @@
 
 - (void)settingsButtonAction:(id)sender {
     self.settingsActionSheetDelegate = [[PAPSettingsActionSheetDelegate alloc] initWithNavigationController:self.navigationController];
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self.settingsActionSheetDelegate cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Edit Profile",@"Terms & Policy",@"About This Version",@"Log Out", nil];
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self.settingsActionSheetDelegate cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Edit Profile",@"About This Version",@"Privacy Policy",@"Terms of Use",@"Log Out", nil];
     
     [actionSheet showFromTabBar:self.tabBarController.tabBar];
 }

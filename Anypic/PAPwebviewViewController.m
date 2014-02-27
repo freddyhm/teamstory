@@ -17,6 +17,7 @@
 @property (nonatomic, strong) UIButton *forward_browse;
 @property (nonatomic, strong) NSString *currentWebsite;
 
+
 @end
 
 @implementation PAPwebviewViewController
