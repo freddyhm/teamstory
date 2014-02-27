@@ -66,9 +66,9 @@
             [self.commentButton setBackgroundColor:[UIColor clearColor]];
             [self.commentButton setTitle:@"" forState:UIControlStateNormal];
             [self.commentButton setTitleColor:[UIColor colorWithRed:0.369f green:0.271f blue:0.176f alpha:1.0f] forState:UIControlStateNormal];
-            [self.commentButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
+            //[self.commentButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
             [self.commentButton setTitleEdgeInsets:UIEdgeInsetsMake( -2.0f, 0.0f, 0.0f, 0.0f)];
-            [[self.commentButton titleLabel] setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
+            //[[self.commentButton titleLabel] setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
             [[self.commentButton titleLabel] setFont:[UIFont systemFontOfSize:9.0f]];
             //[[self.commentButton titleLabel] setMinimumFontSize:11.0f];
             [[self.commentButton titleLabel] setAdjustsFontSizeToFitWidth:YES];
@@ -85,10 +85,10 @@
             [self.likeButton setTitle:@"" forState:UIControlStateNormal];
             [self.likeButton setTitleColor:[UIColor colorWithRed:0.369f green:0.271f blue:0.176f alpha:1.0f] forState:UIControlStateNormal];
             [self.likeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-            [self.likeButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
-            [self.likeButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.750f] forState:UIControlStateSelected];
+            //[self.likeButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
+            //[self.likeButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.750f] forState:UIControlStateSelected];
             [self.likeButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
-            [[self.likeButton titleLabel] setShadowOffset:CGSizeMake(0.0f, 1.0f)];
+            //[[self.likeButton titleLabel] setShadowOffset:CGSizeMake(0.0f, 1.0f)];
             [[self.likeButton titleLabel] setFont:[UIFont systemFontOfSize:9.0f]];
             //[[self.likeButton titleLabel] setMinimumFontSize:11.0f];
             [[self.likeButton titleLabel] setAdjustsFontSizeToFitWidth:YES];
@@ -108,8 +108,8 @@
             [self.userButton setTitleColor:[UIColor colorWithRed:79.0f/255.0f green:182.0f/255.0f blue:154.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
             //[self.userButton setTitleColor:[UIColor colorWithRed:134.0f/255.0f green:100.0f/255.0f blue:65.0f/255.0f alpha:1.0f] forState:UIControlStateHighlighted];
             [[self.userButton titleLabel] setLineBreakMode:NSLineBreakByTruncatingTail];
-            [[self.userButton titleLabel] setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
-            [self.userButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
+            //[[self.userButton titleLabel] setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
+            //[self.userButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
         }
         
         self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
@@ -118,8 +118,8 @@
         self.timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50.0f, 20.0f, containerView.bounds.size.width - 50.0f - 72.0f, 18.0f)];
         [containerView addSubview:self.timestampLabel];
         [self.timestampLabel setTextColor:[UIColor colorWithRed:157.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
-        [self.timestampLabel setShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f]];
-        [self.timestampLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
+        //[self.timestampLabel setShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f]];
+        //[self.timestampLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
         [self.timestampLabel setFont:[UIFont systemFontOfSize:11.0f]];
         [self.timestampLabel setBackgroundColor:[UIColor clearColor]];
         

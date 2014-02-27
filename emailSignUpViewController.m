@@ -234,7 +234,7 @@
     } else if (textField == signUpPWTextField) {
         [signUpPWTextField_confirm becomeFirstResponder];
     } else {
-        [signUpPWTextField_confirm becomeFirstResponder];
+        [signUpPWTextField_confirm resignFirstResponder];
     }
     
     return YES;

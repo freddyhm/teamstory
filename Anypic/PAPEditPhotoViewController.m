@@ -68,13 +68,15 @@
     [photoImageView setBackgroundColor:[UIColor blackColor]];
     [photoImageView setImage:self.image];
     [photoImageView setContentMode:UIViewContentModeScaleAspectFit];
-
+    
+    /*
     CALayer *layer = photoImageView.layer;
     layer.masksToBounds = NO;
     layer.shadowRadius = 3.0f;
     layer.shadowOffset = CGSizeMake(0.0f, 2.0f);
     layer.shadowOpacity = 0.5f;
     layer.shouldRasterize = YES;
+     */
     
     [self.scrollView addSubview:photoImageView];
     
@@ -134,7 +136,7 @@
 
 - (BOOL)shouldUploadImage:(UIImage *)anImage {    
     UIImage *resizedImage = [anImage resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(610.0f, 610.0f) interpolationQuality:kCGInterpolationHigh];
-    UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:10.0f interpolationQuality:kCGInterpolationDefault];
+    UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:0.0f interpolationQuality:kCGInterpolationDefault];
     
     // JPEG to decrease file size and enable faster uploads & downloads
     NSData *imageData = UIImageJPEGRepresentation(resizedImage, 0.8f);

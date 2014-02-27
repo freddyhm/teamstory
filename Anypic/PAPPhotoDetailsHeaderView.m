@@ -132,14 +132,14 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 #pragma mark - UIView
-
+/*
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
     [PAPUtility drawSideDropShadowForRect:self.nameHeaderView.frame inContext:UIGraphicsGetCurrentContext()];
     [PAPUtility drawSideDropShadowForRect:self.photoImageView.frame inContext:UIGraphicsGetCurrentContext()];
     [PAPUtility drawSideDropShadowForRect:self.likeBarView.frame inContext:UIGraphicsGetCurrentContext()];
 }
-
+*/
 
 #pragma mark - PAPPhotoDetailsHeaderView
 
@@ -271,8 +271,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [userButton setTitleColor:[UIColor colorWithRed:87.0f/255.0f green:185.0f/255.0f blue:159.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
             //[userButton setTitleColor:[UIColor colorWithRed:134.0f/255.0f green:100.0f/255.0f blue:65.0f/255.0f alpha:1.0f] forState:UIControlStateHighlighted];
             [[userButton titleLabel] setLineBreakMode:NSLineBreakByTruncatingTail];
-            [[userButton titleLabel] setShadowOffset:CGSizeMake(0.0f, 1.0f)];
-            [userButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
+            //[[userButton titleLabel] setShadowOffset:CGSizeMake(0.0f, 1.0f)];
+            //[userButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
             [userButton addTarget:self action:@selector(didTapUserNameButtonAction:) forControlEvents:UIControlEventTouchUpInside];
             
             // we resize the button to fit the user's name to avoid having a huge touch area
@@ -290,8 +290,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [timeLabel setText:timeString];
             [timeLabel setFont:[UIFont systemFontOfSize:11.0f]];
             [timeLabel setTextColor:[UIColor colorWithRed:124.0f/255.0f green:124.0f/255.0f blue:124.0f/255.0f alpha:1.0f]];
-            [timeLabel setShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f]];
-            [timeLabel setShadowOffset:CGSizeMake(0.0f, 1.0f)];
+            //[timeLabel setShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f]];
+            //[timeLabel setShadowOffset:CGSizeMake(0.0f, 1.0f)];
             [timeLabel setBackgroundColor:[UIColor clearColor]];
             [self.nameHeaderView addSubview:timeLabel];
             
@@ -315,13 +315,13 @@ static TTTTimeIntervalFormatter *timeFormatter;
     [likeButton setBackgroundColor:[UIColor clearColor]];
     [likeButton setTitleColor:[UIColor colorWithRed:0.369f green:0.271f blue:0.176f alpha:1.0f] forState:UIControlStateNormal];
     [likeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-    [likeButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
-    [likeButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.750f] forState:UIControlStateSelected];
+    //[likeButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
+    //[likeButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.750f] forState:UIControlStateSelected];
     [likeButton setTitleEdgeInsets:UIEdgeInsetsMake(50.0f, 0.0f, 50.0f, 0.0f)];
     [[likeButton titleLabel] setFont:[UIFont systemFontOfSize:9.0f]];
 
     [[likeButton titleLabel] setAdjustsFontSizeToFitWidth:YES];
-    [[likeButton titleLabel] setShadowOffset:CGSizeMake(0.0f, 1.0f)];
+    //[[likeButton titleLabel] setShadowOffset:CGSizeMake(0.0f, 1.0f)];
     [likeButton setAdjustsImageWhenDisabled:NO];
     [likeButton setAdjustsImageWhenHighlighted:NO];
     [likeButton setBackgroundImage:[UIImage imageNamed:@"ButtonLike.png"] forState:UIControlStateNormal];

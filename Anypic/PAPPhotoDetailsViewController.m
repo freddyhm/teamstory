@@ -309,6 +309,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     [commentTextField resignFirstResponder];
+    [scrollView setShowsVerticalScrollIndicator:NO];
 }
 
 
