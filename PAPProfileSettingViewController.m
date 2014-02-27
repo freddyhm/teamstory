@@ -31,6 +31,8 @@
 @property (nonatomic, strong) NSString *displayName_user;
 @property (nonatomic, strong) NSString *description_user;
 @property (nonatomic, strong) UIView *backgroundView;
+@property (nonatomic, strong) PFImageView* profilePictureImageView;
+@property (nonatomic, strong) PFFile *imageProfileFile;
 
 
 @end
@@ -56,6 +58,8 @@
 @synthesize displayName_user;
 @synthesize description_user;
 @synthesize backgroundView;
+@synthesize profilePictureImageView;
+@synthesize imageProfileFile;
 
 
 
@@ -73,11 +77,13 @@
 }
 
 - (void)refreshView {
+    bool profileExist = self.user[@"profileExist"];
     location_user = self.user[@"location"];
     website_user = self.user[@"website"];
     displayName_user = self.user[@"displayName"];
     description_user = self.user[@"description"];
     dropDownSelection = self.user[@"userType"];
+    imageProfileFile = [self.user objectForKey:@"profilePictureMedium"];
     
     if ([location_user length] == 0) {
         location_user = @"Location";
@@ -91,7 +97,6 @@
     if ([description_user length] == 0) {
         description_user = @"Description";
     }
-    
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     
@@ -115,11 +120,32 @@
     } else {
         profileImagePicker.frame = CGRectMake( 110.0f, 130.0f, 100.0f, 100.0f );
     }
-    //[profileImagePicker setBackgroundColor:[UIColor redColor]];
     [profileImagePicker setImage:[UIImage imageNamed:@"profilepicture.png"] forState:UIControlStateNormal];
-    //[cameraButton setImage:[UIImage imageNamed:@"ButtonCameraSelected.png"] forState:UIControlStateHighlighted];
+    
     [profileImagePicker addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:profileImagePicker];
+    
+    
+    if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
+        profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 110.0f, 87.0f, 100.0f, 100.0f)];
+    } else {
+        profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 110.0f, 130.0f, 100.0f, 100.0f)];
+    }
+    [self.view addSubview:profilePictureImageView];
+    [profilePictureImageView setContentMode:UIViewContentModeScaleAspectFill];
+    
+    if (imageProfileFile) {
+        [profilePictureImageView setFile:imageProfileFile];
+        [profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {
+            if (!error) {
+                [UIView animateWithDuration:0.05f animations:^{
+                    profilePictureImageView.alpha = 1.0f;
+                }];
+            }
+        }];
+    } else {
+        NSLog(@"ImageFile Not found");
+    }
     
     UISwipeGestureRecognizer *swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
     [swipeUpGestureRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
@@ -128,7 +154,6 @@
     
     
     // Do not display back button if user is first time logging in.
-    bool profileExist = self.user[@"profileExist"];
     if (profileExist == true) {
         UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [backButton setFrame:CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f)];

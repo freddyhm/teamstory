@@ -129,7 +129,7 @@
             [profilePictureImageView setFile:imageFile];
             [profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {
                 if (!error) {
-                    [UIView animateWithDuration:0.1f animations:^{
+                    [UIView animateWithDuration:0.05f animations:^{
                         profilePictureBackgroundView.alpha = 1.0f;
                         profilePictureImageView.alpha = 1.0f;
                     }];
