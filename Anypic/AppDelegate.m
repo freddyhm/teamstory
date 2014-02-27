@@ -150,11 +150,12 @@
     [Konotor addDeviceToken:newDeviceToken];
     
     [PFPush storeDeviceToken:newDeviceToken];
-
+    
     if (application.applicationIconBadgeNumber != 0) {
         application.applicationIconBadgeNumber = 0;
     }
 
+    [[PFInstallation currentInstallation] setDeviceTokenFromData:newDeviceToken];
     [[PFInstallation currentInstallation] saveInBackground];
 }
 

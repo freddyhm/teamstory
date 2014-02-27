@@ -14,6 +14,7 @@
 @property (nonatomic,strong) UINavigationController *navController;
 @property (nonatomic,strong) UIImagePickerController *imagePicker;
 @property (nonatomic,strong) NSDictionary *imagePickerInfo;
+@property (nonatomic, strong) UIPopoverController *popoverController;
 
 @end
 
@@ -22,6 +23,7 @@
 @synthesize imagePicker;
 @synthesize imagePickerInfo;
 @synthesize imageSource;
+@synthesize popoverController;
 
 #pragma mark - UIViewController
 
@@ -155,7 +157,7 @@
 }
 
 - (BOOL)shouldStartCameraController {
-    
+      
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
         return NO;
     }

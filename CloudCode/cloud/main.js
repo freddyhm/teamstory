@@ -66,7 +66,7 @@ Parse.Cloud.afterSave('Activity', function(request) {
       data: {
         alert: message, // Set our alert message.
         badge: 'Increment', // Increment the target device's badge count.
-        // The following keys help Anypic load the correct photo in response to this push notification.
+        // The following keys help Teamstory load the correct photo in response to this push notification.
         p: 'a', // Payload Type: Activity
         t: 'c', // Activity Type: Comment
         fu: request.object.get('fromUser').id, // From User
@@ -103,7 +103,7 @@ Parse.Cloud.afterSave('Activity', function(request) {
       where: query, // Set our Installation query.
       data: {
         alert: message, // Set our alert message.
-        // The following keys help Anypic load the correct photo in response to this push notification.
+        // The following keys help Teamstory load the correct photo in response to this push notification.
         p: 'a', // Payload Type: Activity
         t: 'l', // Activity Type: Like
         fu: request.object.get('fromUser').id, // From User
@@ -139,7 +139,7 @@ Parse.Cloud.afterSave('Activity', function(request) {
       where: query, // Set our Installation query.
       data: {
         alert: message, // Set our alert message.
-        // The following keys help Anypic load the correct photo in response to this push notification.
+        // The following keys help Teamstory load the correct photo in response to this push notification.
         p: 'a', // Payload Type: Activity
         t: 'f', // Activity Type: Follow
         fu: request.object.get('fromUser').id // From User
