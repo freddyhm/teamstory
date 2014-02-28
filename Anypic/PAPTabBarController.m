@@ -14,6 +14,7 @@
 @property (nonatomic,strong) UINavigationController *navController;
 @property (nonatomic,strong) UIImagePickerController *imagePicker;
 @property (nonatomic,strong) NSDictionary *imagePickerInfo;
+@property (nonatomic, strong) UIPopoverController *popoverController;
 
 @end
 
@@ -22,6 +23,7 @@
 @synthesize imagePicker;
 @synthesize imagePickerInfo;
 @synthesize imageSource;
+@synthesize popoverController;
 
 #pragma mark - UIViewController
 
@@ -71,13 +73,13 @@
     
     self.imageSource = self.imageSource != nil ? self.imageSource : @"Album";
     
-    // fix rotation if pic taken from camera
-    UIImage *selectedImg = [self.imageSource isEqualToString:@"Camera"] ? [self fixrotation:[info objectForKey:UIImagePickerControllerOriginalImage]] : [info objectForKey:UIImagePickerControllerOriginalImage];
-    
+    // Check if pic is in correct position, fix rotation if not (pic from camera roll)
+    UIImage *selectedImg = [self fixrotation:[info objectForKey:UIImagePickerControllerOriginalImage]];
     
     BFViewController *cropViewController = [[BFViewController alloc] initWithImage:selectedImg nib:@"BFViewController" source:self.imageSource];
     
     [self.navigationController pushViewController:cropViewController animated:NO];
+   
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -155,7 +157,7 @@
 }
 
 - (BOOL)shouldStartCameraController {
-    
+      
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
         return NO;
     }
@@ -190,6 +192,8 @@
 
 
 - (BOOL)shouldStartPhotoLibraryPickerController {
+    
+    
     if (([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary] == NO
          && [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum] == NO)) {
         return NO;

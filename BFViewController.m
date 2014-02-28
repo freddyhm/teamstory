@@ -154,7 +154,7 @@
     //Resize cropped image
     
     // Create a graphics image context
-    CGSize newSize = CGSizeMake(1000, 1000);
+    CGSize newSize = CGSizeMake(640, 640);
     UIGraphicsBeginImageContext(newSize);
     // Tell the old image to draw in this new context, with the desired
     // new size
