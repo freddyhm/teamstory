@@ -100,6 +100,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     commentTextField.delegate = self;
     self.tableView.tableFooterView = footerView;
 
+    /*
     if ([self currentUserOwnsPhoto]) {
         
         // Else we only want to show an action button if the user owns the photo and has permission to delete it.
@@ -122,6 +123,13 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         
         
     }
+     */
+    UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    shareButton.frame = CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f);
+    [shareButton addTarget:self action:@selector(activityButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [shareButton setBackgroundImage:[UIImage imageNamed:@"share.png"] forState:UIControlStateNormal];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
+    
     
     if (NSClassFromString(@"UIRefreshControl")) {
         // Use the new iOS 6 refresh control.
@@ -457,10 +465,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 - (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl {
     [self loadObjects];
 }
-
+/*
 - (BOOL)currentUserOwnsPhoto {
     return [[[self.photo objectForKey:kPAPPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]];
 }
+*/
 
 - (void)shouldDeletePhoto {
     // Delete all activites related to this photo

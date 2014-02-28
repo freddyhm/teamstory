@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSMutableDictionary *outstandingSectionHeaderQueries;
 @property (nonatomic, strong) NSString *reported_user;
 @property (nonatomic, strong) NSString *photoID;
+@property (nonatomic, strong) PFObject *current_photo;
 @end
 
 @implementation PAPPhotoTimelineViewController
@@ -25,10 +26,12 @@
 @synthesize outstandingSectionHeaderQueries;
 @synthesize reported_user;
 @synthesize photoID;
+@synthesize current_photo;
 
 enum ActionSheetTags {
     MainActionSheetTag = 0,
-    reportTypeTag = 1
+    reportTypeTag = 1,
+    deletePhoto = 2
 };
 
 #pragma mark - Initialization
@@ -409,15 +412,44 @@ enum ActionSheetTags {
     return nil;
 }
 
-- (void) moreActionButton_inflator:(PFUser *) user object:(NSString *)object {
+- (void) moreActionButton_inflator:(PFUser *) user photo:(PFObject *)photo {
+    self.photoID = [photo objectId];
+    self.reported_user = [user objectForKey:@"displayName"];
+    self.current_photo = photo;
+    
     UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
     actionSheet.delegate = self;
     actionSheet.tag = MainActionSheetTag;
-    [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Report Inappropriate", nil)]];
+    
+    if ([self currentUserOwnsPhoto]) {
+        [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Delete Photo"]];
+    } else {
+        [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Report Inappropriate", nil)]];
+    }
     [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
-    self.photoID = object;
-    self.reported_user = [user objectForKey:@"displayName"];
     [actionSheet showFromTabBar:self.tabBarController.tabBar];
+}
+
+- (BOOL)currentUserOwnsPhoto {
+    return [[[self.current_photo objectForKey:kPAPPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]];
+}
+
+- (void)shouldDeletePhoto {
+    // Delete all activites related to this photo
+    PFQuery *query = [PFQuery queryWithClassName:kPAPActivityClassKey];
+    [query whereKey:kPAPActivityPhotoKey equalTo:self.current_photo];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *activities, NSError *error) {
+        if (!error) {
+            for (PFObject *activity in activities) {
+                [activity deleteEventually];
+            }
+        }
+        
+        // Delete photo
+        [self.current_photo deleteEventually];
+    }];
+    [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:[self.current_photo objectId]];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - UIActionSheetDelegate
@@ -426,74 +458,93 @@ enum ActionSheetTags {
     if (actionSheet.tag == MainActionSheetTag) {
         if ([actionSheet destructiveButtonIndex] == buttonIndex) {
             UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
-            [actionSheet addButtonWithTitle:@"I don't like this photo"];
-            [actionSheet addButtonWithTitle:@"Spam or scam"];
-            [actionSheet addButtonWithTitle:@"Nudity or pornography"];
-            [actionSheet addButtonWithTitle:@"Graphic violence"];
-            [actionSheet addButtonWithTitle:@"Hate speech or symbol"];
-            [actionSheet addButtonWithTitle:@"Intellectual property violation"];
-            [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:@"Cancel"]];
             actionSheet.delegate = self;
-            actionSheet.tag = reportTypeTag;
+            
+            if ([self currentUserOwnsPhoto]){
+                [actionSheet setTitle:NSLocalizedString(@"Are you sure you want to delete this photo?", nil)];
+                [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Yes, delete photo", nil)]];
+                [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
+                actionSheet.tag = deletePhoto;
+            } else {
+                [actionSheet addButtonWithTitle:@"I don't like this photo"];
+                [actionSheet addButtonWithTitle:@"Spam or scam"];
+                [actionSheet addButtonWithTitle:@"Nudity or pornography"];
+                [actionSheet addButtonWithTitle:@"Graphic violence"];
+                [actionSheet addButtonWithTitle:@"Hate speech or symbol"];
+                [actionSheet addButtonWithTitle:@"Intellectual property violation"];
+                [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:@"Cancel"]];
+                actionSheet.tag = reportTypeTag;
+            }
             [actionSheet showFromTabBar:self.tabBarController.tabBar];
         }
-    } else {
-        NSString *emailTitle = @"[USER REPORT] Reporting Inappropriate Pictures";
-        NSString *messageBody;
-        NSArray *toRecipients = [NSArray arrayWithObject:@"info@teamstoryapp.com"];
-        
-        switch (buttonIndex) {
-            case 0:
-            {
-                messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"I don't like this photo\"\n", @"Target User: ",
-                               self.reported_user, @"\n", @"Photo ID: ", self.photoID];
-                break;
-            }
-            case 1:
-            {
-                messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"Spam or scam\"\n", @"Target User: ",
-                               self.reported_user, @"\n", @"Photo ID: ", self.photoID];
-                break;
-            }
-            case 2:
-            {
-                messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"Nudity or pornography\"\n", @"Target User: ",
-                               self.reported_user, @"\n", @"Photo ID: ", self.photoID];
-                break;
-            }
-            case 3:
-            {
-                messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"Graphic violence\"\n", @"Target User: ",
-                               self.reported_user, @"\n", @"Photo ID: ", self.photoID];                break;
-            }
-            case 4:
-            {
-                messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"Hate speech or symbol\"\n", @"Target User: ",
-                               self.reported_user, @"\n", @"Photo ID: ", self.photoID];                break;
-            }
-            case 5:
-            {
-                messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"Intellectual property violation\"\n", @"Target User: ",
-                               self.reported_user, @"\n", @"Photo ID: ", self.photoID];
-                break;
-            }
-            default:
-                break;
+    } else if (actionSheet.tag == deletePhoto) {
+        if ([actionSheet destructiveButtonIndex] == buttonIndex) {
+            [self shouldDeletePhoto];
         }
-        
-        NSLog(@"%@", kPAPPhotoClassKey);
-        
-        MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
-        mc.mailComposeDelegate = self;
-        [mc setSubject:emailTitle];
-        [mc setMessageBody:messageBody isHTML:NO];
-        [mc setToRecipients:toRecipients];
-        
-        
-        // Present mail view controller on screen
-        [self presentViewController:mc animated:YES completion:nil];
+
+    } else {
+        if ([actionSheet cancelButtonIndex] == buttonIndex){
+            //do nothing
+        } else {
+            NSString *emailTitle = @"[USER REPORT] Reporting Inappropriate Pictures";
+            NSString *messageBody;
+            NSArray *toRecipients = [NSArray arrayWithObject:@"info@teamstoryapp.com"];
+            
+            switch (buttonIndex) {
+                case 0:
+                {
+                    messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"I don't like this photo\"\n", @"Target User: ",
+                                   self.reported_user, @"\n", @"Photo ID: ", self.photoID];
+                    break;
+                }
+                case 1:
+                {
+                    messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"Spam or scam\"\n", @"Target User: ",
+                                   self.reported_user, @"\n", @"Photo ID: ", self.photoID];
+                    break;
+                }
+                case 2:
+                {
+                    messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"Nudity or pornography\"\n", @"Target User: ",
+                                   self.reported_user, @"\n", @"Photo ID: ", self.photoID];
+                    break;
+                }
+                case 3:
+                {
+                    messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"Graphic violence\"\n", @"Target User: ",
+                                   self.reported_user, @"\n", @"Photo ID: ", self.photoID];                break;
+                }
+                case 4:
+                {
+                    messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"Hate speech or symbol\"\n", @"Target User: ",
+                                   self.reported_user, @"\n", @"Photo ID: ", self.photoID];                break;
+                }
+                case 5:
+                {
+                    messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"Intellectual property violation\"\n", @"Target User: ",
+                                   self.reported_user, @"\n", @"Photo ID: ", self.photoID];
+                    break;
+                }
+                default:
+                    break;
+            }
+            
+            NSLog(@"%@", kPAPPhotoClassKey);
+            
+            MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+            mc.mailComposeDelegate = self;
+            [mc setSubject:emailTitle];
+            [mc setMessageBody:messageBody isHTML:NO];
+            [mc setToRecipients:toRecipients];
+            
+            
+            // Present mail view controller on screen
+            [self presentViewController:mc animated:YES completion:nil];
+        }
     }
 }
+
+
 
 - (void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {

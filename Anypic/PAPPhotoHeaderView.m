@@ -213,9 +213,9 @@
 #pragma mark - ()
 
 - (void) moreActionButton_action:(id)sender{
-    if (delegate && [delegate respondsToSelector:@selector(moreActionButton_inflator:object:)]) {
-        [delegate respondsToSelector:@selector(moreActionButton_inflator:object:)];
-        [delegate moreActionButton_inflator:[self.photo objectForKey:kPAPPhotoUserKey] object:[self.photo objectId]];
+    if (delegate && [delegate respondsToSelector:@selector(moreActionButton_inflator:photo:)]) {
+        [delegate respondsToSelector:@selector(moreActionButton_inflator:photo:)];
+        [delegate moreActionButton_inflator:[self.photo objectForKey:kPAPPhotoUserKey] photo:self.photo];
     }
 }
 

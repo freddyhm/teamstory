@@ -294,7 +294,7 @@
 }
 
 - (void)content3_button_action:(id) sender{
-    self.website = @"http://teamstoryapp.com/perks/slingbot";
+    self.website = @"http://teamstoryapp.com/perks/sb";
     [self create_popup:@"slingbot-popup.png"];
 }
 
@@ -304,12 +304,12 @@
 }
 
 - (void)content5_button_action:(id) sender{
-    self.website = @"http://teamstoryapp.com/perks/positionly";
+    self.website = @"http://teamstoryapp.com/perks/ps";
     [self create_popup:@"positionly-popup.png"];
 }
 
 - (void)content6_button_action:(id) sender{
-    self.website = @"http://teamstoryapp.com/perks/foundersuite";
+    self.website = @"http://teamstoryapp.com/perks/fs";
     [self create_popup:@"foundersuite-popup.png"];
 }
 
