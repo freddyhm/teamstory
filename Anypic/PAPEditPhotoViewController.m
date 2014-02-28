@@ -68,7 +68,8 @@
     [photoImageView setBackgroundColor:[UIColor blackColor]];
     [photoImageView setImage:self.image];
     [photoImageView setContentMode:UIViewContentModeScaleAspectFit];
-
+    
+    /*
     CALayer *layer = photoImageView.layer;
     layer.masksToBounds = NO;
     layer.shadowRadius = 3.0f;

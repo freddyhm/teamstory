@@ -51,7 +51,7 @@
 
 
 #pragma mark - UIView
-
+/*
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
     
@@ -59,7 +59,7 @@
         [PAPUtility drawSideAndBottomDropShadowForRect:mainView.frame inContext:UIGraphicsGetCurrentContext()];
     }
 }
-
+*/
 
 #pragma mark - PAPPhotoDetailsFooterView
 

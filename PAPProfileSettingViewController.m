@@ -287,7 +287,7 @@
     // Dismiss controller
     [picker dismissViewControllerAnimated:YES completion:nil];
     
-    UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:3.0f interpolationQuality:kCGInterpolationHigh];
+    UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:0.0f interpolationQuality:kCGInterpolationHigh];
     UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(200.0f, 200.0f) interpolationQuality:kCGInterpolationHigh];
     
     // Upload image
@@ -298,13 +298,14 @@
     
     if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
         cameraButton.frame = CGRectMake( 110.0f, 87.0f, 100.0f, 100.0f );
+        cameraButton.center = CGPointMake(160.0f, 137.0f);
     } else {
         cameraButton.frame = CGRectMake( 110.0f, 130.0f, 100.0f, 100.0f );
+        cameraButton.center = CGPointMake(160.0f, 180.0f);
     }
-    cameraButton.center = CGPointMake(160.0f, 140.0f);
+
     cameraButton.frame = CGRectIntegral(cameraButton.frame);
     [cameraButton setImage:resizedImage forState:UIControlStateNormal];
-    cameraButton.layer.cornerRadius = 2;
     //cameraButton.clipsToBounds = YES;
     [cameraButton addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:cameraButton];
@@ -412,6 +413,38 @@
     }];
 }
 
+#pragma mark - UINavigationControllerDelegate
+
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    
+    // keep status bar white, in ios7 changes in imagepicker
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    self.navController = navigationController;
+
+    viewController.navigationItem.titleView =[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
+    viewController.navigationItem.rightBarButtonItem = nil;
+    
+    if ([viewController.title isEqualToString:@"Photos"])
+    {
+        viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_cancel"] style:UIBarButtonItemStylePlain target:self action:@selector(imagePickerControllerDidCancel:)];
+        
+    }else{
+        
+        viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(backToPhotoAlbum)];
+        
+    }
+    
+    [viewController.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
+    
+}
+
+-(void)backToPhotoAlbum{
+    
+    // triggered when in selected picture in picker
+    [self.navController popViewControllerAnimated:YES];
+}
 
 #pragma mark - UIActionSheetDelegate
 
@@ -678,7 +711,7 @@
             if (profileExist_user == NO) {
                 UIImage *image = [UIImage imageNamed:@"default-pic.png"];
                 
-                UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:3.0f interpolationQuality:kCGInterpolationHigh];
+                UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:0.0f interpolationQuality:kCGInterpolationHigh];
                 UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(200.0f, 200.0f) interpolationQuality:kCGInterpolationHigh];
                 
                 // Upload image

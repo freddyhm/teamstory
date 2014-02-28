@@ -49,9 +49,9 @@
         [self.nameButton.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
         [self.nameButton setTitleColor:[UIColor colorWithRed:87.0f/255.0f green:72.0f/255.0f blue:49.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
         [self.nameButton setTitleColor:[UIColor colorWithRed:134.0f/255.0f green:100.0f/255.0f blue:65.0f/255.0f alpha:1.0f] forState:UIControlStateHighlighted];
-        [self.nameButton setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [self.nameButton setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateSelected];
-        [self.nameButton.titleLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
+        //[self.nameButton setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        //[self.nameButton setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateSelected];
+        //[self.nameButton.titleLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
         [self.nameButton addTarget:self action:@selector(didTapUserButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:self.nameButton];
         
