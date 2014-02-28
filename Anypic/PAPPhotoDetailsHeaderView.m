@@ -305,7 +305,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
      Create bottom section fo the header view; the likes
      */
     likeBarView = [[UIView alloc] initWithFrame:CGRectMake(likeBarX, likeBarY, likeBarWidth, likeBarHeight)];
-    //[likeBarView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundComments.png"]]];
     [likeBarView setBackgroundColor:[UIColor whiteColor]];
     [self addSubview:likeBarView];
     
@@ -315,13 +314,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
     [likeButton setBackgroundColor:[UIColor clearColor]];
     [likeButton setTitleColor:[UIColor colorWithRed:0.369f green:0.271f blue:0.176f alpha:1.0f] forState:UIControlStateNormal];
     [likeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-    //[likeButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
-    //[likeButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.750f] forState:UIControlStateSelected];
     [likeButton setTitleEdgeInsets:UIEdgeInsetsMake(50.0f, 0.0f, 50.0f, 0.0f)];
     [[likeButton titleLabel] setFont:[UIFont systemFontOfSize:9.0f]];
 
     [[likeButton titleLabel] setAdjustsFontSizeToFitWidth:YES];
-    //[[likeButton titleLabel] setShadowOffset:CGSizeMake(0.0f, 1.0f)];
     [likeButton setAdjustsImageWhenDisabled:NO];
     [likeButton setAdjustsImageWhenHighlighted:NO];
     [likeButton setBackgroundImage:[UIImage imageNamed:@"ButtonLike.png"] forState:UIControlStateNormal];

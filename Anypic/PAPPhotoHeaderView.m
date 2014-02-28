@@ -15,6 +15,7 @@
 @property (nonatomic, strong) UIButton *userButton;
 @property (nonatomic, strong) UILabel *timestampLabel;
 @property (nonatomic, strong) TTTTimeIntervalFormatter *timeIntervalFormatter;
+@property (nonatomic, strong) UIButton *moreActionButton;
 
 @end
 
@@ -30,6 +31,7 @@
 @synthesize likeButton;
 @synthesize commentButton;
 @synthesize delegate;
+@synthesize moreActionButton;
 
 
 #pragma mark - Initialization
@@ -62,10 +64,10 @@
             // comments button
             commentButton = [UIButton buttonWithType:UIButtonTypeCustom];
             [containerView addSubview:self.commentButton];
-            [self.commentButton setFrame:CGRectMake( 267.0f, 8.0f, 30.0f, 30.0f)];
+            [self.commentButton setFrame:CGRectMake( 235.0f, 8.0f, 30.0f, 30.0f)];
             [self.commentButton setBackgroundColor:[UIColor clearColor]];
             [self.commentButton setTitle:@"" forState:UIControlStateNormal];
-            [self.commentButton setTitleColor:[UIColor colorWithRed:0.369f green:0.271f blue:0.176f alpha:1.0f] forState:UIControlStateNormal];
+            [self.commentButton setTitleColor:[UIColor colorWithRed:113.0f/255.0f green:189.0f/255.0f blue:168.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
             //[self.commentButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
             [self.commentButton setTitleEdgeInsets:UIEdgeInsetsMake( -2.0f, 0.0f, 0.0f, 0.0f)];
             //[[self.commentButton titleLabel] setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
@@ -80,10 +82,10 @@
             // like button
             likeButton = [UIButton buttonWithType:UIButtonTypeCustom];
             [containerView addSubview:self.likeButton];
-            [self.likeButton setFrame:CGRectMake(231.0f, 8.0f, 30.0f, 30.0f)];
+            [self.likeButton setFrame:CGRectMake(200.0f, 8.0f, 30.0f, 30.0f)];
             [self.likeButton setBackgroundColor:[UIColor clearColor]];
             [self.likeButton setTitle:@"" forState:UIControlStateNormal];
-            [self.likeButton setTitleColor:[UIColor colorWithRed:0.369f green:0.271f blue:0.176f alpha:1.0f] forState:UIControlStateNormal];
+            [self.likeButton setTitleColor:[UIColor colorWithRed:245.0f/255.0f green:137.0f/255.0f blue:137.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
             [self.likeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
             //[self.likeButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
             //[self.likeButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.750f] forState:UIControlStateSelected];
@@ -112,6 +114,13 @@
             //[self.userButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
         }
         
+        self.moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(270.0f, 8.0f, 30.0f, 30.0f)];
+        [self.moreActionButton setImage:[UIImage imageNamed:@"button-more.png"] forState:UIControlStateNormal];
+        [self.moreActionButton addTarget:self action:@selector(moreActionButton_action:) forControlEvents:UIControlEventTouchUpInside];
+        [containerView addSubview:self.moreActionButton];
+        
+        
+        
         self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
         
         // timestamp
@@ -128,7 +137,7 @@
         layer.masksToBounds = NO;
         layer.shadowRadius = 0.5f;
         layer.shadowOffset = CGSizeMake( 0.0f, 1.0f);
-        layer.shadowOpacity = 0.5f;
+        layer.shadowOpacity = 0.3f;
         layer.shouldRasterize = YES;
         layer.shadowPath = [UIBezierPath bezierPathWithRect:CGRectMake( 0.0f, containerView.frame.size.height - 4.0f, containerView.frame.size.width, 4.0f)].CGPath;
         
@@ -136,7 +145,6 @@
 
     return self;
 }
-
 
 #pragma mark - PAPPhotoHeaderView
 
@@ -203,6 +211,11 @@
 }
 
 #pragma mark - ()
+
+- (void) moreActionButton_action:(id)sender{
+    [delegate respondsToSelector:@selector(moreActionButton_inflator)];
+    [delegate moreActionButton_inflator];
+}
 
 + (void)validateButtons:(PAPPhotoHeaderButtons)buttons {
     if (buttons == PAPPhotoHeaderButtonsNone) {

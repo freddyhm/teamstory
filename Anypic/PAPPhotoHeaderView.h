@@ -83,4 +83,5 @@ typedef enum {
  */
 - (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapCommentOnPhotoButton:(UIButton *)button photo:(PFObject *)photo;
 
+- (void) moreActionButton_inflator;
 @end

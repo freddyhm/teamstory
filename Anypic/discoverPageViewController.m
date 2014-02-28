@@ -58,13 +58,15 @@ NSInteger selection = 1;
     discoveryHeaderView = [[PAPdiscoveryHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 100.0f)];
     [self.view addSubview:discoveryHeaderView];
     
-    //tabBarBackground = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 102.0f, self.view.bounds.size.width, 50.0f)];
-    //[tabBarBackground setImage:[UIImage imageNamed:@"BackgroundTabBar.png"]];
-    //[self.view addSubview:tabBarBackground];
+    UIImageView *product_imageView = [[UIImageView alloc] initWithFrame:CGRectMake( 0.0f, 102.0f ,[UIScreen mainScreen].bounds.size.width, 44.0f)];
+    [product_imageView setImage:[UIImage imageNamed:@"discover.png"]];
+    [self.view addSubview:product_imageView];
     
+    /*
     [self create_productButton];
     [self create_peopleButton];
     [self create_startUpsButton];
+     */
     
     [self displayPerksView];
     
@@ -75,7 +77,7 @@ NSInteger selection = 1;
     [perksView setFrame:CGRectMake(0.0f, 146.0f, self.view.bounds.size.width, self.view.bounds.size.height - 146.0f)];
     [self.view addSubview:perksView];
 }
-
+/*
 - (void) displaystartUpsView {
     startUpsView = [[PAPstartUpsView alloc] initWithFrame:CGRectMake(65.0f, 210.0f, self.view.bounds.size.width, self.view.bounds.size.height - 102.0f)];
     [self.view addSubview:startUpsView];
@@ -85,6 +87,7 @@ NSInteger selection = 1;
     peopleView = [[PAPpeopleView alloc] initWithFrame:CGRectMake(65.0f, 210.0f, self.view.bounds.size.width, self.view.bounds.size.height - 102.0f)];
     [self.view addSubview:peopleView];
 }
+
 
 - (void) productButtonAction:(id) sender {
     NSLog(@"Tab Bar Button 1 Pressed");
@@ -194,6 +197,6 @@ NSInteger selection = 1;
     [peopleButton addTarget:self action:@selector(peopleButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:peopleButton];
 }
-
+*/
 
 @end
