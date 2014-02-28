@@ -7,7 +7,7 @@
 #import "PAPTabBarController.h"
 #import  "CameraFilterViewController.h"
 #import "MBProgressHUD.h"
-#import "BFViewController.h"
+#import "CropResizeViewController.h"
 
 @interface PAPTabBarController ()
 @property (nonatomic,strong) NSString *imageSource;
@@ -76,7 +76,7 @@
     // Check if pic is in correct position, fix rotation if not (pic from camera roll)
     UIImage *selectedImg = [self fixrotation:[info objectForKey:UIImagePickerControllerOriginalImage]];
     
-    BFViewController *cropViewController = [[BFViewController alloc] initWithImage:selectedImg nib:@"BFViewController" source:self.imageSource];
+    CropResizeViewController *cropViewController = [[CropResizeViewController alloc] initWithImage:selectedImg nib:@"BFViewController" source:self.imageSource];
     
     [self.navigationController pushViewController:cropViewController animated:NO];
    

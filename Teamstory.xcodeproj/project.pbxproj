@@ -311,12 +311,10 @@
 		D5D1042C18B5CF4E0084C901 /* button-feedback@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */; };
 		D5D1043718B5D6A40084C901 /* konotor_cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1043518B5D6A40084C901 /* konotor_cancel.png */; };
 		D5D1043818B5D6A40084C901 /* konotor_cancel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1043618B5D6A40084C901 /* konotor_cancel@2x.png */; };
-		D5FC095118A9B518000D85F1 /* BFCropInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC094E18A9B518000D85F1 /* BFCropInterface.m */; };
-		D5FC095218A9B518000D85F1 /* BFViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095018A9B518000D85F1 /* BFViewController.m */; };
+		D5FC095218A9B518000D85F1 /* CropResizeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095018A9B518000D85F1 /* CropResizeViewController.m */; };
 		D5FC095518A9B543000D85F1 /* CameraFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095418A9B543000D85F1 /* CameraFilterViewController.m */; };
 		D5FC095818A9B552000D85F1 /* FilterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095718A9B552000D85F1 /* FilterCell.m */; };
 		D5FC095C18A9B586000D85F1 /* CameraFilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FC095918A9B586000D85F1 /* CameraFilterViewController.xib */; };
-		D5FC095E18A9B586000D85F1 /* BFViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FC095B18A9B586000D85F1 /* BFViewController.xib */; };
 		D5FC099A18A9BFF4000D85F1 /* KonotorConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC096518A9BFF4000D85F1 /* KonotorConversationViewController.m */; };
 		D5FC099B18A9BFF4000D85F1 /* KonotorConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FC096618A9BFF4000D85F1 /* KonotorConversationViewController.xib */; };
 		D5FC099C18A9BFF4000D85F1 /* KonotorEventHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC096818A9BFF4000D85F1 /* KonotorEventHandler.m */; };
@@ -716,16 +714,13 @@
 		D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback@2x.png"; sourceTree = "<group>"; };
 		D5D1043518B5D6A40084C901 /* konotor_cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor_cancel.png; sourceTree = "<group>"; };
 		D5D1043618B5D6A40084C901 /* konotor_cancel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor_cancel@2x.png"; sourceTree = "<group>"; };
-		D5FC094D18A9B518000D85F1 /* BFCropInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFCropInterface.h; sourceTree = SOURCE_ROOT; };
-		D5FC094E18A9B518000D85F1 /* BFCropInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFCropInterface.m; sourceTree = SOURCE_ROOT; };
-		D5FC094F18A9B518000D85F1 /* BFViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFViewController.h; sourceTree = SOURCE_ROOT; };
-		D5FC095018A9B518000D85F1 /* BFViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFViewController.m; sourceTree = SOURCE_ROOT; };
+		D5FC094F18A9B518000D85F1 /* CropResizeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CropResizeViewController.h; sourceTree = SOURCE_ROOT; };
+		D5FC095018A9B518000D85F1 /* CropResizeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CropResizeViewController.m; sourceTree = SOURCE_ROOT; };
 		D5FC095318A9B543000D85F1 /* CameraFilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraFilterViewController.h; sourceTree = SOURCE_ROOT; };
 		D5FC095418A9B543000D85F1 /* CameraFilterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraFilterViewController.m; sourceTree = SOURCE_ROOT; };
 		D5FC095618A9B552000D85F1 /* FilterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterCell.h; sourceTree = SOURCE_ROOT; };
 		D5FC095718A9B552000D85F1 /* FilterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterCell.m; sourceTree = SOURCE_ROOT; };
 		D5FC095918A9B586000D85F1 /* CameraFilterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraFilterViewController.xib; sourceTree = SOURCE_ROOT; };
-		D5FC095B18A9B586000D85F1 /* BFViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BFViewController.xib; sourceTree = SOURCE_ROOT; };
 		D5FC096218A9BFF4000D85F1 /* Konotor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Konotor.h; sourceTree = "<group>"; };
 		D5FC096418A9BFF4000D85F1 /* KonotorConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorConversationViewController.h; sourceTree = "<group>"; };
 		D5FC096518A9BFF4000D85F1 /* KonotorConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorConversationViewController.m; sourceTree = "<group>"; };
@@ -1218,7 +1213,6 @@
 				C4F102A5156C57620061BC3E /* PAPPhotoDetailsFooterView.h */,
 				C4F102A6156C57620061BC3E /* PAPPhotoDetailsFooterView.m */,
 				D5FC095918A9B586000D85F1 /* CameraFilterViewController.xib */,
-				D5FC095B18A9B586000D85F1 /* BFViewController.xib */,
 			);
 			name = PhotoDetailsViews;
 			sourceTree = "<group>";
@@ -1320,10 +1314,8 @@
 		C4A894941558796C00DC57D3 /* Take Photo */ = {
 			isa = PBXGroup;
 			children = (
-				D5FC094D18A9B518000D85F1 /* BFCropInterface.h */,
-				D5FC094E18A9B518000D85F1 /* BFCropInterface.m */,
-				D5FC094F18A9B518000D85F1 /* BFViewController.h */,
-				D5FC095018A9B518000D85F1 /* BFViewController.m */,
+				D5FC094F18A9B518000D85F1 /* CropResizeViewController.h */,
+				D5FC095018A9B518000D85F1 /* CropResizeViewController.m */,
 				D5FC095318A9B543000D85F1 /* CameraFilterViewController.h */,
 				D5FC095418A9B543000D85F1 /* CameraFilterViewController.m */,
 				C4F102DA156C58170061BC3E /* PAPEditPhotoViewController.h */,
@@ -1664,7 +1656,6 @@
 				D5FC09BA18A9BFF4000D85F1 /* konotor_supportprofile.png in Resources */,
 				465A4ED918A8222A00E43DC6 /* iconlocation.png in Resources */,
 				465A4EDD18A8382900E43DC6 /* comingsoon@2x.png in Resources */,
-				D5FC095E18A9B586000D85F1 /* BFViewController.xib in Resources */,
 				46ABD74418B143A4008F5AAB /* news4.png in Resources */,
 				46FB0A9A1888E4C200E978CD /* bg.png in Resources */,
 				465B19B618B81FE500EDBCFC /* browser-refresh@2x.png in Resources */,
@@ -1848,7 +1839,7 @@
 				46ABD75F18B53C46008F5AAB /* PAPwebviewViewController.m in Sources */,
 				C4F102AA156C57620061BC3E /* PAPPhotoDetailsHeaderView.m in Sources */,
 				C4F102B3156C57820061BC3E /* PAPActivityCell.m in Sources */,
-				D5FC095218A9B518000D85F1 /* BFViewController.m in Sources */,
+				D5FC095218A9B518000D85F1 /* CropResizeViewController.m in Sources */,
 				C4F102B4156C57820061BC3E /* PAPBaseTextCell.m in Sources */,
 				46FB0A4B188879C500E978CD /* PAPstartUpsView.m in Sources */,
 				D5FC099D18A9BFF4000D85F1 /* KonotorFeedbackScreen.m in Sources */,
@@ -1869,7 +1860,6 @@
 				D5FC09C218A9BFF4000D85F1 /* KonotorVoiceInputOverlay.m in Sources */,
 				C4F102D2156C57FD0061BC3E /* PAPAccountViewController.m in Sources */,
 				C4F102D3156C57FD0061BC3E /* PAPPhotoDetailsViewController.m in Sources */,
-				D5FC095118A9B518000D85F1 /* BFCropInterface.m in Sources */,
 				C4F102D8156C580C0061BC3E /* PAPFindFriendsViewController.m in Sources */,
 				D5FC099E18A9BFF4000D85F1 /* KonotorFeedbackScreenViewController.m in Sources */,
 				D5FC099C18A9BFF4000D85F1 /* KonotorEventHandler.m in Sources */,

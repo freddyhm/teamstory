@@ -27,18 +27,10 @@
 - (IBAction)cancelEdit:(UIBarButtonItem *)sender;
 - (IBAction)saveEdit:(id)sender;
 
-
-
 @end
 
 @implementation CameraFilterViewController
 
-@synthesize context;
-@synthesize editableImage;
-@synthesize croppedImage;
-@synthesize croppedImageView;
-@synthesize imageSource;
-@synthesize filterList;
 
 
 - (id)initWithImage:(UIImage *)aImage nib:(NSString *)nibNameOrNil source:(NSString *)imgSource {

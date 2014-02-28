@@ -19,13 +19,6 @@
 @end
 
 @implementation PAPEditPhotoViewController
-@synthesize scrollView;
-@synthesize image;
-@synthesize commentTextField;
-@synthesize photoFile;
-@synthesize thumbnailFile;
-@synthesize fileUploadBackgroundTaskId;
-@synthesize photoPostBackgroundTaskId;
 
 #pragma mark - NSObject
 
