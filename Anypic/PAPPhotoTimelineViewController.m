@@ -22,6 +22,11 @@
 @synthesize shouldReloadOnAppear;
 @synthesize outstandingSectionHeaderQueries;
 
+enum ActionSheetTags {
+    MainActionSheetTag = 0,
+    reportTypeTag = 1
+};
+
 #pragma mark - Initialization
 
 - (void)dealloc {
@@ -398,6 +403,125 @@
     }
     
     return nil;
+}
+
+- (void) moreActionButton_inflator {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
+    actionSheet.delegate = self;
+    actionSheet.tag = MainActionSheetTag;
+    [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Report Inappropriate", nil)]];
+    [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
+    [actionSheet showFromTabBar:self.tabBarController.tabBar];
+}
+
+#pragma mark - UIActionSheetDelegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (actionSheet.tag == MainActionSheetTag) {
+        if ([actionSheet destructiveButtonIndex] == buttonIndex) {
+            UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
+            [actionSheet addButtonWithTitle:@"I don't like this photo"];
+            [actionSheet addButtonWithTitle:@"Spam or scam"];
+            [actionSheet addButtonWithTitle:@"Nudity or pornography"];
+            [actionSheet addButtonWithTitle:@"Graphic violence"];
+            [actionSheet addButtonWithTitle:@"Hate speech or symbol"];
+            [actionSheet addButtonWithTitle:@"Intellectual property violation"];
+            [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:@"Cancel"]];
+            actionSheet.delegate = self;
+            actionSheet.tag = reportTypeTag;
+            [actionSheet showFromTabBar:self.tabBarController.tabBar];
+        }
+    } else {
+        NSString *emailTitle = @"[USER REPORT] Reporting Inappropriate Pictures";
+        NSString *messageBody;
+        NSArray *toRecipients = [NSArray arrayWithObject:@"toboklee@gmail.com"];
+        
+        switch (buttonIndex) {
+            case 0:
+            {
+                NSLog(@"I don't like this photo");
+                messageBody = @"I don't like this photo";
+                break;
+            }
+            case 1:
+            {
+                NSLog(@"Spam or scam");
+                messageBody = @"Spam or scam";
+                break;
+            }
+            case 2:
+            {
+                messageBody = @"Nudity or pronography";
+                NSLog(@"Nudity");
+                break;
+            }
+            case 3:
+            {
+                messageBody = @"Graphic Violence";
+                NSLog(@"Graphic Violence");
+                break;
+            }
+            case 4:
+            {
+                messageBody = @"Hate speech or symbol";
+                NSLog(@"Hate Speech");
+                break;
+            }
+            case 5:
+            {
+                messageBody = @"Intellectual property violation";
+                NSLog(@"Intellectual property");
+                break;
+            }
+            default:
+                break;
+        }
+        
+        NSLog(@"%@", kPAPPhotoClassKey);
+        
+        MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+        mc.mailComposeDelegate = self;
+        [mc setSubject:emailTitle];
+        [mc setMessageBody:messageBody isHTML:NO];
+        [mc setToRecipients:toRecipients];
+        
+        
+        // Present mail view controller on screen
+        [self presentViewController:mc animated:YES completion:nil];
+    }
+}
+
+- (void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            NSLog(@"Mail cancelled");
+            break;
+        case MFMailComposeResultSaved:
+            NSLog(@"Mail saved");
+            break;
+        case MFMailComposeResultSent:
+        {
+            NSLog(@"Mail sent");
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Successful" message:@"Message has been successfully sent" delegate:self cancelButtonTitle:@"Done" otherButtonTitles:nil];
+            [alertView show];
+            break;
+        }
+        case MFMailComposeResultFailed:
+        {
+            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your message was not sent! Please check your internet connection!" delegate:self cancelButtonTitle:@"Done" otherButtonTitles:nil];
+            [alertView show];
+            break;
+        }
+        default:
+            break;
+    }
+    
+    // Close the Mail Interface
+    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 

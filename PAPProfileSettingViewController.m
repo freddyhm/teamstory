@@ -33,6 +33,7 @@
 @property (nonatomic, strong) UIView *backgroundView;
 @property (nonatomic, strong) PFImageView* profilePictureImageView;
 @property (nonatomic, strong) PFFile *imageProfileFile;
+@property (nonatomic, strong) UIView *startOverlay;
 
 
 @end
@@ -60,6 +61,7 @@
 @synthesize backgroundView;
 @synthesize profilePictureImageView;
 @synthesize imageProfileFile;
+@synthesize startOverlay;
 
 
 
@@ -96,6 +98,27 @@
     }
     if ([description_user length] == 0) {
         description_user = @"Description";
+    }
+    
+    if (profileExist != true) {
+        self.startOverlay = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+        [[[[UIApplication sharedApplication] delegate] window] addSubview:self.startOverlay];
+        
+        UIImageView *startOverlay_image = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+        UIButton *proceed_button = [[UIButton alloc] init];
+        
+        if ([UIScreen mainScreen].bounds.size.height == 480) {
+            [startOverlay_image setImage:[UIImage imageNamed:@"intro1-iphone4.png"]];
+            [proceed_button setFrame:CGRectMake(35.0f, 416.0f, 250.0f, 43.0f)];
+        } else {
+            [startOverlay_image setImage:[UIImage imageNamed:@"intro1-iphone5.png"]];
+            [proceed_button setFrame:CGRectMake(35.0f, 504.0f, 250.0f, 43.0f)];
+        }
+        
+        [self.startOverlay addSubview:startOverlay_image];
+        
+        [proceed_button addTarget:self action:@selector(proceed_button_action:) forControlEvents:UIControlEventTouchUpInside];
+        [self.startOverlay addSubview:proceed_button];
     }
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
@@ -425,6 +448,11 @@
 
     viewController.navigationItem.titleView =[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     viewController.navigationItem.rightBarButtonItem = nil;
+    
+    // set color of nav bar to custom grey
+    [viewController.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+    viewController.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(79/255.0) green:(91/255.0) blue:(100/255.0) alpha:(0.0/255.0)];
+    viewController.navigationController.navigationBar.translucent = NO;
     
     if ([viewController.title isEqualToString:@"Photos"])
     {
@@ -875,6 +903,10 @@
     // Remove HUD from screen when the HUD hides
     [HUD removeFromSuperview];
     HUD = nil;
+}
+
+- (void) proceed_button_action:(id)sender {
+    [self.startOverlay removeFromSuperview];
 }
 
 @end

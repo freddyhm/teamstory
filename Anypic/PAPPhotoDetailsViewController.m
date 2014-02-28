@@ -100,8 +100,17 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     commentTextField.delegate = self;
     self.tableView.tableFooterView = footerView;
 
-    
-    if (NSClassFromString(@"UIActivityViewController")) {
+    if ([self currentUserOwnsPhoto]) {
+        
+        // Else we only want to show an action button if the user owns the photo and has permission to delete it.
+        UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        shareButton.frame = CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f);
+        [shareButton addTarget:self action:@selector(actionButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [shareButton setImage:[UIImage imageNamed:@"share.png"] forState:UIControlStateNormal];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
+        
+        //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonAction:)];
+    } else if (NSClassFromString(@"UIActivityViewController")) {
         // Use UIActivityViewController if it is available (iOS 6 +)
         //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(activityButtonAction:)];
         
@@ -111,11 +120,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [shareButton setBackgroundImage:[UIImage imageNamed:@"share.png"] forState:UIControlStateNormal];
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
         
-    } else if ([self currentUserOwnsPhoto]) {
-        // Else we only want to show an action button if the user owns the photo and has permission to delete it.
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonAction:)];
+        
     }
-    
     
     if (NSClassFromString(@"UIRefreshControl")) {
         // Use the new iOS 6 refresh control.
@@ -293,6 +299,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Are you sure you want to delete this photo?", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:NSLocalizedString(@"Yes, delete photo", nil) otherButtonTitles:nil];
             actionSheet.tag = ConfirmDeleteActionSheetTag;
             [actionSheet showFromTabBar:self.tabBarController.tabBar];
+        } else if ([actionSheet cancelButtonIndex] == buttonIndex){
+            // do nothing
         } else {
             [self activityButtonAction:actionSheet];
         }
