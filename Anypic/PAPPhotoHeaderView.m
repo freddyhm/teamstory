@@ -213,8 +213,10 @@
 #pragma mark - ()
 
 - (void) moreActionButton_action:(id)sender{
-    [delegate respondsToSelector:@selector(moreActionButton_inflator)];
-    [delegate moreActionButton_inflator];
+    if (delegate && [delegate respondsToSelector:@selector(moreActionButton_inflator:object:)]) {
+        [delegate respondsToSelector:@selector(moreActionButton_inflator:object:)];
+        [delegate moreActionButton_inflator:[self.photo objectForKey:kPAPPhotoUserKey] object:[self.photo objectId]];
+    }
 }
 
 + (void)validateButtons:(PAPPhotoHeaderButtons)buttons {

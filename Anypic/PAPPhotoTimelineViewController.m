@@ -15,12 +15,16 @@
 @property (nonatomic, assign) BOOL shouldReloadOnAppear;
 @property (nonatomic, strong) NSMutableSet *reusableSectionHeaderViews;
 @property (nonatomic, strong) NSMutableDictionary *outstandingSectionHeaderQueries;
+@property (nonatomic, strong) NSString *reported_user;
+@property (nonatomic, strong) NSString *photoID;
 @end
 
 @implementation PAPPhotoTimelineViewController
 @synthesize reusableSectionHeaderViews;
 @synthesize shouldReloadOnAppear;
 @synthesize outstandingSectionHeaderQueries;
+@synthesize reported_user;
+@synthesize photoID;
 
 enum ActionSheetTags {
     MainActionSheetTag = 0,
@@ -405,12 +409,14 @@ enum ActionSheetTags {
     return nil;
 }
 
-- (void) moreActionButton_inflator {
+- (void) moreActionButton_inflator:(PFUser *) user object:(NSString *)object {
     UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
     actionSheet.delegate = self;
     actionSheet.tag = MainActionSheetTag;
     [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Report Inappropriate", nil)]];
     [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
+    self.photoID = object;
+    self.reported_user = [user objectForKey:@"displayName"];
     [actionSheet showFromTabBar:self.tabBarController.tabBar];
 }
 
@@ -434,43 +440,41 @@ enum ActionSheetTags {
     } else {
         NSString *emailTitle = @"[USER REPORT] Reporting Inappropriate Pictures";
         NSString *messageBody;
-        NSArray *toRecipients = [NSArray arrayWithObject:@"toboklee@gmail.com"];
+        NSArray *toRecipients = [NSArray arrayWithObject:@"info@teamstoryapp.com"];
         
         switch (buttonIndex) {
             case 0:
             {
-                NSLog(@"I don't like this photo");
-                messageBody = @"I don't like this photo";
+                messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"I don't like this photo\"\n", @"Target User: ",
+                               self.reported_user, @"\n", @"Photo ID: ", self.photoID];
                 break;
             }
             case 1:
             {
-                NSLog(@"Spam or scam");
-                messageBody = @"Spam or scam";
+                messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"Spam or scam\"\n", @"Target User: ",
+                               self.reported_user, @"\n", @"Photo ID: ", self.photoID];
                 break;
             }
             case 2:
             {
-                messageBody = @"Nudity or pronography";
-                NSLog(@"Nudity");
+                messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"Nudity or pornography\"\n", @"Target User: ",
+                               self.reported_user, @"\n", @"Photo ID: ", self.photoID];
                 break;
             }
             case 3:
             {
-                messageBody = @"Graphic Violence";
-                NSLog(@"Graphic Violence");
-                break;
+                messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"Graphic violence\"\n", @"Target User: ",
+                               self.reported_user, @"\n", @"Photo ID: ", self.photoID];                break;
             }
             case 4:
             {
-                messageBody = @"Hate speech or symbol";
-                NSLog(@"Hate Speech");
-                break;
+                messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"Hate speech or symbol\"\n", @"Target User: ",
+                               self.reported_user, @"\n", @"Photo ID: ", self.photoID];                break;
             }
             case 5:
             {
-                messageBody = @"Intellectual property violation";
-                NSLog(@"Intellectual property");
+                messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"Intellectual property violation\"\n", @"Target User: ",
+                               self.reported_user, @"\n", @"Photo ID: ", self.photoID];
                 break;
             }
             default:
