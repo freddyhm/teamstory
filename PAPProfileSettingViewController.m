@@ -706,9 +706,24 @@
     if (alertView.tag == SUCCESSFUL) {
         if (buttonIndex == 0) {
             NSLog(@"Logged In Sucessfully");
-            [PFUser user];
-            [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
-            return;
+            self.startOverlay = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+            [[[[UIApplication sharedApplication] delegate] window] addSubview:self.startOverlay];
+            
+            UIImageView *startOverlay_image = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+            UIButton *proceed_button = [[UIButton alloc] init];
+            
+            if ([UIScreen mainScreen].bounds.size.height == 480) {
+                [startOverlay_image setImage:[UIImage imageNamed:@"intro2-iphone4.png"]];
+                [proceed_button setFrame:CGRectMake(35.0f, 416.0f, 250.0f, 43.0f)];
+            } else {
+                [startOverlay_image setImage:[UIImage imageNamed:@"intro2-iphone5.png"]];
+                [proceed_button setFrame:CGRectMake(35.0f, 504.0f, 250.0f, 43.0f)];
+            }
+            
+            [self.startOverlay addSubview:startOverlay_image];
+            
+            [proceed_button addTarget:self action:@selector(firstLoginButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+            [self.startOverlay addSubview:proceed_button];
         }
     } else if (alertView.tag == IMAGE_NIL) {
         if (buttonIndex == 1) {
@@ -907,6 +922,18 @@
 
 - (void) proceed_button_action:(id)sender {
     [self.startOverlay removeFromSuperview];
+}
+
+- (void) firstLoginButtonAction:(id)sender {
+    [self.startOverlay removeFromSuperview];
+    [website resignFirstResponder];
+    [description resignFirstResponder];
+    [location resignFirstResponder];
+    [companyName resignFirstResponder];
+    
+    [PFUser user];
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
+    return;
 }
 
 @end

@@ -154,6 +154,9 @@
 		4691B51318C02F7800B7DF6A /* icon-pics.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B50F18C02F7800B7DF6A /* icon-pics.png */; };
 		4691B51618C0314600B7DF6A /* discover@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B51418C0314600B7DF6A /* discover@2x.png */; };
 		4691B51718C0314600B7DF6A /* discover.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B51518C0314600B7DF6A /* discover.png */; };
+		4691B51B18C1477100B7DF6A /* intro2-iphone4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B51818C1477100B7DF6A /* intro2-iphone4@2x.png */; };
+		4691B51C18C1477100B7DF6A /* intro2-iphone4.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B51918C1477100B7DF6A /* intro2-iphone4.png */; };
+		4691B51D18C1477100B7DF6A /* intro2-iphone5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B51A18C1477100B7DF6A /* intro2-iphone5@2x.png */; };
 		46ABD72F18AADFFB008F5AAB /* default-pic.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD72D18AADFFB008F5AAB /* default-pic.png */; };
 		46ABD73018AADFFB008F5AAB /* default-pic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */; };
 		46ABD73318B12E01008F5AAB /* PAPperksoverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 46ABD73218B12E01008F5AAB /* PAPperksoverlay.m */; };
@@ -540,6 +543,9 @@
 		4691B50F18C02F7800B7DF6A /* icon-pics.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-pics.png"; sourceTree = "<group>"; };
 		4691B51418C0314600B7DF6A /* discover@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "discover@2x.png"; sourceTree = "<group>"; };
 		4691B51518C0314600B7DF6A /* discover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = discover.png; sourceTree = "<group>"; };
+		4691B51818C1477100B7DF6A /* intro2-iphone4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "intro2-iphone4@2x.png"; sourceTree = "<group>"; };
+		4691B51918C1477100B7DF6A /* intro2-iphone4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "intro2-iphone4.png"; sourceTree = "<group>"; };
+		4691B51A18C1477100B7DF6A /* intro2-iphone5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "intro2-iphone5@2x.png"; sourceTree = "<group>"; };
 		46ABD72D18AADFFB008F5AAB /* default-pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-pic.png"; sourceTree = "<group>"; };
 		46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-pic@2x.png"; sourceTree = "<group>"; };
 		46ABD73118B12E01008F5AAB /* PAPperksoverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPperksoverlay.h; path = Anypic/PAPperksoverlay.h; sourceTree = SOURCE_ROOT; };
@@ -991,6 +997,9 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				4691B51818C1477100B7DF6A /* intro2-iphone4@2x.png */,
+				4691B51918C1477100B7DF6A /* intro2-iphone4.png */,
+				4691B51A18C1477100B7DF6A /* intro2-iphone5@2x.png */,
 				4691B51418C0314600B7DF6A /* discover@2x.png */,
 				4691B51518C0314600B7DF6A /* discover.png */,
 				4691B50C18C02F7800B7DF6A /* icon-followers@2x.png */,
@@ -1682,6 +1691,7 @@
 				462FCB7A188C806C005059F3 /* button_cancel@2x.png in Resources */,
 				D5FC09BB18A9BFF4000D85F1 /* konotor_supportprofile@2x.png in Resources */,
 				C4BE676D157FC7F700A291C2 /* BackgroundComments.png in Resources */,
+				4691B51D18C1477100B7DF6A /* intro2-iphone5@2x.png in Resources */,
 				465DE3471895983A00C37EF8 /* profileType@2x.png in Resources */,
 				D5D1043818B5D6A40084C901 /* konotor_cancel@2x.png in Resources */,
 				C4BE676E157FC7F700A291C2 /* BackgroundComments@2x.png in Resources */,
@@ -1722,6 +1732,7 @@
 				C4BE6783157FC7F700A291C2 /* ButtonCamera.png in Resources */,
 				D5FC09AB18A9BFF4000D85F1 /* konotor_mic@2x.png in Resources */,
 				465B19B118B81FE500EDBCFC /* browser-button-no.png in Resources */,
+				4691B51C18C1477100B7DF6A /* intro2-iphone4.png in Resources */,
 				4602FCED18BAA7760097DBEC /* teamstorycrew.png in Resources */,
 				464A3542185A979A006E951E /* bg-intro3-iphone5@2x.png in Resources */,
 				C4BE6784157FC7F700A291C2 /* ButtonCamera@2x.png in Resources */,
@@ -1809,6 +1820,7 @@
 				464A3540185A979A006E951E /* bg-intro3-iphone4@2x.png in Resources */,
 				465A4EE618A83D5100E43DC6 /* share@2x.png in Resources */,
 				C4BE67A9157FC7F700A291C2 /* IconHome.png in Resources */,
+				4691B51B18C1477100B7DF6A /* intro2-iphone4@2x.png in Resources */,
 				4691B4F018BEF61200B7DF6A /* unfollow.png in Resources */,
 				C4BE67AA157FC7F700A291C2 /* IconHome@2x.png in Resources */,
 				462FCB7D188C806C005059F3 /* button_setting.png in Resources */,
