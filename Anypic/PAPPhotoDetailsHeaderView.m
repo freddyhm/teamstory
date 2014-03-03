@@ -236,19 +236,12 @@ static TTTTimeIntervalFormatter *timeFormatter;
      */
     self.nameHeaderView = [[UIView alloc] initWithFrame:CGRectMake(nameHeaderX, nameHeaderY, nameHeaderWidth, nameHeaderHeight)];
     self.nameHeaderView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundComments.png"]];
-    //self.nameHeaderView.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.nameHeaderView];
-    /*
-    CALayer *layer = self.nameHeaderView.layer;
-    layer.backgroundColor = [UIColor whiteColor].CGColor;
-    layer.masksToBounds = NO;
-    layer.shadowRadius = 1.0f;
-    layer.shadowOffset = CGSizeMake( 0.0f, 2.0f);
-    layer.shadowOpacity = 0.5f;
-    layer.shouldRasterize = YES;
     
-    layer.shadowPath = [UIBezierPath bezierPathWithRect:CGRectMake( 0.0f, self.nameHeaderView.frame.size.height - 4.0f, self.nameHeaderView.frame.size.width, 4.0f)].CGPath;
-     */
+    UIButton *moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(270.0f, 8.0f, 30.0f, 30.0f)];
+    [moreActionButton setImage:[UIImage imageNamed:@"button-more.png"] forState:UIControlStateNormal];
+    [moreActionButton addTarget:self action:@selector(moreActionButton_action:) forControlEvents:UIControlEventTouchUpInside];
+    [self.nameHeaderView addSubview:moreActionButton];
     
             // Load data for header
         [self.photographer fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
@@ -330,6 +323,13 @@ static TTTTimeIntervalFormatter *timeFormatter;
     UIImageView *separator = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"SeparatorComments.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.0f, 1.0f, 0.0f, 1.0f)]];
     [separator setFrame:CGRectMake(0.0f, likeBarView.frame.size.height - 2.0f, likeBarView.frame.size.width, 2.0f)];
     [likeBarView addSubview:separator];    
+}
+
+- (void)moreActionButton_action:(id)sender{
+    if (delegate && [delegate respondsToSelector:@selector(moreActionButton_inflator:photo:)]) {
+        [delegate respondsToSelector:@selector(moreActionButton_inflator:photo:)];
+        [delegate moreActionButton_inflator:[self.photo objectForKey:kPAPPhotoUserKey] photo:self.photo];
+    }
 }
 
 - (void)didTapLikePhotoButtonAction:(UIButton *)button {

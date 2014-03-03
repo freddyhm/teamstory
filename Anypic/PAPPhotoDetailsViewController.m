@@ -16,13 +16,17 @@
 
 enum ActionSheetTags {
     MainActionSheetTag = 0,
-    ConfirmDeleteActionSheetTag = 1
+    reportTypeTag = 1,
+    deletePhoto = 2
 };
 
 @interface PAPPhotoDetailsViewController ()
 @property (nonatomic, strong) UITextField *commentTextField;
 @property (nonatomic, strong) PAPPhotoDetailsHeaderView *headerView;
 @property (nonatomic, assign) BOOL likersQueryInProgress;
+@property (nonatomic, strong) NSString *photoID;
+@property (nonatomic, strong) PFObject *current_photo;
+@property (nonatomic, strong) PFUser *reported_user;
 @end
 
 static const CGFloat kPAPCellInsetWidth = 7.5f;
@@ -31,6 +35,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 @synthesize commentTextField;
 @synthesize photo, headerView;
+@synthesize photoID;
+@synthesize current_photo;
+@synthesize reported_user;
+
+
 
 #pragma mark - Initialization
 
@@ -124,11 +133,13 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         
     }
      */
+    /*
     UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
     shareButton.frame = CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f);
     [shareButton addTarget:self action:@selector(activityButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [shareButton setBackgroundImage:[UIImage imageNamed:@"share.png"] forState:UIControlStateNormal];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
+     */
     
     
     if (NSClassFromString(@"UIRefreshControl")) {
@@ -184,7 +195,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 
 #pragma mark - PFQueryTableViewController
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+//#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
 
 - (PFQuery *)queryForTable {
     PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
@@ -199,10 +210,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     // and then subsequently do a query against the network.
     //
     // If there is no network connection, we will hit the cache first.
+    /*
     SEL isParseReachableSelector = sel_registerName("isParseReachable");
     if (self.objects.count == 0 || ![[UIApplication sharedApplication].delegate performSelector:isParseReachableSelector]) {
         [query setCachePolicy:kPFCachePolicyCacheThenNetwork];
     }
+     */
     
     return query;
 }
@@ -319,7 +332,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 -(void)photoDetailsHeaderView:(PAPPhotoDetailsHeaderView *)headerView didTapUserButton:(UIButton *)button user:(PFUser *)user {
     [self shouldPresentAccountViewForUser:user];
 }
-
+/*
 - (void)activityButtonAction:(id)sender {
     if (NSClassFromString(@"UIActivityViewController")) {
         // TODO: Need to do something when the photo hasn't finished downloading!
@@ -336,10 +349,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         }
     }
 }
-
+*/
 
 #pragma mark - ()
-
+/*
 - (void)showShareSheet {
     [[self.photo objectForKey:kPAPPhotoPictureKey] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
         if (!error) {
@@ -362,6 +375,175 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         }
     }];
 }
+ */
+
+- (void) moreActionButton_inflator:(PFUser *)user photo:(PFObject *)user_photo {
+    self.photoID = [user_photo objectId];
+    self.reported_user = [user objectForKey:@"displayName"];
+    self.current_photo = user_photo;
+    
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
+    actionSheet.delegate = self;
+    actionSheet.tag = MainActionSheetTag;
+    
+    if ([self currentUserOwnsPhoto]) {
+        [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Delete Photo"]];
+    } else {
+        [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Report Inappropriate", nil)]];
+    }
+    [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
+    [actionSheet showFromTabBar:self.tabBarController.tabBar];
+}
+
+- (BOOL)currentUserOwnsPhoto {
+    return [[[self.current_photo objectForKey:kPAPPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]];
+}
+
+- (void)shouldDeletePhoto {
+    // Delete all activites related to this photo
+    PFQuery *query = [PFQuery queryWithClassName:kPAPActivityClassKey];
+    [query whereKey:kPAPActivityPhotoKey equalTo:self.current_photo];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *activities, NSError *error) {
+        if (!error) {
+            for (PFObject *activity in activities) {
+                [activity deleteEventually];
+            }
+        }
+        
+        // Delete photo
+        [self.current_photo deleteEventually];
+    }];
+    [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:[self.current_photo objectId]];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - UIActionSheetDelegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (actionSheet.tag == MainActionSheetTag) {
+        if ([actionSheet destructiveButtonIndex] == buttonIndex) {
+            UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
+            actionSheet.delegate = self;
+            
+            if ([self currentUserOwnsPhoto]){
+                [actionSheet setTitle:NSLocalizedString(@"Are you sure you want to delete this photo?", nil)];
+                [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Yes, delete photo", nil)]];
+                [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
+                actionSheet.tag = deletePhoto;
+            } else {
+                [actionSheet addButtonWithTitle:@"I don't like this photo"];
+                [actionSheet addButtonWithTitle:@"Spam or scam"];
+                [actionSheet addButtonWithTitle:@"Nudity or pornography"];
+                [actionSheet addButtonWithTitle:@"Graphic violence"];
+                [actionSheet addButtonWithTitle:@"Hate speech or symbol"];
+                [actionSheet addButtonWithTitle:@"Intellectual property violation"];
+                [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:@"Cancel"]];
+                actionSheet.tag = reportTypeTag;
+            }
+            [actionSheet showFromTabBar:self.tabBarController.tabBar];
+        }
+    } else if (actionSheet.tag == deletePhoto) {
+        if ([actionSheet destructiveButtonIndex] == buttonIndex) {
+            [self shouldDeletePhoto];
+        }
+        
+    } else {
+        if ([actionSheet cancelButtonIndex] == buttonIndex){
+            //do nothing
+        } else {
+            NSString *emailTitle = @"[USER REPORT] Reporting Inappropriate Pictures";
+            NSString *messageBody;
+            NSArray *toRecipients = [NSArray arrayWithObject:@"info@teamstoryapp.com"];
+            
+            switch (buttonIndex) {
+                case 0:
+                {
+                    messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"I don't like this photo\"\n", @"Target User: ",
+                                   self.reported_user, @"\n", @"Photo ID: ", self.photoID];
+                    break;
+                }
+                case 1:
+                {
+                    messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"Spam or scam\"\n", @"Target User: ",
+                                   self.reported_user, @"\n", @"Photo ID: ", self.photoID];
+                    break;
+                }
+                case 2:
+                {
+                    messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"Nudity or pornography\"\n", @"Target User: ",
+                                   self.reported_user, @"\n", @"Photo ID: ", self.photoID];
+                    break;
+                }
+                case 3:
+                {
+                    messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"Graphic violence\"\n", @"Target User: ",
+                                   self.reported_user, @"\n", @"Photo ID: ", self.photoID];                break;
+                }
+                case 4:
+                {
+                    messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"Hate speech or symbol\"\n", @"Target User: ",
+                                   self.reported_user, @"\n", @"Photo ID: ", self.photoID];                break;
+                }
+                case 5:
+                {
+                    messageBody = [NSString stringWithFormat:@"%@%@%@%@%@%@", @"Category: \"Intellectual property violation\"\n", @"Target User: ",
+                                   self.reported_user, @"\n", @"Photo ID: ", self.photoID];
+                    break;
+                }
+                default:
+                    break;
+            }
+            
+            NSLog(@"%@", kPAPPhotoClassKey);
+            
+            MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+            mc.mailComposeDelegate = self;
+            [mc setSubject:emailTitle];
+            [mc setMessageBody:messageBody isHTML:NO];
+            [mc setToRecipients:toRecipients];
+            
+            
+            // Present mail view controller on screen
+            [self presentViewController:mc animated:YES completion:nil];
+        }
+    }
+}
+
+
+
+- (void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            NSLog(@"Mail cancelled");
+            break;
+        case MFMailComposeResultSaved:
+            NSLog(@"Mail saved");
+            break;
+        case MFMailComposeResultSent:
+        {
+            NSLog(@"Mail sent");
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Successful" message:@"Message has been successfully sent" delegate:self cancelButtonTitle:@"Done" otherButtonTitles:nil];
+            [alertView show];
+            break;
+        }
+        case MFMailComposeResultFailed:
+        {
+            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your message was not sent! Please check your internet connection!" delegate:self cancelButtonTitle:@"Done" otherButtonTitles:nil];
+            [alertView show];
+            break;
+        }
+        default:
+            break;
+    }
+    
+    // Close the Mail Interface
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
 
 - (void)handleCommentTimeout:(NSTimer *)aTimer {
     [MBProgressHUD hideHUDForView:self.view.superview animated:YES];

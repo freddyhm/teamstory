@@ -46,5 +46,6 @@
  @param user the PFUser for the photograper
  */
 - (void)photoDetailsHeaderView:(PAPPhotoDetailsHeaderView *)headerView didTapUserButton:(UIButton *)button user:(PFUser *)user;
+- (void) moreActionButton_inflator:(PFUser *)user photo:(PFObject *)photo;
 
 @end
