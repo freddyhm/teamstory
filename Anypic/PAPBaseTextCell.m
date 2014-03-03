@@ -56,7 +56,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.backgroundColor = [UIColor clearColor];
         
         mainView = [[UIView alloc] initWithFrame:self.contentView.frame];
-        //[mainView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundComments.png"]]];
         [mainView setBackgroundColor:[UIColor whiteColor]];
         
         self.avatarImageView = [[PAPProfileImageView alloc] init];
@@ -140,14 +139,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
     // Layour separator
     [self.separatorImage setFrame:CGRectMake(0, self.frame.size.height-2, self.frame.size.width-cellInsetWidth*2, 2)];
     [self.separatorImage setHidden:hideSeparator];
-}
-
-- (void)drawRect:(CGRect)rect {
-    // Add a drop shadow in core graphics on the sides of the cell
-    [super drawRect:rect];
-    if (self.cellInsetWidth != 0) {
-        [PAPUtility drawSideDropShadowForRect:mainView.frame inContext:UIGraphicsGetCurrentContext()];
-    }
 }
 
 

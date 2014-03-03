@@ -7,14 +7,25 @@
 //
 
 #import "PAPdiscoveryHeaderView.h"
+#import "PAPwebviewViewController.h"
 
 @implementation PAPdiscoveryHeaderView
 
 @synthesize content_overlay;
 @synthesize dimBackground;
-@synthesize content1_button;
+@synthesize content_button;
 @synthesize content1_cancel_button;
 @synthesize update_text;
+@synthesize navController;
+@synthesize website;
+
+- (id)initWithNavigationController:(UINavigationController *)navigationController {
+    self = [super init];
+    if (self) {
+        navController = navigationController;
+    }
+    return self;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -49,30 +60,61 @@
     return self;
 }
 
+- (void) create_content_overlay:(NSString *)imageName {
+    self.content_overlay = [[UIView alloc] initWithFrame:CGRectMake(16.5f, 80.0f, 287.0f, 375.0f)];
+    [self.content_overlay setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:imageName]]];
+    [[[[UIApplication sharedApplication] delegate] window] addSubview:self.content_overlay];
+}
+
 - (void) dimbackground {
     self.dimBackground = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
     [self.dimBackground setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.8f]];
     [[[[UIApplication sharedApplication] delegate] window] addSubview:self.dimBackground];
 }
 
-- (void) newsButton_3_action:(id)sender {
+- (void)newsButton_2_action:(id)sender {
+    self.website = @"http://jolt.marsdd.com/";
     [self dimbackground];
-    
-    self.content_overlay = [[UIView alloc] initWithFrame:CGRectMake(16.5f, 80.0f, 287.0f, 375.0f)];
-    [self.content_overlay setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"partner.png"]]];
-    [[[[UIApplication sharedApplication] delegate] window] addSubview:self.content_overlay];
-    
+    [self create_content_overlay:@"jolt.png"];
     [self cancelButton:self.content_overlay];
+    [self create_content_button];
+}
+
+- (void) newsButton_3_action:(id)sender {
+    self.website = @"http://teamstoryapp.us6.list-manage.com/subscribe?u=8a2a08ca0b684869a84cadb63&id=2f7f3344a7";
+    
+    [self dimbackground];
+    [self create_content_overlay:@"partner.png"];
+    [self cancelButton:self.content_overlay];
+    [self create_content_button];
 }
 
 - (void) newsButton_4_action:(id)sender {
+    self.website = @"https://hipchat.com";
+    
     [self dimbackground];
-    
-    self.content_overlay = [[UIView alloc] initWithFrame:CGRectMake(16.5f, 80.0f, 287.0f, 375.0f)];
-    [self.content_overlay setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"hipchat.png"]]];
-    [[[[UIApplication sharedApplication] delegate] window] addSubview:self.content_overlay];
-    
+    [self create_content_overlay:@"hipchat.png"];
     [self cancelButton:self.content_overlay];
+    [self create_content_button];
+}
+
+- (void) create_content_button {
+    self.content_button = [[UIButton alloc] initWithFrame:CGRectMake(76.0f, 313.0f, 134.0f, 43.0f)];
+    [self.content_button addTarget:self action:@selector(content_button_action:) forControlEvents:UIControlEventTouchUpInside];
+    [self.content_overlay addSubview:self.content_button];
+}
+
+- (void)content_button_action:(id)sender {
+    [self.content_overlay removeFromSuperview];
+    [self.dimBackground removeFromSuperview];
+    
+    if (!self.navController) {
+        NSLog(@"navController cannot be nil");
+    } else {
+        PAPwebviewViewController *webviewController = [[PAPwebviewViewController alloc] initWithWebsite:self.website];
+        webviewController.hidesBottomBarWhenPushed = YES;
+        [self.navController pushViewController:webviewController animated:YES];
+    }
 }
 
 - (void) cancelButton:(UIView *) target_view{
@@ -82,15 +124,7 @@
     [target_view addSubview:self.content1_cancel_button];
 }
 
-- (void)newsButton_2_action:(id)sender {
-    [self dimbackground];
-    
-    self.content_overlay = [[UIView alloc] initWithFrame:CGRectMake(16.5f, 80.0f, 287.0f, 375.0f)];
-    [self.content_overlay setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"jolt.png"]]];
-    [[[[UIApplication sharedApplication] delegate] window] addSubview:self.content_overlay];
-    
-    [self cancelButton:self.content_overlay];
-}
+
 
 -(void)newsButton_1_action:(id)sender{
     /*
@@ -104,7 +138,7 @@
      */
     float padding_x = 15.0f;
     
-    update_text = @"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.\n\n It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
+    update_text = @"Version 1.0\nWelcome to Teamstory!\n\nTeamstory is a picture-based community for all startups and entrepreneurs around the world. We’re building this community so that we can all capture, share and discover like-minded people and moments throughout our entrepreneurial journeys.\n\nThinking of starting a project? Launching your product? Having a company party? or going to a startup event? Don’t be shy and start capturing your moments. This is a place to show who you really are. Your moments, people, culture and journey.\n\nSo go ahead, start your teamstory.";
     [self dimbackground];
     
     self.content_overlay = [[UIView alloc] initWithFrame:CGRectMake(padding_x, 80.0f, [UIScreen mainScreen].bounds.size.width - padding_x * 2, 370.0f)];

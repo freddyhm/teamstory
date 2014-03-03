@@ -20,6 +20,7 @@
 #import "PAPPhotoDetailsViewController.h"
 #import "PAPProfileSettingViewController.h"
 #import "discoverPageViewController.h"
+#import "PAPwebviewViewController.h"
 
 
 
@@ -148,7 +149,6 @@
     
     // konotor notifications setup
     [Konotor addDeviceToken:newDeviceToken];
-    
     [PFPush storeDeviceToken:newDeviceToken];
     
     if (application.applicationIconBadgeNumber != 0) {
@@ -160,11 +160,11 @@
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-	/*
+	
     if ([error code] != 3010) { // 3010 is for the iPhone Simulator
         NSLog(@"Application failed to register for push notifications: %@", error);
 	}
-     */
+    
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
@@ -185,8 +185,6 @@
             UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
             
             NSString *currentBadgeValue = tabBarItem.badgeValue;
-            
-            NSLog(@"BadgeValue is: %@", currentBadgeValue);
             
             if (currentBadgeValue && currentBadgeValue.length > 0) {
                 NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
@@ -219,6 +217,7 @@
 
     [[FBSession activeSession] handleDidBecomeActive];
 }
+
 
 
 #pragma mark - UITabBarControllerDelegate

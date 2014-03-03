@@ -69,7 +69,7 @@
             [self.commentButton setTitle:@"" forState:UIControlStateNormal];
             [self.commentButton setTitleColor:[UIColor colorWithRed:113.0f/255.0f green:189.0f/255.0f blue:168.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
             //[self.commentButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
-            [self.commentButton setTitleEdgeInsets:UIEdgeInsetsMake( -2.0f, 0.0f, 0.0f, 0.0f)];
+            [self.commentButton setTitleEdgeInsets:UIEdgeInsetsMake( -2.0f, 2.0f, 0.0f, 0.0f)];
             //[[self.commentButton titleLabel] setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
             [[self.commentButton titleLabel] setFont:[UIFont systemFontOfSize:9.0f]];
             //[[self.commentButton titleLabel] setMinimumFontSize:11.0f];

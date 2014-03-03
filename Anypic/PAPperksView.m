@@ -34,10 +34,12 @@
         //[self addSubview:perksOverlay];
         
         float screenWidth = [UIScreen mainScreen].bounds.size.width;
-        float content_gap = 210.0f;
+        float content_gap = 220.0f;
+        // giving padding to the cells that only have the color scheme.
+        float color_cell_padding = 20.0f;
         
         UIScrollView *perksScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, screenWidth, [UIScreen mainScreen].bounds.size.height - 146.0f)];
-        [perksScrollView setContentSize:CGSizeMake(screenWidth, 1600.0f)];
+        [perksScrollView setContentSize:CGSizeMake(screenWidth, 1700.0f)];
         
         
         // ------------------------>   content 1  <--------------------------
@@ -75,7 +77,7 @@
         
         
         // ------------------------>   content 2  <--------------------------
-        UIView *content2 = [[UIView alloc] initWithFrame:CGRectMake(0.0f, content1.frame.origin.y + content_gap, screenWidth, 200.0f)];
+        UIView *content2 = [[UIView alloc] initWithFrame:CGRectMake(0.0f, content1.frame.origin.y + content_gap, screenWidth, 200.0f + color_cell_padding)];
         [content2 setBackgroundColor:[UIColor colorWithRed:229.0f/255.0f green:229.0f/255.0f blue:229.0f/255.0f alpha:0.8f]];
         [perksScrollView addSubview:content2];
         
@@ -142,7 +144,7 @@
         [content3 addSubview:content3_button];
         
         // ------------------------>   content 4  <--------------------------
-        UIView *content4 = [[UIView alloc] initWithFrame:CGRectMake(0.0f, content3.frame.origin.y + content_gap, screenWidth, 200.0f)];
+        UIView *content4 = [[UIView alloc] initWithFrame:CGRectMake(0.0f, content3.frame.origin.y + content_gap, screenWidth, 200.0f + color_cell_padding)];
         [content4 setBackgroundColor:[UIColor colorWithRed:229.0f/255.0f green:229.0f/255.0f blue:229.0f/255.0f alpha:0.8f]];
         [perksScrollView addSubview:content4];
         
@@ -208,7 +210,7 @@
         [content5 addSubview:content5_button];
         
         // ------------------------>   content 6  <--------------------------
-        UIView *content6 = [[UIView alloc] initWithFrame:CGRectMake(0.0f, content5.frame.origin.y + content_gap, screenWidth, 200.0f)];
+        UIView *content6 = [[UIView alloc] initWithFrame:CGRectMake(0.0f, content5.frame.origin.y + content_gap, screenWidth, 200.0f + color_cell_padding)];
         [content6 setBackgroundColor:[UIColor colorWithRed:229.0f/255.0f green:229.0f/255.0f blue:229.0f/255.0f alpha:0.8f]];
         [perksScrollView addSubview:content6];
         

@@ -55,7 +55,8 @@ NSInteger selection = 1;
     self.tableView.backgroundView = texturedBackgroundView;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
-    discoveryHeaderView = [[PAPdiscoveryHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 100.0f)];
+    discoveryHeaderView = [[PAPdiscoveryHeaderView alloc] initWithNavigationController:self.navigationController];
+    [discoveryHeaderView setFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 100.0f)];
     [self.view addSubview:discoveryHeaderView];
     
     UIImageView *product_imageView = [[UIImageView alloc] initWithFrame:CGRectMake( 0.0f, 102.0f ,[UIScreen mainScreen].bounds.size.width, 44.0f)];

@@ -147,6 +147,10 @@
 }
 
 - (void)backButtonAction:(id)sender {
+    if (![PFUser currentUser]) {
+        self.navigationController.navigationBarHidden = YES;
+    }
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
