@@ -6,6 +6,8 @@
 
 #import "PAPEditPhotoViewController.h"
 #import "PAPPhotoDetailsFooterView.h"
+#import "PAPTabBarController.h"
+#import "PAPHomeViewController.h"
 #import "UIImage+ResizeAdditions.h"
 
 @interface PAPEditPhotoViewController ()
@@ -119,9 +121,17 @@
 
 - (void)exitPhoto{
     
-    //hide custom grey bar and pop to home
+    // hide custom grey bar and pop to home
     [[self navigationController] setNavigationBarHidden:YES animated:NO];
-    [self.navigationController popToViewController:[[self.navigationController viewControllers] objectAtIndex:1] animated:YES];
+    
+    // get tab bar and home controller from stack
+    PAPTabBarController *tabBarController =[[self.navigationController viewControllers] objectAtIndex:1];
+    NSArray *tabBarViewControllers = [tabBarController viewControllers];
+    PAPHomeViewController *homeViewController = [tabBarViewControllers objectAtIndex:0];
+    [tabBarController setSelectedViewController:homeViewController];
+    
+    // push tab bar with home controller now selected
+    [self.navigationController popToViewController:tabBarController animated:YES];
 }
 
 
