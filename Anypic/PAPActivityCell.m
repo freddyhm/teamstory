@@ -104,6 +104,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [self.mainView setBackgroundColor:[UIColor whiteColor]];
     } else {
         //[self.mainView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundComments.png"]]];
+        //[self.mainView setBackgroundColor:[UIColor colorWithWhite:255.0f/255.0f alpha:0.7f]];
         [self.mainView setBackgroundColor:[UIColor whiteColor]];
     }
 }

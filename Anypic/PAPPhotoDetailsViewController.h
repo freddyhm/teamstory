@@ -7,7 +7,7 @@
 #import "PAPPhotoDetailsHeaderView.h"
 #import "PAPBaseTextCell.h"
 
-@interface PAPPhotoDetailsViewController : PFQueryTableViewController <UITextFieldDelegate, UIActionSheetDelegate, PAPPhotoDetailsHeaderViewDelegate, PAPBaseTextCellDelegate>
+@interface PAPPhotoDetailsViewController : PFQueryTableViewController <UITextFieldDelegate, PAPPhotoDetailsHeaderViewDelegate, PAPBaseTextCellDelegate>
 
 @property (nonatomic, strong) PFObject *photo;
 

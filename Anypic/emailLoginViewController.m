@@ -172,9 +172,6 @@
     signUpNav.navigationBarHidden = YES;
     [self presentViewController:signUpNav animated:YES completion:nil];
     
-    //UINavigationController *navigationController = [(AppDelegate*)[[UIApplication sharedApplication] delegate] navController];
-    //[navigationController pushViewController:signUpController animated:YES];
-    
 }
 
 -(void)loginButtonAction:(id)sender {

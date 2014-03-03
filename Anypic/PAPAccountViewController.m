@@ -69,11 +69,11 @@
     self.websiteInfo = [self.user objectForKey:@"website"];
     NSString *displayName = [self.user objectForKey:@"displayName"];
     
-    if (imageFile && locationInfo && descriptionInfo && displayName) {
+    if (imageFile && locationInfo && displayName) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         
         descriptionLabel = [[UILabel alloc] init];
-        descriptionLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0f];
+        descriptionLabel.font = [UIFont fontWithName:@"Helvetica" size:13.0f];
         [descriptionLabel setTextColor:[UIColor colorWithRed:178.0f/255.0f green:184.0f/255.0f blue:189.0f/255.0f alpha:1.0f]];
         descriptionLabel.text = descriptionInfo;
         descriptionLabel.numberOfLines = 0;
@@ -87,7 +87,7 @@
         self.navigationItem.rightBarButtonItem = [[PAPSettingsButtonItem alloc] initWithTarget:self action:@selector(settingsButtonAction:)];
         
         if ([websiteInfo length] > 0) {
-            self.headerView = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + 16.0f)];
+            self.headerView = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + 26.0f)];
         } else {
             self.headerView = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height)];
         }
@@ -129,7 +129,7 @@
             [profilePictureImageView setFile:imageFile];
             [profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {
                 if (!error) {
-                    [UIView animateWithDuration:0.1f animations:^{
+                    [UIView animateWithDuration:0.05f animations:^{
                         profilePictureBackgroundView.alpha = 1.0f;
                         profilePictureImageView.alpha = 1.0f;
                     }];
@@ -165,12 +165,12 @@
         [self.headerView addSubview:photoCountLabel];
         
         UIImageView *photoCountIconImageView = [[UIImageView alloc] initWithImage:nil];
-        [photoCountIconImageView setImage:[UIImage imageNamed:@"iconpics.png"]];
+        [photoCountIconImageView setImage:[UIImage imageNamed:@"icon-pics.png"]];
         [photoCountIconImageView setFrame:CGRectMake( 90.0f, 47.50f, 15.0f, 15.0f)];
         [self.headerView addSubview:photoCountIconImageView];
         
         UIImageView *followersIconImageView = [[UIImageView alloc] initWithImage:nil];
-        [followersIconImageView setImage:[UIImage imageNamed:@"iconfollowers.png"]];
+        [followersIconImageView setImage:[UIImage imageNamed:@"icon-followers.png"]];
         [followersIconImageView setFrame:CGRectMake( 90.0f, 65.0f, 15.0f, 15.0f)];
         [self.headerView addSubview:followersIconImageView];
         
@@ -204,7 +204,7 @@
             [websiteLink setTitle:websiteInfo forState:UIControlStateNormal];
             [websiteLink setTitleColor:[UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
             websiteLink.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-            websiteLink.titleLabel.font = [UIFont systemFontOfSize:11.0f];
+            websiteLink.titleLabel.font = [UIFont systemFontOfSize:13.0f];
             [websiteLink addTarget:self action:@selector(websiteLinkAction:) forControlEvents:UIControlEventTouchUpInside];
             [self.headerView addSubview:websiteLink];
         }
@@ -295,7 +295,7 @@
 
 - (void)settingsButtonAction:(id)sender {
     self.settingsActionSheetDelegate = [[PAPSettingsActionSheetDelegate alloc] initWithNavigationController:self.navigationController];
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self.settingsActionSheetDelegate cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Edit Profile",@"Terms & Policy",@"About This Version",@"Log Out", nil];
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self.settingsActionSheetDelegate cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Edit Profile",@"About This Version",@"Privacy Policy",@"Terms of Use",@"Log Out", nil];
     
     [actionSheet showFromTabBar:self.tabBarController.tabBar];
 }

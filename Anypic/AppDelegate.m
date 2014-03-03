@@ -20,6 +20,7 @@
 #import "PAPPhotoDetailsViewController.h"
 #import "PAPProfileSettingViewController.h"
 #import "discoverPageViewController.h"
+#import "PAPwebviewViewController.h"
 
 
 
@@ -148,7 +149,6 @@
     
     // konotor notifications setup
     [Konotor addDeviceToken:newDeviceToken];
-    
     [PFPush storeDeviceToken:newDeviceToken];
     
     if (application.applicationIconBadgeNumber != 0) {
@@ -160,11 +160,11 @@
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-	/*
+	
     if ([error code] != 3010) { // 3010 is for the iPhone Simulator
         NSLog(@"Application failed to register for push notifications: %@", error);
 	}
-     */
+    
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
@@ -185,8 +185,6 @@
             UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
             
             NSString *currentBadgeValue = tabBarItem.badgeValue;
-            
-            NSLog(@"BadgeValue is: %@", currentBadgeValue);
             
             if (currentBadgeValue && currentBadgeValue.length > 0) {
                 NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
@@ -219,6 +217,7 @@
 
     [[FBSession activeSession] handleDidBecomeActive];
 }
+
 
 
 #pragma mark - UITabBarControllerDelegate
@@ -346,8 +345,6 @@
     UITabBarItem *homeTabBarItem = [[UITabBarItem alloc] init];
     [homeTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"IconHomeSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"IconHome.png"]];
     homeTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
-    //[homeTabBarItem setTitleTextAttributes: @{ UITextAttributeTextColor: [UIColor colorWithRed:0.0f/255.0f green:55.0f/255.0f blue:42.0f/255.0f alpha:1.0f] } forState:UIControlStateNormal];
-    //[homeTabBarItem setTitleTextAttributes: @{ UITextAttributeTextColor: [UIColor colorWithRed:129.0f/255.0f green:99.0f/255.0f blue:69.0f/255.0f alpha:1.0f] } forState:UIControlStateSelected];
     
     UITabBarItem *activityFeedTabBarItem = [[UITabBarItem alloc] init];
     [activityFeedTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"IconActivitySelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"IconActivity.png"]];

@@ -15,6 +15,7 @@
 @property (nonatomic, strong) UIButton *userButton;
 @property (nonatomic, strong) UILabel *timestampLabel;
 @property (nonatomic, strong) TTTTimeIntervalFormatter *timeIntervalFormatter;
+@property (nonatomic, strong) UIButton *moreActionButton;
 
 @end
 
@@ -30,6 +31,7 @@
 @synthesize likeButton;
 @synthesize commentButton;
 @synthesize delegate;
+@synthesize moreActionButton;
 
 
 #pragma mark - Initialization
@@ -62,13 +64,13 @@
             // comments button
             commentButton = [UIButton buttonWithType:UIButtonTypeCustom];
             [containerView addSubview:self.commentButton];
-            [self.commentButton setFrame:CGRectMake( 267.0f, 8.0f, 30.0f, 30.0f)];
+            [self.commentButton setFrame:CGRectMake( 235.0f, 8.0f, 30.0f, 30.0f)];
             [self.commentButton setBackgroundColor:[UIColor clearColor]];
             [self.commentButton setTitle:@"" forState:UIControlStateNormal];
-            [self.commentButton setTitleColor:[UIColor colorWithRed:0.369f green:0.271f blue:0.176f alpha:1.0f] forState:UIControlStateNormal];
-            [self.commentButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
-            [self.commentButton setTitleEdgeInsets:UIEdgeInsetsMake( -2.0f, 0.0f, 0.0f, 0.0f)];
-            [[self.commentButton titleLabel] setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
+            [self.commentButton setTitleColor:[UIColor colorWithRed:113.0f/255.0f green:189.0f/255.0f blue:168.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
+            //[self.commentButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
+            [self.commentButton setTitleEdgeInsets:UIEdgeInsetsMake( -2.0f, 2.0f, 0.0f, 0.0f)];
+            //[[self.commentButton titleLabel] setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
             [[self.commentButton titleLabel] setFont:[UIFont systemFontOfSize:9.0f]];
             //[[self.commentButton titleLabel] setMinimumFontSize:11.0f];
             [[self.commentButton titleLabel] setAdjustsFontSizeToFitWidth:YES];
@@ -80,15 +82,15 @@
             // like button
             likeButton = [UIButton buttonWithType:UIButtonTypeCustom];
             [containerView addSubview:self.likeButton];
-            [self.likeButton setFrame:CGRectMake(231.0f, 8.0f, 30.0f, 30.0f)];
+            [self.likeButton setFrame:CGRectMake(200.0f, 8.0f, 30.0f, 30.0f)];
             [self.likeButton setBackgroundColor:[UIColor clearColor]];
             [self.likeButton setTitle:@"" forState:UIControlStateNormal];
-            [self.likeButton setTitleColor:[UIColor colorWithRed:0.369f green:0.271f blue:0.176f alpha:1.0f] forState:UIControlStateNormal];
+            [self.likeButton setTitleColor:[UIColor colorWithRed:245.0f/255.0f green:137.0f/255.0f blue:137.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
             [self.likeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-            [self.likeButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
-            [self.likeButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.750f] forState:UIControlStateSelected];
+            //[self.likeButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
+            //[self.likeButton setTitleShadowColor:[UIColor colorWithWhite:0.0f alpha:0.750f] forState:UIControlStateSelected];
             [self.likeButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
-            [[self.likeButton titleLabel] setShadowOffset:CGSizeMake(0.0f, 1.0f)];
+            //[[self.likeButton titleLabel] setShadowOffset:CGSizeMake(0.0f, 1.0f)];
             [[self.likeButton titleLabel] setFont:[UIFont systemFontOfSize:9.0f]];
             //[[self.likeButton titleLabel] setMinimumFontSize:11.0f];
             [[self.likeButton titleLabel] setAdjustsFontSizeToFitWidth:YES];
@@ -108,9 +110,16 @@
             [self.userButton setTitleColor:[UIColor colorWithRed:79.0f/255.0f green:182.0f/255.0f blue:154.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
             //[self.userButton setTitleColor:[UIColor colorWithRed:134.0f/255.0f green:100.0f/255.0f blue:65.0f/255.0f alpha:1.0f] forState:UIControlStateHighlighted];
             [[self.userButton titleLabel] setLineBreakMode:NSLineBreakByTruncatingTail];
-            [[self.userButton titleLabel] setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
-            [self.userButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
+            //[[self.userButton titleLabel] setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
+            //[self.userButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
         }
+        
+        self.moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(270.0f, 8.0f, 30.0f, 30.0f)];
+        [self.moreActionButton setImage:[UIImage imageNamed:@"button-more.png"] forState:UIControlStateNormal];
+        [self.moreActionButton addTarget:self action:@selector(moreActionButton_action:) forControlEvents:UIControlEventTouchUpInside];
+        [containerView addSubview:self.moreActionButton];
+        
+        
         
         self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
         
@@ -118,8 +127,8 @@
         self.timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50.0f, 20.0f, containerView.bounds.size.width - 50.0f - 72.0f, 18.0f)];
         [containerView addSubview:self.timestampLabel];
         [self.timestampLabel setTextColor:[UIColor colorWithRed:157.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
-        [self.timestampLabel setShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f]];
-        [self.timestampLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
+        //[self.timestampLabel setShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f]];
+        //[self.timestampLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
         [self.timestampLabel setFont:[UIFont systemFontOfSize:11.0f]];
         [self.timestampLabel setBackgroundColor:[UIColor clearColor]];
         
@@ -128,7 +137,7 @@
         layer.masksToBounds = NO;
         layer.shadowRadius = 0.5f;
         layer.shadowOffset = CGSizeMake( 0.0f, 1.0f);
-        layer.shadowOpacity = 0.5f;
+        layer.shadowOpacity = 0.3f;
         layer.shouldRasterize = YES;
         layer.shadowPath = [UIBezierPath bezierPathWithRect:CGRectMake( 0.0f, containerView.frame.size.height - 4.0f, containerView.frame.size.width, 4.0f)].CGPath;
         
@@ -136,7 +145,6 @@
 
     return self;
 }
-
 
 #pragma mark - PAPPhotoHeaderView
 
@@ -203,6 +211,13 @@
 }
 
 #pragma mark - ()
+
+- (void) moreActionButton_action:(id)sender{
+    if (delegate && [delegate respondsToSelector:@selector(moreActionButton_inflator:photo:)]) {
+        [delegate respondsToSelector:@selector(moreActionButton_inflator:photo:)];
+        [delegate moreActionButton_inflator:[self.photo objectForKey:kPAPPhotoUserKey] photo:self.photo];
+    }
+}
 
 + (void)validateButtons:(PAPPhotoHeaderButtons)buttons {
     if (buttons == PAPPhotoHeaderButtonsNone) {

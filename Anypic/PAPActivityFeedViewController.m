@@ -131,8 +131,6 @@
 
 #pragma mark - PFQueryTableViewController
 
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-
 - (PFQuery *)queryForTable {
     
     if (![PFUser currentUser]) {
@@ -155,10 +153,13 @@
     // and then subsequently do a query against the network.
     //
     // If there is no network connection, we will hit the cache first.
-    SEL isParseReachableSelector = sel_registerName("isParseReachable");
+    /*
+    SEL isParseReachableSelector = NSSelectorFromString(@"isParseReachable");
     if (self.objects.count == 0 || ![[UIApplication sharedApplication].delegate performSelector:isParseReachableSelector]) {
+        NSLog(@"??");
         [query setCachePolicy:kPFCachePolicyCacheThenNetwork];
     }
+    */
     
     return query;
 }
@@ -198,7 +199,6 @@
                 unreadCount++;
             }
         }
-        
         if (unreadCount > 0) {
             self.navigationController.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d",unreadCount];
         } else {
@@ -218,11 +218,15 @@
     }
 
     [cell setActivity:object];
+    NSLog(@"%@", lastRefresh);
+    NSLog(@"%@", [object createdAt]);
 
     if ([lastRefresh compare:[object createdAt]] == NSOrderedAscending) {
         [cell setIsNew:YES];
+        NSLog(@"YESYESYES");
     } else {
         [cell setIsNew:NO];
+        NSLog(@"NONONO");
     }
 
     [cell hideSeparator:(indexPath.row == self.objects.count - 1)];

@@ -100,8 +100,18 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     commentTextField.delegate = self;
     self.tableView.tableFooterView = footerView;
 
-    
-    if (NSClassFromString(@"UIActivityViewController")) {
+    /*
+    if ([self currentUserOwnsPhoto]) {
+        
+        // Else we only want to show an action button if the user owns the photo and has permission to delete it.
+        UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        shareButton.frame = CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f);
+        [shareButton addTarget:self action:@selector(actionButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [shareButton setImage:[UIImage imageNamed:@"share.png"] forState:UIControlStateNormal];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
+        
+        //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonAction:)];
+    } else if (NSClassFromString(@"UIActivityViewController")) {
         // Use UIActivityViewController if it is available (iOS 6 +)
         //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(activityButtonAction:)];
         
@@ -111,10 +121,14 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [shareButton setBackgroundImage:[UIImage imageNamed:@"share.png"] forState:UIControlStateNormal];
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
         
-    } else if ([self currentUserOwnsPhoto]) {
-        // Else we only want to show an action button if the user owns the photo and has permission to delete it.
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonAction:)];
+        
     }
+     */
+    UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    shareButton.frame = CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f);
+    [shareButton addTarget:self action:@selector(activityButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [shareButton setBackgroundImage:[UIImage imageNamed:@"share.png"] forState:UIControlStateNormal];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
     
     
     if (NSClassFromString(@"UIRefreshControl")) {
@@ -284,31 +298,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 
-#pragma mark - UIActionSheetDelegate
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (actionSheet.tag == MainActionSheetTag) {
-        if ([actionSheet destructiveButtonIndex] == buttonIndex) {
-            // prompt to delete
-            UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Are you sure you want to delete this photo?", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:NSLocalizedString(@"Yes, delete photo", nil) otherButtonTitles:nil];
-            actionSheet.tag = ConfirmDeleteActionSheetTag;
-            [actionSheet showFromTabBar:self.tabBarController.tabBar];
-        } else {
-            [self activityButtonAction:actionSheet];
-        }
-    } else if (actionSheet.tag == ConfirmDeleteActionSheetTag) {
-        if ([actionSheet destructiveButtonIndex] == buttonIndex) {
-            
-            [self shouldDeletePhoto];
-        }
-    }
-}
-
 
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     [commentTextField resignFirstResponder];
+    [scrollView setShowsVerticalScrollIndicator:NO];
 }
 
 
@@ -323,18 +318,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 -(void)photoDetailsHeaderView:(PAPPhotoDetailsHeaderView *)headerView didTapUserButton:(UIButton *)button user:(PFUser *)user {
     [self shouldPresentAccountViewForUser:user];
-}
-
-- (void)actionButtonAction:(id)sender {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
-    actionSheet.delegate = self;
-    actionSheet.tag = MainActionSheetTag;
-    actionSheet.destructiveButtonIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Delete Photo", nil)];
-    if (NSClassFromString(@"UIActivityViewController")) {
-        [actionSheet addButtonWithTitle:NSLocalizedString(@"Share Photo", nil)];
-    }
-    actionSheet.cancelButtonIndex = [actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
-    [actionSheet showFromTabBar:self.tabBarController.tabBar];
 }
 
 - (void)activityButtonAction:(id)sender {
@@ -448,27 +431,4 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 - (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl {
     [self loadObjects];
 }
-
-- (BOOL)currentUserOwnsPhoto {
-    return [[[self.photo objectForKey:kPAPPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]];
-}
-
-- (void)shouldDeletePhoto {
-    // Delete all activites related to this photo
-    PFQuery *query = [PFQuery queryWithClassName:kPAPActivityClassKey];
-    [query whereKey:kPAPActivityPhotoKey equalTo:self.photo];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *activities, NSError *error) {
-        if (!error) {
-            for (PFObject *activity in activities) {
-                [activity deleteEventually];
-            }
-        }
-        
-        // Delete photo
-        [self.photo deleteEventually];
-    }];
-    [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:[self.photo objectId]];
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 @end

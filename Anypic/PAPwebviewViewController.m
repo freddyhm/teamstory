@@ -17,6 +17,7 @@
 @property (nonatomic, strong) UIButton *forward_browse;
 @property (nonatomic, strong) NSString *currentWebsite;
 
+
 @end
 
 @implementation PAPwebviewViewController
@@ -146,6 +147,10 @@
 }
 
 - (void)backButtonAction:(id)sender {
+    if (![PFUser currentUser]) {
+        self.navigationController.navigationBarHidden = YES;
+    }
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 

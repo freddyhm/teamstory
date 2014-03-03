@@ -7,6 +7,8 @@
 //
 
 #import "emailSignUpViewController.h"
+#import "PAPwebviewViewController.h"
+#import "AppDelegate.h"
 #define SUCCESSFUL 1
 
 @interface emailSignUpViewController ()
@@ -181,7 +183,9 @@
 }
 
 - (void)policyButtonAction:(id)sender {
-    
+    PAPwebviewViewController *webViewController = [[PAPwebviewViewController alloc] initWithWebsite:@"http://teamstoryapp.com/privacy"];
+    self.navigationController.navigationBarHidden = NO;
+    [self.navigationController pushViewController:webViewController animated:YES];
 }
 
 -(void)signUpButtonAction:(id)sender {
@@ -234,7 +238,7 @@
     } else if (textField == signUpPWTextField) {
         [signUpPWTextField_confirm becomeFirstResponder];
     } else {
-        [signUpPWTextField_confirm becomeFirstResponder];
+        [signUpPWTextField_confirm resignFirstResponder];
     }
     
     return YES;

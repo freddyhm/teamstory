@@ -10,6 +10,7 @@
 
 #define SUCCESSFUL 1
 #define IMAGE_NIL 2
+#define FIRST_LOGIN 3
 
 @interface PAPProfileSettingViewController() {
     BOOL smallImage;
@@ -31,6 +32,9 @@
 @property (nonatomic, strong) NSString *displayName_user;
 @property (nonatomic, strong) NSString *description_user;
 @property (nonatomic, strong) UIView *backgroundView;
+@property (nonatomic, strong) PFImageView* profilePictureImageView;
+@property (nonatomic, strong) PFFile *imageProfileFile;
+@property (nonatomic, strong) UIView *startOverlay;
 
 
 @end
@@ -56,6 +60,9 @@
 @synthesize displayName_user;
 @synthesize description_user;
 @synthesize backgroundView;
+@synthesize profilePictureImageView;
+@synthesize imageProfileFile;
+@synthesize startOverlay;
 
 
 
@@ -73,11 +80,13 @@
 }
 
 - (void)refreshView {
+    bool profileExist = self.user[@"profileExist"];
     location_user = self.user[@"location"];
     website_user = self.user[@"website"];
     displayName_user = self.user[@"displayName"];
     description_user = self.user[@"description"];
     dropDownSelection = self.user[@"userType"];
+    imageProfileFile = [self.user objectForKey:@"profilePictureMedium"];
     
     if ([location_user length] == 0) {
         location_user = @"Location";
@@ -92,6 +101,26 @@
         description_user = @"Description";
     }
     
+    if (profileExist != true) {
+        self.startOverlay = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+        [[[[UIApplication sharedApplication] delegate] window] addSubview:self.startOverlay];
+        
+        UIImageView *startOverlay_image = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+        UIButton *proceed_button = [[UIButton alloc] init];
+        
+        if ([UIScreen mainScreen].bounds.size.height == 480) {
+            [startOverlay_image setImage:[UIImage imageNamed:@"intro1-iphone4.png"]];
+            [proceed_button setFrame:CGRectMake(35.0f, 416.0f, 250.0f, 43.0f)];
+        } else {
+            [startOverlay_image setImage:[UIImage imageNamed:@"intro1-iphone5.png"]];
+            [proceed_button setFrame:CGRectMake(35.0f, 504.0f, 250.0f, 43.0f)];
+        }
+        
+        [self.startOverlay addSubview:startOverlay_image];
+        
+        [proceed_button addTarget:self action:@selector(proceed_button_action:) forControlEvents:UIControlEventTouchUpInside];
+        [self.startOverlay addSubview:proceed_button];
+    }
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     
@@ -115,11 +144,32 @@
     } else {
         profileImagePicker.frame = CGRectMake( 110.0f, 130.0f, 100.0f, 100.0f );
     }
-    //[profileImagePicker setBackgroundColor:[UIColor redColor]];
     [profileImagePicker setImage:[UIImage imageNamed:@"profilepicture.png"] forState:UIControlStateNormal];
-    //[cameraButton setImage:[UIImage imageNamed:@"ButtonCameraSelected.png"] forState:UIControlStateHighlighted];
+    
     [profileImagePicker addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:profileImagePicker];
+    
+    
+    if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
+        profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 110.0f, 87.0f, 100.0f, 100.0f)];
+    } else {
+        profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 110.0f, 130.0f, 100.0f, 100.0f)];
+    }
+    [self.view addSubview:profilePictureImageView];
+    [profilePictureImageView setContentMode:UIViewContentModeScaleAspectFill];
+    
+    if (imageProfileFile) {
+        [profilePictureImageView setFile:imageProfileFile];
+        [profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {
+            if (!error) {
+                [UIView animateWithDuration:0.05f animations:^{
+                    profilePictureImageView.alpha = 1.0f;
+                }];
+            }
+        }];
+    } else {
+        NSLog(@"ImageFile Not found");
+    }
     
     UISwipeGestureRecognizer *swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
     [swipeUpGestureRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
@@ -128,7 +178,6 @@
     
     
     // Do not display back button if user is first time logging in.
-    bool profileExist = self.user[@"profileExist"];
     if (profileExist == true) {
         UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [backButton setFrame:CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f)];
@@ -180,64 +229,64 @@
     [backgroundView addSubview:lineView];
 
     CGRect companyName_frame = CGRectMake( 80.0f, 68.0f, 205.0f, 25.0f);
-    companyName = [[UITextField alloc] initWithFrame:companyName_frame];
-    [companyName setBackgroundColor:backgroundColor];
-    [companyName setFont:fonts];
+    self.companyName = [[UITextField alloc] initWithFrame:companyName_frame];
+    [self.companyName setBackgroundColor:backgroundColor];
+    [self.companyName setFont:fonts];
     //companyName.borderStyle = UITextBorderStyleRoundedRect;
-    companyName.placeholder = displayName_user;
+    self.companyName.placeholder = displayName_user;
     //[companyName setText:[self.appUserInfo objectForKey:@"companyName"]];
-    companyName.userInteractionEnabled = YES;
-    companyName.delegate = self;
+    self.companyName.userInteractionEnabled = YES;
+    self.companyName.delegate = self;
     //companyName.keyboardAppearance = UIKeyboardAppearanceDefault;
-    [backgroundView addSubview:companyName];
+    [backgroundView addSubview:self.companyName];
     
     UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 108.0f, self.view.bounds.size.width, 1)];
     lineView1.backgroundColor = lineColor;
     [backgroundView addSubview:lineView1];
 
     CGRect location_frame = CGRectMake( 80.0f, 122.0f, 205.0f, 25.0f);
-    location = [[UITextField alloc] initWithFrame:location_frame];
-    [location setBackgroundColor:backgroundColor];
-    [location setFont:fonts];
+    self.location = [[UITextField alloc] initWithFrame:location_frame];
+    [self.location setBackgroundColor:backgroundColor];
+    [self.location setFont:fonts];
     //location.borderStyle = UITextBorderStyleRoundedRect;
-    location.placeholder = location_user;
-    location.userInteractionEnabled = YES;
-    location.delegate = self;
+    self.location.placeholder = location_user;
+    self.location.userInteractionEnabled = YES;
+    self.location.delegate = self;
     //companyName.keyboardAppearance = UIKeyboardAppearanceDefault;
-    [location resignFirstResponder];
-    [backgroundView addSubview:location];
+    [self.location resignFirstResponder];
+    [backgroundView addSubview:self.location];
     
     UIView *lineView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 162.0f, self.view.bounds.size.width, 1)];
     lineView2.backgroundColor = lineColor;
     [backgroundView addSubview:lineView2];
     
     CGRect description_frame = CGRectMake( 80.0f, 176.0f, 205.0f, 25.0f);
-    description = [[UITextField alloc] initWithFrame:description_frame];
-    [description setBackgroundColor:backgroundColor];
-    [description setFont:fonts];
+    self.description = [[UITextField alloc] initWithFrame:description_frame];
+    [self.description setBackgroundColor:backgroundColor];
+    [self.description setFont:fonts];
     //description.borderStyle = UITextBorderStyleRoundedRect;
-    description.placeholder = description_user;
-    description.userInteractionEnabled = YES;
-    description.delegate = self;
+    self.description.placeholder = description_user;
+    self.description.userInteractionEnabled = YES;
+    self.description.delegate = self;
     //companyName.keyboardAppearance = UIKeyboardAppearanceDefault;
-    [description resignFirstResponder];
-    [backgroundView addSubview:description];
+    [self.description resignFirstResponder];
+    [backgroundView addSubview:self.description];
     
     UIView *lineView3 = [[UIView alloc] initWithFrame:CGRectMake(0, 216.0f, self.view.bounds.size.width, 1)];
     lineView3.backgroundColor = lineColor;
     [backgroundView addSubview:lineView3];
     
     CGRect website_frame = CGRectMake( 80.0f, 230.0f, 205.0f, 25.0f);
-    website = [[UITextField alloc] initWithFrame:website_frame];
-    [website setBackgroundColor:backgroundColor];
-    [website setFont:fonts];
+    self.website = [[UITextField alloc] initWithFrame:website_frame];
+    [self.website setBackgroundColor:backgroundColor];
+    [self.website setFont:fonts];
     //website.borderStyle = UITextBorderStyleRoundedRect;
-    website.placeholder = website_user;
-    website.userInteractionEnabled = YES;
-    website.delegate = self;
+    self.website.placeholder = website_user;
+    self.website.userInteractionEnabled = YES;
+    self.website.delegate = self;
     //companyName.keyboardAppearance = UIKeyboardAppearanceDefault;
-    [website resignFirstResponder];
-    [backgroundView addSubview:website];
+    [self.website resignFirstResponder];
+    [backgroundView addSubview:self.website];
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                    initWithTarget:self
@@ -262,7 +311,7 @@
     // Dismiss controller
     [picker dismissViewControllerAnimated:YES completion:nil];
     
-    UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:3.0f interpolationQuality:kCGInterpolationHigh];
+    UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:0.0f interpolationQuality:kCGInterpolationHigh];
     UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(200.0f, 200.0f) interpolationQuality:kCGInterpolationHigh];
     
     // Upload image
@@ -273,13 +322,14 @@
     
     if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
         cameraButton.frame = CGRectMake( 110.0f, 87.0f, 100.0f, 100.0f );
+        cameraButton.center = CGPointMake(160.0f, 137.0f);
     } else {
         cameraButton.frame = CGRectMake( 110.0f, 130.0f, 100.0f, 100.0f );
+        cameraButton.center = CGPointMake(160.0f, 180.0f);
     }
-    cameraButton.center = CGPointMake(160.0f, 140.0f);
+
     cameraButton.frame = CGRectIntegral(cameraButton.frame);
     [cameraButton setImage:resizedImage forState:UIControlStateNormal];
-    cameraButton.layer.cornerRadius = 2;
     //cameraButton.clipsToBounds = YES;
     [cameraButton addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:cameraButton];
@@ -387,6 +437,43 @@
     }];
 }
 
+#pragma mark - UINavigationControllerDelegate
+
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    
+    // keep status bar white, in ios7 changes in imagepicker
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    self.navController = navigationController;
+
+    viewController.navigationItem.titleView =[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
+    viewController.navigationItem.rightBarButtonItem = nil;
+    
+    // set color of nav bar to custom grey
+    [viewController.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+    viewController.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(79/255.0) green:(91/255.0) blue:(100/255.0) alpha:(0.0/255.0)];
+    viewController.navigationController.navigationBar.translucent = NO;
+    
+    if ([viewController.title isEqualToString:@"Photos"])
+    {
+        viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_cancel"] style:UIBarButtonItemStylePlain target:self action:@selector(imagePickerControllerDidCancel:)];
+        
+    }else{
+        
+        viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(backToPhotoAlbum)];
+        
+    }
+    
+    [viewController.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
+    
+}
+
+-(void)backToPhotoAlbum{
+    
+    // triggered when in selected picture in picker
+    [self.navController popViewControllerAnimated:YES];
+}
 
 #pragma mark - UIActionSheetDelegate
 
@@ -413,7 +500,7 @@
 
 #pragma mark - ()
 
-- (void)photoCaptureButtonAction:(id)sender {
+- (void) photo_picker_init {
     BOOL cameraDeviceAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
     BOOL photoLibraryAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
     
@@ -424,6 +511,10 @@
         // if we don't have at least two options, we automatically show whichever is available (camera or roll)
         [self shouldPresentPhotoCaptureController];
     }
+}
+
+- (void)photoCaptureButtonAction:(id)sender {
+    [self photo_picker_init];
 }
 
 - (BOOL)shouldStartCameraController {
@@ -499,22 +590,18 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     NSLog(@"Return Key Pressed");
-    if (textField == companyName) {
-        [companyName resignFirstResponder];
+    if (textField == self.companyName) {
+        [self.companyName resignFirstResponder];
     }
-    else if (textField == location) {
-        [location resignFirstResponder];
+    else if (textField == self.location) {
+        [self.location resignFirstResponder];
     }
     else if (textField == description) {
-        [description resignFirstResponder];
+        [self.description resignFirstResponder];
     }
-    else if (textField == website) {
-        [website resignFirstResponder];
+    else if (textField == self.website) {
+        [self.website resignFirstResponder];
     }
-    else {
-        [collaborator resignFirstResponder];
-    }
-    
     return YES;
 }
 
@@ -529,7 +616,7 @@
     NSString* companyName_input = self.companyName.text;
     NSString* location_input = self.location.text;
     NSString* description_input = self.description.text;
-    NSString* website_input = self.website.text;
+    NSString* website_input = [self.website.text lowercaseString];
     bool profileExist_user = self.user[@"profileExist"];
     
     if (profileExist_user == YES) {
@@ -593,7 +680,7 @@
             
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             alert.alertViewStyle = UIAlertViewStyleDefault;
-            alert.tag = SUCCESSFUL;
+            alert.tag = FIRST_LOGIN;
             [alert show];
 
         } else {
@@ -620,18 +707,24 @@
     if (alertView.tag == SUCCESSFUL) {
         if (buttonIndex == 0) {
             NSLog(@"Logged In Sucessfully");
+            [self.view endEditing:YES];
+            
             [PFUser user];
             [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
             return;
         }
     } else if (alertView.tag == IMAGE_NIL) {
         if (buttonIndex == 1) {
-            [self performSelector:@selector(photoCaptureButtonAction:)];
+            [self.view endEditing:YES];
+            NSLog(@"image_nil tag");
+            
+            [self photo_picker_init];
+            
         } else if (buttonIndex == 0) {
             NSString* companyName_input = self.companyName.text;
             NSString* location_input = self.location.text;
             NSString* description_input = self.description.text;
-            NSString* website_input = self.website.text;
+            NSString* website_input = [self.website.text lowercaseString];
             bool profileExist_user = self.user[@"profileExist"];
             
             if ([companyName_input length] > 0) {
@@ -653,7 +746,7 @@
             if (profileExist_user == NO) {
                 UIImage *image = [UIImage imageNamed:@"default-pic.png"];
                 
-                UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:3.0f interpolationQuality:kCGInterpolationHigh];
+                UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:0.0f interpolationQuality:kCGInterpolationHigh];
                 UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(200.0f, 200.0f) interpolationQuality:kCGInterpolationHigh];
                 
                 // Upload image
@@ -673,6 +766,30 @@
             alert.alertViewStyle = UIAlertViewStyleDefault;
             alert.tag = SUCCESSFUL;
             [alert show];
+        }
+    } else if (alertView.tag == FIRST_LOGIN) {
+        if (buttonIndex == 0) {
+            NSLog(@"Logged In Sucessfully");
+            [self.view endEditing:YES];
+            
+            self.startOverlay = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+            [[[[UIApplication sharedApplication] delegate] window] addSubview:self.startOverlay];
+            
+            UIImageView *startOverlay_image = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+            UIButton *proceed_button = [[UIButton alloc] init];
+            
+            if ([UIScreen mainScreen].bounds.size.height == 480) {
+                [startOverlay_image setImage:[UIImage imageNamed:@"intro2-iphone4.png"]];
+                [proceed_button setFrame:CGRectMake(35.0f, 416.0f, 250.0f, 43.0f)];
+            } else {
+                [startOverlay_image setImage:[UIImage imageNamed:@"intro2-iphone5.png"]];
+                [proceed_button setFrame:CGRectMake(35.0f, 504.0f, 250.0f, 43.0f)];
+            }
+            
+            [self.startOverlay addSubview:startOverlay_image];
+            
+            [proceed_button addTarget:self action:@selector(firstLoginButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+            [self.startOverlay addSubview:proceed_button];
         }
     }
 }
@@ -723,7 +840,7 @@
     dropDownButton3 = [UIButton buttonWithType:UIButtonTypeCustom];
     [dropDownButton3 setFrame:CGRectMake( 80.0f, 103.0f, 200.0f, 30.0f)];
     [dropDownButton3 setBackgroundImage:[UIImage imageNamed:@"bg_dropdown.png"] forState:UIControlStateNormal];
-    [dropDownButton3 setTitle:@"Incubator" forState:UIControlStateNormal];
+    [dropDownButton3 setTitle:@"Organization" forState:UIControlStateNormal];
     //[dropDownButton3 setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0] forState:UIControlStateNormal];
     [dropDownButton3 addTarget:self action:@selector(dropDownButtonPressedAction3:) forControlEvents:UIControlEventTouchUpInside];
     [dropDownButton3 setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
@@ -758,7 +875,7 @@
     [dropDownButton1 removeFromSuperview];
     [dropDownButton2 removeFromSuperview];
     [dropDownButton3 removeFromSuperview];
-    dropDownSelection = @"Incubator";
+    dropDownSelection = @"Organization";
     [dropDownButton removeFromSuperview];
 
     
@@ -783,7 +900,7 @@
     else if (textField == description) {
         movementDistance = 214; // tweak as needed
     }
-    else if (textField == website) {
+    else if (textField == self.website) {
         movementDistance = 214; // tweak as needed
     }
 
@@ -797,10 +914,10 @@
 }
 
 -(void)dismissKeyboard {
-    [website resignFirstResponder];
-    [description resignFirstResponder];
-    [location resignFirstResponder];
-    [companyName resignFirstResponder];
+    [self.website resignFirstResponder];
+    [self.description resignFirstResponder];
+    [self.location resignFirstResponder];
+    [self.companyName resignFirstResponder];
     [dropDownButton1 removeFromSuperview];
     [dropDownButton2 removeFromSuperview];
     [dropDownButton3 removeFromSuperview];
@@ -817,6 +934,16 @@
     // Remove HUD from screen when the HUD hides
     [HUD removeFromSuperview];
     HUD = nil;
+}
+
+- (void) proceed_button_action:(id)sender {
+    [self.startOverlay removeFromSuperview];
+}
+
+- (void) firstLoginButtonAction:(id)sender {
+    [PFUser user];
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
+    return;
 }
 
 @end
