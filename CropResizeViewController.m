@@ -187,6 +187,31 @@
                                      UIViewAutoresizingFlexibleTopMargin |
                                      UIViewAutoresizingFlexibleBottomMargin)];
     
+    // Add overlay views around scrollview rectangle
+    
+    CGRect screenSize = [[UIScreen mainScreen] bounds];
+    
+    UIView *topHorizontalPane = [[UIView alloc]initWithFrame:CGRectMake(0, 0, screenSize.size.width, borderView.frame.origin.y - 31)];
+    
+    UIView *bottomHorizontalPane = [[UIView alloc]initWithFrame:CGRectMake(0, (borderView.frame.origin.y + borderView.frame.size.height - 33) , screenSize.size.width, borderView.frame.origin.y - 25)];
+    
+    UIView *leftVerticalPane = [[UIView alloc]initWithFrame:CGRectMake(0, 0, borderView.frame.origin.x, screenSize.size.height)];
+    
+    UIView *rightVerticalPane = [[UIView alloc]initWithFrame:CGRectMake(borderView.frame.origin.x + borderView.frame.size.width, 0, borderView.frame.origin.x, screenSize.size.height)];
+    
+    [topHorizontalPane setBackgroundColor:[UIColor blackColor]];
+    topHorizontalPane.alpha = 0.8;
+    [bottomHorizontalPane setBackgroundColor:[UIColor blackColor]];
+    bottomHorizontalPane.alpha = 0.8;
+    [leftVerticalPane setBackgroundColor:[UIColor blackColor]];
+    leftVerticalPane.alpha = 0.8;
+    [rightVerticalPane setBackgroundColor:[UIColor blackColor]];
+    rightVerticalPane.alpha = 0.8;
+    
+    [self.overlayView addSubview:rightVerticalPane];
+    [self.overlayView addSubview:leftVerticalPane];
+    [self.overlayView addSubview:topHorizontalPane];
+    [self.overlayView addSubview:bottomHorizontalPane];
     [self.overlayView addSubview:borderView];
 }
 
