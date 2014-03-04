@@ -941,6 +941,8 @@
 }
 
 - (void) firstLoginButtonAction:(id)sender {
+    [self.startOverlay removeFromSuperview];
+    
     [PFUser user];
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
     return;
