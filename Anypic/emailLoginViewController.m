@@ -198,10 +198,8 @@
                                                 NSLog(@"Profile Setting page");
                                                 
                                                 PAPProfileSettingViewController *accountViewController = [[PAPProfileSettingViewController alloc] init];
-                                                
-                                                UINavigationController *profileSettingNav = [[UINavigationController alloc] initWithRootViewController:accountViewController];
-                                                //profileSettingNav.navigationBarHidden = YES;
-                                                [self presentViewController:profileSettingNav animated:NO completion:nil];
+                                                self.navigationController.navigationBarHidden = NO;
+                                                [self.navigationController pushViewController:accountViewController animated:YES];
                                             }
                                             
                                         } else {
