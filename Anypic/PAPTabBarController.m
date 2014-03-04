@@ -76,7 +76,7 @@
     // Check if pic is in correct position, fix rotation if not (pic from camera roll)
     UIImage *selectedImg = [self fixrotation:[info objectForKey:UIImagePickerControllerOriginalImage]];
     
-    CropResizeViewController *cropViewController = [[CropResizeViewController alloc] initWithImage:selectedImg nib:@"BFViewController" source:self.imageSource];
+    CropResizeViewController *cropViewController = [[CropResizeViewController alloc] initWithImage:selectedImg nib:nil source:self.imageSource];
     
     [self.navigationController pushViewController:cropViewController animated:NO];
    
