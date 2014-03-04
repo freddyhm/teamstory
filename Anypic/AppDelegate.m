@@ -295,7 +295,7 @@
 - (void) presentAccountViewController {
     PAPProfileSettingViewController *accountViewController = [[PAPProfileSettingViewController alloc] init];
     UINavigationController *profileSettingNav = [[UINavigationController alloc] initWithRootViewController:accountViewController];
-    [self.welcomeViewController presentViewController:profileSettingNav animated:YES completion:nil];
+    [self.welcomeViewController presentViewController:profileSettingNav animated:NO completion:nil];
 }
 
 - (void)presentLoginViewControllerAnimated:(BOOL)animated {
