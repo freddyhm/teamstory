@@ -157,6 +157,10 @@
 		4691B51B18C1477100B7DF6A /* intro2-iphone4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B51818C1477100B7DF6A /* intro2-iphone4@2x.png */; };
 		4691B51C18C1477100B7DF6A /* intro2-iphone4.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B51918C1477100B7DF6A /* intro2-iphone4.png */; };
 		4691B51D18C1477100B7DF6A /* intro2-iphone5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B51A18C1477100B7DF6A /* intro2-iphone5@2x.png */; };
+		4691B52018C5691A00B7DF6A /* news5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B51E18C5691A00B7DF6A /* news5@2x.png */; };
+		4691B52118C5691A00B7DF6A /* news5.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B51F18C5691A00B7DF6A /* news5.png */; };
+		4691B52418C56AAF00B7DF6A /* tnz-popup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B52218C56AAF00B7DF6A /* tnz-popup@2x.png */; };
+		4691B52518C56AAF00B7DF6A /* tnz-popup.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B52318C56AAF00B7DF6A /* tnz-popup.png */; };
 		46ABD72F18AADFFB008F5AAB /* default-pic.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD72D18AADFFB008F5AAB /* default-pic.png */; };
 		46ABD73018AADFFB008F5AAB /* default-pic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */; };
 		46ABD73318B12E01008F5AAB /* PAPperksoverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 46ABD73218B12E01008F5AAB /* PAPperksoverlay.m */; };
@@ -257,14 +261,6 @@
 		C4BE6784157FC7F700A291C2 /* ButtonCamera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE672C157FC7E600A291C2 /* ButtonCamera@2x.png */; };
 		C4BE6785157FC7F700A291C2 /* ButtonCameraSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE672D157FC7E600A291C2 /* ButtonCameraSelected.png */; };
 		C4BE6786157FC7F700A291C2 /* ButtonCameraSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE672E157FC7E700A291C2 /* ButtonCameraSelected@2x.png */; };
-		C4BE678B157FC7F700A291C2 /* ButtonFollow.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE6733157FC7E800A291C2 /* ButtonFollow.png */; };
-		C4BE678C157FC7F700A291C2 /* ButtonFollow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE6734157FC7E800A291C2 /* ButtonFollow@2x.png */; };
-		C4BE678D157FC7F700A291C2 /* ButtonFollowing.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE6735157FC7E800A291C2 /* ButtonFollowing.png */; };
-		C4BE678E157FC7F700A291C2 /* ButtonFollowing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE6736157FC7E900A291C2 /* ButtonFollowing@2x.png */; };
-		C4BE678F157FC7F700A291C2 /* ButtonFollowingSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE6737157FC7E900A291C2 /* ButtonFollowingSelected.png */; };
-		C4BE6790157FC7F700A291C2 /* ButtonFollowingSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE6738157FC7E900A291C2 /* ButtonFollowingSelected@2x.png */; };
-		C4BE6791157FC7F700A291C2 /* ButtonFollowSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE6739157FC7EA00A291C2 /* ButtonFollowSelected.png */; };
-		C4BE6792157FC7F700A291C2 /* ButtonFollowSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE673A157FC7EA00A291C2 /* ButtonFollowSelected@2x.png */; };
 		C4BE6797157FC7F700A291C2 /* ButtonLike.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE673F157FC7EB00A291C2 /* ButtonLike.png */; };
 		C4BE6798157FC7F700A291C2 /* ButtonLike@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE6740157FC7EC00A291C2 /* ButtonLike@2x.png */; };
 		C4BE6799157FC7F700A291C2 /* ButtonLikeSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE6741157FC7EC00A291C2 /* ButtonLikeSelected.png */; };
@@ -542,6 +538,10 @@
 		4691B51818C1477100B7DF6A /* intro2-iphone4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "intro2-iphone4@2x.png"; sourceTree = "<group>"; };
 		4691B51918C1477100B7DF6A /* intro2-iphone4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "intro2-iphone4.png"; sourceTree = "<group>"; };
 		4691B51A18C1477100B7DF6A /* intro2-iphone5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "intro2-iphone5@2x.png"; sourceTree = "<group>"; };
+		4691B51E18C5691A00B7DF6A /* news5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "news5@2x.png"; sourceTree = "<group>"; };
+		4691B51F18C5691A00B7DF6A /* news5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = news5.png; sourceTree = "<group>"; };
+		4691B52218C56AAF00B7DF6A /* tnz-popup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tnz-popup@2x.png"; sourceTree = "<group>"; };
+		4691B52318C56AAF00B7DF6A /* tnz-popup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tnz-popup.png"; sourceTree = "<group>"; };
 		46ABD72D18AADFFB008F5AAB /* default-pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-pic.png"; sourceTree = "<group>"; };
 		46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-pic@2x.png"; sourceTree = "<group>"; };
 		46ABD73118B12E01008F5AAB /* PAPperksoverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPperksoverlay.h; path = Anypic/PAPperksoverlay.h; sourceTree = SOURCE_ROOT; };
@@ -656,14 +656,6 @@
 		C4BE672C157FC7E600A291C2 /* ButtonCamera@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonCamera@2x.png"; sourceTree = "<group>"; };
 		C4BE672D157FC7E600A291C2 /* ButtonCameraSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonCameraSelected.png; sourceTree = "<group>"; };
 		C4BE672E157FC7E700A291C2 /* ButtonCameraSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonCameraSelected@2x.png"; sourceTree = "<group>"; };
-		C4BE6733157FC7E800A291C2 /* ButtonFollow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonFollow.png; sourceTree = "<group>"; };
-		C4BE6734157FC7E800A291C2 /* ButtonFollow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonFollow@2x.png"; sourceTree = "<group>"; };
-		C4BE6735157FC7E800A291C2 /* ButtonFollowing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonFollowing.png; sourceTree = "<group>"; };
-		C4BE6736157FC7E900A291C2 /* ButtonFollowing@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonFollowing@2x.png"; sourceTree = "<group>"; };
-		C4BE6737157FC7E900A291C2 /* ButtonFollowingSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonFollowingSelected.png; sourceTree = "<group>"; };
-		C4BE6738157FC7E900A291C2 /* ButtonFollowingSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonFollowingSelected@2x.png"; sourceTree = "<group>"; };
-		C4BE6739157FC7EA00A291C2 /* ButtonFollowSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonFollowSelected.png; sourceTree = "<group>"; };
-		C4BE673A157FC7EA00A291C2 /* ButtonFollowSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonFollowSelected@2x.png"; sourceTree = "<group>"; };
 		C4BE673F157FC7EB00A291C2 /* ButtonLike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonLike.png; sourceTree = "<group>"; };
 		C4BE6740157FC7EC00A291C2 /* ButtonLike@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonLike@2x.png"; sourceTree = "<group>"; };
 		C4BE6741157FC7EC00A291C2 /* ButtonLikeSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonLikeSelected.png; sourceTree = "<group>"; };
@@ -988,6 +980,10 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				4691B52218C56AAF00B7DF6A /* tnz-popup@2x.png */,
+				4691B52318C56AAF00B7DF6A /* tnz-popup.png */,
+				4691B51E18C5691A00B7DF6A /* news5@2x.png */,
+				4691B51F18C5691A00B7DF6A /* news5.png */,
 				4691B51818C1477100B7DF6A /* intro2-iphone4@2x.png */,
 				4691B51918C1477100B7DF6A /* intro2-iphone4.png */,
 				4691B51A18C1477100B7DF6A /* intro2-iphone5@2x.png */,
@@ -1188,14 +1184,6 @@
 				C4BE672C157FC7E600A291C2 /* ButtonCamera@2x.png */,
 				C4BE672D157FC7E600A291C2 /* ButtonCameraSelected.png */,
 				C4BE672E157FC7E700A291C2 /* ButtonCameraSelected@2x.png */,
-				C4BE6733157FC7E800A291C2 /* ButtonFollow.png */,
-				C4BE6734157FC7E800A291C2 /* ButtonFollow@2x.png */,
-				C4BE6735157FC7E800A291C2 /* ButtonFollowing.png */,
-				C4BE6736157FC7E900A291C2 /* ButtonFollowing@2x.png */,
-				C4BE6737157FC7E900A291C2 /* ButtonFollowingSelected.png */,
-				C4BE6738157FC7E900A291C2 /* ButtonFollowingSelected@2x.png */,
-				C4BE6739157FC7EA00A291C2 /* ButtonFollowSelected.png */,
-				C4BE673A157FC7EA00A291C2 /* ButtonFollowSelected@2x.png */,
 				C4BE673F157FC7EB00A291C2 /* ButtonLike.png */,
 				C4BE6740157FC7EC00A291C2 /* ButtonLike@2x.png */,
 				C4BE6741157FC7EC00A291C2 /* ButtonLikeSelected.png */,
@@ -1696,12 +1684,14 @@
 				4602FCEC18BAA7760097DBEC /* teamstorycrew@2x.png in Resources */,
 				462FCB60188C6AE9005059F3 /* ProfileNavigationBar@2x.png in Resources */,
 				46715499188346750000C0CA /* login_iphone4@2x.png in Resources */,
+				4691B52418C56AAF00B7DF6A /* tnz-popup@2x.png in Resources */,
 				D5FC09B218A9BFF4000D85F1 /* konotor_progress_blue.png in Resources */,
 				C4BE6774157FC7F700A291C2 /* BackgroundLeather@2x.png in Resources */,
 				D5FC095C18A9B586000D85F1 /* CameraFilterViewController.xib in Resources */,
 				C4BE6777157FC7F700A291C2 /* BackgroundNavigationBar.png in Resources */,
 				D5FC09AE18A9BFF4000D85F1 /* konotor_profile.png in Resources */,
 				C4BE6778157FC7F700A291C2 /* BackgroundNavigationBar@2x.png in Resources */,
+				4691B52518C56AAF00B7DF6A /* tnz-popup.png in Resources */,
 				C4BE6779157FC7F700A291C2 /* BackgroundNewActivity.png in Resources */,
 				46FB0A7D1888989800E978CD /* tab-product-unselected@2x.png in Resources */,
 				C4BE677A157FC7F700A291C2 /* BackgroundNewActivity@2x.png in Resources */,
@@ -1736,19 +1726,11 @@
 				46B31EEC184E35150028D11C /* profileDescription.png in Resources */,
 				46ABD73018AADFFB008F5AAB /* default-pic@2x.png in Resources */,
 				4602FCFD18BAB9570097DBEC /* deezer-popup.png in Resources */,
-				C4BE678B157FC7F700A291C2 /* ButtonFollow.png in Resources */,
-				C4BE678C157FC7F700A291C2 /* ButtonFollow@2x.png in Resources */,
 				D5FC09A818A9BFF4000D85F1 /* konotor_cross.png in Resources */,
 				4602FD1518BD553B0097DBEC /* foundersuite-logo@2x.png in Resources */,
-				C4BE678D157FC7F700A291C2 /* ButtonFollowing.png in Resources */,
 				4602FCFC18BAB9570097DBEC /* deezer-popup@2x.png in Resources */,
-				C4BE678E157FC7F700A291C2 /* ButtonFollowing@2x.png in Resources */,
 				4691B4F518BEF61C00B7DF6A /* follow@2x.png in Resources */,
-				C4BE678F157FC7F700A291C2 /* ButtonFollowingSelected.png in Resources */,
 				465A4EDE18A8382900E43DC6 /* comingsoon.png in Resources */,
-				C4BE6790157FC7F700A291C2 /* ButtonFollowingSelected@2x.png in Resources */,
-				C4BE6791157FC7F700A291C2 /* ButtonFollowSelected.png in Resources */,
-				C4BE6792157FC7F700A291C2 /* ButtonFollowSelected@2x.png in Resources */,
 				D5FC09A618A9BFF4000D85F1 /* konotor_chatbubble_ios7_you.png in Resources */,
 				462FCB7C188C806C005059F3 /* button_done@2x.png in Resources */,
 				46ABD74B18B144D4008F5AAB /* news2@2x.png in Resources */,
@@ -1861,6 +1843,7 @@
 				D5FC09B718A9BFF4000D85F1 /* konotor_sent@2x.png in Resources */,
 				C4BE67BB157FC7F700A291C2 /* SeparatorComments.png in Resources */,
 				C4BE67BC157FC7F700A291C2 /* SeparatorComments@2x.png in Resources */,
+				4691B52018C5691A00B7DF6A /* news5@2x.png in Resources */,
 				4602FD2218BD553B0097DBEC /* konotor-popup.png in Resources */,
 				4691B4E418BE994800B7DF6A /* asana-popup@2x.png in Resources */,
 				D5FC09BD18A9BFF4000D85F1 /* konotor_uploading@2x.png in Resources */,
@@ -1891,6 +1874,7 @@
 				465B19A218B81DD000EDBCFC /* bg-browser-bar@2x.png in Resources */,
 				D5FC09B518A9BFF4000D85F1 /* konotor_send@2x.png in Resources */,
 				46FB0A861888989800E978CD /* tab-people-selected.png in Resources */,
+				4691B52118C5691A00B7DF6A /* news5.png in Resources */,
 				46B31EF9184E3DCB0028D11C /* profileAddNew@2x.png in Resources */,
 				465B19B018B81FE500EDBCFC /* browser-button-forward-normal@2x.png in Resources */,
 				46B31EDA184D696B0028D11C /* IconProfileSelected.png in Resources */,

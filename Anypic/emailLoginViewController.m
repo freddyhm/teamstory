@@ -201,7 +201,7 @@
                                                 
                                                 UINavigationController *profileSettingNav = [[UINavigationController alloc] initWithRootViewController:accountViewController];
                                                 //profileSettingNav.navigationBarHidden = YES;
-                                                [self presentViewController:profileSettingNav animated:YES completion:nil];
+                                                [self presentViewController:profileSettingNav animated:NO completion:nil];
                                             }
                                             
                                         } else {

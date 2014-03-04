@@ -32,7 +32,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         UIScrollView *headerScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 100.0f)];
-        [headerScrollView setContentSize:CGSizeMake(525.0f, 36.0f)];
+        [headerScrollView setContentSize:CGSizeMake(655.0f, 36.0f)];
         
         UIButton *newsButton_1 = [[UIButton alloc] initWithFrame:CGRectMake(5.0f, 5.0f, 125.0f, 90.0f)];
         [newsButton_1 setImage:[UIImage imageNamed:@"news1.png"] forState:UIControlStateNormal];
@@ -53,6 +53,11 @@
         [newsButton_4 setImage:[UIImage imageNamed:@"news4.png"] forState:UIControlStateNormal];
         [newsButton_4 addTarget:self action:@selector(newsButton_4_action:) forControlEvents:UIControlEventTouchUpInside];
         [headerScrollView addSubview:newsButton_4];
+        
+        UIButton *newsButton_5 = [[UIButton alloc] initWithFrame:CGRectMake(525.0f, 5.0f, 125.0f, 90.0f)];
+        [newsButton_5 setImage:[UIImage imageNamed:@"news5.png"] forState:UIControlStateNormal];
+        [newsButton_5 addTarget:self action:@selector(newsButton_5_action:) forControlEvents:UIControlEventTouchUpInside];
+        [headerScrollView addSubview:newsButton_5];
         
         [headerScrollView setShowsHorizontalScrollIndicator:NO];
         [self addSubview:headerScrollView];
@@ -94,6 +99,15 @@
     
     [self dimbackground];
     [self create_content_overlay:@"hipchat.png"];
+    [self cancelButton:self.content_overlay];
+    [self create_content_button];
+}
+
+- (void) newsButton_5_action:(id)sender {
+    self.website = @"http://thenextzuck.com";
+    
+    [self dimbackground];
+    [self create_content_overlay:@"tnz-popup.png"];
     [self cancelButton:self.content_overlay];
     [self create_content_button];
 }
