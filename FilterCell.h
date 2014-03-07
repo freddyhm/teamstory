@@ -11,5 +11,6 @@
 @interface FilterCell : UICollectionViewCell
 
 @property (strong, nonatomic) UILabel *filter;
+@property (strong, nonatomic) UIImageView *placeholder;
 
 @end
