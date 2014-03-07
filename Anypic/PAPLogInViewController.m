@@ -33,19 +33,16 @@
         [registerButton setFrame:CGRectMake( 12.5f, 370.0f, 295.0f, 45.0f)];
     }
     
-    //[backButtonTest setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
     [emailLogin addTarget:self action:@selector(emailLoginAction:) forControlEvents:UIControlEventTouchUpInside];
     [emailLogin setBackgroundImage:[UIImage imageNamed:@"loginbutton.png"] forState:UIControlStateNormal];
-    //[backButtonTest setBackgroundImage:[UIImage imageNamed:@"ButtonBackSelected.png"] forState:UIControlStateHighlighted];
     [self.logInView addSubview:emailLogin];
     
     [registerButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     [[registerButton titleLabel] setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
     [registerButton addTarget:self action:@selector(registerButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [registerButton setBackgroundImage:[UIImage imageNamed:@"registerbutton.png"] forState:UIControlStateNormal];
-    //[backButtonTest setBackgroundImage:[UIImage imageNamed:@"ButtonBackSelected.png"] forState:UIControlStateHighlighted];
     [self.logInView addSubview:registerButton];
-
+    
     [self.logInView setLogo:nil];
     
     self.fields = PFLogInFieldsUsernameAndPassword;
@@ -62,9 +59,12 @@
     if ([UIScreen mainScreen].bounds.size.height > 480.0f) {
         // for the iPhone 5
         [self.logInView.facebookButton setFrame:CGRectMake(12.5f, 405.0f, 295.0f, 45.0f)];
+        [self.logInView.twitterButton setFrame:CGRectMake(12.5, 200.0f, 295.0f, 45.0f)];
     } else {
         [self.logInView.facebookButton setFrame:CGRectMake(12.5f, 321.0f, 295.0f, 45.0f)];
+        [self.logInView.twitterButton setFrame:CGRectMake(12.5, 200.0f, 295.0f, 45.0f)];
     }
+    
     [self.logInView.facebookButton setTitle:nil forState:UIControlStateNormal];
     [self.logInView.facebookButton setImage:nil forState:UIControlStateNormal];
     [self.logInView.facebookButton setBackgroundImage:[UIImage imageNamed:@"fbbutton.png"] forState:UIControlStateNormal];

@@ -189,6 +189,11 @@
     NSString *facebookId = [user objectForKey:kPAPUserFacebookIDKey];
     return (facebookId && facebookId.length > 0);
 }
+
++ (BOOL)userHasValidTwitterData:(PFUser *)user {
+    NSString *twiiterID = [user objectForKey:@"twitterID"];
+    return (twiiterID && twiiterID.length > 0);
+}
 /*
 + (BOOL)userHasProfilePictures:(PFUser *)user {
     //PFFile *profilePictureMedium = [user objectForKey:kPAPUserProfilePicMediumKey];

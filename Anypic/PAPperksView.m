@@ -356,6 +356,7 @@
     [[[[UIApplication sharedApplication] delegate] window] addSubview:self.dimBackground];
 }
 
+
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
     // If one of our subviews wants it, return YES
     for (UIView *subview in self.subviews) {
@@ -370,9 +371,11 @@
 
 
 
+
 -(void)content1_button_cancel_action:(id)sender{
     [self.content_overlay removeFromSuperview];
     [self.dimBackground removeFromSuperview];
 }
+
 
 @end

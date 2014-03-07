@@ -186,7 +186,7 @@
         [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     } else {
-        self.navigationItem.leftBarButtonItem = nil;
+        [self.navigationItem setHidesBackButton:YES];
     }
     
      
@@ -295,6 +295,7 @@
                                    action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tapOutside];
+    NSLog(@"end");
 }
 
 
