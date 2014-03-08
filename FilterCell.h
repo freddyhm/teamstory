@@ -12,5 +12,11 @@
 
 @property (strong, nonatomic) UILabel *filter;
 @property (strong, nonatomic) UIImageView *placeholder;
+@property (strong, nonatomic) UIColor *selectedStateColor;
+@property (strong, nonatomic) UIColor *defaultStateColor;
+@property (nonatomic, strong) CALayer *selectedFilterBorder;
+
+-(void)select;
+-(void)deselect;
 
 @end

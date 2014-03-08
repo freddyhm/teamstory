@@ -72,10 +72,6 @@
     [self.selectedFilterBorder setBorderWidth:2.0];
     [self.selectedFilterBorder setBorderColor:[[UIColor redColor] CGColor]];
     
-    //custom colors
-    self.selectedStateColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
-    self.defaultStateColor = [UIColor colorWithRed:(154/255.0) green:(154/255.0) blue:(154/255.0) alpha:1];
-        
     // needed for img manipulation (re-init context everytime slows filter selection down so stored as class variable instead)
     self.editableImage = [CIImage imageWithCGImage:[self.croppedImage CGImage]];
     
@@ -174,25 +170,17 @@
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    FilterCell *selectedCell =(FilterCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    
     // select proper filter
-    [self selectFilter:selectedCell.filter.text];
-    
-    // change name color of selected flter
-    selectedCell.filter.textColor = self.selectedStateColor;
-    
-    // add border to selected filter
-    CGRect borderFrame = CGRectMake(0, 0, (selectedCell.placeholder.frame.size.width), (selectedCell.placeholder.frame.size.height));
-    [self.selectedFilterBorder setFrame:borderFrame];
-    [selectedCell.placeholder.layer addSublayer:self.selectedFilterBorder];
+    FilterCell *cell =(FilterCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    [self selectFilter:cell.filter.text];
+    [cell select];
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    FilterCell *selectedCell =(FilterCell *) [collectionView cellForItemAtIndexPath:indexPath];
-    selectedCell.filter.textColor = self.defaultStateColor;
-    [self selectFilter:selectedCell.filter.text];
+    // de-select proper filter
+    FilterCell *cell =(FilterCell *) [collectionView cellForItemAtIndexPath:indexPath];
+    [cell deselect];
 }
 
 
@@ -205,25 +193,8 @@
     
     // set name and color based on state
     cell.filter.text = filterName;
+    cell.selected ? [cell select] : [cell deselect];
     
-    if(cell.selected){
-        
-        cell.filter.textColor = self.selectedStateColor;
-        
-        // add border to selected filter
-        CGRect borderFrame = CGRectMake(0, 0, (cell.placeholder.frame.size.width), (cell.placeholder.frame.size.height));
-        
-        [self.selectedFilterBorder setFrame:borderFrame];
-        [cell.placeholder.layer addSublayer:self.selectedFilterBorder];
-        
-    }else{
-        
-        cell.filter.textColor = self.defaultStateColor;
-        NSArray *noLayers = cell.placeholder.layer.sublayers;
-        [noLayers objectAtIndex:0];
-        
-    }
-
     return cell;
 }
 
