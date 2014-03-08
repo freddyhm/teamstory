@@ -132,7 +132,6 @@
 		467154A318835A910000C0CA /* register_iphone4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 467154A218835A910000C0CA /* register_iphone4@2x.png */; };
 		467154A618835E470000C0CA /* privacy.png in Resources */ = {isa = PBXBuildFile; fileRef = 467154A418835E470000C0CA /* privacy.png */; };
 		467154A718835E470000C0CA /* privacy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 467154A518835E470000C0CA /* privacy@2x.png */; };
-		467154B6188368350000C0CA /* Default@2x-old.png in Resources */ = {isa = PBXBuildFile; fileRef = 467154B4188368350000C0CA /* Default@2x-old.png */; };
 		467154B7188368350000C0CA /* Default-old.png in Resources */ = {isa = PBXBuildFile; fileRef = 467154B5188368350000C0CA /* Default-old.png */; };
 		4688686F185F8B78002BA081 /* emailSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4688686E185F8B78002BA081 /* emailSignUpViewController.m */; };
 		4691B4E218BE994800B7DF6A /* asana@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B4DE18BE994700B7DF6A /* asana@2x.png */; };
@@ -520,7 +519,6 @@
 		467154A218835A910000C0CA /* register_iphone4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "register_iphone4@2x.png"; sourceTree = "<group>"; };
 		467154A418835E470000C0CA /* privacy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = privacy.png; sourceTree = "<group>"; };
 		467154A518835E470000C0CA /* privacy@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "privacy@2x.png"; sourceTree = "<group>"; };
-		467154B4188368350000C0CA /* Default@2x-old.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x-old.png"; sourceTree = "<group>"; };
 		467154B5188368350000C0CA /* Default-old.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-old.png"; sourceTree = "<group>"; };
 		4688686D185F8B78002BA081 /* emailSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = emailSignUpViewController.h; sourceTree = SOURCE_ROOT; };
 		4688686E185F8B78002BA081 /* emailSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = emailSignUpViewController.m; sourceTree = SOURCE_ROOT; };
@@ -1447,7 +1445,6 @@
 				D59B998118C5A165002D6EFE /* Default-568h@2x-new-but-old.png */,
 				7460D3AD1565557A00F755E4 /* Assets */,
 				4639EFBD18B69DFC009D610B /* Default-568h@2x-old.png */,
-				467154B4188368350000C0CA /* Default@2x-old.png */,
 				467154B5188368350000C0CA /* Default-old.png */,
 				46715472188333860000C0CA /* intro_iphone4.png */,
 				46715473188333860000C0CA /* intro_iphone4@2x.png */,
@@ -1783,7 +1780,6 @@
 				4602FD2318BD553B0097DBEC /* konotor-popup@2x.png in Resources */,
 				46FB0A801888989800E978CD /* tab-startup-unselected.png in Resources */,
 				46ABD74518B143A4008F5AAB /* news4@2x.png in Resources */,
-				467154B6188368350000C0CA /* Default@2x-old.png in Resources */,
 				D59B998418C5A165002D6EFE /* Default-568h@2x-new-but-old.png in Resources */,
 				4691B50718BFD9B200B7DF6A /* button-more.png in Resources */,
 				D5FC099B18A9BFF4000D85F1 /* KonotorConversationViewController.xib in Resources */,
