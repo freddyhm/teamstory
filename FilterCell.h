@@ -16,7 +16,6 @@
 @property (strong, nonatomic) UIColor *defaultStateColor;
 @property (nonatomic, strong) CALayer *selectedFilterBorder;
 
--(void)select;
--(void)deselect;
+-(void)setState:(NSString *)state;
 
 @end

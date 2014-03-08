@@ -60,18 +60,10 @@
 {
     [super viewDidLoad];
     
-
     // collectionview cell setup for filters
     [self.filterList registerClass:[FilterCell class] forCellWithReuseIdentifier:@"FilterCell"];
     self.filterList.delegate = self;
-    
-    // border set up for selected filter, lazy loading frame
-    self.selectedFilterBorder = [CALayer layer];
-    [self.selectedFilterBorder setBackgroundColor:[[UIColor clearColor] CGColor]];
-    [self.selectedFilterBorder setCornerRadius:2.0];
-    [self.selectedFilterBorder setBorderWidth:2.0];
-    [self.selectedFilterBorder setBorderColor:[[UIColor redColor] CGColor]];
-    
+
     // needed for img manipulation (re-init context everytime slows filter selection down so stored as class variable instead)
     self.editableImage = [CIImage imageWithCGImage:[self.croppedImage CGImage]];
     
@@ -173,14 +165,14 @@
     // select proper filter
     FilterCell *cell =(FilterCell *)[collectionView cellForItemAtIndexPath:indexPath];
     [self selectFilter:cell.filter.text];
-    [cell select];
+    [cell setState:@"selected"];
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath{
     
     // de-select proper filter
     FilterCell *cell =(FilterCell *) [collectionView cellForItemAtIndexPath:indexPath];
-    [cell deselect];
+    [cell setState:@"default"];
 }
 
 
@@ -193,7 +185,7 @@
     
     // set name and color based on state
     cell.filter.text = filterName;
-    cell.selected ? [cell select] : [cell deselect];
+    cell.selected ? [cell setState:@"selected"] : [cell setState:@"default"];
     
     return cell;
 }
