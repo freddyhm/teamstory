@@ -19,7 +19,8 @@
 
     // If not logged in, present login view controller
     if (!user) {
-        [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentLoginViewControllerAnimated:NO];
+        //[(AppDelegate*)[[UIApplication sharedApplication] delegate] presentLoginViewControllerAnimated:NO];
+        [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentLoginSelectionController];
         return;
     }
     bool profileExist = user[@"profileExist"];

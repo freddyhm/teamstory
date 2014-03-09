@@ -21,6 +21,8 @@
 #import "PAPProfileSettingViewController.h"
 #import "discoverPageViewController.h"
 #import "PAPwebviewViewController.h"
+#import "PAPLoginSelectionViewController.h"
+
 
 
 
@@ -303,6 +305,11 @@
 
 - (void)presentLoginViewController {
     [self presentLoginViewControllerAnimated:YES];
+}
+
+- (void)presentLoginSelectionController {
+    PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] init];
+    [self.welcomeViewController presentViewController:loginSelectionViewController animated:NO completion:nil];
 }
 
 -(void)settingRootViewAsTabBarController {

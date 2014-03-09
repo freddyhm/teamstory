@@ -20,6 +20,7 @@
 - (void)presentLoginViewController;
 - (void)presentLoginViewControllerAnimated:(BOOL)animated;
 - (void)presentTabBarController;
+- (void)presentLoginSelectionController;
 
 - (void)logOut;
 - (void)settingRootViewAsTabBarController;

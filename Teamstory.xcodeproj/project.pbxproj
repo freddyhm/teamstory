@@ -161,6 +161,15 @@
 		4691B52118C5691A00B7DF6A /* news5.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B51F18C5691A00B7DF6A /* news5.png */; };
 		4691B52418C56AAF00B7DF6A /* tnz-popup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B52218C56AAF00B7DF6A /* tnz-popup@2x.png */; };
 		4691B52518C56AAF00B7DF6A /* tnz-popup.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B52318C56AAF00B7DF6A /* tnz-popup.png */; };
+		4691B52E18CCE81600B7DF6A /* PAPLoginSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4691B52D18CCE81600B7DF6A /* PAPLoginSelectionViewController.m */; };
+		4691B53018CCEB8700B7DF6A /* bg-login@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B52F18CCEB8700B7DF6A /* bg-login@2x.png */; };
+		4691B53218CCF49000B7DF6A /* bg-intro@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B53118CCF49000B7DF6A /* bg-intro@2x.png */; };
+		4691B53718CCF4C500B7DF6A /* icon-twitterlogin.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B53318CCF4C500B7DF6A /* icon-twitterlogin.png */; };
+		4691B53818CCF4C500B7DF6A /* icon-twitterlogin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B53418CCF4C500B7DF6A /* icon-twitterlogin@2x.png */; };
+		4691B53918CCF4C500B7DF6A /* icon-fblogin.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B53518CCF4C500B7DF6A /* icon-fblogin.png */; };
+		4691B53A18CCF4C500B7DF6A /* icon-fblogin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B53618CCF4C500B7DF6A /* icon-fblogin@2x.png */; };
+		4691B53D18CCFA4500B7DF6A /* btn-back.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B53B18CCFA4500B7DF6A /* btn-back.png */; };
+		4691B53E18CCFA4500B7DF6A /* btn-back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B53C18CCFA4500B7DF6A /* btn-back@2x.png */; };
 		46ABD72F18AADFFB008F5AAB /* default-pic.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD72D18AADFFB008F5AAB /* default-pic.png */; };
 		46ABD73018AADFFB008F5AAB /* default-pic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */; };
 		46ABD73318B12E01008F5AAB /* PAPperksoverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 46ABD73218B12E01008F5AAB /* PAPperksoverlay.m */; };
@@ -544,6 +553,16 @@
 		4691B51F18C5691A00B7DF6A /* news5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = news5.png; sourceTree = "<group>"; };
 		4691B52218C56AAF00B7DF6A /* tnz-popup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tnz-popup@2x.png"; sourceTree = "<group>"; };
 		4691B52318C56AAF00B7DF6A /* tnz-popup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tnz-popup.png"; sourceTree = "<group>"; };
+		4691B52C18CCE81600B7DF6A /* PAPLoginSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPLoginSelectionViewController.h; path = Anypic/PAPLoginSelectionViewController.h; sourceTree = SOURCE_ROOT; };
+		4691B52D18CCE81600B7DF6A /* PAPLoginSelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPLoginSelectionViewController.m; path = Anypic/PAPLoginSelectionViewController.m; sourceTree = SOURCE_ROOT; };
+		4691B52F18CCEB8700B7DF6A /* bg-login@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg-login@2x.png"; sourceTree = "<group>"; };
+		4691B53118CCF49000B7DF6A /* bg-intro@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg-intro@2x.png"; sourceTree = "<group>"; };
+		4691B53318CCF4C500B7DF6A /* icon-twitterlogin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-twitterlogin.png"; sourceTree = "<group>"; };
+		4691B53418CCF4C500B7DF6A /* icon-twitterlogin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-twitterlogin@2x.png"; sourceTree = "<group>"; };
+		4691B53518CCF4C500B7DF6A /* icon-fblogin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-fblogin.png"; sourceTree = "<group>"; };
+		4691B53618CCF4C500B7DF6A /* icon-fblogin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-fblogin@2x.png"; sourceTree = "<group>"; };
+		4691B53B18CCFA4500B7DF6A /* btn-back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-back.png"; sourceTree = "<group>"; };
+		4691B53C18CCFA4500B7DF6A /* btn-back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-back@2x.png"; sourceTree = "<group>"; };
 		46ABD72D18AADFFB008F5AAB /* default-pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-pic.png"; sourceTree = "<group>"; };
 		46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-pic@2x.png"; sourceTree = "<group>"; };
 		46ABD73118B12E01008F5AAB /* PAPperksoverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPperksoverlay.h; path = Anypic/PAPperksoverlay.h; sourceTree = SOURCE_ROOT; };
@@ -984,6 +1003,14 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				4691B53B18CCFA4500B7DF6A /* btn-back.png */,
+				4691B53C18CCFA4500B7DF6A /* btn-back@2x.png */,
+				4691B53318CCF4C500B7DF6A /* icon-twitterlogin.png */,
+				4691B53418CCF4C500B7DF6A /* icon-twitterlogin@2x.png */,
+				4691B53518CCF4C500B7DF6A /* icon-fblogin.png */,
+				4691B53618CCF4C500B7DF6A /* icon-fblogin@2x.png */,
+				4691B53118CCF49000B7DF6A /* bg-intro@2x.png */,
+				4691B52F18CCEB8700B7DF6A /* bg-login@2x.png */,
 				4691B52218C56AAF00B7DF6A /* tnz-popup@2x.png */,
 				4691B52318C56AAF00B7DF6A /* tnz-popup.png */,
 				4691B51E18C5691A00B7DF6A /* news5@2x.png */,
@@ -1259,6 +1286,8 @@
 			children = (
 				4688686D185F8B78002BA081 /* emailSignUpViewController.h */,
 				4688686E185F8B78002BA081 /* emailSignUpViewController.m */,
+				4691B52C18CCE81600B7DF6A /* PAPLoginSelectionViewController.h */,
+				4691B52D18CCE81600B7DF6A /* PAPLoginSelectionViewController.m */,
 				464A354B185A9F6C006E951E /* emailLoginViewController.h */,
 				464A354C185A9F6C006E951E /* emailLoginViewController.m */,
 				C4F102BF156C57DA0061BC3E /* PAPWelcomeViewController.h */,
@@ -1643,6 +1672,7 @@
 				4602FD1618BD553B0097DBEC /* positionly-popup.png in Resources */,
 				462FCB8A188C863E005059F3 /* button_setting_selected@2x.png in Resources */,
 				464A3545185A979A006E951E /* bg-intro2-iphone5.png in Resources */,
+				4691B53918CCF4C500B7DF6A /* icon-fblogin.png in Resources */,
 				465DE34B1895A31200C37EF8 /* profilepicture.png in Resources */,
 				46715477188333860000C0CA /* intro_iphone4@2x.png in Resources */,
 				465B19B518B81FE500EDBCFC /* browser-refresh.png in Resources */,
@@ -1664,6 +1694,7 @@
 				467154A1188355430000C0CA /* register_iphone5@2x.png in Resources */,
 				C4BE6712157FC7D000A291C2 /* Icon.png in Resources */,
 				C4BE6713157FC7D000A291C2 /* Icon@2x.png in Resources */,
+				4691B53218CCF49000B7DF6A /* bg-intro@2x.png in Resources */,
 				C4BE6714157FC7D000A291C2 /* iTunesArtwork in Resources */,
 				46FB0A991888E4C200E978CD /* bg@2x.png in Resources */,
 				D5D1043718B5D6A40084C901 /* konotor_cancel.png in Resources */,
@@ -1736,7 +1767,9 @@
 				D5FC09A818A9BFF4000D85F1 /* konotor_cross.png in Resources */,
 				4602FD1518BD553B0097DBEC /* foundersuite-logo@2x.png in Resources */,
 				4602FCFC18BAB9570097DBEC /* deezer-popup@2x.png in Resources */,
+				4691B53E18CCFA4500B7DF6A /* btn-back@2x.png in Resources */,
 				4691B4F518BEF61C00B7DF6A /* follow@2x.png in Resources */,
+				4691B53A18CCF4C500B7DF6A /* icon-fblogin@2x.png in Resources */,
 				465A4EDE18A8382900E43DC6 /* comingsoon.png in Resources */,
 				D5FC09A618A9BFF4000D85F1 /* konotor_chatbubble_ios7_you.png in Resources */,
 				462FCB7C188C806C005059F3 /* button_done@2x.png in Resources */,
@@ -1796,12 +1829,14 @@
 				4691B4F018BEF61200B7DF6A /* unfollow.png in Resources */,
 				C4BE67AA157FC7F700A291C2 /* IconHome@2x.png in Resources */,
 				462FCB7D188C806C005059F3 /* button_setting.png in Resources */,
+				4691B53D18CCFA4500B7DF6A /* btn-back.png in Resources */,
 				46FB0A871888989800E978CD /* tab-people-selected@2x.png in Resources */,
 				46B31EDE184D696B0028D11C /* IconProfile@2x.png in Resources */,
 				C4BE67AB157FC7F700A291C2 /* IconHomeSelected.png in Resources */,
 				C4BE67AC157FC7F700A291C2 /* IconHomeSelected@2x.png in Resources */,
 				4691B51118C02F7800B7DF6A /* icon-followers.png in Resources */,
 				46B31EEB184E35150028D11C /* profileWebsite@2x.png in Resources */,
+				4691B53018CCEB8700B7DF6A /* bg-login@2x.png in Resources */,
 				46B31EF5184E3D340028D11C /* profileCollaborator@2x.png in Resources */,
 				462FCB6A188C7848005059F3 /* IconActivity@2x.png in Resources */,
 				465B19AE18B81FE500EDBCFC /* browser-button-forward-no@2x.png in Resources */,
@@ -1837,10 +1872,12 @@
 				4671548B188342380000C0CA /* registerbutton@2x.png in Resources */,
 				4691B4E518BE994800B7DF6A /* asana-popup.png in Resources */,
 				C4BE67B8157FC7F700A291C2 /* LogoNavigationBar@2x.png in Resources */,
+				4691B53818CCF4C500B7DF6A /* icon-twitterlogin@2x.png in Resources */,
 				46FB0A811888989800E978CD /* tab-startup-unselected@2x.png in Resources */,
 				46ABD72F18AADFFB008F5AAB /* default-pic.png in Resources */,
 				4691B4E218BE994800B7DF6A /* asana@2x.png in Resources */,
 				46FB0A951888BBF400E978CD /* news3@2x.png in Resources */,
+				4691B53718CCF4C500B7DF6A /* icon-twitterlogin.png in Resources */,
 				462FCB8D188C8892005059F3 /* button_done_selected.png in Resources */,
 				4671549E188355430000C0CA /* register_iphone4.png in Resources */,
 				D5FC09AD18A9BFF4000D85F1 /* konotor_play@2x.png in Resources */,
@@ -1927,6 +1964,7 @@
 				46ABD75F18B53C46008F5AAB /* PAPwebviewViewController.m in Sources */,
 				C4F102AA156C57620061BC3E /* PAPPhotoDetailsHeaderView.m in Sources */,
 				C4F102B3156C57820061BC3E /* PAPActivityCell.m in Sources */,
+				4691B52E18CCE81600B7DF6A /* PAPLoginSelectionViewController.m in Sources */,
 				D5FC095218A9B518000D85F1 /* CropResizeViewController.m in Sources */,
 				C4F102B4156C57820061BC3E /* PAPBaseTextCell.m in Sources */,
 				46FB0A4B188879C500E978CD /* PAPstartUpsView.m in Sources */,
