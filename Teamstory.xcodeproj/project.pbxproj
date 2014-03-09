@@ -333,6 +333,20 @@
 		D59B998C18C5A902002D6EFE /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = D59B998918C5A902002D6EFE /* Default.png */; };
 		D59B998D18C5A902002D6EFE /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D59B998A18C5A902002D6EFE /* Default@2x.png */; };
 		D59B998E18C5A902002D6EFE /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D59B998B18C5A902002D6EFE /* Default-568h@2x.png */; };
+		D5BFDED518CC84A5004FEC42 /* la.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDEC718CC84A4004FEC42 /* la.png */; };
+		D5BFDED618CC84A5004FEC42 /* la@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDEC818CC84A4004FEC42 /* la@2x.png */; };
+		D5BFDED718CC84A5004FEC42 /* london.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDEC918CC84A4004FEC42 /* london.png */; };
+		D5BFDED818CC84A5004FEC42 /* london@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDECA18CC84A4004FEC42 /* london@2x.png */; };
+		D5BFDED918CC84A5004FEC42 /* newyork.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDECB18CC84A4004FEC42 /* newyork.png */; };
+		D5BFDEDA18CC84A5004FEC42 /* newyork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDECC18CC84A4004FEC42 /* newyork@2x.png */; };
+		D5BFDEDB18CC84A5004FEC42 /* normal.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDECD18CC84A4004FEC42 /* normal.png */; };
+		D5BFDEDC18CC84A5004FEC42 /* normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDECE18CC84A5004FEC42 /* normal@2x.png */; };
+		D5BFDEDD18CC84A5004FEC42 /* paris.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDECF18CC84A5004FEC42 /* paris.png */; };
+		D5BFDEDE18CC84A5004FEC42 /* paris@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDED018CC84A5004FEC42 /* paris@2x.png */; };
+		D5BFDEDF18CC84A5004FEC42 /* toronto.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDED118CC84A5004FEC42 /* toronto.png */; };
+		D5BFDEE018CC84A5004FEC42 /* toronto@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDED218CC84A5004FEC42 /* toronto@2x.png */; };
+		D5BFDEE118CC84A5004FEC42 /* vancity.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDED318CC84A5004FEC42 /* vancity.png */; };
+		D5BFDEE218CC84A5004FEC42 /* vancity@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDED418CC84A5004FEC42 /* vancity@2x.png */; };
 		D5D1042818B5C7AF0084C901 /* konotor.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042718B5C7AF0084C901 /* konotor.png */; };
 		D5D1042B18B5CF4E0084C901 /* button-feedback.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042918B5CF4E0084C901 /* button-feedback.png */; };
 		D5D1042C18B5CF4E0084C901 /* button-feedback@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */; };
@@ -763,6 +777,20 @@
 		D59B998918C5A902002D6EFE /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		D59B998A18C5A902002D6EFE /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		D59B998B18C5A902002D6EFE /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		D5BFDEC718CC84A4004FEC42 /* la.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = la.png; sourceTree = "<group>"; };
+		D5BFDEC818CC84A4004FEC42 /* la@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "la@2x.png"; sourceTree = "<group>"; };
+		D5BFDEC918CC84A4004FEC42 /* london.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = london.png; sourceTree = "<group>"; };
+		D5BFDECA18CC84A4004FEC42 /* london@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "london@2x.png"; sourceTree = "<group>"; };
+		D5BFDECB18CC84A4004FEC42 /* newyork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = newyork.png; sourceTree = "<group>"; };
+		D5BFDECC18CC84A4004FEC42 /* newyork@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "newyork@2x.png"; sourceTree = "<group>"; };
+		D5BFDECD18CC84A4004FEC42 /* normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = normal.png; sourceTree = "<group>"; };
+		D5BFDECE18CC84A5004FEC42 /* normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "normal@2x.png"; sourceTree = "<group>"; };
+		D5BFDECF18CC84A5004FEC42 /* paris.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = paris.png; sourceTree = "<group>"; };
+		D5BFDED018CC84A5004FEC42 /* paris@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "paris@2x.png"; sourceTree = "<group>"; };
+		D5BFDED118CC84A5004FEC42 /* toronto.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = toronto.png; sourceTree = "<group>"; };
+		D5BFDED218CC84A5004FEC42 /* toronto@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toronto@2x.png"; sourceTree = "<group>"; };
+		D5BFDED318CC84A5004FEC42 /* vancity.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vancity.png; sourceTree = "<group>"; };
+		D5BFDED418CC84A5004FEC42 /* vancity@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vancity@2x.png"; sourceTree = "<group>"; };
 		D5D1042718B5C7AF0084C901 /* konotor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor.png; sourceTree = "<group>"; };
 		D5D1042918B5CF4E0084C901 /* button-feedback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback.png"; sourceTree = "<group>"; };
 		D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback@2x.png"; sourceTree = "<group>"; };
@@ -995,6 +1023,20 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				D5BFDEC718CC84A4004FEC42 /* la.png */,
+				D5BFDEC818CC84A4004FEC42 /* la@2x.png */,
+				D5BFDEC918CC84A4004FEC42 /* london.png */,
+				D5BFDECA18CC84A4004FEC42 /* london@2x.png */,
+				D5BFDECB18CC84A4004FEC42 /* newyork.png */,
+				D5BFDECC18CC84A4004FEC42 /* newyork@2x.png */,
+				D5BFDECD18CC84A4004FEC42 /* normal.png */,
+				D5BFDECE18CC84A5004FEC42 /* normal@2x.png */,
+				D5BFDECF18CC84A5004FEC42 /* paris.png */,
+				D5BFDED018CC84A5004FEC42 /* paris@2x.png */,
+				D5BFDED118CC84A5004FEC42 /* toronto.png */,
+				D5BFDED218CC84A5004FEC42 /* toronto@2x.png */,
+				D5BFDED318CC84A5004FEC42 /* vancity.png */,
+				D5BFDED418CC84A5004FEC42 /* vancity@2x.png */,
 				4691B52218C56AAF00B7DF6A /* tnz-popup@2x.png */,
 				4691B52318C56AAF00B7DF6A /* tnz-popup.png */,
 				4691B51E18C5691A00B7DF6A /* news5@2x.png */,
@@ -1680,11 +1722,13 @@
 				467154A1188355430000C0CA /* register_iphone5@2x.png in Resources */,
 				C4BE6712157FC7D000A291C2 /* Icon.png in Resources */,
 				C4BE6713157FC7D000A291C2 /* Icon@2x.png in Resources */,
+				D5BFDED918CC84A5004FEC42 /* newyork.png in Resources */,
 				C4BE6714157FC7D000A291C2 /* iTunesArtwork in Resources */,
 				46FB0A991888E4C200E978CD /* bg@2x.png in Resources */,
 				D5D1043718B5D6A40084C901 /* konotor_cancel.png in Resources */,
 				462FCB7A188C806C005059F3 /* button_cancel@2x.png in Resources */,
 				D5FC09BB18A9BFF4000D85F1 /* konotor_supportprofile@2x.png in Resources */,
+				D5BFDEE018CC84A5004FEC42 /* toronto@2x.png in Resources */,
 				C4BE676D157FC7F700A291C2 /* BackgroundComments.png in Resources */,
 				4691B51D18C1477100B7DF6A /* intro2-iphone5@2x.png in Resources */,
 				465DE3471895983A00C37EF8 /* profileType@2x.png in Resources */,
@@ -1695,6 +1739,7 @@
 				D5FC09A318A9BFF4000D85F1 /* konotor_chatbox@2x.png in Resources */,
 				462FCB65188C774F005059F3 /* IconDiscover.png in Resources */,
 				C4BE676F157FC7F700A291C2 /* BackgroundFindFriendsCell.png in Resources */,
+				D5BFDEE118CC84A5004FEC42 /* vancity.png in Resources */,
 				46B31EDB184D696B0028D11C /* IconProfileSelected@2x.png in Resources */,
 				C4BE6770157FC7F700A291C2 /* BackgroundFindFriendsCell@2x.png in Resources */,
 				C4BE6771157FC7F700A291C2 /* BackgroundHeaderPicture.png in Resources */,
@@ -1708,6 +1753,7 @@
 				4602FCEC18BAA7760097DBEC /* teamstorycrew@2x.png in Resources */,
 				462FCB60188C6AE9005059F3 /* ProfileNavigationBar@2x.png in Resources */,
 				46715499188346750000C0CA /* login_iphone4@2x.png in Resources */,
+				D5BFDEDB18CC84A5004FEC42 /* normal.png in Resources */,
 				4691B52418C56AAF00B7DF6A /* tnz-popup@2x.png in Resources */,
 				D5FC09B218A9BFF4000D85F1 /* konotor_progress_blue.png in Resources */,
 				C4BE6774157FC7F700A291C2 /* BackgroundLeather@2x.png in Resources */,
@@ -1721,6 +1767,7 @@
 				C4BE677A157FC7F700A291C2 /* BackgroundNewActivity@2x.png in Resources */,
 				C4BE677B157FC7F700A291C2 /* BackgroundTabBar.png in Resources */,
 				C4BE677C157FC7F700A291C2 /* BackgroundTabBar@2x.png in Resources */,
+				D5BFDED818CC84A5004FEC42 /* london@2x.png in Resources */,
 				46B31EDF184D696B0028D11C /* IconProfile.png in Resources */,
 				C4BE677D157FC7F700A291C2 /* BackgroundTabBarItemSelected.png in Resources */,
 				D5FC09B618A9BFF4000D85F1 /* konotor_sent.png in Resources */,
@@ -1730,8 +1777,10 @@
 				C4BE6783157FC7F700A291C2 /* ButtonCamera.png in Resources */,
 				D5FC09AB18A9BFF4000D85F1 /* konotor_mic@2x.png in Resources */,
 				465B19B118B81FE500EDBCFC /* browser-button-no.png in Resources */,
+				D5BFDED718CC84A5004FEC42 /* london.png in Resources */,
 				4691B51C18C1477100B7DF6A /* intro2-iphone4.png in Resources */,
 				4602FCED18BAA7760097DBEC /* teamstorycrew.png in Resources */,
+				D5BFDEDD18CC84A5004FEC42 /* paris.png in Resources */,
 				464A3542185A979A006E951E /* bg-intro3-iphone5@2x.png in Resources */,
 				C4BE6784157FC7F700A291C2 /* ButtonCamera@2x.png in Resources */,
 				46B31EF4184E3D340028D11C /* profileCollaborator.png in Resources */,
@@ -1742,6 +1791,7 @@
 				465A4ED918A8222A00E43DC6 /* iconlocation.png in Resources */,
 				465A4EDD18A8382900E43DC6 /* comingsoon@2x.png in Resources */,
 				46ABD74418B143A4008F5AAB /* news4.png in Resources */,
+				D5BFDED618CC84A5004FEC42 /* la@2x.png in Resources */,
 				4691B50618BFD9B200B7DF6A /* button-more@2x.png in Resources */,
 				46FB0A9A1888E4C200E978CD /* bg.png in Resources */,
 				465B19B618B81FE500EDBCFC /* browser-refresh@2x.png in Resources */,
@@ -1784,6 +1834,7 @@
 				4691B50718BFD9B200B7DF6A /* button-more.png in Resources */,
 				D5FC099B18A9BFF4000D85F1 /* KonotorConversationViewController.xib in Resources */,
 				D5FC09B418A9BFF4000D85F1 /* konotor_send.png in Resources */,
+				D5BFDEDF18CC84A5004FEC42 /* toronto.png in Resources */,
 				46FB0A821888989800E978CD /* tab-startup-selected.png in Resources */,
 				462FCB6E188C79E1005059F3 /* IconActivitySelected@2x.png in Resources */,
 				465A4EE518A83D5100E43DC6 /* share.png in Resources */,
@@ -1813,12 +1864,14 @@
 				C4BE67A9157FC7F700A291C2 /* IconHome.png in Resources */,
 				4691B51B18C1477100B7DF6A /* intro2-iphone4@2x.png in Resources */,
 				4691B4F018BEF61200B7DF6A /* unfollow.png in Resources */,
+				D5BFDEDA18CC84A5004FEC42 /* newyork@2x.png in Resources */,
 				C4BE67AA157FC7F700A291C2 /* IconHome@2x.png in Resources */,
 				462FCB7D188C806C005059F3 /* button_setting.png in Resources */,
 				46FB0A871888989800E978CD /* tab-people-selected@2x.png in Resources */,
 				46B31EDE184D696B0028D11C /* IconProfile@2x.png in Resources */,
 				C4BE67AB157FC7F700A291C2 /* IconHomeSelected.png in Resources */,
 				C4BE67AC157FC7F700A291C2 /* IconHomeSelected@2x.png in Resources */,
+				D5BFDEDE18CC84A5004FEC42 /* paris@2x.png in Resources */,
 				4691B51118C02F7800B7DF6A /* icon-followers.png in Resources */,
 				46B31EEB184E35150028D11C /* profileWebsite@2x.png in Resources */,
 				46B31EF5184E3D340028D11C /* profileCollaborator@2x.png in Resources */,
@@ -1885,6 +1938,7 @@
 				C4BE67C3157FC7F700A291C2 /* TitleFindFriends.png in Resources */,
 				C4BE67C4157FC7F700A291C2 /* TitleFindFriends@2x.png in Resources */,
 				C4BE67C7157FC8F600A291C2 /* TextFieldComment.png in Resources */,
+				D5BFDEDC18CC84A5004FEC42 /* normal@2x.png in Resources */,
 				C4BE67C8157FC8F600A291C2 /* TextFieldComment@2x.png in Resources */,
 				C47DDDE915927631002114F6 /* iTunesArtwork@2x in Resources */,
 				C42500DC159939940087C4F4 /* Icon-Small-50@2x.png in Resources */,
@@ -1901,6 +1955,7 @@
 				4691B4E318BE994800B7DF6A /* asana.png in Resources */,
 				465B19A218B81DD000EDBCFC /* bg-browser-bar@2x.png in Resources */,
 				D5FC09B518A9BFF4000D85F1 /* konotor_send@2x.png in Resources */,
+				D5BFDEE218CC84A5004FEC42 /* vancity@2x.png in Resources */,
 				46FB0A861888989800E978CD /* tab-people-selected.png in Resources */,
 				4691B52118C5691A00B7DF6A /* news5.png in Resources */,
 				46B31EF9184E3DCB0028D11C /* profileAddNew@2x.png in Resources */,
@@ -1915,6 +1970,7 @@
 				462FCB71188C7A6E005059F3 /* IconDiscoverSelected.png in Resources */,
 				462FCB86188C8533005059F3 /* button_back@2x.png in Resources */,
 				4602FCF018BAAA630097DBEC /* jolt.png in Resources */,
+				D5BFDED518CC84A5004FEC42 /* la.png in Resources */,
 				4602FCF118BAAA630097DBEC /* jolt@2x.png in Resources */,
 				C499A3041725E6DD0089D40A /* FacebookSDKResources.bundle in Resources */,
 				D5FC09AF18A9BFF4000D85F1 /* konotor_profile@2x.png in Resources */,

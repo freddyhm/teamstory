@@ -14,6 +14,7 @@
 
 @property (nonatomic, assign) BOOL didCancel;
 @property (nonatomic, strong) NSDictionary *filters;
+@property (nonatomic, strong) NSDictionary *filterPreviewPics;
 @property (nonatomic, strong) NSMutableDictionary *filteredImages;
 @property (nonatomic, strong) NSArray *sortedFilterNames;
 @property (nonatomic,strong) NSString *imageSource;
@@ -95,14 +96,20 @@
     
     // filter system names and their custom names
     self.filters = [[NSDictionary alloc] initWithObjectsAndKeys: @"", @"Normal",
-                    @"CIPhotoEffectChrome", @"Silicon Valley", @"CIPhotoEffectFade",
-                    @"New York",@"CIPhotoEffectInstant", @"London", @"CIPhotoEffectMono",
-                    @"Paris",@"CIPhotoEffectProcess", @"Los Angeles", @"CIPhotoEffectTransfer",
-                    @"Vancouver", @"CIPhotoEffectNoir", @"Toronto", @"CIPhotoEffectTonal", @"Waterloo", nil];
+                    @"CIPhotoEffectChrome", @"New York",@"CIPhotoEffectInstant", @"London", @"CIPhotoEffectMono",
+                    @"Paris",@"CIPhotoEffectProcess", @"L.A", @"CIPhotoEffectTransfer",
+                    @"Vancouver", @"CIPhotoEffectNoir", @"Toronto", nil];
     
+    // filter preview images linked to standard name
+    self.filterPreviewPics = [[NSDictionary alloc] initWithObjectsAndKeys: @"normal.png", @"Normal",
+                              @"newyork.png", @"New York", @"paris.png",
+                              @"Paris",@"london.png", @"London", @"la.png",
+                              @"L.A",@"toronto.png", @"Toronto", @"vancity.png",
+                              @"Vancouver", nil];
+
     
     // define order of appearance for filter names
-    self.sortedFilterNames = [[NSArray alloc] initWithObjects: @"Normal", @"London", @"Paris", @"New York", @"Los Angeles", @"Vancouver", @"Toronto", @"Waterloo", @"Silicon Valley", nil];
+    self.sortedFilterNames = [[NSArray alloc] initWithObjects: @"Normal", @"Paris", @"New York", @"Vancouver", @"L.A", @"Toronto", nil];
     
   [self.croppedImageView setImage:self.croppedImage];
 }
@@ -183,8 +190,9 @@
     // create custom filter cell
     FilterCell *cell = (FilterCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"FilterCell" forIndexPath:indexPath];
     
-    // set name and color based on state
+    // set name, preview image, and color based on state
     cell.filter.text = filterName;
+    cell.placeholder.image = [UIImage imageNamed:[self.filterPreviewPics objectForKey:filterName]];
     cell.selected ? [cell setState:@"selected"] : [cell setState:@"default"];
     
     return cell;
