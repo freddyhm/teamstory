@@ -172,16 +172,26 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [[NSNotificationCenter defaultCenter] postNotificationName:PAPAppDelegateApplicationDidReceiveRemoteNotification object:nil userInfo:userInfo];
     
-    NSLog(@"notification");
-    // konotor
+    NSString *pushSrc = [userInfo objectForKey:@"source"];
+    
+    // tracking state
     if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
-        [Konotor handleRemoteNotification:userInfo withShowScreen:NO];
+        
+        if ([pushSrc isEqualToString:@"konotor"]){
+            [Konotor handleRemoteNotification:userInfo withShowScreen:NO];
+        }
+        
     } else if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive){
         // Track app opens due to a push notification being acknowledged while the app wasn't active.
-        [Konotor handleRemoteNotification:userInfo withShowScreen:YES];
-        [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
+        
+        if ([pushSrc isEqualToString:@"konotor"]){
+            [Konotor handleRemoteNotification:userInfo withShowScreen:YES];
+        }else{
+            [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
+        }
     }
     
+
     if ([PFUser currentUser]) {
         if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
             UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
