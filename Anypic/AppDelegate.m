@@ -174,6 +174,8 @@
     
     NSString *pushSrc = [userInfo objectForKey:@"source"];
     
+    NSLog(@"Source:%@", pushSrc);
+    
     // tracking state
     if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
         
