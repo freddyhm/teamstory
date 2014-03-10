@@ -56,6 +56,11 @@
     }
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    
+
+    }
+
 
 - (void)viewDidLoad
 {
@@ -95,23 +100,24 @@
     self.didCancel = NO;
     
     // filter system names and their custom names
-    self.filters = [[NSDictionary alloc] initWithObjectsAndKeys: @"", @"Normal",
+    self.filters = [[NSDictionary alloc] initWithObjectsAndKeys: @"", @"Normal",@"CIPhotoEffectFade", @"The Valley",
                     @"CIPhotoEffectChrome", @"New York",@"CIPhotoEffectInstant", @"London", @"CIPhotoEffectMono",
                     @"Paris",@"CIPhotoEffectProcess", @"L.A", @"CIPhotoEffectTransfer",
                     @"Vancouver", @"CIPhotoEffectNoir", @"Toronto", nil];
     
     // filter preview images linked to standard name
-    self.filterPreviewPics = [[NSDictionary alloc] initWithObjectsAndKeys: @"normal.png", @"Normal",
-                              @"newyork.png", @"New York", @"paris.png",
-                              @"Paris",@"london.png", @"London", @"la.png",
-                              @"L.A",@"toronto.png", @"Toronto", @"vancity.png",
-                              @"Vancouver", nil];
+    self.filterPreviewPics = [[NSDictionary alloc] initWithObjectsAndKeys: @"normal.png", @"Normal", @"valley.png", @"The Valley", @"newyork.png", @"New York",@"paris.png", @"Paris",@"london.png", @"London", @"la.png", @"L.A",@"toronto.png", @"Toronto", @"vancity.png", @"Vancouver", nil];
 
     
     // define order of appearance for filter names
-    self.sortedFilterNames = [[NSArray alloc] initWithObjects: @"Normal", @"Paris", @"New York", @"Vancouver", @"L.A", @"Toronto", nil];
+    self.sortedFilterNames = [[NSArray alloc] initWithObjects: @"Normal", @"The Valley", @"Paris", @"New York", @"Vancouver", @"L.A", @"Toronto", nil];
     
-  [self.croppedImageView setImage:self.croppedImage];
+    // select first cell (normal)
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    [self.filterList selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+    [self collectionView:self.filterList didSelectItemAtIndexPath:indexPath];
+    
+    [self.croppedImageView setImage:self.croppedImage];
 }
 
 - (IBAction)selectFilter:(NSString *)selectedFilter{

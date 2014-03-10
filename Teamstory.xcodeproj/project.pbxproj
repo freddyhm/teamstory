@@ -325,6 +325,8 @@
 		D52C66DF18C5B6F200E56F9E /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D52C66DE18C5B6F200E56F9E /* FacebookSDK.framework */; };
 		D531F7CC18B5DE11008AE73F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D531F7CB18B5DE11008AE73F /* CoreVideo.framework */; };
 		D531F7CE18B5DE44008AE73F /* Appsee.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D531F7CD18B5DE44008AE73F /* Appsee.framework */; };
+		D59AE7B618CD501D007F882B /* valley.png in Resources */ = {isa = PBXBuildFile; fileRef = D59AE7B418CD501D007F882B /* valley.png */; };
+		D59AE7B718CD501D007F882B /* valley@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D59AE7B518CD501D007F882B /* valley@2x.png */; };
 		D59B997A18C5974D002D6EFE /* AppIcon120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = D59B997918C5974C002D6EFE /* AppIcon120x120.png */; };
 		D59B997E18C59836002D6EFE /* AppIcon80x80.png in Resources */ = {isa = PBXBuildFile; fileRef = D59B997D18C59836002D6EFE /* AppIcon80x80.png */; };
 		D59B998418C5A165002D6EFE /* Default-568h@2x-new-but-old.png in Resources */ = {isa = PBXBuildFile; fileRef = D59B998118C5A165002D6EFE /* Default-568h@2x-new-but-old.png */; };
@@ -769,6 +771,8 @@
 		D52C66DE18C5B6F200E56F9E /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = External/FacebookSDK.framework; sourceTree = "<group>"; };
 		D531F7CB18B5DE11008AE73F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		D531F7CD18B5DE44008AE73F /* Appsee.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Appsee.framework; path = External/Appsee.framework; sourceTree = "<group>"; };
+		D59AE7B418CD501D007F882B /* valley.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = valley.png; sourceTree = "<group>"; };
+		D59AE7B518CD501D007F882B /* valley@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "valley@2x.png"; sourceTree = "<group>"; };
 		D59B997918C5974C002D6EFE /* AppIcon120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon120x120.png; sourceTree = "<group>"; };
 		D59B997D18C59836002D6EFE /* AppIcon80x80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon80x80.png; sourceTree = "<group>"; };
 		D59B998118C5A165002D6EFE /* Default-568h@2x-new-but-old.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x-new-but-old.png"; sourceTree = "<group>"; };
@@ -1023,6 +1027,8 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				D59AE7B418CD501D007F882B /* valley.png */,
+				D59AE7B518CD501D007F882B /* valley@2x.png */,
 				D5BFDEC718CC84A4004FEC42 /* la.png */,
 				D5BFDEC818CC84A4004FEC42 /* la@2x.png */,
 				D5BFDEC918CC84A4004FEC42 /* london.png */,
@@ -1667,6 +1673,7 @@
 			files = (
 				46ABD74E18B147FC008F5AAB /* button_cancel_selected.png in Resources */,
 				C45C260715671D730035BCA6 /* PlaceholderPhoto.png in Resources */,
+				D59AE7B618CD501D007F882B /* valley.png in Resources */,
 				46FB0A911888BBF400E978CD /* news1@2x.png in Resources */,
 				C45C260815671D730035BCA6 /* PlaceholderPhoto@2x.png in Resources */,
 				4602FCF918BAB2CA0097DBEC /* hipchat.png in Resources */,
@@ -1885,6 +1892,7 @@
 				D5FC09BC18A9BFF4000D85F1 /* konotor_uploading.png in Resources */,
 				46FB0A851888989800E978CD /* tab-people-unselected@2x.png in Resources */,
 				464A353F185A979A006E951E /* bg-intro3-iphone4.png in Resources */,
+				D59AE7B718CD501D007F882B /* valley@2x.png in Resources */,
 				C4BE67B0157FC7F700A291C2 /* IconTick@2x.png in Resources */,
 				46715489188342380000C0CA /* loginbutton@2x.png in Resources */,
 				465B19B418B81FE500EDBCFC /* browser-button-normal@2x.png in Resources */,

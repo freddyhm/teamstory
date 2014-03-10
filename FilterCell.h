@@ -14,6 +14,7 @@
 @property (strong, nonatomic) UIImageView *placeholder;
 @property (strong, nonatomic) UIColor *selectedStateColor;
 @property (strong, nonatomic) UIColor *defaultStateColor;
+@property (strong, nonatomic) UIColor *defaultTopBorderColor;
 @property (nonatomic, strong) CALayer *selectedFilterBorder;
 
 -(void)setState:(NSString *)state;
