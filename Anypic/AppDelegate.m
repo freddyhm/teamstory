@@ -174,21 +174,12 @@
     
     NSString *pushSrc = [userInfo objectForKey:@"source"];
     
-    NSLog(@"Source:%@", pushSrc);
-    
-    // tracking state
-    if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+    if ([pushSrc isEqualToString:@"konotor"]){
         
-        if ([pushSrc isEqualToString:@"konotor"]){
+        if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
             [Konotor handleRemoteNotification:userInfo withShowScreen:NO];
-        }
-        
-    } else if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive){
-        // Track app opens due to a push notification being acknowledged while the app wasn't active.
-        
-        if ([pushSrc isEqualToString:@"konotor"]){
-            [Konotor handleRemoteNotification:userInfo withShowScreen:YES];
         }else{
+            [Konotor handleRemoteNotification:userInfo withShowScreen:YES];
             [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
         }
     }
