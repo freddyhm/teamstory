@@ -123,6 +123,7 @@
 }
 
 - (void)back_button_action:(id)sender{
+    NSLog(@"%@", self.navigationController);
     [self.navigationController popViewControllerAnimated:YES];
 }
 

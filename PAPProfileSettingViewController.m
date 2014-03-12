@@ -295,7 +295,6 @@
                                    action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tapOutside];
-    NSLog(@"end");
 }
 
 

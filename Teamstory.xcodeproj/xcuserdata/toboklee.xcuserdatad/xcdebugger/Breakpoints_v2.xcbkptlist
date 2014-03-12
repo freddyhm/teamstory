@@ -86,11 +86,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/PAPWelcomeViewController.m"
-            timestampString = "416082170.909275"
+            timestampString = "416347453.273977"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "47"
-            endingLineNumber = "47"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
             landmarkName = "-refreshCurrentUserCallbackWithResult:error:"
             landmarkType = "5">
          </BreakpointContent>
@@ -400,11 +400,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAPProfileSettingViewController.m"
-            timestampString = "415753459.053269"
+            timestampString = "416347150.486882"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "928"
-            endingLineNumber = "928"
+            startingLineNumber = "927"
+            endingLineNumber = "927"
             landmarkName = "-dismissKeyboard"
             landmarkType = "5">
          </BreakpointContent>
@@ -416,11 +416,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/PAPWelcomeViewController.m"
-            timestampString = "416082170.909275"
+            timestampString = "416347453.273977"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
+            startingLineNumber = "67"
+            endingLineNumber = "67"
             landmarkName = "-refreshCurrentUserCallbackWithResult:error:"
             landmarkType = "5">
          </BreakpointContent>

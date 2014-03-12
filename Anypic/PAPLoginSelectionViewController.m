@@ -53,8 +53,7 @@
     loginViewController.fields = PFLogInFieldsFacebook | PFLogInFieldsTwitter;
     loginViewController.facebookPermissions = @[ @"user_about_me" ];
     
-    [self presentViewController:loginViewController animated:YES completion:nil];
-    
+    [self.navigationController pushViewController:loginViewController animated:YES];
 }
 
 - (void) signinButton_action:(id)sender {

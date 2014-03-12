@@ -244,7 +244,6 @@
     
     bool profileExist = user[@"profileExist"];
     
-    
     if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]){
         [[PFUser currentUser] setObject:[PFTwitterUtils twitter].userId forKey:@"twitterID"];
         
@@ -293,23 +292,9 @@
     return self.networkStatus != NotReachable;
 }
 
-
-- (void)presentLoginViewControllerAnimated:(BOOL)animated {
-    PAPLogInViewController *loginViewController = [[PAPLogInViewController alloc] init];
-    [loginViewController setDelegate:self];
-    loginViewController.fields = PFLogInFieldsFacebook | PFLogInFieldsTwitter;
-    loginViewController.facebookPermissions = @[ @"user_about_me" ];
-    
-    [self.welcomeViewController presentViewController:loginViewController animated:NO completion:nil];
-}
-
-- (void)presentLoginViewController {
-    [self presentLoginViewControllerAnimated:YES];
-}
-
 - (void)presentLoginSelectionController {
     PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] init];
-    [self.welcomeViewController presentViewController:loginSelectionViewController animated:NO completion:nil];
+    [self.navController pushViewController:loginSelectionViewController animated:YES];
 }
 
 -(void)settingRootViewAsTabBarController {
@@ -405,7 +390,7 @@
     // clear out cached data, view controllers, etc
     [self.navController popToRootViewControllerAnimated:NO];
     
-    [self presentLoginViewController];
+    [self presentLoginSelectionController];
     
     self.homeViewController = nil;
     self.activityViewController = nil;

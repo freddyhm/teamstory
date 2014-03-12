@@ -19,7 +19,6 @@
 
     // If not logged in, present login view controller
     if (!user) {
-        //[(AppDelegate*)[[UIApplication sharedApplication] delegate] presentLoginViewControllerAnimated:NO];
         [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentLoginSelectionController];
         return;
     }
@@ -29,9 +28,6 @@
         [[PFUser currentUser] refreshInBackgroundWithTarget:self selector:@selector(refreshCurrentUserCallbackWithResult:error:)];
         // Present Teamstory UI
         [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBarController];
-        
-        // Refresh current user with server side data -- checks if user is still valid and so on
-
     } else {
         PAPProfileSettingViewController *profileViewController = [[PAPProfileSettingViewController alloc] init];
         self.navigationController.navigationBarHidden = NO;
