@@ -99,8 +99,8 @@
 
     // ****************************************************************************
     // Parse initialization
-        [Parse setApplicationId:@"SPQlkxDYPDcVhbICHFzjwSsREHaSqKQIKwkijDaJ"
-                      clientKey:@"WtgkZLYZ1UOlsbGMnfYtKCD6dQLMfy3tBsN2UKxA"];
+        [Parse setApplicationId:@"0tEtPoPtsvPu1lCPzBeU032Cz3Byemcp5lr25gIU"
+                      clientKey:@"ZRnM7JXOlbSyOQuosXWG6SlrDNCY22C84hpqyi0l"];
         [PFFacebookUtils initializeFacebook];
     // ****************************************************************************
     
