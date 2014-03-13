@@ -8,13 +8,13 @@
 
 #import "PAPLoginSelectionViewController.h"
 #import "PAPLogInViewController.h"
+#import "AppDelegate.h"
 
 @interface PAPLoginSelectionViewController ()
 
 @end
 
 @implementation PAPLoginSelectionViewController
-
 
 - (void)viewDidLoad
 {
@@ -47,8 +47,10 @@
     [self.view addSubview:signinButton];
 }
 
-- (void) joinButton_action:(id)sender {
-    PAPLogInViewController *loginViewController = [[PAPLogInViewController alloc] init];
+- (void) signinButton_action:(id)sender {
+    NSString *userType = @"signIn";
+    
+    PAPLogInViewController *loginViewController = [[PAPLogInViewController alloc] initWithLoginType:userType];
     [loginViewController setDelegate:self];
     loginViewController.fields = PFLogInFieldsFacebook | PFLogInFieldsTwitter;
     loginViewController.facebookPermissions = @[ @"user_about_me" ];
@@ -56,8 +58,19 @@
     [self.navigationController pushViewController:loginViewController animated:YES];
 }
 
-- (void) signinButton_action:(id)sender {
+- (void) joinButton_action:(id)sender {
+    NSString *userType = @"join";
     
+    PAPLogInViewController *loginViewController = [[PAPLogInViewController alloc] initWithLoginType:userType];
+    [loginViewController setDelegate:self];
+    loginViewController.fields = PFLogInFieldsFacebook | PFLogInFieldsTwitter;
+    loginViewController.facebookPermissions = @[ @"user_about_me" ];
+    
+    [self.navigationController pushViewController:loginViewController animated:YES];
+}
+
+- (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] logInViewController:logInController didLogInUser:user];
 }
 
 
