@@ -69,7 +69,7 @@
         self.tableView.tableHeaderView = nil;
         self.tableView.scrollEnabled = YES;
         [self.tableView setShowsVerticalScrollIndicator:NO];
-    }    
+    }
 }
 
 
