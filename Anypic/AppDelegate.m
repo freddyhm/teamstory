@@ -106,7 +106,7 @@
         [PFFacebookUtils initializeFacebook];
     // ****************************************************************************
     
-    // Track app open. ** Crashing app because it's currently receiving a bad response **
+    // Track app open
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
 
     if (application.applicationIconBadgeNumber != 0) {
@@ -159,6 +159,7 @@
 
     [[PFInstallation currentInstallation] setDeviceTokenFromData:newDeviceToken];
     [[PFInstallation currentInstallation] saveInBackground];
+    
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
@@ -172,13 +173,12 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [[NSNotificationCenter defaultCenter] postNotificationName:PAPAppDelegateApplicationDidReceiveRemoteNotification object:nil userInfo:userInfo];
     
-
-    
     NSString *pushSrc = [userInfo objectForKey:@"source"];
     
     // handle type of notification
     if ([pushSrc isEqualToString:@"konotor"]){
         
+        // app is in foreground
         if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
             [Konotor handleRemoteNotification:userInfo withShowScreen:NO];
         }else{
@@ -187,14 +187,10 @@
         }
         
     }else{
-        
+    
         // app is in foreground
         if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
-            
-            [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
-            
             if ([PFUser currentUser]) {
-                
                 if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
                     
                     UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
@@ -211,8 +207,8 @@
                     }
                 }
             }
-        // app is in background
-        }else if([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
+        }else{
+            [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
             [self handlePush:nil userInfo:userInfo source:@"background"];
         }
     }
