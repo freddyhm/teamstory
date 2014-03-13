@@ -81,7 +81,7 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     // Appsee setup
-   // [Appsee start:@"5bfb3fafb8424fe9b3d070d3022bee41"];
+    //[Appsee start:@"5bfb3fafb8424fe9b3d070d3022bee41"];
     
     // Konotor setup
     [Konotor InitWithAppID:@"7043fe2f-cb83-403e-b9af-3c6de2fd4752" AppKey:@"e57e4508-47b6-4ecf-b0ee-8c657a855b3d" withDelegate:[KonotorEventHandler sharedInstance]];
