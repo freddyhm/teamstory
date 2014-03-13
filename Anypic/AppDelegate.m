@@ -134,7 +134,7 @@
     
     [self.window makeKeyAndVisible];
 
-    [self handlePush:launchOptions];
+    [self handlePush:launchOptions userInfo:nil source:@"launch"];
 
     return YES;
 }
@@ -172,8 +172,11 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [[NSNotificationCenter defaultCenter] postNotificationName:PAPAppDelegateApplicationDidReceiveRemoteNotification object:nil userInfo:userInfo];
     
+
+    
     NSString *pushSrc = [userInfo objectForKey:@"source"];
     
+    // handle type of notification
     if ([pushSrc isEqualToString:@"konotor"]){
         
         if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
@@ -182,23 +185,35 @@
             [Konotor handleRemoteNotification:userInfo withShowScreen:YES];
             [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
         }
-    }
-    
-
-    if ([PFUser currentUser]) {
-        if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
-            UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
+        
+    }else{
+        
+        // app is in foreground
+        if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
             
-            NSString *currentBadgeValue = tabBarItem.badgeValue;
+            [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
             
-            if (currentBadgeValue && currentBadgeValue.length > 0) {
-                NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-                NSNumber *badgeValue = [numberFormatter numberFromString:currentBadgeValue];
-                NSNumber *newBadgeValue = [NSNumber numberWithInt:[badgeValue intValue] + 1];
-                tabBarItem.badgeValue = [numberFormatter stringFromNumber:newBadgeValue];
-            } else {
-                tabBarItem.badgeValue = @"1";
+            if ([PFUser currentUser]) {
+                
+                if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
+                    
+                    UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
+                    
+                    NSString *currentBadgeValue = tabBarItem.badgeValue;
+                    
+                    if (currentBadgeValue && currentBadgeValue.length > 0) {
+                        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+                        NSNumber *badgeValue = [numberFormatter numberFromString:currentBadgeValue];
+                        NSNumber *newBadgeValue = [NSNumber numberWithInt:[badgeValue intValue] + 1];
+                        tabBarItem.badgeValue = [numberFormatter stringFromNumber:newBadgeValue];
+                    } else {
+                        tabBarItem.badgeValue = @"1";
+                    }
+                }
             }
+        // app is in background
+        }else if([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
+            [self handlePush:nil userInfo:userInfo source:@"background"];
         }
     }
 }
@@ -468,13 +483,20 @@
     [self.wifiReach startNotifier];
 }
 
-- (void)handlePush:(NSDictionary *)launchOptions {
-
-    // If the app was launched in response to a push notification, we'll handle the payload here
-    NSDictionary *remoteNotificationPayload = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-    if (remoteNotificationPayload) {
+- (void)handlePush:(NSDictionary *)launchOptions userInfo:(NSDictionary *)userInfo source:(NSString *)source {
+    
+    // handle notification payload based on source (launching or background)
+    NSDictionary *remoteNotificationPayload;
+    
+    if([source isEqualToString:@"launch"]){
+        remoteNotificationPayload = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
         [[NSNotificationCenter defaultCenter] postNotificationName:PAPAppDelegateApplicationDidReceiveRemoteNotification object:nil userInfo:remoteNotificationPayload];
-        
+    }else if([source isEqualToString:@"background"]){
+        remoteNotificationPayload = userInfo;
+    }
+    
+    if (remoteNotificationPayload) {
+    
         if (![PFUser currentUser]) {
             return;
         }
@@ -560,7 +582,11 @@
 }
 
 - (void)shouldNavigateToPhoto:(PFObject *)targetPhoto {
-    for (PFObject *photo in self.homeViewController.objects) {
+    
+    // get photo from objects in homeviewcontroller
+    NSArray *homeObjects = self.homeViewController.objects;
+    for (int i = 0; i < homeObjects.count; i++) {
+        PFObject *photo = (PFObject *)homeObjects[i];
         if ([photo.objectId isEqualToString:targetPhoto.objectId]) {
             targetPhoto = photo;
             break;
