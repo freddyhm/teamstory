@@ -83,8 +83,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [super viewDidLoad];
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
-    self.navigationItem.hidesBackButton = YES;
-
+    
+    // set current default back button to nil and set new one
+    self.navigationItem.leftBarButtonItem = nil;
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     backButton.frame = CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f);
     [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
