@@ -5,6 +5,7 @@
 //  Created by Freddy Hidalgo-Monchez on 2/6/2014.
 //
 //
+#define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
 #import "FilterCell.h"
 
@@ -31,7 +32,10 @@
         //create filter preview placeholder
         self.placeholder = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
         self.placeholder.backgroundColor = [UIColor whiteColor];
-        [self.placeholder setCenter:CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2 - 5)];
+        
+        // set proper placement depending on screen size (iphone 4/5)
+        int spaceFromTop = IS_WIDESCREEN ? self.bounds.size.height/2 - 50 : self.bounds.size.height/2 - 5;
+        [self.placeholder setCenter:CGPointMake(self.bounds.size.width/2, spaceFromTop)];
         
         //create label, set parameters
         self.filter = [[UILabel alloc]initWithFrame:CGRectMake(self.placeholder.frame.origin.x, self.placeholder.frame.size.height,self.placeholder.frame.size.width, self.placeholder.frame.size.height)];

@@ -6,6 +6,8 @@
 //
 //
 
+#define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
+
 #import "CameraFilterViewController.h"
 #import "PAPEditPhotoViewController.h"
 #import "FilterCell.h"
@@ -69,7 +71,16 @@
     // collectionview cell setup for filters
     [self.filterList registerClass:[FilterCell class] forCellWithReuseIdentifier:@"FilterCell"];
     self.filterList.delegate = self;
-
+    
+    // use custom layout because nib won't resize cells auto, set cell height depending on screen size (iphone 4/5)
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    flowLayout.minimumLineSpacing = 1;
+    flowLayout.minimumInteritemSpacing = 10;
+    flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    int itemHeight = IS_WIDESCREEN ? 189 : 103;
+    flowLayout.itemSize = CGSizeMake(91, itemHeight);
+    self.filterList.collectionViewLayout = flowLayout;
+ 
     // needed for img manipulation (re-init context everytime slows filter selection down so stored as class variable instead)
     self.editableImage = [CIImage imageWithCGImage:[self.croppedImage CGImage]];
     
