@@ -23,11 +23,11 @@
         
         // set background and top border
         self.backgroundColor = [UIColor colorWithRed:0.122 green:0.122 blue:0.122 alpha:1];
-        CALayer *TopBorder = [CALayer layer];
-        TopBorder.frame = CGRectMake(0.0f, 0.0f, self.frame.size.width, 3.0f);
-        TopBorder.backgroundColor = self.defaultTopBorderColor.CGColor;
-        [self.layer insertSublayer:TopBorder atIndex:0];
-        [self.layer setValue:TopBorder forKey:@"topBorder"];
+        self.topBorder = [CALayer layer];
+        self.topBorder.frame = CGRectMake(0.0f, 0.0f, self.frame.size.width, 3.0f);
+        self.topBorder.backgroundColor = self.defaultTopBorderColor.CGColor;
+        [self.layer insertSublayer:self.topBorder atIndex:0];
+        [self.layer setValue:self.topBorder forKey:@"topBorder"];
         
         //create filter preview placeholder
         self.placeholder = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
@@ -56,8 +56,7 @@
 
     // retrieve top border, text, and change color based on state
     self.filter.textColor = [state isEqualToString:@"selected"] ? self.selectedStateColor : self.defaultStateColor;
-    CALayer *topBorder = [self.layer valueForKey:@"topBorder"];
-    topBorder.backgroundColor = [state isEqualToString:@"selected"] ? self.selectedStateColor.CGColor : self.defaultTopBorderColor.CGColor;;
+    self.topBorder.backgroundColor = [state isEqualToString:@"selected"] ? self.selectedStateColor.CGColor : self.defaultTopBorderColor.CGColor;
 }
 
 
