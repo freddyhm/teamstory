@@ -226,7 +226,6 @@
 		C47DDDE61592761F002114F6 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = C47DDDE51592761F002114F6 /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C47DDDE915927631002114F6 /* iTunesArtwork@2x in Resources */ = {isa = PBXBuildFile; fileRef = C47DDDE815927631002114F6 /* iTunesArtwork@2x */; };
 		C499A3041725E6DD0089D40A /* FacebookSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C499A3031725E6DD0089D40A /* FacebookSDKResources.bundle */; };
-		C49F5860160285CC0027383F /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C49F585F160285CC0027383F /* Parse.framework */; };
 		C4A0B505156C5B9F00E48554 /* TTTTimeIntervalFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = C4A0B503156C5B9F00E48554 /* TTTTimeIntervalFormatter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C4A6A246158FF842003F64A8 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = C4A6A245158FF842003F64A8 /* MBProgressHUD.m */; };
 		C4A6D87C157859AA009FE621 /* PAPCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C4A6D87B157859AA009FE621 /* PAPCache.m */; };
@@ -322,7 +321,6 @@
 		C4F102E2156C58440061BC3E /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4F102DF156C58440061BC3E /* Entitlements.plist */; };
 		C4F102E7156C58570061BC3E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C4F102E5156C58570061BC3E /* InfoPlist.strings */; };
 		C4F102EF156C58E00061BC3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102EC156C58E00061BC3E /* main.m */; };
-		D52C66DF18C5B6F200E56F9E /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D52C66DE18C5B6F200E56F9E /* FacebookSDK.framework */; };
 		D531F7CC18B5DE11008AE73F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D531F7CB18B5DE11008AE73F /* CoreVideo.framework */; };
 		D531F7CE18B5DE44008AE73F /* Appsee.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D531F7CD18B5DE44008AE73F /* Appsee.framework */; };
 		D59B997A18C5974D002D6EFE /* AppIcon120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = D59B997918C5974C002D6EFE /* AppIcon120x120.png */; };
@@ -625,7 +623,6 @@
 		C47DDDE51592761F002114F6 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		C47DDDE815927631002114F6 /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTunesArtwork@2x"; sourceTree = "<group>"; };
 		C499A3031725E6DD0089D40A /* FacebookSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = FacebookSDKResources.bundle; sourceTree = "<group>"; };
-		C49F585F160285CC0027383F /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		C4A0B502156C5B9F00E48554 /* TTTTimeIntervalFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTTimeIntervalFormatter.h; sourceTree = "<group>"; };
 		C4A0B503156C5B9F00E48554 /* TTTTimeIntervalFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTTimeIntervalFormatter.m; sourceTree = "<group>"; };
 		C4A6A244158FF842003F64A8 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
@@ -752,7 +749,6 @@
 		C4F102EB156C58E00061BC3E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		C4F102EC156C58E00061BC3E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
 		C4F102ED156C58E00061BC3E /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = SOURCE_ROOT; };
-		D52C66DE18C5B6F200E56F9E /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = External/FacebookSDK.framework; sourceTree = "<group>"; };
 		D531F7CB18B5DE11008AE73F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		D531F7CD18B5DE44008AE73F /* Appsee.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Appsee.framework; path = External/Appsee.framework; sourceTree = "<group>"; };
 		D59B997918C5974C002D6EFE /* AppIcon120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon120x120.png; sourceTree = "<group>"; };
@@ -838,7 +834,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D52C66DF18C5B6F200E56F9E /* FacebookSDK.framework in Frameworks */,
 				D531F7CE18B5DE44008AE73F /* Appsee.framework in Frameworks */,
 				D531F7CC18B5DE11008AE73F /* CoreVideo.framework in Frameworks */,
 				D5FC09CC18A9C2FF000D85F1 /* OpenGLES.framework in Frameworks */,
@@ -848,7 +843,6 @@
 				C4C9B94816B877AE00BB2862 /* AdSupport.framework in Frameworks */,
 				C4C9B94916B877AE00BB2862 /* Social.framework in Frameworks */,
 				C4C9B94516B877AE00BB2862 /* Accounts.framework in Frameworks */,
-				C49F5860160285CC0027383F /* Parse.framework in Frameworks */,
 				C4CD219915ED790500BC387F /* libsqlite3.dylib in Frameworks */,
 				74B108AB156D7CC2005B421C /* AddressBook.framework in Frameworks */,
 				74B108A9156D7510005B421C /* MessageUI.framework in Frameworks */,
@@ -893,7 +887,6 @@
 		09ABC07013A1D52D009C3FCF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D52C66DE18C5B6F200E56F9E /* FacebookSDK.framework */,
 				D531F7CD18B5DE44008AE73F /* Appsee.framework */,
 				D531F7CB18B5DE11008AE73F /* CoreVideo.framework */,
 				D5FC09CB18A9C2FF000D85F1 /* OpenGLES.framework */,
@@ -1332,7 +1325,6 @@
 			children = (
 				D5FC095F18A9BFF4000D85F1 /* Konotor */,
 				C499A3031725E6DD0089D40A /* FacebookSDKResources.bundle */,
-				C49F585F160285CC0027383F /* Parse.framework */,
 				C47DDDE31592761F002114F6 /* Reachability */,
 				C4A6A243158FF842003F64A8 /* MBProgressHUD */,
 				C4701B821570035B000BAEA3 /* UIImage Categories */,
