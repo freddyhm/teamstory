@@ -3,6 +3,7 @@
 //  Parse
 //
 //  Created by Brian Jacokes on 6/4/12.
+//  Copyright (c) 2012 Parse, Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -55,7 +56,7 @@
  @result Returns a PFInstallation that represents the currently-running
  installation.
  */
-+ (PFInstallation *)currentInstallation;
++ (instancetype)currentInstallation;
 
 /*!
  Sets the device token string property from an NSData-encoded token.

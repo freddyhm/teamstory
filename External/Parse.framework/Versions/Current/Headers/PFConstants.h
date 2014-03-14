@@ -1,11 +1,12 @@
 // PFConstants.h
+// Copyright 2011 Parse, Inc. All rights reserved.
 
 #import <Foundation/Foundation.h>
 @class PFObject;
 @class PFUser;
 
 // Version
-#define PARSE_VERSION @"1.2.6"
+#define PARSE_VERSION @"1.2.18"
 
 extern NSInteger const PARSE_API_VERSION;
 

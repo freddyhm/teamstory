@@ -3,6 +3,7 @@
 //  Parse
 //
 //  Created by Ilya Sukhar on 9/29/11.
+//  Copyright 2011 Parse, Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -50,8 +51,8 @@
 
 /*!
  Sets the applicationId and clientKey of your application.
- @param applicationId The applicaiton id for your Parse application.
- @param applicationId The client key for your Parse application.
+ @param applicationId The application id for your Parse application.
+ @param clientKey The client key for your Parse application.
  */
 + (void)setApplicationId:(NSString *)applicationId clientKey:(NSString *)clientKey;
 + (NSString *)getApplicationId;

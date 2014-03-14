@@ -3,6 +3,7 @@
 //  Parse
 //
 //  Created by Thomas Bouldin on 3/11/13.
+//  Copyright (c) 2013 Parse Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -24,7 +25,7 @@
  A default implementation is provided by PFObject which should always be sufficient.
  @result Returns the object that is instantiated.
  */
-+ (id)object;
++ (instancetype)object;
 
 /*!
  Creates a reference to an existing PFObject for use in creating associations between PFObjects.  Calling isDataAvailable on this
@@ -33,7 +34,7 @@
  @param objectId The object id for the referenced object.
  @result A PFObject without data.
  */
-+ (id)objectWithoutDataWithObjectId:(NSString *)objectId;
++ (instancetype)objectWithoutDataWithObjectId:(NSString *)objectId;
   
 /*! The name of the class as seen in the REST API. */
 + (NSString *)parseClassName;

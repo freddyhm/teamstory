@@ -3,6 +3,7 @@
 //  Parse
 //
 //  Created by Ilya Sukhar on 7/4/11.
+//  Copyright 2011 Parse, Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -68,14 +69,14 @@
 - (void)setData:(NSDictionary *)data;
 
 /*!
- Sets whether this push will go to Android devices. Defaults to true.
+ Deprecated. Please use a PFInstallation.query with a constraint on deviceType.
  */
-- (void)setPushToAndroid:(BOOL)pushToAndroid;
+- (void)setPushToAndroid:(BOOL)pushToAndroid __attribute__ ((deprecated));
 
 /*!
- Sets whether this push will go to iOS devices. Defaults to true.
+ Deprecated. Please use a PFInstallation.query with a constraint on deviceType.
  */
-- (void)setPushToIOS:(BOOL)pushToIOS;
+- (void)setPushToIOS:(BOOL)pushToIOS  __attribute__ ((deprecated));
 
 /*!
  Sets the expiration time for this notification. The notification will be

@@ -3,6 +3,7 @@
 //  Parse
 //
 //  Created by Henele Adams on 12/1/11.
+//  Copyright (c) 2011 Parse, Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -17,10 +18,7 @@
  Currently, object classes may only have one key associated with a GeoPoint type.
  */
 
-@interface PFGeoPoint : NSObject<NSCopying> {
-    double latitude;
-    double longitude;
-}
+@interface PFGeoPoint : NSObject<NSCopying>
 
 /** @name Creating a PFGeoPoint */
 /*!

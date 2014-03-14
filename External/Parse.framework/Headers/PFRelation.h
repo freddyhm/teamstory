@@ -3,6 +3,7 @@
 //  Parse
 //
 //  Created by Shyam Jayaraman on 5/11/12.
+//  Copyright (c) 2012 Parse Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -13,11 +14,7 @@
  A class that is used to access all of the children of a many-to-many relationship.  Each instance
  of PFRelation is associated with a particular parent object and key.
  */
-@interface PFRelation : NSObject {
-    PFObject *parent;
-    NSString *key;
-    NSString *targetClass;
-}
+@interface PFRelation : NSObject
 
 @property (nonatomic, retain) NSString *targetClass;
 

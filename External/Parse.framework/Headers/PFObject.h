@@ -1,4 +1,5 @@
 // PFObject.h
+// Copyright 2011 Parse, Inc. All rights reserved.
 
 #import <Foundation/Foundation.h>
 #import "PFACL.h"
@@ -7,7 +8,8 @@
 @protocol PFSubclassing;
 
 /*!
- A Parse Framework Object that is a local representation of data persisted to the Parse cloud. This is the main class that is used to interact with objects in your app.
+ A Parse Framework Object that is a local representation of data persisted to the Parse cloud.
+ This is the main class that is used to interact with objects in your app.
 */
 @class PFRelation;
 @class PFTask;
@@ -15,18 +17,6 @@
 NS_REQUIRES_PROPERTY_DEFINITIONS
 @interface PFObject : NSObject {
     BOOL dirty;
-    BOOL hasBeenFetched;
-
-    NSString *objectId;
-    NSString *parseClassName;
-
-    NSMutableDictionary *dataAvailability;
-
-    // The data as it was known the last time it was fetched from the server.
-    // If the object has never been fetched, some keys on the server may not
-    // be present in this dictionary, while others may be known because of the
-    // result of a save.
-    NSMutableDictionary *serverData;
 
     // An array of NSDictionary of NSString -> PFFieldOperation.
     // Each dictionary has a subset of the object's keys as keys, and the
@@ -40,12 +30,6 @@ NS_REQUIRES_PROPERTY_DEFINITIONS
     // Our best estimate as to what the current data is, based on
     // the last fetch from the server, and the set of pending operations.
     NSMutableDictionary *estimatedData;
-
-    // A dictionary that maps id (objects) => PFJSONCache 
-    NSMutableDictionary *hashedObjectsCache;
-
-    NSDate *updatedAt;
-    NSDate *createdAt;
 }
 
 #pragma mark Constructors
@@ -57,7 +41,7 @@ NS_REQUIRES_PROPERTY_DEFINITIONS
  @param className A class name can be any alphanumeric string that begins with a letter. It represents an object in your app, like a User of a Document.
  @result Returns the object that is instantiated with the given class name.
  */
-+ (PFObject *)objectWithClassName:(NSString *)className;
++ (instancetype)objectWithClassName:(NSString *)className;
 
 /*!
  Creates a reference to an existing PFObject for use in creating associations between PFObjects.  Calling isDataAvailable on this
@@ -67,8 +51,8 @@ NS_REQUIRES_PROPERTY_DEFINITIONS
  @param objectId The object id for the referenced object.
  @result A PFObject without data.
  */
-+ (PFObject *)objectWithoutDataWithClassName:(NSString *)className
-                                    objectId:(NSString *)objectId;
++ (instancetype)objectWithoutDataWithClassName:(NSString *)className
+                                      objectId:(NSString *)objectId;
 
 /*!
  Creates a new PFObject with a class name, initialized with data constructed from the specified set of objects and keys.
@@ -161,6 +145,11 @@ NS_REQUIRES_PROPERTY_DEFINITIONS
 /*!
  Returns the relation object associated with the given key 
  @param key The key that the relation is associated with. 
+ */
+- (PFRelation *)relationForKey:(NSString *)key;
+
+/*!
+ Use relationForKey instead. This method exists only for backward compatibility.
  */
 - (PFRelation *)relationforKey:(NSString *)key;
 
@@ -330,6 +319,50 @@ NS_REQUIRES_PROPERTY_DEFINITIONS
 + (void)saveAllInBackground:(NSArray *)objects
                      target:(id)target
                    selector:(SEL)selector;
+
+#pragma mark -
+#pragma mark Delete All
+
+/*! @name Delete Many Objects from Parse */
+
+/*!
+ Deletes a collection of objects all at once.
+ @param objects The array of objects to delete.
+ @result Returns whether the delete succeeded.
+ */
++ (BOOL)deleteAll:(NSArray *)objects;
+
+/*!
+ Deletes a collection of objects all at once and sets an error if necessary.
+ @param objects The array of objects to delete.
+ @param error Pointer to an NSError that will be set if necessary.
+ @result Returns whether the delete succeeded.
+ */
++ (BOOL)deleteAll:(NSArray *)objects error:(NSError **)error;
+
+/*!
+ Deletes a collection of objects all at once asynchronously.
+ @param objects The array of objects to delete.
+ */
++ (void)deleteAllInBackground:(NSArray *)objects;
+
+/*!
+ Deletes a collection of objects all at once asynchronously and the block when done.
+ @param objects The array of objects to delete.
+ @param block The block to execute. The block should have the following argument signature: (BOOL succeeded, NSError *error)
+ */
++ (void)deleteAllInBackground:(NSArray *)objects
+                        block:(PFBooleanResultBlock)block;
+
+/*!
+ Deletes a collection of objects all at once asynchronously and calls a callback when done.
+ @param objects The array of objects to delete.
+ @param target The object to call selector on.
+ @param selector The selector to call. It should have the following signature: (void)callbackWithError:(NSError *)error. error will be nil on success and set if there was an error.
+ */
++ (void)deleteAllInBackground:(NSArray *)objects
+                       target:(id)target
+                     selector:(SEL)selector;
 
 #pragma mark -
 #pragma mark Refresh
@@ -533,6 +566,22 @@ NS_REQUIRES_PROPERTY_DEFINITIONS
  connection can be re-established, and the queued requests can go through.
  */
 - (void)deleteEventually;
+
+#pragma mark -
+#pragma Dirtiness
+
+/*!
+ Gets whether any key-value pair in this object (or its children) has been added/updated/removed and not saved yet.
+ @result Returns whether this object has been altered and not saved yet.
+ */
+- (BOOL)isDirty;
+
+/*!
+ Get whether a value associated with a key has been added/updated/removed and not saved yet.
+ @param key The key to check for
+ @result Returns whether this key has been altered and not saved yet.
+ */
+- (BOOL)isDirtyForKey:(NSString *)key;
 
 #pragma mark -
 

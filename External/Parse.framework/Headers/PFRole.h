@@ -3,6 +3,7 @@
 //  Parse
 //
 //  Created by David Poll on 5/17/12.
+//  Copyright (c) 2012 Parse Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -48,7 +49,7 @@
  
  @param name The name of the Role to create.
  */
-+ (PFRole *)roleWithName:(NSString *)name;
++ (instancetype)roleWithName:(NSString *)name;
 
 /*!
  Constructs a new PFRole with the given name.
@@ -56,7 +57,7 @@
  @param name The name of the Role to create.
  @param acl The ACL for this role. Roles must have an ACL.
  */
-+ (PFRole *)roleWithName:(NSString *)name acl:(PFACL *)acl;
++ (instancetype)roleWithName:(NSString *)name acl:(PFACL *)acl;
 
 #pragma mark -
 #pragma mark Role-specific Properties
@@ -77,8 +78,6 @@
  These users are granted any privileges that this role has been granted
  (e.g. read or write access through ACLs). You can add or remove users from
  the role through this relation.
- 
- @return the relation for the users belonging to this role.
  */
 @property (nonatomic, readonly, retain) PFRelation *users;
 
@@ -87,8 +86,6 @@
  These roles' users are granted any privileges that this role has been granted
  (e.g. read or write access through ACLs). You can add or remove child roles
  from this role through this relation.
- 
- @return the relation for the roles belonging to this role.
  */
 @property (nonatomic, readonly, retain) PFRelation *roles;
 
