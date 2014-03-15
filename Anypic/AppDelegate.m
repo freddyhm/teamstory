@@ -7,8 +7,8 @@
 #import "AppDelegate.h"
 
 #import <Appsee/Appsee.h>
-#import "Konotor.h"
-#import "KonotorEventHandler.h"
+//#import "Konotor.h"
+//#import "KonotorEventHandler.h"
 #import "Reachability.h"
 #import "MBProgressHUD.h"
 #import "PAPHomeViewController.h"
@@ -84,7 +84,7 @@
     //[Appsee start:@"5bfb3fafb8424fe9b3d070d3022bee41"];
     
     // Konotor setup
-    [Konotor InitWithAppID:@"7043fe2f-cb83-403e-b9af-3c6de2fd4752" AppKey:@"e57e4508-47b6-4ecf-b0ee-8c657a855b3d" withDelegate:[KonotorEventHandler sharedInstance]];
+  //  [Konotor InitWithAppID:@"7043fe2f-cb83-403e-b9af-3c6de2fd4752" AppKey:@"e57e4508-47b6-4ecf-b0ee-8c657a855b3d" withDelegate:[KonotorEventHandler sharedInstance]];
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
      (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     
@@ -94,7 +94,7 @@
     NSDictionary* payload=[launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     if(payload!=nil)
     {
-        [Konotor handleRemoteNotification:payload withShowScreen:YES];
+      //  [Konotor handleRemoteNotification:payload withShowScreen:YES];
     }
     
     
@@ -150,7 +150,7 @@
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
     
     // konotor notifications setup
-    [Konotor addDeviceToken:newDeviceToken];
+    //[Konotor addDeviceToken:newDeviceToken];
     [PFPush storeDeviceToken:newDeviceToken];
     
     if (application.applicationIconBadgeNumber != 0) {
@@ -180,9 +180,9 @@
         
         // app is in foreground
         if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
-            [Konotor handleRemoteNotification:userInfo withShowScreen:NO];
+         //   [Konotor handleRemoteNotification:userInfo withShowScreen:NO];
         }else{
-            [Konotor handleRemoteNotification:userInfo withShowScreen:YES];
+           // [Konotor handleRemoteNotification:userInfo withShowScreen:YES];
             [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
         }
         
@@ -217,7 +217,7 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     
     // initiate konotor
-    [Konotor newSession];
+   // [Konotor newSession];
 
 
     // Clear badge and update installation, required for auto-incrementing badges.
@@ -225,6 +225,33 @@
         application.applicationIconBadgeNumber = 0;
         [[PFInstallation currentInstallation] saveInBackground];
     }
+        
+    
+   // PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    //[currentInstallation saveEventually];
+    
+    /*
+    [currentInstallation fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        PFInstallation *m = (PFInstallation *)object;
+        NSLog(@"%zd", m.badge);
+        NSLog(@"%@", m.objectId);
+    }];
+    
+        PFInstallation *m = (PFInstallation *)object;
+            NSLog(@"%zd", m.badge);
+                    NSLog(@"%@", m.objectId);
+    }];
+*/
+    
+    
+    
+    
+    /*
+    if ([[PFInstallation currentInstallation] badge] == 0) {
+        [[PFInstallation currentInstallation] setBadge:0];
+        [[PFInstallation currentInstallation] saveEventually];
+    }
+     */
 
     // Clears out all notifications from Notification Center.
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
@@ -520,6 +547,7 @@
                 }
             }];
         }
+
     }
 }
 

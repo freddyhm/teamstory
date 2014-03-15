@@ -170,12 +170,12 @@ enum ActionSheetTags {
         
         @synchronized(self) {
             // check if we can update the cache
-            NSNumber *outstandingSectionHeaderQueryStatus = [self.outstandingSectionHeaderQueries objectForKey:[NSNumber numberWithInt:section]];
+            NSNumber *outstandingSectionHeaderQueryStatus = [self.outstandingSectionHeaderQueries objectForKey:[NSNumber numberWithInt:(int)section]];
             if (!outstandingSectionHeaderQueryStatus) {
                 PFQuery *query = [PAPUtility queryForActivitiesOnPhoto:photo cachePolicy:kPFCachePolicyNetworkOnly];
                 [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                     @synchronized(self) {
-                        [self.outstandingSectionHeaderQueries removeObjectForKey:[NSNumber numberWithInt:section]];
+                        [self.outstandingSectionHeaderQueries removeObjectForKey:[NSNumber numberWithInt:(int)section]];
 
                         if (error) {
                             return;

@@ -89,6 +89,10 @@
         [self.refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
         self.pullToRefreshEnabled = NO;
     }
+    
+    // reset badge number on server side
+    [[PFInstallation currentInstallation] setBadge:0];
+    [[PFInstallation currentInstallation] saveEventually];
 }
 
 
@@ -200,7 +204,7 @@
             }
         }
         if (unreadCount > 0) {
-            self.navigationController.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d",unreadCount];
+            self.navigationController.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d",(int)unreadCount];
         } else {
             self.navigationController.tabBarItem.badgeValue = nil;
         }

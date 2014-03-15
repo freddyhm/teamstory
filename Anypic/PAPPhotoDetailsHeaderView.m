@@ -174,11 +174,11 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [image removeFromSuperview];
     }
 
-    [likeButton setTitle:[NSString stringWithFormat:@"%d", self.likeUsers.count] forState:UIControlStateNormal];
+    [likeButton setTitle:[NSString stringWithFormat:@"%d", (int)self.likeUsers.count] forState:UIControlStateNormal];
 
     self.currentLikeAvatars = [[NSMutableArray alloc] initWithCapacity:likeUsers.count];
     int i;
-    int numOfPics = numLikePics > self.likeUsers.count ? self.likeUsers.count : numLikePics;
+    int numOfPics = numLikePics > (int)self.likeUsers.count ? (int)self.likeUsers.count : numLikePics;
 
     for (i = 0; i < numOfPics; i++) {
         PAPProfileImageView *profilePic = [[PAPProfileImageView alloc] init];

@@ -236,7 +236,7 @@
         NSDictionary *followingDictionary = [[PFUser currentUser] objectForKey:@"following"];
         [followingCountLabel setText:@"0 following"];
         if (followingDictionary) {
-            [followingCountLabel setText:[NSString stringWithFormat:@"%d following", [[followingDictionary allValues] count]]];
+            [followingCountLabel setText:[NSString stringWithFormat:@"%d following", (int)[[followingDictionary allValues] count]]];
         }
         
         PFQuery *queryFollowingCount = [PFQuery queryWithClassName:kPAPActivityClassKey];

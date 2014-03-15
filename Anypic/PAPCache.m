@@ -43,9 +43,9 @@
 - (void)setAttributesForPhoto:(PFObject *)photo likers:(NSArray *)likers commenters:(NSArray *)commenters likedByCurrentUser:(BOOL)likedByCurrentUser {
     NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
                                       [NSNumber numberWithBool:likedByCurrentUser],kPAPPhotoAttributesIsLikedByCurrentUserKey,
-                                      [NSNumber numberWithInt:[likers count]],kPAPPhotoAttributesLikeCountKey,
+                                      [NSNumber numberWithInt:(int)[likers count]],kPAPPhotoAttributesLikeCountKey,
                                       likers,kPAPPhotoAttributesLikersKey,
-                                      [NSNumber numberWithInt:[commenters count]],kPAPPhotoAttributesCommentCountKey,
+                                      [NSNumber numberWithInt:(int)[commenters count]],kPAPPhotoAttributesCommentCountKey,
                                       commenters,kPAPPhotoAttributesCommentersKey,
                                       nil];
     [self setAttributes:attributes forPhoto:photo];
