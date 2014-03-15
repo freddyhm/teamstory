@@ -91,14 +91,13 @@
     [self.window makeKeyAndVisible]; // or similar code to set a visible view
     
     // Set your view before the following snippet executes
-    NSDictionary* payload=[launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-    if(payload!=nil)
-    {
+    //NSDictionary* payload=[launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    //if(payload!=nil)
+    //{
       //  [Konotor handleRemoteNotification:payload withShowScreen:YES];
-    }
+    //}
     
     
-
     // ****************************************************************************
     // Parse initialization
         [Parse setApplicationId:@"0tEtPoPtsvPu1lCPzBeU032Cz3Byemcp5lr25gIU"
@@ -108,11 +107,6 @@
     
     // Track app open
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
-
-    if (application.applicationIconBadgeNumber != 0) {
-        application.applicationIconBadgeNumber = 0;
-        [[PFInstallation currentInstallation] saveInBackground];
-    }
 
     PFACL *defaultACL = [PFACL ACL];
     // Enable public read access by default, with any newly created PFObjects belonging to the current user
@@ -216,47 +210,27 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     
-    // initiate konotor
-   // [Konotor newSession];
-
-
-    // Clear badge and update installation, required for auto-incrementing badges.
+    // syncs icon badge with tab bar badge, resets icon badge back to 0
     if (application.applicationIconBadgeNumber != 0) {
-        application.applicationIconBadgeNumber = 0;
-        [[PFInstallation currentInstallation] saveInBackground];
-    }
         
-    
-   // PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-    //[currentInstallation saveEventually];
-    
-    /*
-    [currentInstallation fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        PFInstallation *m = (PFInstallation *)object;
-        NSLog(@"%zd", m.badge);
-        NSLog(@"%@", m.objectId);
-    }];
-    
-        PFInstallation *m = (PFInstallation *)object;
-            NSLog(@"%zd", m.badge);
-                    NSLog(@"%@", m.objectId);
-    }];
-*/
-    
-    
-    
-    
-    /*
-    if ([[PFInstallation currentInstallation] badge] == 0) {
-        [[PFInstallation currentInstallation] setBadge:0];
-        [[PFInstallation currentInstallation] saveEventually];
+         if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
+        
+             UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
+            
+             NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+             NSNumber *newBadgeValue = [NSNumber numberWithInteger:application.applicationIconBadgeNumber];
+             tabBarItem.badgeValue = [numberFormatter stringFromNumber:newBadgeValue];
+        }
+        
+        application.applicationIconBadgeNumber = 1;
+        application.applicationIconBadgeNumber = 0;
     }
-     */
 
     // Clears out all notifications from Notification Center.
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
-    application.applicationIconBadgeNumber = 1;
-    application.applicationIconBadgeNumber = 0;
+
+    // initiate konotor
+    // [Konotor newSession];
 
     [[FBSession activeSession] handleDidBecomeActive];
 }
@@ -508,6 +482,7 @@
 
 - (void)handlePush:(NSDictionary *)launchOptions userInfo:(NSDictionary *)userInfo source:(NSString *)source {
     
+
     // handle notification payload based on source (launching or background)
     NSDictionary *remoteNotificationPayload;
     
@@ -519,10 +494,14 @@
     }
     
     if (remoteNotificationPayload) {
-    
+        
         if (![PFUser currentUser]) {
             return;
         }
+        
+        // Reset badge number on server side
+        [[PFInstallation currentInstallation] setBadge:0];
+        [[PFInstallation currentInstallation] saveEventually];
                 
         // If the push notification payload references a photo, we will attempt to push this view controller into view
         NSString *photoObjectId = [remoteNotificationPayload objectForKey:kPAPPushPayloadPhotoObjectIdKey];
@@ -547,7 +526,7 @@
                 }
             }];
         }
-
+        
     }
 }
 

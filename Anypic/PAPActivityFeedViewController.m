@@ -89,10 +89,16 @@
         [self.refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
         self.pullToRefreshEnabled = NO;
     }
+}
+
+- (void)viewWillAppear:(BOOL)animated {
     
-    // reset badge number on server side
-    [[PFInstallation currentInstallation] setBadge:0];
-    [[PFInstallation currentInstallation] saveEventually];
+    // reset badge number on server side when user checks activity feed and badge value is present
+    if(self.navigationController.tabBarItem.badgeValue != nil){
+        // Reset badge number on server side
+        [[PFInstallation currentInstallation] setBadge:0];
+        [[PFInstallation currentInstallation] saveEventually];
+    }
 }
 
 
