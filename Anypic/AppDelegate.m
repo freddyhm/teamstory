@@ -80,11 +80,11 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    // Appsee setup
-    //[Appsee start:@"5bfb3fafb8424fe9b3d070d3022bee41"];
+    // Appsee Prod setup
+    [Appsee start:@"ee2b6679635f492dbc1d36a14fe196ae"];
     
     // Konotor setup
-  //  [Konotor InitWithAppID:@"7043fe2f-cb83-403e-b9af-3c6de2fd4752" AppKey:@"e57e4508-47b6-4ecf-b0ee-8c657a855b3d" withDelegate:[KonotorEventHandler sharedInstance]];
+  //  [Konotor InitWithAppID:@"ab785be6-9398-4b6a-8ae6-4d83431edad9" AppKey:@"3784ef60-6e0f-48fc-9a6c-3ac71c127dcb" withDelegate:[KonotorEventHandler sharedInstance]];
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
      (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     
@@ -99,9 +99,9 @@
     
     
     // ****************************************************************************
-    // Parse initialization
-        [Parse setApplicationId:@"0tEtPoPtsvPu1lCPzBeU032Cz3Byemcp5lr25gIU"
-                      clientKey:@"ZRnM7JXOlbSyOQuosXWG6SlrDNCY22C84hpqyi0l"];
+    // Parse Prod initialization
+        [Parse setApplicationId:@"SPQlkxDYPDcVhbICHFzjwSsREHaSqKQIKwkijDaJ"
+                      clientKey:@"WtgkZLYZ1UOlsbGMnfYtKCD6dQLMfy3tBsN2UKxA"];
         [PFFacebookUtils initializeFacebook];
     // ****************************************************************************
     
