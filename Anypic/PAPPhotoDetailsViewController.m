@@ -27,6 +27,9 @@ enum ActionSheetTags {
 @property (nonatomic, strong) NSString *photoID;
 @property (nonatomic, strong) PFObject *current_photo;
 @property (nonatomic, strong) PFUser *reported_user;
+@property (nonatomic, strong) UITextView *commentTextView;
+@property (nonatomic, strong) UIView *footer_mainView;
+@property (nonatomic, strong) PAPPhotoDetailsFooterView *footerView;
 @end
 
 static const CGFloat kPAPCellInsetWidth = 7.5f;
@@ -38,6 +41,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 @synthesize photoID;
 @synthesize current_photo;
 @synthesize reported_user;
+@synthesize commentTextView;
+@synthesize footer_mainView;
+@synthesize footerView;
 
 
 
@@ -105,10 +111,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.tableView.tableHeaderView = self.headerView;
     
     // Set table footer
-    PAPPhotoDetailsFooterView *footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:[PAPPhotoDetailsFooterView rectForView]];
-    commentTextField = footerView.commentField;
-    commentTextField.delegate = self;
+    footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:[PAPPhotoDetailsFooterView rectForView]];
+    commentTextView = footerView.commentView;
+    commentTextView.delegate = self;
     self.tableView.tableFooterView = footerView;
+    
+    
 
     /*
     if ([self currentUserOwnsPhoto]) {
@@ -155,7 +163,18 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     // Register to be notified when the keyboard will be shown to scroll the view
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLikedOrUnlikedPhoto:) name:PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:self.photo];
+    
+    UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
+                                          initWithTarget:self
+                                          action:@selector(dismissKeyboard)];
+    
+    [self.view addGestureRecognizer:tapOutside];
 }
+
+-(void)dismissKeyboard {
+    [self.view endEditing:YES];
+}
+
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -238,7 +257,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     // Try to dequeue a cell and create one if necessary
     PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (cell == nil) {
-        cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        //cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        cell = [[PAPBaseTextCell alloc] initWithNavigationController:self.navigationController];
         cell.cellInsetWidth = kPAPCellInsetWidth;
         cell.delegate = self;
     }
@@ -264,10 +284,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     return cell;
 }
 
-
+/*
 #pragma mark - UITextFieldDelegate
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+- (BOOL)textFieldShouldReturn:(UITextView *)textField {
     NSString *trimmedComment = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (trimmedComment.length != 0 && [self.photo objectForKey:kPAPPhotoUserKey]) {
         PFObject *comment = [PFObject objectWithClassName:kPAPActivityClassKey];
@@ -310,7 +330,69 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [textField setText:@""];
     return [textField resignFirstResponder];
 }
+ */
 
+#pragma mark - UITextViewDelegate
+
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    [textView setText:@""];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    if ([textView.text length] == 0) {
+        [textView setText:@"Add a comment"];
+    }
+}
+
+
+- (BOOL) textView:(UITextView*)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString*)text{
+    if ([text isEqualToString:@"\n"]) {
+        NSString *trimmedComment = [textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if (trimmedComment.length != 0 && [self.photo objectForKey:kPAPPhotoUserKey]) {
+            PFObject *comment = [PFObject objectWithClassName:kPAPActivityClassKey];
+            [comment setObject:trimmedComment forKey:kPAPActivityContentKey]; // Set comment text
+            [comment setObject:[self.photo objectForKey:kPAPPhotoUserKey] forKey:kPAPActivityToUserKey]; // Set toUser
+            [comment setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey]; // Set fromUser
+            [comment setObject:kPAPActivityTypeComment forKey:kPAPActivityTypeKey];
+            [comment setObject:self.photo forKey:kPAPActivityPhotoKey];
+            
+            PFACL *ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+            [ACL setPublicReadAccess:YES];
+            [ACL setWriteAccess:YES forUser:[self.photo objectForKey:kPAPPhotoUserKey]];
+            comment.ACL = ACL;
+            
+            [[PAPCache sharedCache] incrementCommentCountForPhoto:self.photo];
+            
+            // Show HUD view
+            [MBProgressHUD showHUDAddedTo:self.view.superview animated:YES];
+            
+            // If more than 5 seconds pass since we post a comment, stop waiting for the server to respond
+            NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(handleCommentTimeout:) userInfo:@{@"comment": comment} repeats:NO];
+            
+            [comment saveEventually:^(BOOL succeeded, NSError *error) {
+                [timer invalidate];
+                
+                if (error && error.code == kPFErrorObjectNotFound) {
+                    [[PAPCache sharedCache] decrementCommentCountForPhoto:self.photo];
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Could not post comment", nil) message:NSLocalizedString(@"This photo is no longer available", nil) delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                    [alert show];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:self.photo userInfo:@{@"comments": @(self.objects.count + 1)}];
+                
+                [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+                [self loadObjects];
+            }];
+        }
+        
+        [textView setText:@""];
+        
+        [textView resignFirstResponder];
+        return NO;
+    }
+    return YES;
+}
 
 
 #pragma mark - UIScrollViewDelegate
@@ -570,7 +652,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     // Scroll the view to the comment text box
     NSDictionary* info = [note userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentSize.height-kbSize.height) animated:YES];
+    [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentSize.height-kbSize.height - 100.0f) animated:YES];
 }
 
 - (void)loadLikers {

@@ -8,6 +8,7 @@
 #import "TTTTimeIntervalFormatter.h"
 #import "PAPProfileImageView.h"
 #import "PAPUtility.h"
+#import "PAPwebviewViewController.h"
 
 static TTTTimeIntervalFormatter *timeFormatter;
 
@@ -31,6 +32,17 @@ static TTTTimeIntervalFormatter *timeFormatter;
 @synthesize separatorImage;
 @synthesize delegate;
 @synthesize user;
+@synthesize website;
+@synthesize navController;
+
+
+- (id)initWithNavigationController:(UINavigationController *)navigationController {
+    self = [super init];
+    if (self) {
+        self.navController = navigationController;
+    }
+    return self;
+}
 
 
 #pragma mark - NSObject
@@ -214,13 +226,44 @@ static TTTTimeIntervalFormatter *timeFormatter;
     // If we have a user we pad the content with spaces to make room for the name
     if (self.user) {
         CGSize nameSize = [self.nameButton.titleLabel.text sizeWithFont:[UIFont boldSystemFontOfSize:13] forWidth:nameMaxWidth lineBreakMode:NSLineBreakByTruncatingTail];
-        NSString *paddedString = [PAPBaseTextCell padString:contentString withFont:[UIFont systemFontOfSize:13] toWidth:nameSize.width];    
-        [self.contentLabel setText:paddedString];
+        NSString *paddedString = [PAPBaseTextCell padString:contentString withFont:[UIFont systemFontOfSize:13] toWidth:nameSize.width];
+        NSRange range = [paddedString rangeOfString:@"(?i)(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+" options:NSRegularExpressionSearch];
+        
+        NSMutableAttributedString *commentText = [[NSMutableAttributedString alloc] initWithString:paddedString];
+        [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
+        
+        self.website = [paddedString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        
+        NSLog(@"%@", self.website);
+
+        [self.contentLabel setAttributedText:commentText];
+        [self.contentLabel setUserInteractionEnabled:YES];
+        
+        if (range.length > 0) {
+            UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openUrl:)];
+            gestureRec.numberOfTouchesRequired = 1;
+            gestureRec.numberOfTapsRequired = 1;
+            [self.contentLabel addGestureRecognizer:gestureRec];
+        }
     } else { // Otherwise we ignore the padding and we'll add it after we set the user
         [self.contentLabel setText:contentString];
     }
     [self setNeedsDisplay];
 }
+
+- (void)openUrl:(id)sender {
+    if ([self.website rangeOfString:@"(?i)http" options:NSRegularExpressionSearch].location == NSNotFound) {
+        NSString *http = @"http://";
+        self.website = [NSString stringWithFormat:@"%@%@", http, self.website];
+    }
+    
+    //self.website = [self.website stringWithFormat:@"%@/%@/%@", ];
+    PAPwebviewViewController *webViewController = [[PAPwebviewViewController alloc] initWithWebsite:self.website];
+    webViewController.hidesBottomBarWhenPushed = YES;
+    [self.navController pushViewController:webViewController animated:YES];
+
+}
+
 
 - (void)setDate:(NSDate *)date {
     // Set the label with a human readable time

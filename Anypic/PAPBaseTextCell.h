@@ -30,6 +30,8 @@
 @property (nonatomic, strong) UILabel *contentLabel;
 @property (nonatomic, strong) UILabel *timeLabel;
 @property (nonatomic, strong) UIImageView *separatorImage;
+@property (nonatomic, strong) NSString *website;
+@property (nonatomic, strong) UINavigationController *navController;
 
 /*! The horizontal inset of the cell */
 @property (nonatomic) CGFloat cellInsetWidth;
@@ -40,6 +42,8 @@
 
 - (void)setCellInsetWidth:(CGFloat)insetWidth;
 - (void)hideSeparator:(BOOL)hide;
+
+- (id)initWithNavigationController:(UINavigationController *)navigationController;
 
 /*! Static Helper methods */
 + (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content;
