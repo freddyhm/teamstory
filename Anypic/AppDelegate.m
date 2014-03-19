@@ -7,8 +7,8 @@
 #import "AppDelegate.h"
 
 #import <Appsee/Appsee.h>
-//#import "Konotor.h"
-//#import "KonotorEventHandler.h"
+#import "Konotor.h"
+#import "KonotorEventHandler.h"
 #import "Reachability.h"
 #import "MBProgressHUD.h"
 #import "PAPHomeViewController.h"
@@ -84,19 +84,11 @@
     //[Appsee start:@"5bfb3fafb8424fe9b3d070d3022bee41"];
     
     // Konotor setup
-  //  [Konotor InitWithAppID:@"7043fe2f-cb83-403e-b9af-3c6de2fd4752" AppKey:@"e57e4508-47b6-4ecf-b0ee-8c657a855b3d" withDelegate:[KonotorEventHandler sharedInstance]];
+    [Konotor InitWithAppID:@"7043fe2f-cb83-403e-b9af-3c6de2fd4752" AppKey:@"e57e4508-47b6-4ecf-b0ee-8c657a855b3d" withDelegate:[KonotorEventHandler sharedInstance]];
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
      (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     
     [self.window makeKeyAndVisible]; // or similar code to set a visible view
-    
-    // Set your view before the following snippet executes
-    //NSDictionary* payload=[launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-    //if(payload!=nil)
-    //{
-      //  [Konotor handleRemoteNotification:payload withShowScreen:YES];
-    //}
-    
     
     // ****************************************************************************
     // Parse initialization
@@ -127,7 +119,8 @@
     self.window.rootViewController = self.navController;
     
     [self.window makeKeyAndVisible];
-
+    
+    // handle push notifications
     [self handlePush:launchOptions userInfo:nil source:@"launch"];
 
     return YES;
@@ -174,9 +167,9 @@
         
         // app is in foreground
         if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
-         //   [Konotor handleRemoteNotification:userInfo withShowScreen:NO];
+            [Konotor handleRemoteNotification:userInfo withShowScreen:NO];
         }else{
-           // [Konotor handleRemoteNotification:userInfo withShowScreen:YES];
+            [Konotor handleRemoteNotification:userInfo withShowScreen:YES];
             [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
         }
         
@@ -495,6 +488,12 @@
     
     if (remoteNotificationPayload) {
         
+        NSString *notificationSource = [userInfo objectForKey:@"source"];
+        
+        if([notificationSource isEqualToString:@"konotor"]){
+            [Konotor handleRemoteNotification:remoteNotificationPayload withShowScreen:YES];
+        }
+    
         if (![PFUser currentUser]) {
             return;
         }
