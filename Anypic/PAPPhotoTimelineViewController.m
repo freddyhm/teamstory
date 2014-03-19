@@ -91,13 +91,15 @@ enum ActionSheetTags {
         // Use the new iOS 6 refresh control.
         UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
         self.refreshControl = refreshControl;
-        self.refreshControl.tintColor = [UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:1.0f];
+        self.refreshControl.tintColor = [UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:0.5f];
         [self.refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
         
-        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Updating..."];
+        NSMutableAttributedString *refreshTitle = [[NSMutableAttributedString alloc] initWithString:@"Updating..."];
+        
+        [refreshTitle addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:0.5f] range:NSMakeRange(0, refreshTitle.length)];
+        
+        self.refreshControl.attributedTitle = refreshTitle;
     }
-    
-  
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidPublishPhoto:) name:PAPTabBarControllerDidFinishEditingPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userFollowingChanged:) name:PAPUtilityUserFollowingChangedNotification object:nil];
