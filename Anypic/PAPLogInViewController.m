@@ -40,7 +40,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     // There is no documentation on how to handle assets with the taller iPhone 5 screen as of 9/13/2012
     if ([UIScreen mainScreen].bounds.size.height > 480.0f) {
         // for the iPhone 5

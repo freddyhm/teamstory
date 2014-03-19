@@ -124,7 +124,7 @@
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-intro.png"]];
     
     // Initialization
     UIColor *backgroundColor = [UIColor whiteColor];
@@ -133,7 +133,7 @@
     
     NSLog(@"%f", self.view.bounds.size.height);
     
-    backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, self.view.bounds.size.height - 270.0f, self.view.bounds.size.width, 270.0f)];
+    backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, self.view.bounds.size.height - 370.0f, self.view.bounds.size.width, 370.0f)];
     [backgroundView setBackgroundColor:backgroundColor];
     [self.view addSubview:backgroundView];
     
@@ -142,7 +142,7 @@
     if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
         profileImagePicker.frame = CGRectMake( 110.0f, 87.0f, 100.0f, 100.0f );
     } else {
-        profileImagePicker.frame = CGRectMake( 110.0f, 130.0f, 100.0f, 100.0f );
+        profileImagePicker.frame = CGRectMake( 110.0f, 60.0f, 100.0f, 100.0f );
     }
     [profileImagePicker setImage:[UIImage imageNamed:@"profilepicture.png"] forState:UIControlStateNormal];
     
@@ -189,15 +189,15 @@
         [self.navigationItem setHidesBackButton:YES];
     }
     
-     
-    UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [saveButton setFrame:CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f)];
-    [[saveButton titleLabel] setFont:[UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]]];
+    
+    UIButton *saveButton = [[UIButton alloc] initWithFrame:CGRectMake(35.0f, backgroundView.bounds.size.height - 70.0f, 250.0f, 45.0f)];
+    [[saveButton titleLabel] setFont:[UIFont boldSystemFontOfSize:14.0f]];
+    [saveButton setBackgroundColor:[UIColor colorWithRed:91.0f/255.0f green:194.0f/255.0f blue:165.0f/255.0f alpha:1.0f]];
+    [saveButton setTitle:@"Apply for Membership" forState:UIControlStateNormal];
     [saveButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
     [saveButton addTarget:self action:@selector(saveButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [saveButton setBackgroundImage:[UIImage imageNamed:@"button_done.png"] forState:UIControlStateNormal];
-    [saveButton setBackgroundImage:[UIImage imageNamed:@"button_done_selected.png"] forState:UIControlStateHighlighted];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:saveButton];
+    [backgroundView addSubview:saveButton];
+    
     
     [self createdropDownButton:(@"Select User Type")];
     

@@ -19,6 +19,7 @@
 
 - (void)presentTabBarController;
 - (void)presentLoginSelectionController;
+- (void)presentTutorialViewController;
 
 - (void)logOut;
 - (void)settingRootViewAsTabBarController;

@@ -7,6 +7,7 @@
 #import "PAPWelcomeViewController.h"
 #import "AppDelegate.h"
 #import "PAPProfileSettingViewController.h"
+#import "PAPLoginTutorialViewController.h"
 
 @implementation PAPWelcomeViewController
 
@@ -19,7 +20,7 @@
 
     // If not logged in, present login view controller
     if (!user) {
-        [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentLoginSelectionController];
+        [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTutorialViewController];
         return;
     }
     bool profileExist = user[@"profileExist"];
@@ -30,7 +31,7 @@
         [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBarController];
     } else {
         PAPProfileSettingViewController *profileViewController = [[PAPProfileSettingViewController alloc] init];
-        self.navigationController.navigationBarHidden = NO;
+        self.navigationController.navigationBarHidden = YES;
         [self.navigationController pushViewController:profileViewController animated:NO];
     }
 }

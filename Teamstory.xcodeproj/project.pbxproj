@@ -134,6 +134,15 @@
 		467154A718835E470000C0CA /* privacy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 467154A518835E470000C0CA /* privacy@2x.png */; };
 		467154B6188368350000C0CA /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 467154B4188368350000C0CA /* Default@2x.png */; };
 		467154B7188368350000C0CA /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 467154B5188368350000C0CA /* Default.png */; };
+		46797E6518D8D41C00666961 /* PAPLoginTutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46797E6418D8D41C00666961 /* PAPLoginTutorialViewController.m */; };
+		46797E6E18D8D63B00666961 /* tut3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46797E6618D8D63B00666961 /* tut3@2x.png */; };
+		46797E6F18D8D63B00666961 /* tut3.png in Resources */ = {isa = PBXBuildFile; fileRef = 46797E6718D8D63B00666961 /* tut3.png */; };
+		46797E7018D8D63B00666961 /* tut2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46797E6818D8D63B00666961 /* tut2@2x.png */; };
+		46797E7118D8D63B00666961 /* tut2.png in Resources */ = {isa = PBXBuildFile; fileRef = 46797E6918D8D63B00666961 /* tut2.png */; };
+		46797E7218D8D63B00666961 /* tutlogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46797E6A18D8D63B00666961 /* tutlogo@2x.png */; };
+		46797E7318D8D63B00666961 /* tutlogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 46797E6B18D8D63B00666961 /* tutlogo.png */; };
+		46797E7418D8D63B00666961 /* tut1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46797E6C18D8D63B00666961 /* tut1@2x.png */; };
+		46797E7518D8D63B00666961 /* tut1.png in Resources */ = {isa = PBXBuildFile; fileRef = 46797E6D18D8D63B00666961 /* tut1.png */; };
 		4688686F185F8B78002BA081 /* emailSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4688686E185F8B78002BA081 /* emailSignUpViewController.m */; };
 		4691B4E218BE994800B7DF6A /* asana@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B4DE18BE994700B7DF6A /* asana@2x.png */; };
 		4691B4E318BE994800B7DF6A /* asana.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B4DF18BE994800B7DF6A /* asana.png */; };
@@ -525,6 +534,16 @@
 		467154A518835E470000C0CA /* privacy@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "privacy@2x.png"; sourceTree = "<group>"; };
 		467154B4188368350000C0CA /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		467154B5188368350000C0CA /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		46797E6318D8D41C00666961 /* PAPLoginTutorialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPLoginTutorialViewController.h; path = Anypic/PAPLoginTutorialViewController.h; sourceTree = SOURCE_ROOT; };
+		46797E6418D8D41C00666961 /* PAPLoginTutorialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPLoginTutorialViewController.m; path = Anypic/PAPLoginTutorialViewController.m; sourceTree = SOURCE_ROOT; };
+		46797E6618D8D63B00666961 /* tut3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tut3@2x.png"; sourceTree = "<group>"; };
+		46797E6718D8D63B00666961 /* tut3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tut3.png; sourceTree = "<group>"; };
+		46797E6818D8D63B00666961 /* tut2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tut2@2x.png"; sourceTree = "<group>"; };
+		46797E6918D8D63B00666961 /* tut2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tut2.png; sourceTree = "<group>"; };
+		46797E6A18D8D63B00666961 /* tutlogo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tutlogo@2x.png"; sourceTree = "<group>"; };
+		46797E6B18D8D63B00666961 /* tutlogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tutlogo.png; sourceTree = "<group>"; };
+		46797E6C18D8D63B00666961 /* tut1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tut1@2x.png"; sourceTree = "<group>"; };
+		46797E6D18D8D63B00666961 /* tut1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tut1.png; sourceTree = "<group>"; };
 		4688686D185F8B78002BA081 /* emailSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = emailSignUpViewController.h; sourceTree = SOURCE_ROOT; };
 		4688686E185F8B78002BA081 /* emailSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = emailSignUpViewController.m; sourceTree = SOURCE_ROOT; };
 		4691B4DE18BE994700B7DF6A /* asana@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "asana@2x.png"; sourceTree = "<group>"; };
@@ -1003,6 +1022,14 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				46797E6618D8D63B00666961 /* tut3@2x.png */,
+				46797E6718D8D63B00666961 /* tut3.png */,
+				46797E6818D8D63B00666961 /* tut2@2x.png */,
+				46797E6918D8D63B00666961 /* tut2.png */,
+				46797E6A18D8D63B00666961 /* tutlogo@2x.png */,
+				46797E6B18D8D63B00666961 /* tutlogo.png */,
+				46797E6C18D8D63B00666961 /* tut1@2x.png */,
+				46797E6D18D8D63B00666961 /* tut1.png */,
 				4691B53B18CCFA4500B7DF6A /* btn-back.png */,
 				4691B53C18CCFA4500B7DF6A /* btn-back@2x.png */,
 				4691B53318CCF4C500B7DF6A /* icon-twitterlogin.png */,
@@ -1284,6 +1311,8 @@
 		74A504E51565F17E00CFA4E3 /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				46797E6318D8D41C00666961 /* PAPLoginTutorialViewController.h */,
+				46797E6418D8D41C00666961 /* PAPLoginTutorialViewController.m */,
 				4688686D185F8B78002BA081 /* emailSignUpViewController.h */,
 				4688686E185F8B78002BA081 /* emailSignUpViewController.m */,
 				4691B52C18CCE81600B7DF6A /* PAPLoginSelectionViewController.h */,
@@ -1651,6 +1680,7 @@
 				C4F102E2156C58440061BC3E /* Entitlements.plist in Resources */,
 				4691B4F418BEF61C00B7DF6A /* follow.png in Resources */,
 				D5D1042C18B5CF4E0084C901 /* button-feedback@2x.png in Resources */,
+				46797E7018D8D63B00666961 /* tut2@2x.png in Resources */,
 				C4F102E7156C58570061BC3E /* InfoPlist.strings in Resources */,
 				465B19AF18B81FE500EDBCFC /* browser-button-forward-normal.png in Resources */,
 				46715488188342380000C0CA /* loginbutton.png in Resources */,
@@ -1666,6 +1696,7 @@
 				D5FC09A218A9BFF4000D85F1 /* konotor_chatbox.png in Resources */,
 				4602FCF618BAB2CA0097DBEC /* partner@2x.png in Resources */,
 				46B31EEF184E35150028D11C /* profileLocation@2x.png in Resources */,
+				46797E6E18D8D63B00666961 /* tut3@2x.png in Resources */,
 				D59B997E18C59836002D6EFE /* AppIcon80x80.png in Resources */,
 				462FCB85188C8533005059F3 /* button_back.png in Resources */,
 				467154A618835E470000C0CA /* privacy.png in Resources */,
@@ -1723,6 +1754,7 @@
 				462FCB60188C6AE9005059F3 /* ProfileNavigationBar@2x.png in Resources */,
 				46715499188346750000C0CA /* login_iphone4@2x.png in Resources */,
 				4691B52418C56AAF00B7DF6A /* tnz-popup@2x.png in Resources */,
+				46797E7218D8D63B00666961 /* tutlogo@2x.png in Resources */,
 				D5FC09B218A9BFF4000D85F1 /* konotor_progress_blue.png in Resources */,
 				C4BE6774157FC7F700A291C2 /* BackgroundLeather@2x.png in Resources */,
 				D5FC095C18A9B586000D85F1 /* CameraFilterViewController.xib in Resources */,
@@ -1739,6 +1771,7 @@
 				C4BE677D157FC7F700A291C2 /* BackgroundTabBarItemSelected.png in Resources */,
 				D5FC09B618A9BFF4000D85F1 /* konotor_sent.png in Resources */,
 				C4BE677E157FC7F700A291C2 /* BackgroundTabBarItemSelected@2x.png in Resources */,
+				46797E7418D8D63B00666961 /* tut1@2x.png in Resources */,
 				464A3543185A979A006E951E /* bg-intro2-iphone4.png in Resources */,
 				462FCB5F188C6AE9005059F3 /* ProfileNavigationBar.png in Resources */,
 				C4BE6783157FC7F700A291C2 /* ButtonCamera.png in Resources */,
@@ -1762,6 +1795,7 @@
 				465DE3461895983A00C37EF8 /* profileType.png in Resources */,
 				C4BE6786157FC7F700A291C2 /* ButtonCameraSelected@2x.png in Resources */,
 				46B31EEC184E35150028D11C /* profileDescription.png in Resources */,
+				46797E7518D8D63B00666961 /* tut1.png in Resources */,
 				46ABD73018AADFFB008F5AAB /* default-pic@2x.png in Resources */,
 				4602FCFD18BAB9570097DBEC /* deezer-popup.png in Resources */,
 				D5FC09A818A9BFF4000D85F1 /* konotor_cross.png in Resources */,
@@ -1819,6 +1853,7 @@
 				C4BE67A6157FC7F700A291C2 /* IconComment@2x.png in Resources */,
 				465A4EDA18A8222A00E43DC6 /* iconlocation@2x.png in Resources */,
 				46B31EF8184E3DCB0028D11C /* profileAddNew.png in Resources */,
+				46797E6F18D8D63B00666961 /* tut3.png in Resources */,
 				D5FC09A418A9BFF4000D85F1 /* konotor_chatbubble_ios7_other.png in Resources */,
 				46FB0A841888989800E978CD /* tab-people-unselected.png in Resources */,
 				467154A718835E470000C0CA /* privacy@2x.png in Resources */,
@@ -1836,6 +1871,7 @@
 				C4BE67AC157FC7F700A291C2 /* IconHomeSelected@2x.png in Resources */,
 				4691B51118C02F7800B7DF6A /* icon-followers.png in Resources */,
 				46B31EEB184E35150028D11C /* profileWebsite@2x.png in Resources */,
+				46797E7118D8D63B00666961 /* tut2.png in Resources */,
 				4691B53018CCEB8700B7DF6A /* bg-login@2x.png in Resources */,
 				46B31EF5184E3D340028D11C /* profileCollaborator@2x.png in Resources */,
 				462FCB6A188C7848005059F3 /* IconActivity@2x.png in Resources */,
@@ -1916,6 +1952,7 @@
 				46FB0A921888BBF400E978CD /* news1.png in Resources */,
 				465B19B218B81FE500EDBCFC /* browser-button-no@2x.png in Resources */,
 				4691B4E318BE994800B7DF6A /* asana.png in Resources */,
+				46797E7318D8D63B00666961 /* tutlogo.png in Resources */,
 				465B19A218B81DD000EDBCFC /* bg-browser-bar@2x.png in Resources */,
 				D5FC09B518A9BFF4000D85F1 /* konotor_send@2x.png in Resources */,
 				46FB0A861888989800E978CD /* tab-people-selected.png in Resources */,
@@ -1986,6 +2023,7 @@
 				D5FC09C218A9BFF4000D85F1 /* KonotorVoiceInputOverlay.m in Sources */,
 				C4F102D2156C57FD0061BC3E /* PAPAccountViewController.m in Sources */,
 				C4F102D3156C57FD0061BC3E /* PAPPhotoDetailsViewController.m in Sources */,
+				46797E6518D8D41C00666961 /* PAPLoginTutorialViewController.m in Sources */,
 				C4F102D8156C580C0061BC3E /* PAPFindFriendsViewController.m in Sources */,
 				D5FC099E18A9BFF4000D85F1 /* KonotorFeedbackScreenViewController.m in Sources */,
 				D5FC099C18A9BFF4000D85F1 /* KonotorEventHandler.m in Sources */,

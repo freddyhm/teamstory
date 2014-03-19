@@ -22,6 +22,7 @@
 #import "discoverPageViewController.h"
 #import "PAPwebviewViewController.h"
 #import "PAPLoginSelectionViewController.h"
+#import "PAPLoginTutorialViewController.h"
 
 
 
@@ -237,7 +238,7 @@
 - (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
     // user has logged in - we need to fetch all of their Facebook data before we let them in
     if (![self shouldProceedToMainInterface:user]) {
-        self.hud = [MBProgressHUD showHUDAddedTo:self.navController.presentedViewController.view animated:YES];
+        self.hud = [MBProgressHUD showHUDAddedTo:self.navController.view animated:YES];
         self.hud.labelText = NSLocalizedString(@"Loading", nil);
         self.hud.dimBackground = YES;
     }
@@ -248,17 +249,20 @@
         [[PFUser currentUser] setObject:[PFTwitterUtils twitter].userId forKey:@"twitterID"];
         
         if (profileExist != true) {
+            [self.hud hide:YES];
+            
             PAPProfileSettingViewController *profileSettingView = [[PAPProfileSettingViewController alloc] init];
-            self.navController.navigationBarHidden = NO;
+            self.navController.navigationBarHidden = YES;
             [self.navController pushViewController:profileSettingView animated:NO];
         }
     } else if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
         [FBRequestConnection startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
             if (!error) {
                 if (profileExist != true) {
+                    [self.hud hide:YES];
+                    
                     PAPProfileSettingViewController *profileSettingView = [[PAPProfileSettingViewController alloc] init];
-                    self.navController.navigationBarHidden = NO;
-                    self.navController.navigationItem.leftBarButtonItem = nil;
+                    self.navController.navigationBarHidden = YES;
                     [self.navController pushViewController:profileSettingView animated:NO];
                 } else {
                     [self facebookRequestDidLoad:result];
@@ -295,6 +299,11 @@
 - (void)presentLoginSelectionController {
     PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] init];
     [self.navController pushViewController:loginSelectionViewController animated:YES];
+}
+
+- (void)presentTutorialViewController {
+    PAPLoginTutorialViewController *loginTutorialViewController = [[PAPLoginTutorialViewController alloc] init];
+    [self.navController pushViewController:loginTutorialViewController animated:YES];
 }
 
 -(void)settingRootViewAsTabBarController {
