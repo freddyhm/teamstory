@@ -89,7 +89,7 @@
 }
 
 - (void)promptFeedback:(id)sender{
-   // [KonotorFeedbackScreen showFeedbackScreen];
+   [KonotorFeedbackScreen showFeedbackScreen];
 }
 
 @end
