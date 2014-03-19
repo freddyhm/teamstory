@@ -137,7 +137,7 @@
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
     
     // konotor notifications setup
-    //[Konotor addDeviceToken:newDeviceToken];
+    [Konotor addDeviceToken:newDeviceToken];
     [PFPush storeDeviceToken:newDeviceToken];
     
     if (application.applicationIconBadgeNumber != 0) {
@@ -223,7 +223,7 @@
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
 
     // initiate konotor
-    // [Konotor newSession];
+    [Konotor newSession];
 
     [[FBSession activeSession] handleDidBecomeActive];
 }
