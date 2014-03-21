@@ -143,6 +143,7 @@
 		46797E7318D8D63B00666961 /* tutlogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 46797E6B18D8D63B00666961 /* tutlogo.png */; };
 		46797E7418D8D63B00666961 /* tut1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46797E6C18D8D63B00666961 /* tut1@2x.png */; };
 		46797E7518D8D63B00666961 /* tut1.png in Resources */ = {isa = PBXBuildFile; fileRef = 46797E6D18D8D63B00666961 /* tut1.png */; };
+		46839E6318D9E40A00BD60DB /* PAPprofileApprovalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46839E6218D9E40A00BD60DB /* PAPprofileApprovalViewController.m */; };
 		4688686F185F8B78002BA081 /* emailSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4688686E185F8B78002BA081 /* emailSignUpViewController.m */; };
 		4691B4E218BE994800B7DF6A /* asana@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B4DE18BE994700B7DF6A /* asana@2x.png */; };
 		4691B4E318BE994800B7DF6A /* asana.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B4DF18BE994800B7DF6A /* asana.png */; };
@@ -544,6 +545,8 @@
 		46797E6B18D8D63B00666961 /* tutlogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tutlogo.png; sourceTree = "<group>"; };
 		46797E6C18D8D63B00666961 /* tut1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tut1@2x.png"; sourceTree = "<group>"; };
 		46797E6D18D8D63B00666961 /* tut1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tut1.png; sourceTree = "<group>"; };
+		46839E6118D9E40A00BD60DB /* PAPprofileApprovalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPprofileApprovalViewController.h; path = Anypic/PAPprofileApprovalViewController.h; sourceTree = SOURCE_ROOT; };
+		46839E6218D9E40A00BD60DB /* PAPprofileApprovalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPprofileApprovalViewController.m; path = Anypic/PAPprofileApprovalViewController.m; sourceTree = SOURCE_ROOT; };
 		4688686D185F8B78002BA081 /* emailSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = emailSignUpViewController.h; sourceTree = SOURCE_ROOT; };
 		4688686E185F8B78002BA081 /* emailSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = emailSignUpViewController.m; sourceTree = SOURCE_ROOT; };
 		4691B4DE18BE994700B7DF6A /* asana@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "asana@2x.png"; sourceTree = "<group>"; };
@@ -996,6 +999,8 @@
 		46E1EB6C183BCA4600F64274 /* ProfileSetting */ = {
 			isa = PBXGroup;
 			children = (
+				46839E6118D9E40A00BD60DB /* PAPprofileApprovalViewController.h */,
+				46839E6218D9E40A00BD60DB /* PAPprofileApprovalViewController.m */,
 				46E1EB6D183BCA6300F64274 /* PAPProfileSettingViewController.h */,
 				46E1EB6E183BCA6300F64274 /* PAPProfileSettingViewController.m */,
 			);
@@ -2037,6 +2042,7 @@
 				46FB0A48188879A200E978CD /* PAPpeopleView.m in Sources */,
 				C4A6D87C157859AA009FE621 /* PAPCache.m in Sources */,
 				D5FC09C018A9BFF4000D85F1 /* KonotorUITextView.m in Sources */,
+				46839E6318D9E40A00BD60DB /* PAPprofileApprovalViewController.m in Sources */,
 				D5FC09C118A9BFF4000D85F1 /* KonotorUtility.m in Sources */,
 				C4A6A246158FF842003F64A8 /* MBProgressHUD.m in Sources */,
 				46E1EB6F183BCA6300F64274 /* PAPProfileSettingViewController.m in Sources */,

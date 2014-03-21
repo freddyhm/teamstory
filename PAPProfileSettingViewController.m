@@ -7,6 +7,7 @@
 #import "PAPAccountViewController.h"
 #import "AppDelegate.h"
 #import "UIImage+ResizeAdditions.h"
+#import "PAPprofileApprovalViewController.h"
 
 #define SUCCESSFUL 1
 #define IMAGE_NIL 2
@@ -80,7 +81,9 @@
 }
 
 - (void)refreshView {
-    bool profileExist = self.user[@"profileExist"];
+    NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
+    bool profileExist = [profilExist_num boolValue];
+    
     location_user = self.user[@"location"];
     website_user = self.user[@"website"];
     displayName_user = self.user[@"displayName"];
@@ -680,6 +683,18 @@
             NSNumber *profileBoolNum = [NSNumber numberWithBool: profileExist];
             [[PFUser currentUser] setObject: profileBoolNum forKey: @"profileExist"];
             
+            
+            PFObject *membershipReceived = [PFObject objectWithClassName:kPAPActivityClassKey];
+            [membershipReceived setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey];
+            [membershipReceived setObject:@"membership" forKey:@"type"];
+            
+            PFACL *membershipACL = [PFACL ACL];
+            [membershipACL setPublicReadAccess:YES];
+            membershipReceived.ACL = membershipACL;
+            
+            // make sure our join activity is always earlier than a follow
+            [membershipReceived saveInBackground];
+            
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             alert.alertViewStyle = UIAlertViewStyleDefault;
             alert.tag = FIRST_LOGIN;
@@ -711,8 +726,10 @@
             NSLog(@"Logged In Sucessfully");
             [self.view endEditing:YES];
             
-            [PFUser user];
-            [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
+            //[PFUser user];
+            //[(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
+            PAPprofileApprovalViewController *profileApprovalViewController = [[PAPprofileApprovalViewController alloc] init];
+            [self.navigationController pushViewController:profileApprovalViewController animated:YES];
             return;
         }
     } else if (alertView.tag == IMAGE_NIL) {
@@ -759,6 +776,17 @@
                 [self uploadImage_medium:imageData_picker];
             }
             
+            PFObject *membershipReceived = [PFObject objectWithClassName:kPAPActivityClassKey];
+            [membershipReceived setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey];
+            [membershipReceived setObject:@"membership" forKey:@"type"];
+            
+            PFACL *membershipACL = [PFACL ACL];
+            [membershipACL setPublicReadAccess:YES];
+            membershipReceived.ACL = membershipACL;
+            
+            // make sure our join activity is always earlier than a follow
+            [membershipReceived saveInBackground];
+            
             bool profileExist = YES; // either YES or NO
             NSNumber *profileBoolNum = [NSNumber numberWithBool: profileExist];
             [[PFUser currentUser] setObject: profileBoolNum forKey: @"profileExist"];
@@ -771,27 +799,8 @@
         }
     } else if (alertView.tag == FIRST_LOGIN) {
         if (buttonIndex == 0) {
-            NSLog(@"Logged In Sucessfully");
-            [self.view endEditing:YES];
-            
-            self.startOverlay = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
-            [[[[UIApplication sharedApplication] delegate] window] addSubview:self.startOverlay];
-            
-            UIImageView *startOverlay_image = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
-            UIButton *proceed_button = [[UIButton alloc] init];
-            
-            if ([UIScreen mainScreen].bounds.size.height == 480) {
-                [startOverlay_image setImage:[UIImage imageNamed:@"intro2-iphone4.png"]];
-                [proceed_button setFrame:CGRectMake(35.0f, 416.0f, 250.0f, 43.0f)];
-            } else {
-                [startOverlay_image setImage:[UIImage imageNamed:@"intro2-iphone5.png"]];
-                [proceed_button setFrame:CGRectMake(35.0f, 504.0f, 250.0f, 43.0f)];
-            }
-            
-            [self.startOverlay addSubview:startOverlay_image];
-            
-            [proceed_button addTarget:self action:@selector(firstLoginButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-            [self.startOverlay addSubview:proceed_button];
+            PAPprofileApprovalViewController *profileApprovalViewController = [[PAPprofileApprovalViewController alloc] init];
+            [self.navigationController pushViewController:profileApprovalViewController animated:YES];
         }
     }
 }

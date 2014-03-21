@@ -23,6 +23,7 @@
 #import "PAPwebviewViewController.h"
 #import "PAPLoginSelectionViewController.h"
 #import "PAPLoginTutorialViewController.h"
+#import "PAPprofileApprovalViewController.h"
 
 
 
@@ -243,27 +244,42 @@
         self.hud.dimBackground = YES;
     }
     
-    bool profileExist = user[@"profileExist"];
+    NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
+    bool profileExist = [profilExist_num boolValue];
+    
+    NSNumber *accessGrant_num = [[PFUser currentUser] objectForKey: @"accessGrant"];
+    bool access_grant = [accessGrant_num boolValue];
+    
     
     if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]){
         [[PFUser currentUser] setObject:[PFTwitterUtils twitter].userId forKey:@"twitterID"];
         
-        if (profileExist != true) {
-            [self.hud hide:YES];
+        if (profileExist != true || access_grant != true) {
+            if (profileExist != true) {
+                PAPProfileSettingViewController *profileSettingView = [[PAPProfileSettingViewController alloc] init];
+                self.navController.navigationBarHidden = YES;
+                [self.navController pushViewController:profileSettingView animated:NO];
+                return;
+            }
             
-            PAPProfileSettingViewController *profileSettingView = [[PAPProfileSettingViewController alloc] init];
-            self.navController.navigationBarHidden = YES;
-            [self.navController pushViewController:profileSettingView animated:NO];
+            PAPprofileApprovalViewController *profileApprovalViewController = [[PAPprofileApprovalViewController alloc] init];
+            [self.navController pushViewController:profileApprovalViewController animated:YES];
         }
     } else if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
         [FBRequestConnection startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
             if (!error) {
-                if (profileExist != true) {
-                    [self.hud hide:YES];
+                [self.hud hide:YES];
+                
+                if (profileExist != true || access_grant != true) {
+                    if (profileExist != true) {
+                        PAPProfileSettingViewController *profileSettingView = [[PAPProfileSettingViewController alloc] init];
+                        self.navController.navigationBarHidden = YES;
+                        [self.navController pushViewController:profileSettingView animated:NO];
+                        return;
+                    }
                     
-                    PAPProfileSettingViewController *profileSettingView = [[PAPProfileSettingViewController alloc] init];
-                    self.navController.navigationBarHidden = YES;
-                    [self.navController pushViewController:profileSettingView animated:NO];
+                    PAPprofileApprovalViewController *profileApprovalViewController = [[PAPprofileApprovalViewController alloc] init];
+                    [self.navController pushViewController:profileApprovalViewController animated:YES];
                 } else {
                     [self facebookRequestDidLoad:result];
                 }
