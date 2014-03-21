@@ -352,6 +352,13 @@
 		D5D1042818B5C7AF0084C901 /* konotor.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042718B5C7AF0084C901 /* konotor.png */; };
 		D5D1042B18B5CF4E0084C901 /* button-feedback.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042918B5CF4E0084C901 /* button-feedback.png */; };
 		D5D1042C18B5CF4E0084C901 /* button-feedback@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */; };
+		D5EF16CC18DBE8CF0073C691 /* activity.js in Sources */ = {isa = PBXBuildFile; fileRef = D5EF16C318DBE8CF0073C691 /* activity.js */; };
+		D5EF16CD18DBE8CF0073C691 /* app.js in Sources */ = {isa = PBXBuildFile; fileRef = D5EF16C418DBE8CF0073C691 /* app.js */; };
+		D5EF16CE18DBE8CF0073C691 /* installation.js in Sources */ = {isa = PBXBuildFile; fileRef = D5EF16C518DBE8CF0073C691 /* installation.js */; };
+		D5EF16CF18DBE8CF0073C691 /* main.js in Sources */ = {isa = PBXBuildFile; fileRef = D5EF16C618DBE8CF0073C691 /* main.js */; };
+		D5EF16D018DBE8CF0073C691 /* photo.js in Sources */ = {isa = PBXBuildFile; fileRef = D5EF16C718DBE8CF0073C691 /* photo.js */; };
+		D5EF16D118DBE8CF0073C691 /* global.json in Resources */ = {isa = PBXBuildFile; fileRef = D5EF16C918DBE8CF0073C691 /* global.json */; };
+		D5EF16D218DBE8CF0073C691 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = D5EF16CB18DBE8CF0073C691 /* index.html */; };
 		D5FC095218A9B518000D85F1 /* CropResizeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095018A9B518000D85F1 /* CropResizeViewController.m */; };
 		D5FC095518A9B543000D85F1 /* CameraFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095418A9B543000D85F1 /* CameraFilterViewController.m */; };
 		D5FC095818A9B552000D85F1 /* FilterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095718A9B552000D85F1 /* FilterCell.m */; };
@@ -755,6 +762,13 @@
 		D5D1042718B5C7AF0084C901 /* konotor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor.png; sourceTree = "<group>"; };
 		D5D1042918B5CF4E0084C901 /* button-feedback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback.png"; sourceTree = "<group>"; };
 		D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback@2x.png"; sourceTree = "<group>"; };
+		D5EF16C318DBE8CF0073C691 /* activity.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = activity.js; sourceTree = "<group>"; };
+		D5EF16C418DBE8CF0073C691 /* app.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = app.js; sourceTree = "<group>"; };
+		D5EF16C518DBE8CF0073C691 /* installation.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = installation.js; sourceTree = "<group>"; };
+		D5EF16C618DBE8CF0073C691 /* main.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; };
+		D5EF16C718DBE8CF0073C691 /* photo.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = photo.js; sourceTree = "<group>"; };
+		D5EF16C918DBE8CF0073C691 /* global.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = global.json; sourceTree = "<group>"; };
+		D5EF16CB18DBE8CF0073C691 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		D5FC094F18A9B518000D85F1 /* CropResizeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CropResizeViewController.h; sourceTree = SOURCE_ROOT; };
 		D5FC095018A9B518000D85F1 /* CropResizeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CropResizeViewController.m; sourceTree = SOURCE_ROOT; };
 		D5FC095318A9B543000D85F1 /* CameraFilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraFilterViewController.h; sourceTree = SOURCE_ROOT; };
@@ -1281,6 +1295,7 @@
 		C4A0B4FF156C5B9F00E48554 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				D5EF16C118DBE8CF0073C691 /* CloudCode */,
 				C499A3031725E6DD0089D40A /* FacebookSDKResources.bundle */,
 				C47DDDE31592761F002114F6 /* Reachability */,
 				C4A6A243158FF842003F64A8 /* MBProgressHUD */,
@@ -1422,6 +1437,44 @@
 				C4F102C6156C57ED0061BC3E /* PAPActivityFeedViewController.m */,
 			);
 			name = Activity;
+			sourceTree = "<group>";
+		};
+		D5EF16C118DBE8CF0073C691 /* CloudCode */ = {
+			isa = PBXGroup;
+			children = (
+				D5EF16C218DBE8CF0073C691 /* cloud */,
+				D5EF16C818DBE8CF0073C691 /* config */,
+				D5EF16CA18DBE8CF0073C691 /* public */,
+			);
+			path = CloudCode;
+			sourceTree = "<group>";
+		};
+		D5EF16C218DBE8CF0073C691 /* cloud */ = {
+			isa = PBXGroup;
+			children = (
+				D5EF16C318DBE8CF0073C691 /* activity.js */,
+				D5EF16C418DBE8CF0073C691 /* app.js */,
+				D5EF16C518DBE8CF0073C691 /* installation.js */,
+				D5EF16C618DBE8CF0073C691 /* main.js */,
+				D5EF16C718DBE8CF0073C691 /* photo.js */,
+			);
+			path = cloud;
+			sourceTree = "<group>";
+		};
+		D5EF16C818DBE8CF0073C691 /* config */ = {
+			isa = PBXGroup;
+			children = (
+				D5EF16C918DBE8CF0073C691 /* global.json */,
+			);
+			path = config;
+			sourceTree = "<group>";
+		};
+		D5EF16CA18DBE8CF0073C691 /* public */ = {
+			isa = PBXGroup;
+			children = (
+				D5EF16CB18DBE8CF0073C691 /* index.html */,
+			);
+			path = public;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1608,6 +1661,7 @@
 				4691B4F518BEF61C00B7DF6A /* follow@2x.png in Resources */,
 				465A4EDE18A8382900E43DC6 /* comingsoon.png in Resources */,
 				462FCB7C188C806C005059F3 /* button_done@2x.png in Resources */,
+				D5EF16D218DBE8CF0073C691 /* index.html in Resources */,
 				46ABD74B18B144D4008F5AAB /* news2@2x.png in Resources */,
 				4671548A188342380000C0CA /* registerbutton.png in Resources */,
 				46B31EEA184E35150028D11C /* profileWebsite.png in Resources */,
@@ -1716,6 +1770,7 @@
 				4602FD2218BD553B0097DBEC /* konotor-popup.png in Resources */,
 				4691B4E418BE994800B7DF6A /* asana-popup@2x.png in Resources */,
 				C4BE67BD157FC7F700A291C2 /* SeparatorTimeline.png in Resources */,
+				D5EF16D118DBE8CF0073C691 /* global.json in Resources */,
 				46B31EF1184E35150028D11C /* companyName@2x.png in Resources */,
 				465DE3571895AA9600C37EF8 /* dropdown_arrow@2x.png in Resources */,
 				C4BE67BE157FC7F700A291C2 /* SeparatorTimeline@2x.png in Resources */,
@@ -1769,14 +1824,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5EF16D018DBE8CF0073C691 /* photo.js in Sources */,
 				C4F10288156C56F20061BC3E /* UIImage+AlphaAdditions.m in Sources */,
 				D5FC095818A9B552000D85F1 /* FilterCell.m in Sources */,
 				D5FC095518A9B543000D85F1 /* CameraFilterViewController.m in Sources */,
 				46FB0A42188876C400E978CD /* PAPperksView.m in Sources */,
 				C4F1028A156C56F20061BC3E /* UIImage+ResizeAdditions.m in Sources */,
+				D5EF16CC18DBE8CF0073C691 /* activity.js in Sources */,
 				46FB0A8A1888BAF700E978CD /* PAPdiscoveryHeaderView.m in Sources */,
 				C4F1028B156C56F20061BC3E /* UIImage+RoundedCornerAdditions.m in Sources */,
 				4688686F185F8B78002BA081 /* emailSignUpViewController.m in Sources */,
+				D5EF16CF18DBE8CF0073C691 /* main.js in Sources */,
 				C4F10291156C571C0061BC3E /* AppDelegate.m in Sources */,
 				C4F10292156C571C0061BC3E /* PAPUtility.m in Sources */,
 				C4F102A0156C574A0061BC3E /* PAPImageView.m in Sources */,
@@ -1786,9 +1844,11 @@
 				46ABD75F18B53C46008F5AAB /* PAPwebviewViewController.m in Sources */,
 				C4F102AA156C57620061BC3E /* PAPPhotoDetailsHeaderView.m in Sources */,
 				C4F102B3156C57820061BC3E /* PAPActivityCell.m in Sources */,
+				D5EF16CD18DBE8CF0073C691 /* app.js in Sources */,
 				D5FC095218A9B518000D85F1 /* CropResizeViewController.m in Sources */,
 				C4F102B4156C57820061BC3E /* PAPBaseTextCell.m in Sources */,
 				46FB0A4B188879C500E978CD /* PAPstartUpsView.m in Sources */,
+				D5EF16CE18DBE8CF0073C691 /* installation.js in Sources */,
 				46ABD73318B12E01008F5AAB /* PAPperksoverlay.m in Sources */,
 				C4F102B5156C57820061BC3E /* PAPLoadMoreCell.m in Sources */,
 				464A354D185A9F6C006E951E /* emailLoginViewController.m in Sources */,
