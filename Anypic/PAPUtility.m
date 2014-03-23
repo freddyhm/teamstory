@@ -11,6 +11,26 @@
 
 
 #pragma mark - PAPUtility
+
+
+#pragma mark Notifications
+
++(void)updateSubscriptionToPost:(NSString *)postId forState:(NSString *)state{
+
+    // When create/like/comment post, auto-subcribe
+    NSString *postChannelName = [@"ch" stringByAppendingString:postId];
+    
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    
+    if([state isEqualToString:@"Subscribe"]){
+        [currentInstallation addUniqueObject:postChannelName forKey:@"channels"];
+    }else if([state isEqualToString:@"Unsubscribe"]){
+        [currentInstallation removeObject:postChannelName forKey:@"channels"];
+    }
+    
+    [currentInstallation saveInBackground];
+}
+
 #pragma mark Like Photos
 
 + (void)likePhotoInBackground:(id)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
