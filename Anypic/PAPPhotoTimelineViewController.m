@@ -150,12 +150,24 @@ enum ActionSheetTags {
     [headerView setPhoto:photo];
     headerView.tag = section;
     [headerView.likeButton setTag:section];
-    
+   
     NSDictionary *attributesForPhoto = [[PAPCache sharedCache] attributesForPhoto:photo];
-
+    
     if (attributesForPhoto) {
         [headerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:photo]];
-        [headerView.likeButton setTitle:[[[PAPCache sharedCache] likeCountForPhoto:photo] description] forState:UIControlStateNormal];
+        
+        NSString *likeCount =[[[PAPCache sharedCache] likeCountForPhoto:photo] description];
+        BOOL likeStatus = [[PAPCache sharedCache] isPhotoLikedByCurrentUser:photo];
+        [headerView setLikeStatus:likeStatus];
+        
+        
+        if (likeStatus == YES) {
+            [headerView.likeButton setTitle:likeCount forState:UIControlStateSelected];
+        } else {
+            [headerView.likeButton setTitle:likeCount forState:UIControlStateNormal];
+        }
+        
+
         [headerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:photo] description] forState:UIControlStateNormal];
         
         if (headerView.likeButton.alpha < 1.0f || headerView.commentButton.alpha < 1.0f) {
@@ -165,6 +177,7 @@ enum ActionSheetTags {
             }];
         }
     } else {
+    
         headerView.likeButton.alpha = 0.0f;
         headerView.commentButton.alpha = 0.0f;
         
@@ -175,7 +188,7 @@ enum ActionSheetTags {
                 PFQuery *query = [PAPUtility queryForActivitiesOnPhoto:photo cachePolicy:kPFCachePolicyNetworkOnly];
                 [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                     @synchronized(self) {
-                        [self.outstandingSectionHeaderQueries removeObjectForKey:[NSNumber numberWithInt:(int)section]];
+                        //[self.outstandingSectionHeaderQueries removeObjectForKey:[NSNumber numberWithInt:(int)section]];
 
                         if (error) {
                             return;
@@ -196,6 +209,7 @@ enum ActionSheetTags {
                             if ([[[activity objectForKey:kPAPActivityFromUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
                                 if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeLike]) {
                                     isLikedByCurrentUser = YES;
+
                                 }
                             }
                         }
@@ -205,9 +219,17 @@ enum ActionSheetTags {
                         if (headerView.tag != section) {
                             return;
                         }
+                        NSString *likeCount =[[[PAPCache sharedCache] likeCountForPhoto:photo] description];
                         
+                        NSLog(@"%@", likeCount);
                         [headerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:photo]];
-                        [headerView.likeButton setTitle:[[[PAPCache sharedCache] likeCountForPhoto:photo] description] forState:UIControlStateNormal];
+                        
+                        if (isLikedByCurrentUser == YES) {
+                            [headerView.likeButton setTitle:likeCount forState:UIControlStateSelected];
+                        } else {
+                            [headerView.likeButton setTitle:likeCount forState:UIControlStateNormal];
+                        }
+                        
                         [headerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:photo] description] forState:UIControlStateNormal];
                         
                         if (headerView.likeButton.alpha < 1.0f || headerView.commentButton.alpha < 1.0f) {
@@ -221,7 +243,6 @@ enum ActionSheetTags {
             }            
         }
     }
-    
     return headerView;
 }
 
