@@ -352,11 +352,6 @@
 		D5D1042818B5C7AF0084C901 /* konotor.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042718B5C7AF0084C901 /* konotor.png */; };
 		D5D1042B18B5CF4E0084C901 /* button-feedback.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042918B5CF4E0084C901 /* button-feedback.png */; };
 		D5D1042C18B5CF4E0084C901 /* button-feedback@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */; };
-		D5EF16CC18DBE8CF0073C691 /* activity.js in Sources */ = {isa = PBXBuildFile; fileRef = D5EF16C318DBE8CF0073C691 /* activity.js */; };
-		D5EF16CD18DBE8CF0073C691 /* app.js in Sources */ = {isa = PBXBuildFile; fileRef = D5EF16C418DBE8CF0073C691 /* app.js */; };
-		D5EF16CE18DBE8CF0073C691 /* installation.js in Sources */ = {isa = PBXBuildFile; fileRef = D5EF16C518DBE8CF0073C691 /* installation.js */; };
-		D5EF16CF18DBE8CF0073C691 /* main.js in Sources */ = {isa = PBXBuildFile; fileRef = D5EF16C618DBE8CF0073C691 /* main.js */; };
-		D5EF16D018DBE8CF0073C691 /* photo.js in Sources */ = {isa = PBXBuildFile; fileRef = D5EF16C718DBE8CF0073C691 /* photo.js */; };
 		D5EF16D118DBE8CF0073C691 /* global.json in Resources */ = {isa = PBXBuildFile; fileRef = D5EF16C918DBE8CF0073C691 /* global.json */; };
 		D5EF16D218DBE8CF0073C691 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = D5EF16CB18DBE8CF0073C691 /* index.html */; };
 		D5FC095218A9B518000D85F1 /* CropResizeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095018A9B518000D85F1 /* CropResizeViewController.m */; };
@@ -1824,17 +1819,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D5EF16D018DBE8CF0073C691 /* photo.js in Sources */,
 				C4F10288156C56F20061BC3E /* UIImage+AlphaAdditions.m in Sources */,
 				D5FC095818A9B552000D85F1 /* FilterCell.m in Sources */,
 				D5FC095518A9B543000D85F1 /* CameraFilterViewController.m in Sources */,
 				46FB0A42188876C400E978CD /* PAPperksView.m in Sources */,
 				C4F1028A156C56F20061BC3E /* UIImage+ResizeAdditions.m in Sources */,
-				D5EF16CC18DBE8CF0073C691 /* activity.js in Sources */,
 				46FB0A8A1888BAF700E978CD /* PAPdiscoveryHeaderView.m in Sources */,
 				C4F1028B156C56F20061BC3E /* UIImage+RoundedCornerAdditions.m in Sources */,
 				4688686F185F8B78002BA081 /* emailSignUpViewController.m in Sources */,
-				D5EF16CF18DBE8CF0073C691 /* main.js in Sources */,
 				C4F10291156C571C0061BC3E /* AppDelegate.m in Sources */,
 				C4F10292156C571C0061BC3E /* PAPUtility.m in Sources */,
 				C4F102A0156C574A0061BC3E /* PAPImageView.m in Sources */,
@@ -1844,11 +1836,9 @@
 				46ABD75F18B53C46008F5AAB /* PAPwebviewViewController.m in Sources */,
 				C4F102AA156C57620061BC3E /* PAPPhotoDetailsHeaderView.m in Sources */,
 				C4F102B3156C57820061BC3E /* PAPActivityCell.m in Sources */,
-				D5EF16CD18DBE8CF0073C691 /* app.js in Sources */,
 				D5FC095218A9B518000D85F1 /* CropResizeViewController.m in Sources */,
 				C4F102B4156C57820061BC3E /* PAPBaseTextCell.m in Sources */,
 				46FB0A4B188879C500E978CD /* PAPstartUpsView.m in Sources */,
-				D5EF16CE18DBE8CF0073C691 /* installation.js in Sources */,
 				46ABD73318B12E01008F5AAB /* PAPperksoverlay.m in Sources */,
 				C4F102B5156C57820061BC3E /* PAPLoadMoreCell.m in Sources */,
 				464A354D185A9F6C006E951E /* emailLoginViewController.m in Sources */,
@@ -1951,10 +1941,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_DISPLAY_NAME_SUFFIX = "∆";
+				BUNDLE_ID_SUFFIX = .dev;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				FACBEOOK_URL_TYPE = fb290587851092940;
+				FACEBOOK_CAT = Business;
+				FACEBOOK_ID = 290587851092940;
+				FACEBOOK_NAME = "Teamstory∆";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/**",
@@ -1974,7 +1970,7 @@
 					"$(SRCROOT)/**",
 				);
 				PRODUCT_NAME = Teamstory;
-				PROVISIONING_PROFILE = "C2074B26-2861-4D0A-A0FB-067DF2A3886A";
+				PROVISIONING_PROFILE = "C4A88438-C748-4114-9FE2-54949A008FF0";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1983,10 +1979,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_DISPLAY_NAME_SUFFIX = "";
+				BUNDLE_ID_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				FACBEOOK_URL_TYPE = fb533792813373044;
+				FACEBOOK_CAT = Photography;
+				FACEBOOK_ID = 533792813373044;
+				FACEBOOK_NAME = Teamstory;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/**",
@@ -2038,10 +2040,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_DISPLAY_NAME_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				FACBEOOK_URL_TYPE = "";
+				FACEBOOK_CAT = "";
+				FACEBOOK_ID = "";
+				FACEBOOK_NAME = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/**",
@@ -2094,10 +2101,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_DISPLAY_NAME_SUFFIX = "";
+				BUNDLE_ID_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				FACBEOOK_URL_TYPE = "";
+				FACEBOOK_CAT = "";
+				FACEBOOK_ID = "";
+				FACEBOOK_NAME = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/**",
