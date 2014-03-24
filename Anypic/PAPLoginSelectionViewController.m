@@ -21,12 +21,8 @@
     [super viewDidLoad];
 	
     // There is no documentation on how to handle assets with the taller iPhone 5 screen as of 9/13/2012
-    if ([UIScreen mainScreen].bounds.size.height > 480.0f) {
         // for the iPhone 5
-        self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-login.png"]];
-    } else {
-        self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"login_iphone4.png"]];
-    }
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-login.png"]];
     
     UIButton *joinButton = [[UIButton alloc] initWithFrame:CGRectMake(35.0f, [UIScreen mainScreen].bounds.size.height - 125.0f, 249.0f, 45.0f)];
     [joinButton setTitle:@"Join Teamstory" forState:UIControlStateNormal];

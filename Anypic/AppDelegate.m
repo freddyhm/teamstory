@@ -272,6 +272,14 @@
                 
                 if (profileExist != true || access_grant != true) {
                     if (profileExist != true) {
+                        NSString *email = result[@"email"];
+                        if (email && [email length] != 0) {
+                            [user setObject:email forKey:@"email"];
+                        }
+                        
+                        [user saveInBackground];
+                        
+                        
                         PAPProfileSettingViewController *profileSettingView = [[PAPProfileSettingViewController alloc] init];
                         self.navController.navigationBarHidden = YES;
                         [self.navController pushViewController:profileSettingView animated:NO];

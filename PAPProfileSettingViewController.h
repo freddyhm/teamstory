@@ -24,7 +24,7 @@
 @property (nonatomic, strong) UITextField *location;
 @property (nonatomic, strong) UITextField *description;
 @property (nonatomic, strong) UITextField *website;
-@property (nonatomic, strong) UITextField *collaborator;
+@property (nonatomic, strong) UITextField *email_address;
 
 
 - (void)refreshView;

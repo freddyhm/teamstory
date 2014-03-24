@@ -196,12 +196,12 @@
 }
 /*
 + (BOOL)userHasProfilePictures:(PFUser *)user {
-    //PFFile *profilePictureMedium = [user objectForKey:kPAPUserProfilePicMediumKey];
-    //PFFile *profilePictureSmall = [user objectForKey:kPAPUserProfilePicSmallKey];
+    PFFile *profilePictureMedium = [user objectForKey:kPAPUserProfilePicMediumKey];
+    PFFile *profilePictureSmall = [user objectForKey:kPAPUserProfilePicSmallKey];
     
     return (profilePictureMedium && profilePictureSmall);
 }
- */
+*/
 
 
 #pragma mark Display Name

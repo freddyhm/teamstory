@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "emailSignUpViewController.h"
 #import "MBProgressHUD.h"
+#import "PAPprofileApprovalViewController.h"
+#import "PAPProfileSettingViewController.h"
 
 @interface PAPLogInViewController()
 @property (nonatomic, strong) UITextField *user_email;
@@ -42,28 +44,24 @@
     [super viewDidLoad];
 
     // There is no documentation on how to handle assets with the taller iPhone 5 screen as of 9/13/2012
-    if ([UIScreen mainScreen].bounds.size.height > 480.0f) {
-        // for the iPhone 5
-        self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-intro.png"]];
-    } else {
-        self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"intro_iphone4.png"]];
-    }
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-intro.png"]];
     
     UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];
     UIView *paddingView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];
     UIColor *color = [UIColor colorWithRed:134.0f/255.0f green:134.0f/255.0f blue:134.0f/255.0f alpha:1.0f];
+    
     if ([self.login_type isEqualToString:@"signIn"]) {
-        user_email = [[UITextField alloc] initWithFrame:CGRectMake(35.0f, 310.0f, 250.0f, 45.0f)];
+        user_email = [[UITextField alloc] init];
         user_email.layer.cornerRadius = 1.5f;
         user_email.leftView = paddingView;
         user_email.leftViewMode = UITextFieldViewModeAlways;
         user_email.delegate = self;
         user_email.autocapitalizationType = UITextAutocapitalizationTypeNone;
         [user_email setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.6f]];
-        user_email.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email" attributes:@{NSForegroundColorAttributeName: color, NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue-Thin" size:10.0f]}];
+        user_email.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email" attributes:@{NSForegroundColorAttributeName: color, NSFontAttributeName:@"HelveticaNeue-Thin"}];
         [self.logInView addSubview:user_email];
         
-        user_pw = [[UITextField alloc] initWithFrame:CGRectMake(35.0f, 365.0f, 250.0f, 45.0f)];
+        user_pw = [[UITextField alloc] init];
         user_pw.layer.cornerRadius = 1.5f;
         user_pw.placeholder = @"Password";
         [user_pw setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.6f]];
@@ -78,11 +76,21 @@
         [user_pw resignFirstResponder];
         [self.logInView addSubview:user_pw];
         
-        UIButton *forgotSomething = [[UIButton alloc] initWithFrame:CGRectMake(85.0f, [UIScreen mainScreen].bounds.size.height - 140.0f, 150.0f, 15.0f)];
+        UIButton *forgotSomething = [[UIButton alloc] init];
         [forgotSomething setTitle:@"Forgot Something?" forState:UIControlStateNormal];
         [[forgotSomething titleLabel] setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:15.0f]];
         [forgotSomething addTarget:self action:@selector(forgotSomethingAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.logInView addSubview:forgotSomething];
+        
+        if ([UIScreen mainScreen].bounds.size.height > 480.0f) {
+            forgotSomething.frame = CGRectMake(85.0f, [UIScreen mainScreen].bounds.size.height - 140.0f, 150.0f, 15.0f);
+            user_pw.frame = CGRectMake(35.0f, 365.0f, 250.0f, 45.0f);
+            user_email.frame = CGRectMake(35.0f, 310.0f, 250.0f, 45.0f);
+        } else {
+            forgotSomething.frame = CGRectMake(85.0f, [UIScreen mainScreen].bounds.size.height - 120.0f, 150.0f, 15.0f);
+            user_pw.frame = CGRectMake(35.0f, 300.0f, 250.0f, 45.0f);
+            user_email.frame = CGRectMake(35.0f, 245.0f, 250.0f, 45.0f);
+        }
     } else {
         UIButton *emailSignIn = [[UIButton alloc] initWithFrame:CGRectMake(187.0f, [UIScreen mainScreen].bounds.size.height - 220.0f, 50.0f, 20.0f)];
         [emailSignIn setTitle:@"email." forState:UIControlStateNormal];
@@ -126,8 +134,8 @@
         [self.logInView.facebookButton setFrame:CGRectMake(35.0f, 157.0f, 110.0f, 110.0f)];
         [self.logInView.twitterButton setFrame:CGRectMake(175.5, 157.0f, 110.0f, 110.0f)];
     } else {
-        [self.logInView.facebookButton setFrame:CGRectMake(12.5f, 321.0f, 110.0f, 110.0f)];
-        [self.logInView.twitterButton setFrame:CGRectMake(12.5, 200.0f, 110.0f, 110.0f)];
+        [self.logInView.facebookButton setFrame:CGRectMake(35.5f, 100.0f, 110.0f, 110.0f)];
+        [self.logInView.twitterButton setFrame:CGRectMake(175.5, 100.0f, 110.0f, 110.0f)];
     }
     
     [self.logInView.facebookButton setTitle:nil forState:UIControlStateNormal];
@@ -201,24 +209,25 @@
             [PFUser logInWithUsernameInBackground:userEmail password:userPW
                                             block:^(PFUser *user, NSError *error) {
                                                 if (user) {
-                                                    
+                                                    [user refresh];
                                                     NSNumber *profileBoolNum = [user objectForKey: @"profileExist"];
                                                     bool profileExist = [profileBoolNum boolValue];
                                                     
-                                                    if (profileExist == true) {
+                                                    NSNumber *accessGrantNum = [user objectForKey: @"accessGrant"];
+                                                    bool accessGrant = [accessGrantNum boolValue];
+                                                    
+                                                    if (profileExist == true && accessGrant == true) {
                                                         NSLog(@"Logged In Sucessfully");
                                                         [MBProgressHUD hideHUDForView:self.view animated:YES];
                                                         [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
                                                         return;
                                                         
-                                                    } else {
-                                                        /*
-                                                        NSLog(@"Profile Setting page");
-                                                        
-                                                        PAPProfileSettingViewController *accountViewController = [[PAPProfileSettingViewController alloc] init];
-                                                        self.navigationController.navigationBarHidden = NO;
-                                                        [self.navigationController pushViewController:accountViewController animated:YES];
-                                                         */
+                                                    } else if (profileExist == true && accessGrant != true){
+                                                        PAPprofileApprovalViewController *approvalViewController = [[PAPprofileApprovalViewController alloc] init];
+                                                        [self.navigationController pushViewController:approvalViewController animated:YES];
+                                                    } else if (profileExist != true) {
+                                                        PAPProfileSettingViewController *profileSettingsViewController = [[PAPProfileSettingViewController alloc] init];
+                                                        [self.navigationController pushViewController:profileSettingsViewController animated:YES];
                                                     }
                                                     
                                                 } else {
@@ -228,6 +237,10 @@
                                                     [MBProgressHUD hideHUDForView:self.view animated:YES];
                                                 }
                                             }];
+        } else {
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please check your internet connection" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            alert.alertViewStyle = UIAlertViewStyleDefault;
+            [alert show];
         }
     }
     return YES;

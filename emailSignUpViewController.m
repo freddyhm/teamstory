@@ -9,6 +9,8 @@
 #import "emailSignUpViewController.h"
 #import "PAPwebviewViewController.h"
 #import "AppDelegate.h"
+#import "PAPProfileSettingViewController.h"
+
 #define SUCCESSFUL 1
 
 @interface emailSignUpViewController ()
@@ -16,6 +18,7 @@
 @property (nonatomic, strong) UIButton *cancelButton;
 @property (nonatomic, strong) UIButton *signUpButton;
 @property (nonatomic, strong) UIButton *policy;
+@property (nonatomic, strong) MBProgressHUD *hud;
 
 @end
 
@@ -27,6 +30,7 @@
 @synthesize cancelButton;
 @synthesize signUpButton;
 @synthesize policy;
+@synthesize hud;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -35,27 +39,19 @@
     signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];
     policy = [UIButton buttonWithType:UIButtonTypeCustom];
     
-    // There is no documentation on how to handle assets with the taller iPhone 5 screen as of 9/13/2012
-    if ([UIScreen mainScreen].bounds.size.height > 480.0f) {
-        // for the iPhone 5
-        self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-intro.png"]];
-    } else {
-        self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"register_iphone4.png"]];
-    }
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-intro.png"]];
+
     
-    UILabel *mainLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 100.0f, 320.0f, 30.0f)];
+    UILabel *mainLabel = [[UILabel alloc] init];
     [mainLabel setText:@"Sign up with email"];
     [mainLabel setTextAlignment:NSTextAlignmentCenter];
     [mainLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:25.0f]];
     [mainLabel setTextColor:[UIColor colorWithWhite:1.0f alpha:1.0f]];
     [self.view addSubview:mainLabel];
     
-    signUpEmailTextField = [[UITextField alloc] initWithFrame:CGRectMake( 35.0f, self.view.bounds.size.height - 385.0f, 250.0f, 45.0f)];
-    signUpPWTextField = [[UITextField alloc] initWithFrame:CGRectMake( 35.0f, self.view.bounds.size.height - 330.0f, 250.0f, 45.0f)];
-    signUpPWTextField_confirm = [[UITextField alloc] initWithFrame:CGRectMake( 35.0f, self.view.bounds.size.height - 275.0f, 250.0f, 45.0f)];
-    [signUpButton setFrame:CGRectMake( 35.0f, self.view.bounds.size.height - 220.0f, 250.0f, 45.0f)];
-    [policy setFrame:CGRectMake(35.0f, self.view.bounds.size.height - 130.0f, 252.0f, 23.0f)];
-
+    signUpEmailTextField = [[UITextField alloc] init];
+    signUpPWTextField = [[UITextField alloc] init];
+    signUpPWTextField_confirm = [[UITextField alloc] init];
     
     UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];
     UIView *paddingView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];
@@ -123,6 +119,22 @@
     [back_button addTarget:self action:@selector(back_button_action:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:back_button];
     
+    if ([UIScreen mainScreen].bounds.size.height > 480.0f) {
+        signUpEmailTextField.frame = CGRectMake( 35.0f, self.view.bounds.size.height - 385.0f, 250.0f, 45.0f);
+        signUpPWTextField.frame = CGRectMake( 35.0f, self.view.bounds.size.height - 330.0f, 250.0f, 45.0f);
+        signUpPWTextField_confirm.frame = CGRectMake( 35.0f, self.view.bounds.size.height - 275.0f, 250.0f, 45.0f);
+        [signUpButton setFrame:CGRectMake( 35.0f, self.view.bounds.size.height - 220.0f, 250.0f, 45.0f)];
+        [policy setFrame:CGRectMake(35.0f, self.view.bounds.size.height - 130.0f, 252.0f, 23.0f)];
+        mainLabel.frame = CGRectMake(0.0f, 100.0f, 320.0f, 30.0f);
+    } else {
+        signUpEmailTextField.frame = CGRectMake( 35.0f, self.view.bounds.size.height - 355.0f, 250.0f, 45.0f);
+        signUpPWTextField.frame = CGRectMake( 35.0f, self.view.bounds.size.height - 300.0f, 250.0f, 45.0f);
+        signUpPWTextField_confirm.frame = CGRectMake( 35.0f, self.view.bounds.size.height - 245.0f, 250.0f, 45.0f);
+        [signUpButton setFrame:CGRectMake( 35.0f, self.view.bounds.size.height - 190.0f, 250.0f, 45.0f)];
+        [policy setFrame:CGRectMake(35.0f, self.view.bounds.size.height - 105.0f, 252.0f, 23.0f)];
+        mainLabel.frame = CGRectMake(0.0f, 60.0f, 320.0f, 30.0f);
+    }
+    
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
                                           action:@selector(dismissKeyboard)];
@@ -163,13 +175,13 @@
     float movementDuration = 0.3f; // tweak as needed
     
     if (textField == signUpEmailTextField) {
-        movementDistance = 170; // tweak as needed
+        movementDistance = 100; // tweak as needed
     }
     else if (textField == signUpPWTextField) {
-        movementDistance = 170; // tweak as needed
+        movementDistance = 100; // tweak as needed
     }
     else if (textField == signUpPWTextField_confirm) {
-        movementDistance = 170; // tweak as needed
+        movementDistance = 100; // tweak as needed
     }
     
     int movement = (up ? -movementDistance : movementDistance);
@@ -197,6 +209,7 @@
 }
 
 -(void)signUpButtonAction:(id)sender {
+    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSString *userNewEmail = self.signUpEmailTextField.text;
     NSString *userPW = self.signUpPWTextField.text;
     NSString *userPW_confirm = self.signUpPWTextField_confirm.text;
@@ -214,6 +227,7 @@
             
             [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (!error) {
+                    [self.hud hide:YES];
                     // Hooray! Let them use the app now.
                     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Signed Up Successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                     alert.tag = SUCCESSFUL;
@@ -227,11 +241,13 @@
                 }
             }];
         } else {
+            [self.hud hide:YES];
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Password and confirmation password don't match!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             alert.alertViewStyle = UIAlertViewStyleDefault;
             [alert show];
         }
     } else {
+        [self.hud hide:YES];
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Please fill out all the fields" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         alert.alertViewStyle = UIAlertViewStyleDefault;
         [alert show];
@@ -255,7 +271,8 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (alertView.tag == SUCCESSFUL) {
         if (buttonIndex == 0) {
-            [self.parentViewController dismissViewControllerAnimated:YES completion:nil];
+            PAPProfileSettingViewController *profileSettingsViewController = [[PAPProfileSettingViewController alloc] init];
+            [self.navigationController pushViewController:profileSettingsViewController animated:YES];
         }
     }
 }

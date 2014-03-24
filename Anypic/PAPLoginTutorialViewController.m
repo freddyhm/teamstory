@@ -25,9 +25,13 @@
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-intro.png"]]];
     
-    UIImageView *logoView = [[UIImageView alloc] initWithFrame:CGRectMake(65.0f, 30.0f, 190.0f, 65.0f)];
-    [logoView setImage:[UIImage imageNamed:@"tutlogo.png"]];
-    [self.view addSubview:logoView];
+    if ([UIScreen mainScreen].bounds.size.height > 480.0f) {
+        // for the iPhone 5
+        UIImageView *logoView = [[UIImageView alloc] initWithFrame:CGRectMake(65.0f, 30.0f, 190.0f, 65.0f)];
+        [logoView setImage:[UIImage imageNamed:@"tutlogo.png"]];
+        [self.view addSubview:logoView];
+        
+    }
     
     UIView *footerBackground = [[UIView alloc] initWithFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - 200.0f, 320.0f, 200.0f)];
     [footerBackground setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
@@ -53,8 +57,8 @@
     
     UIPageControl *pageControl_bar = [[UIPageControl alloc] initWithFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - 180.0f, mainSV.bounds.size.width, 20)];
     [self setPageControl:pageControl_bar];
-    [pageControl_bar setPageIndicatorTintColor:[UIColor colorWithWhite:1.0f alpha:1.0f]];
-    [pageControl_bar setCurrentPageIndicatorTintColor:[UIColor colorWithWhite:0.5f alpha:1.0f]];
+    [pageControl_bar setPageIndicatorTintColor:[UIColor colorWithRed:205.0f/255.0f green:208.0f/255.0f blue:210.0f/255.0f alpha:1.0f]];
+    [pageControl_bar setCurrentPageIndicatorTintColor:[UIColor colorWithRed:79.0f/255.0f green:91.0f/255.0f blue:100.0f/255.0f alpha:1.0f]];
     [self.pageControl setNumberOfPages:3];
     [mainSV setContentSize:CGSizeMake(mainSV.bounds.size.width * 3, mainSV.bounds.size.height)];
     [self.view addSubview:pageControl_bar];
