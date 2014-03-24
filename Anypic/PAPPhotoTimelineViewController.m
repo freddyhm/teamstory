@@ -221,7 +221,6 @@ enum ActionSheetTags {
                         }
                         NSString *likeCount =[[[PAPCache sharedCache] likeCountForPhoto:photo] description];
                         
-                        NSLog(@"%@", likeCount);
                         [headerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:photo]];
                         
                         if (isLikedByCurrentUser == YES) {
