@@ -633,7 +633,11 @@ enum ActionSheetTags {
     
     [[PAPCache sharedCache] setPhotoIsLikedByCurrentUser:photo liked:liked];
     
-    [button setTitle:[numberFormatter stringFromNumber:likeCount] forState:UIControlStateNormal];
+    if (liked == YES) {
+        [button setTitle:[numberFormatter stringFromNumber:likeCount] forState:UIControlStateSelected];
+    } else if (liked == NO) {
+        [button setTitle:[numberFormatter stringFromNumber:likeCount] forState:UIControlStateNormal];
+    }
     
     if (liked) {
         [PAPUtility likePhotoInBackground:photo block:^(BOOL succeeded, NSError *error) {
