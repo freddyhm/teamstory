@@ -383,6 +383,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 
                 [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
                 [self loadObjects];
+                
+                // suscribe to post if commenter is not photo owner
+                if(![[[self.photo objectForKey:kPAPPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]){
+                    [PAPUtility updateSubscriptionToPost:self.photo.objectId forState:@"Subscribe"];
+                }
+                
             }];
         }
         

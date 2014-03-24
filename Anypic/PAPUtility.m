@@ -17,9 +17,7 @@
 
 +(void)updateSubscriptionToPost:(NSString *)postId forState:(NSString *)state{
 
-    // When create/like/comment post, auto-subcribe
     NSString *postChannelName = [@"ch" stringByAppendingString:postId];
-    
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     
     if([state isEqualToString:@"Subscribe"]){

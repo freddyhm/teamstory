@@ -12,54 +12,64 @@ Parse.Cloud.beforeSave('Activity', function(request, response) {
                        });
 
 Parse.Cloud.afterSave('Activity', function(request) {
-                      
+    
+    var fromUser = request.object.get("fromUser");                   
     var toUser = request.object.get("toUser");
 
     var toUserId = request.object.get("toUser").id;
     var fromUserId = request.object.get("fromUser").id;
     var photoId = request.object.get('photo').id;
+    var isSelfie = toUserId == fromUserId;
     
-    // Only send push notifications for new activities & no self pushes
-    if (request.object.existed() || toUserId == fromUserId) {
+    // Only send push notifications for new activities
+    if (request.object.existed()) {
     return;
     }
-    
     
     if (!toUser) {
     throw "Undefined toUser. Skipping push for Activity " + request.object.get('type') + " : " + request.object.id;
     return;
     }
     
-    var query = new Parse.Query(Parse.Installation);
     
-    /*
-    query.equalTo('user', toUser);
-    
-    Parse.Push.send({
-                    where: query, // Set our Installation query.
-                    data: alertPayload(request)
-                    }).then(function() {
-                            // Push was successful
-                            console.log('Sent push.');
-                            }, function(error) {
-                            throw "Push Error " + error.code + " : " + error.message;
-                            });
-    */
 
-    // send notification to proper post channel
-    var channelName = "ch" + photoId;
+    // notify all users except fromUser who are subscribed to post when new comment is sent
+    if(request.object.get("type") === "comment"){
 
-    query.equalTo('channels', channelName); // Set our channel
+        var toSubscribersQuery = new Parse.Query(Parse.Installation);
+        var channelName = "ch" + photoId;
 
-    Parse.Push.send({
-      where: query,
-      data: alertPayload(request)
-      }).then(function() {
-        // Push was successful
-        console.log('Sent push.');
-        }, function(error) {
-        throw "Push Error " + error.code + " : " + error.message;
-        });  
+        toSubscribersQuery.equalTo("channels", channelName);
+        toSubscribersQuery.notEqualTo("user", fromUser);
+     
+        Parse.Push.send({
+          where: toSubscribersQuery,
+          data: alertPayload(request)
+          }).then(function() {
+            // Push was successful
+            console.log('Sent subscribers push.');
+            }, function(error) {
+            throw "Push Error " + error.code + " : " + error.message;
+            });    
+    }
+
+    // send post owner notification if someone else creates activity
+    if(!isSelfie){
+
+        var toOwnerQuery = new Parse.Query(Parse.Installation);
+        toOwnerQuery.equalTo('user', toUser);
+
+        Parse.Push.send({
+            where: toOwnerQuery, // Set our Installation query.
+            data: alertPayload(request)
+            }).then(function() {
+                    // Push was successful
+                    console.log('Sent owner push.');
+                    }, function(error) {
+                    throw "Push Error " + error.code + " : " + error.message;
+                    });
+    }
+
 });
 
                     
@@ -71,7 +81,7 @@ var alertMessage = function(request) {
         if (request.user.get('displayName')) {
             message = request.user.get('displayName') + ': ' + request.object.get('content').trim();
         } else {
-            message = "Someone commented on your photo.";
+            message = "Someone commented on this photo.";
         }
     } else if (request.object.get("type") === "like") {
         if (request.user.get('displayName')) {

@@ -364,9 +364,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
                 [button addTarget:self action:@selector(didTapLikePhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
                 [self setLikeUsers:originalLikeUsersArray];
                 [self setLikeButtonState:NO];
-            }else{
-                
-                [PAPUtility updateSubscriptionToPost:self.photo.objectId forState:@"Subscribe"];
             }
         }];
     } else {
@@ -375,8 +372,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
                 [button addTarget:self action:@selector(didTapLikePhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
                 [self setLikeUsers:originalLikeUsersArray];
                 [self setLikeButtonState:YES];
-            }else{
-                [PAPUtility updateSubscriptionToPost:self.photo.objectId forState:@"Unsubscribe"];
             }
         }];
     }
