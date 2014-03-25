@@ -279,7 +279,6 @@
                         
                         [user saveInBackground];
                         
-                        
                         PAPProfileSettingViewController *profileSettingView = [[PAPProfileSettingViewController alloc] init];
                         self.navController.navigationBarHidden = YES;
                         [self.navController pushViewController:profileSettingView animated:NO];

@@ -11,7 +11,6 @@
 
 #define SUCCESSFUL 1
 #define IMAGE_NIL 2
-#define FIRST_LOGIN 3
 
 @interface PAPProfileSettingViewController() {
     BOOL smallImage;
@@ -31,7 +30,7 @@
 @property (nonatomic, strong) UIView *backgroundView;
 @property (nonatomic, strong) PFImageView* profilePictureImageView;
 @property (nonatomic, strong) PFFile *imageProfileFile;
-@property (nonatomic, strong) UIView *startOverlay;
+@property (nonatomic, strong) UIButton *saveButton;
 
 
 @end
@@ -53,9 +52,9 @@
 @synthesize backgroundView;
 @synthesize profilePictureImageView;
 @synthesize imageProfileFile;
-@synthesize startOverlay;
 @synthesize email_address;
 @synthesize email_user;
+@synthesize saveButton;
 
 
 
@@ -75,6 +74,11 @@
 - (void)refreshView {
     NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
     bool profileExist = [profilExist_num boolValue];
+    
+    // Initialization
+    UIColor *backgroundColor = [UIColor whiteColor];
+    UIColor *lineColor = [UIColor colorWithWhite:245.0f/255.0f alpha:1.0];
+    UIFont *fonts = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     
     [self.user refresh];
     location_user = self.user[@"location"];
@@ -100,61 +104,68 @@
         email_user = @"Email";
     }
     
-    if (profileExist != true) {
-        self.startOverlay = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
-        [[[[UIApplication sharedApplication] delegate] window] addSubview:self.startOverlay];
-        
-        UIImageView *startOverlay_image = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
-        UIButton *proceed_button = [[UIButton alloc] init];
-        
-        if ([UIScreen mainScreen].bounds.size.height == 480) {
-            [startOverlay_image setImage:[UIImage imageNamed:@"intro1-iphone4.png"]];
-            [proceed_button setFrame:CGRectMake(35.0f, 416.0f, 250.0f, 43.0f)];
-        } else {
-            [startOverlay_image setImage:[UIImage imageNamed:@"intro1-iphone5.png"]];
-            [proceed_button setFrame:CGRectMake(35.0f, 504.0f, 250.0f, 43.0f)];
-        }
-        
-        [self.startOverlay addSubview:startOverlay_image];
-        
-        [proceed_button addTarget:self action:@selector(proceed_button_action:) forControlEvents:UIControlEventTouchUpInside];
-        [self.startOverlay addSubview:proceed_button];
-    }
-    
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
-    
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-intro.png"]];
-    
-    // Initialization
-    UIColor *backgroundColor = [UIColor whiteColor];
-    UIColor *lineColor = [UIColor colorWithWhite:245.0f/255.0f alpha:1.0];
-    UIFont *fonts = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
-    
-    UIButton *saveButton = [[UIButton alloc] init];
     backgroundView = [[UIView alloc] init];
     [backgroundView setBackgroundColor:backgroundColor];
     [self.view addSubview:backgroundView];
-    
-    
     UIButton *profileImagePicker = [UIButton buttonWithType:UIButtonTypeCustom];
-    if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
-        profileImagePicker.frame = CGRectMake( 122.5f, 35.0f, 75.0f, 75.0f );
-        backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 345.0f, self.view.bounds.size.width, 345.0f);
-        saveButton.frame = CGRectMake(35.0f, backgroundView.bounds.size.height - 60.0f, 250.0f, 45.0f);
-    } else {
-        profileImagePicker.frame = CGRectMake( 122.5f, 85.0f, 75.0f, 75.0f );
-        backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 370.0f, self.view.bounds.size.width, 370.0f);
-        saveButton.frame = CGRectMake(35.0f, backgroundView.bounds.size.height - 70.0f, 250.0f, 45.0f);
-        
-        UILabel *applyLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 20.0f, 320.0f, 45.0f)];
-        [applyLabel setTextColor:[UIColor whiteColor]];
-        [applyLabel setText:@"Apply for Teamstory"];
-        [applyLabel setTextAlignment:NSTextAlignmentCenter];
-        [applyLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:20.0]];
-        [self.view addSubview:applyLabel];
-    }
-    [profileImagePicker setImage:[UIImage imageNamed:@"icon-upload.png"] forState:UIControlStateNormal];
     
+    // Do not display back button if user is first time logging in.
+    if (profileExist == true) {
+        UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [backButton setFrame:CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f)];
+        [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
+        [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+        
+        UIButton *navSaveButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [navSaveButton setFrame:CGRectMake(0.0f, 0.0f, 22.0f, 22.0f)];
+        [navSaveButton addTarget:self action:@selector(saveButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [navSaveButton setBackgroundImage:[UIImage imageNamed:@"button_done.png"] forState:UIControlStateNormal];
+        [navSaveButton setBackgroundImage:[UIImage imageNamed:@"button_done_selected.png"] forState:UIControlStateHighlighted];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:navSaveButton];
+        
+        if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
+            profileImagePicker.frame = CGRectMake( 122.5f, 95.0f, 75.0f, 75.0f );
+            backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 280.0f, self.view.bounds.size.width, 345.0f);
+            saveButton.frame = CGRectMake(35.0f, backgroundView.bounds.size.height - 60.0f, 250.0f, 45.0f);
+            profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 95.0f, 75.0f, 75.0f )];
+        } else {
+            profileImagePicker.frame = CGRectMake( 122.5f, 135.0f, 75.0f, 75.0f );
+            backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 280.0f, self.view.bounds.size.width, 370.0f);
+            saveButton.frame = CGRectMake(35.0f, backgroundView.bounds.size.height - 70.0f, 250.0f, 45.0f);
+            profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 135.0f, 75.0f, 75.0f )];
+        }
+        
+    } else {
+        [self.navigationItem setHidesBackButton:YES];
+        
+        saveButton = [[UIButton alloc] init];
+        
+        if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
+            profileImagePicker.frame = CGRectMake( 122.5f, 35.0f, 75.0f, 75.0f );
+            backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 345.0f, self.view.bounds.size.width, 345.0f);
+            saveButton.frame = CGRectMake(35.0f, backgroundView.bounds.size.height - 60.0f, 250.0f, 45.0f);
+            profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 35.0f, 75.0f, 75.0f )];
+        } else {
+            profileImagePicker.frame = CGRectMake( 122.5f, 85.0f, 75.0f, 75.0f );
+            backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 370.0f, self.view.bounds.size.width, 370.0f);
+            saveButton.frame = CGRectMake(35.0f, backgroundView.bounds.size.height - 70.0f, 250.0f, 45.0f);
+            profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 85.0f, 75.0f, 75.0f )];
+            
+            UILabel *applyLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 20.0f, 320.0f, 45.0f)];
+            [applyLabel setTextColor:[UIColor whiteColor]];
+            [applyLabel setText:@"Apply for Teamstory"];
+            [applyLabel setTextAlignment:NSTextAlignmentCenter];
+            [applyLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:20.0]];
+            [self.view addSubview:applyLabel];
+        }
+    }
+    
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-intro.png"]];
+    
+    [profileImagePicker setImage:[UIImage imageNamed:@"icon-upload.png"] forState:UIControlStateNormal];
     [profileImagePicker addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:profileImagePicker];
 
@@ -166,11 +177,6 @@
     [backgroundView addSubview:saveButton];
     
     
-    if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
-        profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 35.0f, 75.0f, 75.0f )];
-    } else {
-        profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 85.0f, 75.0f, 75.0f )];
-    }
     [self.view addSubview:profilePictureImageView];
     [profilePictureImageView setContentMode:UIViewContentModeScaleAspectFill];
     
@@ -192,18 +198,7 @@
     [swipeUpGestureRecognizer setNumberOfTouchesRequired:1];
     [profileImagePicker addGestureRecognizer:swipeUpGestureRecognizer];
     
-    
-    // Do not display back button if user is first time logging in.
-    if (profileExist == true) {
-        UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [backButton setFrame:CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f)];
-        [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-        [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
-        [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    } else {
-        [self.navigationItem setHidesBackButton:YES];
-    }
+
     
     /*
     UIImageView *companyImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"companyName.png"]];
@@ -390,7 +385,6 @@
                     }
                 }];
                 [refreshHUD removeFromSuperview];
-
         }
         else{
             [HUD hide:YES];
@@ -438,7 +432,6 @@
                 }
             }];
             [refreshHUD removeFromSuperview];
-            
         }
         else{
             [HUD hide:YES];
@@ -635,9 +628,10 @@
     NSString* description_input = self.description.text;
     NSString* website_input = [self.website.text lowercaseString];
     NSString* email_input = self.email_address.text;
-    bool profileExist_user = self.user[@"profileExist"];
+    NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
+    bool profileExist_user = [profilExist_num boolValue];
     
-    if (profileExist_user == YES) {
+    if (profileExist_user == true) {
         if (!imageData_picker) {
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"You did not select any image. Would you like to update the image?" delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES", nil];
             alert.alertViewStyle = UIAlertViewStyleDefault;
@@ -662,8 +656,13 @@
         if ([website_input length] > 0) {
             self.user[@"website"] = website_input;
         }
-        if ([email_input length] > 0 ) {
+        if ([email_input length] > 0 && [self NSStringIsValidEmail:email_input]) {
             self.user[@"email"] = email_input;
+        } else {
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your email input is not valid." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            alert.alertViewStyle = UIAlertViewStyleDefault;
+            [alert show];
+            return;
         }
         
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
@@ -671,7 +670,7 @@
         alert.tag = SUCCESSFUL;
         [alert show];
     } else {
-        if ([companyName_input length] > 0 && [location_input length] > 0 && ([email_input length] > 0 || self.user[@"email"])) {
+        if ([companyName_input length] > 0 && [location_input length] > 0 && (([email_input length] > 0 && [self NSStringIsValidEmail:email_input]) || self.user[@"email"] )) {
             
             if (!imageData_picker) {
                 UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"You did not select any image. Would you like to update the image?" delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES", nil];
@@ -710,7 +709,6 @@
             
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             alert.alertViewStyle = UIAlertViewStyleDefault;
-            alert.tag = FIRST_LOGIN;
             [alert show];
 
         } else {
@@ -721,6 +719,10 @@
                 
             } else if ([location_input length] == 0) {
                 UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter your Location." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                alert.alertViewStyle = UIAlertViewStyleDefault;
+                [alert show];
+            } else if ([email_input length] == 0 || !self.user[@"email"] || ![self NSStringIsValidEmail:email_input]){
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your Email input is not valid." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                 alert.alertViewStyle = UIAlertViewStyleDefault;
                 [alert show];
             } else {
@@ -739,10 +741,8 @@
             NSLog(@"Logged In Sucessfully");
             [self.view endEditing:YES];
             
-            //[PFUser user];
-            //[(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
-            PAPprofileApprovalViewController *profileApprovalViewController = [[PAPprofileApprovalViewController alloc] init];
-            [self.navigationController pushViewController:profileApprovalViewController animated:YES];
+            PAPprofileApprovalViewController *approvalViewController = [[PAPprofileApprovalViewController alloc] init];
+            [self.navigationController pushViewController:approvalViewController animated:YES];
             return;
         }
     } else if (alertView.tag == IMAGE_NIL) {
@@ -788,18 +788,18 @@
                 
                 [self uploadImage_small:imageData_picker_small];
                 [self uploadImage_medium:imageData_picker];
+                
+                PFObject *membershipReceived = [PFObject objectWithClassName:kPAPActivityClassKey];
+                [membershipReceived setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey];
+                [membershipReceived setObject:@"membership" forKey:@"type"];
+                
+                PFACL *membershipACL = [PFACL ACL];
+                [membershipACL setPublicReadAccess:YES];
+                membershipReceived.ACL = membershipACL;
+                
+                // make sure our join activity is always earlier than a follow
+                [membershipReceived saveInBackground];
             }
-            
-            PFObject *membershipReceived = [PFObject objectWithClassName:kPAPActivityClassKey];
-            [membershipReceived setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey];
-            [membershipReceived setObject:@"membership" forKey:@"type"];
-            
-            PFACL *membershipACL = [PFACL ACL];
-            [membershipACL setPublicReadAccess:YES];
-            membershipReceived.ACL = membershipACL;
-            
-            // make sure our join activity is always earlier than a follow
-            [membershipReceived saveInBackground];
             
             bool profileExist = YES; // either YES or NO
             NSNumber *profileBoolNum = [NSNumber numberWithBool: profileExist];
@@ -809,11 +809,6 @@
             alert.alertViewStyle = UIAlertViewStyleDefault;
             alert.tag = SUCCESSFUL;
             [alert show];
-        }
-    } else if (alertView.tag == FIRST_LOGIN) {
-        if (buttonIndex == 0) {
-            PAPprofileApprovalViewController *profileApprovalViewController = [[PAPprofileApprovalViewController alloc] init];
-            [self.navigationController pushViewController:profileApprovalViewController animated:YES];
         }
     }
 }
@@ -865,16 +860,13 @@
     HUD = nil;
 }
 
-- (void) proceed_button_action:(id)sender {
-    [self.startOverlay removeFromSuperview];
-}
-
-- (void) firstLoginButtonAction:(id)sender {
-    [self.startOverlay removeFromSuperview];
-    
-    [PFUser user];
-    [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
-    return;
+-(BOOL)NSStringIsValidEmail:(NSString *)checkString {
+    BOOL stricterFilter = YES;
+    NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";
+    NSString *laxString = @".+@([A-Za-z0-9]+\\.)+[A-Za-z]{2}[A-Za-z]*";
+    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:checkString];
 }
 
 @end

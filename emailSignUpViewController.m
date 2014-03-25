@@ -234,6 +234,7 @@
                     alert.alertViewStyle = UIAlertViewStyleDefault;
                     [alert show];
                 } else {
+                    [self.hud hide:YES];
                     NSString *errorString = [error userInfo][@"error"];
                     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:errorString delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                     alert.alertViewStyle = UIAlertViewStyleDefault;
