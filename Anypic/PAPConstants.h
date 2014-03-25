@@ -77,6 +77,7 @@ extern NSString *const kPAPActivityTypeJoined;
 // Field keys
 extern NSString *const kPAPUserDisplayNameKey;
 extern NSString *const kPAPUserFacebookIDKey;
+extern NSString *const kPAPUserTwitterIDKey;
 extern NSString *const kPAPUserPhotoIDKey;
 extern NSString *const kPAPUserProfilePicSmallKey;
 extern NSString *const kPAPUserProfilePicMediumKey;

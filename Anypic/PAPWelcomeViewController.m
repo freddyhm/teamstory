@@ -6,6 +6,9 @@
 
 #import "PAPWelcomeViewController.h"
 #import "AppDelegate.h"
+#import "PAPProfileSettingViewController.h"
+#import "PAPLoginTutorialViewController.h"
+#import "PAPprofileApprovalViewController.h"
 
 @implementation PAPWelcomeViewController
 
@@ -15,22 +18,35 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     PFUser *user = [PFUser currentUser];
-
+    [user refresh];
+    
     // If not logged in, present login view controller
     if (!user) {
-        [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentLoginViewControllerAnimated:NO];
+        [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTutorialViewController];
         return;
     }
-    bool profileExist = user[@"profileExist"];
     
-    if (user && profileExist == true) {
+    NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
+    bool profileExist = [profilExist_num boolValue];
+    
+    NSNumber *accessGrant_num = [[PFUser currentUser] objectForKey: @"accessGrant"];
+    bool access_grant = [accessGrant_num boolValue];
+    
+    if (user && profileExist == YES &&  access_grant == YES) {
+        [[PFUser currentUser] refreshInBackgroundWithTarget:self selector:@selector(refreshCurrentUserCallbackWithResult:error:)];
         // Present Teamstory UI
         [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBarController];
-        
-        // Refresh current user with server side data -- checks if user is still valid and so on
-        [[PFUser currentUser] refreshInBackgroundWithTarget:self selector:@selector(refreshCurrentUserCallbackWithResult:error:)];
     } else {
-        [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentAccountViewController];
+        if (user && profileExist != YES) {
+            PAPProfileSettingViewController *profileViewController = [[PAPProfileSettingViewController alloc] init];
+            self.navigationController.navigationBarHidden = YES;
+            [self.navigationController pushViewController:profileViewController animated:NO];
+        } else if (user && access_grant != YES){
+            PAPprofileApprovalViewController *profileApprovalViewController = [[PAPprofileApprovalViewController alloc] init];
+            [self.navigationController pushViewController:profileApprovalViewController animated:YES];
+        } else {
+            NSLog(@"User does not exist");
+        }
     }
 }
 
@@ -43,37 +59,45 @@
         [(AppDelegate*)[[UIApplication sharedApplication] delegate] logOut];
         return;
     }
+    
+    PFUser *curr_user = [PFUser currentUser];
 
-    if (![PFUser currentUser]) {
-        // Check if user is missing a Facebook ID
-        if ([PAPUtility userHasValidFacebookData:[PFUser currentUser]]) {
-            // User has Facebook ID.
+    if (curr_user) {
+        if ([PFFacebookUtils isLinkedWithUser:curr_user]){
             
-            // refresh Facebook friends on each launch
-            [FBRequestConnection startForMyFriendsWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-                if (!error) {
-                    if ([[UIApplication sharedApplication].delegate respondsToSelector:@selector(facebookRequestDidLoad:)]) {
-                        [[UIApplication sharedApplication].delegate performSelector:@selector(facebookRequestDidLoad:) withObject:result];
-                    }
+            // Check if user is missing a Facebook ID
+            if ([PAPUtility userHasValidFacebookData:curr_user]) {
+                // refresh Facebook friends on each launch
+                    [FBRequestConnection startForMyFriendsWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+                        if (!error) {
+                            if ([[UIApplication sharedApplication].delegate respondsToSelector:@selector(facebookRequestDidLoad:)]) {
+                                [[UIApplication sharedApplication].delegate performSelector:@selector(facebookRequestDidLoad:) withObject:result];
+                            }
+                        } else {
+                            if ([[UIApplication sharedApplication].delegate respondsToSelector:@selector(facebookRequestDidFailWithError:)]) {
+                                [[UIApplication sharedApplication].delegate performSelector:@selector(facebookRequestDidFailWithError:) withObject:error];
+                            }
+                        }
+                    }];
                 } else {
-                    if ([[UIApplication sharedApplication].delegate respondsToSelector:@selector(facebookRequestDidFailWithError:)]) {
-                        [[UIApplication sharedApplication].delegate performSelector:@selector(facebookRequestDidFailWithError:) withObject:error];
-                    }
+                    NSLog(@"Current user is missing their Facebook ID");
+                    [FBRequestConnection startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+                        if (!error) {
+                            if ([[UIApplication sharedApplication].delegate respondsToSelector:@selector(facebookRequestDidLoad:)]) {
+                                [[UIApplication sharedApplication].delegate performSelector:@selector(facebookRequestDidLoad:) withObject:result];
+                            }
+                        } else {
+                            if ([[UIApplication sharedApplication].delegate respondsToSelector:@selector(facebookRequestDidFailWithError:)]) {
+                                [[UIApplication sharedApplication].delegate performSelector:@selector(facebookRequestDidFailWithError:) withObject:error];
+                            }
+                        }
+                    }];
+                     
                 }
-            }];
-        } else {
-            NSLog(@"Current user is missing their Facebook ID");
-            [FBRequestConnection startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-                if (!error) {
-                    if ([[UIApplication sharedApplication].delegate respondsToSelector:@selector(facebookRequestDidLoad:)]) {
-                        [[UIApplication sharedApplication].delegate performSelector:@selector(facebookRequestDidLoad:) withObject:result];
-                    }
-                } else {
-                    if ([[UIApplication sharedApplication].delegate respondsToSelector:@selector(facebookRequestDidFailWithError:)]) {
-                        [[UIApplication sharedApplication].delegate performSelector:@selector(facebookRequestDidFailWithError:) withObject:error];
-                    }
-                }
-            }];
+        } else if ([PFTwitterUtils isLinkedWithUser:curr_user]) {
+            curr_user[@"twitterId"] = [PFTwitterUtils twitter].userId;
+            
+            [curr_user saveEventually];
         }
     }
 }

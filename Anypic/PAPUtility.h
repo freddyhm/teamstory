@@ -12,6 +12,7 @@
 + (void)processFacebookProfilePictureData:(NSData *)data;
 
 + (BOOL)userHasValidFacebookData:(PFUser *)user;
++ (BOOL)userHasValidTwitterData:(PFUser *)user;
 //+ (BOOL)userHasProfilePictures:(PFUser *)user;
 
 + (NSString *)firstNameForDisplayName:(NSString *)displayName;

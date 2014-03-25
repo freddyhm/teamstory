@@ -21,6 +21,10 @@
 #import "PAPProfileSettingViewController.h"
 #import "discoverPageViewController.h"
 #import "PAPwebviewViewController.h"
+#import "PAPLoginSelectionViewController.h"
+#import "PAPLoginTutorialViewController.h"
+#import "PAPprofileApprovalViewController.h"
+
 
 
 
@@ -103,6 +107,8 @@
         [Parse setApplicationId:@"0tEtPoPtsvPu1lCPzBeU032Cz3Byemcp5lr25gIU"
                       clientKey:@"ZRnM7JXOlbSyOQuosXWG6SlrDNCY22C84hpqyi0l"];
         [PFFacebookUtils initializeFacebook];
+        [PFTwitterUtils initializeWithConsumerKey:@"VGiCnk6P01PjqV13rm34Bw"
+                                   consumerSecret:@"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0z9Q"];
     // ****************************************************************************
     
     // Track app open
@@ -250,31 +256,62 @@
 - (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
     // user has logged in - we need to fetch all of their Facebook data before we let them in
     if (![self shouldProceedToMainInterface:user]) {
-        self.hud = [MBProgressHUD showHUDAddedTo:self.navController.presentedViewController.view animated:YES];
+        self.hud = [MBProgressHUD showHUDAddedTo:self.navController.view animated:YES];
         self.hud.labelText = NSLocalizedString(@"Loading", nil);
         self.hud.dimBackground = YES;
     }
     
-    [FBRequestConnection startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-        if (!error) {
-            PFUser *user = [PFUser currentUser];
-            
-            // verifying for FBuser
-            bool isFBuser = YES; // either YES or NO
-            NSNumber *profileBoolNum = [NSNumber numberWithBool: isFBuser];
-            [user setObject: profileBoolNum forKey: @"isFBuser"];
-            
-            bool profileExist = user[@"profileExist"];
-            
+    NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
+    bool profileExist = [profilExist_num boolValue];
+    
+    NSNumber *accessGrant_num = [[PFUser currentUser] objectForKey: @"accessGrant"];
+    bool access_grant = [accessGrant_num boolValue];
+    
+    
+    if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]){
+        [[PFUser currentUser] setObject:[PFTwitterUtils twitter].userId forKey:@"twitterID"];
+        
+        if (profileExist != true || access_grant != true) {
             if (profileExist != true) {
-                [self settingRootViewAsAccountSettingController];
-            } else {
-                [self facebookRequestDidLoad:result];
+                PAPProfileSettingViewController *profileSettingView = [[PAPProfileSettingViewController alloc] init];
+                self.navController.navigationBarHidden = YES;
+                [self.navController pushViewController:profileSettingView animated:NO];
+                return;
             }
-        } else {
-            [self facebookRequestDidFailWithError:error];
+            
+            PAPprofileApprovalViewController *profileApprovalViewController = [[PAPprofileApprovalViewController alloc] init];
+            [self.navController pushViewController:profileApprovalViewController animated:YES];
         }
-    }];
+    } else if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        [FBRequestConnection startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+            if (!error) {
+                [self.hud hide:YES];
+                
+                if (profileExist != true || access_grant != true) {
+                    if (profileExist != true) {
+                        NSString *email = result[@"email"];
+                        if (email && [email length] != 0) {
+                            [user setObject:email forKey:@"email"];
+                        }
+                        
+                        [user saveInBackground];
+                        
+                        PAPProfileSettingViewController *profileSettingView = [[PAPProfileSettingViewController alloc] init];
+                        self.navController.navigationBarHidden = YES;
+                        [self.navController pushViewController:profileSettingView animated:NO];
+                        return;
+                    }
+                    
+                    PAPprofileApprovalViewController *profileApprovalViewController = [[PAPprofileApprovalViewController alloc] init];
+                    [self.navController pushViewController:profileApprovalViewController animated:YES];
+                } else {
+                    [self facebookRequestDidLoad:result];
+                }
+            } else {
+                [self facebookRequestDidFailWithError:error];
+            }
+        }];
+    }
 }
 
 
@@ -299,33 +336,14 @@
     return self.networkStatus != NotReachable;
 }
 
-- (void)settingRootViewAsAccountSettingController {
-    self.navController = [[UINavigationController alloc] initWithRootViewController:self.welcomeViewController];
-    self.navController.navigationBarHidden = YES;
-    
-    self.window.rootViewController = self.navController;
-    
-    [self.window makeKeyAndVisible];
-    [self presentAccountViewController];
+- (void)presentLoginSelectionController {
+    PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] init];
+    [self.navController pushViewController:loginSelectionViewController animated:YES];
 }
 
-- (void) presentAccountViewController {
-    PAPProfileSettingViewController *accountViewController = [[PAPProfileSettingViewController alloc] init];
-    UINavigationController *profileSettingNav = [[UINavigationController alloc] initWithRootViewController:accountViewController];
-    [self.welcomeViewController presentViewController:profileSettingNav animated:NO completion:nil];
-}
-
-- (void)presentLoginViewControllerAnimated:(BOOL)animated {
-    PAPLogInViewController *loginViewController = [[PAPLogInViewController alloc] init];
-    [loginViewController setDelegate:self];
-    loginViewController.fields = PFLogInFieldsFacebook;
-    loginViewController.facebookPermissions = @[ @"user_about_me" ];
-    
-    [self.welcomeViewController presentViewController:loginViewController animated:NO completion:nil];
-}
-
-- (void)presentLoginViewController {
-    [self presentLoginViewControllerAnimated:YES];
+- (void)presentTutorialViewController {
+    PAPLoginTutorialViewController *loginTutorialViewController = [[PAPLoginTutorialViewController alloc] init];
+    [self.navController pushViewController:loginTutorialViewController animated:YES];
 }
 
 -(void)settingRootViewAsTabBarController {
@@ -421,7 +439,7 @@
     // clear out cached data, view controllers, etc
     [self.navController popToRootViewControllerAnimated:NO];
     
-    [self presentLoginViewController];
+    [self presentLoginSelectionController];
     
     self.homeViewController = nil;
     self.activityViewController = nil;
@@ -448,20 +466,13 @@
     [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"BackgroundNavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
     
     [[UIButton appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
-    
-    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[UIImage imageNamed:@"button_back.png"]
-                                                      forState:UIControlStateNormal
-                                                    barMetrics:UIBarMetricsDefault];
-    
-    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"]
-                                                      forState:UIControlStateSelected
-                                                    barMetrics:UIBarMetricsDefault];
 
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{
                                 UITextAttributeTextColor: [UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0f],
                           UITextAttributeTextShadowColor: [UIColor colorWithWhite:0.0f alpha:0.750f],
                          UITextAttributeTextShadowOffset: [NSValue valueWithCGSize:CGSizeMake(0.0f, 1.0f)]
      } forState:UIControlStateNormal];
+     
  
     
     [[UISearchBar appearance] setTintColor:[UIColor colorWithRed:32.0f/255.0f green:19.0f/255.0f blue:16.0f/255.0f alpha:1.0f]];    
@@ -537,12 +548,21 @@
 }
 
 - (BOOL)shouldProceedToMainInterface:(PFUser *)user {
-    if ([PAPUtility userHasValidFacebookData:[PFUser currentUser]]) {
+    if ([PFFacebookUtils isLinkedWithUser:user]) {
+        if ([PAPUtility userHasValidFacebookData:[PFUser currentUser]]) {
+            [MBProgressHUD hideHUDForView:self.navController.presentedViewController.view animated:YES];
+            [self presentTabBarController];
+
+            [self.navController dismissViewControllerAnimated:YES completion:nil];
+            return YES;
+        }
+    } else if ([PFTwitterUtils isLinkedWithUser:user]){
         [MBProgressHUD hideHUDForView:self.navController.presentedViewController.view animated:YES];
         [self presentTabBarController];
-
+        
         [self.navController dismissViewControllerAnimated:YES completion:nil];
         return YES;
+
     }
     
     return NO;
@@ -607,6 +627,7 @@
         }
     }];
 }
+
 
 - (void)facebookRequestDidLoad:(id)result {
     // This method is called twice - once for the user's /me profile, and a second time when obtaining their friends. We will try and handle both scenarios in a single method.
@@ -709,6 +730,11 @@
                 [user setObject:@"Someone" forKey:kPAPUserDisplayNameKey];
             }
             */
+            
+            NSString *email = result[@"email"];
+            if (email && [email length] != 0) {
+                [user setObject:email forKey:@"email"];
+            }
             
             NSString *facebookId = result[@"id"];
             if (facebookId && [facebookId length] != 0) {
