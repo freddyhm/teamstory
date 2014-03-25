@@ -75,36 +75,55 @@ Parse.Cloud.afterSave('Activity', function(request) {
                     
 
 var alertMessage = function(request) {
-    var message = "";
-    
-    if (request.object.get("type") === "comment") {
-        if (request.user.get('displayName')) {
-            message = request.user.get('displayName') + ': ' + request.object.get('content').trim();
-        } else {
-            message = "Someone commented on this photo.";
-        }
-    } else if (request.object.get("type") === "like") {
-        if (request.user.get('displayName')) {
-            message = request.user.get('displayName') + ' likes your photo.';
-        } else {
-            message = 'Someone likes your photo.';
-        }
-    } else if (request.object.get("type") === "follow") {
-        if (request.user.get('displayName')) {
-            message = request.user.get('displayName') + ' is now following you.';
-        } else {
-            message = "You have a new follower.";
-        }
+  var message = "";
+ 
+  if (request.object.get("type") === "comment") {
+    if (request.user.get('displayName')) {
+      message = request.user.get('displayName') + ': ' + request.object.get('content').trim();
+    } else {
+      message = "Someone commented on your photo.";
     }
-    
-    // Trim our message to 140 characters.
-    if (message.length > 140) {
-        message = message.substring(0, 140);
+  } else if (request.object.get("type") === "like") {
+    if (request.user.get('displayName')) {
+      message = request.user.get('displayName') + ' likes your photo.';
+    } else {
+      message = 'Someone likes your photo.';
     }
-    
-    return message;
-}
+  } else if (request.object.get("type") === "follow") {
+    if (request.user.get('displayName')) {
+      message = request.user.get('displayName') + ' is now following you.';
+    } 
+  } else if (request.object.get("type") === "membership") {
+    var Mailgun = require('mailgun');
+    Mailgun.initialize('sandbox15444.mailgun.org', 'key-1ygnrqln04tefoo3gl4ykzpsvr6cukn5');
 
+    Mailgun.sendEmail({
+      to: "toboklee@gmail.com",
+      from: "postmaster@sandbox15444.mailgun.org",
+      subject: "Hello from Cloud Code!",
+      text: "Using Parse and Mailgun is great!"
+    }, {
+      success: function(httpResponse) {
+        console.log(httpResponse);
+        response.success("Email sent!");
+      },
+      error: function(httpResponse) {
+        console.error(httpResponse);
+        response.error("Uh oh, something went wrong");
+      }
+    });
+  } else {
+      message = "You have a new follower.";
+  }
+ 
+  // Trim our message to 140 characters.
+  if (message.length > 140) {
+    message = message.substring(0, 140);
+  }
+ 
+  return message;
+}
+ 
 var alertPayload = function(request) {
     var payload = {};
     
