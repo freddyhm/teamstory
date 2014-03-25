@@ -269,4 +269,7 @@
     [self exitPhoto];
 }
 
+
+
+
 @end

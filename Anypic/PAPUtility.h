@@ -6,6 +6,7 @@
 
 @interface PAPUtility : NSObject
 
++ (void)updateSubscriptionToPost:(NSString *)postId forState:(NSString *)state;
 + (void)likePhotoInBackground:(id)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock;
 + (void)unlikePhotoInBackground:(id)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock;
 
