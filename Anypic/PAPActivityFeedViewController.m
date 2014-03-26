@@ -102,6 +102,13 @@
         [[PFInstallation currentInstallation] setBadge:0];
         [[PFInstallation currentInstallation] saveEventually];
     }
+    
+    // refresh only when actually viewing the activity screen
+    lastRefresh = [NSDate date];
+    [[NSUserDefaults standardUserDefaults] setObject:lastRefresh forKey:kPAPUserDefaultsActivityFeedViewControllerLastRefreshKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
 }
 
 #pragma mark - UITableViewDelegate
@@ -182,12 +189,6 @@
     if (NSClassFromString(@"UIRefreshControl")) {
         [self.refreshControl endRefreshing];
     }
-
-    lastRefresh = [NSDate date];
-    [[NSUserDefaults standardUserDefaults] setObject:lastRefresh forKey:kPAPUserDefaultsActivityFeedViewControllerLastRefreshKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-
-    [MBProgressHUD hideHUDForView:self.view animated:YES];
     
     if (self.objects.count == 0 && ![[self queryForTable] hasCachedResult]) {
         self.tableView.scrollEnabled = NO;
