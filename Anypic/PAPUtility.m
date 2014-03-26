@@ -6,6 +6,9 @@
 
 #import "PAPUtility.h"
 #import "UIImage+ResizeAdditions.h"
+#import "GAI.h"
+#import "GAIDictionaryBuilder.h"
+#import "GAIFields.h"
 
 @implementation PAPUtility
 
@@ -14,6 +17,19 @@
 
 
 #pragma mark Notifications
+
++(void)captureScreenGA:(NSString *)screen{
+    // May return nil if a tracker has not already been initialized with a
+    // property ID.
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    
+    // This screen name value will remain set on the tracker and sent with
+    // hits until it is set to a new value or to nil.
+    [tracker set:kGAIScreenName
+           value:screen];
+    
+    [tracker send:[[GAIDictionaryBuilder createAppView] build]];
+}
 
 +(void)updateSubscriptionToPost:(NSString *)postId forState:(NSString *)state{
 

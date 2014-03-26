@@ -93,6 +93,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
+    [PAPUtility captureScreenGA:@"Activity"];
+    
     // reset badge number on server side when user checks activity feed and badge value is present
     if(self.navigationController.tabBarItem.badgeValue != nil){
         // Reset badge number on server side
@@ -100,7 +102,6 @@
         [[PFInstallation currentInstallation] saveEventually];
     }
 }
-
 
 #pragma mark - UITableViewDelegate
 

@@ -4,6 +4,7 @@
 //
 //
 
+#import "GAITrackedViewController.h"
 #import "PAPPhotoTimelineViewController.h"
 
 @interface PAPHomeViewController : PAPPhotoTimelineViewController

@@ -308,7 +308,6 @@
 		C4BE67C7157FC8F600A291C2 /* TextFieldComment.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE67C5157FC8F500A291C2 /* TextFieldComment.png */; };
 		C4BE67C8157FC8F600A291C2 /* TextFieldComment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C4BE67C6157FC8F500A291C2 /* TextFieldComment@2x.png */; };
 		C4C9B94516B877AE00BB2862 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C402FEC51602AE3100273778 /* Accounts.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		C4C9B94816B877AE00BB2862 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C9B94616B877AE00BB2862 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C4C9B94916B877AE00BB2862 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C9B94716B877AE00BB2862 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C4CD219915ED790500BC387F /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C4CD219815ED790500BC387F /* libsqlite3.dylib */; };
 		C4F101F4156C2D800061BC3E /* ActivityFeedBlank.png in Resources */ = {isa = PBXBuildFile; fileRef = C4F101EE156C2D800061BC3E /* ActivityFeedBlank.png */; };
@@ -342,6 +341,7 @@
 		C4F102E2156C58440061BC3E /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4F102DF156C58440061BC3E /* Entitlements.plist */; };
 		C4F102E7156C58570061BC3E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C4F102E5156C58570061BC3E /* InfoPlist.strings */; };
 		C4F102EF156C58E00061BC3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102EC156C58E00061BC3E /* main.m */; };
+		D51C98A218E28D16001230DA /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D51C98A118E28D16001230DA /* libGoogleAnalyticsServices.a */; };
 		D52C1E2118D9515D00625887 /* KonotorConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D52C1DEC18D9515D00625887 /* KonotorConversationViewController.m */; };
 		D52C1E2218D9515D00625887 /* KonotorConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D52C1DED18D9515D00625887 /* KonotorConversationViewController.xib */; };
 		D52C1E2318D9515D00625887 /* KonotorEventHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = D52C1DEF18D9515D00625887 /* KonotorEventHandler.m */; };
@@ -819,6 +819,13 @@
 		D51C988E18E26EB6001230DA /* photo.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = photo.js; sourceTree = "<group>"; };
 		D51C989018E26EB6001230DA /* global.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = global.json; sourceTree = "<group>"; };
 		D51C989218E26EB6001230DA /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		D51C989B18E28D16001230DA /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
+		D51C989C18E28D16001230DA /* GAIDictionaryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIDictionaryBuilder.h; sourceTree = "<group>"; };
+		D51C989D18E28D16001230DA /* GAIFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIFields.h; sourceTree = "<group>"; };
+		D51C989E18E28D16001230DA /* GAILogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAILogger.h; sourceTree = "<group>"; };
+		D51C989F18E28D16001230DA /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
+		D51C98A018E28D16001230DA /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
+		D51C98A118E28D16001230DA /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
 		D52C1DE918D9515D00625887 /* Konotor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Konotor.h; sourceTree = "<group>"; };
 		D52C1DEB18D9515D00625887 /* KonotorConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorConversationViewController.h; sourceTree = "<group>"; };
 		D52C1DEC18D9515D00625887 /* KonotorConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorConversationViewController.m; sourceTree = "<group>"; };
@@ -922,15 +929,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D51C98A218E28D16001230DA /* libGoogleAnalyticsServices.a in Frameworks */,
+				D5FC09C818A9C272000D85F1 /* CoreData.framework in Frameworks */,
 				D5A5F52018D2C3CD000BB243 /* Parse.framework in Frameworks */,
 				D5A5F51E18D2C3C1000BB243 /* FacebookSDK.framework in Frameworks */,
 				D531F7CE18B5DE44008AE73F /* Appsee.framework in Frameworks */,
 				D531F7CC18B5DE11008AE73F /* CoreVideo.framework in Frameworks */,
 				D5FC09CC18A9C2FF000D85F1 /* OpenGLES.framework in Frameworks */,
 				D5FC09CA18A9C2C2000D85F1 /* CoreImage.framework in Frameworks */,
-				D5FC09C818A9C272000D85F1 /* CoreData.framework in Frameworks */,
 				D5FC09C618A9C267000D85F1 /* CoreMedia.framework in Frameworks */,
-				C4C9B94816B877AE00BB2862 /* AdSupport.framework in Frameworks */,
 				C4C9B94916B877AE00BB2862 /* Social.framework in Frameworks */,
 				C4C9B94516B877AE00BB2862 /* Accounts.framework in Frameworks */,
 				C4CD219915ED790500BC387F /* libsqlite3.dylib in Frameworks */,
@@ -1455,6 +1462,7 @@
 		C4A0B4FF156C5B9F00E48554 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				D51C989A18E28D16001230DA /* GoogleAnalytics */,
 				D51C988818E26EB6001230DA /* CloudCode */,
 				D52C1DE618D9515D00625887 /* Konotor */,
 				C499A3031725E6DD0089D40A /* FacebookSDKResources.bundle */,
@@ -1636,6 +1644,20 @@
 				D51C989218E26EB6001230DA /* index.html */,
 			);
 			path = public;
+			sourceTree = "<group>";
+		};
+		D51C989A18E28D16001230DA /* GoogleAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				D51C989B18E28D16001230DA /* GAI.h */,
+				D51C989C18E28D16001230DA /* GAIDictionaryBuilder.h */,
+				D51C989D18E28D16001230DA /* GAIFields.h */,
+				D51C989E18E28D16001230DA /* GAILogger.h */,
+				D51C989F18E28D16001230DA /* GAITrackedViewController.h */,
+				D51C98A018E28D16001230DA /* GAITracker.h */,
+				D51C98A118E28D16001230DA /* libGoogleAnalyticsServices.a */,
+			);
+			path = GoogleAnalytics;
 			sourceTree = "<group>";
 		};
 		D52C1DE618D9515D00625887 /* Konotor */ = {
@@ -2289,6 +2311,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)/External/Konotor",
+					"$(PROJECT_DIR)/External/GoogleAnalytics",
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "C4A88438-C748-4114-9FE2-54949A008FF0";
@@ -2323,6 +2346,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)/External/Konotor",
+					"$(PROJECT_DIR)/External/GoogleAnalytics",
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "90F3A78C-691F-40FC-8116-9D8528892DB2";
@@ -2385,6 +2409,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)/External/Konotor",
+					"$(PROJECT_DIR)/External/GoogleAnalytics",
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "C2074B26-2861-4D0A-A0FB-067DF2A3886A";
@@ -2448,6 +2473,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)/External/Konotor",
+					"$(PROJECT_DIR)/External/GoogleAnalytics",
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "C2074B26-2861-4D0A-A0FB-067DF2A3886A";

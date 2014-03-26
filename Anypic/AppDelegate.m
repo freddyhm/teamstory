@@ -6,6 +6,7 @@
 
 #import "AppDelegate.h"
 
+#import "GAI.h"
 #import <Appsee/Appsee.h>
 #import "Konotor.h"
 #import "KonotorEventHandler.h"
@@ -82,6 +83,7 @@
 // Environment keys
 
 #if DEBUG
+static NSString *const GOOGLE_TRACKING_ID = @"UA-49381420-2";
 static NSString *const KONOTOR_APP_ID = @"7043fe2f-cb83-403e-b9af-3c6de2fd4752";
 static NSString *const KONOTOR_APP_KEY = @"e57e4508-47b6-4ecf-b0ee-8c657a855b3d";
 static NSString *const PARSE_APP_ID = @"0tEtPoPtsvPu1lCPzBeU032Cz3Byemcp5lr25gIU";
@@ -89,6 +91,7 @@ static NSString *const PARSE_CLIENT_KEY = @"ZRnM7JXOlbSyOQuosXWG6SlrDNCY22C84hpq
 static NSString *const TWITTER_KEY = @"VGiCnk6P01PjqV13rm34Bw";
 static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0z9Q";
 #else
+static NSString *const GOOGLE_TRACKING_ID = @"UA-49381420-1";
 static NSString *const APPSEE = @"ee2b6679635f492dbc1d36a14fe196ae";
 static NSString *const KONOTOR_APP_ID = @"ab785be6-9398-4b6a-8ae6-4d83431edad9";
 static NSString *const KONOTOR_APP_KEY = @"3784ef60-6e0f-48fc-9a6c-3ac71c127dcb";
@@ -102,6 +105,18 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    // Optional: automatically send uncaught exceptions to Google Analytics.
+    [GAI sharedInstance].trackUncaughtExceptions = YES;
+    
+    // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
+    [GAI sharedInstance].dispatchInterval = 1;
+    
+    // Optional: set Logger to VERBOSE for debug information.
+    [[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
+    
+    // Initialize tracker. Replace with your tracking ID.
+    [[GAI sharedInstance] trackerWithTrackingId:GOOGLE_TRACKING_ID];
     
     // Appsee setup only for release
     #if RELEASE
@@ -254,8 +269,6 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 
     [[FBSession activeSession] handleDidBecomeActive];
 }
-
-
 
 #pragma mark - UITabBarControllerDelegate
 

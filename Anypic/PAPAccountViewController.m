@@ -277,6 +277,12 @@
 
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    [PAPUtility captureScreenGA:@"Account"];
+}
+
+#pragma mark - Custom
+
 - (void)backButtonAction:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
