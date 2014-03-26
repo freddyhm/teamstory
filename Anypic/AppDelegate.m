@@ -33,6 +33,7 @@
     BOOL firstLaunch;
 }
 
+
 @property (nonatomic, strong) PAPHomeViewController *homeViewController;
 @property (nonatomic, strong) PAPActivityFeedViewController *activityViewController;
 @property (nonatomic, strong) PAPWelcomeViewController *welcomeViewController;
@@ -78,17 +79,37 @@
 @synthesize internetReach;
 @synthesize wifiReach;
 
+// Environment keys
+
+#if DEBUG
+static NSString *const KONOTOR_APP_ID = @"7043fe2f-cb83-403e-b9af-3c6de2fd4752";
+static NSString *const KONOTOR_APP_KEY = @"e57e4508-47b6-4ecf-b0ee-8c657a855b3d";
+static NSString *const PARSE_APP_ID = @"0tEtPoPtsvPu1lCPzBeU032Cz3Byemcp5lr25gIU";
+static NSString *const PARSE_CLIENT_KEY = @"ZRnM7JXOlbSyOQuosXWG6SlrDNCY22C84hpqyi0l";
+static NSString *const TWITTER_KEY = @"VGiCnk6P01PjqV13rm34Bw";
+static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0z9Q";
+#elif RELEASE
+static NSString *const APPSEE = @"ee2b6679635f492dbc1d36a14fe196ae";
+static NSString *const KONOTOR_APP_ID = @"ab785be6-9398-4b6a-8ae6-4d83431edad9";
+static NSString *const KONOTOR_APP_KEY = @"3784ef60-6e0f-48fc-9a6c-3ac71c127dcb";
+static NSString *const PARSE_APP_ID = @"SPQlkxDYPDcVhbICHFzjwSsREHaSqKQIKwkijDaJ";
+static NSString *const PARSE_CLIENT_KEY = @"WtgkZLYZ1UOlsbGMnfYtKCD6dQLMfy3tBsN2UKxA";
+static NSString *const TWITTER_KEY = @"VGiCnk6P01PjqV13rm34Bw";
+static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0z9Q";
+#endif
 
 #pragma mark - UIApplicationDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    // Appsee setup
-    //[Appsee start:@"5bfb3fafb8424fe9b3d070d3022bee41"];
+    // Appsee setup only for release
+    #if RELEASE
+        [Appsee start:APPSEE];
+    #endif
     
     // Konotor setup
-    [Konotor InitWithAppID:@"7043fe2f-cb83-403e-b9af-3c6de2fd4752" AppKey:@"e57e4508-47b6-4ecf-b0ee-8c657a855b3d" withDelegate:[KonotorEventHandler sharedInstance]];
+    [Konotor InitWithAppID:KONOTOR_APP_ID AppKey:KONOTOR_APP_KEY withDelegate:[KonotorEventHandler sharedInstance]];
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
      (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     
@@ -96,11 +117,11 @@
     
     // ****************************************************************************
     // Parse initialization
-        [Parse setApplicationId:@"0tEtPoPtsvPu1lCPzBeU032Cz3Byemcp5lr25gIU"
-                      clientKey:@"ZRnM7JXOlbSyOQuosXWG6SlrDNCY22C84hpqyi0l"];
+        [Parse setApplicationId:PARSE_APP_ID
+                      clientKey:PARSE_CLIENT_KEY];
         [PFFacebookUtils initializeFacebook];
-        [PFTwitterUtils initializeWithConsumerKey:@"VGiCnk6P01PjqV13rm34Bw"
-                                   consumerSecret:@"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0z9Q"];
+        [PFTwitterUtils initializeWithConsumerKey:TWITTER_KEY
+                                   consumerSecret:TWITTER_SECRET];
     // ****************************************************************************
     
     // Track app open
