@@ -88,7 +88,7 @@ static NSString *const PARSE_APP_ID = @"0tEtPoPtsvPu1lCPzBeU032Cz3Byemcp5lr25gIU
 static NSString *const PARSE_CLIENT_KEY = @"ZRnM7JXOlbSyOQuosXWG6SlrDNCY22C84hpqyi0l";
 static NSString *const TWITTER_KEY = @"VGiCnk6P01PjqV13rm34Bw";
 static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0z9Q";
-#elif RELEASE
+#else
 static NSString *const APPSEE = @"ee2b6679635f492dbc1d36a14fe196ae";
 static NSString *const KONOTOR_APP_ID = @"ab785be6-9398-4b6a-8ae6-4d83431edad9";
 static NSString *const KONOTOR_APP_KEY = @"3784ef60-6e0f-48fc-9a6c-3ac71c127dcb";
