@@ -812,6 +812,13 @@
 		C4F102EB156C58E00061BC3E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		C4F102EC156C58E00061BC3E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
 		C4F102ED156C58E00061BC3E /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = SOURCE_ROOT; };
+		D51C988A18E26EB6001230DA /* activity.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = activity.js; sourceTree = "<group>"; };
+		D51C988B18E26EB6001230DA /* app.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = app.js; sourceTree = "<group>"; };
+		D51C988C18E26EB6001230DA /* installation.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = installation.js; sourceTree = "<group>"; };
+		D51C988D18E26EB6001230DA /* main.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; };
+		D51C988E18E26EB6001230DA /* photo.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = photo.js; sourceTree = "<group>"; };
+		D51C989018E26EB6001230DA /* global.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = global.json; sourceTree = "<group>"; };
+		D51C989218E26EB6001230DA /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		D52C1DE918D9515D00625887 /* Konotor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Konotor.h; sourceTree = "<group>"; };
 		D52C1DEB18D9515D00625887 /* KonotorConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorConversationViewController.h; sourceTree = "<group>"; };
 		D52C1DEC18D9515D00625887 /* KonotorConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorConversationViewController.m; sourceTree = "<group>"; };
@@ -1448,6 +1455,7 @@
 		C4A0B4FF156C5B9F00E48554 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				D51C988818E26EB6001230DA /* CloudCode */,
 				D52C1DE618D9515D00625887 /* Konotor */,
 				C499A3031725E6DD0089D40A /* FacebookSDKResources.bundle */,
 				C47DDDE31592761F002114F6 /* Reachability */,
@@ -1590,6 +1598,44 @@
 				C4F102C6156C57ED0061BC3E /* PAPActivityFeedViewController.m */,
 			);
 			name = Activity;
+			sourceTree = "<group>";
+		};
+		D51C988818E26EB6001230DA /* CloudCode */ = {
+			isa = PBXGroup;
+			children = (
+				D51C988918E26EB6001230DA /* cloud */,
+				D51C988F18E26EB6001230DA /* config */,
+				D51C989118E26EB6001230DA /* public */,
+			);
+			path = CloudCode;
+			sourceTree = "<group>";
+		};
+		D51C988918E26EB6001230DA /* cloud */ = {
+			isa = PBXGroup;
+			children = (
+				D51C988A18E26EB6001230DA /* activity.js */,
+				D51C988B18E26EB6001230DA /* app.js */,
+				D51C988C18E26EB6001230DA /* installation.js */,
+				D51C988D18E26EB6001230DA /* main.js */,
+				D51C988E18E26EB6001230DA /* photo.js */,
+			);
+			path = cloud;
+			sourceTree = "<group>";
+		};
+		D51C988F18E26EB6001230DA /* config */ = {
+			isa = PBXGroup;
+			children = (
+				D51C989018E26EB6001230DA /* global.json */,
+			);
+			path = config;
+			sourceTree = "<group>";
+		};
+		D51C989118E26EB6001230DA /* public */ = {
+			isa = PBXGroup;
+			children = (
+				D51C989218E26EB6001230DA /* index.html */,
+			);
+			path = public;
 			sourceTree = "<group>";
 		};
 		D52C1DE618D9515D00625887 /* Konotor */ = {
