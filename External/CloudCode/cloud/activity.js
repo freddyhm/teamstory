@@ -55,61 +55,33 @@ Parse.Cloud.afterSave('Activity', function(request) {
     
     
 
-    // notify all users except fromUser who are subscribed to post when new comment is sent
-    if(request.object.get("type") === "comment"){
-
-        var toSubscribersQuery = new Parse.Query(Parse.Installation);
-        var channelName = "ch" + photoId;
-
-        toSubscribersQuery.equalTo("channels", channelName);
-        toSubscribersQuery.notEqualTo("user", fromUser);
-     
-        Parse.Push.send({
-          where: toSubscribersQuery,
-          data: alertPayload(request)
-          }).then(function() {
-            // Push was successful
-            console.log('Sent subscribers push.');
-            }, function(error) {
-            throw "Push Error " + error.code + " : " + error.message;
-            });    
-    }
-
-    // send post owner notification if someone else creates activity
-    if(!isSelfie){
-
-        var toOwnerQuery = new Parse.Query(Parse.Installation);
-        toOwnerQuery.equalTo('user', toUser);
-
-        Parse.Push.send({
-            where: toOwnerQuery, // Set our Installation query.
-            data: alertPayload(request)
-            }).then(function() {
-                    // Push was successful
-                    console.log('Sent owner push.');
-                    }, function(error) {
-                    throw "Push Error " + error.code + " : " + error.message;
-                    });
-    }
-
-});
-
-                    
 
 var alertMessage = function(request) {
-  var message = "";
- 
-  if (request.object.get("type") === "comment") {
-    if (request.user.get('displayName')) {
-      message = request.user.get('displayName') + ': ' + request.object.get('content').trim();
+    var message = "";
+    
+    if (request.object.get("type") === "comment") {
+        if (request.user.get('displayName')) {
+            message = request.user.get('displayName') + ': ' + request.object.get('content').trim();
+        } else {
+            message = "Someone commented on your photo.";
+        }
+    } else if (request.object.get("type") === "like") {
+        if (request.user.get('displayName')) {
+            message = request.user.get('displayName') + ' likes your photo.';
+        } else {
+            message = 'Someone likes your photo.';
+        }
+    } else if (request.object.get("type") === "follow") {
+        if (request.user.get('displayName')) {
+            message = request.user.get('displayName') + ' is now following you.';
+        } 
     } else {
-      message = "Someone commented on your photo.";
+        message = "You have a new follower.";
     }
-  } else if (request.object.get("type") === "like") {
-    if (request.user.get('displayName')) {
-      message = request.user.get('displayName') + ' likes your photo.';
-    } else {
-      message = 'Someone likes your photo.';
+    
+    // Trim our message to 140 characters.
+    if (message.length > 140) {
+        message = message.substring(0, 140);
     }
   } else if (request.object.get("type") === "follow") {
     if (request.user.get('displayName')) {
@@ -126,7 +98,7 @@ var alertMessage = function(request) {
  
   return message;
 }
- 
+
 var alertPayload = function(request) {
     var payload = {};
     
