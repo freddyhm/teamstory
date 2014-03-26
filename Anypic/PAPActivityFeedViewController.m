@@ -93,6 +93,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
+    // analytics
     [PAPUtility captureScreenGA:@"Activity"];
     
     // reset badge number on server side when user checks activity feed and badge value is present

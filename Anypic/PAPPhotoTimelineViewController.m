@@ -604,6 +604,10 @@ enum ActionSheetTags {
     
     NSNumber *likeCount = [numberFormatter numberFromString:button.titleLabel.text];
     if (liked) {
+        
+        // analytics
+        [PAPUtility captureEventGA:@"Engagement" action:@"Like" label:@"Photo"];
+        
         likeCount = [NSNumber numberWithInt:[likeCount intValue] + 1];
         [[PAPCache sharedCache] incrementLikerCountForPhoto:photo];
     } else {
@@ -665,6 +669,10 @@ enum ActionSheetTags {
 }
 
 - (void)userDidCommentOnPhoto:(NSNotification *)note {
+    
+    // analytics
+    [PAPUtility captureEventGA:@"Engagement" action:@"Comment" label:@"Photo"];
+    
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
 }
@@ -678,6 +686,10 @@ enum ActionSheetTags {
 }
 
 - (void)userDidPublishPhoto:(NSNotification *)note {
+    
+    // analytics
+    [PAPUtility captureEventGA:@"Engagement" action:@"Upload" label:@"Photo"];
+    
     if (self.objects.count > 0) {
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
@@ -692,6 +704,10 @@ enum ActionSheetTags {
 
 
 - (void)didTapOnPhotoAction:(UIButton *)sender {
+    
+    // analytics
+    [PAPUtility captureEventGA:@"Engagement" action:@"Tap" label:@"Photo"];
+    
     PFObject *photo = [self.objects objectAtIndex:sender.tag];
     if (photo) {
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo];

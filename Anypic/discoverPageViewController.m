@@ -75,6 +75,7 @@ NSInteger selection = 1;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
+    // analytics
     [PAPUtility captureScreenGA:@"Discover"];
 }
 

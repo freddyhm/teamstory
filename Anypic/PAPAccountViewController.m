@@ -278,6 +278,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated{
+    // analytics
     [PAPUtility captureScreenGA:@"Account"];
 }
 
@@ -353,6 +354,10 @@
 #pragma mark - ()
 
 - (void)followButtonAction:(id)sender {
+    
+    // analytics
+    [PAPUtility captureEventGA:@"Engagement" action:@"Follow" label:@"User"];
+    
     UIActivityIndicatorView *loadingActivityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [loadingActivityIndicatorView startAnimating];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:loadingActivityIndicatorView];

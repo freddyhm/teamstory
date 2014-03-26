@@ -18,7 +18,7 @@
 
 #pragma mark Notifications
 
-+(void)captureScreenGA:(NSString *)screen{
++ (void)captureScreenGA:(NSString *)screen{
     // May return nil if a tracker has not already been initialized with a
     // property ID.
     id tracker = [[GAI sharedInstance] defaultTracker];
@@ -29,6 +29,17 @@
            value:screen];
     
     [tracker send:[[GAIDictionaryBuilder createAppView] build]];
+}
+
++ (void)captureEventGA:(NSString *)eventCategory action:(NSString *)eventAction label:(NSString *)eventLabel{
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    
+
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:eventCategory    // Event category (required)
+                                                          action:eventAction  // Event action (required)
+                                                           label:eventLabel         // Event label
+                                                           value:nil] build]];    // Event value
 }
 
 +(void)updateSubscriptionToPost:(NSString *)postId forState:(NSString *)state{

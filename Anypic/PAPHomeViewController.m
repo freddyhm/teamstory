@@ -51,6 +51,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    // analytics
     [PAPUtility captureScreenGA:@"Home"];
 }
 

@@ -102,6 +102,11 @@
     [self shouldUploadImage:self.image];
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    // analytics
+    [PAPUtility captureScreenGA:@"Edit Photo"];
+}
+
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
