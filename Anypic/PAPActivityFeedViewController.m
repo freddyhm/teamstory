@@ -150,16 +150,63 @@
         [query setLimit:0];
         return query;
     }
+    
 
-    PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
-    [query whereKey:kPAPActivityToUserKey equalTo:[PFUser currentUser]];
-    [query whereKey:kPAPActivityFromUserKey notEqualTo:[PFUser currentUser]];
-    [query whereKeyExists:kPAPActivityFromUserKey];
-    [query includeKey:kPAPActivityFromUserKey];
-    [query includeKey:kPAPActivityPhotoKey];
-    [query orderByDescending:@"createdAt"];
+    PFQuery *personalQuery = [PFQuery queryWithClassName:self.parseClassName];
+    
+    
+    [personalQuery whereKey:kPAPActivityToUserKey equalTo:[PFUser currentUser]];
+    [personalQuery whereKey:kPAPActivityFromUserKey notEqualTo:[PFUser currentUser]];
+    [personalQuery whereKeyExists:kPAPActivityFromUserKey];
+    [personalQuery includeKey:kPAPActivityFromUserKey];
+    [personalQuery includeKey:kPAPActivityPhotoKey];
+    
+    // select all activities from activity where type is comment and photo id IN [user channel array]
+    NSArray *subscribedChannels = [PFInstallation currentInstallation].channels;
+    NSMutableArray *photos = [[NSMutableArray alloc] init];
+    
+    for (NSString *channel in subscribedChannels) {
+        
+        NSString *photoId = [channel substringFromIndex:2];
+    
+        PFObject *pic = [PFObject objectWithoutDataWithClassName:@"Photo" objectId:photoId];
+        [photos addObject:pic];
+    
+    }
+    
+    PFQuery *subscriptionQuery = [PFQuery queryWithClassName:self.parseClassName];
+    
+    [personalQuery whereKey:kPAPActivityToUserKey notEqualTo:[PFUser currentUser]];
+    [subscriptionQuery whereKey:kPAPActivityFromUserKey notEqualTo:[PFUser currentUser]];
+    [subscriptionQuery whereKey:kPAPActivityPhotoKey containedIn:photos];
+    [subscriptionQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeComment];
 
-    [query setCachePolicy:kPFCachePolicyNetworkOnly];
+    
+    [subscriptionQuery includeKey:kPAPActivityFromUserKey];
+    [subscriptionQuery includeKey:kPAPActivityPhotoKey];
+    
+    PFQuery *finalQuery = [PFQuery orQueryWithSubqueries:@[personalQuery,subscriptionQuery]];
+
+    [finalQuery orderByDescending:@"createdAt"];
+    [finalQuery setCachePolicy:kPFCachePolicyNetworkOnly];
+    
+    
+    /*
+    [query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+        // results will contain users with a hometown team with a winning record
+        
+        NSLog(@"array: %@", results);
+    }];
+     
+     */
+
+    
+    //for all my subscriptions, get all the comments associated with them
+    
+    
+    
+
+     
 
     // If no objects are loaded in memory, we look to the cache first to fill the table
     // and then subsequently do a query against the network.
@@ -173,7 +220,7 @@
     }
     */
     
-    return query;
+    return finalQuery;
 }
 
 - (void)objectsDidLoad:(NSError *)error {
