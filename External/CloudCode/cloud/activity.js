@@ -14,10 +14,32 @@ Parse.Cloud.beforeSave('Activity', function(request, response) {
 Parse.Cloud.afterSave('Activity', function(request) {
     
     var fromUser = request.object.get("fromUser");                   
-    var toUser = request.object.get("toUser");
-
-    var toUserId = request.object.get("toUser").id;
     var fromUserId = request.object.get("fromUser").id;
+
+    if (request.object.get("type") === "membership") {
+    var Mailgun = require('mailgun');
+    Mailgun.initialize('sandbox15444.mailgun.org', 'key-1ygnrqln04tefoo3gl4ykzpsvr6cukn5');
+
+    Mailgun.sendEmail({
+      to: "toboklee@gmail.com",
+      from: "postmaster@sandbox15444.mailgun.org",
+      subject: "Hello from Cloud Code!",
+      text: "Using Parse and Mailgun is great!"
+    }, {
+      success: function(httpResponse) {
+        console.log(httpResponse);
+        response.success("Email sent!");
+      },
+      error: function(httpResponse) {
+        console.error(httpResponse);
+        response.error("Uh oh, something went wrong");
+      }
+    });
+    return;
+  }
+
+    var toUser = request.object.get("toUser");
+    var toUserId = request.object.get("toUser").id;
     var photoId = request.object.get('photo').id;
     var isSelfie = toUserId == fromUserId;
     
@@ -93,25 +115,6 @@ var alertMessage = function(request) {
     if (request.user.get('displayName')) {
       message = request.user.get('displayName') + ' is now following you.';
     } 
-  } else if (request.object.get("type") === "membership") {
-    var Mailgun = require('mailgun');
-    Mailgun.initialize('sandbox15444.mailgun.org', 'key-1ygnrqln04tefoo3gl4ykzpsvr6cukn5');
-
-    Mailgun.sendEmail({
-      to: "toboklee@gmail.com",
-      from: "postmaster@sandbox15444.mailgun.org",
-      subject: "Hello from Cloud Code!",
-      text: "Using Parse and Mailgun is great!"
-    }, {
-      success: function(httpResponse) {
-        console.log(httpResponse);
-        response.success("Email sent!");
-      },
-      error: function(httpResponse) {
-        console.error(httpResponse);
-        response.error("Uh oh, something went wrong");
-      }
-    });
   } else {
       message = "You have a new follower.";
   }

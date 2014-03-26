@@ -13,7 +13,7 @@
 @interface PAPEditPhotoViewController ()
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIImage *image;
-@property (nonatomic, strong) UITextField *commentTextField;
+@property (nonatomic, strong) UITextView *commentTextView;
 @property (nonatomic, strong) PFFile *photoFile;
 @property (nonatomic, strong) PFFile *thumbnailFile;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier fileUploadBackgroundTaskId;
@@ -75,11 +75,18 @@
     
     CGRect footerRect = [PAPPhotoDetailsFooterView rectForView];
     footerRect.origin.y = photoImageView.frame.origin.y + photoImageView.frame.size.height;
-
+    /*
     PAPPhotoDetailsFooterView *footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:footerRect];
     self.commentTextField = footerView.commentField;
     self.commentTextField.delegate = self;
     [self.scrollView addSubview:footerView];
+     */
+    
+    PAPPhotoDetailsFooterView *footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:footerRect];
+    self.commentTextView = footerView.commentView;
+    self.commentTextView.delegate = self;
+    [self.scrollView addSubview:footerView];
+    
 
     [self.scrollView setContentSize:CGSizeMake(self.scrollView.bounds.size.width, photoImageView.frame.origin.y + photoImageView.frame.size.height + footerView.frame.size.height)];
 }
@@ -118,7 +125,7 @@
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    [self.commentTextField resignFirstResponder];  
+    [self.commentTextView resignFirstResponder];
 }
 
 
@@ -200,9 +207,97 @@
     }];
 }
 
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    [textView setText:@""];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    if ([textView.text length] == 0) {
+        [textView setText:@"Add a comment"];
+    }
+}
+
+
+- (BOOL) textView:(UITextView*)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString*)text{
+    if ([text isEqualToString:@"\n"]) {
+        NSDictionary *userInfo = [NSDictionary dictionary];
+        NSString *trimmedComment = [self.commentTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if (trimmedComment.length != 0) {
+            userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                        trimmedComment,kPAPEditPhotoViewControllerUserInfoCommentKey,
+                        nil];
+        }
+        
+        if (!self.photoFile || !self.thumbnailFile) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+            [alert show];
+            return NO;
+        }
+        
+        // both files have finished uploading
+        
+        // create a photo object
+        PFObject *photo = [PFObject objectWithClassName:kPAPPhotoClassKey];
+        [photo setObject:[PFUser currentUser] forKey:kPAPPhotoUserKey];
+        [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
+        [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
+        
+        // photos are public, but may only be modified by the user who uploaded them
+        PFACL *photoACL = [PFACL ACLWithUser:[PFUser currentUser]];
+        [photoACL setPublicReadAccess:YES];
+        photo.ACL = photoACL;
+        
+        // Request a background execution task to allow us to finish uploading the photo even if the app is backgrounded
+        self.photoPostBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+            [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
+        }];
+        
+        // save
+        [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                NSLog(@"Photo uploaded");
+                
+                [[PAPCache sharedCache] setAttributesForPhoto:photo likers:[NSArray array] commenters:[NSArray array] likedByCurrentUser:NO];
+                
+                // userInfo might contain any caption which might have been posted by the uploader
+                if (userInfo) {
+                    NSString *commentText = [userInfo objectForKey:kPAPEditPhotoViewControllerUserInfoCommentKey];
+                    
+                    if (commentText && commentText.length != 0) {
+                        // create and save photo caption
+                        PFObject *comment = [PFObject objectWithClassName:kPAPActivityClassKey];
+                        [comment setObject:kPAPActivityTypeComment forKey:kPAPActivityTypeKey];
+                        [comment setObject:photo forKey:kPAPActivityPhotoKey];
+                        [comment setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey];
+                        [comment setObject:[PFUser currentUser] forKey:kPAPActivityToUserKey];
+                        [comment setObject:commentText forKey:kPAPActivityContentKey];
+                        
+                        PFACL *ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+                        [ACL setPublicReadAccess:YES];
+                        comment.ACL = ACL;
+                        
+                        [comment saveEventually];
+                        [[PAPCache sharedCache] incrementCommentCountForPhoto:photo];
+                    }
+                }
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:PAPTabBarControllerDidFinishEditingPhotoNotification object:photo];
+            } else {
+                NSLog(@"Photo failed to save: %@", error);
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+                [alert show];
+            }
+            [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
+        }];
+        
+        [self exitPhoto];
+    }
+    return YES;
+}
+
 - (void)doneButtonAction:(id)sender {
     NSDictionary *userInfo = [NSDictionary dictionary];
-    NSString *trimmedComment = [self.commentTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *trimmedComment = [self.commentTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (trimmedComment.length != 0) {
         userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                                   trimmedComment,kPAPEditPhotoViewControllerUserInfoCommentKey,
