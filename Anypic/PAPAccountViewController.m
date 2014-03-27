@@ -57,9 +57,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    if (NSClassFromString(@"UIRefreshControl")) {
+        self.pullToRefreshEnabled = YES;
+    } else {
+        self.pullToRefreshEnabled = NO;
+    }
+    
     if (!self.user) {
         [NSException raise:NSInvalidArgumentException format:@"user cannot be nil"];
     }
+    [self.user refresh];
     
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     

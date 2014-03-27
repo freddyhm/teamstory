@@ -176,10 +176,7 @@
     [saveButton addTarget:self action:@selector(saveButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [backgroundView addSubview:saveButton];
     
-    
-    [self.view addSubview:profilePictureImageView];
-    [profilePictureImageView setContentMode:UIViewContentModeScaleAspectFill];
-    
+
     if (imageProfileFile) {
         [profilePictureImageView setFile:imageProfileFile];
         [profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {
@@ -192,6 +189,9 @@
     } else {
         NSLog(@"ImageFile Not found");
     }
+
+    [profilePictureImageView setContentMode:UIViewContentModeScaleToFill];
+    [self.view addSubview:profilePictureImageView];
     
     UISwipeGestureRecognizer *swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
     [swipeUpGestureRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
@@ -227,7 +227,6 @@
     [websiteImageView setImage:[UIImage imageNamed:@"profileWebsite.png"]];
     [websiteImageView setFrame:CGRectMake( 15.0f, 223.0f, 40.0f, 40.0f)];
     [backgroundView addSubview:websiteImageView];
-    
     
     CGRect companyName_frame = CGRectMake( 80.0f, 14.0f, 205.0f, 25.0f);
     self.companyName = [[UITextField alloc] initWithFrame:companyName_frame];
@@ -290,6 +289,7 @@
     self.website.placeholder = website_user;
     self.website.userInteractionEnabled = YES;
     self.website.delegate = self;
+    self.website.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [self.website resignFirstResponder];
     [backgroundView addSubview:self.website];
     
@@ -314,6 +314,7 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [self dismissKeyboard];
     [self dismissViewControllerAnimated:NO completion:nil];
+    [self.profilePictureImageView removeFromSuperview];
     
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
     
@@ -328,13 +329,25 @@
     imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
 
     UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
+    bool profileExist_user = [profilExist_num boolValue];
     
-    if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
-        cameraButton.frame = CGRectMake( 122.5f, 35.0f, 75.0f, 75.0f );
-        cameraButton.center = CGPointMake(160.0f, 73.0f);
+    if (!profileExist_user) {
+        if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
+            cameraButton.frame = CGRectMake( 122.5f, 35.0f, 75.0f, 75.0f );
+            cameraButton.center = CGPointMake(160.0f, 73.0f);
+        } else {
+            cameraButton.frame = CGRectMake( 122.5f, 85.0f, 75.0f, 75.0f );
+            cameraButton.center = CGPointMake(160.0f, 123.0f);
+        }
     } else {
-        cameraButton.frame = CGRectMake( 122.5f, 85.0f, 75.0f, 75.0f );
-        cameraButton.center = CGPointMake(160.0f, 123.0f);
+        if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
+            cameraButton.frame = CGRectMake( 122.5f, 35.0f, 75.0f, 75.0f );
+            cameraButton.center = CGPointMake(160.0f, 132.0f);
+        } else {
+            cameraButton.frame = CGRectMake( 122.5f, 85.0f, 75.0f, 75.0f );
+            cameraButton.center = CGPointMake(160.0f, 172.0f);
+        }
     }
 
     cameraButton.frame = CGRectIntegral(cameraButton.frame);
@@ -628,6 +641,7 @@
     NSString* description_input = self.description.text;
     NSString* website_input = [self.website.text lowercaseString];
     NSString* email_input = self.email_address.text;
+    NSString* email_current_input = self.user[@"email"];
     NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
     bool profileExist_user = [profilExist_num boolValue];
     
@@ -656,7 +670,7 @@
         if ([website_input length] > 0) {
             self.user[@"website"] = website_input;
         }
-        if ([email_input length] > 0 && [self NSStringIsValidEmail:email_input]) {
+        if (([email_input length] > 0 && [self NSStringIsValidEmail:email_input]) || email_current_input) {
             self.user[@"email"] = email_input;
         } else {
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your email input is not valid." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
@@ -664,6 +678,8 @@
             [alert show];
             return;
         }
+        
+        [self.user saveInBackground];
         
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         alert.alertViewStyle = UIAlertViewStyleDefault;
@@ -706,6 +722,7 @@
             
             // make sure our join activity is always earlier than a follow
             [membershipReceived saveInBackground];
+            [self.user saveInBackground];
             
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             alert.tag = SUCCESSFUL;
@@ -742,9 +759,16 @@
             NSLog(@"Logged In Sucessfully");
             [self.view endEditing:YES];
             
-            PAPprofileApprovalViewController *approvalViewController = [[PAPprofileApprovalViewController alloc] init];
-            [self.navigationController pushViewController:approvalViewController animated:YES];
-            return;
+            NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
+            bool profileExist_user = [profilExist_num boolValue];
+            
+            if (profileExist_user != true) {
+                PAPprofileApprovalViewController *approvalViewController = [[PAPprofileApprovalViewController alloc] init];
+                [self.navigationController pushViewController:approvalViewController animated:YES];
+                return;
+            } else {
+                [self.navigationController popViewControllerAnimated:YES];
+            }
         }
     } else if (alertView.tag == IMAGE_NIL) {
         if (buttonIndex == 1) {
@@ -805,6 +829,8 @@
             bool profileExist = YES; // either YES or NO
             NSNumber *profileBoolNum = [NSNumber numberWithBool: profileExist];
             [[PFUser currentUser] setObject: profileBoolNum forKey: @"profileExist"];
+            
+            [self.user saveInBackground];
             
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             alert.alertViewStyle = UIAlertViewStyleDefault;
