@@ -18,6 +18,8 @@
 
 @property (nonatomic, strong) NSDate *lastRefresh;
 @property (nonatomic, strong) UIView *blankTimelineView;
+@property (nonatomic, strong) NSMutableArray *readList;
+@property int cellIndex;
 @end
 
 @implementation PAPActivityFeedViewController
@@ -79,8 +81,15 @@
     [self.blankTimelineView addSubview:button];
     
 
-    lastRefresh = [[NSUserDefaults standardUserDefaults] objectForKey:kPAPUserDefaultsActivityFeedViewControllerLastRefreshKey];
-
+    self.readList = [[NSUserDefaults standardUserDefaults] objectForKey:@"readList"];
+    
+    if(self.readList == nil){
+        self.readList = [[NSMutableArray alloc]init];
+        [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    
+    
     if (NSClassFromString(@"UIRefreshControl")) {
         // Use the new iOS 6 refresh control.
         UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
@@ -89,6 +98,8 @@
         [self.refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
         self.pullToRefreshEnabled = NO;
     }
+    
+    self.tableView.bounces = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -100,6 +111,8 @@
     if(self.navigationController.tabBarItem.badgeValue != nil){
         [self setActivityBadge:nil];
     }
+    
+    [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDelegate
@@ -122,6 +135,10 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    [self.readList replaceObjectAtIndex:indexPath.row withObject:@"read"];
+    [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row < self.objects.count) {
         PFObject *activity = [self.objects objectAtIndex:indexPath.row];
@@ -176,7 +193,13 @@
 
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
-
+    
+    if([self.readList count] == 0){
+        for (int i = 0; i < self.objects.count ; i++) {
+            [self.readList addObject:@"read"];
+        }
+    }
+    
     if (NSClassFromString(@"UIRefreshControl")) {
         [self.refreshControl endRefreshing];
     }
@@ -204,6 +227,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
+    
     static NSString *CellIdentifier = @"ActivityCell";
 
     PAPActivityCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -216,11 +240,15 @@
     [cell setActivity:object];
     NSLog(@"%@", lastRefresh);
     NSLog(@"%@", [object createdAt]);
-
-    if ([lastRefresh compare:[object createdAt]] == NSOrderedAscending) {
+    
+    NSLog(@"%d", indexPath.row);
+    
+    NSString *activityStatus = [self.readList objectAtIndex:indexPath.row];
+    
+    if ([activityStatus isEqualToString:@"unread"]) {
         [cell setIsNew:YES];
         NSLog(@"YESYESYES");
-    } else {
+    } else if([activityStatus isEqualToString:@"read"]) {
         [cell setIsNew:NO];
         NSLog(@"NONONO");
     }
@@ -303,6 +331,8 @@
     NSString *pushSrc = [[note userInfo] objectForKey:@"source"];
     
     if(![pushSrc isEqualToString:@"konotor"]){
+        [self.readList insertObject:@"unread" atIndex:0];
+        [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
         [self loadObjects];
     }
 }
