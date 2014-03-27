@@ -708,6 +708,7 @@
             [membershipReceived saveInBackground];
             
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            alert.tag = SUCCESSFUL;
             alert.alertViewStyle = UIAlertViewStyleDefault;
             [alert show];
 
