@@ -641,6 +641,7 @@
     NSString* description_input = self.description.text;
     NSString* website_input = [self.website.text lowercaseString];
     NSString* email_input = self.email_address.text;
+    NSString* email_current_input = self.user[@"email"];
     NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
     bool profileExist_user = [profilExist_num boolValue];
     
@@ -669,7 +670,7 @@
         if ([website_input length] > 0) {
             self.user[@"website"] = website_input;
         }
-        if ([email_input length] > 0 && [self NSStringIsValidEmail:email_input]) {
+        if (([email_input length] > 0 && [self NSStringIsValidEmail:email_input]) || email_current_input) {
             self.user[@"email"] = email_input;
         } else {
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your email input is not valid." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
