@@ -47,6 +47,7 @@
 
 @property (nonatomic, strong) MBProgressHUD *hud;
 @property (nonatomic, strong) NSTimer *autoFollowTimer;
+@property BOOL isKonotor;
 
 @property (nonatomic, strong) Reachability *hostReach;
 @property (nonatomic, strong) Reachability *internetReach;
@@ -182,13 +183,8 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     [Konotor addDeviceToken:newDeviceToken];
     [PFPush storeDeviceToken:newDeviceToken];
     
-    if (application.applicationIconBadgeNumber != 0) {
-        application.applicationIconBadgeNumber = 0;
-    }
-
     [[PFInstallation currentInstallation] setDeviceTokenFromData:newDeviceToken];
     [[PFInstallation currentInstallation] saveInBackground];
-    
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
@@ -203,6 +199,8 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     [[NSNotificationCenter defaultCenter] postNotificationName:PAPAppDelegateApplicationDidReceiveRemoteNotification object:nil userInfo:userInfo];
     
     NSString *pushSrc = [userInfo objectForKey:@"source"];
+    
+    self.isKonotor = YES;
     
     // handle type of notification
     if ([pushSrc isEqualToString:@"konotor"]){
@@ -220,19 +218,27 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
         // app is in foreground
         if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
             if ([PFUser currentUser]) {
+                
+                // set activity and icon badge value
                 if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
                     
                     UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
                     
                     NSString *currentBadgeValue = tabBarItem.badgeValue;
                     
-                    if (currentBadgeValue && currentBadgeValue.length > 0) {
+                    if (currentBadgeValue && currentBadgeValue.length > 0 && application.applicationIconBadgeNumber != 0) {
+                        
+                        // activity bar
                         NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
                         NSNumber *badgeValue = [numberFormatter numberFromString:currentBadgeValue];
                         NSNumber *newBadgeValue = [NSNumber numberWithInt:[badgeValue intValue] + 1];
                         tabBarItem.badgeValue = [numberFormatter stringFromNumber:newBadgeValue];
+                        
+                        // icon value
+                        application.applicationIconBadgeNumber = [newBadgeValue intValue];
                     } else {
                         tabBarItem.badgeValue = @"1";
+                        application.applicationIconBadgeNumber = 1;
                     }
                 }
             }
@@ -246,7 +252,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     
     // syncs icon badge with tab bar badge, resets icon badge back to 0
-    if (application.applicationIconBadgeNumber != 0) {
+    if (application.applicationIconBadgeNumber != 0 && !self.isKonotor) {
         
          if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
         
@@ -256,11 +262,11 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
              NSNumber *newBadgeValue = [NSNumber numberWithInteger:application.applicationIconBadgeNumber];
              tabBarItem.badgeValue = [numberFormatter stringFromNumber:newBadgeValue];
         }
-        
+    }else if(self.isKonotor){
         application.applicationIconBadgeNumber = 1;
         application.applicationIconBadgeNumber = 0;
     }
-
+    
     // Clears out all notifications from Notification Center.
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
 

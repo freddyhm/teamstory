@@ -48,7 +48,7 @@
         }
 
         // The number of objects to show per page
-        self.objectsPerPage = 15;          
+        self.objectsPerPage = 15;
     }
     return self;
 }
@@ -96,19 +96,10 @@
     // analytics
     [PAPUtility captureScreenGA:@"Activity"];
     
-    // reset badge number on server side when user checks activity feed and badge value is present
+    // reset badge number on server and activity bar when user checks activity feed and badge value is present
     if(self.navigationController.tabBarItem.badgeValue != nil){
-        // Reset badge number on server side
-        [[PFInstallation currentInstallation] setBadge:0];
-        [[PFInstallation currentInstallation] saveEventually];
+        [self setActivityBadge:nil];
     }
-    
-    // refresh only when actually viewing the activity screen
-    lastRefresh = [NSDate date];
-    [[NSUserDefaults standardUserDefaults] setObject:lastRefresh forKey:kPAPUserDefaultsActivityFeedViewControllerLastRefreshKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    [MBProgressHUD hideHUDForView:self.view animated:YES];
 }
 
 #pragma mark - UITableViewDelegate
@@ -205,17 +196,9 @@
     } else {
         self.tableView.tableHeaderView = nil;
         self.tableView.scrollEnabled = YES;
-        
-        NSUInteger unreadCount = 0;
-        for (PFObject *activity in self.objects) {
-            if ([lastRefresh compare:[activity createdAt]] == NSOrderedAscending && ![[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeJoined]) {
-                unreadCount++;
-            }
-        }
-        if (unreadCount > 0) {
-            self.navigationController.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d",(int)unreadCount];
-        } else {
-            self.navigationController.tabBarItem.badgeValue = nil;
+    
+        if (self.view.window) {
+            [self setActivityBadge:nil];
         }
     }
 }
@@ -298,13 +281,30 @@
 
 
 #pragma mark - ()
+
+- (void)setActivityBadge:(NSString *)badge{
+
+    self.navigationController.tabBarItem.badgeValue = badge;
+    
+    // Reset badge number on server side
+    if(badge == nil){
+        [[PFInstallation currentInstallation] setBadge:0];
+        [[PFInstallation currentInstallation] saveEventually];
+    }
+}
+
 - (void)inviteFriendsButtonAction:(id)sender {
     PAPFindFriendsViewController *detailViewController = [[PAPFindFriendsViewController alloc] init];
     [self.navigationController pushViewController:detailViewController animated:YES];
 }
 
 - (void)applicationDidReceiveRemoteNotification:(NSNotification *)note {
-    [self loadObjects];
+    
+    NSString *pushSrc = [[note userInfo] objectForKey:@"source"];
+    
+    if(![pushSrc isEqualToString:@"konotor"]){
+        [self loadObjects];
+    }
 }
 
 - (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl {
