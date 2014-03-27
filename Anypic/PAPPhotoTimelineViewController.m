@@ -57,13 +57,6 @@ enum ActionSheetTags {
         // Whether the built-in pagination is enabled
         self.paginationEnabled = YES;
 
-        // Whether the built-in pull-to-refresh is enabled
-        if (NSClassFromString(@"UIRefreshControl")) {
-            self.pullToRefreshEnabled = YES;
-        } else {
-            self.pullToRefreshEnabled = NO;
-        }
-
         // The number of objects to show per page
         self.objectsPerPage = 10;
         
@@ -87,19 +80,15 @@ enum ActionSheetTags {
     
     [self.tableView setShowsVerticalScrollIndicator:NO];
 
-    if (NSClassFromString(@"UIRefreshControl")) {
-        // Use the new iOS 6 refresh control.
-        UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-        self.refreshControl = refreshControl;
-        self.refreshControl.tintColor = [UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:0.5f];
-        [self.refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
-        
-        NSMutableAttributedString *refreshTitle = [[NSMutableAttributedString alloc] initWithString:@"Updating..."];
-        
-        [refreshTitle addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:0.5f] range:NSMakeRange(0, refreshTitle.length)];
-        
-        self.refreshControl.attributedTitle = refreshTitle;
-    }
+     // Refresh control
+     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+     NSMutableAttributedString *refreshTitle = [[NSMutableAttributedString alloc] initWithString:@"Updating..."];
+     [refreshTitle addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:0.5f] range:NSMakeRange(0, refreshTitle.length)];
+     refreshControl.attributedTitle = refreshTitle;
+     refreshControl.tintColor = [UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:0.5f];
+     [refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
+
+     self.refreshControl = refreshControl;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidPublishPhoto:) name:PAPTabBarControllerDidFinishEditingPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userFollowingChanged:) name:PAPUtilityUserFollowingChangedNotification object:nil];
