@@ -26,6 +26,9 @@
 @property (nonatomic, strong) PFUser *currentUser;
 @property (nonatomic, strong) PAPSettingsActionSheetDelegate *settingsActionSheetDelegate;
 @property (nonatomic, strong) MBProgressHUD *hud;
+@property (nonatomic, strong) NSString *displayName;
+@property (nonatomic, strong) UILabel *userDisplayNameLabel;
+@property (nonatomic, strong) UIButton *websiteLink;
 
 
 @end
@@ -47,6 +50,9 @@
 @synthesize hud;
 @synthesize websiteInfo;
 @synthesize navController;
+@synthesize displayName;
+@synthesize userDisplayNameLabel;
+@synthesize websiteLink;
 
 
 #pragma mark - Initialization
@@ -74,7 +80,7 @@
     self.locationInfo = [self.user objectForKey:@"location"];
     self.descriptionInfo = [self.user objectForKey:@"description"];
     self.websiteInfo = [self.user objectForKey:@"website"];
-    NSString *displayName = [self.user objectForKey:@"displayName"];
+    self.displayName = [self.user objectForKey:@"displayName"];
     
     if (imageFile && locationInfo && displayName) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -198,7 +204,7 @@
         [followingCountLabel setFont:[UIFont boldSystemFontOfSize:12.0f]];
         [self.headerView addSubview:followingCountLabel];
         
-        UILabel *userDisplayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94.0f, 12.0f, self.headerView.bounds.size.width, 16.0f)];
+        userDisplayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94.0f, 12.0f, self.headerView.bounds.size.width, 16.0f)];
         [userDisplayNameLabel setBackgroundColor:[UIColor clearColor]];
         [userDisplayNameLabel setTextColor:[UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
         [userDisplayNameLabel setText:displayName];
@@ -206,7 +212,7 @@
         [self.headerView addSubview:userDisplayNameLabel];
         
         if ([websiteInfo length] > 0) {
-            UIButton *websiteLink = [UIButton buttonWithType:UIButtonTypeCustom];
+            websiteLink = [UIButton buttonWithType:UIButtonTypeCustom];
             [websiteLink setFrame:CGRectMake( 10.0f, 86.0f + expectedSize.height, 300.0f, 16.0f)];
             [websiteLink setTitle:websiteInfo forState:UIControlStateNormal];
             [websiteLink setTitleColor:[UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
@@ -286,8 +292,23 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     // analytics
+    [super viewWillAppear:YES];
     [PAPUtility captureScreenGA:@"Account"];
-    [self.view reloadInputViews];
+    [[PFUser currentUser] refresh];
+    
+    self.userDisplayNameLabel.text = [self.user objectForKey:@"displayName"];
+    self.locationLabel.text = [self.user objectForKey:@"location"];
+    self.descriptionLabel.text = [self.user objectForKey:@"description"];
+    [profilePictureImageView setFile:[self.user objectForKey:@"profilePictureMedium"]];
+    [profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {
+        if (!error) {
+            [UIView animateWithDuration:0.05f animations:^{
+                profilePictureBackgroundView.alpha = 1.0f;
+                profilePictureImageView.alpha = 1.0f;
+            }];
+        }
+    }];
+    
 }
 
 #pragma mark - Custom
