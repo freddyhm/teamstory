@@ -47,6 +47,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         }
 
         // Create subviews and set cell properties
+        self.hasBeenRead = NO;
         self.opaque = YES;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.accessoryType = UITableViewCellAccessoryNone;
@@ -101,11 +102,11 @@ static TTTTimeIntervalFormatter *timeFormatter;
 - (void)setIsNew:(BOOL)isNew {
     if (isNew) {
         //[self.mainView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundNewActivity.png"]]];
-        [self.mainView setBackgroundColor:[UIColor whiteColor]];
+        [self.mainView setBackgroundColor:[UIColor colorWithRed:1 green:1 blue:1 alpha:1]];
     } else {
         //[self.mainView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundComments.png"]]];
         //[self.mainView setBackgroundColor:[UIColor colorWithWhite:255.0f/255.0f alpha:0.7f]];
-        [self.mainView setBackgroundColor:[UIColor whiteColor]];
+        [self.mainView setBackgroundColor:[UIColor colorWithRed:1 green:1 blue:1 alpha:0.6]];
     }
 }
 
