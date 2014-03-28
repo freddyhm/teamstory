@@ -380,7 +380,7 @@
     
     [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (error) {
-            NSLog(@"Error: %@ %@", error, [error userInfo]);
+            NSLog(@"uploadImage_small: %@ %@", error, [error userInfo]);
         }
         [refreshHUD removeFromSuperview];
     }];
@@ -402,7 +402,7 @@
     
     [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (error) {
-            NSLog(@"Error: %@ %@", error, [error userInfo]);
+            NSLog(@"uploadImage_medium: %@ %@", error, [error userInfo]);
         }
         [refreshHUD removeFromSuperview];
     }];
@@ -709,17 +709,17 @@
             bool profileExist_user = [profilExist_num boolValue];
             
             if (profileExist_user != true) {
+                //Checking profile existence.
+                bool profileExist = YES; // either YES or NO
+                NSNumber *profileBoolNum = [NSNumber numberWithBool: profileExist];
+                [[PFUser currentUser] setObject: profileBoolNum forKey: @"profileExist"];
+                [[PFUser currentUser] saveInBackground];
+                
                 PAPprofileApprovalViewController *approvalViewController = [[PAPprofileApprovalViewController alloc] init];
                 [self.navigationController pushViewController:approvalViewController animated:YES];
             } else {
                 [self.navigationController popViewControllerAnimated:YES];
             }
-            
-            //Checking profile existence.
-            bool profileExist = YES; // either YES or NO
-            NSNumber *profileBoolNum = [NSNumber numberWithBool: profileExist];
-            [[PFUser currentUser] setObject: profileBoolNum forKey: @"profileExist"];
-            [[PFUser currentUser] saveInBackground];
         }
     } else if (alertView.tag == IMAGE_NIL) {
         if (buttonIndex == 1) {

@@ -99,10 +99,12 @@
         self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ProfileNavigationBar.png"]];
         self.navigationItem.rightBarButtonItem = [[PAPSettingsButtonItem alloc] initWithTarget:self action:@selector(settingsButtonAction:)];
         
+        self.headerView = [[UIView alloc] init];
+        
         if ([websiteInfo length] > 0) {
-            self.headerView = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + 26.0f)];
+            self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + 26.0f);
         } else {
-            self.headerView = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height)];
+            self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height);
         }
         
         [self.headerView setBackgroundColor:[UIColor clearColor]]; // should be clear, this will be the container for our avatar, photo count, follower count, following count, and so on
@@ -299,6 +301,8 @@
     self.userDisplayNameLabel.text = [self.user objectForKey:@"displayName"];
     self.locationLabel.text = [self.user objectForKey:@"location"];
     self.descriptionLabel.text = [self.user objectForKey:@"description"];
+    [self.websiteLink setTitle:[self.user objectForKey:@"website"] forState:UIControlStateNormal];
+    
     [profilePictureImageView setFile:[self.user objectForKey:@"profilePictureMedium"]];
     [profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {
         if (!error) {
@@ -309,6 +313,15 @@
         }
     }];
     
+    CGSize maximumLabelSize = CGSizeMake(300.0f, 32.0f);
+    
+    CGSize expectedSize = [self.descriptionLabel sizeThatFits:maximumLabelSize];
+    
+    if ([websiteInfo length] > 0) {
+        self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + 26.0f);
+    } else {
+        self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height);
+    }
 }
 
 #pragma mark - Custom
