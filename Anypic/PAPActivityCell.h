@@ -11,7 +11,6 @@
 
 /*!Setter for the activity associated with this cell */
 @property (nonatomic, strong) PFObject *activity;
-@property BOOL hasBeenRead;
 
 /*!Set the new state. This changes the background of the cell. */
 - (void)setIsNew:(BOOL)isNew;

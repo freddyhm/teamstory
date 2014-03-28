@@ -47,7 +47,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
         }
 
         // Create subviews and set cell properties
-        self.hasBeenRead = NO;
         self.opaque = YES;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.accessoryType = UITableViewCellAccessoryNone;
