@@ -287,6 +287,7 @@
 - (void)viewWillAppear:(BOOL)animated{
     // analytics
     [PAPUtility captureScreenGA:@"Account"];
+    [self.view reloadInputViews];
 }
 
 #pragma mark - Custom

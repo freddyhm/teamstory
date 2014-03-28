@@ -376,37 +376,13 @@
     // Show the HUD while the provided method executes in a new thread
     [refreshHUD show:YES];
     
+    user[@"profilePictureSmall"] = imageFile;
     
-    // Save PFFile
-    [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-              
-        if (!error) {
-            user[@"profilePictureSmall"] = imageFile;
-            
-                NSLog(@"Picture has been uploaded successfully (NO HUD)");
-                //profilePic.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
-                
-                [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                    if (!error) {
-                        [user refresh];
-                        [self refreshView];
-                        NSLog(@"Picture has been uploaded successfully (WITH HUD)");
-                    }
-                    else{
-                        // Log details of the failure
-                        NSLog(@"Error: %@ %@", error, [error userInfo]);
-                    }
-                }];
-                [refreshHUD removeFromSuperview];
-        }
-        else{
-            [HUD hide:YES];
-            // Log details of the failure
+    [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (error) {
             NSLog(@"Error: %@ %@", error, [error userInfo]);
         }
-    } progressBlock:^(int percentDone) {
-        // Update your progress spinner here. percentDone will be between 0 and 100.
-        HUD.progress = (float)percentDone/100;
+        [refreshHUD removeFromSuperview];
     }];
 }
 
@@ -422,38 +398,13 @@
     
     // Show the HUD while the provided method executes in a new thread
     [refreshHUD show:YES];
+    user[@"profilePictureMedium"] = imageFile;
     
-    
-    // Save PFFile
-    [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        
-        if (!error) {
-            user[@"profilePictureMedium"] = imageFile;
-            
-            NSLog(@"Picture has been uploaded successfully (NO HUD)");
-            //profilePic.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
-            
-            [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if (!error) {
-                    [user refresh];
-                    [self refreshView];
-                    NSLog(@"Picture has been uploaded successfully (WITH HUD)");
-                }
-                else{
-                    // Log details of the failure
-                    NSLog(@"Error: %@ %@", error, [error userInfo]);
-                }
-            }];
-            [refreshHUD removeFromSuperview];
-        }
-        else{
-            [HUD hide:YES];
-            // Log details of the failure
+    [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (error) {
             NSLog(@"Error: %@ %@", error, [error userInfo]);
         }
-    } progressBlock:^(int percentDone) {
-        // Update your progress spinner here. percentDone will be between 0 and 100.
-        HUD.progress = (float)percentDone/100;
+        [refreshHUD removeFromSuperview];
     }];
 }
 
@@ -679,7 +630,7 @@
             return;
         }
         
-        [self.user saveInBackground];
+        [[PFUser currentUser] saveInBackground];
         
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         alert.alertViewStyle = UIAlertViewStyleDefault;
@@ -706,11 +657,6 @@
             self.user[@"location"] = location_input;
             self.user[@"email"] = email_input;
             
-            //Checking profile existence.
-            bool profileExist = YES; // either YES or NO
-            NSNumber *profileBoolNum = [NSNumber numberWithBool: profileExist];
-            [[PFUser currentUser] setObject: profileBoolNum forKey: @"profileExist"];
-            
             
             PFObject *membershipReceived = [PFObject objectWithClassName:kPAPActivityClassKey];
             [membershipReceived setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey];
@@ -722,7 +668,7 @@
             
             // make sure our join activity is always earlier than a follow
             [membershipReceived saveInBackground];
-            [self.user saveInBackground];
+            [[PFUser currentUser] saveInBackground];
             
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             alert.tag = SUCCESSFUL;
@@ -765,10 +711,15 @@
             if (profileExist_user != true) {
                 PAPprofileApprovalViewController *approvalViewController = [[PAPprofileApprovalViewController alloc] init];
                 [self.navigationController pushViewController:approvalViewController animated:YES];
-                return;
             } else {
                 [self.navigationController popViewControllerAnimated:YES];
             }
+            
+            //Checking profile existence.
+            bool profileExist = YES; // either YES or NO
+            NSNumber *profileBoolNum = [NSNumber numberWithBool: profileExist];
+            [[PFUser currentUser] setObject: profileBoolNum forKey: @"profileExist"];
+            [[PFUser currentUser] saveInBackground];
         }
     } else if (alertView.tag == IMAGE_NIL) {
         if (buttonIndex == 1) {
@@ -826,11 +777,7 @@
                 [membershipReceived saveInBackground];
             }
             
-            bool profileExist = YES; // either YES or NO
-            NSNumber *profileBoolNum = [NSNumber numberWithBool: profileExist];
-            [[PFUser currentUser] setObject: profileBoolNum forKey: @"profileExist"];
-            
-            [self.user saveInBackground];
+            [[PFUser currentUser] saveInBackground];
             
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             alert.alertViewStyle = UIAlertViewStyleDefault;
