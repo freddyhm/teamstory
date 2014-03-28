@@ -549,13 +549,18 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
             return;
         }
         
-        // Reset badge number on server side
-        [[PFInstallation currentInstallation] setBadge:0];
-        [[PFInstallation currentInstallation] saveEventually];
-                
+        // call activity notification setup and reset badges
+        [self.activityViewController loadObjects];
+        [self.activityViewController setActivityBadge:nil];
+        
         // If the push notification payload references a photo, we will attempt to push this view controller into view
         NSString *photoObjectId = [remoteNotificationPayload objectForKey:kPAPPushPayloadPhotoObjectIdKey];
         if (photoObjectId && photoObjectId.length > 0) {
+            
+            // mark first message as read and save in user defaults
+            [self.activityViewController.readList replaceObjectAtIndex:0 withObject:@"read"];
+            [[NSUserDefaults standardUserDefaults] setObject:self.activityViewController.readList forKey:@"readList"];
+            
             [self shouldNavigateToPhoto:[PFObject objectWithoutDataWithClassName:kPAPPhotoClassKey objectId:photoObjectId]];
             return;
         }
@@ -567,6 +572,11 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
             query.cachePolicy = kPFCachePolicyCacheElseNetwork;
             [query getObjectInBackgroundWithId:fromObjectId block:^(PFObject *user, NSError *error) {
                 if (!error) {
+                    
+                    // mark first message as read and save in user defaults
+                    [self.activityViewController.readList replaceObjectAtIndex:0 withObject:@"read"];
+                    [[NSUserDefaults standardUserDefaults] setObject:self.activityViewController.readList forKey:@"readList"];
+                    
                     UINavigationController *homeNavigationController = self.tabBarController.viewControllers[PAPHomeTabBarItemIndex];
                     self.tabBarController.selectedViewController = homeNavigationController;
                     

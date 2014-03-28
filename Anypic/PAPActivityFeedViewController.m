@@ -18,7 +18,8 @@
 
 @property (nonatomic, strong) NSDate *lastRefresh;
 @property (nonatomic, strong) UIView *blankTimelineView;
-@property (nonatomic, strong) NSMutableArray *readList;
+
+
 @property int cellIndex;
 @end
 
@@ -51,6 +52,8 @@
 
         // The number of objects to show per page
         self.objectsPerPage = 15;
+        
+        self.loadedWithViewNotification = YES;
     }
     return self;
 }
@@ -114,7 +117,7 @@
     
     [self.tableView reloadData];
 }
-
+ 
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -263,20 +266,13 @@
     }else{
         [cell setActivity:object isSubscription:NO];
     }
-
-    NSLog(@"%@", lastRefresh);
-    NSLog(@"%@", [object createdAt]);
-    
-    NSLog(@"%d", indexPath.row);
     
     NSString *activityStatus = [self.readList objectAtIndex:indexPath.row];
     
     if ([activityStatus isEqualToString:@"unread"]) {
         [cell setIsNew:YES];
-        NSLog(@"YESYESYES");
     } else if([activityStatus isEqualToString:@"read"]) {
         [cell setIsNew:NO];
-        NSLog(@"NONONO");
     }
 
     [cell hideSeparator:(indexPath.row == self.objects.count - 1)];
