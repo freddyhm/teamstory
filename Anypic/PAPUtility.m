@@ -42,6 +42,17 @@
                                                            value:nil] build]];    // Event value
 }
 
++ (UIViewController*) getTopController
+{
+    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    
+    while (topViewController.presentedViewController) {
+        topViewController = topViewController.presentedViewController;
+    }
+    
+    return topViewController;
+}
+
 +(void)updateSubscriptionToPost:(NSString *)postId forState:(NSString *)state{
 
     NSString *postChannelName = [@"ch" stringByAppendingString:postId];

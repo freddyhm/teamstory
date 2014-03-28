@@ -255,12 +255,22 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     if (application.applicationIconBadgeNumber != 0 && !self.isKonotor) {
         
          if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
-        
+             
              UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
             
              NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
              NSNumber *newBadgeValue = [NSNumber numberWithInteger:application.applicationIconBadgeNumber];
              tabBarItem.badgeValue = [numberFormatter stringFromNumber:newBadgeValue];
+             
+             // get current selected tab
+             NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
+
+             // current view is activity so manually notify activity
+             if(selectedtabIndex == PAPActivityTabBarItemIndex){
+                 
+                 [self.activityViewController notificationSetup];
+                 [self.activityViewController setActivityBadge:nil];
+             }
         }
     }else if(self.isKonotor){
         application.applicationIconBadgeNumber = 1;

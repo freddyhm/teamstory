@@ -11,6 +11,7 @@
 @property BOOL loadedWithViewNotification;
 @property (nonatomic, strong) NSMutableArray *readList;
 
+- (void)notificationSetup;
 + (NSString *)stringForActivityType:(NSString *)activityType;
 
 

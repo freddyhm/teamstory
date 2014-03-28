@@ -66,6 +66,8 @@
 
     [super viewDidLoad];
     
+    self.navigationItem.title = @"Activity";
+    
     UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
     [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]]];
     self.tableView.backgroundView = texturedBackgroundView;
@@ -353,10 +355,14 @@
     NSString *pushSrc = [[note userInfo] objectForKey:@"source"];
     
     if(![pushSrc isEqualToString:@"konotor"]){
-        [self.readList insertObject:@"unread" atIndex:0];
-        [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
-        [self loadObjects];
+        [self notificationSetup];
     }
+}
+
+- (void)notificationSetup{
+    [self.readList insertObject:@"unread" atIndex:0];
+    [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
+    [self loadObjects];
 }
 
 - (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl {
