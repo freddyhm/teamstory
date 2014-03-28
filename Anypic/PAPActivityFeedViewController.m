@@ -250,7 +250,12 @@
         [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
     }
 
-    [cell setActivity:object];
+    if(![[[object objectForKey:@"toUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]]){
+        [cell setActivity:object isSubscription:YES];
+    }else{
+        [cell setActivity:object isSubscription:NO];
+    }
+
     NSLog(@"%@", lastRefresh);
     NSLog(@"%@", [object createdAt]);
 
