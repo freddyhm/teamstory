@@ -16,7 +16,6 @@
 
 @interface PAPActivityFeedViewController ()
 
-@property (nonatomic, strong) NSDate *lastRefresh;
 @property (nonatomic, strong) UIView *blankTimelineView;
 
 
@@ -25,7 +24,6 @@
 
 @implementation PAPActivityFeedViewController
 
-@synthesize lastRefresh;
 @synthesize blankTimelineView;
 
 #pragma mark - Initialization

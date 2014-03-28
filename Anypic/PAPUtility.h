@@ -6,7 +6,6 @@
 
 @interface PAPUtility : NSObject
 
-+ (UIViewController*) getTopController;
 + (void)captureEventGA:(NSString *)eventCategory action:(NSString *)eventAction label:(NSString *)eventLabel;
 + (void)captureScreenGA:(NSString *)screen;
 + (void)updateSubscriptionToPost:(NSString *)postId forState:(NSString *)state;
