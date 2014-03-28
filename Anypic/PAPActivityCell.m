@@ -110,7 +110,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 
-- (void)setActivity:(PFObject *)activity {
+- (void)setActivity:(PFObject *)activity isSubscription:(BOOL)isSubscription{
     // Set the activity property
     _activity = activity;
     if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeFollow] || [[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeJoined]) {
@@ -119,7 +119,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [self setActivityImageFile:(PFFile*)[[activity objectForKey:kPAPActivityPhotoKey] objectForKey:kPAPPhotoThumbnailKey]];
     }
     
-    NSString *activityString = [PAPActivityFeedViewController stringForActivityType:(NSString*)[activity objectForKey:kPAPActivityTypeKey]];
+    NSString *activityString = isSubscription ? @"commented on a followed photo" : [PAPActivityFeedViewController stringForActivityType:(NSString*)[activity objectForKey:kPAPActivityTypeKey]];
+    
     self.user = [activity objectForKey:kPAPActivityFromUserKey];
     
     // Set name button properties and avatar image

@@ -165,17 +165,38 @@
         [query setLimit:0];
         return query;
     }
-
-    PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
-    [query whereKey:kPAPActivityToUserKey equalTo:[PFUser currentUser]];
-    [query whereKey:kPAPActivityFromUserKey notEqualTo:[PFUser currentUser]];
-    [query whereKeyExists:kPAPActivityFromUserKey];
-    [query includeKey:kPAPActivityFromUserKey];
-    [query includeKey:kPAPActivityPhotoKey];
-    [query orderByDescending:@"createdAt"];
-
-    [query setCachePolicy:kPFCachePolicyNetworkOnly];
-
+    
+    // select all activities from activity where type is comment and photo id IN [user channel array]
+    NSArray *subscribedChannels = [PFInstallation currentInstallation].channels;
+    NSMutableArray *photos = [[NSMutableArray alloc] init];
+    
+    for (NSString *channel in subscribedChannels) {
+        NSString *photoId = [channel substringFromIndex:2];
+        PFObject *pic = [PFObject objectWithoutDataWithClassName:@"Photo" objectId:photoId];
+        [photos addObject:pic];
+    }
+    
+    
+    // pull all activities to user
+    PFQuery *personalQuery = [PFQuery queryWithClassName:self.parseClassName];
+    [personalQuery whereKey:kPAPActivityToUserKey equalTo:[PFUser currentUser]];
+    
+    // pull all activties from user's subscriptions
+    PFQuery *subscriptionQuery = [PFQuery queryWithClassName:self.parseClassName];
+    [subscriptionQuery whereKey:kPAPActivityToUserKey notEqualTo:[PFUser currentUser]];
+    [subscriptionQuery whereKey:kPAPActivityPhotoKey containedIn:photos];
+    [subscriptionQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeComment];
+    
+    PFQuery *finalQuery = [PFQuery orQueryWithSubqueries:@[personalQuery,subscriptionQuery]];
+    [finalQuery whereKey:kPAPActivityFromUserKey notEqualTo:[PFUser currentUser]];
+    [finalQuery whereKeyExists:kPAPActivityFromUserKey];
+    
+    [finalQuery includeKey:kPAPActivityFromUserKey];
+    [finalQuery includeKey:kPAPActivityPhotoKey];
+    [finalQuery orderByDescending:@"createdAt"];
+    
+    [finalQuery setCachePolicy:kPFCachePolicyNetworkOnly];
+    
     // If no objects are loaded in memory, we look to the cache first to fill the table
     // and then subsequently do a query against the network.
     //
@@ -188,7 +209,7 @@
     }
     */
     
-    return query;
+    return finalQuery;
 }
 
 - (void)objectsDidLoad:(NSError *)error {
@@ -237,7 +258,12 @@
         [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
     }
 
-    [cell setActivity:object];
+    if(![[[object objectForKey:@"toUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]]){
+        [cell setActivity:object isSubscription:YES];
+    }else{
+        [cell setActivity:object isSubscription:NO];
+    }
+
     NSLog(@"%@", lastRefresh);
     NSLog(@"%@", [object createdAt]);
     
