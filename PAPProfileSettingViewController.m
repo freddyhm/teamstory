@@ -100,9 +100,7 @@
     if ([description_user length] == 0) {
         description_user = @"Description";
     }
-    if ([email_user length] == 0) {
-        email_user = @"Email";
-    }
+
     
     backgroundView = [[UIView alloc] init];
     [backgroundView setBackgroundColor:backgroundColor];
@@ -245,8 +243,14 @@
     self.email_address = [[UITextField alloc] initWithFrame:email_address_frame];
     [self.email_address setBackgroundColor:backgroundColor];
     [self.email_address setFont:fonts];
-    self.email_address.placeholder = email_user;
-    self.email_address.userInteractionEnabled = YES;
+    self.email_address.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    if ([email_user length] == 0) {
+        self.email_address.placeholder = @"Email";
+        self.email_address.userInteractionEnabled = YES;
+    } else {
+        self.email_address.placeholder = email_user;
+        self.email_address.userInteractionEnabled = NO;
+    }
     self.email_address.delegate = self;
     [backgroundView addSubview:self.email_address];
     
@@ -375,7 +379,7 @@
     
     // Show the HUD while the provided method executes in a new thread
     [refreshHUD show:YES];
-    
+    user = [PFUser currentUser];
     user[@"profilePictureSmall"] = imageFile;
     
     [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -398,11 +402,14 @@
     
     // Show the HUD while the provided method executes in a new thread
     [refreshHUD show:YES];
+    user = [PFUser currentUser];
     user[@"profilePictureMedium"] = imageFile;
     
     [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (error) {
             NSLog(@"uploadImage_medium: %@ %@", error, [error userInfo]);
+        } else {
+            NSLog(@"successful");
         }
         [refreshHUD removeFromSuperview];
     }];
@@ -637,7 +644,7 @@
         alert.tag = SUCCESSFUL;
         [alert show];
     } else {
-        if ([companyName_input length] > 0 && [location_input length] > 0 && (([email_input length] > 0 && [self NSStringIsValidEmail:email_input]) || self.user[@"email"] )) {
+        if ([companyName_input length] > 0 && [location_input length] > 0 && (([email_input length] > 0 && [self NSStringIsValidEmail:email_input]) || email_current_input )) {
             
             if (!imageData_picker) {
                 UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"You did not select any image. Would you like to update the image?" delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES", nil];
@@ -651,11 +658,21 @@
                 [self uploadImage_small:imageData_picker_small];
             }
             
+            // mendatory fields
             self.user[@"displayName"] = companyName_input;
-            self.user[@"description"] = description_input;
-            self.user[@"website"] = website_input;
             self.user[@"location"] = location_input;
-            self.user[@"email"] = email_input;
+            
+            // optional fields
+            if ([description_input length] > 0) {
+                self.user[@"description"] = description_input;
+            }
+            if ([website_input length] > 0) {
+                self.user[@"website"] = website_input;
+            }
+            
+            if ([email_current_input length] == 0) {
+                self.user[@"email"] = email_input;
+            }
             
             
             PFObject *membershipReceived = [PFObject objectWithClassName:kPAPActivityClassKey];
