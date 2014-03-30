@@ -54,6 +54,7 @@
         user_email = [[UITextField alloc] init];
         user_email.layer.cornerRadius = 1.5f;
         user_email.leftView = paddingView;
+        [user_email setFont:[UIFont systemFontOfSize:15]];
         user_email.leftViewMode = UITextFieldViewModeAlways;
         user_email.delegate = self;
         user_email.autocapitalizationType = UITextAutocapitalizationTypeNone;
