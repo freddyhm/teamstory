@@ -11,4 +11,5 @@
 
 @property (nonatomic, assign, getter = isFirstLaunch) BOOL firstLaunch;
 
+
 @end

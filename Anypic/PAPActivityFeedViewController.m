@@ -16,13 +16,14 @@
 
 @interface PAPActivityFeedViewController ()
 
-@property (nonatomic, strong) NSDate *lastRefresh;
 @property (nonatomic, strong) UIView *blankTimelineView;
+
+
+@property int cellIndex;
 @end
 
 @implementation PAPActivityFeedViewController
 
-@synthesize lastRefresh;
 @synthesize blankTimelineView;
 
 #pragma mark - Initialization
@@ -48,7 +49,9 @@
         }
 
         // The number of objects to show per page
-        self.objectsPerPage = 15;          
+        self.objectsPerPage = 15;
+        
+        self.loadedWithViewNotification = YES;
     }
     return self;
 }
@@ -60,6 +63,8 @@
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 
     [super viewDidLoad];
+    
+    self.navigationItem.title = @"Activity";
     
     UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
     [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]]];
@@ -79,8 +84,15 @@
     [self.blankTimelineView addSubview:button];
     
 
-    lastRefresh = [[NSUserDefaults standardUserDefaults] objectForKey:kPAPUserDefaultsActivityFeedViewControllerLastRefreshKey];
-
+    self.readList = [[NSUserDefaults standardUserDefaults] objectForKey:@"readList"];
+    
+    if(self.readList == nil){
+        self.readList = [[NSMutableArray alloc]init];
+        [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    
+    
     if (NSClassFromString(@"UIRefreshControl")) {
         // Use the new iOS 6 refresh control.
         UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
@@ -89,6 +101,8 @@
         [self.refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
         self.pullToRefreshEnabled = NO;
     }
+    
+    self.tableView.bounces = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -96,14 +110,14 @@
     // analytics
     [PAPUtility captureScreenGA:@"Activity"];
     
-    // reset badge number on server side when user checks activity feed and badge value is present
+    // reset badge number on server and activity bar when user checks activity feed and badge value is present
     if(self.navigationController.tabBarItem.badgeValue != nil){
-        // Reset badge number on server side
-        [[PFInstallation currentInstallation] setBadge:0];
-        [[PFInstallation currentInstallation] saveEventually];
+        [self setActivityBadge:nil];
     }
+    
+    [self.tableView reloadData];
 }
-
+ 
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -124,6 +138,10 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    [self.readList replaceObjectAtIndex:indexPath.row withObject:@"read"];
+    [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row < self.objects.count) {
         PFObject *activity = [self.objects objectAtIndex:indexPath.row];
@@ -150,17 +168,38 @@
         [query setLimit:0];
         return query;
     }
-
-    PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
-    [query whereKey:kPAPActivityToUserKey equalTo:[PFUser currentUser]];
-    [query whereKey:kPAPActivityFromUserKey notEqualTo:[PFUser currentUser]];
-    [query whereKeyExists:kPAPActivityFromUserKey];
-    [query includeKey:kPAPActivityFromUserKey];
-    [query includeKey:kPAPActivityPhotoKey];
-    [query orderByDescending:@"createdAt"];
-
-    [query setCachePolicy:kPFCachePolicyNetworkOnly];
-
+    
+    // select all activities from activity where type is comment and photo id IN [user channel array]
+    NSArray *subscribedChannels = [PFInstallation currentInstallation].channels;
+    NSMutableArray *photos = [[NSMutableArray alloc] init];
+    
+    for (NSString *channel in subscribedChannels) {
+        NSString *photoId = [channel substringFromIndex:2];
+        PFObject *pic = [PFObject objectWithoutDataWithClassName:@"Photo" objectId:photoId];
+        [photos addObject:pic];
+    }
+    
+    
+    // pull all activities to user
+    PFQuery *personalQuery = [PFQuery queryWithClassName:self.parseClassName];
+    [personalQuery whereKey:kPAPActivityToUserKey equalTo:[PFUser currentUser]];
+    
+    // pull all activties from user's subscriptions
+    PFQuery *subscriptionQuery = [PFQuery queryWithClassName:self.parseClassName];
+    [subscriptionQuery whereKey:kPAPActivityToUserKey notEqualTo:[PFUser currentUser]];
+    [subscriptionQuery whereKey:kPAPActivityPhotoKey containedIn:photos];
+    [subscriptionQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeComment];
+    
+    PFQuery *finalQuery = [PFQuery orQueryWithSubqueries:@[personalQuery,subscriptionQuery]];
+    [finalQuery whereKey:kPAPActivityFromUserKey notEqualTo:[PFUser currentUser]];
+    [finalQuery whereKeyExists:kPAPActivityFromUserKey];
+    
+    [finalQuery includeKey:kPAPActivityFromUserKey];
+    [finalQuery includeKey:kPAPActivityPhotoKey];
+    [finalQuery orderByDescending:@"createdAt"];
+    
+    [finalQuery setCachePolicy:kPFCachePolicyNetworkOnly];
+    
     // If no objects are loaded in memory, we look to the cache first to fill the table
     // and then subsequently do a query against the network.
     //
@@ -173,21 +212,21 @@
     }
     */
     
-    return query;
+    return finalQuery;
 }
 
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
-
+    
+    if([self.readList count] == 0){
+        for (int i = 0; i < self.objects.count ; i++) {
+            [self.readList addObject:@"read"];
+        }
+    }
+    
     if (NSClassFromString(@"UIRefreshControl")) {
         [self.refreshControl endRefreshing];
     }
-
-    lastRefresh = [NSDate date];
-    [[NSUserDefaults standardUserDefaults] setObject:lastRefresh forKey:kPAPUserDefaultsActivityFeedViewControllerLastRefreshKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-
-    [MBProgressHUD hideHUDForView:self.view animated:YES];
     
     if (self.objects.count == 0 && ![[self queryForTable] hasCachedResult]) {
         self.tableView.scrollEnabled = NO;
@@ -204,22 +243,15 @@
     } else {
         self.tableView.tableHeaderView = nil;
         self.tableView.scrollEnabled = YES;
-        
-        NSUInteger unreadCount = 0;
-        for (PFObject *activity in self.objects) {
-            if ([lastRefresh compare:[activity createdAt]] == NSOrderedAscending && ![[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeJoined]) {
-                unreadCount++;
-            }
-        }
-        if (unreadCount > 0) {
-            self.navigationController.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d",(int)unreadCount];
-        } else {
-            self.navigationController.tabBarItem.badgeValue = nil;
+    
+        if (self.view.window) {
+            [self setActivityBadge:nil];
         }
     }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
+    
     static NSString *CellIdentifier = @"ActivityCell";
 
     PAPActivityCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -229,16 +261,18 @@
         [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
     }
 
-    [cell setActivity:object];
-    NSLog(@"%@", lastRefresh);
-    NSLog(@"%@", [object createdAt]);
-
-    if ([lastRefresh compare:[object createdAt]] == NSOrderedAscending) {
+    if(![[[object objectForKey:@"toUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]]){
+        [cell setActivity:object isSubscription:YES];
+    }else{
+        [cell setActivity:object isSubscription:NO];
+    }
+    
+    NSString *activityStatus = [self.readList objectAtIndex:indexPath.row];
+    
+    if ([activityStatus isEqualToString:@"unread"]) {
         [cell setIsNew:YES];
-        NSLog(@"YESYESYES");
-    } else {
+    } else if([activityStatus isEqualToString:@"read"]) {
         [cell setIsNew:NO];
-        NSLog(@"NONONO");
     }
 
     [cell hideSeparator:(indexPath.row == self.objects.count - 1)];
@@ -297,12 +331,35 @@
 
 
 #pragma mark - ()
+
+- (void)setActivityBadge:(NSString *)badge{
+
+    self.navigationController.tabBarItem.badgeValue = badge;
+    
+    // Reset badge number on server side
+    if(badge == nil){
+        [[PFInstallation currentInstallation] setBadge:0];
+        [[PFInstallation currentInstallation] saveEventually];
+    }
+}
+
 - (void)inviteFriendsButtonAction:(id)sender {
     PAPFindFriendsViewController *detailViewController = [[PAPFindFriendsViewController alloc] init];
     [self.navigationController pushViewController:detailViewController animated:YES];
 }
 
 - (void)applicationDidReceiveRemoteNotification:(NSNotification *)note {
+    
+    NSString *pushSrc = [[note userInfo] objectForKey:@"source"];
+    
+    if(![pushSrc isEqualToString:@"konotor"]){
+        [self notificationSetup];
+    }
+}
+
+- (void)notificationSetup{
+    [self.readList insertObject:@"unread" atIndex:0];
+    [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
     [self loadObjects];
 }
 

@@ -51,10 +51,13 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    
+    
+    
+
     // analytics
     [PAPUtility captureScreenGA:@"Home"];
 }
-
 
 #pragma mark - PFQueryTableViewController
 

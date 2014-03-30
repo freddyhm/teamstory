@@ -47,6 +47,8 @@
 
 @property (nonatomic, strong) MBProgressHUD *hud;
 @property (nonatomic, strong) NSTimer *autoFollowTimer;
+@property BOOL isKonotor;
+@property NSNumber *konotorCount;
 
 @property (nonatomic, strong) Reachability *hostReach;
 @property (nonatomic, strong) Reachability *internetReach;
@@ -125,10 +127,18 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     
     // Konotor setup
     [Konotor InitWithAppID:KONOTOR_APP_ID AppKey:KONOTOR_APP_KEY withDelegate:[KonotorEventHandler sharedInstance]];
+    
+    self.konotorCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
+    
+    //[Konotor setUnreadWelcomeMessage:@"Welcome to Teamstory! How can we make your experience more kickass?"];
+    
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
      (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     
     [self.window makeKeyAndVisible]; // or similar code to set a visible view
+    
+
+    
     
     // ****************************************************************************
     // Parse initialization
@@ -182,13 +192,8 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     [Konotor addDeviceToken:newDeviceToken];
     [PFPush storeDeviceToken:newDeviceToken];
     
-    if (application.applicationIconBadgeNumber != 0) {
-        application.applicationIconBadgeNumber = 0;
-    }
-
     [[PFInstallation currentInstallation] setDeviceTokenFromData:newDeviceToken];
     [[PFInstallation currentInstallation] saveInBackground];
-    
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
@@ -207,10 +212,14 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     // handle type of notification
     if ([pushSrc isEqualToString:@"konotor"]){
         
+        self.isKonotor = YES;
+        
         // app is in foreground
         if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
             [Konotor handleRemoteNotification:userInfo withShowScreen:NO];
+
         }else{
+
             [Konotor handleRemoteNotification:userInfo withShowScreen:YES];
             [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
         }
@@ -220,19 +229,27 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
         // app is in foreground
         if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
             if ([PFUser currentUser]) {
+                
+                // set activity and icon badge value
                 if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
                     
                     UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
                     
                     NSString *currentBadgeValue = tabBarItem.badgeValue;
                     
-                    if (currentBadgeValue && currentBadgeValue.length > 0) {
+                    if (currentBadgeValue && currentBadgeValue.length > 0 && application.applicationIconBadgeNumber != 0) {
+                        
+                        // activity bar
                         NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
                         NSNumber *badgeValue = [numberFormatter numberFromString:currentBadgeValue];
                         NSNumber *newBadgeValue = [NSNumber numberWithInt:[badgeValue intValue] + 1];
                         tabBarItem.badgeValue = [numberFormatter stringFromNumber:newBadgeValue];
+                        
+                        // icon value
+                        application.applicationIconBadgeNumber = [newBadgeValue intValue];
                     } else {
                         tabBarItem.badgeValue = @"1";
+                        application.applicationIconBadgeNumber = 1;
                     }
                 }
             }
@@ -245,27 +262,45 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     
+    // initiate konotor
+    [Konotor newSession];
+    
+    self.konotorCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
+    
     // syncs icon badge with tab bar badge, resets icon badge back to 0
     if (application.applicationIconBadgeNumber != 0) {
         
-         if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
-        
-             UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
+        if(application.applicationIconBadgeNumber == 1 && [self.konotorCount intValue] > 0){
             
-             NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-             NSNumber *newBadgeValue = [NSNumber numberWithInteger:application.applicationIconBadgeNumber];
-             tabBarItem.badgeValue = [numberFormatter stringFromNumber:newBadgeValue];
+            application.applicationIconBadgeNumber = 1;
+            application.applicationIconBadgeNumber = 0;
+            
+            [KonotorFeedbackScreen showFeedbackScreen];
+             self.konotorCount = 0;
+        }else{
+            if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
+                
+                UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
+                
+                NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+                NSNumber *newBadgeValue = [NSNumber numberWithInteger:application.applicationIconBadgeNumber];
+                tabBarItem.badgeValue = [numberFormatter stringFromNumber:newBadgeValue];
+                
+                // get current selected tab
+                NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
+                
+                // current view is activity so manually notify activity
+                if(selectedtabIndex == PAPActivityTabBarItemIndex){
+                    
+                    [self.activityViewController notificationSetup];
+                    [self.activityViewController setActivityBadge:nil];
+                }
+            }
         }
-        
-        application.applicationIconBadgeNumber = 1;
-        application.applicationIconBadgeNumber = 0;
     }
-
+    
     // Clears out all notifications from Notification Center.
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
-
-    // initiate konotor
-    [Konotor newSession];
 
     [[FBSession activeSession] handleDidBecomeActive];
 }
@@ -536,6 +571,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
         NSString *notificationSource = [userInfo objectForKey:@"source"];
         
         if([notificationSource isEqualToString:@"konotor"]){
+            self.isKonotor = YES;
             [Konotor handleRemoteNotification:remoteNotificationPayload withShowScreen:YES];
         }
     
@@ -543,13 +579,18 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
             return;
         }
         
-        // Reset badge number on server side
-        [[PFInstallation currentInstallation] setBadge:0];
-        [[PFInstallation currentInstallation] saveEventually];
-                
+        // call activity notification setup and reset badges
+        [self.activityViewController loadObjects];
+        [self.activityViewController setActivityBadge:nil];
+        
         // If the push notification payload references a photo, we will attempt to push this view controller into view
         NSString *photoObjectId = [remoteNotificationPayload objectForKey:kPAPPushPayloadPhotoObjectIdKey];
         if (photoObjectId && photoObjectId.length > 0) {
+            
+            // mark first message as read and save in user defaults
+            [self.activityViewController.readList replaceObjectAtIndex:0 withObject:@"read"];
+            [[NSUserDefaults standardUserDefaults] setObject:self.activityViewController.readList forKey:@"readList"];
+            
             [self shouldNavigateToPhoto:[PFObject objectWithoutDataWithClassName:kPAPPhotoClassKey objectId:photoObjectId]];
             return;
         }
@@ -561,6 +602,11 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
             query.cachePolicy = kPFCachePolicyCacheElseNetwork;
             [query getObjectInBackgroundWithId:fromObjectId block:^(PFObject *user, NSError *error) {
                 if (!error) {
+                    
+                    // mark first message as read and save in user defaults
+                    [self.activityViewController.readList replaceObjectAtIndex:0 withObject:@"read"];
+                    [[NSUserDefaults standardUserDefaults] setObject:self.activityViewController.readList forKey:@"readList"];
+                    
                     UINavigationController *homeNavigationController = self.tabBarController.viewControllers[PAPHomeTabBarItemIndex];
                     self.tabBarController.selectedViewController = homeNavigationController;
                     
