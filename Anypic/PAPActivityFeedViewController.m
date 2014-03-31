@@ -83,8 +83,7 @@
     //[button addTarget:self action:@selector(inviteFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.blankTimelineView addSubview:button];
     
-
-    self.readList = [[NSUserDefaults standardUserDefaults] objectForKey:@"readList"];
+    self.readList = [[[NSUserDefaults standardUserDefaults] objectForKey:@"readList"] mutableCopy];
     
     if(self.readList == nil){
         self.readList = [[NSMutableArray alloc]init];
