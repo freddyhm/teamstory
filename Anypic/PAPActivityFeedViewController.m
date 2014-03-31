@@ -91,15 +91,12 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
-    
-    if (NSClassFromString(@"UIRefreshControl")) {
-        // Use the new iOS 6 refresh control.
-        UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-        self.refreshControl = refreshControl;
-        self.refreshControl.tintColor = [UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:1.0f];
-        [self.refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
-        self.pullToRefreshEnabled = YES;
-    }
+    // Use the new iOS 6 refresh control.
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl = refreshControl;
+    self.refreshControl.tintColor = [UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:1.0f];
+    [self.refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
+    self.pullToRefreshEnabled = YES;
     
     self.tableView.bounces = YES;
 }
@@ -122,7 +119,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row < self.objects.count) {
         PFObject *object = [self.objects objectAtIndex:indexPath.row];
-        NSString *activityString = [PAPActivityFeedViewController stringForActivityType:(NSString*)[object objectForKey:kPAPActivityTypeKey]];
+        NSString *activityString = [[[object objectForKey:@"toUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]] ? [PAPActivityFeedViewController stringForActivityType:(NSString*)[object objectForKey:kPAPActivityTypeKey]] : NSLocalizedString(@"commented on your followed photo", nil);;
 
         PFUser *user = (PFUser*)[object objectForKey:kPAPActivityFromUserKey];
         NSString *nameString = NSLocalizedString(@"Someone", nil);
