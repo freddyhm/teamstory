@@ -14,7 +14,7 @@
 
 /*!Set the new state. This changes the background of the cell. */
 - (void)setIsNew:(BOOL)isNew;
-
+- (void)setActivity:(PFObject *)activity isSubscription:(BOOL)isSubscription;
 @end
 
 

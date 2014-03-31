@@ -4,7 +4,7 @@
 //
 //
 
-@interface PAPEditPhotoViewController : UIViewController <UITextFieldDelegate, UIScrollViewDelegate>
+@interface PAPEditPhotoViewController : UIViewController <UITextViewDelegate, UIScrollViewDelegate>
 
 - (id)initWithImage:(UIImage *)aImage;
 

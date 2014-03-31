@@ -58,6 +58,7 @@ NSString *const kPAPActivityTypeJoined     = @"joined";
 // Field keys
 NSString *const kPAPUserDisplayNameKey                          = @"displayName";
 NSString *const kPAPUserFacebookIDKey                           = @"facebookId";
+NSString *const kPAPUserTwitterIDKey                            = @"twitterId";
 NSString *const kPAPUserPhotoIDKey                              = @"photoId";
 NSString *const kPAPUserProfilePicSmallKey                      = @"profilePictureSmall";
 NSString *const kPAPUserProfilePicMediumKey                     = @"profilePictureMedium";

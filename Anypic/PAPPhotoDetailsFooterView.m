@@ -16,6 +16,7 @@
 @synthesize commentField;
 @synthesize mainView;
 @synthesize hideDropShadow;
+@synthesize commentView;
 
 
 #pragma mark - NSObject
@@ -34,6 +35,7 @@
         messageIcon.frame = CGRectMake( 4.0f, 10.0f, 30.0f, 30.0f);
         [mainView addSubview:messageIcon];
         
+        /*
         commentField = [[UITextField alloc] initWithFrame:CGRectMake( 40.0f, 10.0f, 255.0f, 31.0f)];
         commentField.backgroundColor = [UIColor colorWithRed:231.0f/255.0f green:231.0f/255.0f blue:231.0f/255.0f alpha:1.0f];
         commentField.font = [UIFont systemFontOfSize:12.0f];
@@ -45,6 +47,24 @@
         commentField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         [commentField setValue:[UIColor colorWithRed:154.0f/255.0f green:146.0f/255.0f blue:138.0f/255.0f alpha:1.0f] forKeyPath:@"_placeholderLabel.textColor"]; // Are we allowed to modify private properties like this? -Héctor
         [mainView addSubview:commentField];
+         */
+         
+         
+        
+        commentView = [[UITextView alloc] initWithFrame:CGRectMake( 40.0f, 10.0f, 255.0f, 31.0f)];
+        commentView.backgroundColor = [UIColor colorWithRed:231.0f/255.0f green:231.0f/255.0f blue:231.0f/255.0f alpha:1.0f];
+        commentView.font = [UIFont systemFontOfSize:12.0f];
+        commentView.text = @"Add a comment";
+        //commentView.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];
+        //commentView.leftViewMode = UITextFieldViewModeAlways;
+        commentView.returnKeyType = UIReturnKeySend;
+        commentView.textColor = [UIColor colorWithRed:119.0f/255.0f green:119.0f/255.0f blue:119.0f/255.0f alpha:1.0f];
+        //commentView.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        //[commentView setValue:[UIColor colorWithRed:154.0f/255.0f green:146.0f/255.0f blue:138.0f/255.0f alpha:1.0f] forKeyPath:@"_placeholderLabel.textColor"]; // Are we allowed to modify private properties like this? -Héctor
+        [mainView addSubview:commentView];
+         
+        
+        
     }
     return self;
 }
@@ -65,6 +85,10 @@
 
 + (CGRect)rectForView {
     return CGRectMake( 0.0f, 0.0f, 305.0f, 69.0f);
+}
+
++ (CGRect)rectForEditView {
+    return CGRectMake( 0.0f, 0.0f, 305.0f, 100.0f);
 }
 
 @end

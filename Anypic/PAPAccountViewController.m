@@ -26,6 +26,9 @@
 @property (nonatomic, strong) PFUser *currentUser;
 @property (nonatomic, strong) PAPSettingsActionSheetDelegate *settingsActionSheetDelegate;
 @property (nonatomic, strong) MBProgressHUD *hud;
+@property (nonatomic, strong) NSString *displayName;
+@property (nonatomic, strong) UILabel *userDisplayNameLabel;
+@property (nonatomic, strong) UIButton *websiteLink;
 
 
 @end
@@ -47,6 +50,9 @@
 @synthesize hud;
 @synthesize websiteInfo;
 @synthesize navController;
+@synthesize displayName;
+@synthesize userDisplayNameLabel;
+@synthesize websiteLink;
 
 
 #pragma mark - Initialization
@@ -57,9 +63,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    if (NSClassFromString(@"UIRefreshControl")) {
+        self.pullToRefreshEnabled = YES;
+    } else {
+        self.pullToRefreshEnabled = NO;
+    }
+    
     if (!self.user) {
         [NSException raise:NSInvalidArgumentException format:@"user cannot be nil"];
     }
+    [self.user refresh];
     
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
@@ -67,7 +80,7 @@
     self.locationInfo = [self.user objectForKey:@"location"];
     self.descriptionInfo = [self.user objectForKey:@"description"];
     self.websiteInfo = [self.user objectForKey:@"website"];
-    NSString *displayName = [self.user objectForKey:@"displayName"];
+    self.displayName = [self.user objectForKey:@"displayName"];
     
     if (imageFile && locationInfo && displayName) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -86,10 +99,12 @@
         self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ProfileNavigationBar.png"]];
         self.navigationItem.rightBarButtonItem = [[PAPSettingsButtonItem alloc] initWithTarget:self action:@selector(settingsButtonAction:)];
         
+        self.headerView = [[UIView alloc] init];
+        
         if ([websiteInfo length] > 0) {
-            self.headerView = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + 26.0f)];
+            self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + 26.0f);
         } else {
-            self.headerView = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height)];
+            self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height);
         }
         
         [self.headerView setBackgroundColor:[UIColor clearColor]]; // should be clear, this will be the container for our avatar, photo count, follower count, following count, and so on
@@ -191,7 +206,7 @@
         [followingCountLabel setFont:[UIFont boldSystemFontOfSize:12.0f]];
         [self.headerView addSubview:followingCountLabel];
         
-        UILabel *userDisplayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94.0f, 12.0f, self.headerView.bounds.size.width, 16.0f)];
+        userDisplayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94.0f, 12.0f, self.headerView.bounds.size.width, 16.0f)];
         [userDisplayNameLabel setBackgroundColor:[UIColor clearColor]];
         [userDisplayNameLabel setTextColor:[UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
         [userDisplayNameLabel setText:displayName];
@@ -199,7 +214,7 @@
         [self.headerView addSubview:userDisplayNameLabel];
         
         if ([websiteInfo length] > 0) {
-            UIButton *websiteLink = [UIButton buttonWithType:UIButtonTypeCustom];
+            websiteLink = [UIButton buttonWithType:UIButtonTypeCustom];
             [websiteLink setFrame:CGRectMake( 10.0f, 86.0f + expectedSize.height, 300.0f, 16.0f)];
             [websiteLink setTitle:websiteInfo forState:UIControlStateNormal];
             [websiteLink setTitleColor:[UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
@@ -277,6 +292,40 @@
 
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    // analytics
+    [super viewWillAppear:YES];
+    [PAPUtility captureScreenGA:@"Account"];
+    [[PFUser currentUser] refresh];
+    
+    self.userDisplayNameLabel.text = [self.user objectForKey:@"displayName"];
+    self.locationLabel.text = [self.user objectForKey:@"location"];
+    self.descriptionLabel.text = [self.user objectForKey:@"description"];
+    [self.websiteLink setTitle:[self.user objectForKey:@"website"] forState:UIControlStateNormal];
+    
+    [profilePictureImageView setFile:[self.user objectForKey:@"profilePictureMedium"]];
+    [profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {
+        if (!error) {
+            [UIView animateWithDuration:0.05f animations:^{
+                profilePictureBackgroundView.alpha = 1.0f;
+                profilePictureImageView.alpha = 1.0f;
+            }];
+        }
+    }];
+    
+    CGSize maximumLabelSize = CGSizeMake(300.0f, 32.0f);
+    
+    CGSize expectedSize = [self.descriptionLabel sizeThatFits:maximumLabelSize];
+    
+    if ([websiteInfo length] > 0) {
+        self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + 26.0f);
+    } else {
+        self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height);
+    }
+}
+
+#pragma mark - Custom
+
 - (void)backButtonAction:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -347,6 +396,10 @@
 #pragma mark - ()
 
 - (void)followButtonAction:(id)sender {
+    
+    // analytics
+    [PAPUtility captureEventGA:@"Engagement" action:@"Follow" label:@"User"];
+    
     UIActivityIndicatorView *loadingActivityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [loadingActivityIndicatorView startAnimating];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:loadingActivityIndicatorView];

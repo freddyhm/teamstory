@@ -6,11 +6,56 @@
 
 #import "PAPUtility.h"
 #import "UIImage+ResizeAdditions.h"
+#import "GAI.h"
+#import "GAIDictionaryBuilder.h"
+#import "GAIFields.h"
 
 @implementation PAPUtility
 
 
 #pragma mark - PAPUtility
+
+
+#pragma mark Notifications
+
++ (void)captureScreenGA:(NSString *)screen{
+    // May return nil if a tracker has not already been initialized with a
+    // property ID.
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    
+    // This screen name value will remain set on the tracker and sent with
+    // hits until it is set to a new value or to nil.
+    [tracker set:kGAIScreenName
+           value:screen];
+    
+    [tracker send:[[GAIDictionaryBuilder createAppView] build]];
+}
+
++ (void)captureEventGA:(NSString *)eventCategory action:(NSString *)eventAction label:(NSString *)eventLabel{
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    
+
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:eventCategory    // Event category (required)
+                                                          action:eventAction  // Event action (required)
+                                                           label:eventLabel         // Event label
+                                                           value:nil] build]];    // Event value
+}
+
++(void)updateSubscriptionToPost:(NSString *)postId forState:(NSString *)state{
+
+    NSString *postChannelName = [@"ch" stringByAppendingString:postId];
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    
+    if([state isEqualToString:@"Subscribe"]){
+        [currentInstallation addUniqueObject:postChannelName forKey:@"channels"];
+    }else if([state isEqualToString:@"Unsubscribe"]){
+        [currentInstallation removeObject:postChannelName forKey:@"channels"];
+    }
+    
+    [currentInstallation saveInBackground];
+}
+
 #pragma mark Like Photos
 
 + (void)likePhotoInBackground:(id)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
@@ -189,14 +234,19 @@
     NSString *facebookId = [user objectForKey:kPAPUserFacebookIDKey];
     return (facebookId && facebookId.length > 0);
 }
+
++ (BOOL)userHasValidTwitterData:(PFUser *)user {
+    NSString *twiiterID = [user objectForKey:@"twitterID"];
+    return (twiiterID && twiiterID.length > 0);
+}
 /*
 + (BOOL)userHasProfilePictures:(PFUser *)user {
-    //PFFile *profilePictureMedium = [user objectForKey:kPAPUserProfilePicMediumKey];
-    //PFFile *profilePictureSmall = [user objectForKey:kPAPUserProfilePicSmallKey];
+    PFFile *profilePictureMedium = [user objectForKey:kPAPUserProfilePicMediumKey];
+    PFFile *profilePictureSmall = [user objectForKey:kPAPUserProfilePicSmallKey];
     
     return (profilePictureMedium && profilePictureSmall);
 }
- */
+*/
 
 
 #pragma mark Display Name

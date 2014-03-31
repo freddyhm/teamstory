@@ -57,13 +57,6 @@ enum ActionSheetTags {
         // Whether the built-in pagination is enabled
         self.paginationEnabled = YES;
 
-        // Whether the built-in pull-to-refresh is enabled
-        if (NSClassFromString(@"UIRefreshControl")) {
-            self.pullToRefreshEnabled = NO;
-        } else {
-            self.pullToRefreshEnabled = YES;
-        }
-
         // The number of objects to show per page
         self.objectsPerPage = 10;
         
@@ -82,21 +75,20 @@ enum ActionSheetTags {
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone]; // PFQueryTableViewController reads this in viewDidLoad -- would prefer to throw this in init, but didn't work
     
     [super viewDidLoad];
-    
-    UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
-    texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
-    self.tableView.backgroundView = texturedBackgroundView;
+
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     
     [self.tableView setShowsVerticalScrollIndicator:NO];
 
-    if (NSClassFromString(@"UIRefreshControl")) {
-        // Use the new iOS 6 refresh control.
-        UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-        self.refreshControl = refreshControl;
-        self.refreshControl.tintColor = [UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:1.0f];
-        [self.refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
-        self.pullToRefreshEnabled = NO;
-    }
+     // Refresh control
+     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+     NSMutableAttributedString *refreshTitle = [[NSMutableAttributedString alloc] initWithString:@"Updating..."];
+     [refreshTitle addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:0.5f] range:NSMakeRange(0, refreshTitle.length)];
+     refreshControl.attributedTitle = refreshTitle;
+     refreshControl.tintColor = [UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:0.5f];
+     [refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
+
+     self.refreshControl = refreshControl;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidPublishPhoto:) name:PAPTabBarControllerDidFinishEditingPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userFollowingChanged:) name:PAPUtilityUserFollowingChangedNotification object:nil];
@@ -601,6 +593,10 @@ enum ActionSheetTags {
     
     NSNumber *likeCount = [numberFormatter numberFromString:button.titleLabel.text];
     if (liked) {
+        
+        // analytics
+        [PAPUtility captureEventGA:@"Engagement" action:@"Like" label:@"Photo"];
+        
         likeCount = [NSNumber numberWithInt:[likeCount intValue] + 1];
         [[PAPCache sharedCache] incrementLikerCountForPhoto:photo];
     } else {
@@ -662,6 +658,10 @@ enum ActionSheetTags {
 }
 
 - (void)userDidCommentOnPhoto:(NSNotification *)note {
+    
+    // analytics
+    [PAPUtility captureEventGA:@"Engagement" action:@"Comment" label:@"Photo"];
+    
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
 }
@@ -675,6 +675,10 @@ enum ActionSheetTags {
 }
 
 - (void)userDidPublishPhoto:(NSNotification *)note {
+    
+    // analytics
+    [PAPUtility captureEventGA:@"Engagement" action:@"Upload" label:@"Photo"];
+    
     if (self.objects.count > 0) {
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
@@ -689,6 +693,10 @@ enum ActionSheetTags {
 
 
 - (void)didTapOnPhotoAction:(UIButton *)sender {
+    
+    // analytics
+    [PAPUtility captureEventGA:@"Engagement" action:@"Tap" label:@"Photo"];
+    
     PFObject *photo = [self.objects objectAtIndex:sender.tag];
     if (photo) {
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo];

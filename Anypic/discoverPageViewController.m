@@ -48,6 +48,7 @@ NSInteger selection = 1;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
 	self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"DiscoverNavigationBar.png"]];
     
     UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
@@ -71,6 +72,11 @@ NSInteger selection = 1;
     
     [self displayPerksView];
     
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    // analytics
+    [PAPUtility captureScreenGA:@"Discover"];
 }
 
 - (void) displayPerksView {

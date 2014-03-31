@@ -17,10 +17,9 @@
 
 - (BOOL)isParseReachable;
 
-- (void)presentLoginViewController;
-- (void)presentLoginViewControllerAnimated:(BOOL)animated;
 - (void)presentTabBarController;
-- (void)presentAccountViewController;
+- (void)presentLoginSelectionController;
+- (void)presentTutorialViewController;
 
 - (void)logOut;
 - (void)settingRootViewAsTabBarController;

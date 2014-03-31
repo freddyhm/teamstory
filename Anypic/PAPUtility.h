@@ -6,12 +6,16 @@
 
 @interface PAPUtility : NSObject
 
++ (void)captureEventGA:(NSString *)eventCategory action:(NSString *)eventAction label:(NSString *)eventLabel;
++ (void)captureScreenGA:(NSString *)screen;
++ (void)updateSubscriptionToPost:(NSString *)postId forState:(NSString *)state;
 + (void)likePhotoInBackground:(id)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock;
 + (void)unlikePhotoInBackground:(id)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock;
 
 + (void)processFacebookProfilePictureData:(NSData *)data;
 
 + (BOOL)userHasValidFacebookData:(PFUser *)user;
++ (BOOL)userHasValidTwitterData:(PFUser *)user;
 //+ (BOOL)userHasProfilePictures:(PFUser *)user;
 
 + (NSString *)firstNameForDisplayName:(NSString *)displayName;

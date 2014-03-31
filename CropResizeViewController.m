@@ -130,6 +130,11 @@
     [self updateOverlay];
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    // analytics
+    [PAPUtility captureScreenGA:@"Crop Photo"];
+}
+
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
     return self.displayImage;

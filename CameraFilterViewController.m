@@ -26,6 +26,7 @@
 @property (nonatomic, strong) CIContext *context;
 @property (nonatomic, strong) CIImage *editableImage;
 @property (nonatomic, strong) CALayer *selectedFilterBorder;
+@property (nonatomic,strong) NSString *currentFilterName;
 
 - (IBAction)cancelEdit:(UIBarButtonItem *)sender;
 - (IBAction)saveEdit:(id)sender;
@@ -123,7 +124,17 @@
     [self collectionView:self.filterList didSelectItemAtIndexPath:indexPath];
     
     [self.croppedImageView setImage:self.croppedImage];
+    
+    // default filter
+    self.currentFilterName = @"Normal";
 }
+
+-(void)viewWillAppear:(BOOL)animated{
+    // analytics
+    [PAPUtility captureScreenGA:@"Filter Photo"];
+}
+
+#pragma mark - Custom
 
 - (IBAction)selectFilter:(NSString *)selectedFilter{
     
@@ -146,9 +157,14 @@
         
         CGImageRelease(cgimg);
     }
+    
+    self.currentFilterName = selectedFilter;
 }
 
 - (IBAction)saveEdit:(id)sender{
+    
+    // analytics
+    [PAPUtility captureEventGA:@"Engagement" action:self.currentFilterName label:@"Filter"];
     
     // send selected image to edit controller
     PAPEditPhotoViewController *editController = [[PAPEditPhotoViewController alloc] initWithImage:[self.croppedImageView image]];

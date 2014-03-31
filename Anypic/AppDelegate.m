@@ -6,9 +6,10 @@
 
 #import "AppDelegate.h"
 
+#import "GAI.h"
 #import <Appsee/Appsee.h>
-//#import "Konotor.h"
-//#import "KonotorEventHandler.h"
+#import "Konotor.h"
+#import "KonotorEventHandler.h"
 #import "Reachability.h"
 #import "MBProgressHUD.h"
 #import "PAPHomeViewController.h"
@@ -21,6 +22,10 @@
 #import "PAPProfileSettingViewController.h"
 #import "discoverPageViewController.h"
 #import "PAPwebviewViewController.h"
+#import "PAPLoginSelectionViewController.h"
+#import "PAPLoginTutorialViewController.h"
+#import "PAPprofileApprovalViewController.h"
+
 
 
 
@@ -28,6 +33,7 @@
     NSMutableData *_data;
     BOOL firstLaunch;
 }
+
 
 @property (nonatomic, strong) PAPHomeViewController *homeViewController;
 @property (nonatomic, strong) PAPActivityFeedViewController *activityViewController;
@@ -41,6 +47,8 @@
 
 @property (nonatomic, strong) MBProgressHUD *hud;
 @property (nonatomic, strong) NSTimer *autoFollowTimer;
+@property BOOL isKonotor;
+@property NSNumber *konotorCount;
 
 @property (nonatomic, strong) Reachability *hostReach;
 @property (nonatomic, strong) Reachability *internetReach;
@@ -74,6 +82,26 @@
 @synthesize internetReach;
 @synthesize wifiReach;
 
+// Environment keys
+
+#if DEBUG
+static NSString *const GOOGLE_TRACKING_ID = @"UA-49381420-2";
+static NSString *const KONOTOR_APP_ID = @"7043fe2f-cb83-403e-b9af-3c6de2fd4752";
+static NSString *const KONOTOR_APP_KEY = @"e57e4508-47b6-4ecf-b0ee-8c657a855b3d";
+static NSString *const PARSE_APP_ID = @"0tEtPoPtsvPu1lCPzBeU032Cz3Byemcp5lr25gIU";
+static NSString *const PARSE_CLIENT_KEY = @"ZRnM7JXOlbSyOQuosXWG6SlrDNCY22C84hpqyi0l";
+static NSString *const TWITTER_KEY = @"VGiCnk6P01PjqV13rm34Bw";
+static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0z9Q";
+#else
+static NSString *const GOOGLE_TRACKING_ID = @"UA-49381420-1";
+static NSString *const APPSEE = @"ee2b6679635f492dbc1d36a14fe196ae";
+static NSString *const KONOTOR_APP_ID = @"ab785be6-9398-4b6a-8ae6-4d83431edad9";
+static NSString *const KONOTOR_APP_KEY = @"3784ef60-6e0f-48fc-9a6c-3ac71c127dcb";
+static NSString *const PARSE_APP_ID = @"SPQlkxDYPDcVhbICHFzjwSsREHaSqKQIKwkijDaJ";
+static NSString *const PARSE_CLIENT_KEY = @"WtgkZLYZ1UOlsbGMnfYtKCD6dQLMfy3tBsN2UKxA";
+static NSString *const TWITTER_KEY = @"VGiCnk6P01PjqV13rm34Bw";
+static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0z9Q";
+#endif
 
 #pragma mark - UIApplicationDelegate
 
@@ -90,12 +118,7 @@
     
     [self.window makeKeyAndVisible]; // or similar code to set a visible view
     
-    // Set your view before the following snippet executes
-    //NSDictionary* payload=[launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-    //if(payload!=nil)
-    //{
-      //  [Konotor handleRemoteNotification:payload withShowScreen:YES];
-    //}
+
     
     
     // ****************************************************************************
@@ -103,6 +126,8 @@
         [Parse setApplicationId:@"SPQlkxDYPDcVhbICHFzjwSsREHaSqKQIKwkijDaJ"
                       clientKey:@"WtgkZLYZ1UOlsbGMnfYtKCD6dQLMfy3tBsN2UKxA"];
         [PFFacebookUtils initializeFacebook];
+        [PFTwitterUtils initializeWithConsumerKey:TWITTER_KEY
+                                   consumerSecret:TWITTER_SECRET];
     // ****************************************************************************
     
     // Track app open
@@ -127,7 +152,8 @@
     self.window.rootViewController = self.navController;
     
     [self.window makeKeyAndVisible];
-
+    
+    // handle push notifications
     [self handlePush:launchOptions userInfo:nil source:@"launch"];
 
     return YES;
@@ -144,16 +170,11 @@
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
     
     // konotor notifications setup
-    //[Konotor addDeviceToken:newDeviceToken];
+    [Konotor addDeviceToken:newDeviceToken];
     [PFPush storeDeviceToken:newDeviceToken];
     
-    if (application.applicationIconBadgeNumber != 0) {
-        application.applicationIconBadgeNumber = 0;
-    }
-
     [[PFInstallation currentInstallation] setDeviceTokenFromData:newDeviceToken];
     [[PFInstallation currentInstallation] saveInBackground];
-    
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
@@ -172,11 +193,15 @@
     // handle type of notification
     if ([pushSrc isEqualToString:@"konotor"]){
         
+        self.isKonotor = YES;
+        
         // app is in foreground
         if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
-         //   [Konotor handleRemoteNotification:userInfo withShowScreen:NO];
+            [Konotor handleRemoteNotification:userInfo withShowScreen:NO];
+
         }else{
-           // [Konotor handleRemoteNotification:userInfo withShowScreen:YES];
+
+            [Konotor handleRemoteNotification:userInfo withShowScreen:YES];
             [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
         }
         
@@ -185,19 +210,27 @@
         // app is in foreground
         if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
             if ([PFUser currentUser]) {
+                
+                // set activity and icon badge value
                 if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
                     
                     UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
                     
                     NSString *currentBadgeValue = tabBarItem.badgeValue;
                     
-                    if (currentBadgeValue && currentBadgeValue.length > 0) {
+                    if (currentBadgeValue && currentBadgeValue.length > 0 && application.applicationIconBadgeNumber != 0) {
+                        
+                        // activity bar
                         NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
                         NSNumber *badgeValue = [numberFormatter numberFromString:currentBadgeValue];
                         NSNumber *newBadgeValue = [NSNumber numberWithInt:[badgeValue intValue] + 1];
                         tabBarItem.badgeValue = [numberFormatter stringFromNumber:newBadgeValue];
+                        
+                        // icon value
+                        application.applicationIconBadgeNumber = [newBadgeValue intValue];
                     } else {
                         tabBarItem.badgeValue = @"1";
+                        application.applicationIconBadgeNumber = 1;
                     }
                 }
             }
@@ -210,32 +243,48 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     
+    // initiate konotor
+    [Konotor newSession];
+    
+    self.konotorCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
+    
     // syncs icon badge with tab bar badge, resets icon badge back to 0
     if (application.applicationIconBadgeNumber != 0) {
         
-         if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
-        
-             UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
+        if(application.applicationIconBadgeNumber == 1 && [self.konotorCount intValue] > 0){
             
-             NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-             NSNumber *newBadgeValue = [NSNumber numberWithInteger:application.applicationIconBadgeNumber];
-             tabBarItem.badgeValue = [numberFormatter stringFromNumber:newBadgeValue];
+            application.applicationIconBadgeNumber = 1;
+            application.applicationIconBadgeNumber = 0;
+            
+            [KonotorFeedbackScreen showFeedbackScreen];
+             self.konotorCount = 0;
+        }else{
+            if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
+                
+                UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
+                
+                NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+                NSNumber *newBadgeValue = [NSNumber numberWithInteger:application.applicationIconBadgeNumber];
+                tabBarItem.badgeValue = [numberFormatter stringFromNumber:newBadgeValue];
+                
+                // get current selected tab
+                NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
+                
+                // current view is activity so manually notify activity
+                if(selectedtabIndex == PAPActivityTabBarItemIndex){
+                    
+                    [self.activityViewController notificationSetup];
+                    [self.activityViewController setActivityBadge:nil];
+                }
+            }
         }
-        
-        application.applicationIconBadgeNumber = 1;
-        application.applicationIconBadgeNumber = 0;
     }
-
+    
     // Clears out all notifications from Notification Center.
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
 
-    // initiate konotor
-    // [Konotor newSession];
-
     [[FBSession activeSession] handleDidBecomeActive];
 }
-
-
 
 #pragma mark - UITabBarControllerDelegate
 
@@ -250,31 +299,62 @@
 - (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
     // user has logged in - we need to fetch all of their Facebook data before we let them in
     if (![self shouldProceedToMainInterface:user]) {
-        self.hud = [MBProgressHUD showHUDAddedTo:self.navController.presentedViewController.view animated:YES];
+        self.hud = [MBProgressHUD showHUDAddedTo:self.navController.view animated:YES];
         self.hud.labelText = NSLocalizedString(@"Loading", nil);
         self.hud.dimBackground = YES;
     }
     
-    [FBRequestConnection startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-        if (!error) {
-            PFUser *user = [PFUser currentUser];
-            
-            // verifying for FBuser
-            bool isFBuser = YES; // either YES or NO
-            NSNumber *profileBoolNum = [NSNumber numberWithBool: isFBuser];
-            [user setObject: profileBoolNum forKey: @"isFBuser"];
-            
-            bool profileExist = user[@"profileExist"];
-            
+    NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
+    bool profileExist = [profilExist_num boolValue];
+    
+    NSNumber *accessGrant_num = [[PFUser currentUser] objectForKey: @"accessGrant"];
+    bool access_grant = [accessGrant_num boolValue];
+    
+    
+    if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]){
+        [[PFUser currentUser] setObject:[PFTwitterUtils twitter].userId forKey:@"twitterID"];
+        
+        if (profileExist != true || access_grant != true) {
             if (profileExist != true) {
-                [self settingRootViewAsAccountSettingController];
-            } else {
-                [self facebookRequestDidLoad:result];
+                PAPProfileSettingViewController *profileSettingView = [[PAPProfileSettingViewController alloc] init];
+                self.navController.navigationBarHidden = YES;
+                [self.navController pushViewController:profileSettingView animated:NO];
+                return;
             }
-        } else {
-            [self facebookRequestDidFailWithError:error];
+            
+            PAPprofileApprovalViewController *profileApprovalViewController = [[PAPprofileApprovalViewController alloc] init];
+            [self.navController pushViewController:profileApprovalViewController animated:YES];
         }
-    }];
+    } else if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        [FBRequestConnection startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+            if (!error) {
+                [self.hud hide:YES];
+                
+                if (profileExist != true || access_grant != true) {
+                    if (profileExist != true) {
+                        NSString *email = result[@"email"];
+                        if (email && [email length] != 0) {
+                            [user setObject:email forKey:@"email"];
+                        }
+                        
+                        [user saveInBackground];
+                        
+                        PAPProfileSettingViewController *profileSettingView = [[PAPProfileSettingViewController alloc] init];
+                        self.navController.navigationBarHidden = YES;
+                        [self.navController pushViewController:profileSettingView animated:NO];
+                        return;
+                    }
+                    
+                    PAPprofileApprovalViewController *profileApprovalViewController = [[PAPprofileApprovalViewController alloc] init];
+                    [self.navController pushViewController:profileApprovalViewController animated:YES];
+                } else {
+                    [self facebookRequestDidLoad:result];
+                }
+            } else {
+                [self facebookRequestDidFailWithError:error];
+            }
+        }];
+    }
 }
 
 
@@ -299,33 +379,14 @@
     return self.networkStatus != NotReachable;
 }
 
-- (void)settingRootViewAsAccountSettingController {
-    self.navController = [[UINavigationController alloc] initWithRootViewController:self.welcomeViewController];
-    self.navController.navigationBarHidden = YES;
-    
-    self.window.rootViewController = self.navController;
-    
-    [self.window makeKeyAndVisible];
-    [self presentAccountViewController];
+- (void)presentLoginSelectionController {
+    PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] init];
+    [self.navController pushViewController:loginSelectionViewController animated:YES];
 }
 
-- (void) presentAccountViewController {
-    PAPProfileSettingViewController *accountViewController = [[PAPProfileSettingViewController alloc] init];
-    UINavigationController *profileSettingNav = [[UINavigationController alloc] initWithRootViewController:accountViewController];
-    [self.welcomeViewController presentViewController:profileSettingNav animated:NO completion:nil];
-}
-
-- (void)presentLoginViewControllerAnimated:(BOOL)animated {
-    PAPLogInViewController *loginViewController = [[PAPLogInViewController alloc] init];
-    [loginViewController setDelegate:self];
-    loginViewController.fields = PFLogInFieldsFacebook;
-    loginViewController.facebookPermissions = @[ @"user_about_me" ];
-    
-    [self.welcomeViewController presentViewController:loginViewController animated:NO completion:nil];
-}
-
-- (void)presentLoginViewController {
-    [self presentLoginViewControllerAnimated:YES];
+- (void)presentTutorialViewController {
+    PAPLoginTutorialViewController *loginTutorialViewController = [[PAPLoginTutorialViewController alloc] init];
+    [self.navController pushViewController:loginTutorialViewController animated:YES];
 }
 
 -(void)settingRootViewAsTabBarController {
@@ -421,7 +482,7 @@
     // clear out cached data, view controllers, etc
     [self.navController popToRootViewControllerAnimated:NO];
     
-    [self presentLoginViewController];
+    [self presentLoginSelectionController];
     
     self.homeViewController = nil;
     self.activityViewController = nil;
@@ -448,20 +509,13 @@
     [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"BackgroundNavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
     
     [[UIButton appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
-    
-    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[UIImage imageNamed:@"button_back.png"]
-                                                      forState:UIControlStateNormal
-                                                    barMetrics:UIBarMetricsDefault];
-    
-    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"]
-                                                      forState:UIControlStateSelected
-                                                    barMetrics:UIBarMetricsDefault];
 
     [[UIBarButtonItem appearance] setTitleTextAttributes:@{
                                 UITextAttributeTextColor: [UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0f],
                           UITextAttributeTextShadowColor: [UIColor colorWithWhite:0.0f alpha:0.750f],
                          UITextAttributeTextShadowOffset: [NSValue valueWithCGSize:CGSizeMake(0.0f, 1.0f)]
      } forState:UIControlStateNormal];
+     
  
     
     [[UISearchBar appearance] setTintColor:[UIColor colorWithRed:32.0f/255.0f green:19.0f/255.0f blue:16.0f/255.0f alpha:1.0f]];    
@@ -495,17 +549,29 @@
     
     if (remoteNotificationPayload) {
         
+        NSString *notificationSource = [userInfo objectForKey:@"source"];
+        
+        if([notificationSource isEqualToString:@"konotor"]){
+            self.isKonotor = YES;
+            [Konotor handleRemoteNotification:remoteNotificationPayload withShowScreen:YES];
+        }
+    
         if (![PFUser currentUser]) {
             return;
         }
         
-        // Reset badge number on server side
-        [[PFInstallation currentInstallation] setBadge:0];
-        [[PFInstallation currentInstallation] saveEventually];
-                
+        // call activity notification setup and reset badges
+        [self.activityViewController loadObjects];
+        [self.activityViewController setActivityBadge:nil];
+        
         // If the push notification payload references a photo, we will attempt to push this view controller into view
         NSString *photoObjectId = [remoteNotificationPayload objectForKey:kPAPPushPayloadPhotoObjectIdKey];
         if (photoObjectId && photoObjectId.length > 0) {
+            
+            // mark first message as read and save in user defaults
+            [self.activityViewController.readList replaceObjectAtIndex:0 withObject:@"read"];
+            [[NSUserDefaults standardUserDefaults] setObject:self.activityViewController.readList forKey:@"readList"];
+            
             [self shouldNavigateToPhoto:[PFObject objectWithoutDataWithClassName:kPAPPhotoClassKey objectId:photoObjectId]];
             return;
         }
@@ -517,6 +583,11 @@
             query.cachePolicy = kPFCachePolicyCacheElseNetwork;
             [query getObjectInBackgroundWithId:fromObjectId block:^(PFObject *user, NSError *error) {
                 if (!error) {
+                    
+                    // mark first message as read and save in user defaults
+                    [self.activityViewController.readList replaceObjectAtIndex:0 withObject:@"read"];
+                    [[NSUserDefaults standardUserDefaults] setObject:self.activityViewController.readList forKey:@"readList"];
+                    
                     UINavigationController *homeNavigationController = self.tabBarController.viewControllers[PAPHomeTabBarItemIndex];
                     self.tabBarController.selectedViewController = homeNavigationController;
                     
@@ -537,12 +608,21 @@
 }
 
 - (BOOL)shouldProceedToMainInterface:(PFUser *)user {
-    if ([PAPUtility userHasValidFacebookData:[PFUser currentUser]]) {
+    if ([PFFacebookUtils isLinkedWithUser:user]) {
+        if ([PAPUtility userHasValidFacebookData:[PFUser currentUser]]) {
+            [MBProgressHUD hideHUDForView:self.navController.presentedViewController.view animated:YES];
+            [self presentTabBarController];
+
+            [self.navController dismissViewControllerAnimated:YES completion:nil];
+            return YES;
+        }
+    } else if ([PFTwitterUtils isLinkedWithUser:user]){
         [MBProgressHUD hideHUDForView:self.navController.presentedViewController.view animated:YES];
         [self presentTabBarController];
-
+        
         [self.navController dismissViewControllerAnimated:YES completion:nil];
         return YES;
+
     }
     
     return NO;
@@ -607,6 +687,7 @@
         }
     }];
 }
+
 
 - (void)facebookRequestDidLoad:(id)result {
     // This method is called twice - once for the user's /me profile, and a second time when obtaining their friends. We will try and handle both scenarios in a single method.
@@ -709,6 +790,11 @@
                 [user setObject:@"Someone" forKey:kPAPUserDisplayNameKey];
             }
             */
+            
+            NSString *email = result[@"email"];
+            if (email && [email length] != 0) {
+                [user setObject:email forKey:@"email"];
+            }
             
             NSString *facebookId = result[@"id"];
             if (facebookId && [facebookId length] != 0) {

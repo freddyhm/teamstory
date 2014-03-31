@@ -188,7 +188,7 @@
                                             NSNumber *profileBoolNum = [user objectForKey: @"profileExist"];
                                             bool profileExist = [profileBoolNum boolValue];
                                             
-                                            if (profileExist == true) {
+                                            if (profileExist == YES) {
                                                 NSLog(@"Logged In Sucessfully");
                                                 [PFUser user];
                                                 [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
