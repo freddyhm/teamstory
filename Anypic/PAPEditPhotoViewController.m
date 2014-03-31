@@ -263,7 +263,7 @@
                 if (userInfo) {
                     NSString *commentText = [userInfo objectForKey:kPAPEditPhotoViewControllerUserInfoCommentKey];
                     
-                    if (commentText && commentText.length != 0) {
+                    if (commentText && commentText.length != 0 && ![commentText isEqualToString:@"Add a comment"]) {
                         // create and save photo caption
                         PFObject *comment = [PFObject objectWithClassName:kPAPActivityClassKey];
                         [comment setObject:kPAPActivityTypeComment forKey:kPAPActivityTypeKey];
@@ -339,7 +339,7 @@
             if (userInfo) {
                 NSString *commentText = [userInfo objectForKey:kPAPEditPhotoViewControllerUserInfoCommentKey];
                 
-                if (commentText && commentText.length != 0) {
+                if (commentText && commentText.length != 0 && ![commentText isEqualToString:@"Add a comment"]) {
                     // create and save photo caption
                     PFObject *comment = [PFObject objectWithClassName:kPAPActivityClassKey];
                     [comment setObject:kPAPActivityTypeComment forKey:kPAPActivityTypeKey];

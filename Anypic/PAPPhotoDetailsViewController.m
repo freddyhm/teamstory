@@ -658,7 +658,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     // Scroll the view to the comment text box
     NSDictionary* info = [note userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentSize.height-kbSize.height - 100.0f) animated:YES];
+    [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentSize.height-kbSize.height - 50.0f) animated:YES];
 }
 
 - (void)loadLikers {
