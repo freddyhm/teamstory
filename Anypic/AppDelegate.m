@@ -108,11 +108,30 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    // Appsee Prod setup
-    [Appsee start:@"ee2b6679635f492dbc1d36a14fe196ae"];
+    // Optional: automatically send uncaught exceptions to Google Analytics.
+    [GAI sharedInstance].trackUncaughtExceptions = YES;
+    
+    // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
+    [GAI sharedInstance].dispatchInterval = 1;
+    
+    // Optional: set Logger to VERBOSE for debug information.
+    [[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
+    
+    // Initialize tracker. Replace with your tracking ID.
+    [[GAI sharedInstance] trackerWithTrackingId:GOOGLE_TRACKING_ID];
+    
+    // Appsee setup only for release
+    #if RELEASE
+        [Appsee start:APPSEE];
+    #endif
     
     // Konotor setup
-  //  [Konotor InitWithAppID:@"ab785be6-9398-4b6a-8ae6-4d83431edad9" AppKey:@"3784ef60-6e0f-48fc-9a6c-3ac71c127dcb" withDelegate:[KonotorEventHandler sharedInstance]];
+    [Konotor InitWithAppID:KONOTOR_APP_ID AppKey:KONOTOR_APP_KEY withDelegate:[KonotorEventHandler sharedInstance]];
+    
+    self.konotorCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
+    
+    //[Konotor setUnreadWelcomeMessage:@"Welcome to Teamstory! How can we make your experience more kickass?"];
+    
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
      (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     
@@ -122,9 +141,9 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     
     
     // ****************************************************************************
-    // Parse Prod initialization
-        [Parse setApplicationId:@"SPQlkxDYPDcVhbICHFzjwSsREHaSqKQIKwkijDaJ"
-                      clientKey:@"WtgkZLYZ1UOlsbGMnfYtKCD6dQLMfy3tBsN2UKxA"];
+    // Parse initialization
+        [Parse setApplicationId:PARSE_APP_ID
+                      clientKey:PARSE_CLIENT_KEY];
         [PFFacebookUtils initializeFacebook];
         [PFTwitterUtils initializeWithConsumerKey:TWITTER_KEY
                                    consumerSecret:TWITTER_SECRET];

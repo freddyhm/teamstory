@@ -75,20 +75,21 @@ enum ActionSheetTags {
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone]; // PFQueryTableViewController reads this in viewDidLoad -- would prefer to throw this in init, but didn't work
     
     [super viewDidLoad];
-
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     
+    UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
+    texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
+    self.tableView.backgroundView = texturedBackgroundView;
     [self.tableView setShowsVerticalScrollIndicator:NO];
 
-     // Refresh control
-     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-     NSMutableAttributedString *refreshTitle = [[NSMutableAttributedString alloc] initWithString:@"Updating..."];
-     [refreshTitle addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:0.5f] range:NSMakeRange(0, refreshTitle.length)];
-     refreshControl.attributedTitle = refreshTitle;
-     refreshControl.tintColor = [UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:0.5f];
-     [refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
-
-     self.refreshControl = refreshControl;
+     // Create custom refresh control, bring to front, after table view
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    NSMutableAttributedString *refreshTitle = [[NSMutableAttributedString alloc] initWithString:@"Updating..."];
+    [refreshTitle addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:0.5f] range:NSMakeRange(0, refreshTitle.length)];
+    refreshControl.attributedTitle = refreshTitle;
+    refreshControl.tintColor = [UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:0.5f];
+    [refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = refreshControl;
+    self.refreshControl.layer.zPosition = self.tableView.backgroundView.layer.zPosition + 1;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidPublishPhoto:) name:PAPTabBarControllerDidFinishEditingPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userFollowingChanged:) name:PAPUtilityUserFollowingChangedNotification object:nil];
