@@ -9,6 +9,7 @@
 #import "PAPProfileSettingViewController.h"
 #import "PAPLoginTutorialViewController.h"
 #import "PAPprofileApprovalViewController.h"
+#import "PAPHomeViewController.h"
 
 @implementation PAPWelcomeViewController
 
@@ -17,37 +18,53 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    PFUser *user = [PFUser currentUser];
-    [user refresh];
     
+    // set temp background to splash screen
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Default.png"]];
+    
+    PFUser *user = [PFUser currentUser];
+
     // If not logged in, present login view controller
     if (!user) {
         [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTutorialViewController];
         return;
     }
+
+    // Show spinning indicator while user is being refreshed
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
-    NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
-    bool profileExist = [profilExist_num boolValue];
-    
-    NSNumber *accessGrant_num = [[PFUser currentUser] objectForKey: @"accessGrant"];
-    bool access_grant = [accessGrant_num boolValue];
-    
-    if (user && profileExist == YES &&  access_grant == YES) {
-        [[PFUser currentUser] refreshInBackgroundWithTarget:self selector:@selector(refreshCurrentUserCallbackWithResult:error:)];
-        // Present Teamstory UI
-        [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBarController];
-    } else {
-        if (user && profileExist != YES) {
-            PAPProfileSettingViewController *profileViewController = [[PAPProfileSettingViewController alloc] init];
-            self.navigationController.navigationBarHidden = YES;
-            [self.navigationController pushViewController:profileViewController animated:NO];
-        } else if (user && access_grant != YES){
-            PAPprofileApprovalViewController *profileApprovalViewController = [[PAPprofileApprovalViewController alloc] init];
-            [self.navigationController pushViewController:profileApprovalViewController animated:YES];
-        } else {
-            NSLog(@"User does not exist");
+    [user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        
+        // hide indicator
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+        if(!error){
+            NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
+            bool profileExist = [profilExist_num boolValue];
+            
+            NSNumber *accessGrant_num = [[PFUser currentUser] objectForKey: @"accessGrant"];
+            bool access_grant = [accessGrant_num boolValue];
+            
+            if (user && profileExist == YES &&  access_grant == YES) {
+                [[PFUser currentUser] refreshInBackgroundWithTarget:self selector:@selector(refreshCurrentUserCallbackWithResult:error:)];
+                // Present Teamstory UI
+                [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBarController];
+            } else {
+                if (user && profileExist != YES) {
+                    PAPProfileSettingViewController *profileViewController = [[PAPProfileSettingViewController alloc] init];
+                    self.navigationController.navigationBarHidden = YES;
+                    [self.navigationController pushViewController:profileViewController animated:NO];
+                } else if (user && access_grant != YES){
+                    PAPprofileApprovalViewController *profileApprovalViewController = [[PAPprofileApprovalViewController alloc] init];
+                    [self.navigationController pushViewController:profileApprovalViewController animated:YES];
+                } else {
+                    NSLog(@"User does not exist");
+                }
+            }
+        }else{
+            NSLog(@"%@", error);
         }
-    }
+    }];
 }
 
 #pragma mark - ()
