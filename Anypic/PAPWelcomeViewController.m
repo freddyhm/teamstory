@@ -13,14 +13,15 @@
 
 @implementation PAPWelcomeViewController
 
-
+#define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 #pragma mark - UIViewController
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    // set temp background to splash screen
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Default.png"]];
+        
+    // set temp background to splash screen depending on iphone type
+    self.view.backgroundColor = IS_WIDESCREEN ? [UIColor colorWithPatternImage:[UIImage imageNamed:@"Default-568h.png"]] : [UIColor colorWithPatternImage:[UIImage imageNamed:@"Default.png"]];
     
     PFUser *user = [PFUser currentUser];
 
