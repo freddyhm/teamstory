@@ -292,7 +292,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
                 NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
                 
                 // notify activity controller of new notification (didreceivenot. is not called from background)
-                [self.activityViewController notificationSetup:application.applicationIconBadgeNumber source:@"background"];
+                [self.activityViewController notificationSetup:(int)application.applicationIconBadgeNumber source:@"background"];
                 
                 // current view is activity, clear the badge
                 if(selectedtabIndex == PAPActivityTabBarItemIndex){
@@ -492,7 +492,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
             tabBarItem.badgeValue = [numberFormatter stringFromNumber:newBadgeValue];
             
             // notify activity of new notification (didreceivenot. is not called in launch)
-            [self.activityViewController notificationSetup:[UIApplication sharedApplication].applicationIconBadgeNumber source:@"launch"];
+            [self.activityViewController notificationSetup:(int)[UIApplication sharedApplication].applicationIconBadgeNumber source:@"launch"];
         }
     }
 }
@@ -598,7 +598,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
         }
         
         // call activity notification setup and reset badges
-        [self.activityViewController notificationSetup:[UIApplication sharedApplication].applicationIconBadgeNumber source:@"notification background"];
+        [self.activityViewController notificationSetup:(int)[UIApplication sharedApplication].applicationIconBadgeNumber source:@"notification background"];
         [self.activityViewController setActivityBadge:nil];
         
         // If the push notification payload references a photo, we will attempt to push this view controller into view
