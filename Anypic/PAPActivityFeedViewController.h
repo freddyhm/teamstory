@@ -8,10 +8,9 @@
 
 @interface PAPActivityFeedViewController : PFQueryTableViewController <PAPActivityCellDelegate>
 
-@property BOOL loadedWithViewNotification;
 @property (nonatomic, strong) NSMutableArray *readList;
 
-- (void)notificationSetup;
+- (void)notificationSetup:(int)size;
 + (NSString *)stringForActivityType:(NSString *)activityType;
 
 

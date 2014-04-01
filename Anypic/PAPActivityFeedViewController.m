@@ -17,6 +17,7 @@
 @interface PAPActivityFeedViewController ()
 
 @property (nonatomic, strong) UIView *blankTimelineView;
+@property int notificationCount;
 
 
 @property int cellIndex;
@@ -51,7 +52,21 @@
         // The number of objects to show per page
         self.objectsPerPage = 15;
         
-        self.loadedWithViewNotification = YES;
+        //[[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"readList"];
+        //[[NSUserDefaults standardUserDefaults] synchronize];
+        
+        // get read list from local storage, if nil init and save
+        self.readList = [[[NSUserDefaults standardUserDefaults] objectForKey:@"readList"] mutableCopy];
+        self.notificationCount = 0;
+        
+    
+        if(self.readList == nil){
+            self.readList = [[NSMutableArray alloc]init];
+            [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+        
+        
     }
     return self;
 }
@@ -76,20 +91,11 @@
     
     self.blankTimelineView = [[UIView alloc] initWithFrame:self.tableView.bounds];
     
-    
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setBackgroundImage:[UIImage imageNamed:@"ActivityFeedBlank.png"] forState:UIControlStateNormal];
     [button setFrame:CGRectMake(0.0f, 113.0f, 320.0f, 160.0f)];
     //[button addTarget:self action:@selector(inviteFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.blankTimelineView addSubview:button];
-    
-    self.readList = [[[NSUserDefaults standardUserDefaults] objectForKey:@"readList"] mutableCopy];
-    
-    if(self.readList == nil){
-        self.readList = [[NSMutableArray alloc]init];
-        [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
     
     // Use the new iOS 6 refresh control.
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
@@ -215,10 +221,25 @@
     [super objectsDidLoad:error];
     
     if([self.readList count] == 0){
-        for (int i = 0; i < self.objects.count ; i++) {
+        for (int i = 0; i < self.objects.count; i++) {
             [self.readList addObject:@"read"];
         }
     }
+    
+    if(self.notificationCount != 0){
+        
+        int i = 0;
+        
+        while (i < self.notificationCount) {
+            [self.readList insertObject:@"unread" atIndex:0];
+            i++;
+        }
+        self.notificationCount = 0;
+    }
+    
+   
+    
+    [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
     
     if (self.objects.count == 0 && ![[self queryForTable] hasCachedResult]) {
         self.tableView.scrollEnabled = NO;
@@ -263,7 +284,7 @@
     
     if ([activityStatus isEqualToString:@"unread"]) {
         [cell setIsNew:YES];
-    } else if([activityStatus isEqualToString:@"read"]) {
+    }else{
         [cell setIsNew:NO];
     }
 
@@ -345,13 +366,12 @@
     NSString *pushSrc = [[note userInfo] objectForKey:@"source"];
     
     if(![pushSrc isEqualToString:@"konotor"]){
-        [self notificationSetup];
+        [self notificationSetup:1];
     }
 }
 
-- (void)notificationSetup{
-    [self.readList insertObject:@"unread" atIndex:0];
-    [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
+- (void)notificationSetup:(int)size{
+    self.notificationCount = size;
     [self loadObjects];
 }
 
