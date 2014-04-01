@@ -278,6 +278,8 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
             [KonotorFeedbackScreen showFeedbackScreen];
              self.konotorCount = 0;
         }else{
+            
+            // check if tab controllers and activity tab exist
             if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
                 
                 UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
@@ -289,10 +291,11 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
                 // get current selected tab
                 NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
                 
-                // current view is activity so manually notify activity
+                // notify activity controller of new notification (didreceivenot. is not called from background)
+                [self.activityViewController notificationSetup:application.applicationIconBadgeNumber source:@"background"];
+                
+                // current view is activity, clear the badge
                 if(selectedtabIndex == PAPActivityTabBarItemIndex){
-                    
-                    [self.activityViewController notificationSetup];
                     [self.activityViewController setActivityBadge:nil];
                 }
             }
@@ -477,6 +480,21 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     NSURL *profilePictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large", [[PFUser currentUser] objectForKey:kPAPUserFacebookIDKey]]];
     NSURLRequest *profilePictureURLRequest = [NSURLRequest requestWithURL:profilePictureURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.0f]; // Facebook profile picture cache policy: Expires in 2 weeks
     [NSURLConnection connectionWithRequest:profilePictureURLRequest delegate:self];
+    
+    // syncs icon badge with tab bar badge if value is not 0 and controllers present (only on launch)
+    if ([UIApplication sharedApplication].applicationIconBadgeNumber != 0) {
+        if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
+            
+            UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
+            
+            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+            NSNumber *newBadgeValue = [NSNumber numberWithInteger:[UIApplication sharedApplication].applicationIconBadgeNumber];
+            tabBarItem.badgeValue = [numberFormatter stringFromNumber:newBadgeValue];
+            
+            // notify activity of new notification (didreceivenot. is not called in launch)
+            [self.activityViewController notificationSetup:[UIApplication sharedApplication].applicationIconBadgeNumber source:@"launch"];
+        }
+    }
 }
 
 - (void)logOut {
@@ -580,16 +598,12 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
         }
         
         // call activity notification setup and reset badges
-        [self.activityViewController loadObjects];
+        [self.activityViewController notificationSetup:[UIApplication sharedApplication].applicationIconBadgeNumber source:@"notification background"];
         [self.activityViewController setActivityBadge:nil];
         
         // If the push notification payload references a photo, we will attempt to push this view controller into view
         NSString *photoObjectId = [remoteNotificationPayload objectForKey:kPAPPushPayloadPhotoObjectIdKey];
         if (photoObjectId && photoObjectId.length > 0) {
-            
-            // mark first message as read and save in user defaults
-            [self.activityViewController.readList replaceObjectAtIndex:0 withObject:@"read"];
-            [[NSUserDefaults standardUserDefaults] setObject:self.activityViewController.readList forKey:@"readList"];
             
             [self shouldNavigateToPhoto:[PFObject objectWithoutDataWithClassName:kPAPPhotoClassKey objectId:photoObjectId]];
             return;
@@ -602,10 +616,6 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
             query.cachePolicy = kPFCachePolicyCacheElseNetwork;
             [query getObjectInBackgroundWithId:fromObjectId block:^(PFObject *user, NSError *error) {
                 if (!error) {
-                    
-                    // mark first message as read and save in user defaults
-                    [self.activityViewController.readList replaceObjectAtIndex:0 withObject:@"read"];
-                    [[NSUserDefaults standardUserDefaults] setObject:self.activityViewController.readList forKey:@"readList"];
                     
                     UINavigationController *homeNavigationController = self.tabBarController.viewControllers[PAPHomeTabBarItemIndex];
                     self.tabBarController.selectedViewController = homeNavigationController;

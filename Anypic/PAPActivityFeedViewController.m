@@ -17,6 +17,7 @@
 @interface PAPActivityFeedViewController ()
 
 @property (nonatomic, strong) UIView *blankTimelineView;
+@property int notificationCount;
 
 
 @property int cellIndex;
@@ -51,7 +52,19 @@
         // The number of objects to show per page
         self.objectsPerPage = 15;
         
-        self.loadedWithViewNotification = YES;
+        //resets read list
+        //[[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"readList"];
+        //[[NSUserDefaults standardUserDefaults] synchronize];
+        
+        // get read list from local storage
+        self.readList = [[[NSUserDefaults standardUserDefaults] objectForKey:@"readList"] mutableCopy];
+        if(self.readList == nil){
+            self.readList = [[NSMutableArray alloc]init];
+            [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+        
+        
     }
     return self;
 }
@@ -76,20 +89,11 @@
     
     self.blankTimelineView = [[UIView alloc] initWithFrame:self.tableView.bounds];
     
-    
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setBackgroundImage:[UIImage imageNamed:@"ActivityFeedBlank.png"] forState:UIControlStateNormal];
     [button setFrame:CGRectMake(0.0f, 113.0f, 320.0f, 160.0f)];
     //[button addTarget:self action:@selector(inviteFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.blankTimelineView addSubview:button];
-    
-    self.readList = [[[NSUserDefaults standardUserDefaults] objectForKey:@"readList"] mutableCopy];
-    
-    if(self.readList == nil){
-        self.readList = [[NSMutableArray alloc]init];
-        [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
     
     // Use the new iOS 6 refresh control.
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
@@ -215,11 +219,13 @@
     [super objectsDidLoad:error];
     
     if([self.readList count] == 0){
-        for (int i = 0; i < self.objects.count ; i++) {
+        for (int i = 0; i < self.objects.count; i++) {
             [self.readList addObject:@"read"];
         }
+        
+        [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
     }
-    
+
     if (self.objects.count == 0 && ![[self queryForTable] hasCachedResult]) {
         self.tableView.scrollEnabled = NO;
         self.navigationController.tabBarItem.badgeValue = nil;
@@ -259,11 +265,12 @@
         [cell setActivity:object isSubscription:NO];
     }
     
-    NSString *activityStatus = [self.readList objectAtIndex:indexPath.row];
+    // safety check make sure read list has enough items
+    NSString *activityStatus = [self.readList count] > indexPath.row ? [self.readList objectAtIndex:indexPath.row] : @"";
     
     if ([activityStatus isEqualToString:@"unread"]) {
         [cell setIsNew:YES];
-    } else if([activityStatus isEqualToString:@"read"]) {
+    }else{
         [cell setIsNew:NO];
     }
 
@@ -342,17 +349,39 @@
 
 - (void)applicationDidReceiveRemoteNotification:(NSNotification *)note {
     
-    NSString *pushSrc = [[note userInfo] objectForKey:@"source"];
-    
-    if(![pushSrc isEqualToString:@"konotor"]){
-        [self notificationSetup];
+    if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+        NSString *pushSrc = [[note userInfo] objectForKey:@"source"];
+        if(![pushSrc isEqualToString:@"konotor"]){
+            [self notificationSetup:1 source:@"notification foreground"];
+        }
     }
 }
 
-- (void)notificationSetup{
-    [self.readList insertObject:@"unread" atIndex:0];
+- (void)notificationSetup:(int)size source:(NSString *)source{
+    
+    // load & fill readlist or set new unread
+    if([self.readList count] == 0){
+        [self loadObjects];
+    }else{
+        [self updateReadList:size source:source];
+        [self loadObjects];
+    }
+}
+
+- (void)updateReadList:(int)size source:(NSString *)source{
+    
+    int i = 0;
+    while (i < size) {
+        [self.readList insertObject:@"unread" atIndex:0];
+        i++;
+    }
+    
+    // background pushes activity when touched so auto read
+    if([source isEqualToString:@"notification background"]){
+        [self.readList replaceObjectAtIndex:0 withObject:@"read"];
+    }
+    
     [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
-    [self loadObjects];
 }
 
 - (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl {
