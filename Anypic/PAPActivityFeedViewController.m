@@ -52,14 +52,12 @@
         // The number of objects to show per page
         self.objectsPerPage = 15;
         
+        //resets read list
         //[[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"readList"];
         //[[NSUserDefaults standardUserDefaults] synchronize];
         
-        // get read list from local storage, if nil init and save
+        // get read list from local storage
         self.readList = [[[NSUserDefaults standardUserDefaults] objectForKey:@"readList"] mutableCopy];
-        self.notificationCount = 0;
-        
-    
         if(self.readList == nil){
             self.readList = [[NSMutableArray alloc]init];
             [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
@@ -224,23 +222,10 @@
         for (int i = 0; i < self.objects.count; i++) {
             [self.readList addObject:@"read"];
         }
-    }
-    
-    if(self.notificationCount != 0){
         
-        int i = 0;
-        
-        while (i < self.notificationCount) {
-            [self.readList insertObject:@"unread" atIndex:0];
-            i++;
-        }
-        self.notificationCount = 0;
+        [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
     }
-    
-   
-    
-    [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
-    
+
     if (self.objects.count == 0 && ![[self queryForTable] hasCachedResult]) {
         self.tableView.scrollEnabled = NO;
         self.navigationController.tabBarItem.badgeValue = nil;
@@ -280,7 +265,8 @@
         [cell setActivity:object isSubscription:NO];
     }
     
-    NSString *activityStatus = [self.readList objectAtIndex:indexPath.row];
+    // safety check make sure read list has enough items
+    NSString *activityStatus = [self.readList count] > indexPath.row ? [self.readList objectAtIndex:indexPath.row] : @"";
     
     if ([activityStatus isEqualToString:@"unread"]) {
         [cell setIsNew:YES];
@@ -363,16 +349,39 @@
 
 - (void)applicationDidReceiveRemoteNotification:(NSNotification *)note {
     
-    NSString *pushSrc = [[note userInfo] objectForKey:@"source"];
-    
-    if(![pushSrc isEqualToString:@"konotor"]){
-        [self notificationSetup:1];
+    if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+        NSString *pushSrc = [[note userInfo] objectForKey:@"source"];
+        if(![pushSrc isEqualToString:@"konotor"]){
+            [self notificationSetup:1 source:@"notification foreground"];
+        }
     }
 }
 
-- (void)notificationSetup:(int)size{
-    self.notificationCount = size;
-    [self loadObjects];
+- (void)notificationSetup:(int)size source:(NSString *)source{
+    
+    // load & fill readlist or set new unread
+    if([self.readList count] == 0){
+        [self loadObjects];
+    }else{
+        [self updateReadList:size source:source];
+        [self loadObjects];
+    }
+}
+
+- (void)updateReadList:(int)size source:(NSString *)source{
+    
+    int i = 0;
+    while (i < size) {
+        [self.readList insertObject:@"unread" atIndex:0];
+        i++;
+    }
+    
+    // background pushes activity when touched so auto read
+    if([source isEqualToString:@"notification background"]){
+        [self.readList replaceObjectAtIndex:0 withObject:@"read"];
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
 }
 
 - (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl {
