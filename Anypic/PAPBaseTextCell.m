@@ -141,7 +141,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
     [self.nameButton setFrame:CGRectMake(nameX, nameY, nameSize.width, nameSize.height)];
     
     // Layout the content
-    CGSize contentSize = [self.contentLabel.text sizeWithFont:[UIFont systemFontOfSize:13] constrainedToSize:CGSizeMake(horizontalTextSpace, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+    CGSize maximumLabelSize = CGSizeMake(horizontalTextSpace, 9999.0f);
+    CGSize contentSize = [self.contentLabel sizeThatFits:maximumLabelSize];
+    self.contentLabel.font = [UIFont systemFontOfSize:13.0f];
+    
     [self.contentLabel setFrame:CGRectMake(nameX, vertTextBorderSpacing, contentSize.width, contentSize.height)];
     
     // Layout the timestamp label
@@ -233,8 +236,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
         
         self.website = [paddedString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        
-        NSLog(@"%@", self.website);
 
         [self.contentLabel setAttributedText:commentText];
         [self.contentLabel setUserInteractionEnabled:YES];

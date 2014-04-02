@@ -7,6 +7,7 @@
 #import "PAPPhotoDetailsHeaderView.h"
 #import "PAPProfileImageView.h"
 #import "TTTTimeIntervalFormatter.h"
+#import "MBProgressHUD.h"
 
 #define baseHorizontalOffset 7.5f
 #define baseWidth 305.0f
@@ -53,10 +54,12 @@
 #define likeProfileY 6.0f
 #define likeProfileDim 30.0f
 
-#define viewTotalHeight likeBarY+likeBarHeight
+#define contentY nameHeaderHeight + mainImageHeight
 #define numLikePics 7.0f
+static CGSize expectedSize;
 
 @interface PAPPhotoDetailsHeaderView ()
+
 
 // View components
 @property (nonatomic, strong) UIView *nameHeaderView;
@@ -64,6 +67,9 @@
 @property (nonatomic, strong) UIView *likeBarView;
 @property (nonatomic, strong) NSMutableArray *currentLikeAvatars;
 @property (nonatomic, strong) NSString *companyName;
+@property (nonatomic, strong) UILabel *photoDescriptionLabel;
+@property (nonatomic, strong) NSArray *objects;
+@property (nonatomic, strong) MBProgressHUD *hud;
 
 // Redeclare for edit
 @property (nonatomic, strong, readwrite) PFUser *photographer;
@@ -88,6 +94,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
 @synthesize delegate;
 @synthesize currentLikeAvatars;
 @synthesize companyName;
+@synthesize photoDescriptionLabel;
+@synthesize objects;
+@synthesize hud;
 
 #pragma mark - NSObject
 
@@ -142,10 +151,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
 */
 
 #pragma mark - PAPPhotoDetailsHeaderView
-
-+ (CGRect)rectForView {
-    return CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, viewTotalHeight);
-}
 
 - (void)setPhoto:(PFObject *)aPhoto {
     photo = aPhoto;
@@ -217,33 +222,90 @@ static TTTTimeIntervalFormatter *timeFormatter;
     /*
      Create middle section of the header view; the image
      */
-    self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
-    self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
-    self.photoImageView.backgroundColor = [UIColor blackColor];
-    self.photoImageView.contentMode = UIViewContentModeScaleAspectFit;
-    
-    PFFile *imageFile = [self.photo objectForKey:kPAPPhotoPictureKey];
+    [self.hud show:YES];
 
-    if (imageFile) {
-        self.photoImageView.file = imageFile;
-        [self.photoImageView loadInBackground];
-    }
     
-    [self addSubview:self.photoImageView];
+    PFQuery *query = [PFQuery queryWithClassName:@"Activity"];
+    [query whereKey:kPAPActivityPhotoKey equalTo:self.photo];
+    [query includeKey:kPAPActivityFromUserKey];
+    [query whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeComment];
+    [query orderByAscending:@"createdAt"];
     
-    /*
-     Create top of header view with name and avatar
-     */
-    self.nameHeaderView = [[UIView alloc] initWithFrame:CGRectMake(nameHeaderX, nameHeaderY, nameHeaderWidth, nameHeaderHeight)];
-    self.nameHeaderView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundComments.png"]];
-    [self addSubview:self.nameHeaderView];
+    [query setCachePolicy:kPFCachePolicyNetworkOnly];
     
-    UIButton *moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(270.0f, 8.0f, 30.0f, 30.0f)];
-    [moreActionButton setImage:[UIImage imageNamed:@"button-more.png"] forState:UIControlStateNormal];
-    [moreActionButton addTarget:self action:@selector(moreActionButton_action:) forControlEvents:UIControlEventTouchUpInside];
-    [self.nameHeaderView addSubview:moreActionButton];
-    
-            // Load data for header
+    [query findObjectsInBackgroundWithBlock:^(NSArray *aobjects, NSError *error) {
+        if (!error) {
+          self.objects = aobjects;
+            
+            if ([self.objects count] > 0) {
+                NSString *photoDescription = [self.objects[0] objectForKey:@"content"];
+                
+                if ([photoDescription length] > 0) {
+                    CGSize maximumLabelSize = CGSizeMake(320.0f - baseHorizontalOffset * 4, 9999.0f);
+                    
+                    self.photoDescriptionLabel = [[UILabel alloc] init];
+                    self.photoDescriptionLabel.text = photoDescription;
+                    self.photoDescriptionLabel.backgroundColor = [UIColor clearColor];
+                    self.photoDescriptionLabel.numberOfLines = 0;
+                    self.photoDescriptionLabel.font = [UIFont systemFontOfSize:13.0f];
+                    self.photoDescriptionLabel.textColor = [UIColor colorWithWhite:0.6f alpha:1.0f];
+                    
+                    expectedSize = [self.photoDescriptionLabel sizeThatFits:maximumLabelSize];
+                    
+                    UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(baseHorizontalOffset, nameHeaderHeight, mainImageWidth, expectedSize.height + 15.0f)];
+                    [backgroundView setBackgroundColor:[UIColor whiteColor]];
+                    [self addSubview:backgroundView];
+                    
+                    self.photoDescriptionLabel.frame = CGRectMake(baseHorizontalOffset * 2, nameHeaderHeight + 5.0f, mainImageWidth - baseHorizontalOffset * 2, expectedSize.height + 5.0f);
+                    [self addSubview:self.photoDescriptionLabel];
+                    
+                    self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height + 10.0f, mainImageWidth, mainImageHeight)];
+                    self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
+                    self.photoImageView.backgroundColor = [UIColor blackColor];
+                    self.photoImageView.contentMode = UIViewContentModeScaleAspectFit;
+                    
+                    PFFile *imageFile = [self.photo objectForKey:kPAPPhotoPictureKey];
+                    
+                    if (imageFile) {
+                        self.photoImageView.file = imageFile;
+                        [self.photoImageView loadInBackground];
+                    }
+                    
+                    [self addSubview:self.photoImageView];
+                }
+            } else {
+                self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
+                self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
+                self.photoImageView.backgroundColor = [UIColor blackColor];
+                self.photoImageView.contentMode = UIViewContentModeScaleAspectFit;
+                
+                PFFile *imageFile = [self.photo objectForKey:kPAPPhotoPictureKey];
+                
+                if (imageFile) {
+                    self.photoImageView.file = imageFile;
+                    [self.photoImageView loadInBackground];
+                }
+                
+                [self addSubview:self.photoImageView];
+            }
+            
+        } else {
+            NSLog(@"error: %@", error);
+        }
+        
+        /*
+         Create top of header view with name and avatar
+         */
+        self.nameHeaderView = [[UIView alloc] initWithFrame:CGRectMake(nameHeaderX, nameHeaderY, nameHeaderWidth, nameHeaderHeight)];
+        self.nameHeaderView.backgroundColor = [UIColor whiteColor];
+        [self addSubview:self.nameHeaderView];
+        
+        UIButton *moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(270.0f, 8.0f, 30.0f, 30.0f)];
+        [moreActionButton setImage:[UIImage imageNamed:@"button-more.png"] forState:UIControlStateNormal];
+        [moreActionButton addTarget:self action:@selector(moreActionButton_action:) forControlEvents:UIControlEventTouchUpInside];
+        [self.nameHeaderView addSubview:moreActionButton];
+        
+        // Load data for header
         [self.photographer fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
             // Create avatar view
             PAPProfileImageView *avatarImageView = [[PAPProfileImageView alloc] initWithFrame:CGRectMake(avatarImageX, avatarImageY, avatarImageDim, avatarImageDim)];
@@ -290,39 +352,40 @@ static TTTTimeIntervalFormatter *timeFormatter;
             
             [self setNeedsDisplay];
         }];
-
-
-
-    
-    /*
-     Create bottom section fo the header view; the likes
-     */
-    likeBarView = [[UIView alloc] initWithFrame:CGRectMake(likeBarX, likeBarY, likeBarWidth, likeBarHeight)];
-    [likeBarView setBackgroundColor:[UIColor whiteColor]];
-    [self addSubview:likeBarView];
-    
-    // Create the heart-shaped like button
-    likeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [likeButton setFrame:CGRectMake(likeButtonX, likeButtonY, likeButtonDim, likeButtonDim)];
-    [likeButton setBackgroundColor:[UIColor clearColor]];
-    [likeButton setTitleColor:[UIColor colorWithRed:0.369f green:0.271f blue:0.176f alpha:1.0f] forState:UIControlStateNormal];
-    [likeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-    [likeButton setTitleEdgeInsets:UIEdgeInsetsMake(50.0f, 0.0f, 50.0f, 0.0f)];
-    [[likeButton titleLabel] setFont:[UIFont systemFontOfSize:9.0f]];
-
-    [[likeButton titleLabel] setAdjustsFontSizeToFitWidth:YES];
-    [likeButton setAdjustsImageWhenDisabled:NO];
-    [likeButton setAdjustsImageWhenHighlighted:NO];
-    [likeButton setBackgroundImage:[UIImage imageNamed:@"ButtonLike.png"] forState:UIControlStateNormal];
-    [likeButton setBackgroundImage:[UIImage imageNamed:@"ButtonLikeSelected.png"] forState:UIControlStateSelected];
-    [likeButton addTarget:self action:@selector(didTapLikePhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [likeBarView addSubview:likeButton];
-    
-    [self reloadLikeBar];
-    
-    UIImageView *separator = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"SeparatorComments.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.0f, 1.0f, 0.0f, 1.0f)]];
-    [separator setFrame:CGRectMake(0.0f, likeBarView.frame.size.height - 2.0f, likeBarView.frame.size.width, 2.0f)];
-    [likeBarView addSubview:separator];    
+        
+        /*
+         Create bottom section fo the header view; the likes
+         */
+        likeBarView = [[UIView alloc] initWithFrame:CGRectMake(likeBarX, likeBarY + expectedSize.height, likeBarWidth, likeBarHeight)];
+        [likeBarView setBackgroundColor:[UIColor whiteColor]];
+        [self addSubview:likeBarView];
+        
+        // Create the heart-shaped like button
+        likeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [likeButton setFrame:CGRectMake(likeButtonX, likeButtonY, likeButtonDim, likeButtonDim)];
+        [likeButton setBackgroundColor:[UIColor clearColor]];
+        [likeButton setTitleColor:[UIColor colorWithRed:0.369f green:0.271f blue:0.176f alpha:1.0f] forState:UIControlStateNormal];
+        [likeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+        [likeButton setTitleEdgeInsets:UIEdgeInsetsMake(50.0f, 0.0f, 50.0f, 0.0f)];
+        [[likeButton titleLabel] setFont:[UIFont systemFontOfSize:9.0f]];
+        
+        [[likeButton titleLabel] setAdjustsFontSizeToFitWidth:YES];
+        [likeButton setAdjustsImageWhenDisabled:NO];
+        [likeButton setAdjustsImageWhenHighlighted:NO];
+        [likeButton setBackgroundImage:[UIImage imageNamed:@"ButtonLike.png"] forState:UIControlStateNormal];
+        [likeButton setBackgroundImage:[UIImage imageNamed:@"ButtonLikeSelected.png"] forState:UIControlStateSelected];
+        [likeButton addTarget:self action:@selector(didTapLikePhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [likeBarView addSubview:likeButton];
+        
+        [self reloadLikeBar];
+        
+        UIImageView *separator = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"SeparatorComments.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.0f, 1.0f, 0.0f, 1.0f)]];
+        [separator setFrame:CGRectMake(0.0f, likeBarView.frame.size.height - 2.0f, likeBarView.frame.size.width, 2.0f)];
+        [likeBarView addSubview:separator];
+        
+        [self.hud hide:YES];
+    }];
+  
 }
 
 - (void)moreActionButton_action:(id)sender{
@@ -390,6 +453,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
     if (delegate && [delegate respondsToSelector:@selector(photoDetailsHeaderView:didTapUserButton:user:)]) {
         [delegate photoDetailsHeaderView:self didTapUserButton:button user:self.photographer];
     }    
+}
+
++ (CGRect)rectForView {
+    return CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, contentY + expectedSize.height);
 }
 
 

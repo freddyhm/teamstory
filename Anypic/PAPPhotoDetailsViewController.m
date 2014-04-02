@@ -28,7 +28,6 @@ enum ActionSheetTags {
 @property (nonatomic, strong) PFObject *current_photo;
 @property (nonatomic, strong) PFUser *reported_user;
 @property (nonatomic, strong) UITextView *commentTextView;
-@property (nonatomic, strong) UIView *footer_mainView;
 @property (nonatomic, strong) PAPPhotoDetailsFooterView *footerView;
 @end
 
@@ -42,7 +41,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 @synthesize current_photo;
 @synthesize reported_user;
 @synthesize commentTextView;
-@synthesize footer_mainView;
 @synthesize footerView;
 
 
@@ -111,11 +109,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.tableView.tableHeaderView = self.headerView;
     
     // Set table footer
-    footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:[PAPPhotoDetailsFooterView rectForView]];
+    
+    self.footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:[PAPPhotoDetailsFooterView rectForView]];
     commentTextView = footerView.commentView;
     commentTextView.delegate = self;
-    self.tableView.tableFooterView = footerView;
-    
+    self.tableView.tableFooterView = self.footerView;
     
 
     /*
@@ -283,6 +281,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     return cell;
 }
+
 
 /*
 #pragma mark - UITextFieldDelegate
@@ -583,7 +582,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                     break;
             }
             
-            NSLog(@"%@", kPAPPhotoClassKey);
+            //NSLog(@"%@", kPAPPhotoClassKey);
             
             MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
             mc.mailComposeDelegate = self;

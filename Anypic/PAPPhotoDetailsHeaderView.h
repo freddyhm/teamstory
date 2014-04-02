@@ -32,6 +32,7 @@
 
 - (void)setLikeButtonState:(BOOL)selected;
 - (void)reloadLikeBar;
+
 @end
 
 /*!
