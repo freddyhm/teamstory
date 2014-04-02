@@ -128,16 +128,10 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     // Konotor setup
     [Konotor InitWithAppID:KONOTOR_APP_ID AppKey:KONOTOR_APP_KEY withDelegate:[KonotorEventHandler sharedInstance]];
     
-    self.konotorCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
-    
     //[Konotor setUnreadWelcomeMessage:@"Welcome to Teamstory! How can we make your experience more kickass?"];
     
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
      (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-    
-    [self.window makeKeyAndVisible]; // or similar code to set a visible view
-    
-
     
     
     // ****************************************************************************
