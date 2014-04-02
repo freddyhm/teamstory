@@ -260,7 +260,7 @@ enum ActionSheetTags {
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section >= self.objects.count) {
         // Load More Section
-        return 44.0f;
+        return 0.0f;
     }
     
     return 305.0f;

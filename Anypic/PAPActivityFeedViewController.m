@@ -76,9 +76,7 @@
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 
     [super viewDidLoad];
-    
-    self.navigationItem.title = @"Activity";
-    
+        
     UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
     [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]]];
     self.tableView.backgroundView = texturedBackgroundView;
@@ -103,6 +101,8 @@
     self.pullToRefreshEnabled = YES;
     
     self.tableView.bounces = YES;
+    
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -133,7 +133,7 @@
         
         return [PAPActivityCell heightForCellWithName:nameString contentString:activityString];
     } else {
-        return 44.0f;
+        return 0.0f;
     }
 }
 
