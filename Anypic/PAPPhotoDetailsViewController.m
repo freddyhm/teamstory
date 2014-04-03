@@ -29,6 +29,7 @@ enum ActionSheetTags {
 @property (nonatomic, strong) PFUser *reported_user;
 @property (nonatomic, strong) UITextView *commentTextView;
 @property (nonatomic, strong) PAPPhotoDetailsFooterView *footerView;
+@property (nonatomic, strong) PFQuery *temp_query;
 @end
 
 static const CGFloat kPAPCellInsetWidth = 7.5f;
@@ -42,7 +43,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 @synthesize reported_user;
 @synthesize commentTextView;
 @synthesize footerView;
-
+@synthesize temp_query;
 
 
 #pragma mark - Initialization
@@ -78,6 +79,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
+}
+
 
 #pragma mark - UIViewController
 
@@ -101,19 +106,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
     texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     self.tableView.backgroundView = texturedBackgroundView;
-    
-    // Set table header
-    self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:[PAPPhotoDetailsHeaderView rectForView] photo:self.photo];
-    self.headerView.delegate = self;
-    
-    self.tableView.tableHeaderView = self.headerView;
-    
-    // Set table footer
-    
-    self.footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:[PAPPhotoDetailsFooterView rectForView]];
-    commentTextView = footerView.commentView;
-    commentTextView.delegate = self;
-    self.tableView.tableFooterView = self.footerView;
     
 
     /*
@@ -169,6 +161,33 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self.view addGestureRecognizer:tapOutside];
 }
 
+- (void)createOutstandingViews {
+    if ([self.objects count] > 0) {
+        NSString *description = [[self.objects objectAtIndex:0] objectForKey:@"content"];
+        if ([description length] > 0) {
+            CGSize maximumLabelSize = CGSizeMake(320.0f - 7.5f * 4, 9999.0f);
+            CGSize expectedSize = [description sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:maximumLabelSize];
+            
+            // Set table header
+            self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 351.0f + expectedSize.height + 43.0f) photo:self.photo description:description];
+            self.headerView.delegate = self;
+            self.tableView.tableHeaderView = self.headerView;
+        }
+    } else {
+        self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:[PAPPhotoDetailsHeaderView rectForView] photo:self.photo description:nil];
+        self.headerView.delegate = self;
+        self.tableView.tableHeaderView = self.headerView;
+    }
+    
+    
+    // Set table footer
+    
+    self.footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:[PAPPhotoDetailsFooterView rectForView]];
+    commentTextView = footerView.commentView;
+    commentTextView.delegate = self;
+    self.tableView.tableFooterView = self.footerView;
+}
+
 -(void)dismissKeyboard {
     [self.view endEditing:YES];
 }
@@ -203,14 +222,13 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 nameString = [commentAuthor objectForKey:kPAPUserDisplayNameKey];
             }
             
-            return [PAPActivityCell heightForCellWithName:nameString contentString:commentString cellInsetWidth:kPAPCellInsetWidth];
+            return [PAPBaseTextCell heightForCellWithName:nameString contentString:commentString cellInsetWidth:kPAPCellInsetWidth];
         }
     }
     
     // The pagination row
     return 44.0f;
 }
-
 
 #pragma mark - PFQueryTableViewController
 //#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
@@ -235,6 +253,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
      */
     
+    self.temp_query = query;
+    
     return query;
 }
 
@@ -244,7 +264,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     if (NSClassFromString(@"UIRefreshControl")) {
         [self.refreshControl endRefreshing];
     }
-
+    [self createOutstandingViews];
     [self.headerView reloadLikeBar];
     [self loadLikers];
 }

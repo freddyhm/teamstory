@@ -68,7 +68,7 @@ static CGSize expectedSize;
 @property (nonatomic, strong) NSMutableArray *currentLikeAvatars;
 @property (nonatomic, strong) NSString *companyName;
 @property (nonatomic, strong) UILabel *photoDescriptionLabel;
-@property (nonatomic, strong) NSArray *objects;
+@property (nonatomic, strong) NSString *description;
 @property (nonatomic, strong) MBProgressHUD *hud;
 
 // Redeclare for edit
@@ -95,12 +95,12 @@ static TTTTimeIntervalFormatter *timeFormatter;
 @synthesize currentLikeAvatars;
 @synthesize companyName;
 @synthesize photoDescriptionLabel;
-@synthesize objects;
+@synthesize description;
 @synthesize hud;
 
 #pragma mark - NSObject
 
-- (id)initWithFrame:(CGRect)frame photo:(PFObject*)aPhoto {
+- (id)initWithFrame:(CGRect)frame photo:(PFObject*)aPhoto description:(NSString *)adescription{
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
@@ -111,6 +111,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.photo = aPhoto;
         self.photographer = [self.photo objectForKey:kPAPPhotoUserKey];
         self.likeUsers = nil;
+        
+        self.description = adescription;
         
         self.backgroundColor = [UIColor clearColor];
         [self createView];
@@ -223,76 +225,58 @@ static TTTTimeIntervalFormatter *timeFormatter;
      Create middle section of the header view; the image
      */
     [self.hud show:YES];
-
-    
-    PFQuery *query = [PFQuery queryWithClassName:@"Activity"];
-    [query whereKey:kPAPActivityPhotoKey equalTo:self.photo];
-    [query includeKey:kPAPActivityFromUserKey];
-    [query whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeComment];
-    [query orderByAscending:@"createdAt"];
-    
-    [query setCachePolicy:kPFCachePolicyNetworkOnly];
-    
-    [query findObjectsInBackgroundWithBlock:^(NSArray *aobjects, NSError *error) {
-        if (!error) {
-          self.objects = aobjects;
-            
-            if ([self.objects count] > 0) {
-                NSString *photoDescription = [self.objects[0] objectForKey:@"content"];
-                
-                if ([photoDescription length] > 0) {
-                    CGSize maximumLabelSize = CGSizeMake(320.0f - baseHorizontalOffset * 4, 9999.0f);
-                    
-                    self.photoDescriptionLabel = [[UILabel alloc] init];
-                    self.photoDescriptionLabel.text = photoDescription;
-                    self.photoDescriptionLabel.backgroundColor = [UIColor clearColor];
-                    self.photoDescriptionLabel.numberOfLines = 0;
-                    self.photoDescriptionLabel.font = [UIFont systemFontOfSize:13.0f];
-                    self.photoDescriptionLabel.textColor = [UIColor colorWithWhite:0.6f alpha:1.0f];
-                    
-                    expectedSize = [self.photoDescriptionLabel sizeThatFits:maximumLabelSize];
-                    
-                    UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(baseHorizontalOffset, nameHeaderHeight, mainImageWidth, expectedSize.height + 15.0f)];
-                    [backgroundView setBackgroundColor:[UIColor whiteColor]];
-                    [self addSubview:backgroundView];
-                    
-                    self.photoDescriptionLabel.frame = CGRectMake(baseHorizontalOffset * 2, nameHeaderHeight + 5.0f, mainImageWidth - baseHorizontalOffset * 2, expectedSize.height + 5.0f);
-                    [self addSubview:self.photoDescriptionLabel];
-                    
-                    self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height + 10.0f, mainImageWidth, mainImageHeight)];
-                    self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
-                    self.photoImageView.backgroundColor = [UIColor blackColor];
-                    self.photoImageView.contentMode = UIViewContentModeScaleAspectFit;
-                    
-                    PFFile *imageFile = [self.photo objectForKey:kPAPPhotoPictureKey];
-                    
-                    if (imageFile) {
-                        self.photoImageView.file = imageFile;
-                        [self.photoImageView loadInBackground];
-                    }
-                    
-                    [self addSubview:self.photoImageView];
-                }
-            } else {
-                self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
-                self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
-                self.photoImageView.backgroundColor = [UIColor blackColor];
-                self.photoImageView.contentMode = UIViewContentModeScaleAspectFit;
-                
-                PFFile *imageFile = [self.photo objectForKey:kPAPPhotoPictureKey];
-                
-                if (imageFile) {
-                    self.photoImageView.file = imageFile;
-                    [self.photoImageView loadInBackground];
-                }
-                
-                [self addSubview:self.photoImageView];
-            }
-            
-        } else {
-            NSLog(@"error: %@", error);
+        
+    if ([self.description length] > 0) {
+        CGSize maximumLabelSize = CGSizeMake(320.0f - baseHorizontalOffset * 4, 9999.0f);
+        
+        self.photoDescriptionLabel = [[UILabel alloc] init];
+        self.photoDescriptionLabel.text = self.description;
+        self.photoDescriptionLabel.backgroundColor = [UIColor clearColor];
+        self.photoDescriptionLabel.numberOfLines = 0;
+        self.photoDescriptionLabel.font = [UIFont systemFontOfSize:13.0f];
+        self.photoDescriptionLabel.textColor = [UIColor colorWithWhite:0.6f alpha:1.0f];
+        
+        expectedSize = [self.photoDescriptionLabel sizeThatFits:maximumLabelSize];
+        
+        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(baseHorizontalOffset, nameHeaderHeight, mainImageWidth, expectedSize.height + 20.0f)];
+        [backgroundView setBackgroundColor:[UIColor whiteColor]];
+        [self addSubview:backgroundView];
+        
+        self.photoDescriptionLabel.frame = CGRectMake(baseHorizontalOffset * 2, nameHeaderHeight + 5.0f, mainImageWidth - baseHorizontalOffset * 2, expectedSize.height + 5.0f);
+        [self addSubview:self.photoDescriptionLabel];
+        
+        self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height + 15.0f, mainImageWidth, mainImageHeight)];
+        self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
+        self.photoImageView.backgroundColor = [UIColor blackColor];
+        self.photoImageView.contentMode = UIViewContentModeScaleAspectFit;
+        
+        PFFile *imageFile = [self.photo objectForKey:kPAPPhotoPictureKey];
+        
+        if (imageFile) {
+            self.photoImageView.file = imageFile;
+            [self.photoImageView loadInBackground];
         }
         
+        [self addSubview:self.photoImageView];
+    } else {
+        self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
+        self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
+        self.photoImageView.backgroundColor = [UIColor blackColor];
+        self.photoImageView.contentMode = UIViewContentModeScaleAspectFit;
+        
+        PFFile *imageFile = [self.photo objectForKey:kPAPPhotoPictureKey];
+        
+        if (imageFile) {
+            self.photoImageView.file = imageFile;
+            [self.photoImageView loadInBackground];
+        }
+        
+        expectedSize.height = 0.0f;
+        
+        [self addSubview:self.photoImageView];
+        
+    }
+    
         /*
          Create top of header view with name and avatar
          */
@@ -352,7 +336,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             
             [self setNeedsDisplay];
         }];
-        
+    
         /*
          Create bottom section fo the header view; the likes
          */
@@ -384,7 +368,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [likeBarView addSubview:separator];
         
         [self.hud hide:YES];
-    }];
   
 }
 
@@ -456,7 +439,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 + (CGRect)rectForView {
-    return CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, contentY + expectedSize.height);
+    return CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 394.0f);
 }
 
 

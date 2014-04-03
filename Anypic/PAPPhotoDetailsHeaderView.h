@@ -27,7 +27,7 @@
 
 + (CGRect)rectForView;
 
-- (id)initWithFrame:(CGRect)frame photo:(PFObject*)aPhoto;
+- (id)initWithFrame:(CGRect)frame photo:(PFObject*)aPhoto description:(NSString *)adescription;
 - (id)initWithFrame:(CGRect)frame photo:(PFObject*)aPhoto photographer:(PFUser*)aPhotographer likeUsers:(NSArray*)theLikeUsers;
 
 - (void)setLikeButtonState:(BOOL)selected;
