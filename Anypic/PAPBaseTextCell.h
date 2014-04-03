@@ -43,7 +43,7 @@
 - (void)setCellInsetWidth:(CGFloat)insetWidth;
 - (void)hideSeparator:(BOOL)hide;
 
-- (id)initWithNavigationController:(UINavigationController *)navigationController;
+- (id)initWithNavigationController:(UINavigationController *)navigationController reuseIdentifier:(NSString *)reuseIdentifier;
 
 /*! Static Helper methods */
 + (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content;

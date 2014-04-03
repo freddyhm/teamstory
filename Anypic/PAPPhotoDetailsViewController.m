@@ -20,6 +20,7 @@ enum ActionSheetTags {
     deletePhoto = 2
 };
 
+
 @interface PAPPhotoDetailsViewController ()
 @property (nonatomic, strong) UITextField *commentTextField;
 @property (nonatomic, strong) PAPPhotoDetailsHeaderView *headerView;
@@ -29,7 +30,7 @@ enum ActionSheetTags {
 @property (nonatomic, strong) PFUser *reported_user;
 @property (nonatomic, strong) UITextView *commentTextView;
 @property (nonatomic, strong) PAPPhotoDetailsFooterView *footerView;
-@property (nonatomic, strong) PFQuery *temp_query;
+@property (nonatomic, strong) NSString *commentID;
 @end
 
 static const CGFloat kPAPCellInsetWidth = 7.5f;
@@ -43,7 +44,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 @synthesize reported_user;
 @synthesize commentTextView;
 @synthesize footerView;
-@synthesize temp_query;
+@synthesize commentID;
 
 
 #pragma mark - Initialization
@@ -162,17 +163,18 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 - (void)createOutstandingViews {
-    if ([self.objects count] > 0) {
-        NSString *description = [[self.objects objectAtIndex:0] objectForKey:@"content"];
-        if ([description length] > 0) {
-            CGSize maximumLabelSize = CGSizeMake(320.0f - 7.5f * 4, 9999.0f);
-            CGSize expectedSize = [description sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:maximumLabelSize];
-            
-            // Set table header
-            self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 351.0f + expectedSize.height + 43.0f) photo:self.photo description:description];
-            self.headerView.delegate = self;
-            self.tableView.tableHeaderView = self.headerView;
-        }
+    if ([self.objects count] > 0 && [[[self.objects objectAtIndex:0] objectForKey:@"fromUser"] objectId] == [[[self.objects objectAtIndex:0] objectForKey:@"toUser"] objectId]) {
+            NSString *description = [[self.objects objectAtIndex:0] objectForKey:@"content"];
+            if ([description length] > 0) {
+                CGSize maximumLabelSize = CGSizeMake(320.0f - 7.5f * 4, 9999.0f);
+                CGSize expectedSize = [description sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:maximumLabelSize];
+                
+                // Set table header
+                self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 351.0f + expectedSize.height + 43.0f) photo:self.photo description:description];
+                self.headerView.delegate = self;
+                self.tableView.tableHeaderView = self.headerView;
+            }
+        
     } else {
         self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:[PAPPhotoDetailsHeaderView rectForView] photo:self.photo description:nil];
         self.headerView.delegate = self;
@@ -213,16 +215,21 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         PFObject *object = [self.objects objectAtIndex:indexPath.row];
         
         if (object) {
-            NSString *commentString = [self.objects[indexPath.row] objectForKey:kPAPActivityContentKey];
-            
-            PFUser *commentAuthor = (PFUser *)[object objectForKey:kPAPActivityFromUserKey];
-            
-            NSString *nameString = @"";
-            if (commentAuthor) {
-                nameString = [commentAuthor objectForKey:kPAPUserDisplayNameKey];
+            // hide the first row if the photographer has commented.
+            if (indexPath.row == 0 && [[object objectForKey:@"fromUser"] objectId] == [[object objectForKey:@"toUser"] objectId]) {
+                return 0.0f;
+            } else {
+                NSString *commentString = [self.objects[indexPath.row] objectForKey:kPAPActivityContentKey];
+                
+                PFUser *commentAuthor = (PFUser *)[object objectForKey:kPAPActivityFromUserKey];
+                
+                NSString *nameString = @"";
+                if (commentAuthor) {
+                    nameString = [commentAuthor objectForKey:kPAPUserDisplayNameKey];
+                }
+                
+                return [PAPBaseTextCell heightForCellWithName:nameString contentString:commentString cellInsetWidth:kPAPCellInsetWidth];
             }
-            
-            return [PAPBaseTextCell heightForCellWithName:nameString contentString:commentString cellInsetWidth:kPAPCellInsetWidth];
         }
     }
     
@@ -238,7 +245,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [query whereKey:kPAPActivityPhotoKey equalTo:self.photo];
     [query includeKey:kPAPActivityFromUserKey];
     [query whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeComment];
-    [query orderByAscending:@"createdAt"]; 
+    [query orderByAscending:@"createdAt"];
 
     [query setCachePolicy:kPFCachePolicyNetworkOnly];
 
@@ -253,8 +260,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
      */
     
-    self.temp_query = query;
-    
     return query;
 }
 
@@ -267,26 +272,34 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self createOutstandingViews];
     [self.headerView reloadLikeBar];
     [self loadLikers];
+    
+    if ([self.objects count] > 0) {
+        self.commentID = [[self.objects objectAtIndex:0] objectId];
+    }
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
     static NSString *cellID = @"CommentCell";
-
-    // Try to dequeue a cell and create one if necessary
-    PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-    if (cell == nil) {
-        //cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-        cell = [[PAPBaseTextCell alloc] initWithNavigationController:self.navigationController];
-        cell.cellInsetWidth = kPAPCellInsetWidth;
-        cell.delegate = self;
-    }
+        // Try to dequeue a cell and create one if necessary
+        PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+        if (cell == nil) {
+            //cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+            cell = [[PAPBaseTextCell alloc] initWithNavigationController:self.navigationController reuseIdentifier:(NSString *)cellID];
+            cell.cellInsetWidth = kPAPCellInsetWidth;
+            cell.delegate = self;
+        }
     
-    [cell setUser:[object objectForKey:kPAPActivityFromUserKey]];
-    [cell setContentText:[object objectForKey:kPAPActivityContentKey]];
-    [cell setDate:[object createdAt]];
-
-    return cell;
+    if ([self.commentID isEqualToString:[object objectId]]) {
+        //cell.bounds.size.height = 0.0f;
+    }
+        
+        [cell setUser:[object objectForKey:kPAPActivityFromUserKey]];
+        [cell setContentText:[object objectForKey:kPAPActivityContentKey]];
+        [cell setDate:[object createdAt]];
+        return cell;
 }
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForNextPageAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"NextPage";

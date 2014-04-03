@@ -36,7 +36,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 @synthesize navController;
 
 
-- (id)initWithNavigationController:(UINavigationController *)navigationController {
+- (id)initWithNavigationController:(UINavigationController *)navigationController reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super init];
     if (self) {
         self.navController = navigationController;
