@@ -42,14 +42,26 @@
 
 - (void)setAttributesForPhoto:(PFObject *)photo likers:(NSArray *)likers commenters:(NSArray *)commenters likedByCurrentUser:(BOOL)likedByCurrentUser {
     //NSLog(@"%d", (int)[likers count]);
-    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      [NSNumber numberWithBool:likedByCurrentUser],kPAPPhotoAttributesIsLikedByCurrentUserKey,
-                                      [NSNumber numberWithInt:(int)[likers count]],kPAPPhotoAttributesLikeCountKey,
-                                      likers,kPAPPhotoAttributesLikersKey,
-                                      [NSNumber numberWithInt:(int)[commenters count]],kPAPPhotoAttributesCommentCountKey,
-                                      commenters,kPAPPhotoAttributesCommentersKey,
-                                      nil];
-    [self setAttributes:attributes forPhoto:photo];
+    
+    if ([commenters count] > 0 && [[[commenters objectAtIndex:0] objectId] isEqualToString:[[photo objectForKey:@"user"] objectId]]) {
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                          [NSNumber numberWithBool:likedByCurrentUser],kPAPPhotoAttributesIsLikedByCurrentUserKey,
+                                          [NSNumber numberWithInt:(int)[likers count]],kPAPPhotoAttributesLikeCountKey,
+                                          likers,kPAPPhotoAttributesLikersKey,
+                                          [NSNumber numberWithInt:(int)[commenters count] - 1],kPAPPhotoAttributesCommentCountKey,
+                                          commenters,kPAPPhotoAttributesCommentersKey,
+                                          nil];
+        [self setAttributes:attributes forPhoto:photo];
+    } else {
+        NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    [NSNumber numberWithBool:likedByCurrentUser],kPAPPhotoAttributesIsLikedByCurrentUserKey,
+                                    [NSNumber numberWithInt:(int)[likers count]],kPAPPhotoAttributesLikeCountKey,
+                                    likers,kPAPPhotoAttributesLikersKey,
+                                    [NSNumber numberWithInt:(int)[commenters count]],kPAPPhotoAttributesCommentCountKey,
+                                    commenters,kPAPPhotoAttributesCommentersKey,
+                                    nil];
+        [self setAttributes:attributes forPhoto:photo];
+    }
 }
 
 - (NSDictionary *)attributesForPhoto:(PFObject *)photo {
