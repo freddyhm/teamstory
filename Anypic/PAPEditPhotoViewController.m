@@ -242,6 +242,14 @@
         [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
         [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
         
+        if (userInfo) {
+            NSString *commentText = [userInfo objectForKey:kPAPEditPhotoViewControllerUserInfoCommentKey];
+            
+            if (commentText && commentText.length != 0 && ![commentText isEqualToString:@"Add a comment"]) {
+                [photo setObject:commentText forKey:@"caption"];
+            }
+        }
+        
         // photos are public, but may only be modified by the user who uploaded them
         PFACL *photoACL = [PFACL ACLWithUser:[PFUser currentUser]];
         [photoACL setPublicReadAccess:YES];
@@ -258,29 +266,6 @@
                 NSLog(@"Photo uploaded");
                 
                 [[PAPCache sharedCache] setAttributesForPhoto:photo likers:[NSArray array] commenters:[NSArray array] likedByCurrentUser:NO];
-                
-                // userInfo might contain any caption which might have been posted by the uploader
-                if (userInfo) {
-                    NSString *commentText = [userInfo objectForKey:kPAPEditPhotoViewControllerUserInfoCommentKey];
-                    
-                    if (commentText && commentText.length != 0 && ![commentText isEqualToString:@"Add a comment"]) {
-                        // create and save photo caption
-                        PFObject *comment = [PFObject objectWithClassName:kPAPActivityClassKey];
-                        [comment setObject:kPAPActivityTypeComment forKey:kPAPActivityTypeKey];
-                        [comment setObject:photo forKey:kPAPActivityPhotoKey];
-                        [comment setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey];
-                        [comment setObject:[PFUser currentUser] forKey:kPAPActivityToUserKey];
-                        [comment setObject:commentText forKey:kPAPActivityContentKey];
-                        
-                        PFACL *ACL = [PFACL ACLWithUser:[PFUser currentUser]];
-                        [ACL setPublicReadAccess:YES];
-                        comment.ACL = ACL;
-                        
-                        [comment saveEventually];
-                        [[PAPCache sharedCache] incrementCommentCountForPhoto:photo];
-                    }
-                }
-                
                 [[NSNotificationCenter defaultCenter] postNotificationName:PAPTabBarControllerDidFinishEditingPhotoNotification object:photo];
             } else {
                 NSLog(@"Photo failed to save: %@", error);
@@ -318,6 +303,14 @@
     [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
     [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
     
+    if (userInfo) {
+        NSString *commentText = [userInfo objectForKey:kPAPEditPhotoViewControllerUserInfoCommentKey];
+        
+        if (commentText && commentText.length != 0 && ![commentText isEqualToString:@"Add a comment"]) {
+            [photo setObject:commentText forKey:@"caption"];
+        }
+    }
+    
     // photos are public, but may only be modified by the user who uploaded them
     PFACL *photoACL = [PFACL ACLWithUser:[PFUser currentUser]];
     [photoACL setPublicReadAccess:YES];
@@ -334,29 +327,6 @@
             NSLog(@"Photo uploaded");
             
             [[PAPCache sharedCache] setAttributesForPhoto:photo likers:[NSArray array] commenters:[NSArray array] likedByCurrentUser:NO];
-            
-            // userInfo might contain any caption which might have been posted by the uploader
-            if (userInfo) {
-                NSString *commentText = [userInfo objectForKey:kPAPEditPhotoViewControllerUserInfoCommentKey];
-                
-                if (commentText && commentText.length != 0 && ![commentText isEqualToString:@"Add a comment"]) {
-                    // create and save photo caption
-                    PFObject *comment = [PFObject objectWithClassName:kPAPActivityClassKey];
-                    [comment setObject:kPAPActivityTypeComment forKey:kPAPActivityTypeKey];
-                    [comment setObject:photo forKey:kPAPActivityPhotoKey];
-                    [comment setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey];
-                    [comment setObject:[PFUser currentUser] forKey:kPAPActivityToUserKey];
-                    [comment setObject:commentText forKey:kPAPActivityContentKey];
-                    
-                    PFACL *ACL = [PFACL ACLWithUser:[PFUser currentUser]];
-                    [ACL setPublicReadAccess:YES];
-                    comment.ACL = ACL;
-                    
-                    [comment saveEventually];
-                    [[PAPCache sharedCache] incrementCommentCountForPhoto:photo];
-                }
-            }
-            
             [[NSNotificationCenter defaultCenter] postNotificationName:PAPTabBarControllerDidFinishEditingPhotoNotification object:photo];
         } else {
             NSLog(@"Photo failed to save: %@", error);

@@ -51,7 +51,7 @@
         self.containerView = [[UIView alloc] initWithFrame:CGRectMake( 7.5f, 0.0f, self.bounds.size.width - 7.5f * 2.0f, self.bounds.size.height)];
         [self addSubview:self.containerView];
         //[self.containerView setBackgroundColor:[UIColor clearColor]];
-        [self.containerView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundComments.png"]]];
+        [self.containerView setBackgroundColor:[UIColor whiteColor]];
         
         
         self.avatarImageView = [[PAPProfileImageView alloc] init];
@@ -131,7 +131,7 @@
         //[self.timestampLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
         [self.timestampLabel setFont:[UIFont systemFontOfSize:11.0f]];
         [self.timestampLabel setBackgroundColor:[UIColor clearColor]];
-        
+        /*
         CALayer *layer = [containerView layer];
         layer.backgroundColor = [[UIColor whiteColor] CGColor];
         layer.masksToBounds = NO;
@@ -140,6 +140,7 @@
         layer.shadowOpacity = 0.3f;
         layer.shouldRasterize = YES;
         layer.shadowPath = [UIBezierPath bezierPathWithRect:CGRectMake( 0.0f, containerView.frame.size.height - 4.0f, containerView.frame.size.width, 4.0f)].CGPath;
+         */
         
     }
 
