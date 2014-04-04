@@ -30,6 +30,7 @@ enum ActionSheetTags {
 @property (nonatomic, strong) UITextView *commentTextView;
 @property (nonatomic, strong) UIView *footer_mainView;
 @property (nonatomic, strong) PAPPhotoDetailsFooterView *footerView;
+@property (nonatomic, strong) NSString *source;
 @end
 
 static const CGFloat kPAPCellInsetWidth = 7.5f;
@@ -54,7 +55,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:self.photo];
 }
 
-- (id)initWithPhoto:(PFObject *)aPhoto {
+- (id)initWithPhoto:(PFObject *)aPhoto source:(NSString *)source{
     self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
         // The className to query on
@@ -76,6 +77,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         self.photo = aPhoto;
         
         self.likersQueryInProgress = NO;
+        
+        self.source = source;
     }
     return self;
 }
@@ -169,6 +172,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                                           action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tapOutside];
+
 }
 
 -(void)dismissKeyboard {
@@ -185,6 +189,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     BOOL hasCachedLikers = [[PAPCache sharedCache] attributesForPhoto:self.photo] != nil;
     if (!hasCachedLikers) {
         [self loadLikers];
+    }
+    
+    if(self.objects.count > 0 && ([self.source isEqual:@"notification"] ||[self.source isEqual:@"activity"])){
+        [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height)];
     }
 }
 
@@ -242,6 +250,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
+    
 
     if (NSClassFromString(@"UIRefreshControl")) {
         [self.refreshControl endRefreshing];
@@ -249,6 +258,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
     [self.headerView reloadLikeBar];
     [self loadLikers];
+    
+    if(self.objects.count > 0 && ([self.source isEqual:@"notification"] ||[self.source isEqual:@"activity"])){
+        [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height)];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {

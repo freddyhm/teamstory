@@ -12,6 +12,6 @@
 
 @property (nonatomic, strong) PFObject *photo;
 
-- (id)initWithPhoto:(PFObject*)aPhoto;
+- (id)initWithPhoto:(PFObject *)aPhoto source:(NSString *)source;
 
 @end
