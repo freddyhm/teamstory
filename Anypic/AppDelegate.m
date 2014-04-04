@@ -581,6 +581,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     if (remoteNotificationPayload) {
         
         NSString *notificationSource = [userInfo objectForKey:@"source"];
+        NSString *typeOfNotification = [userInfo objectForKey:@"t"];
         
         if([notificationSource isEqualToString:@"konotor"]){
             self.isKonotor = YES;
@@ -595,11 +596,12 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
         [self.activityViewController notificationSetup:(int)[UIApplication sharedApplication].applicationIconBadgeNumber source:@"notification background"];
         [self.activityViewController setActivityBadge:nil];
         
+    
         // If the push notification payload references a photo, we will attempt to push this view controller into view
         NSString *photoObjectId = [remoteNotificationPayload objectForKey:kPAPPushPayloadPhotoObjectIdKey];
         if (photoObjectId && photoObjectId.length > 0) {
             
-            [self shouldNavigateToPhoto:[PFObject objectWithoutDataWithClassName:kPAPPhotoClassKey objectId:photoObjectId]];
+            [self shouldNavigateToPhoto:[PFObject objectWithoutDataWithClassName:kPAPPhotoClassKey objectId:photoObjectId] notificationType:typeOfNotification];
             return;
         }
         
@@ -660,7 +662,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
         if ([[url fragment] rangeOfString:@"^pic/[A-Za-z0-9]{10}$" options:NSRegularExpressionSearch].location != NSNotFound) {
             NSString *photoObjectId = [[url fragment] substringWithRange:NSMakeRange(4, 10)];
             if (photoObjectId && photoObjectId.length > 0) {
-                [self shouldNavigateToPhoto:[PFObject objectWithoutDataWithClassName:kPAPPhotoClassKey objectId:photoObjectId]];
+                [self shouldNavigateToPhoto:[PFObject objectWithoutDataWithClassName:kPAPPhotoClassKey objectId:photoObjectId] notificationType:nil];
                 return YES;
             }
         }
@@ -687,7 +689,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     }
 }
 
-- (void)shouldNavigateToPhoto:(PFObject *)targetPhoto {
+- (void)shouldNavigateToPhoto:(PFObject *)targetPhoto notificationType:(NSString *)type {
     
     // get photo from objects in homeviewcontroller
     NSArray *homeObjects = self.homeViewController.objects;
@@ -705,8 +707,14 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
             UINavigationController *homeNavigationController = [[self.tabBarController viewControllers] objectAtIndex:PAPHomeTabBarItemIndex];
             [self.tabBarController setSelectedViewController:homeNavigationController];
             
-            PAPPhotoDetailsViewController *detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notification"];
+            PAPPhotoDetailsViewController *detailViewController;
             
+            if([type isEqualToString:kPAPActivityTypeComment]){
+                detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notificationComment"];
+            }else{
+                detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notification"];
+            }
+           
             [homeNavigationController pushViewController:detailViewController animated:YES];
         }
     }];

@@ -146,7 +146,16 @@
     if (indexPath.row < self.objects.count) {
         PFObject *activity = [self.objects objectAtIndex:indexPath.row];
         if ([activity objectForKey:kPAPActivityPhotoKey]) {
-            PAPPhotoDetailsViewController *detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:[activity objectForKey:kPAPActivityPhotoKey] source:@"activity"];
+            
+            
+            PAPPhotoDetailsViewController *detailViewController;
+            
+            if([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeComment]){
+                detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:[activity objectForKey:kPAPActivityPhotoKey] source:@"activityComment"];
+            }else{
+                detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:[activity objectForKey:kPAPActivityPhotoKey] source:@"activity"];
+            }
+            
             [self.navigationController pushViewController:detailViewController animated:YES];
         } else if ([activity objectForKey:kPAPActivityFromUserKey]) {
             PAPAccountViewController *detailViewController = [[PAPAccountViewController alloc] initWithStyle:UITableViewStylePlain];
@@ -300,7 +309,9 @@
     PFObject *photo = [activity objectForKey:kPAPActivityPhotoKey];
     
     // Push single photo view controller
+    
     PAPPhotoDetailsViewController *photoViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"activity"];
+    
     [self.navigationController pushViewController:photoViewController animated:YES];
 }
 

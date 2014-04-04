@@ -191,8 +191,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [self loadLikers];
     }
     
-    if(self.objects.count > 0 && ([self.source isEqual:@"notification"] ||[self.source isEqual:@"activity"])){
-        [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height)];
+    if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] ||[self.source isEqual:@"activityComment"])){
+        [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height + 44)];
     }
 }
 
@@ -259,8 +259,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self.headerView reloadLikeBar];
     [self loadLikers];
     
-    if(self.objects.count > 0 && ([self.source isEqual:@"notification"] ||[self.source isEqual:@"activity"])){
-        [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height)];
+    if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] ||[self.source isEqual:@"activityComment"])){
+        [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height + 44)];
     }
 }
 
