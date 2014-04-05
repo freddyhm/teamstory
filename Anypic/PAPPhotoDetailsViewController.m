@@ -60,14 +60,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     if (self) {
         // The className to query on
         self.parseClassName = kPAPActivityClassKey;
-
-        // Whether the built-in pull-to-refresh is enabled
-        if (NSClassFromString(@"UIRefreshControl")) {
-            self.pullToRefreshEnabled = NO;
-        } else {
-            self.pullToRefreshEnabled = YES;
-        }
-
+        
         // Whether the built-in pagination is enabled
         self.paginationEnabled = YES;
         
@@ -119,7 +112,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     commentTextView.delegate = self;
     self.tableView.tableFooterView = footerView;
     
-    
 
     /*
     if ([self currentUserOwnsPhoto]) {
@@ -152,16 +144,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [shareButton setBackgroundImage:[UIImage imageNamed:@"share.png"] forState:UIControlStateNormal];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
      */
-    
-    
-    if (NSClassFromString(@"UIRefreshControl")) {
-        // Use the new iOS 6 refresh control.
-        UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-        self.refreshControl = refreshControl;
-        self.refreshControl.tintColor = [UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:1.0f];
-        [self.refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
-        self.pullToRefreshEnabled = NO;
-    }
     
     // Register to be notified when the keyboard will be shown to scroll the view
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -249,13 +231,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 - (void)objectsDidLoad:(NSError *)error {
+
     [super objectsDidLoad:error];
-    
-
-    if (NSClassFromString(@"UIRefreshControl")) {
-        [self.refreshControl endRefreshing];
-    }
-
     [self.headerView reloadLikeBar];
     [self loadLikers];
     
@@ -660,10 +637,13 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 - (void)backButtonAction:(id)sender {
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)userLikedOrUnlikedPhoto:(NSNotification *)note {
+    
+
     [self.headerView reloadLikeBar];
 }
 

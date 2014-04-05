@@ -705,6 +705,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     [targetPhoto fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if (!error) {
             UINavigationController *homeNavigationController = [[self.tabBarController viewControllers] objectAtIndex:PAPHomeTabBarItemIndex];
+    
             [self.tabBarController setSelectedViewController:homeNavigationController];
             
             PAPPhotoDetailsViewController *detailViewController;

@@ -348,6 +348,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
     }
     
     if (liked) {
+        
+        // analytics
+        [PAPUtility captureEventGA:@"Engagement" action:@"Like" label:@"Photo"];
+        
         [[PAPCache sharedCache] incrementLikerCountForPhoto:self.photo];
         [newLikeUsersSet addObject:[PFUser currentUser]];
     } else {

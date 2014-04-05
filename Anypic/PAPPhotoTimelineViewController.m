@@ -18,6 +18,7 @@
 @property (nonatomic, strong) NSString *reported_user;
 @property (nonatomic, strong) NSString *photoID;
 @property (nonatomic, strong) PFObject *current_photo;
+@property int count;
 @end
 
 @implementation PAPPhotoTimelineViewController
@@ -64,6 +65,8 @@ enum ActionSheetTags {
         self.reusableSectionHeaderViews = [NSMutableSet setWithCapacity:3];
         
         self.shouldReloadOnAppear = NO;
+        
+        self.count = 0;
     }
     return self;
 }
@@ -678,8 +681,10 @@ enum ActionSheetTags {
 }
 
 - (void)userDidLikeOrUnlikePhoto:(NSNotification *)note {
+    
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
+    [self.tableView reloadData];
 }
 
 - (void)userDidCommentOnPhoto:(NSNotification *)note {
@@ -689,6 +694,7 @@ enum ActionSheetTags {
     
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
+    [self.tableView reloadData];
 }
 
 - (void)userDidDeletePhoto:(NSNotification *)note {
