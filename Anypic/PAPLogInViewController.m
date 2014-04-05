@@ -8,14 +8,13 @@
 #import "emailLoginViewController.h"
 #import "AppDelegate.h"
 #import "emailSignUpViewController.h"
-#import "MBProgressHUD.h"
+#import "SVProgressHUD.h"
 #import "PAPprofileApprovalViewController.h"
 #import "PAPProfileSettingViewController.h"
 
 @interface PAPLogInViewController()
 @property (nonatomic, strong) UITextField *user_email;
 @property (nonatomic, strong) UITextField *user_pw;
-@property (nonatomic, strong) MBProgressHUD *hud;
 @property (nonatomic, strong) NSString *login_type;
 
 @end
@@ -24,7 +23,6 @@
 @synthesize emailLoginNavController;
 @synthesize user_email;
 @synthesize user_pw;
-@synthesize hud;
 @synthesize login_type;
 
 
@@ -198,7 +196,8 @@
     if (textField == user_email) {
         [user_pw becomeFirstResponder];
     } else {
-        self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        
+        [SVProgressHUD show];
         
         [user_pw resignFirstResponder];
         [user_email resignFirstResponder];
@@ -219,7 +218,7 @@
                                                     
                                                     if (profileExist == true && accessGrant == true) {
                                                         NSLog(@"Logged In Sucessfully");
-                                                        [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                                        [SVProgressHUD dismiss];
                                                         [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
                                                         return;
                                                         
@@ -235,7 +234,7 @@
                                                     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Wrong Email" message:@"Please check your email address or password" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                                                     alert.alertViewStyle = UIAlertViewStyleDefault;
                                                     [alert show];
-                                                    [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                                    [SVProgressHUD dismiss];
                                                 }
                                             }];
         } else {

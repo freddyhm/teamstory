@@ -33,10 +33,7 @@
     }
 
     // Show spinning indicator while user is being refreshed
-    [SVProgressHUD setBackgroundColor:[UIColor clearColor]];
     [SVProgressHUD show];
-    
-    
     [user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         
         // hide indicator

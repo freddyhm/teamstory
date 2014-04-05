@@ -7,15 +7,13 @@
 # import "PAPProfileSettingViewController.h"
 # import <UIKit/UIKit.h>
 # import <Parse/Parse.h>
-# import "MBProgressHUD.h"
+# import "SVProgressHUD.h"
 # include <stdlib.h>
 #import "PAPEditPhotoViewController.h"
 
 
-@interface PAPProfileSettingViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, MBProgressHUDDelegate, UITextFieldDelegate, UINavigationControllerDelegate, UIActionSheetDelegate> {
+@interface PAPProfileSettingViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextFieldDelegate, UINavigationControllerDelegate, UIActionSheetDelegate> {
     
-    MBProgressHUD *HUD;
-    MBProgressHUD *refreshHUD;
     NSArray *dropDownMenu;
     BOOL flag;
 }

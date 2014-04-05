@@ -9,7 +9,7 @@
 #import "PAPProfileSettingViewController.h"
 #import "PAPSettingsButtonItem.h"
 #import "PAPSettingsActionSheetDelegate.h"
-#import "MBProgressHUD.h"
+#import "SVProgressHUD.h"
 #import "PAPwebviewViewController.h"
 
 @interface PAPAccountViewController()
@@ -25,7 +25,6 @@
 @property (nonatomic, strong) UIView *profilePictureBackgroundView;
 @property (nonatomic, strong) PFUser *currentUser;
 @property (nonatomic, strong) PAPSettingsActionSheetDelegate *settingsActionSheetDelegate;
-@property (nonatomic, strong) MBProgressHUD *hud;
 @property (nonatomic, strong) NSString *displayName;
 @property (nonatomic, strong) UILabel *userDisplayNameLabel;
 @property (nonatomic, strong) UIButton *websiteLink;
@@ -47,7 +46,6 @@
 @synthesize descriptionInfo;
 @synthesize descriptionLabel;
 @synthesize settingsActionSheetDelegate;
-@synthesize hud;
 @synthesize websiteInfo;
 @synthesize navController;
 @synthesize displayName;
@@ -74,7 +72,7 @@
     }
     [self.user refresh];
     
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [SVProgressHUD show];
     
     self.imageFile = [self.user objectForKey:@"profilePictureMedium"];
     self.locationInfo = [self.user objectForKey:@"location"];
@@ -83,7 +81,7 @@
     self.displayName = [self.user objectForKey:@"displayName"];
     
     if (imageFile && locationInfo && displayName) {
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [SVProgressHUD dismiss];
         
         descriptionLabel = [[UILabel alloc] init];
         descriptionLabel.font = [UIFont fontWithName:@"Helvetica" size:13.0f];
