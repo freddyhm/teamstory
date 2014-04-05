@@ -8,7 +8,7 @@
 #import "PAPSettingsActionSheetDelegate.h"
 #import "PAPSettingsButtonItem.h"
 #import "PAPFindFriendsViewController.h"
-#import "MBProgressHUD.h"
+#import "SVProgressHUD.h"
 #import "KonotorUI.h"
 
 @interface PAPHomeViewController ()

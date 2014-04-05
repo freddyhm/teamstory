@@ -5,6 +5,7 @@
 //
 
 #import "PAPWelcomeViewController.h"
+#import "SVProgressHUD.h"
 #import "AppDelegate.h"
 #import "PAPProfileSettingViewController.h"
 #import "PAPLoginTutorialViewController.h"
@@ -32,12 +33,14 @@
     }
 
     // Show spinning indicator while user is being refreshed
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [SVProgressHUD setBackgroundColor:[UIColor clearColor]];
+    [SVProgressHUD show];
+    
     
     [user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         
         // hide indicator
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [SVProgressHUD dismiss];
         
         if(!error){
             NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
