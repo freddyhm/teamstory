@@ -353,6 +353,8 @@
 		D52C1E4B18D9515D00625887 /* libKonotorCombined.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D52C1E2018D9515D00625887 /* libKonotorCombined.a */; };
 		D531F7CC18B5DE11008AE73F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D531F7CB18B5DE11008AE73F /* CoreVideo.framework */; };
 		D531F7CE18B5DE44008AE73F /* Appsee.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D531F7CD18B5DE44008AE73F /* Appsee.framework */; };
+		D594C20418EFEBAD0008F5DF /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D594C20118EFEBAD0008F5DF /* SVProgressHUD.bundle */; };
+		D594C20518EFEBAD0008F5DF /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = D594C20318EFEBAD0008F5DF /* SVProgressHUD.m */; };
 		D59AE7B618CD501D007F882B /* valley.png in Resources */ = {isa = PBXBuildFile; fileRef = D59AE7B418CD501D007F882B /* valley.png */; };
 		D59AE7B718CD501D007F882B /* valley@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D59AE7B518CD501D007F882B /* valley@2x.png */; };
 		D59B997A18C5974D002D6EFE /* AppIcon120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = D59B997918C5974C002D6EFE /* AppIcon120x120.png */; };
@@ -814,6 +816,10 @@
 		D52C1E2018D9515D00625887 /* libKonotorCombined.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libKonotorCombined.a; sourceTree = "<group>"; };
 		D531F7CB18B5DE11008AE73F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		D531F7CD18B5DE44008AE73F /* Appsee.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Appsee.framework; path = External/Appsee.framework; sourceTree = "<group>"; };
+		D594C20018EFEBAD0008F5DF /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
+		D594C20118EFEBAD0008F5DF /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
+		D594C20218EFEBAD0008F5DF /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
+		D594C20318EFEBAD0008F5DF /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
 		D59AE7B418CD501D007F882B /* valley.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = valley.png; sourceTree = "<group>"; };
 		D59AE7B518CD501D007F882B /* valley@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "valley@2x.png"; sourceTree = "<group>"; };
 		D59B997918C5974C002D6EFE /* AppIcon120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon120x120.png; sourceTree = "<group>"; };
@@ -1364,6 +1370,7 @@
 		C4A0B4FF156C5B9F00E48554 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				D594C1FF18EFEBAD0008F5DF /* SVProgressHUD */,
 				D51C989A18E28D16001230DA /* GoogleAnalytics */,
 				D51C988818E26EB6001230DA /* CloudCode */,
 				D52C1DE618D9515D00625887 /* Konotor */,
@@ -1651,6 +1658,17 @@
 			path = KonotorImageResources;
 			sourceTree = "<group>";
 		};
+		D594C1FF18EFEBAD0008F5DF /* SVProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				D594C20018EFEBAD0008F5DF /* SVProgressHUD-Prefix.pch */,
+				D594C20118EFEBAD0008F5DF /* SVProgressHUD.bundle */,
+				D594C20218EFEBAD0008F5DF /* SVProgressHUD.h */,
+				D594C20318EFEBAD0008F5DF /* SVProgressHUD.m */,
+			);
+			path = SVProgressHUD;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1801,6 +1819,7 @@
 				46FB0A7D1888989800E978CD /* tab-product-unselected@2x.png in Resources */,
 				C4BE677A157FC7F700A291C2 /* BackgroundNewActivity@2x.png in Resources */,
 				C4BE677B157FC7F700A291C2 /* BackgroundTabBar.png in Resources */,
+				D594C20418EFEBAD0008F5DF /* SVProgressHUD.bundle in Resources */,
 				C4BE677C157FC7F700A291C2 /* BackgroundTabBar@2x.png in Resources */,
 				D52C1E2918D9515D00625887 /* konotor_chatbox.png in Resources */,
 				D5BFDED818CC84A5004FEC42 /* london@2x.png in Resources */,
@@ -2018,6 +2037,7 @@
 				D5FC095818A9B552000D85F1 /* FilterCell.m in Sources */,
 				D5FC095518A9B543000D85F1 /* CameraFilterViewController.m in Sources */,
 				46FB0A42188876C400E978CD /* PAPperksView.m in Sources */,
+				D594C20518EFEBAD0008F5DF /* SVProgressHUD.m in Sources */,
 				C4F1028A156C56F20061BC3E /* UIImage+ResizeAdditions.m in Sources */,
 				46FB0A8A1888BAF700E978CD /* PAPdiscoveryHeaderView.m in Sources */,
 				C4F1028B156C56F20061BC3E /* UIImage+RoundedCornerAdditions.m in Sources */,

@@ -32,12 +32,12 @@
     }
 
     // Show spinning indicator while user is being refreshed
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [SVProgressHUD show];
     
     [user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         
         // hide indicator
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [SVProgressHUD dismiss];
         
         if(!error){
             NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];

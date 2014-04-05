@@ -12,7 +12,7 @@
 #import "PAPAccountViewController.h"
 #import "PAPLoadMoreCell.h"
 #import "PAPUtility.h"
-#import "MBProgressHUD.h"
+#import "SVProgressHUD.h"
 
 enum ActionSheetTags {
     MainActionSheetTag = 0,
@@ -354,7 +354,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             [[PAPCache sharedCache] incrementCommentCountForPhoto:self.photo];
             
             // Show HUD view
-            [MBProgressHUD showHUDAddedTo:self.view.superview animated:YES];
+            [SVProgressHUD show];
             
             // If more than 5 seconds pass since we post a comment, stop waiting for the server to respond
             NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(handleCommentTimeout:) userInfo:@{@"comment": comment} repeats:NO];
@@ -371,7 +371,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:self.photo userInfo:@{@"comments": @(self.objects.count + 1)}];
                 
-                [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+                [SVProgressHUD dismiss];
                 [self loadObjects];
                 
                 // suscribe to post if commenter is not photo owner
@@ -625,7 +625,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 
 - (void)handleCommentTimeout:(NSTimer *)aTimer {
-    [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+    [SVProgressHUD dismiss];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"New Comment", nil) message:NSLocalizedString(@"Your comment will be posted next time there is an Internet connection.", nil)  delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Dismiss", nil), nil];
     [alert show];
 }

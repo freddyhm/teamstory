@@ -371,14 +371,9 @@
     PFFile *imageFile = [PFFile fileWithName:nil data:imageData];
     
     //HUD creation here (see example for code)
-    refreshHUD = [[MBProgressHUD alloc] initWithView:self.view];
-    [self.view addSubview:refreshHUD];
     
-    // Register for HUD callbacks so we can remove it from the window at the right time
-    refreshHUD.delegate = self;
+    [SVProgressHUD show];
     
-    // Show the HUD while the provided method executes in a new thread
-    [refreshHUD show:YES];
     user = [PFUser currentUser];
     user[@"profilePictureSmall"] = imageFile;
     
@@ -386,22 +381,14 @@
         if (error) {
             NSLog(@"uploadImage_small: %@ %@", error, [error userInfo]);
         }
-        [refreshHUD removeFromSuperview];
+        [SVProgressHUD dismiss];
     }];
 }
 
 -(void)uploadImage_medium:(NSData *)imageData {
     PFFile *imageFile = [PFFile fileWithName:nil data:imageData];
     
-    //HUD creation here (see example for code)
-    refreshHUD = [[MBProgressHUD alloc] initWithView:self.view];
-    [self.view addSubview:refreshHUD];
-    
-    // Register for HUD callbacks so we can remove it from the window at the right time
-    refreshHUD.delegate = self;
-    
-    // Show the HUD while the provided method executes in a new thread
-    [refreshHUD show:YES];
+    [SVProgressHUD show];
     user = [PFUser currentUser];
     user[@"profilePictureMedium"] = imageFile;
     
@@ -411,7 +398,7 @@
         } else {
             NSLog(@"successful");
         }
-        [refreshHUD removeFromSuperview];
+        [SVProgressHUD dismiss];
     }];
 }
 
@@ -843,12 +830,6 @@
 
 -(void)dismissKeyboard {
     [self.view endEditing:YES];
-}
-
-- (void)hudWasHidden:(MBProgressHUD *)hud {
-    // Remove HUD from screen when the HUD hides
-    [HUD removeFromSuperview];
-    HUD = nil;
 }
 
 -(BOOL)NSStringIsValidEmail:(NSString *)checkString {
