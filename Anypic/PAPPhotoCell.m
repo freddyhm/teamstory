@@ -7,17 +7,17 @@
 #import "PAPPhotoCell.h"
 #import "PAPUtility.h"
 #import "PAPwebviewViewController.h"
+#import "PAPPhotoDetailsViewController.h"
 
 @implementation PAPPhotoCell
 @synthesize photoButton;
 @synthesize captionLabel;
 @synthesize caption;
 @synthesize backgroundView;
-@synthesize website;
 
 #pragma mark - NSObject
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier navigationController:(UINavigationController *)anavController{
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
  
     if (self) {
@@ -43,8 +43,6 @@
         layer.shouldRasterize = YES;
          */
         
-        self.navController = anavController;
-        
         self.backgroundView = [[UIView alloc] init];
         [self.backgroundView setBackgroundColor:[UIColor whiteColor]];
         [self.contentView addSubview:self.backgroundView];
@@ -62,7 +60,7 @@
         
         self.photoButton = [UIButton buttonWithType:UIButtonTypeCustom];
         self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 305.0f, 305.0f);
-        self.photoButton.backgroundColor = [UIColor blackColor];
+        self.photoButton.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:self.photoButton];
         
         [self.contentView bringSubviewToFront:self.imageView];
@@ -90,14 +88,12 @@
         self.backgroundView.frame = CGRectMake(7.5f, 0.0f, 305.0f, expectedSize.height + 25.0f);
         self.captionLabel.frame = CGRectMake(12.5f, 10.0f, 295.0f, expectedSize.height);
         self.imageView.frame = CGRectMake( 7.5f, expectedSize.height + 25.0f, 305.0f, 305.0f);
-        self.photoButton.frame = CGRectMake( 7.5f, expectedSize.height + 25.0f, 305.0f, 305.0f);
+        self.photoButton.frame = CGRectMake( 7.5f, 0.0, 305.0f, 330.0f + expectedSize.height);
         
         NSRange range = [self.caption rangeOfString:@"(?i)(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+" options:NSRegularExpressionSearch];
         
         NSMutableAttributedString *captionText = [[NSMutableAttributedString alloc] initWithString:self.caption];
         [captionText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
-        
-        self.website = [self.caption substringWithRange:range];
         
         [self.captionLabel setBackgroundColor:[UIColor clearColor]];
         [self.captionLabel setFont:[UIFont systemFontOfSize:13.0f]];
@@ -106,31 +102,12 @@
         [self.captionLabel setUserInteractionEnabled:YES];
         self.captionLabel.numberOfLines = 3;
         self.captionLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-        
-        if (range.length > 0) {
-            UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openUrl:)];
-            gestureRec.numberOfTouchesRequired = 1;
-            gestureRec.numberOfTapsRequired = 1;
-            [self.captionLabel addGestureRecognizer:gestureRec];
-        }
+
     } else {
         self.captionLabel.frame = CGRectMake(7.5f, 0.0f, 305.0f, 44.0f);
         self.imageView.frame = CGRectMake( 7.5f, 0.0f, 305.0f, 305.0f);
         self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 305.0f, 305.0f);
     }
-}
-
-- (void)openUrl:(id)sender {
-    if ([self.website rangeOfString:@"(?i)http" options:NSRegularExpressionSearch].location == NSNotFound) {
-        NSString *http = @"http://";
-        self.website = [NSString stringWithFormat:@"%@%@", http, self.website];
-    }
-    
-    //self.website = [self.website stringWithFormat:@"%@/%@/%@", ];
-    PAPwebviewViewController *webViewController = [[PAPwebviewViewController alloc] initWithWebsite:self.website];
-    webViewController.hidesBottomBarWhenPushed = YES;
-    [self.navController pushViewController:webViewController animated:YES];
-    
 }
 
 @end

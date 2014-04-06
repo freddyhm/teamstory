@@ -396,7 +396,7 @@ enum ActionSheetTags {
         PAPPhotoCell *cell = (PAPPhotoCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 
         if (cell == nil) {
-            cell = [[PAPPhotoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier navigationController:self.navigationController];
+            cell = [[PAPPhotoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             [cell.photoButton addTarget:self action:@selector(didTapOnPhotoAction:) forControlEvents:UIControlEventTouchUpInside];
         }
 
@@ -406,6 +406,7 @@ enum ActionSheetTags {
         if (object) {
             cell.imageView.file = [object objectForKey:kPAPPhotoPictureKey];
             cell.caption = [object objectForKey:@"caption"];
+
             // PFQTVC will take care of asynchronously downloading files, but will only load them when the tableview is not moving. If the data is there, let's load it right away.
             if ([cell.imageView.file isDataAvailable]) {
                 [cell.imageView loadInBackground:^(UIImage *image, NSError *error) {
