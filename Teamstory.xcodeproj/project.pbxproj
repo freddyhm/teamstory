@@ -76,6 +76,8 @@
 		462FCB8A188C863E005059F3 /* button_setting_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 462FCB88188C863E005059F3 /* button_setting_selected@2x.png */; };
 		462FCB8D188C8892005059F3 /* button_done_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 462FCB8B188C8892005059F3 /* button_done_selected.png */; };
 		462FCB8E188C8892005059F3 /* button_done_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 462FCB8C188C8892005059F3 /* button_done_selected@2x.png */; };
+		4639A76218F1C66D009D4824 /* top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4639A76018F1C66D009D4824 /* top@2x.png */; };
+		4639A76318F1C66D009D4824 /* top.png in Resources */ = {isa = PBXBuildFile; fileRef = 4639A76118F1C66D009D4824 /* top.png */; };
 		4639EFBF18B69DFC009D610B /* Default-568h@2x-old.png in Resources */ = {isa = PBXBuildFile; fileRef = 4639EFBD18B69DFC009D610B /* Default-568h@2x-old.png */; };
 		464A354D185A9F6C006E951E /* emailLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 464A354C185A9F6C006E951E /* emailLoginViewController.m */; };
 		465A4ED918A8222A00E43DC6 /* iconlocation.png in Resources */ = {isa = PBXBuildFile; fileRef = 465A4ED718A8222A00E43DC6 /* iconlocation.png */; };
@@ -465,6 +467,8 @@
 		462FCB88188C863E005059F3 /* button_setting_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_setting_selected@2x.png"; sourceTree = "<group>"; };
 		462FCB8B188C8892005059F3 /* button_done_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_done_selected.png; sourceTree = "<group>"; };
 		462FCB8C188C8892005059F3 /* button_done_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_done_selected@2x.png"; sourceTree = "<group>"; };
+		4639A76018F1C66D009D4824 /* top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "top@2x.png"; sourceTree = "<group>"; };
+		4639A76118F1C66D009D4824 /* top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = top.png; sourceTree = "<group>"; };
 		4639EFBD18B69DFC009D610B /* Default-568h@2x-old.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x-old.png"; sourceTree = "<group>"; };
 		464A354B185A9F6C006E951E /* emailLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = emailLoginViewController.h; path = Anypic/emailLoginViewController.h; sourceTree = SOURCE_ROOT; };
 		464A354C185A9F6C006E951E /* emailLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = emailLoginViewController.m; path = Anypic/emailLoginViewController.m; sourceTree = SOURCE_ROOT; };
@@ -1021,6 +1025,8 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				4639A76018F1C66D009D4824 /* top@2x.png */,
+				4639A76118F1C66D009D4824 /* top.png */,
 				46839E8018E1E8C100BD60DB /* bg-intro@2x.png */,
 				46839E8118E1E8C100BD60DB /* bg-login@2x.png */,
 				46839E8218E1E8C100BD60DB /* btn-back.png */,
@@ -1746,6 +1752,7 @@
 				D52C1E4218D9515D00625887 /* konotor_supportprofile@2x.png in Resources */,
 				462FCB8A188C863E005059F3 /* button_setting_selected@2x.png in Resources */,
 				465B19B518B81FE500EDBCFC /* browser-refresh.png in Resources */,
+				4639A76218F1C66D009D4824 /* top@2x.png in Resources */,
 				46B31EEE184E35150028D11C /* profileLocation.png in Resources */,
 				C4BE670D157FC7D000A291C2 /* Icon-72.png in Resources */,
 				C4BE670E157FC7D000A291C2 /* Icon-72@2x.png in Resources */,
@@ -1787,6 +1794,7 @@
 				D52C1E4118D9515D00625887 /* konotor_supportprofile.png in Resources */,
 				462FCB60188C6AE9005059F3 /* ProfileNavigationBar@2x.png in Resources */,
 				D52C1E2218D9515D00625887 /* KonotorConversationViewController.xib in Resources */,
+				4639A76318F1C66D009D4824 /* top.png in Resources */,
 				D5BFDEDB18CC84A5004FEC42 /* normal.png in Resources */,
 				4691B52418C56AAF00B7DF6A /* tnz-popup@2x.png in Resources */,
 				46839EA218E1E8C100BD60DB /* tut2.png in Resources */,

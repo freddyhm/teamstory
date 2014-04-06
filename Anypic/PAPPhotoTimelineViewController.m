@@ -10,6 +10,7 @@
 #import "PAPPhotoDetailsViewController.h"
 #import "PAPUtility.h"
 #import "PAPLoadMoreCell.h"
+#import "MBProgressHUD.h"
 
 @interface PAPPhotoTimelineViewController ()
 @property (nonatomic, assign) BOOL shouldReloadOnAppear;
@@ -18,6 +19,7 @@
 @property (nonatomic, strong) NSString *reported_user;
 @property (nonatomic, strong) NSString *photoID;
 @property (nonatomic, strong) PFObject *current_photo;
+@property (nonatomic, strong) MBProgressHUD *hud;
 @end
 
 @implementation PAPPhotoTimelineViewController
@@ -27,6 +29,7 @@
 @synthesize reported_user;
 @synthesize photoID;
 @synthesize current_photo;
+@synthesize hud;
 
 enum ActionSheetTags {
     MainActionSheetTag = 0,
@@ -80,7 +83,7 @@ enum ActionSheetTags {
     texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     self.tableView.backgroundView = texturedBackgroundView;
     [self.tableView setShowsVerticalScrollIndicator:NO];
-
+    
      // Create custom refresh control, bring to front, after table view
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     NSMutableAttributedString *refreshTitle = [[NSMutableAttributedString alloc] initWithString:@"Updating..."];
@@ -90,6 +93,8 @@ enum ActionSheetTags {
     [refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
     self.refreshControl = refreshControl;
     self.refreshControl.layer.zPosition = self.tableView.backgroundView.layer.zPosition + 1;
+    
+    
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidPublishPhoto:) name:PAPTabBarControllerDidFinishEditingPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userFollowingChanged:) name:PAPUtilityUserFollowingChangedNotification object:nil];
@@ -386,7 +391,6 @@ enum ActionSheetTags {
     if (indexPath.section == self.objects.count) {
         // this behavior is normally handled by PFQueryTableViewController, but we are using sections for each object and we must handle this ourselves
         UITableViewCell *cell = [self tableView:tableView cellForNextPageAtIndexPath:indexPath];
-        NSLog(@"this called");
         return cell;
     } else {
         PAPPhotoCell *cell = (PAPPhotoCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -404,7 +408,11 @@ enum ActionSheetTags {
             cell.caption = [object objectForKey:@"caption"];
             // PFQTVC will take care of asynchronously downloading files, but will only load them when the tableview is not moving. If the data is there, let's load it right away.
             if ([cell.imageView.file isDataAvailable]) {
-                [cell.imageView loadInBackground];
+                [cell.imageView loadInBackground:^(UIImage *image, NSError *error) {
+                    if (error) {
+                        NSLog(@"%@", error);
+                    }
+                }];
             }
         }
 
