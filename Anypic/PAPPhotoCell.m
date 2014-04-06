@@ -6,16 +6,18 @@
 
 #import "PAPPhotoCell.h"
 #import "PAPUtility.h"
+#import "PAPwebviewViewController.h"
 
 @implementation PAPPhotoCell
 @synthesize photoButton;
 @synthesize captionLabel;
 @synthesize caption;
 @synthesize backgroundView;
+@synthesize website;
 
 #pragma mark - NSObject
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier navigationController:(UINavigationController *)anavController{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
  
     if (self) {
@@ -40,6 +42,9 @@
         layer.shadowOffset = CGSizeMake( 0.0f, 1.0f);
         layer.shouldRasterize = YES;
          */
+        
+        self.navController = anavController;
+        
         self.backgroundView = [[UIView alloc] init];
         [self.backgroundView setBackgroundColor:[UIColor whiteColor]];
         [self.contentView addSubview:self.backgroundView];
@@ -87,17 +92,45 @@
         self.imageView.frame = CGRectMake( 7.5f, expectedSize.height + 25.0f, 305.0f, 305.0f);
         self.photoButton.frame = CGRectMake( 7.5f, expectedSize.height + 25.0f, 305.0f, 305.0f);
         
+        NSRange range = [self.caption rangeOfString:@"(?i)(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+" options:NSRegularExpressionSearch];
+        
+        NSMutableAttributedString *captionText = [[NSMutableAttributedString alloc] initWithString:self.caption];
+        [captionText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
+        
+        self.website = [self.caption substringWithRange:range];
+        
         [self.captionLabel setBackgroundColor:[UIColor clearColor]];
-        [self.captionLabel setText:self.caption];
         [self.captionLabel setFont:[UIFont systemFontOfSize:13.0f]];
         [self.captionLabel setTextColor:[UIColor colorWithWhite:0.6f alpha:1.0f]];
+        [self.captionLabel setAttributedText:captionText];
+        [self.captionLabel setUserInteractionEnabled:YES];
         self.captionLabel.numberOfLines = 3;
         self.captionLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+        
+        if (range.length > 0) {
+            UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openUrl:)];
+            gestureRec.numberOfTouchesRequired = 1;
+            gestureRec.numberOfTapsRequired = 1;
+            [self.captionLabel addGestureRecognizer:gestureRec];
+        }
     } else {
         self.captionLabel.frame = CGRectMake(7.5f, 0.0f, 305.0f, 44.0f);
         self.imageView.frame = CGRectMake( 7.5f, 0.0f, 305.0f, 305.0f);
         self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 305.0f, 305.0f);
     }
+}
+
+- (void)openUrl:(id)sender {
+    if ([self.website rangeOfString:@"(?i)http" options:NSRegularExpressionSearch].location == NSNotFound) {
+        NSString *http = @"http://";
+        self.website = [NSString stringWithFormat:@"%@%@", http, self.website];
+    }
+    
+    //self.website = [self.website stringWithFormat:@"%@/%@/%@", ];
+    PAPwebviewViewController *webViewController = [[PAPwebviewViewController alloc] initWithWebsite:self.website];
+    webViewController.hidesBottomBarWhenPushed = YES;
+    [self.navController pushViewController:webViewController animated:YES];
+    
 }
 
 @end

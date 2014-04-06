@@ -113,11 +113,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         CGSize expectedSize = [caption_local sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:maximumLabelSize];
         
         // Set table header
-        self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 351.0f + expectedSize.height + 43.0f) photo:self.photo description:caption_local];
+        self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 351.0f + expectedSize.height + 43.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
         self.headerView.delegate = self;
         self.tableView.tableHeaderView = self.headerView;
     } else {
-        self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:[PAPPhotoDetailsHeaderView rectForView] photo:self.photo description:nil];
+        self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:[PAPPhotoDetailsHeaderView rectForView] photo:self.photo description:nil navigationController:self.navigationController];
         self.headerView.delegate = self;
         self.tableView.tableHeaderView = self.headerView;
     }

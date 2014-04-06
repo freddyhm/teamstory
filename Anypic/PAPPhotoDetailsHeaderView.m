@@ -8,6 +8,7 @@
 #import "PAPProfileImageView.h"
 #import "TTTTimeIntervalFormatter.h"
 #import "MBProgressHUD.h"
+#import "PAPwebviewViewController.h"
 
 #define baseHorizontalOffset 7.5f
 #define baseWidth 305.0f
@@ -70,6 +71,8 @@ static CGSize expectedSize;
 @property (nonatomic, strong) UILabel *photoDescriptionLabel;
 @property (nonatomic, strong) NSString *description;
 @property (nonatomic, strong) MBProgressHUD *hud;
+@property (nonatomic, strong) NSString *website;
+@property (nonatomic, strong) UINavigationController *navController;
 
 // Redeclare for edit
 @property (nonatomic, strong, readwrite) PFUser *photographer;
@@ -97,10 +100,12 @@ static TTTTimeIntervalFormatter *timeFormatter;
 @synthesize photoDescriptionLabel;
 @synthesize description;
 @synthesize hud;
+@synthesize website;
+@synthesize navController;
 
 #pragma mark - NSObject
 
-- (id)initWithFrame:(CGRect)frame photo:(PFObject*)aPhoto description:(NSString *)adescription{
+- (id)initWithFrame:(CGRect)frame photo:(PFObject*)aPhoto description:(NSString *)adescription navigationController:(UINavigationController *)anavController{
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
@@ -112,6 +117,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.photographer = [self.photo objectForKey:kPAPPhotoUserKey];
         self.likeUsers = nil;
         
+        self.navController = anavController;
         self.description = adescription;
         
         self.backgroundColor = [UIColor clearColor];
@@ -229,12 +235,27 @@ static TTTTimeIntervalFormatter *timeFormatter;
     if ([self.description length] > 0) {
         CGSize maximumLabelSize = CGSizeMake(320.0f - baseHorizontalOffset * 4, 9999.0f);
         
+        NSRange range = [self.description rangeOfString:@"(?i)(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+" options:NSRegularExpressionSearch];
+        
+        NSMutableAttributedString *captionText = [[NSMutableAttributedString alloc] initWithString:self.description];
+        [captionText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
+        
+        self.website = [self.description substringWithRange:range];
+        
         self.photoDescriptionLabel = [[UILabel alloc] init];
-        self.photoDescriptionLabel.text = self.description;
         self.photoDescriptionLabel.backgroundColor = [UIColor clearColor];
         self.photoDescriptionLabel.numberOfLines = 0;
         self.photoDescriptionLabel.font = [UIFont systemFontOfSize:13.0f];
         self.photoDescriptionLabel.textColor = [UIColor colorWithWhite:0.6f alpha:1.0f];
+        self.photoDescriptionLabel.attributedText = captionText;
+        [self.photoDescriptionLabel setUserInteractionEnabled:YES];
+        
+        if (range.length > 0) {
+            UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openUrl:)];
+            gestureRec.numberOfTouchesRequired = 1;
+            gestureRec.numberOfTapsRequired = 1;
+            [self.photoDescriptionLabel addGestureRecognizer:gestureRec];
+        }
         
         expectedSize = [self.photoDescriptionLabel sizeThatFits:maximumLabelSize];
         
@@ -440,6 +461,19 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 + (CGRect)rectForView {
     return CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 394.0f);
+}
+
+- (void)openUrl:(id)sender {
+    if ([self.website rangeOfString:@"(?i)http" options:NSRegularExpressionSearch].location == NSNotFound) {
+        NSString *http = @"http://";
+        self.website = [NSString stringWithFormat:@"%@%@", http, self.website];
+    }
+    
+    //self.website = [self.website stringWithFormat:@"%@/%@/%@", ];
+    PAPwebviewViewController *webViewController = [[PAPwebviewViewController alloc] initWithWebsite:self.website];
+    webViewController.hidesBottomBarWhenPushed = YES;
+    [self.navController pushViewController:webViewController animated:YES];
+    
 }
 
 
