@@ -183,9 +183,11 @@
     NSMutableArray *photos = [[NSMutableArray alloc] init];
     
     for (NSString *channel in subscribedChannels) {
-        NSString *photoId = [channel substringFromIndex:2];
-        PFObject *pic = [PFObject objectWithoutDataWithClassName:@"Photo" objectId:photoId];
-        [photos addObject:pic];
+        if(![channel isEqualToString:@""]){
+            NSString *photoId = [channel substringFromIndex:2];
+            PFObject *pic = [PFObject objectWithoutDataWithClassName:@"Photo" objectId:photoId];
+            [photos addObject:pic];
+        }
     }
     
     
