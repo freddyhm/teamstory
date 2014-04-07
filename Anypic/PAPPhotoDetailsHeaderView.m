@@ -240,7 +240,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
         NSMutableAttributedString *captionText = [[NSMutableAttributedString alloc] initWithString:self.description];
         [captionText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
         
-        self.website = [self.description substringWithRange:range];
+        if (range.length > 0) {
+            self.website = [self.description substringWithRange:range];
+        }
         
         self.photoDescriptionLabel = [[UILabel alloc] init];
         self.photoDescriptionLabel.backgroundColor = [UIColor clearColor];
