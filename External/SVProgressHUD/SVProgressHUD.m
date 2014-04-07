@@ -29,8 +29,8 @@ static UIFont *SVProgressHUDFont;
 static UIImage *SVProgressHUDSuccessImage;
 static UIImage *SVProgressHUDErrorImage;
 
-static const CGFloat SVProgressHUDRingRadius = 18;
-static const CGFloat SVProgressHUDRingNoTextRadius = 24;
+static const CGFloat SVProgressHUDRingRadius = 9;
+static const CGFloat SVProgressHUDRingNoTextRadius = 12;
 static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
 
 @interface SVProgressHUD ()
@@ -204,7 +204,7 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
         self.activityCount = 0;
         
         SVProgressHUDBackgroundColor = [UIColor clearColor];
-        SVProgressHUDForegroundColor = [UIColor blackColor];
+        SVProgressHUDForegroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.60];
         SVProgressHUDFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
         SVProgressHUDSuccessImage = [[UIImage imageNamed:@"SVProgressHUD.bundle/success"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         SVProgressHUDErrorImage = [[UIImage imageNamed:@"SVProgressHUD.bundle/error"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
