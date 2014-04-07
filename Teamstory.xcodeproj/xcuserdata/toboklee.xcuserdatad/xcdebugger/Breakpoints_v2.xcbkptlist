@@ -389,7 +389,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "267"
             endingLineNumber = "267"
-            landmarkName = "-objectsDidLoad:"
+            landmarkName = "-tableView:cellForRowAtIndexPath:object:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

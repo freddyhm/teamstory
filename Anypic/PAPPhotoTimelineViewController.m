@@ -20,6 +20,7 @@
 @property (nonatomic, strong) NSString *photoID;
 @property (nonatomic, strong) PFObject *current_photo;
 @property (nonatomic, strong) MBProgressHUD *hud;
+@property int count;
 @end
 
 @implementation PAPPhotoTimelineViewController

@@ -249,11 +249,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 - (void)objectsDidLoad:(NSError *)error {
-    [super objectsDidLoad:error];
 
-    if (NSClassFromString(@"UIRefreshControl")) {
-        [self.refreshControl endRefreshing];
-    }
+    [super objectsDidLoad:error];
     [self.headerView reloadLikeBar];
     [self loadLikers];
     
