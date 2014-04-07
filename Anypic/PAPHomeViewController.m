@@ -27,13 +27,25 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
+    //self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
 
     // button image for feedback
     UIImageView *feedbackImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"button-feedback.png"]];
     UIBarButtonItem *promptTrigger = [[UIBarButtonItem alloc] initWithCustomView:feedbackImgView];
     feedbackImgView.userInteractionEnabled = YES;
     [feedbackImgView addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(promptFeedback:)]];
+    
+    UIView *navBarTitleView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 94.0f, 30.0f)];
+    [navBarTitleView setBackgroundColor:[UIColor clearColor]];
+    
+    UIButton *refresh_button = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 94.0f, 30.0f)];
+    [refresh_button addTarget:self action:@selector(userRefreshControl) forControlEvents:UIControlEventTouchUpInside];
+    [navBarTitleView addSubview:refresh_button];
+    
+    UIImageView *logoView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
+    [navBarTitleView addSubview:logoView];
+
+    self.navigationItem.titleView = navBarTitleView;
     
     self.navigationItem.rightBarButtonItem = promptTrigger;
 
@@ -46,6 +58,13 @@
     [button addTarget:self action:@selector(inviteFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.blankTimelineView addSubview:button];
      */
+}
+
+-(void)userRefreshControl{
+        NSLog(@"pressed");
+    
+    [self.tableView setContentOffset:CGPointMake(0.0f, -50.0f) animated:YES];
+    [self loadObjects];
 }
 
 -(void)viewWillAppear:(BOOL)animated{

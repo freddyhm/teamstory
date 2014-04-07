@@ -36,7 +36,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 @synthesize navController;
 
 
-- (id)initWithNavigationController:(UINavigationController *)navigationController {
+- (id)initWithNavigationController:(UINavigationController *)navigationController reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super init];
     if (self) {
         self.navController = navigationController;
@@ -141,7 +141,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
     [self.nameButton setFrame:CGRectMake(nameX, nameY, nameSize.width, nameSize.height)];
     
     // Layout the content
-    CGSize contentSize = [self.contentLabel.text sizeWithFont:[UIFont systemFontOfSize:13] constrainedToSize:CGSizeMake(horizontalTextSpace, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+    CGSize maximumLabelSize = CGSizeMake(horizontalTextSpace, 9999.0f);
+    CGSize contentSize = [self.contentLabel sizeThatFits:maximumLabelSize];
+    self.contentLabel.font = [UIFont systemFontOfSize:13.0f];
+    
     [self.contentLabel setFrame:CGRectMake(nameX, vertTextBorderSpacing, contentSize.width, contentSize.height)];
     
     // Layout the timestamp label
@@ -174,11 +177,12 @@ static TTTTimeIntervalFormatter *timeFormatter;
 /* Static helper to get the height for a cell if it had the given name, content and horizontal inset */
 + (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content cellInsetWidth:(CGFloat)cellInset {
     CGSize nameSize = [name sizeWithFont:[UIFont boldSystemFontOfSize:13] forWidth:nameMaxWidth lineBreakMode:NSLineBreakByTruncatingTail];
+    
     NSString *paddedString = [PAPBaseTextCell padString:content withFont:[UIFont systemFontOfSize:13] toWidth:nameSize.width];    
     CGFloat horizontalTextSpace = [PAPBaseTextCell horizontalTextSpaceForInsetWidth:cellInset];
    
     CGSize contentSize = [paddedString sizeWithFont:[UIFont systemFontOfSize:13] constrainedToSize:CGSizeMake(horizontalTextSpace, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
-    CGFloat singleLineHeight = [@"test" sizeWithFont:[UIFont systemFontOfSize:13]].height;
+    CGFloat singleLineHeight = [@"test" sizeWithFont:[UIFont systemFontOfSize:13.0f]].height;
     
     // Calculate the added height necessary for multiline text. Ensure value is not below 0.
     CGFloat multilineHeightAddition = (contentSize.height - singleLineHeight) > 0 ? (contentSize.height - singleLineHeight) : 0;
@@ -233,8 +237,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
         
         self.website = [paddedString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        
-        NSLog(@"%@", self.website);
 
         [self.contentLabel setAttributedText:commentText];
         [self.contentLabel setUserInteractionEnabled:YES];

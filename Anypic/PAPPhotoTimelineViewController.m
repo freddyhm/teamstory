@@ -10,6 +10,7 @@
 #import "PAPPhotoDetailsViewController.h"
 #import "PAPUtility.h"
 #import "PAPLoadMoreCell.h"
+#import "MBProgressHUD.h"
 
 @interface PAPPhotoTimelineViewController ()
 @property (nonatomic, assign) BOOL shouldReloadOnAppear;
@@ -18,6 +19,7 @@
 @property (nonatomic, strong) NSString *reported_user;
 @property (nonatomic, strong) NSString *photoID;
 @property (nonatomic, strong) PFObject *current_photo;
+@property (nonatomic, strong) MBProgressHUD *hud;
 @property int count;
 @end
 
@@ -28,6 +30,7 @@
 @synthesize reported_user;
 @synthesize photoID;
 @synthesize current_photo;
+@synthesize hud;
 
 enum ActionSheetTags {
     MainActionSheetTag = 0,
@@ -83,7 +86,7 @@ enum ActionSheetTags {
     texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     self.tableView.backgroundView = texturedBackgroundView;
     [self.tableView setShowsVerticalScrollIndicator:NO];
-
+    
      // Create custom refresh control, bring to front, after table view
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     NSMutableAttributedString *refreshTitle = [[NSMutableAttributedString alloc] initWithString:@"Updating..."];
@@ -93,6 +96,8 @@ enum ActionSheetTags {
     [refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
     self.refreshControl = refreshControl;
     self.refreshControl.layer.zPosition = self.tableView.backgroundView.layer.zPosition + 1;
+    
+    
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidPublishPhoto:) name:PAPTabBarControllerDidFinishEditingPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userFollowingChanged:) name:PAPUtilityUserFollowingChangedNotification object:nil];
@@ -215,7 +220,7 @@ enum ActionSheetTags {
                         if (headerView.tag != section) {
                             return;
                         }
-                        NSString *likeCount =[[[PAPCache sharedCache] likeCountForPhoto:photo] description];
+                        NSString *likeCount = [[[PAPCache sharedCache] likeCountForPhoto:photo] description];
                         
                         [headerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:photo]];
                         
@@ -266,7 +271,19 @@ enum ActionSheetTags {
         return 0.0f;
     }
     
-    return 305.0f;
+    NSString *caption = [[self.objects objectAtIndex:indexPath.section] objectForKey:@"caption"];
+    
+    if ([caption length] > 0) {
+        CGSize maximumLabelSize = CGSizeMake(295.0f, 9999.0f);
+        CGSize expectedSize = [caption sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:maximumLabelSize];
+        
+        if (expectedSize.height > 46.527f) {
+            expectedSize.height = 46.527f;
+        }
+        return 305.0f + expectedSize.height + 25.0f;
+    } else {
+        return 305.0f;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -291,7 +308,7 @@ enum ActionSheetTags {
         [query setLimit:0];
         return query;
     }
-    
+    /*
     PFQuery *followingActivitiesQuery = [PFQuery queryWithClassName:kPAPActivityClassKey];
     [followingActivitiesQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
     [followingActivitiesQuery whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
@@ -306,15 +323,17 @@ enum ActionSheetTags {
     [photosFromCurrentUserQuery whereKey:kPAPPhotoUserKey equalTo:[PFUser currentUser]];
     [photosFromCurrentUserQuery whereKeyExists:kPAPPhotoPictureKey];
 
-    /*
+    
     PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:photosFromFollowedUsersQuery, photosFromCurrentUserQuery, nil]];
     [query includeKey:kPAPPhotoUserKey];
     [query orderByDescending:@"createdAt"];
-     */
+          */
+    
+    
     PFQuery *query = [PFQuery queryWithClassName:kPAPPhotoClassKey];
     [query includeKey:kPAPPhotoUserKey];
     [query orderByDescending:@"createdAt"];
-
+    
     // A pull-to-refresh should always trigger a network request.
     [query setCachePolicy:kPFCachePolicyNetworkOnly];
 
@@ -326,8 +345,8 @@ enum ActionSheetTags {
     if (self.objects.count == 0 || ![[UIApplication sharedApplication].delegate performSelector:isParseReachableSelector]) {
         [query setCachePolicy:kPFCachePolicyCacheThenNetwork];
     }
-
-    /*
+     /*
+    
      This query will result in an error if the schema hasn't been set beforehand. While Parse usually handles this automatically, this is not the case for a compound query such as this one. The error thrown is:
      
      Error: bad special key: __type
@@ -389,10 +408,15 @@ enum ActionSheetTags {
         
         if (object) {
             cell.imageView.file = [object objectForKey:kPAPPhotoPictureKey];
-            
+            cell.caption = [object objectForKey:@"caption"];
+
             // PFQTVC will take care of asynchronously downloading files, but will only load them when the tableview is not moving. If the data is there, let's load it right away.
             if ([cell.imageView.file isDataAvailable]) {
-                [cell.imageView loadInBackground];
+                [cell.imageView loadInBackground:^(UIImage *image, NSError *error) {
+                    if (error) {
+                        NSLog(@"%@", error);
+                    }
+                }];
             }
         }
 

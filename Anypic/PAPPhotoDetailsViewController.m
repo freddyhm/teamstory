@@ -20,6 +20,7 @@ enum ActionSheetTags {
     deletePhoto = 2
 };
 
+
 @interface PAPPhotoDetailsViewController ()
 @property (nonatomic, strong) UITextField *commentTextField;
 @property (nonatomic, strong) PAPPhotoDetailsHeaderView *headerView;
@@ -28,7 +29,6 @@ enum ActionSheetTags {
 @property (nonatomic, strong) PFObject *current_photo;
 @property (nonatomic, strong) PFUser *reported_user;
 @property (nonatomic, strong) UITextView *commentTextView;
-@property (nonatomic, strong) UIView *footer_mainView;
 @property (nonatomic, strong) PAPPhotoDetailsFooterView *footerView;
 @property (nonatomic, strong) NSString *source;
 @end
@@ -43,9 +43,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 @synthesize current_photo;
 @synthesize reported_user;
 @synthesize commentTextView;
-@synthesize footer_mainView;
 @synthesize footerView;
-
 
 
 #pragma mark - Initialization
@@ -76,6 +74,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
+}
+
 
 #pragma mark - UIViewController
 
@@ -100,17 +102,29 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     self.tableView.backgroundView = texturedBackgroundView;
     
-    // Set table header
-    self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:[PAPPhotoDetailsHeaderView rectForView] photo:self.photo];
-    self.headerView.delegate = self;
+    NSString *caption_local = [self.photo objectForKey:@"caption"];
     
-    self.tableView.tableHeaderView = self.headerView;
+    if ([caption_local length] > 0) {
+        CGSize maximumLabelSize = CGSizeMake(320.0f - 7.5f * 4, 9999.0f);
+        CGSize expectedSize = [caption_local sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:maximumLabelSize];
+        
+        // Set table header
+        self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 351.0f + expectedSize.height + 43.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
+        self.headerView.delegate = self;
+        self.tableView.tableHeaderView = self.headerView;
+    } else {
+        self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:[PAPPhotoDetailsHeaderView rectForView] photo:self.photo description:nil navigationController:self.navigationController];
+        self.headerView.delegate = self;
+        self.tableView.tableHeaderView = self.headerView;
+    }
+    
     
     // Set table footer
-    footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:[PAPPhotoDetailsFooterView rectForView]];
+    
+    self.footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:[PAPPhotoDetailsFooterView rectForView]];
     commentTextView = footerView.commentView;
     commentTextView.delegate = self;
-    self.tableView.tableFooterView = footerView;
+    self.tableView.tableFooterView = self.footerView;
     
 
     /*
@@ -157,6 +171,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 }
 
+- (void)createOutstandingViews {
+    
+}
+
 -(void)dismissKeyboard {
     [self.view endEditing:YES];
 }
@@ -195,14 +213,14 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 nameString = [commentAuthor objectForKey:kPAPUserDisplayNameKey];
             }
             
-            return [PAPActivityCell heightForCellWithName:nameString contentString:commentString cellInsetWidth:kPAPCellInsetWidth];
+            return [PAPBaseTextCell heightForCellWithName:nameString contentString:commentString cellInsetWidth:kPAPCellInsetWidth];
+            
         }
     }
     
     // The pagination row
     return 44.0f;
 }
-
 
 #pragma mark - PFQueryTableViewController
 //#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
@@ -212,7 +230,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [query whereKey:kPAPActivityPhotoKey equalTo:self.photo];
     [query includeKey:kPAPActivityFromUserKey];
     [query whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeComment];
-    [query orderByAscending:@"createdAt"]; 
+    [query orderByAscending:@"createdAt"];
 
     [query setCachePolicy:kPFCachePolicyNetworkOnly];
 
@@ -243,12 +261,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
     static NSString *cellID = @"CommentCell";
-
     // Try to dequeue a cell and create one if necessary
     PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (cell == nil) {
         //cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-        cell = [[PAPBaseTextCell alloc] initWithNavigationController:self.navigationController];
+        cell = [[PAPBaseTextCell alloc] initWithNavigationController:self.navigationController reuseIdentifier:(NSString *)cellID];
         cell.cellInsetWidth = kPAPCellInsetWidth;
         cell.delegate = self;
     }
@@ -256,9 +273,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [cell setUser:[object objectForKey:kPAPActivityFromUserKey]];
     [cell setContentText:[object objectForKey:kPAPActivityContentKey]];
     [cell setDate:[object createdAt]];
-
     return cell;
 }
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForNextPageAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"NextPage";
@@ -273,6 +290,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     return cell;
 }
+
 
 /*
 #pragma mark - UITextFieldDelegate
@@ -573,7 +591,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                     break;
             }
             
-            NSLog(@"%@", kPAPPhotoClassKey);
+            //NSLog(@"%@", kPAPPhotoClassKey);
             
             MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
             mc.mailComposeDelegate = self;
