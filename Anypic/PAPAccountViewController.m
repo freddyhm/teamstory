@@ -61,12 +61,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    if (NSClassFromString(@"UIRefreshControl")) {
-        self.pullToRefreshEnabled = YES;
-    } else {
-        self.pullToRefreshEnabled = NO;
-    }
-    
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = refreshControl;
+
     if (!self.user) {
         [NSException raise:NSInvalidArgumentException format:@"user cannot be nil"];
     }
@@ -446,6 +444,11 @@
     
     //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"unfollow.png"] style:UIBarButtonItemStylePlain target:self action:@selector(unfollowButtonAction:)];
     [[PAPCache sharedCache] setFollowStatus:YES user:self.user];
+}
+
+- (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl {
+    [self.refreshControl endRefreshing];
+    self.tableView.scrollEnabled = YES;
 }
 
 @end

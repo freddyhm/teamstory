@@ -11,6 +11,7 @@
 #import "Konotor.h"
 #import "KonotorEventHandler.h"
 #import "Reachability.h"
+#import "SVProgressHUD.h"
 #import "MBProgressHUD.h"
 #import "PAPHomeViewController.h"
 #import "PAPLogInViewController.h"
@@ -46,6 +47,7 @@
 
 
 @property (nonatomic, strong) MBProgressHUD *hud;
+
 @property (nonatomic, strong) NSTimer *autoFollowTimer;
 @property BOOL isKonotor;
 @property NSNumber *konotorCount;
@@ -75,7 +77,6 @@
 @synthesize emailoginviewcontroller;
 @synthesize discoverViewController;
 
-@synthesize hud;
 @synthesize autoFollowTimer;
 
 @synthesize hostReach;
@@ -315,9 +316,12 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 - (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
     // user has logged in - we need to fetch all of their Facebook data before we let them in
     if (![self shouldProceedToMainInterface:user]) {
-        self.hud = [MBProgressHUD showHUDAddedTo:self.navController.view animated:YES];
-        self.hud.labelText = NSLocalizedString(@"Loading", nil);
-        self.hud.dimBackground = YES;
+        
+        [SVProgressHUD  setBackgroundColor:[UIColor clearColor]];
+        [SVProgressHUD showWithStatus:NSLocalizedString(@"Loading", nil)];
+        //self.hud = [MBProgressHUD showHUDAddedTo:self.navController.view animated:YES];
+        //self.hud.labelText = NSLocalizedString(@"Loading", nil);
+        //self.hud.dimBackground = YES;
     }
     
     NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];

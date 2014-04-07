@@ -5,6 +5,7 @@
 //
 
 #import "PAPWelcomeViewController.h"
+#import "SVProgressHUD.h"
 #import "AppDelegate.h"
 #import "PAPProfileSettingViewController.h"
 #import "PAPLoginTutorialViewController.h"
@@ -33,7 +34,6 @@
 
     // Show spinning indicator while user is being refreshed
     [SVProgressHUD show];
-    
     [user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         
         // hide indicator

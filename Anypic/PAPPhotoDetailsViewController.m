@@ -711,6 +711,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 - (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl {
-    [self loadObjects];
+    [self.refreshControl endRefreshing];
+    self.tableView.scrollEnabled = YES;
 }
 @end
