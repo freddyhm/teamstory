@@ -128,16 +128,10 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     // Konotor setup
     [Konotor InitWithAppID:KONOTOR_APP_ID AppKey:KONOTOR_APP_KEY withDelegate:[KonotorEventHandler sharedInstance]];
     
-    self.konotorCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
-    
     //[Konotor setUnreadWelcomeMessage:@"Welcome to Teamstory! How can we make your experience more kickass?"];
     
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
      (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-    
-    [self.window makeKeyAndVisible]; // or similar code to set a visible view
-    
-
     
     
     // ****************************************************************************
@@ -278,6 +272,8 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
             [KonotorFeedbackScreen showFeedbackScreen];
              self.konotorCount = 0;
         }else{
+            
+            // check if tab controllers and activity tab exist
             if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
                 
                 UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
@@ -289,10 +285,11 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
                 // get current selected tab
                 NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
                 
-                // current view is activity so manually notify activity
+                // notify activity controller of new notification (didreceivenot. is not called from background)
+                [self.activityViewController notificationSetup:(int)application.applicationIconBadgeNumber source:@"background"];
+                
+                // current view is activity, clear the badge
                 if(selectedtabIndex == PAPActivityTabBarItemIndex){
-                    
-                    [self.activityViewController notificationSetup];
                     [self.activityViewController setActivityBadge:nil];
                 }
             }
@@ -477,6 +474,21 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     NSURL *profilePictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large", [[PFUser currentUser] objectForKey:kPAPUserFacebookIDKey]]];
     NSURLRequest *profilePictureURLRequest = [NSURLRequest requestWithURL:profilePictureURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.0f]; // Facebook profile picture cache policy: Expires in 2 weeks
     [NSURLConnection connectionWithRequest:profilePictureURLRequest delegate:self];
+    
+    // syncs icon badge with tab bar badge if value is not 0 and controllers present (only on launch)
+    if ([UIApplication sharedApplication].applicationIconBadgeNumber != 0) {
+        if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
+            
+            UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
+            
+            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+            NSNumber *newBadgeValue = [NSNumber numberWithInteger:[UIApplication sharedApplication].applicationIconBadgeNumber];
+            tabBarItem.badgeValue = [numberFormatter stringFromNumber:newBadgeValue];
+            
+            // notify activity of new notification (didreceivenot. is not called in launch)
+            [self.activityViewController notificationSetup:(int)[UIApplication sharedApplication].applicationIconBadgeNumber source:@"launch"];
+        }
+    }
 }
 
 - (void)logOut {
@@ -569,6 +581,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     if (remoteNotificationPayload) {
         
         NSString *notificationSource = [userInfo objectForKey:@"source"];
+        NSString *typeOfNotification = [userInfo objectForKey:@"t"];
         
         if([notificationSource isEqualToString:@"konotor"]){
             self.isKonotor = YES;
@@ -580,18 +593,15 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
         }
         
         // call activity notification setup and reset badges
-        [self.activityViewController loadObjects];
+        [self.activityViewController notificationSetup:(int)[UIApplication sharedApplication].applicationIconBadgeNumber source:@"notification background"];
         [self.activityViewController setActivityBadge:nil];
         
+    
         // If the push notification payload references a photo, we will attempt to push this view controller into view
         NSString *photoObjectId = [remoteNotificationPayload objectForKey:kPAPPushPayloadPhotoObjectIdKey];
         if (photoObjectId && photoObjectId.length > 0) {
             
-            // mark first message as read and save in user defaults
-            [self.activityViewController.readList replaceObjectAtIndex:0 withObject:@"read"];
-            [[NSUserDefaults standardUserDefaults] setObject:self.activityViewController.readList forKey:@"readList"];
-            
-            [self shouldNavigateToPhoto:[PFObject objectWithoutDataWithClassName:kPAPPhotoClassKey objectId:photoObjectId]];
+            [self shouldNavigateToPhoto:[PFObject objectWithoutDataWithClassName:kPAPPhotoClassKey objectId:photoObjectId] notificationType:typeOfNotification];
             return;
         }
         
@@ -602,10 +612,6 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
             query.cachePolicy = kPFCachePolicyCacheElseNetwork;
             [query getObjectInBackgroundWithId:fromObjectId block:^(PFObject *user, NSError *error) {
                 if (!error) {
-                    
-                    // mark first message as read and save in user defaults
-                    [self.activityViewController.readList replaceObjectAtIndex:0 withObject:@"read"];
-                    [[NSUserDefaults standardUserDefaults] setObject:self.activityViewController.readList forKey:@"readList"];
                     
                     UINavigationController *homeNavigationController = self.tabBarController.viewControllers[PAPHomeTabBarItemIndex];
                     self.tabBarController.selectedViewController = homeNavigationController;
@@ -656,7 +662,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
         if ([[url fragment] rangeOfString:@"^pic/[A-Za-z0-9]{10}$" options:NSRegularExpressionSearch].location != NSNotFound) {
             NSString *photoObjectId = [[url fragment] substringWithRange:NSMakeRange(4, 10)];
             if (photoObjectId && photoObjectId.length > 0) {
-                [self shouldNavigateToPhoto:[PFObject objectWithoutDataWithClassName:kPAPPhotoClassKey objectId:photoObjectId]];
+                [self shouldNavigateToPhoto:[PFObject objectWithoutDataWithClassName:kPAPPhotoClassKey objectId:photoObjectId] notificationType:nil];
                 return YES;
             }
         }
@@ -683,7 +689,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     }
 }
 
-- (void)shouldNavigateToPhoto:(PFObject *)targetPhoto {
+- (void)shouldNavigateToPhoto:(PFObject *)targetPhoto notificationType:(NSString *)type {
     
     // get photo from objects in homeviewcontroller
     NSArray *homeObjects = self.homeViewController.objects;
@@ -699,9 +705,17 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     [targetPhoto fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if (!error) {
             UINavigationController *homeNavigationController = [[self.tabBarController viewControllers] objectAtIndex:PAPHomeTabBarItemIndex];
+    
             [self.tabBarController setSelectedViewController:homeNavigationController];
             
-            PAPPhotoDetailsViewController *detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object];
+            PAPPhotoDetailsViewController *detailViewController;
+            
+            if([type isEqualToString:kPAPActivityTypeComment]){
+                detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notificationComment"];
+            }else{
+                detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notification"];
+            }
+           
             [homeNavigationController pushViewController:detailViewController animated:YES];
         }
     }];

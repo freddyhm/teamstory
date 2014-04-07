@@ -67,6 +67,8 @@ enum ActionSheetTags {
         self.reusableSectionHeaderViews = [NSMutableSet setWithCapacity:3];
         
         self.shouldReloadOnAppear = NO;
+        
+        self.count = 0;
     }
     return self;
 }
@@ -265,7 +267,7 @@ enum ActionSheetTags {
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section >= self.objects.count) {
         // Load More Section
-        return 44.0f;
+        return 0.0f;
     }
     
     NSString *caption = [[self.objects objectAtIndex:indexPath.section] objectForKey:@"caption"];
@@ -683,7 +685,7 @@ enum ActionSheetTags {
 }
 
 - (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapCommentOnPhotoButton:(UIButton *)button  photo:(PFObject *)photo {
-    PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo];
+    PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"commentButton"];
     [self.navigationController pushViewController:photoDetailsVC animated:YES];
 }
 
@@ -702,8 +704,10 @@ enum ActionSheetTags {
 }
 
 - (void)userDidLikeOrUnlikePhoto:(NSNotification *)note {
+    
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
+    [self.tableView reloadData];
 }
 
 - (void)userDidCommentOnPhoto:(NSNotification *)note {
@@ -713,6 +717,7 @@ enum ActionSheetTags {
     
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
+    [self.tableView reloadData];
 }
 
 - (void)userDidDeletePhoto:(NSNotification *)note {
@@ -748,7 +753,7 @@ enum ActionSheetTags {
     
     PFObject *photo = [self.objects objectAtIndex:sender.tag];
     if (photo) {
-        PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo];
+        PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
         [self.navigationController pushViewController:photoDetailsVC animated:YES];
     }
 }

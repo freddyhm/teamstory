@@ -32,12 +32,12 @@
     }
 
     // Show spinning indicator while user is being refreshed
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [SVProgressHUD show];
     
     [user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         
         // hide indicator
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [SVProgressHUD dismiss];
         
         if(!error){
             NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
@@ -52,6 +52,10 @@
                 [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBarController];
             } else {
                 if (user && profileExist != YES) {
+                    
+                    // analytics
+                    [PAPUtility captureScreenGA:@"New Profile"];
+                    
                     PAPProfileSettingViewController *profileViewController = [[PAPProfileSettingViewController alloc] init];
                     self.navigationController.navigationBarHidden = YES;
                     [self.navigationController pushViewController:profileViewController animated:NO];

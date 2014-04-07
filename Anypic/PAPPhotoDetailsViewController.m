@@ -12,7 +12,7 @@
 #import "PAPAccountViewController.h"
 #import "PAPLoadMoreCell.h"
 #import "PAPUtility.h"
-#import "MBProgressHUD.h"
+#import "SVProgressHUD.h"
 
 enum ActionSheetTags {
     MainActionSheetTag = 0,
@@ -30,6 +30,7 @@ enum ActionSheetTags {
 @property (nonatomic, strong) PFUser *reported_user;
 @property (nonatomic, strong) UITextView *commentTextView;
 @property (nonatomic, strong) PAPPhotoDetailsFooterView *footerView;
+@property (nonatomic, strong) NSString *source;
 @end
 
 static const CGFloat kPAPCellInsetWidth = 7.5f;
@@ -52,19 +53,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:self.photo];
 }
 
-- (id)initWithPhoto:(PFObject *)aPhoto {
+- (id)initWithPhoto:(PFObject *)aPhoto source:(NSString *)source{
     self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
         // The className to query on
         self.parseClassName = kPAPActivityClassKey;
-
-        // Whether the built-in pull-to-refresh is enabled
-        if (NSClassFromString(@"UIRefreshControl")) {
-            self.pullToRefreshEnabled = NO;
-        } else {
-            self.pullToRefreshEnabled = YES;
-        }
-
+        
         // Whether the built-in pagination is enabled
         self.paginationEnabled = YES;
         
@@ -74,6 +68,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         self.photo = aPhoto;
         
         self.likersQueryInProgress = NO;
+        
+        self.source = source;
     }
     return self;
 }
@@ -163,16 +159,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
      */
     
-    
-    if (NSClassFromString(@"UIRefreshControl")) {
-        // Use the new iOS 6 refresh control.
-        UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-        self.refreshControl = refreshControl;
-        self.refreshControl.tintColor = [UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:1.0f];
-        [self.refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
-        self.pullToRefreshEnabled = NO;
-    }
-    
     // Register to be notified when the keyboard will be shown to scroll the view
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLikedOrUnlikedPhoto:) name:PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:self.photo];
@@ -182,6 +168,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                                           action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tapOutside];
+
 }
 
 - (void)createOutstandingViews {
@@ -202,6 +189,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     BOOL hasCachedLikers = [[PAPCache sharedCache] attributesForPhoto:self.photo] != nil;
     if (!hasCachedLikers) {
         [self loadLikers];
+    }
+    
+    if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] ||[self.source isEqual:@"activityComment"])){
+        [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height + 44)];
     }
 }
 
@@ -265,6 +256,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
     [self.headerView reloadLikeBar];
     [self loadLikers];
+    
+    if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] ||[self.source isEqual:@"activityComment"])){
+        [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height + 44)];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
@@ -380,7 +375,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             [[PAPCache sharedCache] incrementCommentCountForPhoto:self.photo];
             
             // Show HUD view
-            [MBProgressHUD showHUDAddedTo:self.view.superview animated:YES];
+            [SVProgressHUD show];
             
             // If more than 5 seconds pass since we post a comment, stop waiting for the server to respond
             NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(handleCommentTimeout:) userInfo:@{@"comment": comment} repeats:NO];
@@ -397,7 +392,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:self.photo userInfo:@{@"comments": @(self.objects.count + 1)}];
                 
-                [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+                [SVProgressHUD dismiss];
                 [self loadObjects];
                 
                 // suscribe to post if commenter is not photo owner
@@ -651,7 +646,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 
 - (void)handleCommentTimeout:(NSTimer *)aTimer {
-    [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+    [SVProgressHUD dismiss];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"New Comment", nil) message:NSLocalizedString(@"Your comment will be posted next time there is an Internet connection.", nil)  delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Dismiss", nil), nil];
     [alert show];
 }
@@ -663,10 +658,13 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 - (void)backButtonAction:(id)sender {
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)userLikedOrUnlikedPhoto:(NSNotification *)note {
+    
+
     [self.headerView reloadLikeBar];
 }
 
