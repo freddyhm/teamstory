@@ -367,8 +367,6 @@
 		D59B998E18C5A902002D6EFE /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D59B998B18C5A902002D6EFE /* Default-568h@2x.png */; };
 		D5A5F51E18D2C3C1000BB243 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A5F51D18D2C3C1000BB243 /* FacebookSDK.framework */; };
 		D5A5F52018D2C3CD000BB243 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A5F51F18D2C3CD000BB243 /* Parse.framework */; };
-		D5BDAA6D18EFBF310082BE2A /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D5BDAA6A18EFBF310082BE2A /* SVProgressHUD.bundle */; };
-		D5BDAA6E18EFBF310082BE2A /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = D5BDAA6C18EFBF310082BE2A /* SVProgressHUD.m */; };
 		D5BFDED518CC84A5004FEC42 /* la.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDEC718CC84A4004FEC42 /* la.png */; };
 		D5BFDED618CC84A5004FEC42 /* la@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDEC818CC84A4004FEC42 /* la@2x.png */; };
 		D5BFDED718CC84A5004FEC42 /* london.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDEC918CC84A4004FEC42 /* london.png */; };
@@ -834,10 +832,6 @@
 		D59B998B18C5A902002D6EFE /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		D5A5F51D18D2C3C1000BB243 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = External/FacebookSDK.framework; sourceTree = "<group>"; };
 		D5A5F51F18D2C3CD000BB243 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = External/Parse.framework; sourceTree = "<group>"; };
-		D5BDAA6918EFBF310082BE2A /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
-		D5BDAA6A18EFBF310082BE2A /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
-		D5BDAA6B18EFBF310082BE2A /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
-		D5BDAA6C18EFBF310082BE2A /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
 		D5BFDEC718CC84A4004FEC42 /* la.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = la.png; sourceTree = "<group>"; };
 		D5BFDEC818CC84A4004FEC42 /* la@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "la@2x.png"; sourceTree = "<group>"; };
 		D5BFDEC918CC84A4004FEC42 /* london.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = london.png; sourceTree = "<group>"; };
@@ -1376,8 +1370,6 @@
 		C4A0B4FF156C5B9F00E48554 /* External */ = {
 			isa = PBXGroup;
 			children = (
-
-
 				D594C1FF18EFEBAD0008F5DF /* SVProgressHUD */,
 				D51C989A18E28D16001230DA /* GoogleAnalytics */,
 				D51C988818E26EB6001230DA /* CloudCode */,
@@ -1666,7 +1658,6 @@
 			path = KonotorImageResources;
 			sourceTree = "<group>";
 		};
-
 		D594C1FF18EFEBAD0008F5DF /* SVProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
@@ -2179,7 +2170,7 @@
 				BUNDLE_DISPLAY_NAME_SUFFIX = "∆";
 				BUNDLE_ID_SUFFIX = .dev;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				FACBEOOK_URL_TYPE = fb290587851092940;
@@ -2207,7 +2198,7 @@
 					"$(PROJECT_DIR)/External/GoogleAnalytics",
 				);
 				PRODUCT_NAME = Teamstory;
-				PROVISIONING_PROFILE = "B38BC28B-349C-4348-BB9E-4027E28B0D4A";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2219,7 +2210,7 @@
 				BUNDLE_DISPLAY_NAME_SUFFIX = "";
 				BUNDLE_ID_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FACBEOOK_URL_TYPE = fb533792813373044;
@@ -2242,7 +2233,7 @@
 					"$(PROJECT_DIR)/External/GoogleAnalytics",
 				);
 				PRODUCT_NAME = Teamstory;
-				PROVISIONING_PROFILE = "90F3A78C-691F-40FC-8116-9D8528892DB2";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
@@ -2281,7 +2272,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_DISPLAY_NAME_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FACBEOOK_URL_TYPE = "";
@@ -2305,7 +2296,7 @@
 					"$(PROJECT_DIR)/External/GoogleAnalytics",
 				);
 				PRODUCT_NAME = Teamstory;
-				PROVISIONING_PROFILE = "C2074B26-2861-4D0A-A0FB-067DF2A3886A";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
@@ -2345,7 +2336,7 @@
 				BUNDLE_DISPLAY_NAME_SUFFIX = "";
 				BUNDLE_ID_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FACBEOOK_URL_TYPE = "";
@@ -2369,7 +2360,7 @@
 					"$(PROJECT_DIR)/External/GoogleAnalytics",
 				);
 				PRODUCT_NAME = Teamstory;
-				PROVISIONING_PROFILE = "C2074B26-2861-4D0A-A0FB-067DF2A3886A";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;

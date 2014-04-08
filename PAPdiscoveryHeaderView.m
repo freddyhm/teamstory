@@ -32,29 +32,24 @@
     self = [super initWithFrame:frame];
     if (self) {
         UIScrollView *headerScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 100.0f)];
-        [headerScrollView setContentSize:CGSizeMake(655.0f, 36.0f)];
+        [headerScrollView setContentSize:CGSizeMake(525.0f, 36.0f)];
         
         UIButton *newsButton_1 = [[UIButton alloc] initWithFrame:CGRectMake(5.0f, 5.0f, 125.0f, 90.0f)];
         [newsButton_1 setImage:[UIImage imageNamed:@"news1.png"] forState:UIControlStateNormal];
         [newsButton_1 addTarget:self action:@selector(newsButton_1_action:) forControlEvents:UIControlEventTouchUpInside];
         [headerScrollView addSubview:newsButton_1];
         
-        UIButton *newsButton_2 = [[UIButton alloc] initWithFrame:CGRectMake(135.0f, 5.0f, 125.0f, 90.0f)];
-        [newsButton_2 setImage:[UIImage imageNamed:@"news2.png"] forState:UIControlStateNormal];
-        [newsButton_2 addTarget:self action:@selector(newsButton_2_action:) forControlEvents:UIControlEventTouchUpInside];
-        [headerScrollView addSubview:newsButton_2];
-        
-        UIButton *newsButton_3 = [[UIButton alloc] initWithFrame:CGRectMake(265.0f, 5.0f, 125.0f, 90.0f)];
+        UIButton *newsButton_3 = [[UIButton alloc] initWithFrame:CGRectMake(135.0f, 5.0f, 125.0f, 90.0f)];
         [newsButton_3 setImage:[UIImage imageNamed:@"news3.png"] forState:UIControlStateNormal];
         [newsButton_3 addTarget:self action:@selector(newsButton_3_action:) forControlEvents:UIControlEventTouchUpInside];
         [headerScrollView addSubview:newsButton_3];
         
-        UIButton *newsButton_4 = [[UIButton alloc] initWithFrame:CGRectMake(395.0f, 5.0f, 125.0f, 90.0f)];
+        UIButton *newsButton_4 = [[UIButton alloc] initWithFrame:CGRectMake(265.0f, 5.0f, 125.0f, 90.0f)];
         [newsButton_4 setImage:[UIImage imageNamed:@"news4.png"] forState:UIControlStateNormal];
         [newsButton_4 addTarget:self action:@selector(newsButton_4_action:) forControlEvents:UIControlEventTouchUpInside];
         [headerScrollView addSubview:newsButton_4];
         
-        UIButton *newsButton_5 = [[UIButton alloc] initWithFrame:CGRectMake(525.0f, 5.0f, 125.0f, 90.0f)];
+        UIButton *newsButton_5 = [[UIButton alloc] initWithFrame:CGRectMake(395.0f, 5.0f, 125.0f, 90.0f)];
         [newsButton_5 setImage:[UIImage imageNamed:@"news5.png"] forState:UIControlStateNormal];
         [newsButton_5 addTarget:self action:@selector(newsButton_5_action:) forControlEvents:UIControlEventTouchUpInside];
         [headerScrollView addSubview:newsButton_5];
@@ -152,7 +147,7 @@
      */
     float padding_x = 15.0f;
     
-    update_text = @"Version 1.0\nWelcome to Teamstory!\n\nTeamstory is a picture-based community for all startups and entrepreneurs around the world. We’re building this community so that we can all capture, share and discover like-minded people and moments throughout our entrepreneurial journeys.\n\nThinking of starting a project? Launching your product? Having a company party? or going to a startup event? Don’t be shy and start capturing your moments. This is a place to show who you really are. Your moments, people, culture and journey.\n\nSo go ahead, start your teamstory.";
+    update_text = @"Version 1.1.5\n\nWelcome to Teamstory!\nThe crew is working real hard to push out awesome features and squashing bugs. Here's what we did for our latest versions 1.1 & 1.1.5:\n\n-New intro flow\n-Invitation system set up\n-Enabled notification for post followers\n-Fixed 'like' numbers\n-Enabled links for 'http://'; in comments\n-Added pull-to-refresh indicator\n-Updated feedback system\n-New read/unread activity notice\n-Descriptions for photos on the timeline\n-Go to top button\n\n\nHope you are enjoying Teamstory!\nPlease stay tuned for more!";
     [self dimbackground];
     
     self.content_overlay = [[UIView alloc] initWithFrame:CGRectMake(padding_x, 80.0f, [UIScreen mainScreen].bounds.size.width - padding_x * 2, 370.0f)];
