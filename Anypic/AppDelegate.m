@@ -25,6 +25,7 @@
 #import "PAPLoginSelectionViewController.h"
 #import "PAPLoginTutorialViewController.h"
 #import "PAPprofileApprovalViewController.h"
+#import <Crashlytics/Crashlytics.h>
 
 
 
@@ -143,6 +144,8 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
                                    consumerSecret:TWITTER_SECRET];
     // ****************************************************************************
     
+   // [Crashlytics startWithAPIKey:@"9075de9af4f252529090970cd8c2f7e426771d92"];
+    
     // Track app open
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
 
@@ -165,6 +168,8 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     self.window.rootViewController = self.navController;
     
     [self.window makeKeyAndVisible];
+    
+
     
     // handle push notifications
     [self handlePush:launchOptions userInfo:nil source:@"launch"];
