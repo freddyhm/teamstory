@@ -8,6 +8,7 @@
 #import "AppDelegate.h"
 #import "UIImage+ResizeAdditions.h"
 #import "PAPprofileApprovalViewController.h"
+#import "SVProgressHUD.h"
 
 #define SUCCESSFUL 1
 #define IMAGE_NIL 2
@@ -72,6 +73,10 @@
 }
 
 - (void)refreshView {
+    [self.navigationItem setHidesBackButton:YES];
+    
+    [SVProgressHUD show];
+    
     NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
     bool profileExist = [profilExist_num boolValue];
     
@@ -80,85 +85,11 @@
     UIColor *lineColor = [UIColor colorWithWhite:245.0f/255.0f alpha:1.0];
     UIFont *fonts = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     
-    [self.user refresh];
-    location_user = self.user[@"location"];
-    website_user = self.user[@"website"];
-    displayName_user = self.user[@"displayName"];
-    description_user = self.user[@"description"];
-    email_user = self.user[@"email"];
-    imageProfileFile = [self.user objectForKey:@"profilePictureMedium"];
-    
-    if ([location_user length] == 0) {
-        location_user = @"Location";
-    }
-    if ([website_user length] == 0) {
-        website_user = @"Website";
-    }
-    if ([displayName_user length] == 0) {
-        displayName_user = @"Display Name";
-    }
-    if ([description_user length] == 0) {
-        description_user = @"Description";
-    }
-
-    
     backgroundView = [[UIView alloc] init];
     [backgroundView setBackgroundColor:backgroundColor];
     [self.view addSubview:backgroundView];
-    UIButton *profileImagePicker = [UIButton buttonWithType:UIButtonTypeCustom];
     
-    // Do not display back button if user is first time logging in.
-    if (profileExist == true) {
-        UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [backButton setFrame:CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f)];
-        [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-        [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
-        [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-        
-        UIButton *navSaveButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [navSaveButton setFrame:CGRectMake(0.0f, 0.0f, 22.0f, 22.0f)];
-        [navSaveButton addTarget:self action:@selector(saveButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-        [navSaveButton setBackgroundImage:[UIImage imageNamed:@"button_done.png"] forState:UIControlStateNormal];
-        [navSaveButton setBackgroundImage:[UIImage imageNamed:@"button_done_selected.png"] forState:UIControlStateHighlighted];
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:navSaveButton];
-        
-        if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
-            profileImagePicker.frame = CGRectMake( 122.5f, 95.0f, 75.0f, 75.0f );
-            backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 280.0f, self.view.bounds.size.width, 345.0f);
-            saveButton.frame = CGRectMake(35.0f, backgroundView.bounds.size.height - 60.0f, 250.0f, 45.0f);
-            profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 95.0f, 75.0f, 75.0f )];
-        } else {
-            profileImagePicker.frame = CGRectMake( 122.5f, 135.0f, 75.0f, 75.0f );
-            backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 280.0f, self.view.bounds.size.width, 370.0f);
-            saveButton.frame = CGRectMake(35.0f, backgroundView.bounds.size.height - 70.0f, 250.0f, 45.0f);
-            profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 135.0f, 75.0f, 75.0f )];
-        }
-        
-    } else {
-        [self.navigationItem setHidesBackButton:YES];
-        
-        saveButton = [[UIButton alloc] init];
-        
-        if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
-            profileImagePicker.frame = CGRectMake( 122.5f, 35.0f, 75.0f, 75.0f );
-            backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 345.0f, self.view.bounds.size.width, 345.0f);
-            saveButton.frame = CGRectMake(35.0f, backgroundView.bounds.size.height - 60.0f, 250.0f, 45.0f);
-            profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 35.0f, 75.0f, 75.0f )];
-        } else {
-            profileImagePicker.frame = CGRectMake( 122.5f, 85.0f, 75.0f, 75.0f );
-            backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 370.0f, self.view.bounds.size.width, 370.0f);
-            saveButton.frame = CGRectMake(35.0f, backgroundView.bounds.size.height - 70.0f, 250.0f, 45.0f);
-            profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 85.0f, 75.0f, 75.0f )];
-            
-            UILabel *applyLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 20.0f, 320.0f, 45.0f)];
-            [applyLabel setTextColor:[UIColor whiteColor]];
-            [applyLabel setText:@"Apply for Teamstory"];
-            [applyLabel setTextAlignment:NSTextAlignmentCenter];
-            [applyLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:20.0]];
-            [self.view addSubview:applyLabel];
-        }
-    }
+    UIButton *profileImagePicker = [UIButton buttonWithType:UIButtonTypeCustom];
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-intro.png"]];
@@ -166,146 +97,242 @@
     [profileImagePicker setImage:[UIImage imageNamed:@"icon-upload.png"] forState:UIControlStateNormal];
     [profileImagePicker addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:profileImagePicker];
-
-    [[saveButton titleLabel] setFont:[UIFont boldSystemFontOfSize:14.0f]];
-    [saveButton setBackgroundColor:[UIColor colorWithRed:91.0f/255.0f green:194.0f/255.0f blue:165.0f/255.0f alpha:1.0f]];
-    [saveButton setTitle:@"Apply for Membership" forState:UIControlStateNormal];
-    [saveButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
-    [saveButton addTarget:self action:@selector(saveButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [backgroundView addSubview:saveButton];
     
-
-    if (imageProfileFile) {
-        [profilePictureImageView setFile:imageProfileFile];
-        [profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {
-            if (!error) {
-                [UIView animateWithDuration:0.05f animations:^{
-                    profilePictureImageView.alpha = 1.0f;
-                }];
+    [self.user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        
+        if(!error){
+            
+            self.user = (PFUser *)object;
+            
+            location_user = self.user[@"location"];
+            website_user = self.user[@"website"];
+            displayName_user = self.user[@"displayName"];
+            description_user = self.user[@"description"];
+            email_user = self.user[@"email"];
+            imageProfileFile = [self.user objectForKey:@"profilePictureMedium"];
+            
+            if ([location_user length] == 0) {
+                location_user = @"Location";
             }
-        }];
-    } else {
-        NSLog(@"ImageFile Not found");
-    }
+            if ([website_user length] == 0) {
+                website_user = @"Website";
+            }
+            if ([displayName_user length] == 0) {
+                displayName_user = @"Display Name";
+            }
+            if ([description_user length] == 0) {
+                description_user = @"Description";
+            }
 
-    [profilePictureImageView setContentMode:UIViewContentModeScaleToFill];
-    [self.view addSubview:profilePictureImageView];
-    
-    UISwipeGestureRecognizer *swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
-    [swipeUpGestureRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
-    [swipeUpGestureRecognizer setNumberOfTouchesRequired:1];
-    [profileImagePicker addGestureRecognizer:swipeUpGestureRecognizer];
-    
+            
+            // Do not display back button if user is first time logging in.
+            if (profileExist == true) {
+                UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                [backButton setFrame:CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f)];
+                [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+                [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
+                [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
+                self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+                
+                UIButton *navSaveButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                [navSaveButton setFrame:CGRectMake(0.0f, 0.0f, 22.0f, 22.0f)];
+                [navSaveButton addTarget:self action:@selector(saveButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+                [navSaveButton setBackgroundImage:[UIImage imageNamed:@"button_done.png"] forState:UIControlStateNormal];
+                [navSaveButton setBackgroundImage:[UIImage imageNamed:@"button_done_selected.png"] forState:UIControlStateHighlighted];
+                self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:navSaveButton];
+                
+                if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
+                    profileImagePicker.frame = CGRectMake( 122.5f, 95.0f, 75.0f, 75.0f );
+                    backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 280.0f, self.view.bounds.size.width, 345.0f);
+                    saveButton.frame = CGRectMake(35.0f, backgroundView.bounds.size.height - 60.0f, 250.0f, 45.0f);
+                    profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 95.0f, 75.0f, 75.0f )];
+                } else {
+                    profileImagePicker.frame = CGRectMake( 122.5f, 135.0f, 75.0f, 75.0f );
+                    backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 280.0f, self.view.bounds.size.width, 370.0f);
+                    saveButton.frame = CGRectMake(35.0f, backgroundView.bounds.size.height - 70.0f, 250.0f, 45.0f);
+                    profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 135.0f, 75.0f, 75.0f )];
+                }
+                
+            } else {
+                
+                saveButton = [[UIButton alloc] init];
+                
+                if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
+                    profileImagePicker.frame = CGRectMake( 122.5f, 35.0f, 75.0f, 75.0f );
+                    backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 345.0f, self.view.bounds.size.width, 345.0f);
+                    saveButton.frame = CGRectMake(35.0f, backgroundView.bounds.size.height - 60.0f, 250.0f, 45.0f);
+                    profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 35.0f, 75.0f, 75.0f )];
+                } else {
+                    profileImagePicker.frame = CGRectMake( 122.5f, 85.0f, 75.0f, 75.0f );
+                    backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 370.0f, self.view.bounds.size.width, 370.0f);
+                    saveButton.frame = CGRectMake(35.0f, backgroundView.bounds.size.height - 70.0f, 250.0f, 45.0f);
+                    profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 85.0f, 75.0f, 75.0f )];
+                    
+                    UILabel *applyLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 20.0f, 320.0f, 45.0f)];
+                    [applyLabel setTextColor:[UIColor whiteColor]];
+                    [applyLabel setText:@"Apply for Teamstory"];
+                    [applyLabel setTextAlignment:NSTextAlignmentCenter];
+                    [applyLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:20.0]];
+                    [self.view addSubview:applyLabel];
+                }
+            }
+            
+            [[saveButton titleLabel] setFont:[UIFont boldSystemFontOfSize:14.0f]];
+            [saveButton setBackgroundColor:[UIColor colorWithRed:91.0f/255.0f green:194.0f/255.0f blue:165.0f/255.0f alpha:1.0f]];
+            [saveButton setTitle:@"Apply for Membership" forState:UIControlStateNormal];
+            [saveButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
+            [saveButton addTarget:self action:@selector(saveButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+            [backgroundView addSubview:saveButton];
+            
 
-    
-    /*
-    UIImageView *companyImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"companyName.png"]];
-    [companyImageView setFrame:CGRectMake( 15.0f, 61.0f, 40.0f, 40.0f)];
-    [backgroundView addSubview:companyImageView];
-     */
-    UIImageView *companyImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"companyName.png"]];
-    [companyImageView setFrame:CGRectMake( 15.0f, 7.0f, 40.0f, 40.0f)];
-    [backgroundView addSubview:companyImageView];
-    
-    UIImageView *emailImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon-email.png"]];
-    [emailImageView setFrame:CGRectMake( 15.0f, 61.0f, 40.0f, 40.0f)];
-    [backgroundView addSubview:emailImageView];
-    
-    UIImageView *locationImageView = [[UIImageView alloc] initWithImage:nil];
-    [locationImageView setImage:[UIImage imageNamed:@"profileLocation.png"]];
-    [locationImageView setFrame:CGRectMake( 15.0f, 115.0f, 40.0f, 40.0f)];
-    [backgroundView addSubview:locationImageView];
-    
-    UIImageView *descriptionImageView = [[UIImageView alloc] initWithImage:nil];
-    [descriptionImageView setImage:[UIImage imageNamed:@"profileDescription.png"]];
-    [descriptionImageView setFrame:CGRectMake( 15.0f, 169.0f, 40.0f, 40.0f)];
-    [backgroundView addSubview:descriptionImageView];
-    
-    UIImageView *websiteImageView = [[UIImageView alloc] initWithImage:nil];
-    [websiteImageView setImage:[UIImage imageNamed:@"profileWebsite.png"]];
-    [websiteImageView setFrame:CGRectMake( 15.0f, 223.0f, 40.0f, 40.0f)];
-    [backgroundView addSubview:websiteImageView];
-    
-    CGRect companyName_frame = CGRectMake( 80.0f, 14.0f, 205.0f, 25.0f);
-    self.companyName = [[UITextField alloc] initWithFrame:companyName_frame];
-    [self.companyName setBackgroundColor:backgroundColor];
-    [self.companyName setFont:fonts];
-    self.companyName.placeholder = displayName_user;
-    self.companyName.userInteractionEnabled = YES;
-    self.companyName.delegate = self;
-    [backgroundView addSubview:self.companyName];
-    
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 54.0f, self.view.bounds.size.width, 1)];
-    lineView.backgroundColor = lineColor;
-    [backgroundView addSubview:lineView];
+            if (imageProfileFile) {
+                [profilePictureImageView setFile:imageProfileFile];
+                [profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {
+                    if (!error) {
+                        [UIView animateWithDuration:0.05f animations:^{
+                            profilePictureImageView.alpha = 1.0f;
+                        }];
+                    }
+                }];
+            } else {
+                NSLog(@"ImageFile Not found");
+            }
 
-    CGRect email_address_frame = CGRectMake( 80.0f, 68.0f, 205.0f, 25.0f);
-    self.email_address = [[UITextField alloc] initWithFrame:email_address_frame];
-    [self.email_address setBackgroundColor:backgroundColor];
-    [self.email_address setFont:fonts];
-    self.email_address.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    if ([email_user length] == 0) {
-        self.email_address.placeholder = @"Email";
-        self.email_address.userInteractionEnabled = YES;
-    } else {
-        self.email_address.placeholder = email_user;
-        self.email_address.userInteractionEnabled = NO;
-    }
-    self.email_address.delegate = self;
-    [backgroundView addSubview:self.email_address];
-    
-    UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 108.0f, self.view.bounds.size.width, 1)];
-    lineView1.backgroundColor = lineColor;
-    [backgroundView addSubview:lineView1];
+            [profilePictureImageView setContentMode:UIViewContentModeScaleToFill];
+            [self.view addSubview:profilePictureImageView];
+            
+            UISwipeGestureRecognizer *swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
+            [swipeUpGestureRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
+            [swipeUpGestureRecognizer setNumberOfTouchesRequired:1];
+            [profileImagePicker addGestureRecognizer:swipeUpGestureRecognizer];
+            
 
-    CGRect location_frame = CGRectMake( 80.0f, 122.0f, 205.0f, 25.0f);
-    self.location = [[UITextField alloc] initWithFrame:location_frame];
-    [self.location setBackgroundColor:backgroundColor];
-    [self.location setFont:fonts];
-    self.location.placeholder = location_user;
-    self.location.userInteractionEnabled = YES;
-    self.location.delegate = self;
-    [self.location resignFirstResponder];
-    [backgroundView addSubview:self.location];
-    
-    UIView *lineView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 162.0f, self.view.bounds.size.width, 1)];
-    lineView2.backgroundColor = lineColor;
-    [backgroundView addSubview:lineView2];
-    
-    CGRect description_frame = CGRectMake( 80.0f, 176.0f, 205.0f, 25.0f);
-    self.description = [[UITextField alloc] initWithFrame:description_frame];
-    [self.description setBackgroundColor:backgroundColor];
-    [self.description setFont:fonts];
-    self.description.placeholder = description_user;
-    self.description.userInteractionEnabled = YES;
-    self.description.delegate = self;
-    [self.description resignFirstResponder];
-    [backgroundView addSubview:self.description];
-    
-    UIView *lineView3 = [[UIView alloc] initWithFrame:CGRectMake(0, 216.0f, self.view.bounds.size.width, 1)];
-    lineView3.backgroundColor = lineColor;
-    [backgroundView addSubview:lineView3];
-    
-    CGRect website_frame = CGRectMake( 80.0f, 230.0f, 205.0f, 25.0f);
-    self.website = [[UITextField alloc] initWithFrame:website_frame];
-    [self.website setBackgroundColor:backgroundColor];
-    [self.website setFont:fonts];
-    self.website.placeholder = website_user;
-    self.website.userInteractionEnabled = YES;
-    self.website.delegate = self;
-    self.website.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    [self.website resignFirstResponder];
-    [backgroundView addSubview:self.website];
-    
-    UIView *lineView4 = [[UIView alloc] initWithFrame:CGRectMake(0, 270.0f, self.view.bounds.size.width, 1)];
-    lineView4.backgroundColor = lineColor;
-    [backgroundView addSubview:lineView4];
-    
-    UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
-                                   initWithTarget:self
-                                   action:@selector(dismissKeyboard)];
-    
-    [self.view addGestureRecognizer:tapOutside];
+            
+            /*
+            UIImageView *companyImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"companyName.png"]];
+            [companyImageView setFrame:CGRectMake( 15.0f, 61.0f, 40.0f, 40.0f)];
+            [backgroundView addSubview:companyImageView];
+             */
+            UIImageView *companyImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"companyName.png"]];
+            [companyImageView setFrame:CGRectMake( 15.0f, 7.0f, 40.0f, 40.0f)];
+            [backgroundView addSubview:companyImageView];
+            
+            UIImageView *emailImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon-email.png"]];
+            [emailImageView setFrame:CGRectMake( 15.0f, 61.0f, 40.0f, 40.0f)];
+            [backgroundView addSubview:emailImageView];
+            
+            UIImageView *locationImageView = [[UIImageView alloc] initWithImage:nil];
+            [locationImageView setImage:[UIImage imageNamed:@"profileLocation.png"]];
+            [locationImageView setFrame:CGRectMake( 15.0f, 115.0f, 40.0f, 40.0f)];
+            [backgroundView addSubview:locationImageView];
+            
+            UIImageView *descriptionImageView = [[UIImageView alloc] initWithImage:nil];
+            [descriptionImageView setImage:[UIImage imageNamed:@"profileDescription.png"]];
+            [descriptionImageView setFrame:CGRectMake( 15.0f, 169.0f, 40.0f, 40.0f)];
+            [backgroundView addSubview:descriptionImageView];
+            
+            UIImageView *websiteImageView = [[UIImageView alloc] initWithImage:nil];
+            [websiteImageView setImage:[UIImage imageNamed:@"profileWebsite.png"]];
+            [websiteImageView setFrame:CGRectMake( 15.0f, 223.0f, 40.0f, 40.0f)];
+            [backgroundView addSubview:websiteImageView];
+            
+            CGRect companyName_frame = CGRectMake( 80.0f, 14.0f, 205.0f, 25.0f);
+            self.companyName = [[UITextField alloc] initWithFrame:companyName_frame];
+            [self.companyName setBackgroundColor:backgroundColor];
+            [self.companyName setFont:fonts];
+            self.companyName.placeholder = displayName_user;
+            self.companyName.userInteractionEnabled = YES;
+            self.companyName.delegate = self;
+            [backgroundView addSubview:self.companyName];
+            
+            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 54.0f, self.view.bounds.size.width, 1)];
+            lineView.backgroundColor = lineColor;
+            [backgroundView addSubview:lineView];
+
+            CGRect email_address_frame = CGRectMake( 80.0f, 68.0f, 205.0f, 25.0f);
+            self.email_address = [[UITextField alloc] initWithFrame:email_address_frame];
+            [self.email_address setBackgroundColor:backgroundColor];
+            [self.email_address setFont:fonts];
+            self.email_address.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            if ([email_user length] == 0) {
+                self.email_address.placeholder = @"Email";
+                self.email_address.userInteractionEnabled = YES;
+            } else {
+                self.email_address.placeholder = email_user;
+                self.email_address.userInteractionEnabled = NO;
+            }
+            self.email_address.delegate = self;
+            [backgroundView addSubview:self.email_address];
+            
+            UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 108.0f, self.view.bounds.size.width, 1)];
+            lineView1.backgroundColor = lineColor;
+            [backgroundView addSubview:lineView1];
+
+            CGRect location_frame = CGRectMake( 80.0f, 122.0f, 205.0f, 25.0f);
+            self.location = [[UITextField alloc] initWithFrame:location_frame];
+            [self.location setBackgroundColor:backgroundColor];
+            [self.location setFont:fonts];
+            self.location.placeholder = location_user;
+            self.location.userInteractionEnabled = YES;
+            self.location.delegate = self;
+            [self.location resignFirstResponder];
+            [backgroundView addSubview:self.location];
+            
+            UIView *lineView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 162.0f, self.view.bounds.size.width, 1)];
+            lineView2.backgroundColor = lineColor;
+            [backgroundView addSubview:lineView2];
+            
+            CGRect description_frame = CGRectMake( 80.0f, 176.0f, 205.0f, 25.0f);
+            self.description = [[UITextField alloc] initWithFrame:description_frame];
+            [self.description setBackgroundColor:backgroundColor];
+            [self.description setFont:fonts];
+            self.description.placeholder = description_user;
+            self.description.userInteractionEnabled = YES;
+            self.description.delegate = self;
+            [self.description resignFirstResponder];
+            [backgroundView addSubview:self.description];
+            
+            UIView *lineView3 = [[UIView alloc] initWithFrame:CGRectMake(0, 216.0f, self.view.bounds.size.width, 1)];
+            lineView3.backgroundColor = lineColor;
+            [backgroundView addSubview:lineView3];
+            
+            CGRect website_frame = CGRectMake( 80.0f, 230.0f, 205.0f, 25.0f);
+            self.website = [[UITextField alloc] initWithFrame:website_frame];
+            [self.website setBackgroundColor:backgroundColor];
+            [self.website setFont:fonts];
+            self.website.placeholder = website_user;
+            self.website.userInteractionEnabled = YES;
+            self.website.delegate = self;
+            self.website.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            [self.website resignFirstResponder];
+            [backgroundView addSubview:self.website];
+            
+            UIView *lineView4 = [[UIView alloc] initWithFrame:CGRectMake(0, 270.0f, self.view.bounds.size.width, 1)];
+            lineView4.backgroundColor = lineColor;
+            [backgroundView addSubview:lineView4];
+            
+            UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
+                                           initWithTarget:self
+                                           action:@selector(dismissKeyboard)];
+            
+            [self.view addGestureRecognizer:tapOutside];
+            
+            [SVProgressHUD dismiss];
+            
+        }else{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Profile fetch failed. Check your network connection and try again" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+            [alert show];
+            
+            if(profileExist == true){
+                UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                [backButton setFrame:CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f)];
+                [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+                [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
+                [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
+                self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+            }
+        }
+    }];
 }
 
 
