@@ -144,10 +144,11 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
                                    consumerSecret:TWITTER_SECRET];
     // ****************************************************************************
     
-   // [Crashlytics startWithAPIKey:@"9075de9af4f252529090970cd8c2f7e426771d92"];
-    
     // Track app open
     [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+    
+    // Crash analytics
+    [Crashlytics startWithAPIKey:@"9075de9af4f252529090970cd8c2f7e426771d92"];
 
     PFACL *defaultACL = [PFACL ACL];
     // Enable public read access by default, with any newly created PFObjects belonging to the current user

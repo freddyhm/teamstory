@@ -144,6 +144,7 @@
 #pragma mark - ()
 
 - (void)photoCaptureButtonAction:(id)sender {
+
     BOOL cameraDeviceAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
     BOOL photoLibraryAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
     
