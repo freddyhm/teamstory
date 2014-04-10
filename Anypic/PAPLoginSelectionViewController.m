@@ -54,6 +54,10 @@
     [self.navigationController pushViewController:loginViewController animated:YES];
 }
 
+- (void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error {
+    NSLog(@"%@", error);
+}
+
 - (void) joinButton_action:(id)sender {
     NSString *userType = @"join";
     

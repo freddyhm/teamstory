@@ -41,7 +41,6 @@
 @property (nonatomic, strong) PAPProfileSettingViewController *profileSettingViewController;
 @property (nonatomic, strong) PAPAccountViewController *accountViewController_tabBar;
 @property (nonatomic, strong) PAPLogInViewController *loginviewcontroller;
-@property (nonatomic, strong) emailLoginViewController *emailoginviewcontroller;
 @property (nonatomic, strong) discoverPageViewController *discoverViewController;
 
 
@@ -73,7 +72,6 @@
 @synthesize profileSettingViewController;
 @synthesize accountViewController_tabBar;
 @synthesize loginviewcontroller;
-@synthesize emailoginviewcontroller;
 @synthesize discoverViewController;
 
 @synthesize autoFollowTimer;

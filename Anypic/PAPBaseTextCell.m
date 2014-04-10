@@ -236,7 +236,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
         NSMutableAttributedString *commentText = [[NSMutableAttributedString alloc] initWithString:paddedString];
         [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
         
-        self.website = [paddedString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if (range.length > 0) {
+            self.website = [paddedString substringWithRange:range];
+        }
 
         [self.contentLabel setAttributedText:commentText];
         [self.contentLabel setUserInteractionEnabled:YES];
@@ -259,6 +261,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.website = [NSString stringWithFormat:@"%@%@", http, self.website];
     }
     
+    NSLog(@"%@", self.website);
     //self.website = [self.website stringWithFormat:@"%@/%@/%@", ];
     PAPwebviewViewController *webViewController = [[PAPwebviewViewController alloc] initWithWebsite:self.website];
     webViewController.hidesBottomBarWhenPushed = YES;
