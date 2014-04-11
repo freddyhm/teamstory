@@ -204,7 +204,7 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
         self.activityCount = 0;
         
         SVProgressHUDBackgroundColor = [UIColor clearColor];
-        SVProgressHUDForegroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.60];
+        SVProgressHUDForegroundColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
         SVProgressHUDFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
         SVProgressHUDSuccessImage = [[UIImage imageNamed:@"SVProgressHUD.bundle/success"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         SVProgressHUDErrorImage = [[UIImage imageNamed:@"SVProgressHUD.bundle/error"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];

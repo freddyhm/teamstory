@@ -11,6 +11,9 @@
 #import "PAPUtility.h"
 #import "PAPLoadMoreCell.h"
 #import "MBProgressHUD.h"
+#import "SVProgressHUD.h"
+
+#define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
 @interface PAPPhotoTimelineViewController ()
 @property (nonatomic, assign) BOOL shouldReloadOnAppear;
@@ -87,15 +90,17 @@ enum ActionSheetTags {
     self.tableView.backgroundView = texturedBackgroundView;
     [self.tableView setShowsVerticalScrollIndicator:NO];
     
+
      // Create custom refresh control, bring to front, after table view
+    
+    /*
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-    NSMutableAttributedString *refreshTitle = [[NSMutableAttributedString alloc] initWithString:@"Updating..."];
-    [refreshTitle addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:0.5f] range:NSMakeRange(0, refreshTitle.length)];
-    refreshControl.attributedTitle = refreshTitle;
-    refreshControl.tintColor = [UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:0.5f];
+    refreshControl.tintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:0.5f];
     [refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
     self.refreshControl = refreshControl;
     self.refreshControl.layer.zPosition = self.tableView.backgroundView.layer.zPosition + 1;
+     */
+    
     
     
     
@@ -761,6 +766,24 @@ enum ActionSheetTags {
 
 - (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl {
     [self loadObjects];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+    if(scrollView.contentOffset.y <= -100){
+        
+        if(![SVProgressHUD isVisible]){
+            
+            CGFloat hudOffset = IS_WIDESCREEN ? -160.0f : -120.0f;
+            [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, hudOffset)];
+            [SVProgressHUD show];
+        }
+    }else{
+        if([SVProgressHUD isVisible]){
+            [SVProgressHUD dismiss];
+            [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, 0.0f)];
+        }
+    }
 }
 
 // see if scrolling near end, refresh when decelerating if so
