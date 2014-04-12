@@ -828,7 +828,7 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     [self animateTextField: textField up: NO];
     
-    if (textField == companyName) {
+    if (textField == companyName && [(AppDelegate*)[[UIApplication sharedApplication] delegate] isParseReachable]) {
         [SVProgressHUD showWithStatus:@"Validating User Name"];
         [self textfieldUserInteractionControl:NO];
         
@@ -852,7 +852,7 @@
             }
             
         }];
-    } else if (textField == email_address) {
+    } else if (textField == email_address && [(AppDelegate*)[[UIApplication sharedApplication] delegate] isParseReachable]) {
         [SVProgressHUD showWithStatus:@"Validating Email"];
         
         PFQuery *userQuery = [PFUser query];
