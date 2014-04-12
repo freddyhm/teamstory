@@ -580,6 +580,8 @@
 }
 
 
+
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     NSLog(@"Return Key Pressed");
     if (textField == self.companyName) {
@@ -825,9 +827,63 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     [self animateTextField: textField up: NO];
+    
+    if (textField == companyName) {
+        [SVProgressHUD showWithStatus:@"Validating User Name"];
+        [self textfieldUserInteractionControl:NO];
+        
+        PFQuery *query = [PFUser query];
+        [query whereKey:@"displayName" equalTo:textField.text];
+        [query countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
+            [SVProgressHUD dismiss];
+            
+            [self textfieldUserInteractionControl:YES];
+            
+            if (!error) {
+                if (number > 0 || [textField.text length] == 0) {
+                    companyName.text = @"";
+                    [companyName becomeFirstResponder];
+                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Display name is already in use. Please choose another name." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    alert.alertViewStyle = UIAlertViewStyleDefault;
+                    [alert show];
+                }
+            } else {
+                NSLog(@"%@", error);
+            }
+            
+        }];
+    } else if (textField == email_address) {
+        [SVProgressHUD showWithStatus:@"Validating Email"];
+        
+        PFQuery *userQuery = [PFUser query];
+        [userQuery whereKey:@"email" equalTo:email_address.text];
+        [userQuery countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
+            [SVProgressHUD dismiss];
+            
+            if (!error) {
+                if (number > 0) {
+                    email_address.text = @"";
+                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"The email address is already in use. Please use another email address." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    alert.alertViewStyle = UIAlertViewStyleDefault;
+                    [alert show];
+                }
+            } else {
+                NSLog(@"%@", error);
+            }
+        }];
+        
+    }
+    
+}
+
+- (void) textfieldUserInteractionControl:(BOOL) enable {
+    [location setUserInteractionEnabled:enable];
+    [description setUserInteractionEnabled:enable];
+    [website setUserInteractionEnabled:enable];
 }
 
 - (void) animateTextField: (UITextField*) textField up: (BOOL) up {
+    [SVProgressHUD dismiss];
     float movementDuration = 0.1f; // tweak as needed
     
     if (textField == companyName) {
