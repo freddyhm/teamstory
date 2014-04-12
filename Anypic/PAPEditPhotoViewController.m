@@ -219,7 +219,9 @@
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
-    [textView setText:@""];
+    if ([[textView text] isEqualToString:@"Add a comment"]) {
+        [textView setText:@""];
+    }
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
@@ -292,6 +294,12 @@
 }
 
 - (void)doneButtonAction:(id)sender {
+    
+    // make sure placeholder gets erased
+    if([[self.commentTextView text] isEqualToString:@"Add a comment"]){
+        [self.commentTextView setText:@""];
+    }
+    
     NSDictionary *userInfo = [NSDictionary dictionary];
     NSString *trimmedComment = [self.commentTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (trimmedComment.length != 0) {

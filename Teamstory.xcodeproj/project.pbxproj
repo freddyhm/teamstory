@@ -307,7 +307,6 @@
 		C4F102E2156C58440061BC3E /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4F102DF156C58440061BC3E /* Entitlements.plist */; };
 		C4F102E7156C58570061BC3E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C4F102E5156C58570061BC3E /* InfoPlist.strings */; };
 		C4F102EF156C58E00061BC3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102EC156C58E00061BC3E /* main.m */; };
-		D51925D818F6398E00221D82 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D51925D718F6398D00221D82 /* Crashlytics.framework */; };
 		D51C98A218E28D16001230DA /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D51C98A118E28D16001230DA /* libGoogleAnalyticsServices.a */; };
 		D52C1E2118D9515D00625887 /* KonotorConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D52C1DEC18D9515D00625887 /* KonotorConversationViewController.m */; };
 		D52C1E2218D9515D00625887 /* KonotorConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D52C1DED18D9515D00625887 /* KonotorConversationViewController.xib */; };
@@ -385,6 +384,7 @@
 		D5D1042818B5C7AF0084C901 /* konotor.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042718B5C7AF0084C901 /* konotor.png */; };
 		D5D1042B18B5CF4E0084C901 /* button-feedback.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042918B5CF4E0084C901 /* button-feedback.png */; };
 		D5D1042C18B5CF4E0084C901 /* button-feedback@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */; };
+		D5FB8E6C18F79E2D0034CAE6 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FB8E6B18F79E2D0034CAE6 /* Crashlytics.framework */; };
 		D5FC095218A9B518000D85F1 /* CropResizeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095018A9B518000D85F1 /* CropResizeViewController.m */; };
 		D5FC095518A9B543000D85F1 /* CameraFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095418A9B543000D85F1 /* CameraFilterViewController.m */; };
 		D5FC095818A9B552000D85F1 /* FilterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095718A9B552000D85F1 /* FilterCell.m */; };
@@ -747,7 +747,6 @@
 		C4F102EB156C58E00061BC3E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		C4F102EC156C58E00061BC3E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
 		C4F102ED156C58E00061BC3E /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = SOURCE_ROOT; };
-		D51925D718F6398D00221D82 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		D51C988A18E26EB6001230DA /* activity.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = activity.js; sourceTree = "<group>"; };
 		D51C988B18E26EB6001230DA /* app.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = app.js; sourceTree = "<group>"; };
 		D51C988C18E26EB6001230DA /* installation.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = installation.js; sourceTree = "<group>"; };
@@ -851,6 +850,7 @@
 		D5D1042718B5C7AF0084C901 /* konotor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor.png; sourceTree = "<group>"; };
 		D5D1042918B5CF4E0084C901 /* button-feedback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback.png"; sourceTree = "<group>"; };
 		D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback@2x.png"; sourceTree = "<group>"; };
+		D5FB8E6B18F79E2D0034CAE6 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		D5FC094F18A9B518000D85F1 /* CropResizeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CropResizeViewController.h; sourceTree = SOURCE_ROOT; };
 		D5FC095018A9B518000D85F1 /* CropResizeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CropResizeViewController.m; sourceTree = SOURCE_ROOT; };
 		D5FC095318A9B543000D85F1 /* CameraFilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraFilterViewController.h; sourceTree = SOURCE_ROOT; };
@@ -894,7 +894,7 @@
 				092354B513A1D7F000DA740F /* SystemConfiguration.framework in Frameworks */,
 				092354B313A1D7EB00DA740F /* CFNetwork.framework in Frameworks */,
 				09ABC07613A1D52D009C3FCF /* CoreGraphics.framework in Frameworks */,
-				D51925D818F6398E00221D82 /* Crashlytics.framework in Frameworks */,
+				D5FB8E6C18F79E2D0034CAE6 /* Crashlytics.framework in Frameworks */,
 				09ABC07213A1D52D009C3FCF /* UIKit.framework in Frameworks */,
 				09ABC07413A1D52D009C3FCF /* Foundation.framework in Frameworks */,
 				D52C1E4B18D9515D00625887 /* libKonotorCombined.a in Frameworks */,
@@ -925,7 +925,6 @@
 		09ABC07013A1D52D009C3FCF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D51925D718F6398D00221D82 /* Crashlytics.framework */,
 				D5A5F51F18D2C3CD000BB243 /* Parse.framework */,
 				D5A5F51D18D2C3C1000BB243 /* FacebookSDK.framework */,
 				D531F7CD18B5DE44008AE73F /* Appsee.framework */,
@@ -1374,6 +1373,7 @@
 		C4A0B4FF156C5B9F00E48554 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				D5FB8E6B18F79E2D0034CAE6 /* Crashlytics.framework */,
 				D594C1FF18EFEBAD0008F5DF /* SVProgressHUD */,
 				D51C989A18E28D16001230DA /* GoogleAnalytics */,
 				D51C988818E26EB6001230DA /* CloudCode */,
@@ -2044,7 +2044,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./Crashlytics.framework/run 9075de9af4f252529090970cd8c2f7e426771d92 b65a067085879699667823a2059d609d2b04476fc3804d3a5a6f9ab5896ca5d4";
+			shellScript = "./External/Crashlytics.framework/run 9075de9af4f252529090970cd8c2f7e426771d92 b65a067085879699667823a2059d609d2b04476fc3804d3a5a6f9ab5896ca5d4";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2202,6 +2202,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/External",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2243,6 +2244,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/External",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
@@ -2306,6 +2308,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/External",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
@@ -2371,6 +2374,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/External",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
