@@ -72,10 +72,19 @@
     [self refreshView];
 }
 
+-(void)viewDidAppear:(BOOL)animated{
+    
+    [SVProgressHUD show];
+    
+    if(email_user != nil && [SVProgressHUD isVisible]){
+        [SVProgressHUD dismiss];
+    }
+}
+
 - (void)refreshView {
     [self.navigationItem setHidesBackButton:YES];
     
-    [SVProgressHUD show];
+
     
     NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
     bool profileExist = [profilExist_num boolValue];
