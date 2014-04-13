@@ -352,7 +352,9 @@
 - (void)websiteLinkAction:(id)sender{
     NSString *http = @"http://";
     //window does not work with only urls. Must append "http://".
-    self.websiteInfo = [NSString stringWithFormat:@"%@%@", http, self.websiteInfo];
+    if ([self.websiteInfo rangeOfString:@"(?i)http" options:NSRegularExpressionSearch].location == NSNotFound) {
+        self.websiteInfo = [NSString stringWithFormat:@"%@%@", http, self.websiteInfo];
+    }
     
     PAPwebviewViewController *webviewController = [[PAPwebviewViewController alloc] initWithWebsite:self.websiteInfo];
     webviewController.hidesBottomBarWhenPushed = YES;

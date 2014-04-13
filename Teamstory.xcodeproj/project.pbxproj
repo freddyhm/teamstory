@@ -77,7 +77,6 @@
 		462FCB8D188C8892005059F3 /* button_done_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 462FCB8B188C8892005059F3 /* button_done_selected.png */; };
 		462FCB8E188C8892005059F3 /* button_done_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 462FCB8C188C8892005059F3 /* button_done_selected@2x.png */; };
 		4639EFBF18B69DFC009D610B /* Default-568h@2x-old.png in Resources */ = {isa = PBXBuildFile; fileRef = 4639EFBD18B69DFC009D610B /* Default-568h@2x-old.png */; };
-		464A354D185A9F6C006E951E /* emailLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 464A354C185A9F6C006E951E /* emailLoginViewController.m */; };
 		465A4ED918A8222A00E43DC6 /* iconlocation.png in Resources */ = {isa = PBXBuildFile; fileRef = 465A4ED718A8222A00E43DC6 /* iconlocation.png */; };
 		465A4EDA18A8222A00E43DC6 /* iconlocation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465A4ED818A8222A00E43DC6 /* iconlocation@2x.png */; };
 		465A4EDD18A8382900E43DC6 /* comingsoon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465A4EDB18A8382900E43DC6 /* comingsoon@2x.png */; };
@@ -469,8 +468,6 @@
 		462FCB8B188C8892005059F3 /* button_done_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_done_selected.png; sourceTree = "<group>"; };
 		462FCB8C188C8892005059F3 /* button_done_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_done_selected@2x.png"; sourceTree = "<group>"; };
 		4639EFBD18B69DFC009D610B /* Default-568h@2x-old.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x-old.png"; sourceTree = "<group>"; };
-		464A354B185A9F6C006E951E /* emailLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = emailLoginViewController.h; path = Anypic/emailLoginViewController.h; sourceTree = SOURCE_ROOT; };
-		464A354C185A9F6C006E951E /* emailLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = emailLoginViewController.m; path = Anypic/emailLoginViewController.m; sourceTree = SOURCE_ROOT; };
 		465A4ED718A8222A00E43DC6 /* iconlocation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = iconlocation.png; path = Resources/Assets/iconlocation.png; sourceTree = SOURCE_ROOT; };
 		465A4ED818A8222A00E43DC6 /* iconlocation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "iconlocation@2x.png"; path = "Resources/Assets/iconlocation@2x.png"; sourceTree = SOURCE_ROOT; };
 		465A4EDB18A8382900E43DC6 /* comingsoon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "comingsoon@2x.png"; sourceTree = "<group>"; };
@@ -1313,8 +1310,6 @@
 				4688686E185F8B78002BA081 /* emailSignUpViewController.m */,
 				4691B52C18CCE81600B7DF6A /* PAPLoginSelectionViewController.h */,
 				4691B52D18CCE81600B7DF6A /* PAPLoginSelectionViewController.m */,
-				464A354B185A9F6C006E951E /* emailLoginViewController.h */,
-				464A354C185A9F6C006E951E /* emailLoginViewController.m */,
 				C4F102BF156C57DA0061BC3E /* PAPWelcomeViewController.h */,
 				C4F102C0156C57DA0061BC3E /* PAPWelcomeViewController.m */,
 				C4F102BD156C57DA0061BC3E /* PAPLogInViewController.h */,
@@ -2082,7 +2077,6 @@
 				D52C1E4518D9515D00625887 /* KonotorMediaUIButton.m in Sources */,
 				46ABD73318B12E01008F5AAB /* PAPperksoverlay.m in Sources */,
 				C4F102B5156C57820061BC3E /* PAPLoadMoreCell.m in Sources */,
-				464A354D185A9F6C006E951E /* emailLoginViewController.m in Sources */,
 				C4F102B6156C57820061BC3E /* PAPPhotoCell.m in Sources */,
 				C4F102B9156C57B90061BC3E /* PAPSettingsButtonItem.m in Sources */,
 				C4F102BC156C57CD0061BC3E /* PAPTabBarController.m in Sources */,

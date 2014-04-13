@@ -5,7 +5,6 @@
 //
 
 #import "PAPLogInViewController.h"
-#import "emailLoginViewController.h"
 #import "AppDelegate.h"
 #import "emailSignUpViewController.h"
 #import "SVProgressHUD.h"
@@ -40,7 +39,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     // There is no documentation on how to handle assets with the taller iPhone 5 screen as of 9/13/2012
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-intro.png"]];
     
@@ -111,7 +110,7 @@
 
     [self.logInView setLogo:nil];
     
-    self.fields = PFLogInFieldsUsernameAndPassword;
+    //self.fields = PFLogInFieldsUsernameAndPassword;
     self.logInView.usernameField.placeholder = @"Enter your email";
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
