@@ -26,7 +26,7 @@
 #import "PAPLoginTutorialViewController.h"
 #import "PAPprofileApprovalViewController.h"
 #import <Crashlytics/Crashlytics.h>
-
+#import "iRate.h"
 
 
 
@@ -526,6 +526,12 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 
 
 #pragma mark - ()
+
++ (void)initialize
+{
+    //configure iRate
+    [iRate sharedInstance].previewMode = YES;
+}
 
 - (void)setupAppearance {
     

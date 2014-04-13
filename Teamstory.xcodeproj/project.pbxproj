@@ -350,6 +350,8 @@
 		D52C1E4918D9515D00625887 /* KonotorVoiceInputOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = D52C1E1E18D9515D00625887 /* KonotorVoiceInputOverlay.m */; };
 		D52C1E4A18D9515D00625887 /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D52C1E1F18D9515D00625887 /* KonotorModels.bundle */; };
 		D52C1E4B18D9515D00625887 /* libKonotorCombined.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D52C1E2018D9515D00625887 /* libKonotorCombined.a */; };
+		D530C3F218FB22FC00739027 /* iRate.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D530C3EF18FB22FC00739027 /* iRate.bundle */; };
+		D530C3F318FB22FC00739027 /* iRate.m in Sources */ = {isa = PBXBuildFile; fileRef = D530C3F118FB22FC00739027 /* iRate.m */; };
 		D531F7CC18B5DE11008AE73F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D531F7CB18B5DE11008AE73F /* CoreVideo.framework */; };
 		D531F7CE18B5DE44008AE73F /* Appsee.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D531F7CD18B5DE44008AE73F /* Appsee.framework */; };
 		D594C20418EFEBAD0008F5DF /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D594C20118EFEBAD0008F5DF /* SVProgressHUD.bundle */; };
@@ -812,6 +814,9 @@
 		D52C1E1E18D9515D00625887 /* KonotorVoiceInputOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorVoiceInputOverlay.m; sourceTree = "<group>"; };
 		D52C1E1F18D9515D00625887 /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		D52C1E2018D9515D00625887 /* libKonotorCombined.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libKonotorCombined.a; sourceTree = "<group>"; };
+		D530C3EF18FB22FC00739027 /* iRate.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = iRate.bundle; sourceTree = "<group>"; };
+		D530C3F018FB22FC00739027 /* iRate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iRate.h; sourceTree = "<group>"; };
+		D530C3F118FB22FC00739027 /* iRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iRate.m; sourceTree = "<group>"; };
 		D531F7CB18B5DE11008AE73F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		D531F7CD18B5DE44008AE73F /* Appsee.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Appsee.framework; path = External/Appsee.framework; sourceTree = "<group>"; };
 		D594C20018EFEBAD0008F5DF /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
@@ -1368,6 +1373,7 @@
 		C4A0B4FF156C5B9F00E48554 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				D530C3EE18FB22E700739027 /* iRate */,
 				D5FB8E6B18F79E2D0034CAE6 /* Crashlytics.framework */,
 				D594C1FF18EFEBAD0008F5DF /* SVProgressHUD */,
 				D51C989A18E28D16001230DA /* GoogleAnalytics */,
@@ -1655,6 +1661,16 @@
 				D52C1E1318D9515D00625887 /* konotor_uploading@2x.png */,
 			);
 			path = KonotorImageResources;
+			sourceTree = "<group>";
+		};
+		D530C3EE18FB22E700739027 /* iRate */ = {
+			isa = PBXGroup;
+			children = (
+				D530C3EF18FB22FC00739027 /* iRate.bundle */,
+				D530C3F018FB22FC00739027 /* iRate.h */,
+				D530C3F118FB22FC00739027 /* iRate.m */,
+			);
+			path = iRate;
 			sourceTree = "<group>";
 		};
 		D594C1FF18EFEBAD0008F5DF /* SVProgressHUD */ = {
@@ -1977,6 +1993,7 @@
 				46B31EF1184E35150028D11C /* companyName@2x.png in Resources */,
 				465DE3571895AA9600C37EF8 /* dropdown_arrow@2x.png in Resources */,
 				C4BE67BE157FC7F700A291C2 /* SeparatorTimeline@2x.png in Resources */,
+				D530C3F218FB22FC00739027 /* iRate.bundle in Resources */,
 				462FCB62188C6AE9005059F3 /* DiscoverNavigationBar@2x.png in Resources */,
 				C4BE67BF157FC7F700A291C2 /* SeparatorTimelineDark.png in Resources */,
 				C4BE67C0157FC7F700A291C2 /* SeparatorTimelineDark@2x.png in Resources */,
@@ -2094,6 +2111,7 @@
 				C4F102D9156C580C0061BC3E /* PAPSettingsActionSheetDelegate.m in Sources */,
 				D52C1E4818D9515D00625887 /* KonotorUtility.m in Sources */,
 				D52C1E2118D9515D00625887 /* KonotorConversationViewController.m in Sources */,
+				D530C3F318FB22FC00739027 /* iRate.m in Sources */,
 				C4F102DC156C58170061BC3E /* PAPEditPhotoViewController.m in Sources */,
 				D52C1E4718D9515D00625887 /* KonotorUITextView.m in Sources */,
 				C4F102EF156C58E00061BC3E /* main.m in Sources */,
