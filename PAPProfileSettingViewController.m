@@ -899,6 +899,8 @@
     [location setUserInteractionEnabled:enable];
     [description setUserInteractionEnabled:enable];
     [website setUserInteractionEnabled:enable];
+    self.navigationItem.rightBarButtonItem.enabled = enable;
+    self.navigationItem.leftBarButtonItem.enabled = enable;
 }
 
 - (void) animateTextField: (UITextField*) textField up: (BOOL) up {
