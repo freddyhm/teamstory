@@ -224,7 +224,7 @@
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
     if ([textView.text length] == 0) {
-        [textView setText:@"Add a comment"];
+        [textView setText:@"Add a caption"];
     }
 }
 
@@ -256,7 +256,7 @@
         if (userInfo) {
             NSString *commentText = [userInfo objectForKey:kPAPEditPhotoViewControllerUserInfoCommentKey];
             
-            if (commentText && commentText.length != 0 && ![commentText isEqualToString:@"Add a comment"]) {
+            if (commentText && commentText.length != 0 && ![commentText isEqualToString:@"Add a caption"]) {
                 [photo setObject:commentText forKey:@"caption"];
             }
         }
@@ -317,7 +317,7 @@
     if (userInfo) {
         NSString *commentText = [userInfo objectForKey:kPAPEditPhotoViewControllerUserInfoCommentKey];
         
-        if (commentText && commentText.length != 0 && ![commentText isEqualToString:@"Add a comment"]) {
+        if (commentText && commentText.length != 0 && ![commentText isEqualToString:@"Add a caption"]) {
             [photo setObject:commentText forKey:@"caption"];
         }
     }
