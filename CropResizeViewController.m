@@ -149,8 +149,6 @@
 - (IBAction)cropPressed:(id)sender {
     
     // show spinning indicator
-    [SVProgressHUD setForegroundColor:[UIColor whiteColor]];
-    [SVProgressHUD setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.6]];
     [SVProgressHUD show];
     //resize cropped image and send to filter controller (work on background thread)
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
@@ -160,8 +158,6 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            [SVProgressHUD setForegroundColor:[UIColor blackColor]];
-            [SVProgressHUD setBackgroundColor:[UIColor clearColor]];
             [SVProgressHUD dismiss];
 
             // add to filters

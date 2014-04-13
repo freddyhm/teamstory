@@ -71,7 +71,6 @@
         [NSException raise:NSInvalidArgumentException format:@"user cannot be nil"];
     }
     
-    [SVProgressHUD setForegroundColor:[UIColor whiteColor]];
     [SVProgressHUD show];
     
     [self.user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
@@ -292,8 +291,7 @@
         
         // load header
         self.tableView.tableHeaderView = headerView;
-        
-        [SVProgressHUD setForegroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.60]];
+    
         [SVProgressHUD dismiss];
     }];
 
@@ -304,7 +302,6 @@
     [super viewWillAppear:YES];
     [PAPUtility captureScreenGA:@"Account"];
     
-    [SVProgressHUD setForegroundColor:[UIColor whiteColor]];
     [SVProgressHUD show];
     
     [self.user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
@@ -336,9 +333,6 @@
             self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height);
         }
         
-
-
-        [SVProgressHUD setForegroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.60]];
         [SVProgressHUD dismiss];
     }];
 }
