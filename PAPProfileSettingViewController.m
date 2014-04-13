@@ -629,6 +629,8 @@
 }
 
 - (void)saveButtonAction:(id)sender {
+    [self.companyName resignFirstResponder];
+    [self.email_address resignFirstResponder];
     NSString* companyName_input = self.companyName.text;
     NSString* location_input = self.location.text;
     NSString* description_input = self.description.text;
@@ -841,6 +843,10 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     [self animateTextField: textField up: YES];
+    if (textField == companyName || textField == email_address) {
+        self.navigationItem.leftBarButtonItem.enabled = NO;
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+    }
 }
 
 
