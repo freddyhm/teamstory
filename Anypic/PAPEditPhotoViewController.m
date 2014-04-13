@@ -84,6 +84,7 @@
     
     PAPPhotoDetailsFooterView *footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:footerRect];
     self.commentTextView = footerView.commentView;
+    self.commentTextView.text = @"Add a caption";
     self.commentTextView.delegate = self;
     [self.scrollView addSubview:footerView];
     
@@ -219,7 +220,7 @@
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
-    if ([[textView text] isEqualToString:@"Add a comment"]) {
+    if ([[textView text] isEqualToString:@"Add a caption"]) {
         [textView setText:@""];
     }
 }
@@ -296,7 +297,7 @@
 - (void)doneButtonAction:(id)sender {
     
     // make sure placeholder gets erased
-    if([[self.commentTextView text] isEqualToString:@"Add a comment"]){
+    if([[self.commentTextView text] isEqualToString:@"Add a caption"]){
         [self.commentTextView setText:@""];
     }
     

@@ -343,7 +343,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 #pragma mark - UITextViewDelegate
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
-    [textView setText:@""];
+    if ([[textView text] isEqualToString:@"Add a comment"]) {
+        [textView setText:@""];
+    }
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
