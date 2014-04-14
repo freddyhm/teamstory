@@ -209,6 +209,13 @@
     [cell setState:@"default"];
 }
 
+-(void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    // de-select proper filter
+    FilterCell *filterCell =(FilterCell *) cell;
+    [filterCell setState:@"default"];
+}
+
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
