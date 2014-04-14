@@ -208,7 +208,6 @@
             [PFUser logInWithUsernameInBackground:userEmail password:userPW
                                             block:^(PFUser *user, NSError *error) {
                                                 if (user) {
-                                              //      [user refresh];
                                                     NSNumber *profileBoolNum = [user objectForKey: @"profileExist"];
                                                     bool profileExist = [profileBoolNum boolValue];
                                                     
