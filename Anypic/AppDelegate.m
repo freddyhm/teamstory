@@ -527,12 +527,6 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 
 #pragma mark - ()
 
-+ (void)initialize
-{
-    //configure iRate
-    [iRate sharedInstance].previewMode = YES;
-}
-
 - (void)setupAppearance {
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
