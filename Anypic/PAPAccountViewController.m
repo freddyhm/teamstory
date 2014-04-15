@@ -312,6 +312,7 @@
         self.locationLabel.text = [self.user objectForKey:@"location"];
         self.descriptionLabel.text = [self.user objectForKey:@"description"];
         [self.websiteLink setTitle:[self.user objectForKey:@"website"] forState:UIControlStateNormal];
+        self.websiteInfo = [self.user objectForKey:@"website"];
         
         [profilePictureImageView setFile:[self.user objectForKey:@"profilePictureMedium"]];
         [profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {
