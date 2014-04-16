@@ -31,6 +31,8 @@ enum ActionSheetTags {
 @property (nonatomic, strong) UITextView *commentTextView;
 @property (nonatomic, strong) PAPPhotoDetailsFooterView *footerView;
 @property (nonatomic, strong) NSString *source;
+@property (nonatomic, strong) NSArray *userArray;
+@property (nonatomic, strong) UITableView *autocompleteTableView;
 @end
 
 static const CGFloat kPAPCellInsetWidth = 7.5f;
@@ -44,6 +46,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 @synthesize reported_user;
 @synthesize commentTextView;
 @synthesize footerView;
+@synthesize userArray;
+@synthesize autocompleteTableView;
 
 
 #pragma mark - Initialization
@@ -126,6 +130,14 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     commentTextView.delegate = self;
     self.tableView.tableFooterView = self.footerView;
     
+    self.autocompleteTableView = [[UITableView alloc] init];
+    self.autocompleteTableView.delegate = self;
+    self.autocompleteTableView.separatorInset = UIEdgeInsetsZero;
+    self.autocompleteTableView.dataSource = self;
+    self.autocompleteTableView.scrollEnabled = YES;
+    self.autocompleteTableView.hidden = YES;
+    [self.view addSubview:autocompleteTableView];
+
 
     /*
     if ([self currentUserOwnsPhoto]) {
@@ -354,9 +366,24 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
 }
 
-
 - (BOOL) textView:(UITextView*)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString*)text{
-    if ([text isEqualToString:@"\n"]) {
+    if ([text isEqualToString:@"@"]){
+        [SVProgressHUD show];
+        
+        PFQuery *userQuery = [PFUser query];
+        [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            [SVProgressHUD dismiss];
+            if (!error) {
+                self.userArray = objects;
+                
+                self.autocompleteTableView.frame = CGRectMake(47.5f, self.tableView.contentSize.height - 185.0f, 255.0f, 120.0f);
+                self.autocompleteTableView.backgroundColor = [UIColor redColor];
+                self.autocompleteTableView.hidden = NO;
+            } else {
+                NSLog(@"%@", error);
+            }
+        }];
+    } else if ([text isEqualToString:@"\n"]) {
         NSString *trimmedComment = [textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         if (trimmedComment.length != 0 && [self.photo objectForKey:kPAPPhotoUserKey]) {
             PFObject *comment = [PFObject objectWithClassName:kPAPActivityClassKey];
@@ -407,6 +434,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [textView resignFirstResponder];
         return NO;
     }
+    
     return YES;
 }
 
@@ -671,7 +699,13 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     // Scroll the view to the comment text box
     NSDictionary* info = [note userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentSize.height-kbSize.height - 50.0f) animated:YES];
+    NSInteger offset = 0.0f;
+    if ([UIScreen mainScreen].bounds.size.height == 480) {
+        offset = 60.0f;
+    } else {
+        offset = 150.0f;
+    }
+    [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentSize.height-kbSize.height - offset) animated:YES];
 }
 
 - (void)loadLikers {
