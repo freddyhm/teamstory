@@ -34,7 +34,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
 @synthesize user;
 @synthesize website;
 @synthesize navController;
-@synthesize cellType;
 
 
 #pragma mark - NSObject
@@ -48,7 +47,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
         if (!timeFormatter) {
             timeFormatter = [[TTTTimeIntervalFormatter alloc] init];
         }
-
+        
+        self.navController = anavController;
+        
         cellInsetWidth = 0.0f;
         hideSeparator = NO;
         self.clipsToBounds = YES;
@@ -59,11 +60,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.accessoryType = UITableViewCellAccessoryNone;
         self.backgroundColor = [UIColor clearColor];
         mainView = [[UIView alloc] initWithFrame:self.contentView.frame];
-        if ([reuseIdentifier isEqualToString:@"atmentionCell"]) {
-            [mainView setBackgroundColor:[UIColor grayColor]];
-        } else {
-            [mainView setBackgroundColor:[UIColor whiteColor]];
-        }
         
         self.avatarImageView = [[PAPProfileImageView alloc] init];
         [self.avatarImageView setBackgroundColor:[UIColor clearColor]];
@@ -72,15 +68,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
                 
         self.nameButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.nameButton setBackgroundColor:[UIColor clearColor]];
-        [self.nameButton setTitleColor:[UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
-        //[self.nameButton setTitleColor:[UIColor colorWithRed:134.0f/255.0f green:100.0f/255.0f blue:65.0f/255.0f alpha:1.0f] forState:UIControlStateHighlighted];
-        [self.nameButton.titleLabel setFont:[UIFont boldSystemFontOfSize:13]];
-        [self.nameButton.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
-        //[self.nameButton setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        //[self.nameButton setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateSelected];
-        //[self.nameButton.titleLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
-        [self.nameButton addTarget:self action:@selector(didTapUserButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [mainView addSubview:self.nameButton];
+        
         
         self.contentLabel = [[UILabel alloc] init];
         [self.contentLabel setFont:[UIFont systemFontOfSize:13.0f]];
@@ -99,6 +88,21 @@ static TTTTimeIntervalFormatter *timeFormatter;
         //[self.timeLabel setShadowColor:[UIColor colorWithWhite:1.0f alpha:0.70f]];
         //[self.timeLabel setShadowOffset:CGSizeMake(0, 1)];
         [mainView addSubview:self.timeLabel];
+        
+        if ([reuseIdentifier isEqualToString:@"atmentionCell"]) {
+            [mainView setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:0.95f]];
+            [self.nameButton setTitleColor:[UIColor colorWithWhite:0.5f alpha:0.95f] forState:UIControlStateNormal];
+            [self.nameButton.titleLabel setFont:[UIFont boldSystemFontOfSize:15]];
+  //          [self.nameButton.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
+    //        [self.nameButton addTarget:self action:@selector(didTapUserButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        } else {
+            [mainView setBackgroundColor:[UIColor whiteColor]];
+            
+            [self.nameButton setTitleColor:[UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
+            [self.nameButton.titleLabel setFont:[UIFont boldSystemFontOfSize:13]];
+            [self.nameButton.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
+            [self.nameButton addTarget:self action:@selector(didTapUserButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        }
         
         
         self.avatarImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -223,29 +227,31 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 - (void)setContentText:(NSString *)contentString {
     // If we have a user we pad the content with spaces to make room for the name
-    if (self.user) {
-        CGSize nameSize = [self.nameButton.titleLabel.text sizeWithFont:[UIFont boldSystemFontOfSize:13] forWidth:nameMaxWidth lineBreakMode:NSLineBreakByTruncatingTail];
-        NSString *paddedString = [PAPBaseTextCell padString:contentString withFont:[UIFont systemFontOfSize:13] toWidth:nameSize.width];
-        NSRange range = [paddedString rangeOfString:@"(?i)(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+" options:NSRegularExpressionSearch];
-        
-        NSMutableAttributedString *commentText = [[NSMutableAttributedString alloc] initWithString:paddedString];
-        [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
-        
-        if (range.length > 0) {
-            self.website = [paddedString substringWithRange:range];
-        }
+    if ([contentString length] > 0) {
+        if (self.user) {
+            CGSize nameSize = [self.nameButton.titleLabel.text sizeWithFont:[UIFont boldSystemFontOfSize:13] forWidth:nameMaxWidth lineBreakMode:NSLineBreakByTruncatingTail];
+            NSString *paddedString = [PAPBaseTextCell padString:contentString withFont:[UIFont systemFontOfSize:13] toWidth:nameSize.width];
+            NSRange range = [paddedString rangeOfString:@"(?i)(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+" options:NSRegularExpressionSearch];
+            
+            NSMutableAttributedString *commentText = [[NSMutableAttributedString alloc] initWithString:paddedString];
+            [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
+            
+            if (range.length > 0) {
+                self.website = [paddedString substringWithRange:range];
+            }
 
-        [self.contentLabel setAttributedText:commentText];
-        [self.contentLabel setUserInteractionEnabled:YES];
-        
-        if (range.length > 0) {
-            UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openUrl:)];
-            gestureRec.numberOfTouchesRequired = 1;
-            gestureRec.numberOfTapsRequired = 1;
-            [self.contentLabel addGestureRecognizer:gestureRec];
+            [self.contentLabel setAttributedText:commentText];
+            [self.contentLabel setUserInteractionEnabled:YES];
+            
+            if (range.length > 0) {
+                UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openUrl:)];
+                gestureRec.numberOfTouchesRequired = 1;
+                gestureRec.numberOfTapsRequired = 1;
+                [self.contentLabel addGestureRecognizer:gestureRec];
+            }
+        } else { // Otherwise we ignore the padding and we'll add it after we set the user
+            [self.contentLabel setText:contentString];
         }
-    } else { // Otherwise we ignore the padding and we'll add it after we set the user
-        [self.contentLabel setText:contentString];
     }
     [self setNeedsDisplay];
 }

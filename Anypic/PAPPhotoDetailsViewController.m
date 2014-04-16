@@ -278,7 +278,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         // Try to dequeue a cell and create one if necessary
         PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         if (cell == nil) {
-            cell = [[PAPBaseTextCell alloc] initWithNavigationController:self.navigationController reuseIdentifier:(NSString *)cellID];
+            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID navigationController:self.navigationController];
             cell.cellInsetWidth = kPAPCellInsetWidth;
             cell.delegate = self;
         }
@@ -295,7 +295,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         // Try to dequeue a cell and create one if necessary
         PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         if (cell == nil) {
-            cell = [[PAPBaseTextCell alloc] initWithNavigationController:self.navigationController reuseIdentifier:(NSString *)cellID];
+            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID navigationController:self.navigationController];
             cell.delegate = self;
         }
         
@@ -409,7 +409,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 self.userArray = objects;
                 
                 self.autocompleteTableView.frame = CGRectMake(47.5f, self.tableView.contentSize.height - 185.0f, 255.0f, 120.0f);
-                self.autocompleteTableView.backgroundColor = [UIColor redColor];
+                self.autocompleteTableView.backgroundColor = [UIColor clearColor];
                 self.autocompleteTableView.hidden = NO;
                 
             } else {

@@ -32,7 +32,6 @@
 @property (nonatomic, strong) UIImageView *separatorImage;
 @property (nonatomic, strong) NSString *website;
 @property (nonatomic, strong) UINavigationController *navController;
-@property (nonatomic, strong) NSString *cellType;
 
 /*! The horizontal inset of the cell */
 @property (nonatomic) CGFloat cellInsetWidth;
@@ -43,6 +42,8 @@
 
 - (void)setCellInsetWidth:(CGFloat)insetWidth;
 - (void)hideSeparator:(BOOL)hide;
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier navigationController:(UINavigationController *) anavController;
 
 /*! Static Helper methods */
 + (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content;
