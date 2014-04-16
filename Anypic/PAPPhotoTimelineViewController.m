@@ -67,6 +67,9 @@ enum ActionSheetTags {
         // The number of objects to show per page
         self.objectsPerPage = 10;
         
+        // Remove default loading indicator
+        self.loadingViewEnabled = NO;
+        
         // Improve scrolling performance by reusing UITableView section headers
         self.reusableSectionHeaderViews = [NSMutableSet setWithCapacity:3];
         
@@ -376,8 +379,16 @@ enum ActionSheetTags {
     return query;
 }
 
+- (void)objectsWillLoad{
+    [super objectsWillLoad];
+    
+    [SVProgressHUD show];
+}
+
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
+    
+    [SVProgressHUD dismiss];
     
     if (NSClassFromString(@"UIRefreshControl")) {
         [self.refreshControl endRefreshing];

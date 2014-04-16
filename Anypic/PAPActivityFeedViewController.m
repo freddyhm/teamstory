@@ -12,7 +12,7 @@
 #import "PAPLoadMoreCell.h"
 #import "PAPSettingsButtonItem.h"
 #import "PAPFindFriendsViewController.h"
-#import "MBProgressHUD.h"
+#import "SVProgressHUD.h"
 
 @interface PAPActivityFeedViewController ()
 
@@ -51,6 +51,9 @@
 
         // The number of objects to show per page
         self.objectsPerPage = 15;
+        
+        // Remove default loading indicator
+        self.loadingViewEnabled = NO;
         
         //resets read list
         //[[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"readList"];
@@ -116,6 +119,10 @@
     }
     
     [self.tableView reloadData];
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    
 }
  
 #pragma mark - UITableViewDelegate
@@ -226,8 +233,16 @@
     return finalQuery;
 }
 
+- (void)objectsWillLoad{
+    [super objectsWillLoad];
+    
+    [SVProgressHUD show];
+}
+
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
+    
+    [SVProgressHUD dismiss];
     
     if([self.readList count] == 0){
         for (int i = 0; i < self.objects.count; i++) {
