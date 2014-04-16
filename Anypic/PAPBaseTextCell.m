@@ -34,20 +34,12 @@ static TTTTimeIntervalFormatter *timeFormatter;
 @synthesize user;
 @synthesize website;
 @synthesize navController;
-
-
-- (id)initWithNavigationController:(UINavigationController *)navigationController reuseIdentifier:(NSString *)reuseIdentifier{
-    self = [super init];
-    if (self) {
-        self.navController = navigationController;
-    }
-    return self;
-}
+@synthesize cellType;
 
 
 #pragma mark - NSObject
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier navigationController:(UINavigationController *) anavController
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
 
@@ -66,9 +58,12 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.accessoryType = UITableViewCellAccessoryNone;
         self.backgroundColor = [UIColor clearColor];
-        
         mainView = [[UIView alloc] initWithFrame:self.contentView.frame];
-        [mainView setBackgroundColor:[UIColor whiteColor]];
+        if ([reuseIdentifier isEqualToString:@"atmentionCell"]) {
+            [mainView setBackgroundColor:[UIColor grayColor]];
+        } else {
+            [mainView setBackgroundColor:[UIColor whiteColor]];
+        }
         
         self.avatarImageView = [[PAPProfileImageView alloc] init];
         [self.avatarImageView setBackgroundColor:[UIColor clearColor]];

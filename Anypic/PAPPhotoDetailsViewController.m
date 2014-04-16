@@ -132,7 +132,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     self.autocompleteTableView = [[UITableView alloc] init];
     self.autocompleteTableView.delegate = self;
-    self.autocompleteTableView.separatorInset = UIEdgeInsetsZero;
+    //self.autocompleteTableView.separatorInset = UIEdgeInsetsZero;
+    self.autocompleteTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.autocompleteTableView.dataSource = self;
     self.autocompleteTableView.scrollEnabled = YES;
     self.autocompleteTableView.hidden = YES;
@@ -271,21 +272,51 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
-    static NSString *cellID = @"CommentCell";
-    // Try to dequeue a cell and create one if necessary
-    PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-    if (cell == nil) {
-        //cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-        cell = [[PAPBaseTextCell alloc] initWithNavigationController:self.navigationController reuseIdentifier:(NSString *)cellID];
-        cell.cellInsetWidth = kPAPCellInsetWidth;
-        cell.delegate = self;
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (tableView != self.autocompleteTableView) {
+        static NSString *cellID = @"CommentCell";
+        // Try to dequeue a cell and create one if necessary
+        PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+        if (cell == nil) {
+            cell = [[PAPBaseTextCell alloc] initWithNavigationController:self.navigationController reuseIdentifier:(NSString *)cellID];
+            cell.cellInsetWidth = kPAPCellInsetWidth;
+            cell.delegate = self;
+        }
+        
+        //[cell setUser:[self.objects objectForKey:kPAPActivityFromUserKey]];
+        //[cell setContentText:[object objectForKey:kPAPActivityContentKey]];
+        //[cell setDate:[object createdAt]];
+    [cell setUser:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityFromUserKey]];
+    [cell setContentText:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityContentKey]];
+    [cell setDate:[[self.objects objectAtIndex:indexPath.row] createdAt]];
+        return cell;
+    } else {
+        static NSString *cellID = @"atmentionCell";
+        // Try to dequeue a cell and create one if necessary
+        PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+        if (cell == nil) {
+            cell = [[PAPBaseTextCell alloc] initWithNavigationController:self.navigationController reuseIdentifier:(NSString *)cellID];
+            cell.delegate = self;
+        }
+        
+        //[cell setUser:[self.objects objectForKey:kPAPActivityFromUserKey]];
+        //[cell setContentText:[object objectForKey:kPAPActivityContentKey]];
+        //[cell setDate:[object createdAt]];
+        NSLog(@"%@", [[self.userArray objectAtIndex:indexPath.row] objectForKey:@"displayName"]);
+        [cell setUser:[self.userArray objectAtIndex:indexPath.row]];
+        [cell setContentText:[[self.userArray objectAtIndex:indexPath.row] objectForKey:kPAPActivityContentKey]];
+        return cell;
     }
-    
-    [cell setUser:[object objectForKey:kPAPActivityFromUserKey]];
-    [cell setContentText:[object objectForKey:kPAPActivityContentKey]];
-    [cell setDate:[object createdAt]];
-    return cell;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (tableView == self.autocompleteTableView) {
+        NSLog(@"%lu", (unsigned long)[self.userArray count]);
+        return [self.userArray count];
+    } else {
+        NSLog(@"%lu", (unsigned long)[self.objects count]);
+        return [self.objects count];
+    }
 }
 
 
@@ -371,6 +402,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [SVProgressHUD show];
         
         PFQuery *userQuery = [PFUser query];
+        [userQuery orderByAscending:@"displayName"];
         [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             [SVProgressHUD dismiss];
             if (!error) {
@@ -379,6 +411,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 self.autocompleteTableView.frame = CGRectMake(47.5f, self.tableView.contentSize.height - 185.0f, 255.0f, 120.0f);
                 self.autocompleteTableView.backgroundColor = [UIColor redColor];
                 self.autocompleteTableView.hidden = NO;
+                
             } else {
                 NSLog(@"%@", error);
             }
