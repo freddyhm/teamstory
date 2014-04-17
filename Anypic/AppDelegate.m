@@ -709,7 +709,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
             
             PAPPhotoDetailsViewController *detailViewController;
             
-            if([type isEqualToString:kPAPActivityTypeComment]){
+            if([type isEqualToString:kPAPPushPayloadActivityCommentKey]){
                 detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notificationComment"];
             }else{
                 detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notification"];
