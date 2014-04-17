@@ -21,7 +21,9 @@ enum ActionSheetTags {
 };
 
 
-@interface PAPPhotoDetailsViewController ()
+@interface PAPPhotoDetailsViewController () {
+    NSInteger text_location;
+}
 @property (nonatomic, strong) UITextField *commentTextField;
 @property (nonatomic, strong) PAPPhotoDetailsHeaderView *headerView;
 @property (nonatomic, assign) BOOL likersQueryInProgress;
@@ -31,8 +33,9 @@ enum ActionSheetTags {
 @property (nonatomic, strong) UITextView *commentTextView;
 @property (nonatomic, strong) PAPPhotoDetailsFooterView *footerView;
 @property (nonatomic, strong) NSString *source;
-@property (nonatomic, strong) NSArray *userArray;
+@property (nonatomic, strong) NSMutableArray *userArray;
 @property (nonatomic, strong) UITableView *autocompleteTableView;
+@property (nonatomic, strong) NSString *atmetionSearchString;
 @end
 
 static const CGFloat kPAPCellInsetWidth = 7.5f;
@@ -48,6 +51,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 @synthesize footerView;
 @synthesize userArray;
 @synthesize autocompleteTableView;
+@synthesize atmetionSearchString;
 
 
 #pragma mark - Initialization
@@ -283,12 +287,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             cell.delegate = self;
         }
         
-        //[cell setUser:[self.objects objectForKey:kPAPActivityFromUserKey]];
-        //[cell setContentText:[object objectForKey:kPAPActivityContentKey]];
-        //[cell setDate:[object createdAt]];
-    [cell setUser:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityFromUserKey]];
-    [cell setContentText:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityContentKey]];
-    [cell setDate:[[self.objects objectAtIndex:indexPath.row] createdAt]];
+        [cell setUser:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityFromUserKey]];
+        [cell setContentText:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityContentKey]];
+        [cell setDate:[[self.objects objectAtIndex:indexPath.row] createdAt]];
         return cell;
     } else {
         static NSString *cellID = @"atmentionCell";
@@ -298,13 +299,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID navigationController:self.navigationController];
             cell.delegate = self;
         }
-        
-        //[cell setUser:[self.objects objectForKey:kPAPActivityFromUserKey]];
-        //[cell setContentText:[object objectForKey:kPAPActivityContentKey]];
-        //[cell setDate:[object createdAt]];
-        NSLog(@"%@", [[self.userArray objectAtIndex:indexPath.row] objectForKey:@"displayName"]);
         [cell setUser:[self.userArray objectAtIndex:indexPath.row]];
-        [cell setContentText:[[self.userArray objectAtIndex:indexPath.row] objectForKey:kPAPActivityContentKey]];
+        [cell setContentText:@" "];
         return cell;
     }
 }
@@ -406,7 +402,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             [SVProgressHUD dismiss];
             if (!error) {
-                self.userArray = objects;
+                self.userArray = [[NSMutableArray alloc] initWithArray:objects];
                 
                 self.autocompleteTableView.frame = CGRectMake(47.5f, self.tableView.contentSize.height - 185.0f, 255.0f, 120.0f);
                 self.autocompleteTableView.backgroundColor = [UIColor clearColor];
@@ -468,6 +464,24 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         return NO;
     }
     
+    NSMutableString *updatedText = [[NSMutableString alloc] initWithString:textView.text];
+    if (range.location == 0) {
+        text_location = 0;
+    } else if (range.location > 0 && [[updatedText substringWithRange:NSMakeRange(range.location - 1, 1)] isEqualToString:@"@"]) {
+        text_location = range.location;
+    } else if (text_location > 0) {
+        atmetionSearchString = [updatedText substringWithRange:NSMakeRange(text_location, range.location - text_location)];
+        NSLog(@"%@", atmetionSearchString);
+        for (int i = 0; i < [self.userArray count]; i++) {
+            if ([[[self.userArray objectAtIndex:i] objectForKey:@"displayName"] rangeOfString:atmetionSearchString].location == NSNotFound) {
+                [self.userArray removeObjectAtIndex:i];
+            }
+        }
+        //NSLog(@"%@", self.userArray);
+        [self.autocompleteTableView reloadData];
+         
+    }
+
     return YES;
 }
 
@@ -482,8 +496,13 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 #pragma mark - PAPBaseTextCellDelegate
 
-- (void)cell:(PAPBaseTextCell *)cellView didTapUserButton:(PFUser *)aUser {
-    [self shouldPresentAccountViewForUser:aUser];
+- (void)cell:(PAPBaseTextCell *)cellView didTapUserButton:(PFUser *)aUser cellType:(NSString *)cellType{
+    if ([cellType isEqualToString:@"atmentionCell"]) {
+        NSLog(@"%@", [aUser objectForKey:@"displayName"]);
+        self.autocompleteTableView.hidden = YES;
+    } else {
+        [self shouldPresentAccountViewForUser:aUser];
+    }
 }
 
 

@@ -32,6 +32,7 @@
 @property (nonatomic, strong) UIImageView *separatorImage;
 @property (nonatomic, strong) NSString *website;
 @property (nonatomic, strong) UINavigationController *navController;
+@property (nonatomic, strong) NSString *cellType;
 
 /*! The horizontal inset of the cell */
 @property (nonatomic) CGFloat cellInsetWidth;
@@ -82,7 +83,7 @@
  Sent to the delegate when a user button is tapped
  @param aUser the PFUser of the user that was tapped
  */
-- (void)cell:(PAPBaseTextCell *)cellView didTapUserButton:(PFUser *)aUser;
+- (void)cell:(PAPBaseTextCell *)cellView didTapUserButton:(PFUser *)aUser cellType:(NSString *)cellType;
 
 @end
 

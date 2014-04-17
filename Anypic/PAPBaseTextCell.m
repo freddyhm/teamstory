@@ -34,7 +34,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 @synthesize user;
 @synthesize website;
 @synthesize navController;
-
+@synthesize cellType;
 
 #pragma mark - NSObject
 
@@ -49,6 +49,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         }
         
         self.navController = anavController;
+        self.cellType = reuseIdentifier;
         
         cellInsetWidth = 0.0f;
         hideSeparator = NO;
@@ -64,45 +65,43 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.avatarImageView = [[PAPProfileImageView alloc] init];
         [self.avatarImageView setBackgroundColor:[UIColor clearColor]];
         [self.avatarImageView setOpaque:YES];
-        [mainView addSubview:self.avatarImageView];
-                
-        self.nameButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.nameButton setBackgroundColor:[UIColor clearColor]];
-        [mainView addSubview:self.nameButton];
-        
         
         self.contentLabel = [[UILabel alloc] init];
         [self.contentLabel setFont:[UIFont systemFontOfSize:13.0f]];
-        [self.contentLabel setTextColor:[UIColor colorWithRed:119.0f/255.0f green:119.0f/255.0f blue:119.0f/255.0f alpha:1.0f]];
         [self.contentLabel setNumberOfLines:0];
         [self.contentLabel setLineBreakMode:NSLineBreakByWordWrapping];
         [self.contentLabel setBackgroundColor:[UIColor clearColor]];
-        //[self.contentLabel setShadowColor:[UIColor colorWithWhite:1.0f alpha:0.70f]];
-        //[self.contentLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
-        [mainView addSubview:self.contentLabel];
         
         self.timeLabel = [[UILabel alloc] init];
         [self.timeLabel setFont:[UIFont systemFontOfSize:11]];
         [self.timeLabel setTextColor:[UIColor grayColor]];
         [self.timeLabel setBackgroundColor:[UIColor clearColor]];
-        //[self.timeLabel setShadowColor:[UIColor colorWithWhite:1.0f alpha:0.70f]];
-        //[self.timeLabel setShadowOffset:CGSizeMake(0, 1)];
-        [mainView addSubview:self.timeLabel];
         
+        self.nameButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.nameButton setBackgroundColor:[UIColor clearColor]];
+
         if ([reuseIdentifier isEqualToString:@"atmentionCell"]) {
             [mainView setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:0.95f]];
             [self.nameButton setTitleColor:[UIColor colorWithWhite:0.5f alpha:0.95f] forState:UIControlStateNormal];
             [self.nameButton.titleLabel setFont:[UIFont boldSystemFontOfSize:15]];
-  //          [self.nameButton.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
-    //        [self.nameButton addTarget:self action:@selector(didTapUserButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+            [self.nameButton.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
+            [self.nameButton addTarget:self action:@selector(didTapUserButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         } else {
             [mainView setBackgroundColor:[UIColor whiteColor]];
-            
+        
             [self.nameButton setTitleColor:[UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
             [self.nameButton.titleLabel setFont:[UIFont boldSystemFontOfSize:13]];
             [self.nameButton.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
             [self.nameButton addTarget:self action:@selector(didTapUserButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+            
+            [self.contentLabel setTextColor:[UIColor colorWithRed:119.0f/255.0f green:119.0f/255.0f blue:119.0f/255.0f alpha:1.0f]];
+
         }
+        
+        [mainView addSubview:self.avatarImageView];
+        [mainView addSubview:self.nameButton];
+        [mainView addSubview:self.contentLabel];
+        [mainView addSubview:self.timeLabel];
         
         
         self.avatarImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -134,10 +133,24 @@ static TTTTimeIntervalFormatter *timeFormatter;
     // Layout avatar image
     [self.avatarImageView setFrame:CGRectMake(avatarX, avatarY, avatarDim, avatarDim)];
     [self.avatarImageButton setFrame:CGRectMake(avatarX, avatarY, avatarDim, avatarDim)];
-    
+    NSInteger fontSize = 0;
+    NSInteger name_height_origin = 0;
+    if ([self.cellType isEqualToString:@"atmentionCell"]) {
+        fontSize = 15;
+        name_height_origin = nameY + 3;
+    } else {
+        fontSize = 13;
+        name_height_origin = nameY;
+    }
     // Layout the name button
-    CGSize nameSize = [self.nameButton.titleLabel.text sizeWithFont:[UIFont boldSystemFontOfSize:13] forWidth:nameMaxWidth lineBreakMode:NSLineBreakByTruncatingTail];
-    [self.nameButton setFrame:CGRectMake(nameX, nameY, nameSize.width, nameSize.height)];
+    CGSize nameSize = [self.nameButton.titleLabel.text sizeWithFont:[UIFont boldSystemFontOfSize:fontSize] forWidth:nameMaxWidth lineBreakMode:NSLineBreakByTruncatingTail];
+    
+    if ([self.cellType isEqualToString:@"atmentionCell"]) {
+        [self.nameButton setFrame:CGRectMake(nameX, 0.0f, nameMaxWidth, 44.0f)];
+        self.nameButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    } else {
+        [self.nameButton setFrame:CGRectMake(nameX, name_height_origin, nameSize.width, nameSize.height)];
+    }
     
     // Layout the content
     CGSize maximumLabelSize = CGSizeMake(horizontalTextSpace, 9999.0f);
@@ -160,8 +173,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 /* Inform delegate that a user image or name was tapped */
 - (void)didTapUserButtonAction:(id)sender {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(cell:didTapUserButton:)]) {
-        [self.delegate cell:self didTapUserButton:self.user];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(cell:didTapUserButton:cellType:)]) {
+        [self.delegate cell:self didTapUserButton:self.user cellType:self.cellType];
     }    
 }
 
@@ -227,7 +240,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 - (void)setContentText:(NSString *)contentString {
     // If we have a user we pad the content with spaces to make room for the name
-    if ([contentString length] > 0) {
         if (self.user) {
             CGSize nameSize = [self.nameButton.titleLabel.text sizeWithFont:[UIFont boldSystemFontOfSize:13] forWidth:nameMaxWidth lineBreakMode:NSLineBreakByTruncatingTail];
             NSString *paddedString = [PAPBaseTextCell padString:contentString withFont:[UIFont systemFontOfSize:13] toWidth:nameSize.width];
@@ -252,8 +264,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
         } else { // Otherwise we ignore the padding and we'll add it after we set the user
             [self.contentLabel setText:contentString];
         }
-    }
+    
     [self setNeedsDisplay];
+
 }
 
 - (void)openUrl:(id)sender {
