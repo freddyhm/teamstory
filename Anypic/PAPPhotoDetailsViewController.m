@@ -34,8 +34,9 @@ enum ActionSheetTags {
 @property (nonatomic, strong) PAPPhotoDetailsFooterView *footerView;
 @property (nonatomic, strong) NSString *source;
 @property (nonatomic, strong) NSMutableArray *userArray;
+@property (nonatomic, strong) NSArray *filteredArray;
 @property (nonatomic, strong) UITableView *autocompleteTableView;
-@property (nonatomic, strong) NSString *atmetionSearchString;
+@property (nonatomic, strong) NSString *atmentionSearchString;
 @end
 
 static const CGFloat kPAPCellInsetWidth = 7.5f;
@@ -51,7 +52,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 @synthesize footerView;
 @synthesize userArray;
 @synthesize autocompleteTableView;
-@synthesize atmetionSearchString;
+@synthesize atmentionSearchString;
+@synthesize filteredArray;
 
 
 #pragma mark - Initialization
@@ -299,7 +301,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID navigationController:self.navigationController];
             cell.delegate = self;
         }
-        [cell setUser:[self.userArray objectAtIndex:indexPath.row]];
+        [cell setUser:[self.filteredArray objectAtIndex:indexPath.row]];
         [cell setContentText:@" "];
         return cell;
     }
@@ -307,10 +309,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (tableView == self.autocompleteTableView) {
-        NSLog(@"%lu", (unsigned long)[self.userArray count]);
-        return [self.userArray count];
+        return [self.filteredArray count];
     } else {
-        NSLog(@"%lu", (unsigned long)[self.objects count]);
         return [self.objects count];
     }
 }
@@ -398,11 +398,13 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [SVProgressHUD show];
         
         PFQuery *userQuery = [PFUser query];
+        [userQuery whereKeyExists:@"displayName"];
         [userQuery orderByAscending:@"displayName"];
         [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             [SVProgressHUD dismiss];
             if (!error) {
                 self.userArray = [[NSMutableArray alloc] initWithArray:objects];
+                self.filteredArray = objects;
                 
                 self.autocompleteTableView.frame = CGRectMake(47.5f, self.tableView.contentSize.height - 185.0f, 255.0f, 120.0f);
                 self.autocompleteTableView.backgroundColor = [UIColor clearColor];
@@ -469,15 +471,25 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         text_location = 0;
     } else if (range.location > 0 && [[updatedText substringWithRange:NSMakeRange(range.location - 1, 1)] isEqualToString:@"@"]) {
         text_location = range.location;
-    } else if (text_location > 0) {
-        atmetionSearchString = [updatedText substringWithRange:NSMakeRange(text_location, range.location - text_location)];
-        NSLog(@"%@", atmetionSearchString);
-        for (int i = 0; i < [self.userArray count]; i++) {
-            if ([[[self.userArray objectAtIndex:i] objectForKey:@"displayName"] rangeOfString:atmetionSearchString].location == NSNotFound) {
-                [self.userArray removeObjectAtIndex:i];
+    }
+    if (text_location > 0) {
+        atmentionSearchString = [updatedText substringWithRange:NSMakeRange(text_location, range.location - text_location)];
+        atmentionSearchString = [atmentionSearchString stringByAppendingString:text];
+        /*
+        if ([self.userArray count] > 0) {
+            for (int i = 0; i < [self.userArray count]; i++) {
+                if ([[[self.userArray objectAtIndex:i] objectForKey:@"displayName"] rangeOfString:atmentionSearchString].location == NSNotFound) {
+                    [self.userArray removeObjectAtIndex:i];
+                }
             }
         }
-        //NSLog(@"%@", self.userArray);
+        */
+        self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName  contains[c] %@", atmentionSearchString]];
+        if ([self.filteredArray count] == 1) {
+            self.autocompleteTableView.frame = CGRectMake(47.5f, self.tableView.contentSize.height - 140.0f, 255.0f, 120.0f);
+        } else if ([self.filteredArray count] == 2) {
+            self.autocompleteTableView.frame = CGRectMake(47.5f, self.tableView.contentSize.height - 185.0f, 255.0f, 120.0f);
+        }
         [self.autocompleteTableView reloadData];
          
     }
