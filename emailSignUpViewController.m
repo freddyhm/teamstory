@@ -18,7 +18,6 @@
 @property (nonatomic, strong) UIButton *cancelButton;
 @property (nonatomic, strong) UIButton *signUpButton;
 @property (nonatomic, strong) UIButton *policy;
-@property (nonatomic, strong) MBProgressHUD *hud;
 
 @end
 
@@ -30,7 +29,6 @@
 @synthesize cancelButton;
 @synthesize signUpButton;
 @synthesize policy;
-@synthesize hud;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -209,7 +207,7 @@
 }
 
 -(void)signUpButtonAction:(id)sender {
-    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [SVProgressHUD show];
     NSString *userNewEmail = self.signUpEmailTextField.text;
     NSString *userPW = self.signUpPWTextField.text;
     NSString *userPW_confirm = self.signUpPWTextField_confirm.text;
@@ -227,14 +225,14 @@
             
             [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (!error) {
-                    [self.hud hide:YES];
+                    [SVProgressHUD dismiss];
                     // Hooray! Let them use the app now.
                     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Signed Up Successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                     alert.tag = SUCCESSFUL;
                     alert.alertViewStyle = UIAlertViewStyleDefault;
                     [alert show];
                 } else {
-                    [self.hud hide:YES];
+                    [SVProgressHUD dismiss];
                     NSString *errorString = [error userInfo][@"error"];
                     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:errorString delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                     alert.alertViewStyle = UIAlertViewStyleDefault;
@@ -242,13 +240,13 @@
                 }
             }];
         } else {
-            [self.hud hide:YES];
+            [SVProgressHUD dismiss];
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Password and confirmation password don't match!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             alert.alertViewStyle = UIAlertViewStyleDefault;
             [alert show];
         }
     } else {
-        [self.hud hide:YES];
+        [SVProgressHUD dismiss];
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Please fill out all the fields" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         alert.alertViewStyle = UIAlertViewStyleDefault;
         [alert show];
