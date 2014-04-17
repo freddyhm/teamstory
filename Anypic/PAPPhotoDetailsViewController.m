@@ -486,9 +486,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         */
         self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName  contains[c] %@", atmentionSearchString]];
         if ([self.filteredArray count] == 1) {
-            self.autocompleteTableView.frame = CGRectMake(47.5f, self.tableView.contentSize.height - 140.0f, 255.0f, 120.0f);
+            self.autocompleteTableView.frame = CGRectMake(47.5f, self.tableView.contentSize.height - 115.0f, 255.0f, 120.0f);
         } else if ([self.filteredArray count] == 2) {
-            self.autocompleteTableView.frame = CGRectMake(47.5f, self.tableView.contentSize.height - 185.0f, 255.0f, 120.0f);
+            self.autocompleteTableView.frame = CGRectMake(47.5f, self.tableView.contentSize.height - 165.0f, 255.0f, 120.0f);
         }
         [self.autocompleteTableView reloadData];
          
