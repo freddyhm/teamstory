@@ -68,7 +68,8 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    
+    [super viewWillAppear:animated];
+
     // analytics
     [PAPUtility captureScreenGA:@"Home"];
 }
@@ -77,7 +78,7 @@
 
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
-
+    
     if (self.objects.count == 0 && ![[self queryForTable] hasCachedResult] & !self.firstLaunch) {
         self.tableView.scrollEnabled = NO;
         

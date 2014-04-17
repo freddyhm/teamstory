@@ -118,10 +118,15 @@ enum ActionSheetTags {
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
+   if(self.isLoading && ![SVProgressHUD isVisible]){
+        [SVProgressHUD showQuickly];
+    }
+    
     if (self.shouldReloadOnAppear) {
         self.shouldReloadOnAppear = NO;
         [self loadObjects];
     }
+    
 }
 
 
@@ -311,6 +316,8 @@ enum ActionSheetTags {
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
 
 - (PFQuery *)queryForTable {
+    
+    
     if (![PFUser currentUser]) {
         PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
         [query setLimit:0];
@@ -377,12 +384,6 @@ enum ActionSheetTags {
      */
 
     return query;
-}
-
-- (void)objectsWillLoad{
-    [super objectsWillLoad];
-    
-    [SVProgressHUD show];
 }
 
 - (void)objectsDidLoad:(NSError *)error {
