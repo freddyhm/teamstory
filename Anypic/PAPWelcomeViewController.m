@@ -6,6 +6,7 @@
 
 #import "PAPWelcomeViewController.h"
 #import "SVProgressHUD.h"
+#import "MBProgressHUD.h"
 #import "AppDelegate.h"
 #import "PAPProfileSettingViewController.h"
 #import "PAPLoginTutorialViewController.h"
@@ -34,11 +35,11 @@
 
     // Show spinning indicator while user is being refreshed
     [SVProgressHUD show];
+    
     [user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         
-        // hide indicator
-        [SVProgressHUD dismiss];
-        
+       [SVProgressHUD dismissQuickly];
+    
         if(!error){
             NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
             bool profileExist = [profilExist_num boolValue];
@@ -68,9 +69,19 @@
             }
         }else{
             NSLog(@"%@", error);
+            
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Login Error" message:@"Logging you off and sending you back to main screen" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            alert.alertViewStyle = UIAlertViewStyleDefault;
+            [alert show];
+            
+            if([PFUser currentUser]){
+                [PFUser logOut];
+            }
+            [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTutorialViewController];
         }
     }];
 }
+
 
 #pragma mark - ()
 

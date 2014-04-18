@@ -318,13 +318,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 
 - (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
     // user has logged in - we need to fetch all of their Facebook data before we let them in
-    if (![self shouldProceedToMainInterface:user]) {
-        
-        self.hud = [MBProgressHUD showHUDAddedTo:self.navController.view animated:YES];
-        self.hud.labelText = NSLocalizedString(@"Loading", nil);
-        self.hud.dimBackground = YES;
-    }
-    
+    [self shouldProceedToMainInterface:user];
     NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
     bool profileExist = [profilExist_num boolValue];
     
@@ -349,8 +343,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     } else if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
         [FBRequestConnection startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
             if (!error) {
-                [self.hud hide:YES];
-                
+            
                 if (profileExist != true || access_grant != true) {
                     if (profileExist != true) {
                         NSString *email = result[@"email"];
@@ -468,6 +461,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 
     self.tabBarController.delegate = self;
     self.tabBarController.viewControllers = @[ homeNavigationController, perksNavigationController, emptyNavigationController, activityFeedNavigationController, accountNavigationController ];
+    
     
     [self.navController setViewControllers:@[ self.welcomeViewController, self.tabBarController ] animated:NO];
 
@@ -715,7 +709,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
             
             PAPPhotoDetailsViewController *detailViewController;
             
-            if([type isEqualToString:kPAPActivityTypeComment]){
+            if([type isEqualToString:kPAPPushPayloadActivityCommentKey]){
                 detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notificationComment"];
             }else{
                 detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notification"];
@@ -816,8 +810,6 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
             [self logOut];
         }
     } else {
-        self.hud.labelText = NSLocalizedString(@"Creating Profile", nil);
-        
         
         if (user) {
             /*

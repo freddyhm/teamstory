@@ -302,8 +302,11 @@
     [super viewWillAppear:YES];
     [PAPUtility captureScreenGA:@"Account"];
     
-    [SVProgressHUD show];
     
+    if(![SVProgressHUD isVisible]){
+        [SVProgressHUD show];
+    }
+
     [self.user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         
         self.user = (PFUser *)object;
@@ -334,7 +337,9 @@
             self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height);
         }
         
-        [SVProgressHUD dismiss];
+         if([SVProgressHUD isVisible]){
+             [SVProgressHUD dismiss];
+         }
     }];
 }
 
@@ -368,6 +373,8 @@
 
 
 #pragma mark - PFQueryTableViewController
+
+
 
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];

@@ -125,6 +125,10 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
     [[self sharedView] showProgress:-1 status:nil maskType:SVProgressHUDMaskTypeNone];
 }
 
++ (void)showQuickly{
+    [[self sharedView] showProgressQuickly:-1 status:nil maskType:SVProgressHUDMaskTypeNone];
+}
+
 + (void)showWithStatus:(NSString *)status {
     [[self sharedView] showProgress:-1 status:status maskType:SVProgressHUDMaskTypeNone];
 }
@@ -179,6 +183,13 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
     if ([self isVisible]) {
         [[self sharedView] dismiss];
     }
+}
+
++ (void)dismissQuickly{
+    if ([self isVisible]) {
+        [[self sharedView] dismissQuickly];
+    }
+
 }
 
 
@@ -556,6 +567,92 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
     }
 }
 
+- (void)showProgressQuickly:(float)progress status:(NSString*)string maskType:(SVProgressHUDMaskType)hudMaskType {
+    
+    if(!self.overlayView.superview){
+        NSEnumerator *frontToBackWindows = [[[UIApplication sharedApplication]windows]reverseObjectEnumerator];
+        
+        for (UIWindow *window in frontToBackWindows)
+            if (window.windowLevel == UIWindowLevelNormal) {
+                [window addSubview:self.overlayView];
+                break;
+            }
+    }
+    
+    if(!self.superview)
+        [self.overlayView addSubview:self];
+    
+    self.fadeOutTimer = nil;
+    self.imageView.hidden = YES;
+    self.maskType = hudMaskType;
+    self.progress = progress;
+    
+    self.stringLabel.text = string;
+    [self updatePosition];
+    
+    if(progress >= 0) {
+        self.imageView.image = nil;
+        self.imageView.hidden = NO;
+        [self.indefiniteAnimatedLayer removeFromSuperlayer];
+        
+        self.ringLayer.strokeEnd = progress;
+        
+        if(progress == 0)
+            self.activityCount++;
+    }
+    else {
+        self.activityCount++;
+        [self cancelRingLayerAnimation];
+        [self.hudView.layer addSublayer:self.indefiniteAnimatedLayer];
+    }
+    
+    if(self.maskType != SVProgressHUDMaskTypeNone) {
+        self.overlayView.userInteractionEnabled = YES;
+        self.accessibilityLabel = string;
+        self.isAccessibilityElement = YES;
+    }
+    else {
+        self.overlayView.userInteractionEnabled = NO;
+        self.hudView.accessibilityLabel = string;
+        self.hudView.isAccessibilityElement = YES;
+    }
+    
+    [self.overlayView setHidden:NO];
+    self.overlayView.backgroundColor = [UIColor clearColor];
+    [self positionHUD:nil];
+    
+    if(self.alpha != 1) {
+        NSDictionary *userInfo = [self notificationUserInfo];
+        [[NSNotificationCenter defaultCenter] postNotificationName:SVProgressHUDWillAppearNotification
+                                                            object:nil
+                                                          userInfo:userInfo];
+        
+        [self registerNotifications];
+        
+        self.hudView.transform = CGAffineTransformScale(self.hudView.transform, 1.3, 1.3);
+        
+        if(self.isClear) {
+            self.alpha = 1;
+            self.hudView.alpha = 0;
+        }
+        
+        self.hudView.transform = CGAffineTransformScale(self.hudView.transform, 1/1.3, 1/1.3);
+                             
+         if(self.isClear) // handle iOS 7 UIToolbar not answer well to hierarchy opacity change
+             self.hudView.alpha = 1;
+         else
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:SVProgressHUDDidAppearNotification
+                                                                                 object:nil
+                                                                               userInfo:userInfo];
+        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil);
+        UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, string);
+
+        
+        [self setNeedsDisplay];
+    }
+}
+
 
 - (void)showImage:(UIImage *)image status:(NSString *)string duration:(NSTimeInterval)duration {
     self.progress = -1;
@@ -636,6 +733,47 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
                              //NSLog(@"keyWindow = %@", [UIApplication sharedApplication].keyWindow);
                          }
                      }];
+}
+
+- (void)dismissQuickly{
+    
+    NSDictionary *userInfo = [self notificationUserInfo];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SVProgressHUDWillDisappearNotification
+                                                        object:nil
+                                                      userInfo:userInfo];
+    
+    self.activityCount = 0;
+   
+     self.hudView.transform = CGAffineTransformScale(self.hudView.transform, 0.8, 0.8);
+
+     self.alpha = 0;
+     self.hudView.alpha = 0;
+     
+     [[NSNotificationCenter defaultCenter] removeObserver:self];
+     [self cancelRingLayerAnimation];
+     [_hudView removeFromSuperview];
+     _hudView = nil;
+     
+     [_overlayView removeFromSuperview];
+     _overlayView = nil;
+     
+     [_indefiniteAnimatedLayer removeFromSuperlayer];
+     _indefiniteAnimatedLayer = nil;
+     
+     UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil);
+     
+     [[NSNotificationCenter defaultCenter] postNotificationName:SVProgressHUDDidDisappearNotification
+                                                         object:nil
+                                                       userInfo:userInfo];
+     
+     // Tell the rootViewController to update the StatusBar appearance
+     UIViewController *rootController = [[UIApplication sharedApplication] keyWindow].rootViewController;
+     if ([rootController respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
+         [rootController setNeedsStatusBarAppearanceUpdate];
+     }
+     // uncomment to make sure UIWindow is gone from app.windows
+     //NSLog(@"%@", [UIApplication sharedApplication].windows);
+     //NSLog(@"keyWindow = %@", [UIApplication sharedApplication].keyWindow);
 }
 
 

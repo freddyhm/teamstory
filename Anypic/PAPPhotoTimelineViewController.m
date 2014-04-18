@@ -67,6 +67,9 @@ enum ActionSheetTags {
         // The number of objects to show per page
         self.objectsPerPage = 10;
         
+        // Remove default loading indicator
+        self.loadingViewEnabled = NO;
+        
         // Improve scrolling performance by reusing UITableView section headers
         self.reusableSectionHeaderViews = [NSMutableSet setWithCapacity:3];
         
@@ -115,10 +118,15 @@ enum ActionSheetTags {
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
+   if(self.isLoading && ![SVProgressHUD isVisible]){
+        [SVProgressHUD showQuickly];
+    }
+    
     if (self.shouldReloadOnAppear) {
         self.shouldReloadOnAppear = NO;
         [self loadObjects];
     }
+    
 }
 
 
@@ -308,6 +316,8 @@ enum ActionSheetTags {
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
 
 - (PFQuery *)queryForTable {
+    
+    
     if (![PFUser currentUser]) {
         PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
         [query setLimit:0];
@@ -378,6 +388,8 @@ enum ActionSheetTags {
 
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
+    
+    [SVProgressHUD dismiss];
     
     if (NSClassFromString(@"UIRefreshControl")) {
         [self.refreshControl endRefreshing];
