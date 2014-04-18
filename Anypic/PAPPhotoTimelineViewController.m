@@ -792,6 +792,7 @@ enum ActionSheetTags {
     
     BOOL isHome = [[self.navigationController.viewControllers lastObject] isKindOfClass:PAPHomeViewController.class];
     
+    // make sure pull-to-refresh set only for home
     if(isHome){
         if(scrollView.contentOffset.y <= -100){
             
