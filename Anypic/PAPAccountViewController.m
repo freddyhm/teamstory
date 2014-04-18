@@ -299,8 +299,10 @@
             alert.alertViewStyle = UIAlertViewStyleDefault;
             [alert show];
         }
-    
-        [SVProgressHUD dismiss];
+        
+        if([SVProgressHUD isVisible]){
+            [SVProgressHUD dismiss];
+        }
     }];
 
 }

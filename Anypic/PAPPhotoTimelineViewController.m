@@ -7,6 +7,7 @@
 #import "PAPPhotoTimelineViewController.h"
 #import "PAPPhotoCell.h"
 #import "PAPAccountViewController.h"
+#import "PAPHomeViewController.h"
 #import "PAPPhotoDetailsViewController.h"
 #import "PAPUtility.h"
 #import "PAPLoadMoreCell.h"
@@ -117,6 +118,7 @@ enum ActionSheetTags {
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+   
     
    if(self.isLoading && ![SVProgressHUD isVisible]){
         [SVProgressHUD showQuickly];
@@ -386,11 +388,17 @@ enum ActionSheetTags {
     return query;
 }
 
+- (void)objectsWillLoad{
+    [super objectsWillLoad];
+}
+
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
     
-    [SVProgressHUD dismiss];
-    
+    if([SVProgressHUD isVisible]){
+        [SVProgressHUD dismiss];
+    }
+
     if (NSClassFromString(@"UIRefreshControl")) {
         [self.refreshControl endRefreshing];
     }
@@ -782,18 +790,21 @@ enum ActionSheetTags {
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
-    if(scrollView.contentOffset.y <= -100){
-        
-        if(![SVProgressHUD isVisible]){
+    BOOL isHome = [[self.navigationController.viewControllers lastObject] isKindOfClass:PAPHomeViewController.class];
+    
+    if(isHome){
+        if(scrollView.contentOffset.y <= -100){
             
-            CGFloat hudOffset = IS_WIDESCREEN ? -160.0f : -120.0f;
-            [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, hudOffset)];
-            [SVProgressHUD show];
-        }
-    }else{
-        if([SVProgressHUD isVisible]){
-            [SVProgressHUD dismiss];
-            [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, 0.0f)];
+            if(![SVProgressHUD isVisible]){
+                CGFloat hudOffset = IS_WIDESCREEN ? -160.0f : -120.0f;
+                [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, hudOffset)];
+                [SVProgressHUD show];
+            }
+        }else{
+            if([SVProgressHUD isVisible]){
+                [SVProgressHUD dismiss];
+                [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, 0.0f)];
+            }
         }
     }
 }
