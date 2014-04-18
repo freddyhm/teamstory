@@ -420,14 +420,17 @@
         [SVProgressHUD dismiss];
     }];
      */
+    [user saveInBackground];
+    [SVProgressHUD dismiss];
+    /*
     [user saveEventually:^(BOOL succeeded, NSError *error) {
         if (error) {
             NSLog(@"uploadImage_small: %@ %@", error, [error userInfo]);
         } else {
             NSLog(@"successful");
         }
-        [SVProgressHUD dismiss];
-    }];
+
+    }];*/
 }
 
 -(void)uploadImage_medium:(NSData *)imageData {
@@ -447,6 +450,9 @@
         [SVProgressHUD dismiss];
     }];
      */
+    [user saveInBackground];
+    [SVProgressHUD dismiss];
+    /*
     [user saveEventually:^(BOOL succeeded, NSError *error) {
         if (error) {
             NSLog(@"uploadImage_medium: %@ %@", error, [error userInfo]);
@@ -454,7 +460,7 @@
             NSLog(@"successful");
         }
         [SVProgressHUD dismiss];
-    }];
+    }];*/
 }
 
 #pragma mark - UINavigationControllerDelegate
@@ -683,7 +689,8 @@
             return;
         }
         
-        [[PFUser currentUser] saveEventually];
+        //[[PFUser currentUser] saveEventually];
+        [[PFUser currentUser] saveInBackground];
         
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         alert.alertViewStyle = UIAlertViewStyleDefault;
@@ -730,8 +737,10 @@
             membershipReceived.ACL = membershipACL;
             
             // make sure our join activity is always earlier than a follow
-            [membershipReceived saveEventually];
-            [[PFUser currentUser] saveEventually];
+            //[membershipReceived saveEventually];
+            [membershipReceived saveInBackground];
+            [[PFUser currentUser] saveInBackground];
+            //[[PFUser currentUser] saveEventually];
             
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             alert.tag = SUCCESSFUL;
@@ -837,10 +846,12 @@
                 membershipReceived.ACL = membershipACL;
                 
                 // make sure our join activity is always earlier than a follow
-                [membershipReceived saveEventually];
+                //[membershipReceived saveEventually];
+                [membershipReceived saveInBackground];
             }
             
-            [[PFUser currentUser] saveEventually];
+            //[[PFUser currentUser] saveEventually];
+            [[PFUser currentUser] saveInBackground];
             
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             alert.alertViewStyle = UIAlertViewStyleDefault;
