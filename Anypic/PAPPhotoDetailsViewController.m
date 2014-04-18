@@ -14,6 +14,7 @@
 #import "PAPUtility.h"
 #import "SVProgressHUD.h"
 
+
 enum ActionSheetTags {
     MainActionSheetTag = 0,
     reportTypeTag = 1,
@@ -31,6 +32,7 @@ enum ActionSheetTags {
 @property (nonatomic, strong) UITextView *commentTextView;
 @property (nonatomic, strong) PAPPhotoDetailsFooterView *footerView;
 @property (nonatomic, strong) NSString *source;
+@property CGRect previousRect;
 @end
 
 static const CGFloat kPAPCellInsetWidth = 7.5f;
@@ -182,6 +184,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    self.previousRect = CGRectZero;
 
     [self.headerView reloadLikeBar];
     
@@ -342,6 +346,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 #pragma mark - UITextViewDelegate
 
+
 - (void)textViewDidBeginEditing:(UITextView *)textView {
     if ([[textView text] isEqualToString:@"Add a comment"]) {
         [textView setText:@""];
@@ -354,9 +359,29 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
 }
 
+- (void)textViewDidChange:(UITextView *)textView{
+    
+    UITextPosition* pos = textView.endOfDocument;//explore others like beginningOfDocument if you want to customize the behaviour
+    CGRect currentRect = [textView caretRectForPosition:pos];
+
+    NSLog(@"%f", currentRect.origin.y);
+    
+    if (currentRect.origin.y > self.previousRect.origin.y && self.previousRect.origin.y != 0){
+        CGRect frame = textView.frame;
+        frame.size.height = [textView contentSize].height;
+        textView.frame = frame;
+        self.footerView.frame = CGRectMake(self.footerView.frame.origin.x, self.footerView.frame.origin.y, self.footerView.frame.size.width,800);
+        [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentOffset.y + (frame.size.height - 60)) animated:YES];
+    }
+    
+    self.previousRect = currentRect;
+}
+
 
 - (BOOL) textView:(UITextView*)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString*)text{
+
     if ([text isEqualToString:@"\n"]) {
+        
         NSString *trimmedComment = [textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         if (trimmedComment.length != 0 && [self.photo objectForKey:kPAPPhotoUserKey]) {
             PFObject *comment = [PFObject objectWithClassName:kPAPActivityClassKey];
