@@ -8,7 +8,7 @@
 #import "PAPUtility.h"
 
 @interface PAPPhotoDetailsFooterView ()
-@property (nonatomic, strong) UIView *mainView;
+
 @end
 
 @implementation PAPPhotoDetailsFooterView

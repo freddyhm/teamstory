@@ -361,17 +361,19 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 - (void)textViewDidChange:(UITextView *)textView{
     
-    UITextPosition* pos = textView.endOfDocument;//explore others like beginningOfDocument if you want to customize the behaviour
+    UITextPosition* pos = textView.endOfDocument;
     CGRect currentRect = [textView caretRectForPosition:pos];
-
-    NSLog(@"%f", currentRect.origin.y);
     
+    CGRect frame = textView.frame;
+    frame.size.height = [textView contentSize].height;
+    textView.frame = frame;
+
     if (currentRect.origin.y > self.previousRect.origin.y && self.previousRect.origin.y != 0){
-        CGRect frame = textView.frame;
-        frame.size.height = [textView contentSize].height;
-        textView.frame = frame;
-        self.footerView.frame = CGRectMake(self.footerView.frame.origin.x, self.footerView.frame.origin.y, self.footerView.frame.size.width,800);
-        [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentOffset.y + (frame.size.height - 60)) animated:YES];
+        self.footerView.mainView.frame = CGRectMake(self.footerView.mainView.frame.origin.x, self.footerView.mainView.frame.origin.y, self.footerView.mainView.frame.size.width, frame.size.height + 20);
+        [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentOffset.y + 15) animated:YES];
+    }else if (currentRect.origin.y < self.previousRect.origin.y && self.previousRect.origin.y != 0){
+        self.footerView.mainView.frame = CGRectMake(self.footerView.mainView.frame.origin.x, self.footerView.mainView.frame.origin.y, self.footerView.mainView.frame.size.width, frame.size.height + 20);
+        [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentOffset.y  - 15) animated:YES];
     }
     
     self.previousRect = currentRect;
