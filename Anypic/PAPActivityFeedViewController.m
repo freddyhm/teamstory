@@ -56,8 +56,8 @@
         self.loadingViewEnabled = NO;
         
         //resets read list
-        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"readList"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+       // [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"readList"];
+        //[[NSUserDefaults standardUserDefaults] synchronize];
         
         // get read list from local storage
         self.readList = [[[NSUserDefaults standardUserDefaults] objectForKey:@"readList"] mutableCopy];
@@ -248,6 +248,7 @@
     
     [SVProgressHUD dismiss];
     
+    
     if([self.readList count] == 0){
         for (int i = 0; i < self.objects.count; i++) {
             
@@ -260,6 +261,28 @@
         }
         
         [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
+    }else{
+        
+        // sync loaded objects with read list
+        for (PFObject *object in self.objects) {
+            NSString *activityId = [object objectId];
+            if([self.readList valueForKey:activityId] == nil){
+                NSString *photoId = [object objectForKey:@"photo"];
+                [self addToReadList:photoId itemActivityId:activityId];
+            }
+        }
+        
+        /*
+         // remove items in read list that are not present in loaded objects
+        for (NSDictionary *itemList in self.readList) {
+            
+            PFObject *activityObj = [PFObject objectWithoutDataWithClassName:@"Activity" objectId:[self.readList objectForKey:itemList]];
+            
+            if(![self.objects containsObject:activityObj]){
+                [self.readList removeObjectForKey:itemList];
+            }
+        }
+         */
     }
 
     if (self.objects.count == 0 && ![[self queryForTable] hasCachedResult]) {
