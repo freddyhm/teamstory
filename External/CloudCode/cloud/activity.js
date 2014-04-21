@@ -15,16 +15,17 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       
                       var fromUser = request.object.get("fromUser");
                       var fromUserId = fromUser != undefined ? request.object.get("fromUser").id : "";
+                      var fromUserEmail = fromUser != undefined ? request.user.get("email") : "";
                       
                       if (request.object.get("type") === "membership") {
                       var Mailgun = require('mailgun');
-                      Mailgun.initialize('sandbox15444.mailgun.org', 'key-1ygnrqln04tefoo3gl4ykzpsvr6cukn5');
+                      Mailgun.initialize('teamstoryapp.com', 'key-57rdy7ishc75mi99405w246l22tyevt8');
                       
                       Mailgun.sendEmail({
-                                        to: "toboklee@gmail.com",
-                                        from: "postmaster@sandbox15444.mailgun.org",
-                                        subject: "Hello from Cloud Code!",
-                                        text: "Using Parse and Mailgun is great!"
+                                        to: fromUserEmail,
+                                        from: "info@teamstoryapp.com",
+                                        subject: "Getting Into Teamstory!",
+                                        text: "Hey there!\n\nThanks for signing up for Teamstory.\nWe’re working hard to create a great collaborative platform where entrepreneurs & startups can capture and share their unique moments.\nWe’re currently invite-only to focus on the quality of the community. All members are reviewed manually.\n\nWe’ll get back to you soon. Please send us an email if you have any questions.\n\n\nTeamstory Crew\n\nhttps://angel.co/teamstory\nhttp://twitter.com/teamstoryapp"
                                         }, {
                                         success: function(httpResponse) {
                                         console.log(httpResponse);
@@ -92,46 +93,18 @@ Parse.Cloud.afterSave('Activity', function(request) {
                                               });
                       }
                       
+                      // Only send push notifications for new activities
+                      if (request.object.existed()) {
+                      return;
+                      }
+                      
+                      if (!toUser) {
+                      throw "Undefined toUser. Skipping push for Activity " + request.object.get('type') + " : " + request.object.id;
+                      return;
+                      }
+                      
                       });
 
-    if (request.object.get("type") === "membership") {
-    var Mailgun = require('mailgun');
-    Mailgun.initialize('sandbox15444.mailgun.org', 'key-1ygnrqln04tefoo3gl4ykzpsvr6cukn5');
-
-    Mailgun.sendEmail({
-      to: "toboklee@gmail.com",
-      from: "postmaster@sandbox15444.mailgun.org",
-      subject: "Hello from Cloud Code!",
-      text: "Using Parse and Mailgun is great!"
-    }, {
-      success: function(httpResponse) {
-        console.log(httpResponse);
-        response.success("Email sent!");
-      },
-      error: function(httpResponse) {
-        console.error(httpResponse);
-        response.error("Uh oh, something went wrong");
-      }
-    });
-    return;
-  }
-
-    var toUser = request.object.get("toUser");
-    var toUserId = request.object.get("toUser").id;
-    var photoId = request.object.get('photo').id;
-    var isSelfie = toUserId == fromUserId;
-    
-    // Only send push notifications for new activities
-    if (request.object.existed()) {
-    return;
-    }
-    
-    if (!toUser) {
-    throw "Undefined toUser. Skipping push for Activity " + request.object.get('type') + " : " + request.object.id;
-    return;
-    }
-    
-    
 
 
 var alertMessage = function(request) {
@@ -152,7 +125,7 @@ var alertMessage = function(request) {
     } else if (request.object.get("type") === "follow") {
         if (request.user.get('displayName')) {
             message = request.user.get('displayName') + ' is now following you.';
-        } 
+        }
     } else {
         message = "You have a new follower.";
     }
@@ -176,7 +149,8 @@ var alertPayload = function(request) {
         p: 'a', // Payload Type: Activity
         t: 'c', // Activity Type: Comment
         fu: request.object.get('fromUser').id, // From User
-        pid: request.object.get('photo').id // Photo Id
+        pid: request.object.get('photo').id, // Photo Id
+        aid: request.object.id // Activity Id
         };
     } else if (request.object.get("type") === "like") {
         return {
@@ -186,7 +160,8 @@ var alertPayload = function(request) {
         p: 'a', // Payload Type: Activity
         t: 'l', // Activity Type: Like
         fu: request.object.get('fromUser').id, // From User
-        pid: request.object.get('photo').id // Photo Id
+        pid: request.object.get('photo').id, // Photo Id
+        aid: request.object.id // Activity Id
         };
     } else if (request.object.get("type") === "follow") {
         return {
@@ -195,7 +170,8 @@ var alertPayload = function(request) {
             // The following keys help load the correct photo in response to this push notification.
         p: 'a', // Payload Type: Activity
         t: 'f', // Activity Type: Follow
-        fu: request.object.get('fromUser').id // From User
+        fu: request.object.get('fromUser').id, // From User
+        aid: request.object.id // Activity Id
         };
     }
     

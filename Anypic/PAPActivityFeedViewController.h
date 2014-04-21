@@ -10,12 +10,12 @@
 
 @property (nonatomic, strong) NSMutableDictionary *readList;
 
-- (void)notificationSetup:(int)size source:(NSString *)source;
 + (NSString *)stringForActivityType:(NSString *)activityType;
 
 
 - (void)setActivityBadge:(NSString *)badge;
 - (void)updateReadList:(NSString *)itemPhotoId;
+- (void)addToReadList:(NSString *)itemPhotoId itemActivityId:(NSString *)itemActivityId;
 
 
 @end

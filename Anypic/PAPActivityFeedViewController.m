@@ -154,7 +154,7 @@
         // get status from read list and update if necessary
         NSString *status = [[self.readList objectForKey:[activity objectId]] objectForKey:@"status"];
         if([status isEqualToString:@"unread"]){
-            [self updateReadList:[activity objectForKey:@"photo"]];
+            [self updateReadList:[[activity objectForKey:@"photo"] objectId]];
         }
 
         if ([activity objectForKey:kPAPActivityPhotoKey]) {
@@ -254,7 +254,7 @@
             PFObject *pfObj = self.objects[i];
 
             NSDictionary *activity = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                               @"unread", @"status", [[pfObj objectForKey:@"photo"] objectId], @"photoId", nil];
+                               @"read", @"status", [[pfObj objectForKey:@"photo"] objectId], @"photoId", nil];
              
              [self.readList setObject:activity forKey:[pfObj objectId]];
         }
@@ -306,9 +306,9 @@
     // safety check make sure read list has enough items
     NSString *activityStatus = [self.readList count] > indexPath.row ? [readListItem objectForKey:@"status"] : @"";
     
-    if ([activityStatus isEqualToString:@"unread"]) {
+    if ([activityStatus isEqualToString:@"unread"] || [activityStatus isEqualToString:@""]) {
         [cell setIsNew:YES];
-    }else{
+    }else if([activityStatus isEqualToString:@"read"]){
         [cell setIsNew:NO];
     }
 
@@ -392,20 +392,27 @@
     NSString *photoId = [[note userInfo] objectForKey:@"pid"];
     NSString *activityId = [[note userInfo] objectForKey:@"aid"];
     
-    NSLog(@"%@", note);
-    
     if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
         NSString *pushSrc = [[note userInfo] objectForKey:@"source"];
+        
         if(![pushSrc isEqualToString:@"konotor"]){
-            [self addToReadList:photoId itemActivityId:activityId];
+            
+            // load & fill readlist or set new unread
+            if([self.readList count] == 0){
+                [self loadObjects];
+            }else{
+                [self addToReadList:photoId itemActivityId:activityId];
+                [self loadObjects];
+            }
         }
     }
 }
 
+/*
 
 - (void)notificationSetup:(int)size source:(NSString *)source{
     
-    /*
+ 
     // load & fill readlist or set new unread
     if([self.readList count] == 0){
         [self loadObjects];
@@ -413,11 +420,9 @@
         [self updateReadList:item];
         [self loadObjects];
     }
-     */
+ 
 }
-
-
-
+*/
 /*
 
 - (void)updateReadList:(int)size source:(NSString *)source{
@@ -468,8 +473,6 @@
     [self.readList setObject:activity forKey:itemActivityId];
     
     [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
-    
-    [self loadObjects];
 }
 
 
