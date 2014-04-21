@@ -267,7 +267,7 @@
         for (PFObject *object in self.objects) {
             NSString *activityId = [object objectId];
             if([self.readList valueForKey:activityId] == nil){
-                NSString *photoId = [object objectForKey:@"photo"];
+                NSString *photoId = [[object objectForKey:@"photo"] objectId];
                 [self addToReadList:photoId itemActivityId:activityId];
             }
         }
