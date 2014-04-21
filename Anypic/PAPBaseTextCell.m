@@ -126,15 +126,15 @@ static TTTTimeIntervalFormatter *timeFormatter;
     [super layoutSubviews];
     
     //[mainView setFrame:CGRectMake(cellInsetWidth, self.contentView.frame.origin.y, 305.0f, self.contentView.frame.size.height)];
-    
     [mainView setFrame:CGRectMake(cellInsetWidth, self.contentView.frame.origin.y, self.contentView.frame.size.width-2*cellInsetWidth, self.contentView.frame.size.height)];
-    
     
     // Layout avatar image
     [self.avatarImageView setFrame:CGRectMake(avatarX, avatarY, avatarDim, avatarDim)];
     [self.avatarImageButton setFrame:CGRectMake(avatarX, avatarY, avatarDim, avatarDim)];
+    
     NSInteger fontSize = 0;
     NSInteger name_height_origin = 0;
+    
     if ([self.cellType isEqualToString:@"atmentionCell"]) {
         fontSize = 15;
         name_height_origin = nameY + 3;
@@ -160,7 +160,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
     CGSize maximumLabelSize = CGSizeMake(horizontalTextSpace, 9999.0f);
     CGSize contentSize = [self.contentLabel sizeThatFits:maximumLabelSize];
     self.contentLabel.font = [UIFont systemFontOfSize:13.0f];
-    
     [self.contentLabel setFrame:CGRectMake(nameX, vertTextBorderSpacing, contentSize.width, contentSize.height)];
     
     // Layout the timestamp label

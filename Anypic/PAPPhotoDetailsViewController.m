@@ -226,7 +226,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row < self.objects.count) { // A comment row
+    if (tableView != self.autocompleteTableView && indexPath.row < self.objects.count) { // A comment row
         PFObject *object = [self.objects objectAtIndex:indexPath.row];
         
         if (object) {
@@ -379,8 +379,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 self.userArray = [[NSMutableArray alloc] initWithArray:objects];
                 self.atmentionUserArray = [[NSMutableArray alloc] init];
                 self.filteredArray = objects;
-                
-                self.autocompleteTableView.frame = CGRectMake(47.5f, self.tableView.contentSize.height - 185.0f, 255.0f, 120.0f);
                 self.autocompleteTableView.backgroundColor = [UIColor clearColor];
                 
             } else {
