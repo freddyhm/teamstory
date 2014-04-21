@@ -56,13 +56,13 @@
         self.loadingViewEnabled = NO;
         
         //resets read list
-        //[[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"readList"];
-        //[[NSUserDefaults standardUserDefaults] synchronize];
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"readList"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         
         // get read list from local storage
         self.readList = [[[NSUserDefaults standardUserDefaults] objectForKey:@"readList"] mutableCopy];
         if(self.readList == nil){
-            self.readList = [[NSMutableArray alloc]init];
+            self.readList = [[NSMutableDictionary alloc]init];
             [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
@@ -146,14 +146,18 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    [self.readList replaceObjectAtIndex:indexPath.row withObject:@"read"];
-    [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
-    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row < self.objects.count) {
+    
         PFObject *activity = [self.objects objectAtIndex:indexPath.row];
+        
+        // get status from read list and update if necessary
+        NSString *status = [[self.readList objectForKey:[activity objectId]] objectForKey:@"status"];
+        if([status isEqualToString:@"unread"]){
+            [self updateReadList:[activity objectForKey:@"photo"]];
+        }
+
         if ([activity objectForKey:kPAPActivityPhotoKey]) {
-            
             
             PAPPhotoDetailsViewController *detailViewController;
             
@@ -246,7 +250,13 @@
     
     if([self.readList count] == 0){
         for (int i = 0; i < self.objects.count; i++) {
-            [self.readList addObject:@"read"];
+            
+            PFObject *pfObj = self.objects[i];
+
+            NSDictionary *activity = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                               @"unread", @"status", [[pfObj objectForKey:@"photo"] objectId], @"photoId", nil];
+             
+             [self.readList setObject:activity forKey:[pfObj objectId]];
         }
         
         [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
@@ -291,8 +301,10 @@
         [cell setActivity:object isSubscription:NO];
     }
     
+    NSDictionary *readListItem = [self.readList valueForKey:[object objectId]];
+    
     // safety check make sure read list has enough items
-    NSString *activityStatus = [self.readList count] > indexPath.row ? [self.readList objectAtIndex:indexPath.row] : @"";
+    NSString *activityStatus = [self.readList count] > indexPath.row ? [readListItem objectForKey:@"status"] : @"";
     
     if ([activityStatus isEqualToString:@"unread"]) {
         [cell setIsNew:YES];
@@ -377,40 +389,89 @@
 
 - (void)applicationDidReceiveRemoteNotification:(NSNotification *)note {
     
+    NSString *photoId = [[note userInfo] objectForKey:@"pid"];
+    NSString *activityId = [[note userInfo] objectForKey:@"aid"];
+    
+    NSLog(@"%@", note);
+    
     if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
         NSString *pushSrc = [[note userInfo] objectForKey:@"source"];
         if(![pushSrc isEqualToString:@"konotor"]){
-            [self notificationSetup:1 source:@"notification foreground"];
+            [self addToReadList:photoId itemActivityId:activityId];
         }
     }
 }
 
+
 - (void)notificationSetup:(int)size source:(NSString *)source{
     
+    /*
     // load & fill readlist or set new unread
     if([self.readList count] == 0){
         [self loadObjects];
     }else{
-        [self updateReadList:size source:source];
+        [self updateReadList:item];
         [self loadObjects];
     }
+     */
 }
+
+
+
+/*
 
 - (void)updateReadList:(int)size source:(NSString *)source{
     
     int i = 0;
     while (i < size) {
-        [self.readList insertObject:@"unread" atIndex:0];
+      //  [self.readList insertObject:@"unread" atIndex:0];
         i++;
     }
     
     // background pushes activity when touched so auto read
     if([source isEqualToString:@"notification background"]){
-        [self.readList replaceObjectAtIndex:0 withObject:@"read"];
+     //   [self.readList replaceObjectAtIndex:0 withObject:@"read"];
     }
     
     [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
 }
+ 
+ */
+
+- (void)updateReadList:(NSString *)itemPhotoId{
+    
+    // load objects if read list is not set
+    if([self.readList count] == 0){
+        [self loadObjects];
+    }
+    
+    for (id listItemKey in self.readList) {
+        
+        NSMutableDictionary *listItem = [self.readList objectForKey:listItemKey];
+        NSString *listItemPhotoId = [listItem objectForKey:@"photoId"];
+        
+        if([listItemPhotoId isEqualToString:itemPhotoId]){
+            [listItem setValue:@"read" forKey:@"status"];
+        }
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
+    
+    [self.tableView reloadData];
+}
+
+- (void)addToReadList:(NSString *)itemPhotoId itemActivityId:(NSString *)itemActivityId{
+    
+    NSDictionary *activity = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                              @"unread", @"status",  itemPhotoId, @"photoId", nil];
+    
+    [self.readList setObject:activity forKey:itemActivityId];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
+    
+    [self loadObjects];
+}
+
 
 - (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl {
     [self.refreshControl endRefreshing];
