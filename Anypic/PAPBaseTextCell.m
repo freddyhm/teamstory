@@ -81,7 +81,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [self.nameButton setBackgroundColor:[UIColor clearColor]];
 
         if ([reuseIdentifier isEqualToString:@"atmentionCell"]) {
-            [mainView setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:0.95f]];
+            [mainView setBackgroundColor:[UIColor colorWithRed:241.0f/255.0f green:242.0f/255.0f blue:246.0f/255.0f alpha:0.9f]];
             [self.nameButton setTitleColor:[UIColor colorWithWhite:0.5f alpha:0.95f] forState:UIControlStateNormal];
             [self.nameButton.titleLabel setFont:[UIFont boldSystemFontOfSize:15]];
             [self.nameButton.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
@@ -239,9 +239,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 - (void)atMentionedUsers:(NSArray *)userArray {
+    /*
     if ([userArray count] > 0) {
-        NSLog(@"%@", [[userArray objectAtIndex:0] objectForKey:@"displayName"]);
-    }
+        NSLog(@"%@", [[userArray objectAtIndex:0] objectId]);
+    }*/
 }
 
 - (void)setContentText:(NSString *)contentString {

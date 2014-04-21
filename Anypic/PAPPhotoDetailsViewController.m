@@ -338,55 +338,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     return cell;
 }
 
-
-/*
-#pragma mark - UITextFieldDelegate
-
-- (BOOL)textFieldShouldReturn:(UITextView *)textField {
-    NSString *trimmedComment = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    if (trimmedComment.length != 0 && [self.photo objectForKey:kPAPPhotoUserKey]) {
-        PFObject *comment = [PFObject objectWithClassName:kPAPActivityClassKey];
-        [comment setObject:trimmedComment forKey:kPAPActivityContentKey]; // Set comment text
-        [comment setObject:[self.photo objectForKey:kPAPPhotoUserKey] forKey:kPAPActivityToUserKey]; // Set toUser
-        [comment setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey]; // Set fromUser
-        [comment setObject:kPAPActivityTypeComment forKey:kPAPActivityTypeKey];
-        [comment setObject:self.photo forKey:kPAPActivityPhotoKey];
-        
-        PFACL *ACL = [PFACL ACLWithUser:[PFUser currentUser]];
-        [ACL setPublicReadAccess:YES];
-        [ACL setWriteAccess:YES forUser:[self.photo objectForKey:kPAPPhotoUserKey]];
-        comment.ACL = ACL;
-
-        [[PAPCache sharedCache] incrementCommentCountForPhoto:self.photo];
-        
-        // Show HUD view
-        [MBProgressHUD showHUDAddedTo:self.view.superview animated:YES];
-        
-        // If more than 5 seconds pass since we post a comment, stop waiting for the server to respond
-        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(handleCommentTimeout:) userInfo:@{@"comment": comment} repeats:NO];
-
-        [comment saveEventually:^(BOOL succeeded, NSError *error) {
-            [timer invalidate];
-            
-            if (error && error.code == kPFErrorObjectNotFound) {
-                [[PAPCache sharedCache] decrementCommentCountForPhoto:self.photo];
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Could not post comment", nil) message:NSLocalizedString(@"This photo is no longer available", nil) delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                [alert show];
-                [self.navigationController popViewControllerAnimated:YES];
-            }
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:self.photo userInfo:@{@"comments": @(self.objects.count + 1)}];
-            
-            [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
-            [self loadObjects];
-        }];
-    }
-    
-    [textField setText:@""];
-    return [textField resignFirstResponder];
-}
- */
-
 #pragma mark - UITextViewDelegate
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
@@ -449,14 +400,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             [comment setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey]; // Set fromUser
             [comment setObject:kPAPActivityTypeComment forKey:kPAPActivityTypeKey];
             [comment setObject:self.photo forKey:kPAPActivityPhotoKey];
+            
+            //NSLog(@"%@", self.atmentionUserArray);
    
             // storing atmention user list to the array (only filtered cases).
             NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", textView.text]];
             [comment setObject:mod_atmentionUserArray forKey:@"atmention"];
-            
-            for (int i = 0; i < [mod_atmentionUserArray count]; i++) {
-                NSLog(@"%@", [[mod_atmentionUserArray objectAtIndex:i] objectForKey:@"displayName"]);
-            }
             
             PFACL *ACL = [PFACL ACLWithUser:[PFUser currentUser]];
             [ACL setPublicReadAccess:YES];
@@ -502,6 +451,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     NSMutableString *updatedText = [[NSMutableString alloc] initWithString:textView.text];
     if (range.location == 0 || range.location == text_location) {
+        self.autocompleteTableView.hidden = YES;
         text_location = 0;
     } else if (range.location > 0 && [[updatedText substringWithRange:NSMakeRange(range.location - 1, 1)] isEqualToString:@"@"]) {
         text_location = range.location;
