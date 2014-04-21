@@ -40,6 +40,7 @@
 /*! Setters for the cell's content */
 - (void)setContentText:(NSString *)contentString;
 - (void)setDate:(NSDate *)date;
+- (void)atMentionedUsers:(NSArray *)userArray;
 
 - (void)setCellInsetWidth:(CGFloat)insetWidth;
 - (void)hideSeparator:(BOOL)hide;

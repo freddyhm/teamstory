@@ -150,6 +150,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.nameButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     } else {
         [self.nameButton setFrame:CGRectMake(nameX, name_height_origin, nameSize.width, nameSize.height)];
+        
+        // Layour separator
+        [self.separatorImage setFrame:CGRectMake(0, self.frame.size.height-2, self.frame.size.width-cellInsetWidth*2, 2)];
+        [self.separatorImage setHidden:hideSeparator];
     }
     
     // Layout the content
@@ -162,10 +166,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
     // Layout the timestamp label
     CGSize timeSize = [self.timeLabel.text sizeWithFont:[UIFont systemFontOfSize:11] forWidth:horizontalTextSpace lineBreakMode:NSLineBreakByTruncatingTail];
     [self.timeLabel setFrame:CGRectMake(timeX, contentLabel.frame.origin.y + contentLabel.frame.size.height + vertElemSpacing, timeSize.width, timeSize.height)];
-    
-    // Layour separator
-    [self.separatorImage setFrame:CGRectMake(0, self.frame.size.height-2, self.frame.size.width-cellInsetWidth*2, 2)];
-    [self.separatorImage setHidden:hideSeparator];
 }
 
 
@@ -236,6 +236,12 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [self setContentText:self.contentLabel.text];
     }
     [self setNeedsDisplay];
+}
+
+- (void)atMentionedUsers:(NSArray *)userArray {
+    if ([userArray count] > 0) {
+        NSLog(@"%@", [[userArray objectAtIndex:0] objectForKey:@"displayName"]);
+    }
 }
 
 - (void)setContentText:(NSString *)contentString {

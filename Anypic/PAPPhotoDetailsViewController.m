@@ -23,6 +23,8 @@ enum ActionSheetTags {
 
 @interface PAPPhotoDetailsViewController () {
     NSInteger text_location;
+    NSInteger atmentionLength;
+    NSRange atmentionRange;
 }
 @property (nonatomic, strong) UITextField *commentTextField;
 @property (nonatomic, strong) PAPPhotoDetailsHeaderView *headerView;
@@ -37,6 +39,9 @@ enum ActionSheetTags {
 @property (nonatomic, strong) NSArray *filteredArray;
 @property (nonatomic, strong) UITableView *autocompleteTableView;
 @property (nonatomic, strong) NSString *atmentionSearchString;
+@property (nonatomic, strong) NSString *cellType;
+@property (nonatomic, strong) PFQuery *userQuery;
+@property (nonatomic, strong) NSMutableArray *atmentionUserArray;
 @end
 
 static const CGFloat kPAPCellInsetWidth = 7.5f;
@@ -54,7 +59,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 @synthesize autocompleteTableView;
 @synthesize atmentionSearchString;
 @synthesize filteredArray;
-
+@synthesize cellType;
+@synthesize userQuery;
+@synthesize atmentionUserArray;
 
 #pragma mark - Initialization
 
@@ -292,6 +299,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [cell setUser:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityFromUserKey]];
         [cell setContentText:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityContentKey]];
         [cell setDate:[[self.objects objectAtIndex:indexPath.row] createdAt]];
+        [cell atMentionedUsers:[[self.objects objectAtIndex:indexPath.row] objectForKey:@"atmention"]];
         return cell;
     } else {
         static NSString *cellID = @"atmentionCell";
@@ -394,27 +402,45 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 - (BOOL) textView:(UITextView*)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString*)text{
+    if (text.length > 1 && [cellType isEqualToString:@"atmentionCell"]) {
+        text = [text stringByAppendingString:@" "];
+        textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, range.length + 1) withString:text];
+        /*
+        NSMutableAttributedString *commentText = [[NSMutableAttributedString alloc] initWithString:textView.text];
+        [commentText addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:119.0f/255.0f green:119.0f/255.0f blue:119.0f/255.0f alpha:1.0f] range:NSMakeRange(0, textView.text.length)];
+        [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:NSMakeRange(range.location - 1, text.length + 1)];
+        [textView setAttributedText:commentText];
+         */
+        
+        cellType = nil;
+    }
+    
     if ([text isEqualToString:@"@"]){
         [SVProgressHUD show];
         
-        PFQuery *userQuery = [PFUser query];
+        if (!self.userArray) {
+        userQuery = [PFUser query];
         [userQuery whereKeyExists:@"displayName"];
         [userQuery orderByAscending:@"displayName"];
         [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             [SVProgressHUD dismiss];
             if (!error) {
                 self.userArray = [[NSMutableArray alloc] initWithArray:objects];
+                self.atmentionUserArray = [[NSMutableArray alloc] init];
                 self.filteredArray = objects;
                 
                 self.autocompleteTableView.frame = CGRectMake(47.5f, self.tableView.contentSize.height - 185.0f, 255.0f, 120.0f);
                 self.autocompleteTableView.backgroundColor = [UIColor clearColor];
-                self.autocompleteTableView.hidden = NO;
                 
             } else {
                 NSLog(@"%@", error);
             }
-        }];
+        }]; } else {
+            [SVProgressHUD dismiss];
+        }
     } else if ([text isEqualToString:@"\n"]) {
+        self.autocompleteTableView.hidden = YES;
+        
         NSString *trimmedComment = [textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         if (trimmedComment.length != 0 && [self.photo objectForKey:kPAPPhotoUserKey]) {
             PFObject *comment = [PFObject objectWithClassName:kPAPActivityClassKey];
@@ -423,6 +449,14 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             [comment setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey]; // Set fromUser
             [comment setObject:kPAPActivityTypeComment forKey:kPAPActivityTypeKey];
             [comment setObject:self.photo forKey:kPAPActivityPhotoKey];
+   
+            // storing atmention user list to the array (only filtered cases).
+            NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", textView.text]];
+            [comment setObject:mod_atmentionUserArray forKey:@"atmention"];
+            
+            for (int i = 0; i < [mod_atmentionUserArray count]; i++) {
+                NSLog(@"%@", [[mod_atmentionUserArray objectAtIndex:i] objectForKey:@"displayName"]);
+            }
             
             PFACL *ACL = [PFACL ACLWithUser:[PFUser currentUser]];
             [ACL setPublicReadAccess:YES];
@@ -467,31 +501,31 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
     
     NSMutableString *updatedText = [[NSMutableString alloc] initWithString:textView.text];
-    if (range.location == 0) {
+    if (range.location == 0 || range.location == text_location) {
         text_location = 0;
     } else if (range.location > 0 && [[updatedText substringWithRange:NSMakeRange(range.location - 1, 1)] isEqualToString:@"@"]) {
         text_location = range.location;
     }
+    
     if (text_location > 0) {
-        atmentionSearchString = [updatedText substringWithRange:NSMakeRange(text_location, range.location - text_location)];
-        atmentionSearchString = [atmentionSearchString stringByAppendingString:text];
-        /*
-        if ([self.userArray count] > 0) {
-            for (int i = 0; i < [self.userArray count]; i++) {
-                if ([[[self.userArray objectAtIndex:i] objectForKey:@"displayName"] rangeOfString:atmentionSearchString].location == NSNotFound) {
-                    [self.userArray removeObjectAtIndex:i];
-                }
-            }
+        if ([text isEqualToString:@""]) {
+            range.location -= 1;
         }
-        */
-        self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName  contains[c] %@", atmentionSearchString]];
+        self.autocompleteTableView.hidden = NO;
+        atmentionRange = NSMakeRange(text_location, range.location - text_location);
+        atmentionSearchString = [updatedText substringWithRange:atmentionRange];
+        atmentionSearchString = [atmentionSearchString stringByAppendingString:text];
+        
+        self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
         if ([self.filteredArray count] == 1) {
             self.autocompleteTableView.frame = CGRectMake(47.5f, self.tableView.contentSize.height - 115.0f, 255.0f, 120.0f);
         } else if ([self.filteredArray count] == 2) {
             self.autocompleteTableView.frame = CGRectMake(47.5f, self.tableView.contentSize.height - 165.0f, 255.0f, 120.0f);
+        } else {
+            self.autocompleteTableView.frame = CGRectMake(47.5f, self.tableView.contentSize.height - 185.0f, 255.0f, 120.0f);
         }
+        
         [self.autocompleteTableView reloadData];
-         
     }
 
     return YES;
@@ -508,10 +542,13 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 #pragma mark - PAPBaseTextCellDelegate
 
-- (void)cell:(PAPBaseTextCell *)cellView didTapUserButton:(PFUser *)aUser cellType:(NSString *)cellType{
-    if ([cellType isEqualToString:@"atmentionCell"]) {
-        NSLog(@"%@", [aUser objectForKey:@"displayName"]);
+- (void)cell:(PAPBaseTextCell *)cellView didTapUserButton:(PFUser *)aUser cellType:(NSString *)acellType{
+    if ([acellType isEqualToString:@"atmentionCell"]) {
+        cellType = acellType;
+        text_location = 0;
+        [self textView:commentTextView shouldChangeTextInRange:atmentionRange replacementText:[aUser objectForKey:@"displayName"]];
         self.autocompleteTableView.hidden = YES;
+        [self.atmentionUserArray addObject:aUser];
     } else {
         [self shouldPresentAccountViewForUser:aUser];
     }
@@ -523,50 +560,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 -(void)photoDetailsHeaderView:(PAPPhotoDetailsHeaderView *)headerView didTapUserButton:(UIButton *)button user:(PFUser *)user {
     [self shouldPresentAccountViewForUser:user];
 }
-/*
-- (void)activityButtonAction:(id)sender {
-    if (NSClassFromString(@"UIActivityViewController")) {
-        // TODO: Need to do something when the photo hasn't finished downloading!
-        if ([[self.photo objectForKey:kPAPPhotoPictureKey] isDataAvailable]) {
-            [self showShareSheet];
-        } else {
-            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            [[self.photo objectForKey:kPAPPhotoPictureKey] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                if (!error) {
-                    [self showShareSheet];
-                }
-            }];
-        }
-    }
-}
-*/
 
 #pragma mark - ()
-/*
-- (void)showShareSheet {
-    [[self.photo objectForKey:kPAPPhotoPictureKey] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-        if (!error) {
-            NSMutableArray *activityItems = [NSMutableArray arrayWithCapacity:3];
-                        
-            // Prefill caption if this is the original poster of the photo, and then only if they added a caption initially.
-            if ([[[PFUser currentUser] objectId] isEqualToString:[[self.photo objectForKey:kPAPPhotoUserKey] objectId]] && [self.objects count] > 0) {
-                PFObject *firstActivity = self.objects[0];
-                if ([[[firstActivity objectForKey:kPAPActivityFromUserKey] objectId] isEqualToString:[[self.photo objectForKey:kPAPPhotoUserKey] objectId]]) {
-                    NSString *commentString = [firstActivity objectForKey:kPAPActivityContentKey];
-                    [activityItems addObject:commentString];
-                }
-            }
-            
-            [activityItems addObject:[UIImage imageWithData:data]];
-            [activityItems addObject:[NSURL URLWithString:[NSString stringWithFormat:@"https://Teamstory.org/#pic/%@", self.photo.objectId]]];
-            
-            UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
-            [self.navigationController presentViewController:activityViewController animated:YES completion:nil];
-        }
-    }];
-}
- */
+
 
 - (void) moreActionButton_inflator:(PFUser *)user photo:(PFObject *)user_photo {
     self.photoID = [user_photo objectId];
