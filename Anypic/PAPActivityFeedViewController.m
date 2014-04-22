@@ -56,18 +56,18 @@
         self.loadingViewEnabled = NO;
         
         //resets read list
-       // [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"readList"];
-        //[[NSUserDefaults standardUserDefaults] synchronize];
+        //  [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"readList"];
+        // [[NSUserDefaults standardUserDefaults] synchronize];
         
         // get read list from local storage
         self.readList = [[[NSUserDefaults standardUserDefaults] objectForKey:@"readList"] mutableCopy];
-        if(self.readList == nil){
+        
+        // new read list if still in old mutable array format or nil
+        if(self.readList == nil || [self.readList isKindOfClass:[NSMutableArray class]]){
             self.readList = [[NSMutableDictionary alloc]init];
             [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
-        
-        
     }
     return self;
 }
