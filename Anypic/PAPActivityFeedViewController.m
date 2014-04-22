@@ -56,8 +56,8 @@
         self.loadingViewEnabled = NO;
         
         //resets read list
-        //  [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"readList"];
-        // [[NSUserDefaults standardUserDefaults] synchronize];
+         // [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"readList"];
+         //[[NSUserDefaults standardUserDefaults] synchronize];
         
         // get read list from local storage
         self.readList = [[[NSUserDefaults standardUserDefaults] objectForKey:@"readList"] mutableCopy];
@@ -248,13 +248,13 @@
     
     [SVProgressHUD dismiss];
     
-    
+    // init read list with current objects
     if([self.readList count] == 0){
         for (int i = 0; i < self.objects.count; i++) {
             
             PFObject *pfObj = self.objects[i];
 
-            NSDictionary *activity = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+            NSMutableDictionary *activity = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                @"read", @"status", [[pfObj objectForKey:@"photo"] objectId], @"photoId", nil];
              
              [self.readList setObject:activity forKey:[pfObj objectId]];
@@ -263,7 +263,11 @@
         [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
     }else{
         
-        // sync loaded objects with read list
+        /* out-of-sync occurs when:
+           case (1) new items are loaded but read list is not updated -> push notifications
+           case (2) read list tracks old items -> beyond 15 items (loaded by table) */
+        
+        // make sure loaded objects are present in read list
         for (PFObject *object in self.objects) {
             NSString *activityId = [object objectId];
             if([self.readList valueForKey:activityId] == nil){
@@ -272,17 +276,29 @@
             }
         }
         
-        /*
-         // remove items in read list that are not present in loaded objects
-        for (NSDictionary *itemList in self.readList) {
+        // make sure read list is identical to loaded object list
+        NSMutableArray *extraKeys = [[NSMutableArray alloc] init];
+        for (NSString *activityId in self.readList) {
             
-            PFObject *activityObj = [PFObject objectWithoutDataWithClassName:@"Activity" objectId:[self.readList objectForKey:itemList]];
-            
-            if(![self.objects containsObject:activityObj]){
-                [self.readList removeObjectForKey:itemList];
+            if([self.objects valueForKey:activityId]){
+                
+                // check if activity id in loaded objects
+                NSInteger indexOfObject = [self.objects indexOfObjectPassingTest:^(id obj, NSUInteger idx, BOOL *stop){
+                    PFObject *object = (PFObject *)obj;
+                    return [[object objectId] isEqualToString:activityId];
+                }];
+                
+                if(indexOfObject == NSNotFound){
+                    [extraKeys addObject:activityId];
+                }
             }
         }
-         */
+        
+        // cannot delete while loop so get rid of excess items here
+        if(extraKeys.count != 0){
+            [self.readList removeObjectsForKeys:extraKeys];
+            [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
+        }
     }
 
     if (self.objects.count == 0 && ![[self queryForTable] hasCachedResult]) {
