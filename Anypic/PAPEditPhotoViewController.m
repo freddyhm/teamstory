@@ -27,6 +27,13 @@
 @property (nonatomic, assign) UIBackgroundTaskIdentifier photoPostBackgroundTaskId;
 @property CGRect previousRect;
 @property (nonatomic, strong) PAPPhotoDetailsFooterView *footerView;
+@property (nonatomic, strong) NSString *cellType;
+@property (nonatomic, strong) NSMutableArray *userArray;
+@property (nonatomic, strong) NSMutableArray *atmentionUserArray;
+@property (nonatomic, strong) NSArray *filteredArray;
+@property (nonatomic, strong) PFQuery *userQuery;
+@property (nonatomic, strong) UITableView *autocompleteTableView;
+@property (nonatomic, strong) NSString *atmentionSearchString;
 @end
 
 @implementation PAPEditPhotoViewController
