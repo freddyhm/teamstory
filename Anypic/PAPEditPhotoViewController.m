@@ -9,8 +9,15 @@
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
 #import "UIImage+ResizeAdditions.h"
+#import "PAPBaseTextCell.h"
+#import "SVProgressHUD.h"
+#import "PAPLoadMoreCell.h"
+#import "PAPConstants.h"
 
-@interface PAPEditPhotoViewController ()
+@interface PAPEditPhotoViewController () {
+    NSInteger text_location;
+    NSRange atmentionRange;
+}
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIImage *image;
 @property (nonatomic, strong) UITextView *commentTextView;
@@ -18,9 +25,23 @@
 @property (nonatomic, strong) PFFile *thumbnailFile;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier fileUploadBackgroundTaskId;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier photoPostBackgroundTaskId;
+@property (nonatomic, strong) NSString *cellType;
+@property (nonatomic, strong) NSMutableArray *userArray;
+@property (nonatomic, strong) NSMutableArray *atmentionUserArray;
+@property (nonatomic, strong) NSArray *filteredArray;
+@property (nonatomic, strong) PFQuery *userQuery;
+@property (nonatomic, strong) UITableView *autocompleteTableView;
+@property (nonatomic, strong) NSString *atmentionSearchString;
 @end
 
 @implementation PAPEditPhotoViewController
+@synthesize cellType;
+@synthesize userArray;
+@synthesize userQuery;
+@synthesize atmentionUserArray;
+@synthesize filteredArray;
+@synthesize autocompleteTableView;
+@synthesize atmentionSearchString;
 
 #pragma mark - NSObject
 
@@ -100,6 +121,15 @@
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_cancel"] style:UIBarButtonItemStylePlain target:self action:@selector(exitPhoto)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_done.png"] style:UIBarButtonItemStylePlain target:self action:@selector(doneButtonAction:)];
+    
+    self.autocompleteTableView = [[UITableView alloc] init];
+    self.autocompleteTableView.delegate = self;
+    //self.autocompleteTableView.separatorInset = UIEdgeInsetsZero;
+    self.autocompleteTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.autocompleteTableView.dataSource = self;
+    self.autocompleteTableView.scrollEnabled = YES;
+    self.autocompleteTableView.hidden = YES;
+    [self.view addSubview:autocompleteTableView];
     
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
     [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
@@ -219,6 +249,27 @@
     }];
 }
 
+#pragma mark - UITableViewDelegate
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+        static NSString *cellID = @"atmentionCell";
+        // Try to dequeue a cell and create one if necessary
+        PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+        if (cell == nil) {
+            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID navigationController:self.navigationController];
+            cell.delegate = self;
+        }
+        [cell setUser:[self.filteredArray objectAtIndex:indexPath.row]];
+        [cell setContentText:@" "];
+        return cell;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self.filteredArray count];
+}
+
+
+
 - (void)textViewDidBeginEditing:(UITextView *)textView {
     if ([[textView text] isEqualToString:@"Add a caption"]) {
         [textView setText:@""];
@@ -233,7 +284,42 @@
 
 
 - (BOOL) textView:(UITextView*)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString*)text{
-    if ([text isEqualToString:@"\n"]) {
+    if (text.length > 1 && [cellType isEqualToString:@"atmentionCell"]) {
+        text = [text stringByAppendingString:@" "];
+        textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, range.length + 1) withString:text];
+        /*
+         NSMutableAttributedString *commentText = [[NSMutableAttributedString alloc] initWithString:textView.text];
+         [commentText addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:119.0f/255.0f green:119.0f/255.0f blue:119.0f/255.0f alpha:1.0f] range:NSMakeRange(0, textView.text.length)];
+         [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:NSMakeRange(range.location - 1, text.length + 1)];
+         [textView setAttributedText:commentText];
+         */
+        
+        cellType = nil;
+    }
+    
+    if ([text isEqualToString:@"@"]){
+        [SVProgressHUD show];
+        
+        if (!self.userArray) {
+            userQuery = [PFUser query];
+            [userQuery whereKeyExists:@"displayName"];
+            [userQuery orderByAscending:@"displayName"];
+            [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                [SVProgressHUD dismiss];
+                if (!error) {
+                    self.userArray = [[NSMutableArray alloc] initWithArray:objects];
+                    self.atmentionUserArray = [[NSMutableArray alloc] init];
+                    self.filteredArray = objects;
+                    self.autocompleteTableView.backgroundColor = [UIColor clearColor];
+                    
+                } else {
+                    NSLog(@"%@", error);
+                }
+            }]; } else {
+                [SVProgressHUD dismiss];
+            }
+    
+    }else if ([text isEqualToString:@"\n"]) {
         NSDictionary *userInfo = [NSDictionary dictionary];
         NSString *trimmedComment = [self.commentTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         if (trimmedComment.length != 0) {
@@ -255,6 +341,9 @@
         [photo setObject:[PFUser currentUser] forKey:kPAPPhotoUserKey];
         [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
         [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
+        
+        NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", textView.text]];
+        [photo setObject:mod_atmentionUserArray forKey:@"atmention"];
         
         if (userInfo) {
             NSString *commentText = [userInfo objectForKey:kPAPEditPhotoViewControllerUserInfoCommentKey];
@@ -291,7 +380,48 @@
         
         [self exitPhoto];
     }
+    
+    NSMutableString *updatedText = [[NSMutableString alloc] initWithString:textView.text];
+    if (range.location == 0 || range.location == text_location) {
+        self.autocompleteTableView.hidden = YES;
+        text_location = 0;
+    } else if (range.location > 0 && [[updatedText substringWithRange:NSMakeRange(range.location - 1, 1)] isEqualToString:@"@"]) {
+        text_location = range.location;
+    }
+    
+    if (text_location > 0) {
+        if ([text isEqualToString:@""]) {
+            range.location -= 1;
+        }
+        self.autocompleteTableView.hidden = NO;
+        atmentionRange = NSMakeRange(text_location, range.location - text_location);
+        atmentionSearchString = [updatedText substringWithRange:atmentionRange];
+        atmentionSearchString = [atmentionSearchString stringByAppendingString:text];
+        
+        self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
+        if ([self.filteredArray count] == 1) {
+            self.autocompleteTableView.frame = CGRectMake(47.5f,  115.0f, 255.0f, 120.0f);
+        } else if ([self.filteredArray count] == 2) {
+            self.autocompleteTableView.frame = CGRectMake(47.5f,  165.0f, 255.0f, 120.0f);
+        } else {
+            self.autocompleteTableView.frame = CGRectMake(47.5f,  185.0f, 255.0f, 120.0f);
+        }
+        
+        [self.autocompleteTableView reloadData];
+    }
     return YES;
+}
+
+#pragma mark - PAPBaseTextCellDelegate
+
+- (void)cell:(PAPBaseTextCell *)cellView didTapUserButton:(PFUser *)aUser cellType:(NSString *)acellType{
+    if ([acellType isEqualToString:@"atmentionCell"]) {
+        cellType = acellType;
+        text_location = 0;
+        [self textView:self.commentTextView shouldChangeTextInRange:atmentionRange replacementText:[aUser objectForKey:@"displayName"]];
+        self.autocompleteTableView.hidden = YES;
+        [self.atmentionUserArray addObject:aUser];
+    }
 }
 
 - (void)doneButtonAction:(id)sender {
@@ -322,6 +452,9 @@
     [photo setObject:[PFUser currentUser] forKey:kPAPPhotoUserKey];
     [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
     [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
+    
+    NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", self.commentTextView.text]];
+    [photo setObject:mod_atmentionUserArray forKey:@"atmention"];
     
     if (userInfo) {
         NSString *commentText = [userInfo objectForKey:kPAPEditPhotoViewControllerUserInfoCommentKey];
