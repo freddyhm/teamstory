@@ -36,6 +36,13 @@ enum ActionSheetTags {
 @property (nonatomic, strong) UITextView *commentTextView;
 @property (nonatomic, strong) PAPPhotoDetailsFooterView *footerView;
 @property (nonatomic, strong) NSString *source;
+@property (nonatomic, strong) NSMutableArray *userArray;
+@property (nonatomic, strong) NSString *atmentionSearchString;
+@property (nonatomic, strong) UITableView *autocompleteTableView;
+@property (nonatomic, strong) NSArray *filteredArray;
+@property (nonatomic, strong) NSString *cellType;
+@property (nonatomic, strong) PFQuery *userQuery;
+@property (nonatomic, strong) NSMutableArray *atmentionUserArray;
 @property CGRect previousRect;
 @end
 
@@ -145,7 +152,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.autocompleteTableView.dataSource = self;
     self.autocompleteTableView.scrollEnabled = YES;
     self.autocompleteTableView.hidden = YES;
-    [self.view addSubview:autocompleteTableView];
+    [self.view addSubview:self.autocompleteTableView];
 
 
     /*
@@ -372,8 +379,42 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 
 - (BOOL) textView:(UITextView*)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString*)text{
-
-    if ([text isEqualToString:@"\n"]) {
+    if (text.length > 1 && [cellType isEqualToString:@"atmentionCell"]) {
+        text = [text stringByAppendingString:@" "];
+        textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, range.length + 1) withString:text];
+        /*
+         NSMutableAttributedString *commentText = [[NSMutableAttributedString alloc] initWithString:textView.text];
+         [commentText addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:119.0f/255.0f green:119.0f/255.0f blue:119.0f/255.0f alpha:1.0f] range:NSMakeRange(0, textView.text.length)];
+         [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:NSMakeRange(range.location - 1, text.length + 1)];
+         [textView setAttributedText:commentText];
+         */
+        
+        cellType = nil;
+    }
+    
+    if ([text isEqualToString:@"@"]){
+        [SVProgressHUD show];
+        
+        if (!self.userArray) {
+            userQuery = [PFUser query];
+            [userQuery whereKeyExists:@"displayName"];
+            [userQuery orderByAscending:@"displayName"];
+            [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                [SVProgressHUD dismiss];
+                if (!error) {
+                    self.userArray = [[NSMutableArray alloc] initWithArray:objects];
+                    self.atmentionUserArray = [[NSMutableArray alloc] init];
+                    self.filteredArray = objects;
+                    self.autocompleteTableView.backgroundColor = [UIColor clearColor];
+                    
+                } else {
+                    NSLog(@"%@", error);
+                }
+            }]; } else {
+                [SVProgressHUD dismiss];
+            }
+        
+    } else if ([text isEqualToString:@"\n"]) {
         
         NSString *trimmedComment = [textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         if (trimmedComment.length != 0 && [self.photo objectForKey:kPAPPhotoUserKey]) {
