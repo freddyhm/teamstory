@@ -18,6 +18,8 @@
 @property (nonatomic, strong) PFFile *thumbnailFile;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier fileUploadBackgroundTaskId;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier photoPostBackgroundTaskId;
+@property CGRect previousRect;
+@property (nonatomic, strong) PAPPhotoDetailsFooterView *footerView;
 @end
 
 @implementation PAPEditPhotoViewController
@@ -82,14 +84,14 @@
     [self.scrollView addSubview:footerView];
      */
     
-    PAPPhotoDetailsFooterView *footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:footerRect];
-    self.commentTextView = footerView.commentView;
+    self.footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:footerRect];
+    self.commentTextView = self.footerView.commentView;
     self.commentTextView.text = @"Add a caption";
     self.commentTextView.delegate = self;
-    [self.scrollView addSubview:footerView];
+    [self.scrollView addSubview:self.footerView];
     
 
-    [self.scrollView setContentSize:CGSizeMake(self.scrollView.bounds.size.width, photoImageView.frame.origin.y + photoImageView.frame.size.height + footerView.frame.size.height)];
+    [self.scrollView setContentSize:CGSizeMake(self.scrollView.bounds.size.width, photoImageView.frame.origin.y + photoImageView.frame.size.height + self.footerView.frame.size.height)];
 }
 
 - (void)viewDidLoad {
@@ -229,6 +231,38 @@
     if ([textView.text length] == 0) {
         [textView setText:@"Add a caption"];
     }
+}
+
+- (void)textViewDidChange:(UITextView *)textView{
+    
+    // get current frame position of text with proper height
+    UITextPosition* pos = textView.endOfDocument;
+    CGRect currentRect = [textView caretRectForPosition:pos];
+    
+    CGRect frame = textView.frame;
+    frame.size.height = [textView contentSize].height;
+    textView.frame = frame;
+    
+    // for next line excl. first line
+    if (currentRect.origin.y > self.previousRect.origin.y && self.previousRect.origin.y != 0){
+        
+        // expands textview based on content
+        self.footerView.mainView.frame = CGRectMake(self.footerView.mainView.frame.origin.x, self.footerView.mainView.frame.origin.y, self.footerView.mainView.frame.size.width, frame.size.height + 20);
+        
+        // moves keyboard to proper height
+        [self.scrollView setContentOffset:CGPointMake(0.0f, self.scrollView.contentOffset.y + 15) animated:YES];
+    
+    // for prev line excl. first line
+    }else if (currentRect.origin.y < self.previousRect.origin.y && self.previousRect.origin.y != 0){
+        
+        // expands textview based on content
+        self.footerView.mainView.frame = CGRectMake(self.footerView.mainView.frame.origin.x, self.footerView.mainView.frame.origin.y, self.footerView.mainView.frame.size.width, frame.size.height + 20);
+        
+        // moves keyboard to proper height
+        [self.scrollView setContentOffset:CGPointMake(0.0f, self.scrollView.contentOffset.y  - 15) animated:YES];
+    }
+    
+    self.previousRect = currentRect;
 }
 
 
