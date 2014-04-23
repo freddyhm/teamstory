@@ -301,10 +301,11 @@
     CGRect frame = textView.frame;
     frame.size.height = [textView contentSize].height;
     textView.frame = frame;
+    text_offset = 0;
     
     // for next line excl. first line
     if (currentRect.origin.y > self.previousRect.origin.y && self.previousRect.origin.y != 0){
-        
+        text_offset += 15.0f;
         // expands textview based on content
         self.footerView.mainView.frame = CGRectMake(self.footerView.mainView.frame.origin.x, self.footerView.mainView.frame.origin.y, self.footerView.mainView.frame.size.width, frame.size.height + 20);
         
@@ -313,7 +314,7 @@
     
     // for prev line excl. first line
     }else if (currentRect.origin.y < self.previousRect.origin.y && self.previousRect.origin.y != 0){
-        
+        text_offset -= 15.0f;
         // expands textview based on content
         self.footerView.mainView.frame = CGRectMake(self.footerView.mainView.frame.origin.x, self.footerView.mainView.frame.origin.y, self.footerView.mainView.frame.size.width, frame.size.height + 20);
         
