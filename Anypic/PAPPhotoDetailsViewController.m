@@ -26,6 +26,7 @@ enum ActionSheetTags {
     NSInteger text_location;
     NSInteger atmentionLength;
     NSRange atmentionRange;
+    NSInteger text_offset;
 }
 @property (nonatomic, strong) UITextField *commentTextField;
 @property (nonatomic, strong) PAPPhotoDetailsHeaderView *headerView;
@@ -43,6 +44,7 @@ enum ActionSheetTags {
 @property (nonatomic, strong) NSString *cellType;
 @property (nonatomic, strong) PFQuery *userQuery;
 @property (nonatomic, strong) NSMutableArray *atmentionUserArray;
+@property (nonatomic, strong) UIView *dimView;
 @property CGRect previousRect;
 @end
 
@@ -64,6 +66,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 @synthesize cellType;
 @synthesize userQuery;
 @synthesize atmentionUserArray;
+@synthesize dimView;
 
 #pragma mark - Initialization
 
@@ -145,14 +148,20 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     commentTextView.delegate = self;
     self.tableView.tableFooterView = self.footerView;
     
+    
+    self.dimView = [[UIView alloc] init];
+    self.dimView.hidden = YES;
+    self.dimView.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.8f];
+    [self.view addSubview:self.dimView];
+    
     self.autocompleteTableView = [[UITableView alloc] init];
     self.autocompleteTableView.delegate = self;
-    //self.autocompleteTableView.separatorInset = UIEdgeInsetsZero;
     self.autocompleteTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.autocompleteTableView.dataSource = self;
     self.autocompleteTableView.scrollEnabled = YES;
     self.autocompleteTableView.hidden = YES;
     [self.view addSubview:self.autocompleteTableView];
+
 
 
     /*
@@ -365,11 +374,18 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     CGRect frame = textView.frame;
     frame.size.height = [textView contentSize].height;
     textView.frame = frame;
+    
+    if (text_offset == NSNotFound) {
+        text_offset = 0;
+    }
 
+    // Expandable textview.
     if (currentRect.origin.y > self.previousRect.origin.y && self.previousRect.origin.y != 0){
+        text_offset += 15.0f;
         self.footerView.mainView.frame = CGRectMake(self.footerView.mainView.frame.origin.x, self.footerView.mainView.frame.origin.y, self.footerView.mainView.frame.size.width, frame.size.height + 20);
         [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentOffset.y + 15) animated:YES];
     }else if (currentRect.origin.y < self.previousRect.origin.y && self.previousRect.origin.y != 0){
+        text_offset -= 15.0f;
         self.footerView.mainView.frame = CGRectMake(self.footerView.mainView.frame.origin.x, self.footerView.mainView.frame.origin.y, self.footerView.mainView.frame.size.width, frame.size.height + 20);
         [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentOffset.y  - 15) animated:YES];
     }
@@ -476,6 +492,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     NSMutableString *updatedText = [[NSMutableString alloc] initWithString:textView.text];
     if (range.location == 0 || range.location == text_location) {
         self.autocompleteTableView.hidden = YES;
+        self.dimView.hidden = YES;
         text_location = 0;
     } else if (range.location > 0 && [[updatedText substringWithRange:NSMakeRange(range.location - 1, 1)] isEqualToString:@"@"]) {
         text_location = range.location;
@@ -485,20 +502,16 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         if ([text isEqualToString:@""]) {
             range.location -= 1;
         }
-        self.autocompleteTableView.hidden = NO;
+
         atmentionRange = NSMakeRange(text_location, range.location - text_location);
         atmentionSearchString = [updatedText substringWithRange:atmentionRange];
         atmentionSearchString = [atmentionSearchString stringByAppendingString:text];
         
         self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
-        if ([self.filteredArray count] == 1) {
-            self.autocompleteTableView.frame = CGRectMake(47.5f, self.tableView.contentSize.height - 115.0f, 255.0f, 120.0f);
-        } else if ([self.filteredArray count] == 2) {
-            self.autocompleteTableView.frame = CGRectMake(47.5f, self.tableView.contentSize.height - 165.0f, 255.0f, 120.0f);
-        } else {
-            self.autocompleteTableView.frame = CGRectMake(47.5f, self.tableView.contentSize.height - 185.0f, 255.0f, 120.0f);
-        }
-        
+        self.dimView.frame = CGRectMake(0.0f, self.tableView.contentSize.height - 302.0f + text_offset, 320.0f, 232.0f - text_offset);
+        self.dimView.hidden = NO;
+        self.autocompleteTableView.hidden = NO;
+        self.autocompleteTableView.frame = CGRectMake(7.5f, self.tableView.contentSize.height - 302.0f + text_offset, 305.0f, 232.0f - text_offset);
         [self.autocompleteTableView reloadData];
     }
 
@@ -522,6 +535,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         text_location = 0;
         [self textView:commentTextView shouldChangeTextInRange:atmentionRange replacementText:[aUser objectForKey:@"displayName"]];
         self.autocompleteTableView.hidden = YES;
+        self.dimView.hidden = YES;
         [self.atmentionUserArray addObject:aUser];
     } else {
         [self shouldPresentAccountViewForUser:aUser];

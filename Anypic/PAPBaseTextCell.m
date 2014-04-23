@@ -79,13 +79,18 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         self.nameButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.nameButton setBackgroundColor:[UIColor clearColor]];
+        
+
+
 
         if ([reuseIdentifier isEqualToString:@"atmentionCell"]) {
-            [mainView setBackgroundColor:[UIColor colorWithRed:241.0f/255.0f green:242.0f/255.0f blue:246.0f/255.0f alpha:0.9f]];
+            [mainView setBackgroundColor:[UIColor colorWithRed:241.0f/255.0f green:242.0f/255.0f blue:246.0f/255.0f alpha:1.0f]];
             [self.nameButton setTitleColor:[UIColor colorWithWhite:0.5f alpha:0.95f] forState:UIControlStateNormal];
             [self.nameButton.titleLabel setFont:[UIFont boldSystemFontOfSize:15]];
             [self.nameButton.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
             [self.nameButton addTarget:self action:@selector(didTapUserButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+            self.separatorImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"SeparatorComments.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 1, 0, 1)]];
+            self.separatorImage.frame = CGRectMake(50.0f, 0.0f, 255.0f, 1.0f);
         } else {
             [mainView setBackgroundColor:[UIColor whiteColor]];
         
@@ -95,6 +100,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.nameButton addTarget:self action:@selector(didTapUserButtonAction:) forControlEvents:UIControlEventTouchUpInside];
             
             [self.contentLabel setTextColor:[UIColor colorWithRed:119.0f/255.0f green:119.0f/255.0f blue:119.0f/255.0f alpha:1.0f]];
+            self.separatorImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"SeparatorComments.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 1, 0, 1)]];
 
         }
         
@@ -102,7 +108,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [mainView addSubview:self.nameButton];
         [mainView addSubview:self.contentLabel];
         [mainView addSubview:self.timeLabel];
-        
+        [mainView addSubview:separatorImage];
         
         self.avatarImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.avatarImageButton setBackgroundColor:[UIColor clearColor]];
@@ -110,8 +116,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
         [mainView addSubview:self.avatarImageButton];
         
-        self.separatorImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"SeparatorComments.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 1, 0, 1)]];
-        [mainView addSubview:separatorImage];
+
         
         [self.contentView addSubview:mainView];
     }
