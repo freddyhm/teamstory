@@ -17,6 +17,7 @@
 @interface PAPEditPhotoViewController () {
     NSInteger text_location;
     NSRange atmentionRange;
+    NSInteger text_offset;
 }
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIImage *image;
@@ -32,6 +33,7 @@
 @property (nonatomic, strong) PFQuery *userQuery;
 @property (nonatomic, strong) UITableView *autocompleteTableView;
 @property (nonatomic, strong) NSString *atmentionSearchString;
+@property (nonatomic, strong) UIView *dimView;
 @end
 
 @implementation PAPEditPhotoViewController
@@ -42,6 +44,7 @@
 @synthesize filteredArray;
 @synthesize autocompleteTableView;
 @synthesize atmentionSearchString;
+@synthesize dimView;
 
 #pragma mark - NSObject
 
@@ -121,6 +124,11 @@
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_cancel"] style:UIBarButtonItemStylePlain target:self action:@selector(exitPhoto)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_done.png"] style:UIBarButtonItemStylePlain target:self action:@selector(doneButtonAction:)];
+    
+    self.dimView = [[UIView alloc] init];
+    self.dimView.hidden = YES;
+    self.dimView.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.8f];
+    [self.view addSubview:self.dimView];
     
     self.autocompleteTableView = [[UITableView alloc] init];
     self.autocompleteTableView.delegate = self;
@@ -384,6 +392,7 @@
     NSMutableString *updatedText = [[NSMutableString alloc] initWithString:textView.text];
     if (range.location == 0 || range.location == text_location) {
         self.autocompleteTableView.hidden = YES;
+        self.dimView.hidden = YES;
         text_location = 0;
     } else if (range.location > 0 && [[updatedText substringWithRange:NSMakeRange(range.location - 1, 1)] isEqualToString:@"@"]) {
         text_location = range.location;
@@ -397,16 +406,12 @@
         atmentionRange = NSMakeRange(text_location, range.location - text_location);
         atmentionSearchString = [updatedText substringWithRange:atmentionRange];
         atmentionSearchString = [atmentionSearchString stringByAppendingString:text];
-        
+
         self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
-        if ([self.filteredArray count] == 1) {
-            self.autocompleteTableView.frame = CGRectMake(47.5f,  115.0f, 255.0f, 120.0f);
-        } else if ([self.filteredArray count] == 2) {
-            self.autocompleteTableView.frame = CGRectMake(47.5f,  165.0f, 255.0f, 120.0f);
-        } else {
-            self.autocompleteTableView.frame = CGRectMake(47.5f,  185.0f, 255.0f, 120.0f);
-        }
-        
+        self.dimView.frame = CGRectMake(0.0f, 115.0f + text_offset, 320.0f, 232.0f - text_offset);
+        self.dimView.hidden = NO;
+        self.autocompleteTableView.hidden = NO;
+        self.autocompleteTableView.frame = CGRectMake(7.5f, 115.0f + text_offset, 305.0f, 232.0f - text_offset);
         [self.autocompleteTableView reloadData];
     }
     return YES;
@@ -420,6 +425,7 @@
         text_location = 0;
         [self textView:self.commentTextView shouldChangeTextInRange:atmentionRange replacementText:[aUser objectForKey:@"displayName"]];
         self.autocompleteTableView.hidden = YES;
+        self.dimView.hidden = YES;
         [self.atmentionUserArray addObject:aUser];
     }
 }
