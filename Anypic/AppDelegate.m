@@ -290,7 +290,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
                 NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
                 
                 // notify activity controller of new notification (didreceivenot. is not called from background)
-                [self.activityViewController notificationSetup:(int)application.applicationIconBadgeNumber source:@"background"];
+              //  [self.activityViewController notificationSetup:(int)application.applicationIconBadgeNumber source:@"background"];
                 
                 // current view is activity, clear the badge
                 if(selectedtabIndex == PAPActivityTabBarItemIndex){
@@ -485,7 +485,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
             tabBarItem.badgeValue = [numberFormatter stringFromNumber:newBadgeValue];
             
             // notify activity of new notification (didreceivenot. is not called in launch)
-            [self.activityViewController notificationSetup:(int)[UIApplication sharedApplication].applicationIconBadgeNumber source:@"launch"];
+          //  [self.activityViewController notificationSetup:(int)[UIApplication sharedApplication].applicationIconBadgeNumber source:@"launch"];
         }
     }
 }
@@ -581,6 +581,8 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
         
         NSString *notificationSource = [userInfo objectForKey:@"source"];
         NSString *typeOfNotification = [userInfo objectForKey:@"t"];
+        NSString *photoId = [userInfo objectForKey:@"pid"];
+        NSString *activityId = [userInfo objectForKey:@"aid"];
         
         if([notificationSource isEqualToString:@"konotor"]){
             self.isKonotor = YES;
@@ -591,8 +593,9 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
             return;
         }
         
-        // call activity notification setup and reset badges
-        [self.activityViewController notificationSetup:(int)[UIApplication sharedApplication].applicationIconBadgeNumber source:@"notification background"];
+        // add to read list, set as read, and reset badges
+        [self.activityViewController addToReadList:photoId itemActivityId:activityId];
+        [self.activityViewController updateReadList:photoId];
         [self.activityViewController setActivityBadge:nil];
         
     
