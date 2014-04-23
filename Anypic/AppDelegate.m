@@ -593,10 +593,9 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
             return;
         }
         
-        // call activity notification setup and reset badges
+        // add to read list, set as read, and reset badges
         [self.activityViewController addToReadList:photoId itemActivityId:activityId];
         [self.activityViewController updateReadList:photoId];
-        
         [self.activityViewController setActivityBadge:nil];
         
     

@@ -56,8 +56,8 @@
         self.loadingViewEnabled = NO;
         
         //resets read list
-         // [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"readList"];
-         //[[NSUserDefaults standardUserDefaults] synchronize];
+        // [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"readList"];
+        // [[NSUserDefaults standardUserDefaults] synchronize];
         
         // get read list from local storage
         self.readList = [[[NSUserDefaults standardUserDefaults] objectForKey:@"readList"] mutableCopy];
@@ -67,7 +67,7 @@
             self.readList = [[NSMutableDictionary alloc]init];
             [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
             [[NSUserDefaults standardUserDefaults] synchronize];
-        }
+        }   
     }
     return self;
 }
@@ -115,6 +115,7 @@
     
     // reset badge number on server and activity bar when user checks activity feed and badge value is present
     if(self.navigationController.tabBarItem.badgeValue != nil){
+        [self loadObjects];
         [self setActivityBadge:nil];
     }
     
@@ -430,78 +431,46 @@
     
     NSString *photoId = [[note userInfo] objectForKey:@"pid"];
     NSString *activityId = [[note userInfo] objectForKey:@"aid"];
+    NSString *pushSrc = [[note userInfo] objectForKey:@"source"];
     
-    if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
-        NSString *pushSrc = [[note userInfo] objectForKey:@"source"];
+    if(![pushSrc isEqualToString:@"konotor"]){
         
-        if(![pushSrc isEqualToString:@"konotor"]){
-            
-            // load & fill readlist or set new unread
-            if([self.readList count] == 0){
-                [self loadObjects];
-            }else{
-                [self addToReadList:photoId itemActivityId:activityId];
-                [self loadObjects];
-            }
+        // only for active, background notification are handled in app delegate
+        if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+            // load & fill on readlist init or set new unread
+            [self addToReadList:photoId itemActivityId:activityId];
         }
-    }
-}
-
-/*
-
-- (void)notificationSetup:(int)size source:(NSString *)source{
-    
- 
-    // load & fill readlist or set new unread
-    if([self.readList count] == 0){
-        [self loadObjects];
-    }else{
-        [self updateReadList:item];
+        
+        // always load objects when notification is received excl. konotor
         [self loadObjects];
     }
- 
 }
-*/
-/*
 
-- (void)updateReadList:(int)size source:(NSString *)source{
-    
-    int i = 0;
-    while (i < size) {
-      //  [self.readList insertObject:@"unread" atIndex:0];
-        i++;
-    }
-    
-    // background pushes activity when touched so auto read
-    if([source isEqualToString:@"notification background"]){
-     //   [self.readList replaceObjectAtIndex:0 withObject:@"read"];
-    }
-    
-    [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
-}
- 
- */
+
 
 - (void)updateReadList:(NSString *)itemPhotoId{
     
-    // load objects if read list is not set
+    // load objects if read list is empty, fail safe
     if([self.readList count] == 0){
         [self loadObjects];
     }
     
-    for (id listItemKey in self.readList) {
+    if([self.readList count] != 0){
         
-        NSMutableDictionary *listItem = [self.readList objectForKey:listItemKey];
-        NSString *listItemPhotoId = [listItem objectForKey:@"photoId"];
-        
-        if([listItemPhotoId isEqualToString:itemPhotoId]){
-            [listItem setValue:@"read" forKey:@"status"];
+        // update input item from read lsit
+        for (id listItemKey in self.readList) {
+            NSMutableDictionary *listItem = [self.readList objectForKey:listItemKey];
+            NSString *listItemPhotoId = [listItem objectForKey:@"photoId"];
+            
+            if([listItemPhotoId isEqualToString:itemPhotoId]){
+                [listItem setValue:@"read" forKey:@"status"];
+            }
         }
+        
+        // save list locally & reload table
+        [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
+        [self.tableView reloadData];
     }
-    
-    [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
-    
-    [self.tableView reloadData];
 }
 
 - (void)addToReadList:(NSString *)itemPhotoId itemActivityId:(NSString *)itemActivityId{

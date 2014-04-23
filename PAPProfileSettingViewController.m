@@ -690,12 +690,22 @@
         }
         
         //[[PFUser currentUser] saveEventually];
-        [[PFUser currentUser] saveInBackground];
+        [SVProgressHUD show];
+        [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            [SVProgressHUD dismiss];
+            
+            if(succeeded){
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                alert.alertViewStyle = UIAlertViewStyleDefault;
+                alert.tag = SUCCESSFUL;
+                [alert show];
+            }else{
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your Information could not be saved. Reach us at info@teamstoryapp.com" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                alert.alertViewStyle = UIAlertViewStyleDefault;
+                [alert show];
+            }
+        }];
         
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        alert.alertViewStyle = UIAlertViewStyleDefault;
-        alert.tag = SUCCESSFUL;
-        [alert show];
     } else {
         if ([companyName_input length] > 0 && [location_input length] > 0 && (([email_input length] > 0 && [self NSStringIsValidEmail:email_input]) || email_current_input )) {
             
@@ -739,13 +749,23 @@
             // make sure our join activity is always earlier than a follow
             //[membershipReceived saveEventually];
             [membershipReceived saveInBackground];
-            [[PFUser currentUser] saveInBackground];
-            //[[PFUser currentUser] saveEventually];
             
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            alert.tag = SUCCESSFUL;
-            alert.alertViewStyle = UIAlertViewStyleDefault;
-            [alert show];
+            [SVProgressHUD show];
+            [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                [SVProgressHUD dismiss];
+                
+                if(succeeded){
+                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    alert.alertViewStyle = UIAlertViewStyleDefault;
+                    alert.tag = SUCCESSFUL;
+                    [alert show];
+                }else{
+                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your Information could not be saved. Reach us at info@teamstoryapp.com" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    alert.alertViewStyle = UIAlertViewStyleDefault;
+                    [alert show];
+                }
+            }];
+            //[[PFUser currentUser] saveEventually];
 
         } else {
             if ([companyName_input length] == 0) {
@@ -785,10 +805,13 @@
                 bool profileExist = YES; // either YES or NO
                 NSNumber *profileBoolNum = [NSNumber numberWithBool: profileExist];
                 [[PFUser currentUser] setObject: profileBoolNum forKey: @"profileExist"];
-                [[PFUser currentUser] saveInBackground];
                 
-                PAPprofileApprovalViewController *approvalViewController = [[PAPprofileApprovalViewController alloc] init];
-                [self.navigationController pushViewController:approvalViewController animated:YES];
+                [SVProgressHUD show];
+                [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    [SVProgressHUD dismiss];
+                    PAPprofileApprovalViewController *approvalViewController = [[PAPprofileApprovalViewController alloc] init];
+                    [self.navigationController pushViewController:approvalViewController animated:YES];
+                }];
             } else {
                 [self.navigationController popViewControllerAnimated:YES];
             }
@@ -851,12 +874,25 @@
             }
             
             //[[PFUser currentUser] saveEventually];
-            [[PFUser currentUser] saveInBackground];
             
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            alert.alertViewStyle = UIAlertViewStyleDefault;
-            alert.tag = SUCCESSFUL;
-            [alert show];
+            [SVProgressHUD show];
+            [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                [SVProgressHUD dismiss];
+                
+                if(succeeded){
+                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    alert.alertViewStyle = UIAlertViewStyleDefault;
+                    alert.tag = SUCCESSFUL;
+                    [alert show];
+                }else{
+                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your Information could not be saved. Reach us at info@teamstoryapp.com" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    alert.alertViewStyle = UIAlertViewStyleDefault;
+                    [alert show];
+                }
+                
+            }];
+            
+            
         }
     }
 }
