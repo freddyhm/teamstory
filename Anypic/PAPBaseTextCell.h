@@ -32,6 +32,7 @@
 @property (nonatomic, strong) UIImageView *separatorImage;
 @property (nonatomic, strong) NSString *website;
 @property (nonatomic, strong) UINavigationController *navController;
+@property (nonatomic, strong) NSString *cellType;
 
 /*! The horizontal inset of the cell */
 @property (nonatomic) CGFloat cellInsetWidth;
@@ -39,11 +40,12 @@
 /*! Setters for the cell's content */
 - (void)setContentText:(NSString *)contentString;
 - (void)setDate:(NSDate *)date;
+- (void)atMentionedUsers:(NSArray *)userArray;
 
 - (void)setCellInsetWidth:(CGFloat)insetWidth;
 - (void)hideSeparator:(BOOL)hide;
 
-- (id)initWithNavigationController:(UINavigationController *)navigationController reuseIdentifier:(NSString *)reuseIdentifier;
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier navigationController:(UINavigationController *) anavController;
 
 /*! Static Helper methods */
 + (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content;
@@ -82,7 +84,7 @@
  Sent to the delegate when a user button is tapped
  @param aUser the PFUser of the user that was tapped
  */
-- (void)cell:(PAPBaseTextCell *)cellView didTapUserButton:(PFUser *)aUser;
+- (void)cell:(PAPBaseTextCell *)cellView didTapUserButton:(PFUser *)aUser cellType:(NSString *)cellType;
 
 @end
 

@@ -384,12 +384,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/PAPPhotoDetailsViewController.m"
-            timestampString = "419397314.279639"
+            timestampString = "419963179.357191"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "283"
-            endingLineNumber = "283"
-            landmarkName = "-tableView:cellForNextPageAtIndexPath:"
+            startingLineNumber = "290"
+            endingLineNumber = "290"
+            landmarkName = "-objectsDidLoad:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -400,12 +400,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/PAPPhotoDetailsViewController.m"
-            timestampString = "419397314.279639"
+            timestampString = "419963179.357191"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "229"
-            endingLineNumber = "229"
-            landmarkName = "-queryForTable"
+            startingLineNumber = "236"
+            endingLineNumber = "236"
+            landmarkName = "-tableView:heightForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
