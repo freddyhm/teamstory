@@ -441,10 +441,10 @@
         
         // frames should be handled differently for iphone 4 and 5.
         if ([UIScreen mainScreen].bounds.size.height == 480) {
-            self.dimView.frame = [UIScreen mainScreen].bounds;
+            self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
             self.autocompleteTableView.frame = CGRectMake(7.5f, 203.0f + text_offset, 305.0f, 145.0f - text_offset);
         } else {
-            self.dimView.frame = [UIScreen mainScreen].bounds;
+            self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
             self.autocompleteTableView.frame = CGRectMake(7.5f, 115.0f + text_offset, 305.0f, 232.0f - text_offset);
         }
         
