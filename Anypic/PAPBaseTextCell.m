@@ -38,8 +38,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 #pragma mark - NSObject
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier navigationController:(UINavigationController *) anavController
-{
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
 
     if (self) {
@@ -48,7 +47,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             timeFormatter = [[TTTTimeIntervalFormatter alloc] init];
         }
         
-        self.navController = anavController;
+        //self.navController = anavController;
         self.cellType = reuseIdentifier;
         
         cellInsetWidth = 0.0f;
@@ -79,9 +78,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         self.nameButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.nameButton setBackgroundColor:[UIColor clearColor]];
-        
-
-
 
         if ([reuseIdentifier isEqualToString:@"atmentionCell"]) {
             [mainView setBackgroundColor:[UIColor colorWithRed:241.0f/255.0f green:242.0f/255.0f blue:246.0f/255.0f alpha:1.0f]];
@@ -242,11 +238,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
     [self setNeedsDisplay];
 }
 
-- (void)atMentionedUsers:(NSArray *)userArray {
-    /*
-    if ([userArray count] > 0) {
-        NSLog(@"%@", [[userArray objectAtIndex:0] objectId]);
-    }*/
+
+- (void)navigationController:(UINavigationController *)anavController {
+    self.navController = anavController;
 }
 
 - (void)setContentText:(NSString *)contentString {

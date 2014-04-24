@@ -140,6 +140,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         self.tableView.tableHeaderView = self.headerView;
     }
     
+    self.dimView = [[UIView alloc] init];
+    self.dimView.hidden = YES;
+    self.dimView.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.8f];
+    [self.view addSubview:self.dimView];
+    
     
     // Set table footer
     
@@ -148,11 +153,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     commentTextView.delegate = self;
     self.tableView.tableFooterView = self.footerView;
     
-    
-    self.dimView = [[UIView alloc] init];
-    self.dimView.hidden = YES;
-    self.dimView.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.8f];
-    [self.view addSubview:self.dimView];
     
     self.autocompleteTableView = [[UITableView alloc] init];
     self.autocompleteTableView.delegate = self;
@@ -304,22 +304,21 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         // Try to dequeue a cell and create one if necessary
         PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         if (cell == nil) {
-            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID navigationController:self.navigationController];
+            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
             cell.cellInsetWidth = kPAPCellInsetWidth;
             cell.delegate = self;
         }
-        
+        [cell navigationController:self.navigationController];
         [cell setUser:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityFromUserKey]];
         [cell setContentText:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityContentKey]];
         [cell setDate:[[self.objects objectAtIndex:indexPath.row] createdAt]];
-        [cell atMentionedUsers:[[self.objects objectAtIndex:indexPath.row] objectForKey:@"atmention"]];
         return cell;
     } else {
         static NSString *cellID = @"atmentionCell";
         // Try to dequeue a cell and create one if necessary
         PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         if (cell == nil) {
-            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID navigationController:self.navigationController];
+            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
             cell.delegate = self;
         }
         [cell setUser:[self.filteredArray objectAtIndex:indexPath.row]];
@@ -444,8 +443,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             //NSLog(@"%@", self.atmentionUserArray);
    
             // storing atmention user list to the array (only filtered cases).
-            NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", textView.text]];
-            [comment setObject:mod_atmentionUserArray forKey:@"atmention"];
+            if ([self.atmentionUserArray count] > 0) {
+                NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", textView.text]];
+                [comment setObject:mod_atmentionUserArray forKey:@"atmention"];
+            }
+            
             
             PFACL *ACL = [PFACL ACLWithUser:[PFUser currentUser]];
             [ACL setPublicReadAccess:YES];
@@ -493,6 +495,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     if (range.location == 0 || range.location == text_location) {
         self.autocompleteTableView.hidden = YES;
         self.dimView.hidden = YES;
+        self.tableView.scrollEnabled = YES;
         text_location = 0;
     } else if (range.location > 0 && [[updatedText substringWithRange:NSMakeRange(range.location - 1, 1)] isEqualToString:@"@"]) {
         text_location = range.location;
@@ -508,10 +511,19 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         atmentionSearchString = [atmentionSearchString stringByAppendingString:text];
         
         self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
-        self.dimView.frame = CGRectMake(0.0f, self.tableView.contentSize.height - 302.0f + text_offset, 320.0f, 232.0f - text_offset);
+        
+        // frames should be handled differently for iphone 4 and 5.
+        if ([UIScreen mainScreen].bounds.size.height == 480) {
+            self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
+            self.autocompleteTableView.frame = CGRectMake(7.5f, self.tableView.contentSize.height - 212.0f + text_offset, 305.0f, 143.0f - text_offset);
+        } else {
+            self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
+            self.autocompleteTableView.frame = CGRectMake(7.5f, self.tableView.contentSize.height - 302.0f + text_offset, 305.0f, 232.0f - text_offset);
+        }
+        
         self.dimView.hidden = NO;
         self.autocompleteTableView.hidden = NO;
-        self.autocompleteTableView.frame = CGRectMake(7.5f, self.tableView.contentSize.height - 302.0f + text_offset, 305.0f, 232.0f - text_offset);
+        self.tableView.scrollEnabled = NO;
         [self.autocompleteTableView reloadData];
     }
 
@@ -536,6 +548,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [self textView:commentTextView shouldChangeTextInRange:atmentionRange replacementText:[aUser objectForKey:@"displayName"]];
         self.autocompleteTableView.hidden = YES;
         self.dimView.hidden = YES;
+        self.tableView.scrollEnabled = YES;
         [self.atmentionUserArray addObject:aUser];
     } else {
         [self shouldPresentAccountViewForUser:aUser];
