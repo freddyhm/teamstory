@@ -58,10 +58,22 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       }
                       
                       if (atmentionUserArray.length > 0) {
-                        for (int i = 0; i < atmentionUserArray.length; i++) {
-                          console.log(atmentionUserArray[i]);
+                        for (i = 0; i < atmentionUserArray.length; i++) {
+                          var atmetionUserQuery = new Parse.Query(Parse.Installation);
+
+                          atmetionUserQuery.equalTo("user", atmentionUserArray[i].id);
+
+                          Parse.Push.send({
+                                          where: atmetionUserQuery,
+                                          data: alertPayload(request)
+                                          }).then(function() {
+                                          console.log('Sent atmetion push');
+                                          }, function(error) {
+                                          throw "Push Error" + error.code + " : " + error.message;
+                                          });
                         }
                       }
+                      
                       
                       
                       // notify all users except fromUser who are subscribed to post when new comment is sent
@@ -117,12 +129,22 @@ Parse.Cloud.afterSave('Activity', function(request) {
 
 var alertMessage = function(request) {
     var message = "";
+
+    var atmentionUserArray = new Array();
+
+    atmentionUserArray = request.object.get("atmention") != undefined ? request.object.get("atmention") : "";
     
-    if (request.object.get("type") === "comment") {
+    if (request.object.get("type") === "comment" && atmentionUserArray.length == 0) {
         if (request.user.get('displayName')) {
             message = request.user.get('displayName') + ': ' + request.object.get('content').trim();
         } else {
             message = "Someone commented on your photo.";
+        }
+    } else if (request.object.get("type") === "comment" && atmentionUserArray.length > 0) { 
+        if (request.user.get('displayName')) {
+            message = request.user.get('displayName') + ': ' + 'mentioned you in a post';
+        } else {
+            message = "Someone mentioned you in a post.";
         }
     } else if (request.object.get("type") === "like") {
         if (request.user.get('displayName')) {
