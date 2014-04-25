@@ -43,6 +43,9 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       var toUserId = toUser != undefined ? request.object.get("toUser").id : "";
                       var photoId = request.object.get("photo") != undefined ? request.object.get("photo").id : "";
                       var isSelfie = toUserId == fromUserId;
+                      var atmentionUserArray = new Array();
+
+                      atmentionUserArray = request.object.get("atmention") != undefined ? request.object.get("atmention") : "";
                       
                       // Only send push notifications for new activities
                       if (request.object.existed()) {
@@ -54,10 +57,15 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       return;
                       }
                       
+                      if (atmentionUserArray.length > 0) {
+                        for (int i = 0; i < atmentionUserArray.length; i++) {
+                          console.log(atmentionUserArray[i]);
+                        }
+                      }
                       
                       
                       // notify all users except fromUser who are subscribed to post when new comment is sent
-                      if(request.object.get("type") === "comment"){
+                      if(request.object.get("type") === "comment" && atmentionUserArray.length == 0){
                       
                       var toSubscribersQuery = new Parse.Query(Parse.Installation);
                       var channelName = "ch" + photoId;
