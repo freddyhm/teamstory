@@ -24,6 +24,7 @@
 @property (nonatomic, strong) NSString *photoID;
 @property (nonatomic, strong) PFObject *current_photo;
 @property (nonatomic, strong) MBProgressHUD *hud;
+@property (nonatomic, strong) NSCache *imgCache;
 @property int count;
 @end
 
@@ -77,6 +78,9 @@ enum ActionSheetTags {
         self.shouldReloadOnAppear = NO;
         
         self.count = 0;
+        
+        // init our image cache
+        self.imgCache = [[NSCache alloc]init];
     }
     return self;
 }
@@ -395,6 +399,16 @@ enum ActionSheetTags {
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
     
+    for (PFObject *object in self.objects) {
+        
+        PFImageView *creature = [[PFImageView alloc] init];
+        creature.file = [object objectForKey:kPAPPhotoPictureKey];
+        [creature loadInBackground:^(UIImage *image, NSError *error) {
+            [self.imgCache setObject:image forKey:[object objectId]];
+        }];
+    }
+    
+    
     if([SVProgressHUD isVisible]){
         [SVProgressHUD dismiss];
     }
@@ -431,20 +445,25 @@ enum ActionSheetTags {
         cell.photoButton.tag = indexPath.section;
         cell.imageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
         
-        if (object) {
-            cell.imageView.file = [object objectForKey:kPAPPhotoPictureKey];
+        if(object){
+            
             cell.caption = [object objectForKey:@"caption"];
-
-            // PFQTVC will take care of asynchronously downloading files, but will only load them when the tableview is not moving. If the data is there, let's load it right away.
-            if ([cell.imageView.file isDataAvailable]) {
-                [cell.imageView loadInBackground:^(UIImage *image, NSError *error) {
-                    if (error) {
-                        NSLog(@"%@", error);
-                    }
-                }];
+            cell.imageView.file = [object objectForKey:kPAPPhotoPictureKey];
+    
+            UIImage *cachedImg = [self.imgCache objectForKey:[object objectId]];
+            
+            if(cachedImg){
+                cell.imageView.image = cachedImg;
+            }else{
+                if ([cell.imageView.file isDataAvailable]) {
+                    [cell.imageView loadInBackground:^(UIImage *image, NSError *error) {
+                        cell.imageView.image = image;
+                        [self.imgCache setObject:cell.imageView.image forKey:[object objectId]];
+                    }];
+                }
             }
         }
-
+    
         return cell;
     }
 }
