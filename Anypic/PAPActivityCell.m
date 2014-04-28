@@ -118,7 +118,11 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [self setActivityImageFile:(PFFile*)[[activity objectForKey:kPAPActivityPhotoKey] objectForKey:kPAPPhotoThumbnailKey]];
     }
     
-    NSString *activityString = isSubscription ? @"commented on a followed photo" : [PAPActivityFeedViewController stringForActivityType:(NSString*)[activity objectForKey:kPAPActivityTypeKey]];
+    NSString *activityString = isSubscription ? @"commented on a followed photo" : [PAPActivityFeedViewController stringForActivityType:(NSString*)[activity objectForKey:kPAPActivityTypeKey] object:activity];
+    
+    if ([[activity objectForKey:@"atmention"] count] > 0) {
+        activityString = NSLocalizedString(@"mentioned you in a post", nil);
+    }
     
     self.user = [activity objectForKey:kPAPActivityFromUserKey];
     

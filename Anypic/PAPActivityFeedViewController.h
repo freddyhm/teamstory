@@ -10,7 +10,7 @@
 
 @property (nonatomic, strong) NSMutableDictionary *readList;
 
-+ (NSString *)stringForActivityType:(NSString *)activityType;
++ (NSString *)stringForActivityType:(NSString *)activityType object:(PFObject *)object;
 
 
 - (void)setActivityBadge:(NSString *)badge;
