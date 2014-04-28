@@ -399,16 +399,18 @@ enum ActionSheetTags {
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
     
+    // add images to cache if not already present
     for (PFObject *object in self.objects) {
-        
-        PFImageView *creature = [[PFImageView alloc] init];
-        creature.file = [object objectForKey:kPAPPhotoPictureKey];
-        [creature loadInBackground:^(UIImage *image, NSError *error) {
-            [self.imgCache setObject:image forKey:[object objectId]];
-        }];
+        if(![self.imgCache objectForKey:[object objectId]]){
+            PFImageView *photoImgView = [[PFImageView alloc] init];
+            photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
+            // load images from remote server
+            [photoImgView loadInBackground:^(UIImage *image, NSError *error) {
+                [self.imgCache setObject:image forKey:[object objectId]];
+            }];
+        }
     }
-    
-    
+
     if([SVProgressHUD isVisible]){
         [SVProgressHUD dismiss];
     }
@@ -449,9 +451,11 @@ enum ActionSheetTags {
             
             cell.caption = [object objectForKey:@"caption"];
             cell.imageView.file = [object objectForKey:kPAPPhotoPictureKey];
-    
+            
+            // try getting img from cache
             UIImage *cachedImg = [self.imgCache objectForKey:[object objectId]];
             
+            // set img from cache or grab from remote server & add to cache
             if(cachedImg){
                 cell.imageView.image = cachedImg;
             }else{
