@@ -27,6 +27,8 @@
 @property (nonatomic, strong) PAPSettingsActionSheetDelegate *settingsActionSheetDelegate;
 @property (nonatomic, strong) NSString *displayName;
 @property (nonatomic, strong) UILabel *userDisplayNameLabel;
+@property (nonatomic, strong) UILabel *followerCountLabel;
+@property (nonatomic, strong) UILabel *followingCountLabel;
 @property (nonatomic, strong) UIButton *websiteLink;
 
 
@@ -195,17 +197,17 @@
                 [locationIconImageView setFrame:CGRectMake( 90.0f, 30.0f, 15.0f, 15.0f)];
                 [self.headerView addSubview:locationIconImageView];
                 
-                UILabel *followerCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 110.0f, 65.0f, self.headerView.bounds.size.width, 16.0f)];
-                [followerCountLabel setBackgroundColor:[UIColor clearColor]];
-                [followerCountLabel setTextColor:textColor];
-                [followerCountLabel setFont:[UIFont boldSystemFontOfSize:12.0f]];
-                [self.headerView addSubview:followerCountLabel];
+                self.followerCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 110.0f, 65.0f, self.headerView.bounds.size.width, 16.0f)];
+                [self.followerCountLabel setBackgroundColor:[UIColor clearColor]];
+                [self.followerCountLabel setTextColor:textColor];
+                [self.followerCountLabel setFont:[UIFont boldSystemFontOfSize:12.0f]];
+                [self.headerView addSubview:self.followerCountLabel];
                 
-                UILabel *followingCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 193.0f, 65.0f, self.headerView.bounds.size.width, 16.0f)];
-                [followingCountLabel setBackgroundColor:[UIColor clearColor]];
-                [followingCountLabel setTextColor:textColor];
-                [followingCountLabel setFont:[UIFont boldSystemFontOfSize:12.0f]];
-                [self.headerView addSubview:followingCountLabel];
+                self.followingCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 193.0f, 65.0f, self.headerView.bounds.size.width, 16.0f)];
+                [self.followingCountLabel setBackgroundColor:[UIColor clearColor]];
+                [self.followingCountLabel setTextColor:textColor];
+                [self.followingCountLabel setFont:[UIFont boldSystemFontOfSize:12.0f]];
+                [self.headerView addSubview:self.followingCountLabel];
                 
                 userDisplayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94.0f, 12.0f, self.headerView.bounds.size.width, 16.0f)];
                 [userDisplayNameLabel setBackgroundColor:[UIColor clearColor]];
@@ -237,7 +239,7 @@
                     }
                 }];
                 
-                [followerCountLabel setText:@"0 followers"];
+                [self.followerCountLabel setText:@"0 followers"];
                 
                 PFQuery *queryFollowerCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
                 [queryFollowerCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
@@ -245,14 +247,14 @@
                 [queryFollowerCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
                 [queryFollowerCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
                     if (!error) {
-                        [followerCountLabel setText:[NSString stringWithFormat:@"%d follower%@  |", number, number==1?@"":@"s"]];
+                        [self.followerCountLabel setText:[NSString stringWithFormat:@"%d follower%@  |", number, number==1?@"":@"s"]];
                     }
                 }];
                 
                 NSDictionary *followingDictionary = [[PFUser currentUser] objectForKey:@"following"];
-                [followingCountLabel setText:@"0 following"];
+                [self.followingCountLabel setText:@"0 following"];
                 if (followingDictionary) {
-                    [followingCountLabel setText:[NSString stringWithFormat:@"%d following", (int)[[followingDictionary allValues] count]]];
+                    [self.followingCountLabel setText:[NSString stringWithFormat:@"%d following", (int)[[followingDictionary allValues] count]]];
                 }
                 
                 PFQuery *queryFollowingCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
@@ -261,7 +263,7 @@
                 [queryFollowingCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
                 [queryFollowingCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
                     if (!error) {
-                        [followingCountLabel setText:[NSString stringWithFormat:@"%d following", number]];
+                        [self.followingCountLabel setText:[NSString stringWithFormat:@"%d following", number]];
                     }
                 }];
                 
@@ -431,27 +433,32 @@
     // analytics
     [PAPUtility captureEventGA:@"Engagement" action:@"Follow" label:@"User"];
     
-    UIActivityIndicatorView *loadingActivityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    [loadingActivityIndicatorView startAnimating];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:loadingActivityIndicatorView];
-
     [self configureUnfollowButton];
-
+    
+    [SVProgressHUD show];
     [PAPUtility followUserEventually:self.user block:^(BOOL succeeded, NSError *error) {
         if (error) {
             [self configureFollowButton];
+        }else if(succeeded){
+            [self refreshFollowerCount];
         }
+        
+        [SVProgressHUD dismiss];
     }];
 }
 
 - (void)unfollowButtonAction:(id)sender {
-    UIActivityIndicatorView *loadingActivityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    [loadingActivityIndicatorView startAnimating];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:loadingActivityIndicatorView];
 
     [self configureFollowButton];
-
-    [PAPUtility unfollowUserEventually:self.user];
+    
+    [SVProgressHUD show];
+    [PAPUtility unfollowUserEventually:self.user block:^(BOOL succeeded, NSError *error) {
+        if(succeeded){
+            [self refreshFollowerCount];
+        }
+        
+        [SVProgressHUD dismiss];
+    }];
 }
 
 
@@ -479,6 +486,35 @@
     
     //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"unfollow.png"] style:UIBarButtonItemStylePlain target:self action:@selector(unfollowButtonAction:)];
     [[PAPCache sharedCache] setFollowStatus:YES user:self.user];
+}
+
+-(void)refreshFollowerCount{
+    
+
+    PFQuery *queryFollowerCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
+    [queryFollowerCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
+    [queryFollowerCount whereKey:kPAPActivityToUserKey equalTo:self.user];
+    [queryFollowerCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
+    [queryFollowerCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
+        if (!error) {
+            [self.followerCountLabel setText:[NSString stringWithFormat:@"%d follower%@  |", number, number==1?@"":@"s"]];
+        }
+    }];
+    
+    NSDictionary *followingDictionary = [[PFUser currentUser] objectForKey:@"following"];
+    if (followingDictionary) {
+        [self.followingCountLabel setText:[NSString stringWithFormat:@"%d following", (int)[[followingDictionary allValues] count]]];
+    }
+    
+    PFQuery *queryFollowingCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
+    [queryFollowingCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
+    [queryFollowingCount whereKey:kPAPActivityFromUserKey equalTo:self.user];
+    [queryFollowingCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
+    [queryFollowingCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
+        if (!error) {
+            [self.followingCountLabel setText:[NSString stringWithFormat:@"%d following", number]];
+        }
+    }];
 }
 
 - (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl {

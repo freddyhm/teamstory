@@ -484,7 +484,7 @@ typedef enum {
     if ([cell.followButton isSelected]) {
         // Unfollow
         cell.followButton.selected = NO;
-        [PAPUtility unfollowUserEventually:cellUser];
+        [PAPUtility unfollowUserEventually:cellUser block:^(BOOL succeeded, NSError *error) {}];
         [[NSNotificationCenter defaultCenter] postNotificationName:PAPUtilityUserFollowingChangedNotification object:nil];
     } else {
         // Follow

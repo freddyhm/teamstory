@@ -315,7 +315,7 @@
     }
 }
 
-+ (void)unfollowUserEventually:(PFUser *)user {
++ (void)unfollowUserEventually:(PFUser *)user block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
     PFQuery *query = [PFQuery queryWithClassName:kPAPActivityClassKey];
     [query whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
     [query whereKey:kPAPActivityToUserKey equalTo:user];
