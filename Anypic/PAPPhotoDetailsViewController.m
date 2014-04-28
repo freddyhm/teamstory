@@ -470,6 +470,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:self.photo userInfo:@{@"comments": @(self.objects.count + 1)}];
                 
                 self.atmentionUserArray = nil;
+                self.atmentionUserArray = [[NSMutableArray alloc] init];
                 [SVProgressHUD dismiss];
                 [self loadObjects];
                 
@@ -546,6 +547,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         self.dimView.hidden = YES;
         self.tableView.scrollEnabled = YES;
         [self.atmentionUserArray addObject:aUser];
+        NSLog(@"%@", self.atmentionUserArray);
     } else {
         [self shouldPresentAccountViewForUser:aUser];
     }

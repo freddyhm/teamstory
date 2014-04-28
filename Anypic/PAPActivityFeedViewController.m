@@ -205,7 +205,7 @@
             [photos addObject:pic];
         }
     }
-    
+    //NSString *userId = [PFUser currentUser].objectId;
     
     // pull all activities to user
     PFQuery *personalQuery = [PFQuery queryWithClassName:self.parseClassName];
@@ -216,11 +216,11 @@
     [subscriptionQuery whereKey:kPAPActivityToUserKey notEqualTo:[PFUser currentUser]];
     [subscriptionQuery whereKey:kPAPActivityPhotoKey containedIn:photos];
     [subscriptionQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeComment];
-    
+    /*
     PFQuery *atmentionQuery = [PFQuery queryWithClassName:self.parseClassName];
     [atmentionQuery whereKeyExists:@"atmention"];
-    [atmentionQuery whereKey:@"atmention" containsString:(NSString *)[PFUser currentUser].objectId];
-    
+    [atmentionQuery whereKey:@"atmention" equalTo:userId];
+    */
     PFQuery *finalQuery = [PFQuery orQueryWithSubqueries:@[personalQuery, subscriptionQuery]];
     [finalQuery whereKey:kPAPActivityFromUserKey notEqualTo:[PFUser currentUser]];
     [finalQuery whereKeyExists:kPAPActivityFromUserKey];
@@ -388,7 +388,6 @@
     // Push single photo view controller
     
     PAPPhotoDetailsViewController *photoViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"activity"];
-    
     [self.navigationController pushViewController:photoViewController animated:YES];
 }
 
@@ -409,7 +408,6 @@
         return NSLocalizedString(@"started following you", nil);
     } else if ([activityType isEqualToString:kPAPActivityTypeComment]) {
         if ([[object objectForKey:@"atmention"] count] > 0) {
-            NSLog(@"here?");
             /*
             if ([[object objectForKey:@"atmention"] matchesInString:(NSString *)[PFUser currentUser].objectId options:0 range:NSMakeRange(0, [PFUser currentUser].objectId.length)]) {
                 return NSLocalizedString(@"mentioned you in a post", nil);

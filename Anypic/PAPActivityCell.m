@@ -119,11 +119,11 @@ static TTTTimeIntervalFormatter *timeFormatter;
     }
     
     NSString *activityString = isSubscription ? @"commented on a followed photo" : [PAPActivityFeedViewController stringForActivityType:(NSString*)[activity objectForKey:kPAPActivityTypeKey] object:activity];
-    
+    /*
     if ([[activity objectForKey:@"atmention"] count] > 0) {
         activityString = NSLocalizedString(@"mentioned you in a post", nil);
     }
-    
+    */
     self.user = [activity objectForKey:kPAPActivityFromUserKey];
     
     // Set name button properties and avatar image
