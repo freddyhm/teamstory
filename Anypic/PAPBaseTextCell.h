@@ -25,6 +25,8 @@
 /*! The cell's views. These shouldn't be modified but need to be exposed for the subclass */
 @property (nonatomic, strong) UIView *mainView;
 @property (nonatomic, strong) UIButton *nameButton;
+@property (nonatomic, strong) UIButton *likeButton;
+@property (nonatomic, strong) UIButton *likeCounter;
 @property (nonatomic, strong) UIButton *avatarImageButton;
 @property (nonatomic, strong) PAPProfileImageView *avatarImageView;
 @property (nonatomic, strong) UILabel *contentLabel;

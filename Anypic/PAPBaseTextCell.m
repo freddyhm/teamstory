@@ -10,6 +10,8 @@
 #import "PAPUtility.h"
 #import "PAPwebviewViewController.h"
 
+#define likeButtonDim 28.0f
+
 static TTTTimeIntervalFormatter *timeFormatter;
 
 @interface PAPBaseTextCell () {
@@ -80,9 +82,34 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.nameButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.nameButton setBackgroundColor:[UIColor clearColor]];
         
+        
+        // Create the like button
+        self.likeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.likeButton setTitle:@"Like" forState:UIControlStateNormal];
+        [self.likeButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+        [self.likeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+        [self.likeButton setTitleEdgeInsets:UIEdgeInsetsMake(50.0f, 0.0f, 50.0f, 0.0f)];
+        [[self.likeButton titleLabel] setFont:[UIFont systemFontOfSize:11.0f]];
+        [[self.likeButton titleLabel] setAdjustsFontSizeToFitWidth:YES];
+        [self.likeButton addTarget:self action:nil forControlEvents:UIControlEventTouchUpInside];
+        
+        // Create the counter heart shape (disabled button)
+        self.likeCounter = [UIButton buttonWithType:UIButtonTypeCustom];
 
-
-
+        [self.likeCounter setBackgroundColor:[UIColor clearColor]];
+        [self.likeCounter setTitleColor:[UIColor colorWithRed:0.369f green:0.271f blue:0.176f alpha:1.0f] forState:UIControlStateNormal];
+        [self.likeCounter setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+        [self.likeCounter setTitleEdgeInsets:UIEdgeInsetsMake(50.0f, 0.0f, 50.0f, 0.0f)];
+        [[self.likeCounter titleLabel] setFont:[UIFont systemFontOfSize:9.0f]];
+        
+        [[self.likeCounter titleLabel] setAdjustsFontSizeToFitWidth:YES];
+        [self.likeCounter setAdjustsImageWhenDisabled:NO];
+        [self.likeCounter setAdjustsImageWhenHighlighted:NO];
+        [self.likeCounter setBackgroundImage:[UIImage imageNamed:@"ButtonLike.png"] forState:UIControlStateNormal];
+        [self.likeCounter setBackgroundImage:[UIImage imageNamed:@"ButtonLikeSelected.png"] forState:UIControlStateSelected];
+        [self.likeCounter addTarget:self action:nil forControlEvents:UIControlEventTouchUpInside];
+        self.likeCounter.enabled = NO;
+        
         if ([reuseIdentifier isEqualToString:@"atmentionCell"]) {
             [mainView setBackgroundColor:[UIColor colorWithRed:241.0f/255.0f green:242.0f/255.0f blue:246.0f/255.0f alpha:1.0f]];
             [self.nameButton setTitleColor:[UIColor colorWithWhite:0.5f alpha:0.95f] forState:UIControlStateNormal];
@@ -108,6 +135,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [mainView addSubview:self.nameButton];
         [mainView addSubview:self.contentLabel];
         [mainView addSubview:self.timeLabel];
+        [mainView addSubview:self.likeButton];
+        [mainView addSubview:self.likeCounter];
         [mainView addSubview:separatorImage];
         
         self.avatarImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -170,6 +199,14 @@ static TTTTimeIntervalFormatter *timeFormatter;
     // Layout the timestamp label
     CGSize timeSize = [self.timeLabel.text sizeWithFont:[UIFont systemFontOfSize:11] forWidth:horizontalTextSpace lineBreakMode:NSLineBreakByTruncatingTail];
     [self.timeLabel setFrame:CGRectMake(timeX, contentLabel.frame.origin.y + contentLabel.frame.size.height + vertElemSpacing, timeSize.width, timeSize.height)];
+    
+    // Layout the like button label
+    
+    [self.likeButton setFrame:CGRectMake((self.timeLabel.frame.origin.x + self.timeLabel.frame.size.width), self.timeLabel.frame.origin.y, likeButtonDim, likeButtonDim)];
+
+    [self.likeCounter setFrame:CGRectMake((self.timeLabel.frame.origin.x + self.timeLabel.frame.size.width), timeLabel.frame.origin.y, likeButtonDim, likeButtonDim)];
+    
+    
 }
 
 
