@@ -262,7 +262,7 @@
         // Try to dequeue a cell and create one if necessary
         PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         if (cell == nil) {
-            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID navigationController:self.navigationController];
+            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
             cell.delegate = self;
         }
         [cell setUser:[self.filteredArray objectAtIndex:indexPath.row]];
@@ -322,7 +322,7 @@
 
 
 - (BOOL) textView:(UITextView*)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString*)text{
-    if (text.length > 1 && [cellType isEqualToString:@"atmentionCell"]) {
+    if ([cellType isEqualToString:@"atmentionCell"]) {
         text = [text stringByAppendingString:@" "];
         textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, range.length + 1) withString:text];
         /*
@@ -380,8 +380,12 @@
         [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
         [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
         
-        NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", textView.text]];
-        [photo setObject:mod_atmentionUserArray forKey:@"atmention"];
+        // storing atmention user list to the array (only filtered cases).
+        if ([self.atmentionUserArray count] > 0) {
+            NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", self.commentTextView.text]];
+            [photo setObject:mod_atmentionUserArray forKey:@"atmention"];
+        }
+        
         
         if (userInfo) {
             NSString *commentText = [userInfo objectForKey:kPAPEditPhotoViewControllerUserInfoCommentKey];
@@ -429,7 +433,7 @@
     }
     
     if (text_location > 0) {
-        if ([text isEqualToString:@""]) {
+        if ([text isEqualToString:@""]&& text_location > 1) {
             range.location -= 1;
         }
         self.autocompleteTableView.hidden = NO;
@@ -497,8 +501,11 @@
     [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
     [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
     
-    NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", self.commentTextView.text]];
-    [photo setObject:mod_atmentionUserArray forKey:@"atmention"];
+    // storing atmention user list to the array (only filtered cases).
+    if ([self.atmentionUserArray count] > 0) {
+        NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", self.commentTextView.text]];
+        [photo setObject:mod_atmentionUserArray forKey:@"atmention"];
+    }
     
     if (userInfo) {
         NSString *commentText = [userInfo objectForKey:kPAPEditPhotoViewControllerUserInfoCommentKey];

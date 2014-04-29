@@ -304,22 +304,21 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         // Try to dequeue a cell and create one if necessary
         PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         if (cell == nil) {
-            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID navigationController:self.navigationController];
+            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
             cell.cellInsetWidth = kPAPCellInsetWidth;
             cell.delegate = self;
         }
-        
+        [cell navigationController:self.navigationController];
         [cell setUser:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityFromUserKey]];
         [cell setContentText:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityContentKey]];
         [cell setDate:[[self.objects objectAtIndex:indexPath.row] createdAt]];
-        [cell atMentionedUsers:[[self.objects objectAtIndex:indexPath.row] objectForKey:@"atmention"]];
         return cell;
     } else {
         static NSString *cellID = @"atmentionCell";
         // Try to dequeue a cell and create one if necessary
         PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         if (cell == nil) {
-            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID navigationController:self.navigationController];
+            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
             cell.delegate = self;
         }
         [cell setUser:[self.filteredArray objectAtIndex:indexPath.row]];
@@ -395,7 +394,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 
 - (BOOL) textView:(UITextView*)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString*)text{
-    if (text.length > 1 && [cellType isEqualToString:@"atmentionCell"]) {
+    if ([cellType isEqualToString:@"atmentionCell"]) {
         text = [text stringByAppendingString:@" "];
         textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, range.length + 1) withString:text];
         /*
@@ -404,7 +403,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
          [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:NSMakeRange(range.location - 1, text.length + 1)];
          [textView setAttributedText:commentText];
          */
-        
         cellType = nil;
     }
     
@@ -431,7 +429,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             }
         
     } else if ([text isEqualToString:@"\n"]) {
-        
         NSString *trimmedComment = [textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         if (trimmedComment.length != 0 && [self.photo objectForKey:kPAPPhotoUserKey]) {
             PFObject *comment = [PFObject objectWithClassName:kPAPActivityClassKey];
@@ -441,11 +438,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             [comment setObject:kPAPActivityTypeComment forKey:kPAPActivityTypeKey];
             [comment setObject:self.photo forKey:kPAPActivityPhotoKey];
             
-            //NSLog(@"%@", self.atmentionUserArray);
-   
             // storing atmention user list to the array (only filtered cases).
-            NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", textView.text]];
-            [comment setObject:mod_atmentionUserArray forKey:@"atmention"];
+            if ([self.atmentionUserArray count] > 0) {
+                NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", textView.text]];
+                [comment setObject:mod_atmentionUserArray forKey:@"atmention"];
+            }
             
             PFACL *ACL = [PFACL ACLWithUser:[PFUser currentUser]];
             [ACL setPublicReadAccess:YES];
@@ -472,6 +469,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:self.photo userInfo:@{@"comments": @(self.objects.count + 1)}];
                 
+                self.atmentionUserArray = nil;
                 [SVProgressHUD dismiss];
                 [self loadObjects];
                 
@@ -500,7 +498,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
     
     if (text_location > 0) {
-        if ([text isEqualToString:@""]) {
+        if ([text isEqualToString:@""] && text_location > 1) {
             range.location -= 1;
         }
 

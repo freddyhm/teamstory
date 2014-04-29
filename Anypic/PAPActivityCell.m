@@ -36,8 +36,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 #pragma mark - NSObject
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         horizontalTextSpace = [PAPActivityCell horizontalTextSpaceForInsetWidth:0];
