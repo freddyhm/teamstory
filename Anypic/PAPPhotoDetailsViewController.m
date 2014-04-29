@@ -553,6 +553,86 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
 }
 
+- (void)didTapCommentLikeButton:(PAPBaseTextCell *)cellView{
+    
+    UIButton *cellLikeCommentButton = cellView.likeCommentButton;
+    BOOL liked = !cellLikeCommentButton.selected;
+    [cellView setLikeCommentButtonState:liked];
+ 
+    /* current object comment
+    NSIndexPath *cellIndexPath = [self.tableView indexPathForCell:cellView];
+    PFObject *likedComment = [self.objects  objectAtIndex:cellIndexPath.row];
+    NSLog(@"%@", [likedComment objectForKey:@"content"]);
+     */
+    
+
+    /*
+     
+     Set current controller based on current data
+     
+     NSArray *originalLikeUsersArray = [NSArray arrayWithArray:self.likeUsers];
+     NSMutableSet *newLikeUsersSet = [NSMutableSet setWithCapacity:[self.likeUsers count]];
+     
+     for (PFUser *likeUser in self.likeUsers) {
+     // add all current likeUsers BUT currentUser
+     if (![[likeUser objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+     [newLikeUsersSet addObject:likeUser];
+     }
+     }
+     */
+    
+    if (liked) {
+        
+        // analytics
+   //     [PAPUtility captureEventGA:@"Engagement" action:@"Like" label:@"Photo"];
+        
+       // update data in this controller
+     //   [[PAPCache sharedCache] incrementLikerCountForPhoto:self.photo];
+       // [newLikeUsersSet addObject:[PFUser currentUser]];
+    } else {
+        // update data in this controller
+        //[[PAPCache sharedCache] decrementLikerCountForPhoto:self.photo];
+    }
+    
+    // update data in this controller
+    //[[PAPCache sharedCache] setPhotoIsLikedByCurrentUser:self.photo liked:liked];
+    
+    // update data in this controller
+    //[self setLikeUsers:[newLikeUsersSet allObjects]];
+    
+    if (liked) {
+        
+        /*
+        [PAPUtility likePhotoInBackground:self.photo block:^(BOOL succeeded, NSError *error) {
+            if (!succeeded) {
+                [button addTarget:self action:@selector(didTapLikePhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+                [self setLikeUsers:originalLikeUsersArray];
+                [self setLikeButtonState:NO];
+            }
+        }];
+         
+         */
+    } else {
+        
+        /*
+        [PAPUtility unlikePhotoInBackground:self.photo block:^(BOOL succeeded, NSError *error) {
+            if (!succeeded) {
+                [button addTarget:self action:@selector(didTapLikePhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+                [self setLikeUsers:originalLikeUsersArray];
+                [self setLikeButtonState:YES];
+            }
+        }];
+         */
+    }
+    
+    /*
+     [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotification object:self.photo userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:liked] forKey:PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotificationUserInfoLikedKey]];
+     */
+
+}
+
+
+
 
 #pragma mark - PAPPhotoDetailsHeaderViewDelegate
 
