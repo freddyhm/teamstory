@@ -134,9 +134,9 @@
         NSString *activityString = [[[object objectForKey:@"toUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]] ? [PAPActivityFeedViewController stringForActivityType:(NSString*)[object objectForKey:kPAPActivityTypeKey] object:object] : NSLocalizedString(@"commented on your followed photo", nil);;
         
         if ([[object objectForKey:@"atmention"] count] > 0) {
-            activityString = NSLocalizedString(@"mentioned you in a post", nil);
+            activityString = NSLocalizedString(@"mentnioned you in a post", nil);
         }
-
+    
         PFUser *user = (PFUser*)[object objectForKey:kPAPActivityFromUserKey];
         NSString *nameString = NSLocalizedString(@"Someone", nil);
         if (user && [user objectForKey:kPAPUserDisplayNameKey] && [[user objectForKey:kPAPUserDisplayNameKey] length] > 0) {
@@ -205,7 +205,6 @@
             [photos addObject:pic];
         }
     }
-    //NSString *userId = [PFUser currentUser].objectId;
     
     // pull all activities to user
     PFQuery *personalQuery = [PFQuery queryWithClassName:self.parseClassName];
@@ -216,12 +215,14 @@
     [subscriptionQuery whereKey:kPAPActivityToUserKey notEqualTo:[PFUser currentUser]];
     [subscriptionQuery whereKey:kPAPActivityPhotoKey containedIn:photos];
     [subscriptionQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeComment];
-    /*
+    
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    [array addObject:[PFUser currentUser]];
+    //NSPredicate *prediate = [NSPredicate predicateWithFormat:@"atmention.objectId contains %@", [PFUser currentUser].objectId];
     PFQuery *atmentionQuery = [PFQuery queryWithClassName:self.parseClassName];
-    [atmentionQuery whereKeyExists:@"atmention"];
-    [atmentionQuery whereKey:@"atmention" equalTo:userId];
-    */
-    PFQuery *finalQuery = [PFQuery orQueryWithSubqueries:@[personalQuery, subscriptionQuery]];
+    [atmentionQuery whereKey:@"atmention" containsAllObjectsInArray:array];
+    
+    PFQuery *finalQuery = [PFQuery orQueryWithSubqueries:@[personalQuery, subscriptionQuery, atmentionQuery]];
     [finalQuery whereKey:kPAPActivityFromUserKey notEqualTo:[PFUser currentUser]];
     [finalQuery whereKeyExists:kPAPActivityFromUserKey];
     
@@ -236,14 +237,15 @@
     //
     // If there is no network connection, we will hit the cache first.
     /*
-    SEL isParseReachableSelector = NSSelectorFromString(@"isParseReachable");
-    if (self.objects.count == 0 || ![[UIApplication sharedApplication].delegate performSelector:isParseReachableSelector]) {
-        NSLog(@"??");
-        [query setCachePolicy:kPFCachePolicyCacheThenNetwork];
-    }
-    */
+     SEL isParseReachableSelector = NSSelectorFromString(@"isParseReachable");
+     if (self.objects.count == 0 || ![[UIApplication sharedApplication].delegate performSelector:isParseReachableSelector]) {
+     NSLog(@"??");
+     [query setCachePolicy:kPFCachePolicyCacheThenNetwork];
+     }
+     */
     
     return finalQuery;
+    
 }
 
 - (void)objectsWillLoad{
@@ -408,21 +410,17 @@
         return NSLocalizedString(@"started following you", nil);
     } else if ([activityType isEqualToString:kPAPActivityTypeComment]) {
         if ([[object objectForKey:@"atmention"] count] > 0) {
-            /*
-            if ([[object objectForKey:@"atmention"] matchesInString:(NSString *)[PFUser currentUser].objectId options:0 range:NSMakeRange(0, [PFUser currentUser].objectId.length)]) {
-                return NSLocalizedString(@"mentioned you in a post", nil);
-            } else {
-                return nil;
-            }*/
             for (int i = 0; i < [[object objectForKey:@"atmention"] count]; i++) {
                 if ([[[[object objectForKey:@"atmention"] objectAtIndex:i] objectId] isEqualToString:[PFUser currentUser].objectId]) {
+                    NSLog(@"goes through at mention %d", i);
                     return NSLocalizedString(@"mentioned you in a post", nil);
                 }
             }
-            return nil;
+            return NSLocalizedString(@"commented on your photo", nil);
         } else {
             return NSLocalizedString(@"commented on your photo", nil);
         }
+    
     } else if ([activityType isEqualToString:kPAPActivityTypeJoined]) {
         return NSLocalizedString(@"joined Teamstory", nil);
     } else {
