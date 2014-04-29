@@ -60,8 +60,8 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       if (atmentionUserArray.length > 0) {
                         for (i = 0; i < atmentionUserArray.length; i++) {
                           var atmetionUserQuery = new Parse.Query(Parse.Installation);
-
-                          atmetionUserQuery.equalTo("user", atmentionUserArray[i].id);
+                          console.log("atmention array loop");
+                          atmetionUserQuery.equalTo("user", atmentionUserArray[i]);
 
                           Parse.Push.send({
                                           where: atmetionUserQuery,
@@ -97,7 +97,7 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       }
                       
                       // send post owner notification if someone else creates activity
-                      if(!isSelfie){
+                      if(!isSelfie && atmentionUserArray.length == 0){
                       
                       var toOwnerQuery = new Parse.Query(Parse.Installation);
                       toOwnerQuery.equalTo('user', toUser);
