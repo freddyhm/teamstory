@@ -397,13 +397,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     if ([cellType isEqualToString:@"atmentionCell"]) {
         text = [text stringByAppendingString:@" "];
         textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, range.length + 1) withString:text];
-        /*
-         NSMutableAttributedString *commentText = [[NSMutableAttributedString alloc] initWithString:textView.text];
-         [commentText addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:119.0f/255.0f green:119.0f/255.0f blue:119.0f/255.0f alpha:1.0f] range:NSMakeRange(0, textView.text.length)];
-         [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:NSMakeRange(range.location - 1, text.length + 1)];
-         [textView setAttributedText:commentText];
-         */
+        
         cellType = nil;
+        return NO;
     }
     
     if ([text isEqualToString:@"@"]){
@@ -518,7 +514,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             self.autocompleteTableView.frame = CGRectMake(7.5f, self.tableView.contentSize.height - 302.0f + text_offset, 305.0f, 232.0f - text_offset);
         }
         
-        self.dimView.hidden = NO;
+        if ([self.filteredArray count] < 1) {
+            self.dimView.hidden = YES;
+        } else {
+            self.dimView.hidden = NO;
+        }
+
         self.autocompleteTableView.hidden = NO;
         self.tableView.scrollEnabled = NO;
         [self.autocompleteTableView reloadData];
@@ -547,7 +548,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         self.dimView.hidden = YES;
         self.tableView.scrollEnabled = YES;
         [self.atmentionUserArray addObject:aUser];
-        NSLog(@"%@", self.atmentionUserArray);
     } else {
         [self shouldPresentAccountViewForUser:aUser];
     }
