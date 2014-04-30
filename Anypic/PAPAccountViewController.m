@@ -450,15 +450,10 @@
 - (void)unfollowButtonAction:(id)sender {
 
     [self configureFollowButton];
-    
     [SVProgressHUD show];
-    [PAPUtility unfollowUserEventually:self.user block:^(BOOL succeeded, NSError *error) {
-        if(succeeded){
-            [self refreshFollowerCount];
-        }
-        
-        [SVProgressHUD dismiss];
-    }];
+    [PAPUtility unfollowUserEventually:self.user];
+    [self refreshFollowerCount];
+    [SVProgressHUD dismiss];
 }
 
 
