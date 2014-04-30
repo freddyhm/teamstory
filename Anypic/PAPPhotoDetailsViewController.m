@@ -214,6 +214,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 -(void)dismissKeyboard {
     [self.view endEditing:YES];
+    self.autocompleteTableView.hidden = YES;
+    self.dimView.hidden = YES;
 }
 
 
@@ -499,10 +501,14 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             if ([text isEqualToString:@""] && text_location > 1) {
                 range.location -= 1;
             }
-
-            atmentionRange = NSMakeRange(text_location, range.location - text_location);
-            atmentionSearchString = [updatedText substringWithRange:atmentionRange];
-            atmentionSearchString = [atmentionSearchString stringByAppendingString:text];
+            
+            if (range.location == NSNotFound) {
+                NSLog(@"range location not found");
+            } else {
+                atmentionRange = NSMakeRange(text_location, range.location - text_location);
+                atmentionSearchString = [updatedText substringWithRange:atmentionRange];
+                atmentionSearchString = [atmentionSearchString stringByAppendingString:text];
+            }
             
             self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
             
