@@ -24,6 +24,7 @@
 + (void)followUserEventually:(PFUser *)user block:(void (^)(BOOL succeeded, NSError *error))completionBlock;
 + (void)followUsersEventually:(NSArray *)users block:(void (^)(BOOL succeeded, NSError *error))completionBlock;
 + (void)unfollowUserEventually:(PFUser *)user;
++ (void)unfollowUserEventually:(PFUser *)user block:(void (^)(BOOL succeeded))completionBlock;
 + (void)unfollowUsersEventually:(NSArray *)users;
 
 + (void)drawSideDropShadowForRect:(CGRect)rect inContext:(CGContextRef)context;

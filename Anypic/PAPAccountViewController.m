@@ -30,6 +30,7 @@
 @property (nonatomic, strong) UILabel *followerCountLabel;
 @property (nonatomic, strong) UILabel *followingCountLabel;
 @property (nonatomic, strong) UIButton *websiteLink;
+@property int userStatUpdateCount;
 
 
 @end
@@ -349,9 +350,12 @@
             self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height);
         }
         
-         if([SVProgressHUD isVisible]){
-             [SVProgressHUD dismiss];
-         }
+        // refresh user stats, dismiss progress hud when finished
+        [self refreshFollowerCount:^(BOOL completed) {
+            if(completed){
+                [SVProgressHUD dismiss];
+            }
+        }];
     }];
 }
 
@@ -435,25 +439,40 @@
     
     [self configureUnfollowButton];
     
+    // show hud while numbers are refreshing
     [SVProgressHUD show];
     [PAPUtility followUserEventually:self.user block:^(BOOL succeeded, NSError *error) {
         if (error) {
             [self configureFollowButton];
         }else if(succeeded){
-            [self refreshFollowerCount];
+            
+            // refresh new count
+            [self refreshFollowerCount:^(BOOL completed) {
+                if(completed){
+                    [SVProgressHUD dismiss];
+                }
+            }];
         }
-        
-        [SVProgressHUD dismiss];
     }];
 }
 
 - (void)unfollowButtonAction:(id)sender {
 
     [self configureFollowButton];
+    
+    // show hud while numbers are refreshing
     [SVProgressHUD show];
-    [PAPUtility unfollowUserEventually:self.user];
-    [self refreshFollowerCount];
-    [SVProgressHUD dismiss];
+    [PAPUtility unfollowUserEventually:self.user block:^(BOOL succeeded) {
+        
+        if (succeeded) {
+            // refresh new count
+            [self refreshFollowerCount:^(BOOL completed) {
+                if(completed){
+                    [SVProgressHUD dismiss];
+                }
+            }];
+        }
+    }];
 }
 
 
@@ -483,16 +502,26 @@
     [[PAPCache sharedCache] setFollowStatus:YES user:self.user];
 }
 
--(void)refreshFollowerCount{
+-(void)refreshFollowerCount:(void (^)(BOOL))completed{
     
-
+    // return completed when both queries have finished
+    self.userStatUpdateCount = 0;
+    
+    // refresh follower count
     PFQuery *queryFollowerCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
     [queryFollowerCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
     [queryFollowerCount whereKey:kPAPActivityToUserKey equalTo:self.user];
     [queryFollowerCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
     [queryFollowerCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
         if (!error) {
+            
             [self.followerCountLabel setText:[NSString stringWithFormat:@"%d follower%@  |", number, number==1?@"":@"s"]];
+            
+            // increment and check if we're done updating
+            self.userStatUpdateCount++;
+            if(self.userStatUpdateCount > 1){
+                completed(YES);
+            }
         }
     }];
     
@@ -501,13 +530,21 @@
         [self.followingCountLabel setText:[NSString stringWithFormat:@"%d following", (int)[[followingDictionary allValues] count]]];
     }
     
+    // refresh following count
     PFQuery *queryFollowingCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
     [queryFollowingCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
     [queryFollowingCount whereKey:kPAPActivityFromUserKey equalTo:self.user];
     [queryFollowingCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
     [queryFollowingCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
         if (!error) {
+            
             [self.followingCountLabel setText:[NSString stringWithFormat:@"%d following", number]];
+            
+            // increment and check if we're done updating
+            self.userStatUpdateCount++;
+            if(self.userStatUpdateCount > 1){
+                 completed(YES);
+            }
         }
     }];
 }
