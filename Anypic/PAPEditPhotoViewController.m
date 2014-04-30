@@ -297,7 +297,9 @@
     CGRect frame = textView.frame;
     frame.size.height = [textView contentSize].height;
     textView.frame = frame;
-    text_offset = 0;
+    if (text_offset == NSNotFound) {
+        text_offset = 0;
+    }
     
     // for next line excl. first line
     if (currentRect.origin.y > self.previousRect.origin.y && self.previousRect.origin.y != 0){
@@ -326,20 +328,15 @@
     if ([cellType isEqualToString:@"atmentionCell"]) {
         text = [text stringByAppendingString:@" "];
         textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, range.length + 1) withString:text];
-        /*
-         NSMutableAttributedString *commentText = [[NSMutableAttributedString alloc] initWithString:textView.text];
-         [commentText addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:119.0f/255.0f green:119.0f/255.0f blue:119.0f/255.0f alpha:1.0f] range:NSMakeRange(0, textView.text.length)];
-         [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:NSMakeRange(range.location - 1, text.length + 1)];
-         [textView setAttributedText:commentText];
-         */
         
         cellType = nil;
+        return YES;
     }
     
     if ([text isEqualToString:@"@"]){
         [SVProgressHUD show];
         
-        if (!self.userArray) {
+        if ([self.userArray count] < 1) {
             userQuery = [PFUser query];
             [userQuery whereKeyExists:@"displayName"];
             [userQuery orderByAscending:@"displayName"];
@@ -424,38 +421,45 @@
         [self exitPhoto];
     }
     
-    NSMutableString *updatedText = [[NSMutableString alloc] initWithString:textView.text];
-    if (range.location == 0 || range.location == text_location) {
-        self.autocompleteTableView.hidden = YES;
-        self.dimView.hidden = YES;
-        text_location = 0;
-    } else if (range.location > 0 && [[updatedText substringWithRange:NSMakeRange(range.location - 1, 1)] isEqualToString:@"@"]) {
-        text_location = range.location;
-    }
-    
-    if (text_location > 0) {
-        if ([text isEqualToString:@""]&& text_location > 1) {
-            range.location -= 1;
+    if ([self.userArray count] > 0) {
+        NSMutableString *updatedText = [[NSMutableString alloc] initWithString:textView.text];
+        if (range.location == 0 || range.location == text_location) {
+            self.autocompleteTableView.hidden = YES;
+            self.dimView.hidden = YES;
+            text_location = 0;
+        } else if (range.location > 0 && [[updatedText substringWithRange:NSMakeRange(range.location - 1, 1)] isEqualToString:@"@"]) {
+            text_location = range.location;
         }
-        self.autocompleteTableView.hidden = NO;
-        atmentionRange = NSMakeRange(text_location, range.location - text_location);
-        atmentionSearchString = [updatedText substringWithRange:atmentionRange];
-        atmentionSearchString = [atmentionSearchString stringByAppendingString:text];
+        
+        if (text_location > 0) {
+            if ([text isEqualToString:@""] && text_location > 1) {
+                range.location -= 1;
+            }
+            
+            atmentionRange = NSMakeRange(text_location, range.location - text_location);
+            atmentionSearchString = [updatedText substringWithRange:atmentionRange];
+            atmentionSearchString = [atmentionSearchString stringByAppendingString:text];
 
-        self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
-        
-        // frames should be handled differently for iphone 4 and 5.
-        if ([UIScreen mainScreen].bounds.size.height == 480) {
-            self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
-            self.autocompleteTableView.frame = CGRectMake(7.5f, 203.0f + text_offset, 305.0f, 145.0f - text_offset);
-        } else {
-            self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
-            self.autocompleteTableView.frame = CGRectMake(7.5f, 115.0f + text_offset, 305.0f, 232.0f - text_offset);
+            self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
+            
+            // frames should be handled differently for iphone 4 and 5.
+            if ([UIScreen mainScreen].bounds.size.height == 480) {
+                self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
+                self.autocompleteTableView.frame = CGRectMake(7.5f, 203.0f + text_offset, 305.0f, 145.0f - text_offset);
+            } else {
+                self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
+                self.autocompleteTableView.frame = CGRectMake(7.5f, 115.0f + text_offset, 305.0f, 232.0f - text_offset);
+            }
+            
+            if ([self.filteredArray count] < 1) {
+                self.dimView.hidden = YES;
+            } else {
+                self.dimView.hidden = NO;
+            }
+            
+            self.autocompleteTableView.hidden = NO;
+            [self.autocompleteTableView reloadData];
         }
-        
-        self.dimView.hidden = NO;
-        self.autocompleteTableView.hidden = NO;
-        [self.autocompleteTableView reloadData];
     }
     return YES;
 }
