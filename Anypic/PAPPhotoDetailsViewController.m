@@ -45,6 +45,8 @@ enum ActionSheetTags {
 @property (nonatomic, strong) PFQuery *userQuery;
 @property (nonatomic, strong) NSMutableArray *atmentionUserArray;
 @property (nonatomic, strong) UIView *dimView;
+@property CGRect defaultFooterViewFrame;
+@property CGRect defaultCommentTextViewFrame;
 @property CGRect previousRect;
 @end
 
@@ -150,6 +152,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     self.footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:[PAPPhotoDetailsFooterView rectForView]];
     commentTextView = footerView.commentView;
+    self.defaultFooterViewFrame = self.footerView.mainView.frame;
+    self.defaultCommentTextViewFrame = self.commentTextView.frame;
     commentTextView.delegate = self;
     self.tableView.tableFooterView = self.footerView;
     
@@ -361,7 +365,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
     if ([textView.text length] == 0) {
+        // reset default text view and frame
         [textView setText:@"Add a comment"];
+        self.footerView.mainView.frame = self.defaultFooterViewFrame;
+        textView.frame = self.defaultCommentTextViewFrame;
     }
 }
 
@@ -482,7 +489,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         }
         
         [textView setText:@""];
-        
         [textView resignFirstResponder];
         return NO;
     }
