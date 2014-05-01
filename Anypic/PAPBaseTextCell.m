@@ -101,9 +101,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
         }
         
         [mainView addSubview:self.avatarImageView];
-        [mainView addSubview:self.nameButton];
         [mainView addSubview:self.contentLabel];
         [mainView addSubview:self.timeLabel];
+        [mainView addSubview:self.nameButton];
         [mainView addSubview:separatorImage];
         
         self.avatarImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
