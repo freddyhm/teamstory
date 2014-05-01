@@ -2203,8 +2203,8 @@
 				BUNDLE_DISPLAY_NAME_SUFFIX = "∆";
 				BUNDLE_ID_SUFFIX = .dev;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Tobok Lee (J6C82HHGJA)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				FACBEOOK_URL_TYPE = fb290587851092940;
 				FACEBOOK_CAT = Business;
@@ -2309,7 +2309,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_DISPLAY_NAME_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Tobok Lee (J6C82HHGJA)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FACBEOOK_URL_TYPE = "";
@@ -2335,7 +2335,7 @@
 					"$(PROJECT_DIR)/External/GoogleAnalytics",
 				);
 				PRODUCT_NAME = Teamstory;
-				PROVISIONING_PROFILE = "90F3A78C-691F-40FC-8116-9D8528892DB2";
+				PROVISIONING_PROFILE = "C5DB0801-FD86-4697-AE5E-52A020EF2366";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
