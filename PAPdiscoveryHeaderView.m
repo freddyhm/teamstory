@@ -147,7 +147,7 @@
      */
     float padding_x = 15.0f;
     
-    update_text = @"Version 1.1.5\n\nWelcome to Teamstory!\nThe crew is working real hard to push out awesome features and squashing bugs. Here's what we did for our latest versions 1.1 & 1.1.5:\n\n-New intro flow\n-Invitation system set up\n-Enabled notification for post followers\n-Fixed 'like' numbers\n-Enabled links for 'http://'; in comments\n-Added pull-to-refresh indicator\n-Updated feedback system\n-New read/unread activity notice\n-Descriptions for photos on the timeline\n-Go to top button\n\n\nHope you are enjoying Teamstory!\nPlease stay tuned for more!";
+    update_text = @"Version 1.3\n\nWelcome to Teamstory!\nThe crew is working real hard to push out awesome features and squashing bugs.\n\nHere's what we did for our latest version 1.3:\n\n• New! Tag an entrepreneur by typing @ followed by their username in a comment\n• Updated textview to make it dynamic in height\n• Improved image caching and loading speeds\n• Enhanced activity notifications when reading similar items\n• Fixed not following/unfollowing refresh bug\n• Fixed application not submitting properly bug\n\n\nHope you are enjoying Teamstory!\nPlease stay tuned for more!";
     [self dimbackground];
     
     self.content_overlay = [[UIView alloc] initWithFrame:CGRectMake(padding_x, 80.0f, [UIScreen mainScreen].bounds.size.width - padding_x * 2, 370.0f)];
