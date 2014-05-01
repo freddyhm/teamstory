@@ -144,6 +144,18 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 
     [self shouldUploadImage:self.image];
+    
+    UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
+                                          initWithTarget:self
+                                          action:@selector(dismissKeyboard)];
+    
+    [self.view addGestureRecognizer:tapOutside];
+}
+
+-(void)dismissKeyboard {
+    [self.view endEditing:YES];
+    self.autocompleteTableView.hidden = YES;
+    self.dimView.hidden = YES;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -431,14 +443,22 @@
             text_location = range.location;
         }
         
-        if (text_location > 0) {
-            if ([text isEqualToString:@""] && text_location > 1) {
-                range.location -= 1;
-            }
+        if ([text isEqualToString:@""] && text_location > 1) {
+            range.location -=1;
             
-            atmentionRange = NSMakeRange(text_location, range.location - text_location);
-            atmentionSearchString = [updatedText substringWithRange:atmentionRange];
-            atmentionSearchString = [atmentionSearchString stringByAppendingString:text];
+            if (text_location > range.location) {
+                text_location -= 1;
+            }
+        }
+        
+        if (text_location > 0) {
+            if (range.location == NSNotFound) {
+                NSLog(@"range location not found");
+            } else {
+                atmentionRange = NSMakeRange(text_location, range.location - text_location);
+                atmentionSearchString = [updatedText substringWithRange:atmentionRange];
+                atmentionSearchString = [atmentionSearchString stringByAppendingString:text];
+            };
 
             self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
             

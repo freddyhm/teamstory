@@ -497,11 +497,15 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             text_location = range.location;
         }
         
-        if (text_location > 0) {
-            if ([text isEqualToString:@""] && text_location > 1) {
-                range.location -= 1;
-            }
+        if ([text isEqualToString:@""] && text_location > 1) {
+            range.location -=1;
             
+            if (text_location > range.location) {
+                text_location -= 1;
+            }
+        }
+        
+        if (text_location > 0) {
             if (range.location == NSNotFound) {
                 NSLog(@"range location not found");
             } else {
