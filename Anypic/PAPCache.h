@@ -12,7 +12,9 @@
 
 - (void)clear;
 - (void)setAttributesForPhoto:(PFObject *)photo likers:(NSArray *)likers commenters:(NSArray *)commenters likedByCurrentUser:(BOOL)likedByCurrentUser;
+- (void)setAttributesForComment:(PFObject *)comment commentLikers:(NSArray *)commentLikers likedByCurrentUser:(BOOL)commentLikedByCurrentUser;
 - (NSDictionary *)attributesForPhoto:(PFObject *)photo;
+- (NSDictionary *)attributesForComment:(PFObject *)photo;
 - (NSNumber *)likeCountForPhoto:(PFObject *)photo;
 - (NSNumber *)commentCountForPhoto:(PFObject *)photo;
 - (NSArray *)likersForPhoto:(PFObject *)photo;

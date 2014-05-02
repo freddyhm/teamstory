@@ -152,6 +152,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 
+#pragma mark - ()
+
 #pragma mark - UIView
 
 - (void)layoutSubviews {
@@ -229,9 +231,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
 - (void)shouldEnableLikeCommentButton:(BOOL)enable{
     
     if (enable) {
-        [self.likeCommentButton removeTarget:self action:@selector(didTapLikeCommentButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    } else {
         [self.likeCommentButton addTarget:self action:@selector(didTapLikeCommentButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    } else {
+        [self.likeCommentButton removeTarget:self action:@selector(didTapLikeCommentButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     }
 }
 

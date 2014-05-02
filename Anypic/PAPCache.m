@@ -52,6 +52,21 @@
     [self setAttributes:attributes forPhoto:photo];
 }
 
+- (void)setAttributesForComment:(PFObject *)comment commentLikers:(NSArray *)commentLikers likedByCurrentUser:(BOOL)commentLikedByCurrentUser {
+    
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                [NSNumber numberWithBool:commentLikedByCurrentUser],kPAPCommentAttributesIsLikedByCurrentUserKey,
+                                [NSNumber numberWithInt:(int)[commentLikers count]],kPAPCommentAttributesLikeCountKey, nil];
+    
+    [self setAttributes:attributes forComment:comment];
+}
+
+
+- (NSDictionary *)attributesForComment:(PFObject *)photo {
+    NSString *key = [self keyForComment:photo];
+    return [self.cache objectForKey:key];
+}
+
 - (NSDictionary *)attributesForPhoto:(PFObject *)photo {
     NSString *key = [self keyForPhoto:photo];
     return [self.cache objectForKey:key];
@@ -216,6 +231,11 @@
 
 #pragma mark - ()
 
+- (void)setAttributes:(NSDictionary *)attributes forComment:(PFObject *)comment {
+    NSString *key = [self keyForComment:comment];
+    [self.cache setObject:attributes forKey:key];
+}
+
 - (void)setAttributes:(NSDictionary *)attributes forPhoto:(PFObject *)photo {
     NSString *key = [self keyForPhoto:photo];
     [self.cache setObject:attributes forKey:key];
@@ -232,6 +252,10 @@
 
 - (NSString *)keyForUser:(PFUser *)user {
     return [NSString stringWithFormat:@"user_%@", [user objectId]];
+}
+
+- (NSString *)keyForComment:(PFObject *)comment {
+    return [NSString stringWithFormat:@"comment_%@", [comment objectId]];
 }
 
 @end

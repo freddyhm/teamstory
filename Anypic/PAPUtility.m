@@ -56,6 +56,123 @@
     [currentInstallation saveInBackground];
 }
 
+#pragma mark Like Comments
+
++ (void)likeCommentInBackground:(id)comment block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
+    
+    PFQuery *queryExistingCommentLikes = [PFQuery queryWithClassName:kPAPActivityClassKey];
+    [queryExistingCommentLikes whereKey:@"forComment" equalTo:comment];
+    [queryExistingCommentLikes whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeLikeComment];
+    [queryExistingCommentLikes whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
+    [queryExistingCommentLikes setCachePolicy:kPFCachePolicyNetworkOnly];
+    [queryExistingCommentLikes findObjectsInBackgroundWithBlock:^(NSArray *activities, NSError *error) {
+        if (!error) {
+            for (PFObject *activity in activities) {
+                [activity delete];
+            }
+        }
+        
+        // proceed to creating new like comment
+        PFObject *likeCommentActivity = [PFObject objectWithClassName:kPAPActivityClassKey];
+        [likeCommentActivity setObject:kPAPActivityTypeLikeComment forKey:kPAPActivityTypeKey];
+        [likeCommentActivity setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey];
+        [likeCommentActivity setObject:[comment objectForKey:kPAPActivityFromUserKey] forKey:kPAPActivityToUserKey];
+        [likeCommentActivity setObject:comment forKey:kPAPActivityForCommentKey];
+        
+        PFACL *likeCommentACL = [PFACL ACLWithUser:[PFUser currentUser]];
+        [likeCommentACL setPublicReadAccess:YES];
+        [likeCommentACL setWriteAccess:YES forUser:[PFUser currentUser]];
+        likeCommentActivity.ACL = likeCommentACL;
+        
+        [likeCommentActivity saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (completionBlock) {
+                completionBlock(succeeded,error);
+            }
+            
+            /*
+            // refresh cache --> notify and save in cache likers/commenters
+            PFQuery *query = [PAPUtility queryForActivitiesOnComment:comment cachePolicy:kPFCachePolicyNetworkOnly];
+            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                if (!error) {
+                    
+                    NSMutableArray *likers = [NSMutableArray array];
+                    BOOL isLikedByCurrentUser = NO;
+                    
+                    for (PFObject *activity in objects) {
+                        [likers addObject:[activity objectForKey:kPAPActivityFromUserKey]];
+                        if ([[[activity objectForKey:kPAPActivityFromUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+                            isLikedByCurrentUser = YES;
+                        }
+                    }
+                    
+                    [[PAPCache sharedCache] setAttributesForComment:comment commentLikers:likers likedByCurrentUser:isLikedByCurrentUser];
+                    
+                }
+            }];
+             
+             */
+        }];
+    }];
+}
+
++ (void)unlikeCommentInBackground:(id)comment block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
+    
+    PFQuery *queryExistingLikes = [PFQuery queryWithClassName:kPAPActivityClassKey];
+    [queryExistingLikes whereKey:kPAPActivityForCommentKey equalTo:comment];
+    [queryExistingLikes whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeLikeComment];
+    [queryExistingLikes whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
+    [queryExistingLikes setCachePolicy:kPFCachePolicyNetworkOnly];
+    [queryExistingLikes findObjectsInBackgroundWithBlock:^(NSArray *activities, NSError *error) {
+        if (!error) {
+            for (PFObject *activity in activities) {
+                [activity delete];
+            }
+            
+            if (completionBlock) {
+                completionBlock(YES,nil);
+            }
+            
+            /*
+            
+            // refresh cache --> notify and save in cache likers/commenters
+            PFQuery *query = [PAPUtility queryForActivitiesOnPhoto:photo cachePolicy:kPFCachePolicyNetworkOnly];
+            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                if (!error) {
+                    
+                    NSMutableArray *likers = [NSMutableArray array];
+                    NSMutableArray *commenters = [NSMutableArray array];
+                    
+                    BOOL isLikedByCurrentUser = NO;
+                    
+                    for (PFObject *activity in objects) {
+                        if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeLike]) {
+                            [likers addObject:[activity objectForKey:kPAPActivityFromUserKey]];
+                        } else if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeComment]) {
+                            [commenters addObject:[activity objectForKey:kPAPActivityFromUserKey]];
+                        }
+                        
+                        if ([[[activity objectForKey:kPAPActivityFromUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+                            if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeLike]) {
+                                isLikedByCurrentUser = YES;
+                            }
+                        }
+                    }
+                    
+                    [[PAPCache sharedCache] setAttributesForPhoto:photo likers:likers commenters:commenters likedByCurrentUser:isLikedByCurrentUser];
+                }
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:photo userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotificationUserInfoLikedKey]];
+            }];
+            */
+        } else {
+            if (completionBlock) {
+                completionBlock(NO,error);
+            }
+        }
+    }];
+}
+
+
 #pragma mark Like Photos
 
 + (void)likePhotoInBackground:(id)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
@@ -365,6 +482,15 @@
     [query includeKey:kPAPActivityPhotoKey];
 
     return query;
+}
+
++ (PFQuery *)queryForActivitiesOnComment:(PFObject *)comment cachePolicy:(PFCachePolicy)cachePolicy {
+    PFQuery *queryLikes = [PFQuery queryWithClassName:kPAPActivityClassKey];
+    [queryLikes whereKey:kPAPActivityForCommentKey equalTo:comment];
+    [queryLikes whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeLikeComment];
+    [queryLikes setCachePolicy:cachePolicy];
+    
+    return queryLikes;
 }
 
 

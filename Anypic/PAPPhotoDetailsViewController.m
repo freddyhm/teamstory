@@ -555,16 +555,63 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 - (void)didTapCommentLikeButton:(PAPBaseTextCell *)cellView{
     
+    // set button as liked
     UIButton *cellLikeCommentButton = cellView.likeCommentButton;
+    UIButton *cellLikeCommentCountButton = cellView.likeCommentCounter;
     BOOL liked = !cellLikeCommentButton.selected;
     [cellView setLikeCommentButtonState:liked];
- 
-    /* current object comment
+    
+    // get comment object
     NSIndexPath *cellIndexPath = [self.tableView indexPathForCell:cellView];
     PFObject *likedComment = [self.objects  objectAtIndex:cellIndexPath.row];
-    NSLog(@"%@", [likedComment objectForKey:@"content"]);
-     */
     
+    // disable like button temp
+    [cellView shouldEnableLikeCommentButton:NO];
+    
+    // get count from button string
+   // NSString *originalButtonTitle = cellLikeCommentCountButton.titleLabel.text;
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+    NSNumber *likeCommentCount = [numberFormatter numberFromString:cellLikeCommentCountButton.titleLabel.text];
+    
+    if (liked) {
+        
+        // analytics
+     //  [PAPUtility captureEventGA:@"Engagement" action:@"Like Comment" label:@"Photo"];
+        likeCommentCount = [NSNumber numberWithInt:[likeCommentCount intValue] + 1];
+    //    [[PAPCache sharedCache] incrementLikerCountForPhoto:photo];
+    } else {
+        if ([likeCommentCount intValue] > 0) {
+            likeCommentCount = [NSNumber numberWithInt:[likeCommentCount intValue] - 1];
+        }
+      //  [[PAPCache sharedCache] decrementLikerCountForPhoto:photo];
+    }
+    
+    //[[PAPCache sharedCache] setPhotoIsLikedByCurrentUser:photo liked:liked];
+    
+    if (liked == YES) {
+        [cellLikeCommentCountButton setTitle:[numberFormatter stringFromNumber:likeCommentCount] forState:UIControlStateSelected];
+    } else if (liked == NO) {
+        [cellLikeCommentCountButton setTitle:[numberFormatter stringFromNumber:likeCommentCount] forState:UIControlStateNormal];
+    }
+    
+    if (liked) {
+        [PAPUtility likeCommentInBackground:likedComment block:^(BOOL succeeded, NSError *error) {
+            [cellView shouldEnableLikeCommentButton:YES];
+            if (!succeeded) {
+                [cellView setLikeCommentButtonState:NO];
+            }
+        }];
+        
+    } else {
+        [PAPUtility unlikeCommentInBackground:likedComment block:^(BOOL succeeded, NSError *error) {
+            [cellView shouldEnableLikeCommentButton:YES];
+            if (!succeeded) {
+                [cellView setLikeCommentButtonState:YES];
+            }
+        }];
+    }
+
 
     /*
      
@@ -600,35 +647,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     // update data in this controller
     //[self setLikeUsers:[newLikeUsersSet allObjects]];
     
-    if (liked) {
-        
-        /*
-        [PAPUtility likePhotoInBackground:self.photo block:^(BOOL succeeded, NSError *error) {
-            if (!succeeded) {
-                [button addTarget:self action:@selector(didTapLikePhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-                [self setLikeUsers:originalLikeUsersArray];
-                [self setLikeButtonState:NO];
-            }
-        }];
-         
-         */
-    } else {
-        
-        /*
-        [PAPUtility unlikePhotoInBackground:self.photo block:^(BOOL succeeded, NSError *error) {
-            if (!succeeded) {
-                [button addTarget:self action:@selector(didTapLikePhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-                [self setLikeUsers:originalLikeUsersArray];
-                [self setLikeButtonState:YES];
-            }
-        }];
-         */
-    }
-    
-    /*
-     [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotification object:self.photo userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:liked] forKey:PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotificationUserInfoLikedKey]];
-     */
-
 }
 
 
@@ -641,6 +659,45 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 #pragma mark - ()
+
+-(void)setLikedComments:(PAPBaseTextCell *)cellView{
+    /*
+    likeUsers = [anArray sortedArrayUsingComparator:^NSComparisonResult(PFUser *liker1, PFUser *liker2) {
+        NSString *displayName1 = [liker1 objectForKey:kPAPUserDisplayNameKey];
+        NSString *displayName2 = [liker2 objectForKey:kPAPUserDisplayNameKey];
+        
+        if ([[liker1 objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+            return NSOrderedAscending;
+        } else if ([[liker2 objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+            return NSOrderedDescending;
+        }
+        
+        return [displayName1 compare:displayName2 options:NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch];
+    }];;
+    
+    for (PAPProfileImageView *image in currentLikeAvatars) {
+        [image removeFromSuperview];
+    }
+    
+    [likeButton setTitle:[NSString stringWithFormat:@"%d", (int)self.likeUsers.count] forState:UIControlStateNormal];
+    
+    self.currentLikeAvatars = [[NSMutableArray alloc] initWithCapacity:likeUsers.count];
+    int i;
+    int numOfPics = numLikePics > (int)self.likeUsers.count ? (int)self.likeUsers.count : numLikePics;
+    
+    for (i = 0; i < numOfPics; i++) {
+        PAPProfileImageView *profilePic = [[PAPProfileImageView alloc] init];
+        [profilePic setFrame:CGRectMake(likeProfileXBase + i * (likeProfileXSpace + likeProfileDim), likeProfileY, likeProfileDim, likeProfileDim)];
+        [profilePic.profileButton addTarget:self action:@selector(didTapLikerButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        profilePic.profileButton.tag = i;
+        [profilePic setFile:[[self.likeUsers objectAtIndex:i] objectForKey:kPAPUserProfilePicSmallKey]];
+        [likeBarView addSubview:profilePic];
+        [currentLikeAvatars addObject:profilePic];
+    }
+    */
+
+    
+}
 
 
 - (void) moreActionButton_inflator:(PFUser *)user photo:(PFObject *)user_photo {
