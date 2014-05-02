@@ -313,6 +313,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [cell setContentText:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityContentKey]];
         [cell setDate:[[self.objects objectAtIndex:indexPath.row] createdAt]];
         [cell atMentionedUsers:[[self.objects objectAtIndex:indexPath.row] objectForKey:@"atmention"]];
+        [self setLikedComments:cell comment:[self.objects objectAtIndex:indexPath.row]];
+        
         return cell;
     } else {
         static NSString *cellID = @"atmentionCell";
@@ -611,42 +613,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             }
         }];
     }
-
-
-    /*
-     
-     Set current controller based on current data
-     
-     NSArray *originalLikeUsersArray = [NSArray arrayWithArray:self.likeUsers];
-     NSMutableSet *newLikeUsersSet = [NSMutableSet setWithCapacity:[self.likeUsers count]];
-     
-     for (PFUser *likeUser in self.likeUsers) {
-     // add all current likeUsers BUT currentUser
-     if (![[likeUser objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
-     [newLikeUsersSet addObject:likeUser];
-     }
-     }
-     */
-    
-    if (liked) {
-        
-        // analytics
-   //     [PAPUtility captureEventGA:@"Engagement" action:@"Like" label:@"Photo"];
-        
-       // update data in this controller
-     //   [[PAPCache sharedCache] incrementLikerCountForPhoto:self.photo];
-       // [newLikeUsersSet addObject:[PFUser currentUser]];
-    } else {
-        // update data in this controller
-        //[[PAPCache sharedCache] decrementLikerCountForPhoto:self.photo];
-    }
-    
-    // update data in this controller
-    //[[PAPCache sharedCache] setPhotoIsLikedByCurrentUser:self.photo liked:liked];
-    
-    // update data in this controller
-    //[self setLikeUsers:[newLikeUsersSet allObjects]];
-    
 }
 
 
@@ -660,42 +626,48 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 #pragma mark - ()
 
--(void)setLikedComments:(PAPBaseTextCell *)cellView{
-    /*
-    likeUsers = [anArray sortedArrayUsingComparator:^NSComparisonResult(PFUser *liker1, PFUser *liker2) {
-        NSString *displayName1 = [liker1 objectForKey:kPAPUserDisplayNameKey];
-        NSString *displayName2 = [liker2 objectForKey:kPAPUserDisplayNameKey];
-        
-        if ([[liker1 objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
-            return NSOrderedAscending;
-        } else if ([[liker2 objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
-            return NSOrderedDescending;
+-(void)setLikedComments:(PAPBaseTextCell *)cellView comment:(PFObject *)comment{
+    
+    // get button counter
+    UIButton *cellLikeCommentCountButton = cellView.likeCommentCounter;
+    
+    // get all likes for comment
+    PFQuery *queryExistingCommentLikes = [PFQuery queryWithClassName:kPAPActivityClassKey];
+    [queryExistingCommentLikes whereKey:@"forComment" equalTo:comment];
+    [queryExistingCommentLikes whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeLikeComment];
+    [queryExistingCommentLikes setCachePolicy:kPFCachePolicyNetworkOnly];
+    [queryExistingCommentLikes includeKey:kPAPActivityFromUserKey];
+    [queryExistingCommentLikes findObjectsInBackgroundWithBlock:^(NSArray *activities, NSError *error) {
+        if (!error) {
+            // get count from button string
+            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+            [numberFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+            NSNumber *likeCommentCount = [numberFormatter numberFromString:cellLikeCommentCountButton.titleLabel.text];
+            
+            if ([activities count] != 0) {
+                
+                // show heart + new count
+                
+                likeCommentCount = [NSNumber numberWithInteger:[activities count]];
+                [cellLikeCommentCountButton setTitle:[numberFormatter stringFromNumber:likeCommentCount] forState:UIControlStateSelected];
+            } else {
+               // 0 likes hide heart
+            }
+            
+            BOOL userLikesComment = NO;
+            
+            for (PFObject *activity in activities) {
+                
+                // mark as liked if user has liked comment
+                if([[[activity objectForKey:@"fromUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]]){
+                    userLikesComment = YES;
+                }
+            }
+            
+            [cellView setLikeCommentButtonState:userLikesComment];
         }
         
-        return [displayName1 compare:displayName2 options:NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch];
-    }];;
-    
-    for (PAPProfileImageView *image in currentLikeAvatars) {
-        [image removeFromSuperview];
-    }
-    
-    [likeButton setTitle:[NSString stringWithFormat:@"%d", (int)self.likeUsers.count] forState:UIControlStateNormal];
-    
-    self.currentLikeAvatars = [[NSMutableArray alloc] initWithCapacity:likeUsers.count];
-    int i;
-    int numOfPics = numLikePics > (int)self.likeUsers.count ? (int)self.likeUsers.count : numLikePics;
-    
-    for (i = 0; i < numOfPics; i++) {
-        PAPProfileImageView *profilePic = [[PAPProfileImageView alloc] init];
-        [profilePic setFrame:CGRectMake(likeProfileXBase + i * (likeProfileXSpace + likeProfileDim), likeProfileY, likeProfileDim, likeProfileDim)];
-        [profilePic.profileButton addTarget:self action:@selector(didTapLikerButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-        profilePic.profileButton.tag = i;
-        [profilePic setFile:[[self.likeUsers objectAtIndex:i] objectForKey:kPAPUserProfilePicSmallKey]];
-        [likeBarView addSubview:profilePic];
-        [currentLikeAvatars addObject:profilePic];
-    }
-    */
-
+    }];
     
 }
 
