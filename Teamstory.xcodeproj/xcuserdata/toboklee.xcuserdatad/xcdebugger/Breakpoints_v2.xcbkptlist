@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/PAPActivityFeedViewController.m"
-            timestampString = "417906291.744357"
+            timestampString = "420428511.230168"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "161"
@@ -107,7 +107,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "24"
             endingLineNumber = "24"
-            landmarkName = "location"
+            landmarkName = "website"
             landmarkType = "19">
             <Locations>
                <Location
@@ -389,7 +389,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "290"
             endingLineNumber = "290"
-            landmarkName = "-objectsDidLoad:"
+            landmarkName = "-queryForTable"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

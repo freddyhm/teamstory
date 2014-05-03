@@ -40,8 +40,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 #pragma mark - NSObject
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier navigationController:(UINavigationController *) anavController
-{
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
 
     if (self) {
@@ -50,7 +49,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             timeFormatter = [[TTTTimeIntervalFormatter alloc] init];
         }
         
-        self.navController = anavController;
+        //self.navController = anavController;
         self.cellType = reuseIdentifier;
         
         cellInsetWidth = 0.0f;
@@ -130,7 +129,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
         }
         
         [mainView addSubview:self.avatarImageView];
-        [mainView addSubview:self.nameButton];
         [mainView addSubview:self.contentLabel];
         [mainView addSubview:self.timeLabel];
         [mainView addSubview:self.likeCommentButton];
@@ -303,11 +301,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
     [self setNeedsDisplay];
 }
 
-- (void)atMentionedUsers:(NSArray *)userArray {
-    /*
-    if ([userArray count] > 0) {
-        NSLog(@"%@", [[userArray objectAtIndex:0] objectId]);
-    }*/
+
+- (void)navigationController:(UINavigationController *)anavController {
+    self.navController = anavController;
 }
 
 - (void)setContentText:(NSString *)contentString {

@@ -45,6 +45,8 @@ enum ActionSheetTags {
 @property (nonatomic, strong) PFQuery *userQuery;
 @property (nonatomic, strong) NSMutableArray *atmentionUserArray;
 @property (nonatomic, strong) UIView *dimView;
+@property CGRect defaultFooterViewFrame;
+@property CGRect defaultCommentTextViewFrame;
 @property CGRect previousRect;
 @end
 
@@ -150,6 +152,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     self.footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:[PAPPhotoDetailsFooterView rectForView]];
     commentTextView = footerView.commentView;
+    self.defaultFooterViewFrame = self.footerView.mainView.frame;
+    self.defaultCommentTextViewFrame = self.commentTextView.frame;
     commentTextView.delegate = self;
     self.tableView.tableFooterView = self.footerView;
     
@@ -214,6 +218,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 -(void)dismissKeyboard {
     [self.view endEditing:YES];
+    self.autocompleteTableView.hidden = YES;
+    self.dimView.hidden = YES;
 }
 
 
@@ -304,11 +310,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         // Try to dequeue a cell and create one if necessary
         PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         if (cell == nil) {
-            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID navigationController:self.navigationController];
+            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
             cell.cellInsetWidth = kPAPCellInsetWidth;
             cell.delegate = self;
         }
-        
+        [cell navigationController:self.navigationController];
         [cell setUser:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityFromUserKey]];
         [cell setContentText:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityContentKey]];
         [cell setDate:[[self.objects objectAtIndex:indexPath.row] createdAt]];
@@ -320,7 +326,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         // Try to dequeue a cell and create one if necessary
         PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         if (cell == nil) {
-            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID navigationController:self.navigationController];
+            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
             cell.delegate = self;
         }
         [cell setUser:[self.filteredArray objectAtIndex:indexPath.row]];
@@ -363,7 +369,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
     if ([textView.text length] == 0) {
+        // reset default text view and frame
         [textView setText:@"Add a comment"];
+        self.footerView.mainView.frame = self.defaultFooterViewFrame;
+        textView.frame = self.defaultCommentTextViewFrame;
     }
 }
 
@@ -396,23 +405,18 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 
 - (BOOL) textView:(UITextView*)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString*)text{
-    if (text.length > 1 && [cellType isEqualToString:@"atmentionCell"]) {
+    if ([cellType isEqualToString:@"atmentionCell"]) {
         text = [text stringByAppendingString:@" "];
         textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, range.length + 1) withString:text];
-        /*
-         NSMutableAttributedString *commentText = [[NSMutableAttributedString alloc] initWithString:textView.text];
-         [commentText addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:119.0f/255.0f green:119.0f/255.0f blue:119.0f/255.0f alpha:1.0f] range:NSMakeRange(0, textView.text.length)];
-         [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:NSMakeRange(range.location - 1, text.length + 1)];
-         [textView setAttributedText:commentText];
-         */
         
         cellType = nil;
+        return YES;
     }
     
     if ([text isEqualToString:@"@"]){
         [SVProgressHUD show];
         
-        if (!self.userArray) {
+        if ([self.userArray count] < 1) {
             userQuery = [PFUser query];
             [userQuery whereKeyExists:@"displayName"];
             [userQuery orderByAscending:@"displayName"];
@@ -432,7 +436,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             }
         
     } else if ([text isEqualToString:@"\n"]) {
-        
         NSString *trimmedComment = [textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         if (trimmedComment.length != 0 && [self.photo objectForKey:kPAPPhotoUserKey]) {
             PFObject *comment = [PFObject objectWithClassName:kPAPActivityClassKey];
@@ -442,11 +445,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             [comment setObject:kPAPActivityTypeComment forKey:kPAPActivityTypeKey];
             [comment setObject:self.photo forKey:kPAPActivityPhotoKey];
             
-            //NSLog(@"%@", self.atmentionUserArray);
-   
             // storing atmention user list to the array (only filtered cases).
-            NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", textView.text]];
-            [comment setObject:mod_atmentionUserArray forKey:@"atmention"];
+            if ([self.atmentionUserArray count] > 0) {
+                NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", textView.text]];
+                [comment setObject:mod_atmentionUserArray forKey:@"atmention"];
+            }
             
             PFACL *ACL = [PFACL ACLWithUser:[PFUser currentUser]];
             [ACL setPublicReadAccess:YES];
@@ -473,6 +476,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:self.photo userInfo:@{@"comments": @(self.objects.count + 1)}];
                 
+                self.atmentionUserArray = nil;
+                self.atmentionUserArray = [[NSMutableArray alloc] init];
                 [SVProgressHUD dismiss];
                 [self loadObjects];
                 
@@ -485,45 +490,59 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         }
         
         [textView setText:@""];
-        
         [textView resignFirstResponder];
         return NO;
     }
     
-    NSMutableString *updatedText = [[NSMutableString alloc] initWithString:textView.text];
-    if (range.location == 0 || range.location == text_location) {
-        self.autocompleteTableView.hidden = YES;
-        self.dimView.hidden = YES;
-        self.tableView.scrollEnabled = YES;
-        text_location = 0;
-    } else if (range.location > 0 && [[updatedText substringWithRange:NSMakeRange(range.location - 1, 1)] isEqualToString:@"@"]) {
-        text_location = range.location;
-    }
-    
-    if (text_location > 0) {
-        if ([text isEqualToString:@""]) {
-            range.location -= 1;
+    if ([self.userArray count] > 0) {
+        NSMutableString *updatedText = [[NSMutableString alloc] initWithString:textView.text];
+        if (range.location == 0 || range.location == text_location) {
+            self.autocompleteTableView.hidden = YES;
+            self.dimView.hidden = YES;
+            self.tableView.scrollEnabled = YES;
+            text_location = 0;
+        } else if (range.location > 0 && [[updatedText substringWithRange:NSMakeRange(range.location - 1, 1)] isEqualToString:@"@"]) {
+            text_location = range.location;
         }
+        
+        if ([text isEqualToString:@""] && text_location > 1) {
+            range.location -=1;
+            
+            if (text_location > range.location) {
+                text_location -= 1;
+            }
+        }
+        
+        if (text_location > 0) {
+            if (range.location == NSNotFound) {
+                NSLog(@"range location not found");
+            } else {
+                atmentionRange = NSMakeRange(text_location, range.location - text_location);
+                atmentionSearchString = [updatedText substringWithRange:atmentionRange];
+                atmentionSearchString = [atmentionSearchString stringByAppendingString:text];
+            }
+            
+            self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
+            
+            // frames should be handled differently for iphone 4 and 5.
+            if ([UIScreen mainScreen].bounds.size.height == 480) {
+                self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
+                self.autocompleteTableView.frame = CGRectMake(7.5f, self.tableView.contentSize.height - 212.0f + text_offset, 305.0f, 143.0f - text_offset);
+            } else {
+                self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
+                self.autocompleteTableView.frame = CGRectMake(7.5f, self.tableView.contentSize.height - 302.0f + text_offset, 305.0f, 232.0f - text_offset);
+            }
+            
+            if ([self.filteredArray count] < 1) {
+                self.dimView.hidden = YES;
+            } else {
+                self.dimView.hidden = NO;
+            }
 
-        atmentionRange = NSMakeRange(text_location, range.location - text_location);
-        atmentionSearchString = [updatedText substringWithRange:atmentionRange];
-        atmentionSearchString = [atmentionSearchString stringByAppendingString:text];
-        
-        self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
-        
-        // frames should be handled differently for iphone 4 and 5.
-        if ([UIScreen mainScreen].bounds.size.height == 480) {
-            self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
-            self.autocompleteTableView.frame = CGRectMake(7.5f, self.tableView.contentSize.height - 212.0f + text_offset, 305.0f, 143.0f - text_offset);
-        } else {
-            self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
-            self.autocompleteTableView.frame = CGRectMake(7.5f, self.tableView.contentSize.height - 302.0f + text_offset, 305.0f, 232.0f - text_offset);
+            self.autocompleteTableView.hidden = NO;
+            self.tableView.scrollEnabled = NO;
+            [self.autocompleteTableView reloadData];
         }
-        
-        self.dimView.hidden = NO;
-        self.autocompleteTableView.hidden = NO;
-        self.tableView.scrollEnabled = NO;
-        [self.autocompleteTableView reloadData];
     }
 
     return YES;

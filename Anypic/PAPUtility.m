@@ -432,7 +432,7 @@
     }
 }
 
-+ (void)unfollowUserEventually:(PFUser *)user {
++ (void)unfollowUserEventually:(PFUser *)user{
     PFQuery *query = [PFQuery queryWithClassName:kPAPActivityClassKey];
     [query whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
     [query whereKey:kPAPActivityToUserKey equalTo:user];
@@ -448,6 +448,26 @@
     }];
     [[PAPCache sharedCache] setFollowStatus:NO user:user];
 }
+
++ (void)unfollowUserEventually:(PFUser *)user block:(void (^)(BOOL succeeded))completionBlock {
+    PFQuery *query = [PFQuery queryWithClassName:kPAPActivityClassKey];
+    [query whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
+    [query whereKey:kPAPActivityToUserKey equalTo:user];
+    [query whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *followActivities, NSError *error) {
+        // While normally there should only be one follow activity returned, we can't guarantee that.
+        
+        if (!error) {
+            for (PFObject *followActivity in followActivities) {
+                [followActivity deleteEventually];
+            }
+            completionBlock(!error);
+        }
+    }];
+    [[PAPCache sharedCache] setFollowStatus:NO user:user];
+}
+
+
 
 + (void)unfollowUsersEventually:(NSArray *)users {
     PFQuery *query = [PFQuery queryWithClassName:kPAPActivityClassKey];

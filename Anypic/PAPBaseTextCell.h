@@ -47,12 +47,10 @@
 /*! Setters for the cell's content */
 - (void)setContentText:(NSString *)contentString;
 - (void)setDate:(NSDate *)date;
-- (void)atMentionedUsers:(NSArray *)userArray;
+- (void)navigationController:(UINavigationController *)anavController;
 
 - (void)setCellInsetWidth:(CGFloat)insetWidth;
 - (void)hideSeparator:(BOOL)hide;
-
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier navigationController:(UINavigationController *) anavController;
 
 /*! Static Helper methods */
 + (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content;

@@ -128,6 +128,10 @@ Parse.Cloud.afterSave('Activity', function(request) {
 
 var alertMessage = function(request) {
     var message = "";
+
+    var atmentionUserArray = new Array();
+
+    atmentionUserArray = request.object.get("atmention") != undefined ? request.object.get("atmention") : "";
     
     var atmentionUserArray = new Array();
     
