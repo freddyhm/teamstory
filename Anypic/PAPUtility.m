@@ -58,12 +58,13 @@
 
 #pragma mark Like Comments
 
-+ (void)likeCommentInBackground:(id)comment block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
++ (void)likeCommentInBackground:(id)comment photo:(id)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
     
     PFQuery *queryExistingCommentLikes = [PFQuery queryWithClassName:kPAPActivityClassKey];
     [queryExistingCommentLikes whereKey:@"forComment" equalTo:comment];
     [queryExistingCommentLikes whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeLikeComment];
     [queryExistingCommentLikes whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
+    [queryExistingCommentLikes whereKey:kPAPActivityPhotoKey equalTo:photo];
     [queryExistingCommentLikes setCachePolicy:kPFCachePolicyNetworkOnly];
     [queryExistingCommentLikes findObjectsInBackgroundWithBlock:^(NSArray *activities, NSError *error) {
         if (!error) {
@@ -76,8 +77,10 @@
         PFObject *likeCommentActivity = [PFObject objectWithClassName:kPAPActivityClassKey];
         [likeCommentActivity setObject:kPAPActivityTypeLikeComment forKey:kPAPActivityTypeKey];
         [likeCommentActivity setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey];
+        [likeCommentActivity setObject:photo forKey:kPAPActivityPhotoKey];
         [likeCommentActivity setObject:[comment objectForKey:kPAPActivityFromUserKey] forKey:kPAPActivityToUserKey];
         [likeCommentActivity setObject:comment forKey:kPAPActivityForCommentKey];
+
         
         PFACL *likeCommentACL = [PFACL ACLWithUser:[PFUser currentUser]];
         [likeCommentACL setPublicReadAccess:YES];

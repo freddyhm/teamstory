@@ -344,7 +344,7 @@
         [cell setDelegate:self];
         [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
     }
-
+    
     if(![[[object objectForKey:@"toUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]]){
         [cell setActivity:object isSubscription:YES];
     }else{

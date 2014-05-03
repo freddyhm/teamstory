@@ -616,7 +616,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
     
     if (liked) {
-        [PAPUtility likeCommentInBackground:likedComment block:^(BOOL succeeded, NSError *error) {
+        [PAPUtility likeCommentInBackground:likedComment photo:self.photo block:^(BOOL succeeded, NSError *error) {
             [cellView shouldEnableLikeCommentButton:YES];
             if (!succeeded) {
                 [cellView setLikeCommentButtonState:NO];

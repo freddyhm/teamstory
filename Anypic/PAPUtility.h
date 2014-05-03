@@ -11,7 +11,7 @@
 + (void)updateSubscriptionToPost:(NSString *)postId forState:(NSString *)state;
 + (void)likePhotoInBackground:(id)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock;
 + (void)unlikePhotoInBackground:(id)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock;
-+ (void)likeCommentInBackground:(id)comment block:(void (^)(BOOL succeeded, NSError *error))completionBlock;
++ (void)likeCommentInBackground:(id)comment photo:(id)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock;
 + (void)unlikeCommentInBackground:(id)comment block:(void (^)(BOOL succeeded, NSError *error))completionBlock;
 
 

@@ -128,10 +128,6 @@ Parse.Cloud.afterSave('Activity', function(request) {
 
 var alertMessage = function(request) {
     var message = "";
-
-    var atmentionUserArray = new Array();
-
-    atmentionUserArray = request.object.get("atmention") != undefined ? request.object.get("atmention") : "";
     
     var atmentionUserArray = new Array();
     
@@ -210,6 +206,7 @@ var alertPayload = function(request) {
         p: 'a', // Payload Type: Activity
         t: 'lc', // Activity Type: Like Comment
         fu: request.object.get('fromUser').id, // From User
+        pid: request.object.get('photo').id, // Photo Id
         aid: request.object.id // Activity Id
         };
     } else if (request.object.get("type") === "follow") {
