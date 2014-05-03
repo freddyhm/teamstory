@@ -312,7 +312,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [cell setUser:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityFromUserKey]];
         [cell setContentText:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityContentKey]];
         [cell setDate:[[self.objects objectAtIndex:indexPath.row] createdAt]];
-        [cell atMentionedUsers:[[self.objects objectAtIndex:indexPath.row] objectForKey:@"atmention"]];
         [self setLikedComments:cell comment:[self.objects objectAtIndex:indexPath.row]];
         
         return cell;
