@@ -159,7 +159,14 @@
         // get status from read list and update if necessary
         NSString *status = [[self.readList objectForKey:[activity objectId]] objectForKey:@"status"];
         if([status isEqualToString:@"unread"]){
-            [self updateReadList:[[activity objectForKey:@"photo"] objectId]];
+            
+            // check if photo is set first, if not use activity to mark as read (case for follows)
+            if([activity objectForKey:@"photo"] != nil){
+                [self updateReadList:[[activity objectForKey:@"photo"] objectId]];
+            }else{
+                [self updateReadList:[activity objectId]];
+            }
+            
         }
 
         if ([activity objectForKey:kPAPActivityPhotoKey]) {
@@ -495,12 +502,24 @@
 
 - (void)addToReadList:(NSString *)itemPhotoId itemActivityId:(NSString *)itemActivityId{
     
-    NSDictionary *activity = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                              @"unread", @"status",  itemPhotoId, @"photoId", nil];
-    
-    [self.readList setObject:activity forKey:itemActivityId];
-    
-    [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
+    // edge case: when old notifications without aid get pushed
+    if(itemActivityId != nil){
+        
+        NSDictionary *activity;
+        
+        // when photo id is missing replace with activity id, case for follower
+        if(itemPhotoId != nil){
+          activity = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                      @"unread", @"status",  itemPhotoId, @"photoId", nil];
+        }else{
+            activity = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                        @"unread", @"status",  itemActivityId, @"photoId", nil];
+        }
+        
+        [self.readList setObject:activity forKey:itemActivityId];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
+    }
 }
 
 

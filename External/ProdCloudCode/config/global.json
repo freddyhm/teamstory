@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "Teamstory": {
+            "applicationId": "SPQlkxDYPDcVhbICHFzjwSsREHaSqKQIKwkijDaJ", 
+            "masterKey": "822ieoiMUDG7yuu3wVwdZYSQgiB8bNrgp5vHc8Gb"
+        }, 
+        "_default": {
+            "link": "Teamstory"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.2.17"
+    }
+}
