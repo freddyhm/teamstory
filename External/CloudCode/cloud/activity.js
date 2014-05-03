@@ -43,6 +43,9 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       var toUserId = toUser != undefined ? request.object.get("toUser").id : "";
                       var photoId = request.object.get("photo") != undefined ? request.object.get("photo").id : "";
                       var isSelfie = toUserId == fromUserId;
+                      var atmentionUserArray = new Array();
+                      
+                      atmentionUserArray = request.object.get("atmention") != undefined ? request.object.get("atmention") : "";
                       
                       // Only send push notifications for new activities
                       if (request.object.existed()) {
@@ -54,10 +57,26 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       return;
                       }
                       
+                      if (atmentionUserArray.length > 0) {
+                      for (i = 0; i < atmentionUserArray.length; i++) {
+                      var atmetionUserQuery = new Parse.Query(Parse.Installation);
+                      console.log("atmention array loop");
+                      atmetionUserQuery.equalTo("user", atmentionUserArray[i]);
+                      
+                      Parse.Push.send({
+                                      where: atmetionUserQuery,
+                                      data: alertPayload(request)
+                                      }).then(function() {
+                                              console.log('Sent atmetion push');
+                                              }, function(error) {
+                                              throw "Push Error" + error.code + " : " + error.message;
+                                              });
+                      }
+                      }
                       
                       
                       // notify all users except fromUser who are subscribed to post when new comment is sent
-                      if(request.object.get("type") === "comment"){
+                      if(request.object.get("type") === "comment" && atmentionUserArray.length == 0){
                       
                       var toSubscribersQuery = new Parse.Query(Parse.Installation);
                       var channelName = "ch" + photoId;
@@ -76,8 +95,8 @@ Parse.Cloud.afterSave('Activity', function(request) {
                                               });
                       }
                       
-                      // send post owner notification if someone else creates activity
-                      if(!isSelfie){
+                      // send activity/post owner notification if someone else creates activity
+                      if(!isSelfie && atmentionUserArray.length == 0){
                       
                       var toOwnerQuery = new Parse.Query(Parse.Installation);
                       toOwnerQuery.equalTo('user', toUser);
@@ -110,17 +129,33 @@ Parse.Cloud.afterSave('Activity', function(request) {
 var alertMessage = function(request) {
     var message = "";
     
-    if (request.object.get("type") === "comment") {
+    var atmentionUserArray = new Array();
+    
+    atmentionUserArray = request.object.get("atmention") != undefined ? request.object.get("atmention") : "";
+    
+    if (request.object.get("type") === "comment" && atmentionUserArray.length == 0) {
         if (request.user.get('displayName')) {
             message = request.user.get('displayName') + ': ' + request.object.get('content').trim();
         } else {
             message = "Someone commented on your photo.";
+        }
+    } else if (request.object.get("type") === "comment" && atmentionUserArray.length > 0) {
+        if (request.user.get('displayName')) {
+            message = request.user.get('displayName') + ': ' + 'mentioned you in a post';
+        } else {
+            message = "Someone mentioned you in a post.";
         }
     } else if (request.object.get("type") === "like") {
         if (request.user.get('displayName')) {
             message = request.user.get('displayName') + ' likes your photo.';
         } else {
             message = 'Someone likes your photo.';
+        }
+    } else if (request.object.get("type") === "like comment") {
+        if (request.user.get('displayName')) {
+            message = request.user.get('displayName') + ' likes your comment.';
+        } else {
+            message = 'Someone likes your comment.';
         }
     } else if (request.object.get("type") === "follow") {
         if (request.user.get('displayName')) {
@@ -161,6 +196,16 @@ var alertPayload = function(request) {
         t: 'l', // Activity Type: Like
         fu: request.object.get('fromUser').id, // From User
         pid: request.object.get('photo').id, // Photo Id
+        aid: request.object.id // Activity Id
+        };
+    } else if (request.object.get("type") === "like comment") {
+        return {
+        alert: alertMessage(request), // Set our alert message.
+        badge: 'Increment',
+            // The following keys help load the correct photo in response to this push notification.
+        p: 'a', // Payload Type: Activity
+        t: 'lc', // Activity Type: Like Comment
+        fu: request.object.get('fromUser').id, // From User
         aid: request.object.id // Activity Id
         };
     } else if (request.object.get("type") === "follow") {
