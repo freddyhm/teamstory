@@ -26,7 +26,8 @@
 @property (nonatomic, strong) UIView *mainView;
 @property (nonatomic, strong) UIButton *nameButton;
 @property (nonatomic, strong) UIButton *likeCommentButton;
-@property (nonatomic, strong) UIButton *likeCommentCounter;
+@property (nonatomic, strong) UIButton *likeCommentHeart;
+@property (nonatomic, strong) UILabel *likeCommentCount;
 @property (nonatomic, strong) UIButton *avatarImageButton;
 @property (nonatomic, strong) PAPProfileImageView *avatarImageView;
 @property (nonatomic, strong) UILabel *contentLabel;
@@ -39,9 +40,10 @@
 /*! The horizontal inset of the cell */
 @property (nonatomic) CGFloat cellInsetWidth;
 
-/*! Like comment setters */
+/*! Like comment */
 - (void)setLikeCommentButtonState:(BOOL)selected;
 - (void)shouldEnableLikeCommentButton:(BOOL)enable;
+- (void)removeCommentCountHeart;
 
 
 /*! Setters for the cell's content */

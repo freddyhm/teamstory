@@ -577,7 +577,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     // set button as liked
     UIButton *cellLikeCommentButton = cellView.likeCommentButton;
-    UIButton *cellLikeCommentCountButton = cellView.likeCommentCounter;
+    UILabel *cellLikeCommentCount = cellView.likeCommentCount;
     BOOL liked = !cellLikeCommentButton.selected;
     [cellView setLikeCommentButtonState:liked];
     
@@ -592,7 +592,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
    // NSString *originalButtonTitle = cellLikeCommentCountButton.titleLabel.text;
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-    NSNumber *likeCommentCount = [numberFormatter numberFromString:cellLikeCommentCountButton.titleLabel.text];
+    NSNumber *likeCommentCount = [numberFormatter numberFromString:cellLikeCommentCount.text];
     
     if (liked) {
         
@@ -603,6 +603,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     } else {
         if ([likeCommentCount intValue] > 0) {
             likeCommentCount = [NSNumber numberWithInt:[likeCommentCount intValue] - 1];
+            
+            // if likes equal to 0, remove heart and counter
+            if([likeCommentCount intValue] == 0){
+                [cellView removeCommentCountHeart];
+            }
         }
       //  [[PAPCache sharedCache] decrementLikerCountForPhoto:photo];
     }
@@ -610,9 +615,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     //[[PAPCache sharedCache] setPhotoIsLikedByCurrentUser:photo liked:liked];
     
     if (liked == YES) {
-        [cellLikeCommentCountButton setTitle:[numberFormatter stringFromNumber:likeCommentCount] forState:UIControlStateSelected];
+        [cellLikeCommentCount setText:[numberFormatter stringFromNumber:likeCommentCount]];
     } else if (liked == NO) {
-        [cellLikeCommentCountButton setTitle:[numberFormatter stringFromNumber:likeCommentCount] forState:UIControlStateNormal];
+        [cellLikeCommentCount setText:[numberFormatter stringFromNumber:likeCommentCount]];
     }
     
     if (liked) {
@@ -647,7 +652,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 -(void)setLikedComments:(PAPBaseTextCell *)cellView comment:(PFObject *)comment{
     
     // get button counter
-    UIButton *cellLikeCommentCountButton = cellView.likeCommentCounter;
+    UILabel *cellLikeCommentCount = cellView.likeCommentCount;
     
     // get all likes for comment
     PFQuery *queryExistingCommentLikes = [PFQuery queryWithClassName:kPAPActivityClassKey];
@@ -660,16 +665,14 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             // get count from button string
             NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
             [numberFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-            NSNumber *likeCommentCount = [numberFormatter numberFromString:cellLikeCommentCountButton.titleLabel.text];
+            NSNumber *likeCommentCount = [numberFormatter numberFromString:cellLikeCommentCount.text];
             
             if ([activities count] != 0) {
                 
                 // show heart + new count
-                
+                [cellView setLikeCommentButtonState:YES];
                 likeCommentCount = [NSNumber numberWithInteger:[activities count]];
-                [cellLikeCommentCountButton setTitle:[numberFormatter stringFromNumber:likeCommentCount] forState:UIControlStateSelected];
-            } else {
-               // 0 likes hide heart
+                [cellLikeCommentCount setText:[numberFormatter stringFromNumber:likeCommentCount]];
             }
             
             BOOL userLikesComment = NO;
