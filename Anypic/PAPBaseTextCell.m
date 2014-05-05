@@ -12,8 +12,6 @@
 
 #define unlikeButtonDimHeight 15.0f
 #define unlikeButtonDimWidth 50.0f
-#define likeButtonDimHeight 15.0f
-#define likeButtonDimWidth 45.0f
 #define likeCounterButtonDim 15.0f
 
 
@@ -112,9 +110,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
             
             // Create the like button
             self.likeCommentButton = [UIButton buttonWithType:UIButtonTypeCustom];
-            [self.likeCommentButton setTitle:@"• Like •" forState:UIControlStateNormal];
            // self. likeCommentButton.layer.borderColor = [[UIColor blackColor] CGColor];
            // self.likeCommentButton.layer.borderWidth=1.0f;
+            [self.likeCommentButton setTitle:@"• Like •" forState:UIControlStateNormal];
             [self.likeCommentButton setTitle:@"• Unlike •" forState:UIControlStateSelected];
             [self.likeCommentButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
             [[self.likeCommentButton titleLabel] setFont:[UIFont systemFontOfSize:11.0f]];
@@ -130,7 +128,14 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.likeCommentCount setFont:[UIFont systemFontOfSize:11.0f]];
             self.likeCommentCount.textColor = [UIColor grayColor];
             
+            // hide by default heart and label
+            self.likeCommentHeart.hidden = YES;
+            self.likeCommentCount.hidden = YES;
+            
+            // add to mainview 
             [mainView addSubview:self.likeCommentButton];
+            [mainView addSubview:self.likeCommentHeart];
+            [mainView addSubview:self.likeCommentCount];
         }
         
         [mainView addSubview:self.avatarImageView];
@@ -202,17 +207,17 @@ static TTTTimeIntervalFormatter *timeFormatter;
     CGSize timeSize = [self.timeLabel.text sizeWithFont:[UIFont systemFontOfSize:11] forWidth:horizontalTextSpace lineBreakMode:NSLineBreakByTruncatingTail];
     [self.timeLabel setFrame:CGRectMake(timeX, contentLabel.frame.origin.y + contentLabel.frame.size.height + vertElemSpacing, timeSize.width, timeSize.height)];
     
-    
     if ([self.cellType isEqualToString:@"CommentCell"]) {
-        // Layout the like button label
-        [self.likeCommentButton setFrame:CGRectMake((self.timeLabel.frame.origin.x + self.timeLabel.frame.size.width), self.timeLabel.frame.origin.y, likeButtonDimWidth, likeButtonDimHeight)];
+        // Layout the like button (default)
+        self.likeCommentButton.frame = CGRectMake((self.timeLabel.frame.origin.x + self.timeLabel.frame.size.width), self.timeLabel.frame.origin.y, unlikeButtonDimWidth, unlikeButtonDimHeight);
         
-        [self.likeCommentHeart setFrame:CGRectMake((self.likeCommentButton.frame.origin.x + self.likeCommentButton.frame.size.width), timeLabel.frame.origin.y - 2, likeCounterButtonDim, likeCounterButtonDim)];
+        // layout the heart
+        self.likeCommentHeart.frame = CGRectMake((self.likeCommentButton.frame.origin.x + self.likeCommentButton.frame.size.width), timeLabel.frame.origin.y - 2, likeCounterButtonDim, likeCounterButtonDim);
         
+        // layout the counter
         [self.likeCommentCount setFrame:CGRectMake((self.likeCommentHeart.frame.origin.x + self.likeCommentHeart.frame.size.width), timeLabel.frame.origin.y - 2, likeCounterButtonDim, likeCounterButtonDim)];
+        
     }
-    
-    
 }
 
 
@@ -287,29 +292,15 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 - (void)setLikeCommentButtonState:(BOOL)selected {
     
-    if (selected) {
-        // Layout the unlike button with updated witdh label
-        self.likeCommentButton.frame = CGRectMake((self.timeLabel.frame.origin.x + self.timeLabel.frame.size.width), self.timeLabel.frame.origin.y, unlikeButtonDimWidth, unlikeButtonDimHeight);
-        
-        // reset the heart counter with updated like button values
-        self.likeCommentHeart.frame = CGRectMake((self.likeCommentButton.frame.origin.x + self.likeCommentButton.frame.size.width), timeLabel.frame.origin.y - 2, likeCounterButtonDim, likeCounterButtonDim);
-        
-        // reset the heart count label
-        [self.likeCommentCount setFrame:CGRectMake((self.likeCommentHeart.frame.origin.x + self.likeCommentHeart.frame.size.width), timeLabel.frame.origin.y - 2, likeCounterButtonDim, likeCounterButtonDim)];
-        
-        [self.mainView addSubview:self.likeCommentHeart];
-        [self.mainView addSubview:self.likeCommentCount];
-    }else{
-        // Layout the like button with updated witdh label
-        self.likeCommentButton.frame = CGRectMake((self.timeLabel.frame.origin.x + self.timeLabel.frame.size.width), self.timeLabel.frame.origin.y, likeButtonDimWidth, likeButtonDimHeight);
-    }
-
-    [self.likeCommentButton setSelected:selected];
+    self.likeCommentHeart.hidden = !selected;
+    self.likeCommentCount.hidden = !selected;
+    self.likeCommentButton.selected = selected;
 }
 
+
 - (void)removeCommentCountHeart{
-    [self.likeCommentHeart removeFromSuperview];
-    [self.likeCommentCount removeFromSuperview];
+    self.likeCommentHeart.hidden = YES;
+    self.likeCommentCount.hidden = YES;
 }
 
 

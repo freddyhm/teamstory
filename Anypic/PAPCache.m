@@ -62,8 +62,8 @@
 }
 
 
-- (NSDictionary *)attributesForComment:(PFObject *)photo {
-    NSString *key = [self keyForComment:photo];
+- (NSDictionary *)attributesForComment:(PFObject *)comment {
+    NSString *key = [self keyForComment:comment];
     return [self.cache objectForKey:key];
 }
 
@@ -78,6 +78,15 @@
         return [attributes objectForKey:kPAPPhotoAttributesLikeCountKey];
     }
 
+    return [NSNumber numberWithInt:0];
+}
+
+- (NSNumber *)likeCountForComment:(PFObject *)comment {
+    NSDictionary *attributes = [self attributesForComment:comment];
+    if (attributes) {
+        return [attributes objectForKey:kPAPCommentAttributesLikeCountKey];
+    }
+    
     return [NSNumber numberWithInt:0];
 }
 
@@ -108,11 +117,29 @@
     return [NSArray array];
 }
 
+- (void)setCommentIsLikedByCurrentUser:(PFObject *)comment liked:(BOOL)liked {
+    NSMutableDictionary *attributes = [NSMutableDictionary dictionaryWithDictionary:[self attributesForComment:comment]];
+    [attributes setObject:[NSNumber numberWithBool:liked] forKey:kPAPCommentAttributesIsLikedByCurrentUserKey];
+    [self setAttributes:attributes forComment:comment];
+}
+
+- (BOOL)isCommentLikedByCurrentUser:(PFObject *)comment {
+    NSDictionary *attributes = [self attributesForComment:comment];
+    if (attributes) {
+        return [[attributes objectForKey:kPAPCommentAttributesIsLikedByCurrentUserKey] boolValue];
+    }
+    
+    return NO;
+}
+
+
 - (void)setPhotoIsLikedByCurrentUser:(PFObject *)photo liked:(BOOL)liked {
     NSMutableDictionary *attributes = [NSMutableDictionary dictionaryWithDictionary:[self attributesForPhoto:photo]];
     [attributes setObject:[NSNumber numberWithBool:liked] forKey:kPAPPhotoAttributesIsLikedByCurrentUserKey];
     [self setAttributes:attributes forPhoto:photo];
 }
+
+
 
 - (BOOL)isPhotoLikedByCurrentUser:(PFObject *)photo {
     NSDictionary *attributes = [self attributesForPhoto:photo];
@@ -121,6 +148,13 @@
     }
     
     return NO;
+}
+
+- (void)incrementLikerCountForComment:(PFObject *)comment {
+    NSNumber *likerCount = [NSNumber numberWithInt:[[self likeCountForComment:comment] intValue] + 1];
+    NSMutableDictionary *attributes = [NSMutableDictionary dictionaryWithDictionary:[self attributesForComment:comment]];
+    [attributes setObject:likerCount forKey:kPAPCommentAttributesLikeCountKey];
+    [self setAttributes:attributes forComment:comment];
 }
 
 - (void)incrementLikerCountForPhoto:(PFObject *)photo {
@@ -145,6 +179,16 @@
     NSMutableDictionary *attributes = [NSMutableDictionary dictionaryWithDictionary:[self attributesForPhoto:photo]];
     [attributes setObject:commentCount forKey:kPAPPhotoAttributesCommentCountKey];
     [self setAttributes:attributes forPhoto:photo];
+}
+
+- (void)decrementLikerCountForComment:(PFObject *)comment {
+    NSNumber *likerCount = [NSNumber numberWithInt:[[self likeCountForComment:comment] intValue] - 1];
+    if ([likerCount intValue] < 0) {
+        return;
+    }
+    NSMutableDictionary *attributes = [NSMutableDictionary dictionaryWithDictionary:[self attributesForComment:comment]];
+    [attributes setObject:likerCount forKey:kPAPCommentAttributesLikeCountKey];
+    [self setAttributes:attributes forComment:comment];
 }
 
 - (void)decrementCommentCountForPhoto:(PFObject *)photo {

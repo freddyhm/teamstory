@@ -16,11 +16,16 @@
 - (NSDictionary *)attributesForPhoto:(PFObject *)photo;
 - (NSDictionary *)attributesForComment:(PFObject *)photo;
 - (NSNumber *)likeCountForPhoto:(PFObject *)photo;
+- (NSNumber *)likeCountForComment:(PFObject *)comment;
 - (NSNumber *)commentCountForPhoto:(PFObject *)photo;
 - (NSArray *)likersForPhoto:(PFObject *)photo;
 - (NSArray *)commentersForPhoto:(PFObject *)photo;
 - (void)setPhotoIsLikedByCurrentUser:(PFObject *)photo liked:(BOOL)liked;
+- (void)setCommentIsLikedByCurrentUser:(PFObject *)comment liked:(BOOL)liked;
 - (BOOL)isPhotoLikedByCurrentUser:(PFObject *)photo;
+- (BOOL)isCommentLikedByCurrentUser:(PFObject *)comment;
+- (void)incrementLikerCountForComment:(PFObject *)comment;
+- (void)decrementLikerCountForComment:(PFObject *)comment;
 - (void)incrementLikerCountForPhoto:(PFObject *)photo;
 - (void)decrementLikerCountForPhoto:(PFObject *)photo;
 - (void)incrementCommentCountForPhoto:(PFObject *)photo;
