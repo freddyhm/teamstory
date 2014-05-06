@@ -722,7 +722,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         
         if ([activities count] > 0) {
             // add comment to cache with updated count
-            [[PAPCache sharedCache] setLikesForComment:comment count:[activities count]];
+            [[PAPCache sharedCache] setLikesForComment:comment count:(int)[activities count]];
         }
         
     }
