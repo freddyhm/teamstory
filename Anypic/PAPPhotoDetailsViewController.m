@@ -416,6 +416,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         
         if ([self.userArray count] < 1) {
             userQuery = [PFUser query];
+            userQuery.limit = 10000;
             [userQuery whereKeyExists:@"displayName"];
             [userQuery orderByAscending:@"displayName"];
             [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -425,7 +426,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                     self.atmentionUserArray = [[NSMutableArray alloc] init];
                     self.filteredArray = objects;
                     self.autocompleteTableView.backgroundColor = [UIColor clearColor];
-                    
+                    NSLog(@"%lu", (unsigned long)[self.userArray count]);
                 } else {
                     NSLog(@"%@", error);
                 }
