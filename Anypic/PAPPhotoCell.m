@@ -90,7 +90,7 @@
         self.imageView.frame = CGRectMake( 7.5f, expectedSize.height + 25.0f, 305.0f, 305.0f);
         self.photoButton.frame = CGRectMake( 7.5f, 0.0, 305.0f, 330.0f + expectedSize.height);
         
-        NSRange range = [self.caption rangeOfString:@"(?i)(http\\S+|www.\\S+|\\w+.(com|ca)(\\S+)?)" options:NSRegularExpressionSearch];
+        NSRange range = [self.caption rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
         
         NSMutableAttributedString *captionText = [[NSMutableAttributedString alloc] initWithString:self.caption];
         [captionText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];

@@ -248,7 +248,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         if (self.user) {
             CGSize nameSize = [self.nameButton.titleLabel.text sizeWithFont:[UIFont boldSystemFontOfSize:13] forWidth:nameMaxWidth lineBreakMode:NSLineBreakByTruncatingTail];
             NSString *paddedString = [PAPBaseTextCell padString:contentString withFont:[UIFont systemFontOfSize:13] toWidth:nameSize.width];
-            NSRange range = [paddedString rangeOfString:@"(?i)(http\\S+|www.\\S+|\\w+.(com|ca)(\\S+)?)" options:NSRegularExpressionSearch];
+            NSRange range = [paddedString rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
             
             NSMutableAttributedString *commentText = [[NSMutableAttributedString alloc] initWithString:paddedString];
             [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
