@@ -235,7 +235,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     if ([self.description length] > 0) {
         CGSize maximumLabelSize = CGSizeMake(320.0f - baseHorizontalOffset * 4, 9999.0f);
         
-        NSRange range = [self.description rangeOfString:@"(?i)(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+" options:NSRegularExpressionSearch];
+        NSRange range = [self.description rangeOfString:@"(?i)(http\\S+|www.\\S+|\\w+.(com|ca)(\\S+)?)" options:NSRegularExpressionSearch];
         
         NSMutableAttributedString *captionText = [[NSMutableAttributedString alloc] initWithString:self.description];
         [captionText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];

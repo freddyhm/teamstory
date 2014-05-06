@@ -562,10 +562,15 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     if ([acellType isEqualToString:@"atmentionCell"]) {
         cellType = acellType;
         text_location = 0;
-        [self textView:commentTextView shouldChangeTextInRange:atmentionRange replacementText:[aUser objectForKey:@"displayName"]];
+        
+        if (atmentionRange.location != NSNotFound) {
+            [self textView:commentTextView shouldChangeTextInRange:atmentionRange replacementText:[aUser objectForKey:@"displayName"]];
+        }
+        
         self.autocompleteTableView.hidden = YES;
         self.dimView.hidden = YES;
         self.tableView.scrollEnabled = YES;
+        
         [self.atmentionUserArray addObject:aUser];
     } else {
         [self shouldPresentAccountViewForUser:aUser];

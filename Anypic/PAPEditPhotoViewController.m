@@ -490,7 +490,11 @@
     if ([acellType isEqualToString:@"atmentionCell"]) {
         cellType = acellType;
         text_location = 0;
-        [self textView:self.commentTextView shouldChangeTextInRange:atmentionRange replacementText:[aUser objectForKey:@"displayName"]];
+        
+        if (atmentionRange.location != NSNotFound) {
+            [self textView:self.commentTextView shouldChangeTextInRange:atmentionRange replacementText:[aUser objectForKey:@"displayName"]];
+        }
+        
         self.autocompleteTableView.hidden = YES;
         self.dimView.hidden = YES;
         [self.atmentionUserArray addObject:aUser];
