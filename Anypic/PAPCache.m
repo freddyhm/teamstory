@@ -123,6 +123,13 @@
     [self setAttributes:attributes forComment:comment];
 }
 
+- (void)setLikesForComment:(PFObject *)comment count:(int)count{
+    NSMutableDictionary *attributes = [NSMutableDictionary dictionaryWithDictionary:[self attributesForComment:comment]];
+    [attributes setObject:[NSNumber numberWithInt:count] forKey:kPAPCommentAttributesLikeCountKey];
+    [self setAttributes:attributes forComment:comment];
+
+}
+
 - (BOOL)isCommentLikedByCurrentUser:(PFObject *)comment {
     NSDictionary *attributes = [self attributesForComment:comment];
     if (attributes) {

@@ -40,8 +40,9 @@
 /*! The horizontal inset of the cell */
 @property (nonatomic) CGFloat cellInsetWidth;
 
+
 /*! Like comment */
-- (void)setLikeCommentButtonState:(BOOL)selected;
+- (void)setLikeCommentButtonState:(BOOL)selected forCurrentUser:(BOOL)forCurrentUser;
 - (void)shouldEnableLikeCommentButton:(BOOL)enable;
 - (void)removeCommentCountHeart;
 

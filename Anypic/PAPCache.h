@@ -23,6 +23,7 @@
 - (void)setPhotoIsLikedByCurrentUser:(PFObject *)photo liked:(BOOL)liked;
 - (void)setCommentIsLikedByCurrentUser:(PFObject *)comment liked:(BOOL)liked;
 - (BOOL)isPhotoLikedByCurrentUser:(PFObject *)photo;
+- (void)setLikesForComment:(PFObject *)comment count:(int)count;
 - (BOOL)isCommentLikedByCurrentUser:(PFObject *)comment;
 - (void)incrementLikerCountForComment:(PFObject *)comment;
 - (void)decrementLikerCountForComment:(PFObject *)comment;
@@ -36,6 +37,7 @@
 - (BOOL)followStatusForUser:(PFUser *)user;
 - (void)setPhotoCount:(NSNumber *)count user:(PFUser *)user;
 - (void)setFollowStatus:(BOOL)following user:(PFUser *)user;
+
 
 - (void)setFacebookFriends:(NSArray *)friends;
 - (NSArray *)facebookFriends;

@@ -121,7 +121,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
             // Create the counter heart shape (disabled button)
             self.likeCommentHeart = [UIButton buttonWithType:UIButtonTypeCustom];
             [self.likeCommentHeart setBackgroundColor:[UIColor clearColor]];
-            [self.likeCommentHeart setBackgroundImage:[UIImage imageNamed:@"ButtonLikeCommentSelected.png"] forState:UIControlStateNormal];
+            [self.likeCommentHeart setBackgroundImage:[UIImage imageNamed:@"ButtonLikeCommentSelected.png"] forState:UIControlStateSelected];
+            [self.likeCommentHeart setBackgroundImage:[UIImage imageNamed:@"ButtonLikeComment.png"] forState:UIControlStateNormal];
             
             // Create the counter label next to heart
             self.likeCommentCount = [[UILabel alloc] init];
@@ -129,8 +130,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
             self.likeCommentCount.textColor = [UIColor grayColor];
             
             // hide by default heart and label
-            self.likeCommentHeart.hidden = YES;
-            self.likeCommentCount.hidden = YES;
+           // self.likeCommentHeart.hidden = YES;
+           // self.likeCommentCount.hidden = YES;
             
             // add to mainview 
             [mainView addSubview:self.likeCommentButton];
@@ -290,19 +291,21 @@ static TTTTimeIntervalFormatter *timeFormatter;
     return paddedString;
 }
 
-- (void)setLikeCommentButtonState:(BOOL)selected {
+- (void)setLikeCommentButtonState:(BOOL)selected forCurrentUser:(BOOL)forCurrentUser{
     
-    self.likeCommentHeart.hidden = !selected;
-    self.likeCommentCount.hidden = !selected;
-    self.likeCommentButton.selected = selected;
+    if(forCurrentUser){
+        self.likeCommentHeart.selected = selected;
+        self.likeCommentButton.selected = selected;
+    }
+    
+    self.likeCommentHeart.hidden = NO;
+    self.likeCommentCount.hidden = NO;
 }
-
 
 - (void)removeCommentCountHeart{
     self.likeCommentHeart.hidden = YES;
     self.likeCommentCount.hidden = YES;
 }
-
 
 - (void)setUser:(PFUser *)aUser {
     user = aUser;
