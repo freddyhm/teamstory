@@ -350,6 +350,7 @@
         
         if ([self.userArray count] < 1) {
             userQuery = [PFUser query];
+            userQuery.limit = 100000;
             [userQuery whereKeyExists:@"displayName"];
             [userQuery orderByAscending:@"displayName"];
             [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
