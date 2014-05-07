@@ -13,6 +13,7 @@
 #import "PAPLoadMoreCell.h"
 #import "PAPUtility.h"
 #import "SVProgressHUD.h"
+#import "MBProgressHUD.h"
 
 
 enum ActionSheetTags {
@@ -28,6 +29,7 @@ enum ActionSheetTags {
     NSRange atmentionRange;
     NSInteger text_offset;
 }
+@property (nonatomic, strong) UIActivityIndicatorView *spinner;
 @property (nonatomic, strong) UITextField *commentTextField;
 @property (nonatomic, strong) PAPPhotoDetailsHeaderView *headerView;
 @property (nonatomic, assign) BOOL likersQueryInProgress;
@@ -45,6 +47,7 @@ enum ActionSheetTags {
 @property (nonatomic, strong) PFQuery *userQuery;
 @property (nonatomic, strong) NSMutableArray *atmentionUserArray;
 @property (nonatomic, strong) UIView *dimView;
+@property (nonatomic, strong) UIView *hideCommentsView;
 @property CGRect defaultFooterViewFrame;
 @property CGRect defaultCommentTextViewFrame;
 @property CGRect previousRect;
@@ -295,23 +298,48 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 - (void)objectsWillLoad{
     [super objectsWillLoad];
-    [SVProgressHUD show];
+    
+    
 }
 
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
     [self.headerView reloadLikeBar];
     [self loadLikers];
-    
+
     if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] ||[self.source isEqual:@"activityComment"])){
         [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height + 44)];
     }else{
-        // set like comments for loaded comments
-        for (PFObject *obj in self.objects) {
-            [self setLikedComments:obj];
-        }
         
-        [SVProgressHUD dismiss];
+        float tableCommentVerticalPos = self.tableView.tableHeaderView.frame.origin.y + self.tableView.tableHeaderView.frame.size.height;
+        float tableCommentHeight =  self.tableView.tableFooterView.frame.origin.y;
+        
+        self.hideCommentsView = [[UIView alloc] initWithFrame:CGRectMake(self.tableView.tableHeaderView.frame.origin.x
+                                                                         , tableCommentVerticalPos, self.tableView.tableHeaderView.frame.size.width, tableCommentHeight)];
+        
+        [self.hideCommentsView setBackgroundColor:[UIColor whiteColor]];
+        
+        self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width/2 - 50,0,100,100)];
+        self.spinner.activityIndicatorViewStyle =UIActivityIndicatorViewStyleWhiteLarge;
+        self.spinner.color = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
+        [self.hideCommentsView addSubview:self.spinner];
+        self.spinner.hidesWhenStopped = YES;
+        [self.spinner startAnimating];
+        [self.view addSubview:self.hideCommentsView];
+        
+        //resize cropped image and send to filter controller (work on background thread)
+        dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+            
+            // set like comments for loaded comments
+            for (PFObject *obj in self.objects) {
+                [self setLikedComments:obj];
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.spinner stopAnimating];
+                [self.hideCommentsView removeFromSuperview];
+            });
+        });
     }
 }
 
@@ -719,7 +747,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [queryExistingCommentLikes setCachePolicy:kPFCachePolicyNetworkOnly];
         [queryExistingCommentLikes includeKey:kPAPActivityFromUserKey];
         NSArray *activities = [queryExistingCommentLikes findObjects];
-        
+    
         if ([activities count] > 0) {
             // add comment to cache with updated count
             [[PAPCache sharedCache] setLikesForComment:comment count:(int)[activities count]];

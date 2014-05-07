@@ -243,6 +243,13 @@ typedef enum {
  */
 @property (MB_WEAK) id<MBProgressHUDDelegate> delegate;
 
+/**
+ * The color of the HUD window. Defaults to black. If this property is set, color is set using
+ * this UIColor and the opacity property is not used.  using retain because performing copy on
+ * UIColor base colors (like [UIColor greenColor]) cause problems with the copyZone.
+ */
+@property (atomic, MB_STRONG) UIColor *color;
+
 /** 
  * An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit
  * the entire text. If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or
