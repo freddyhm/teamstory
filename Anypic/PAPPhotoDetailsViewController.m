@@ -204,6 +204,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLikedOrUnlikedPhoto:) name:PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:self.photo];
     
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
+    
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
                                           action:@selector(dismissKeyboard)];
@@ -215,13 +217,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 - (void)createOutstandingViews {
     
 }
-
--(void)dismissKeyboard {
-    [self.view endEditing:YES];
-    self.autocompleteTableView.hidden = YES;
-    self.dimView.hidden = YES;
-}
-
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -239,6 +234,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] ||[self.source isEqual:@"activityComment"])){
         [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height + 44)];
     }
+    
 }
 
 
@@ -360,6 +356,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
+    
     if ([[textView text] isEqualToString:@"Add a comment"]) {
         [textView setText:@""];
     }
@@ -388,13 +385,25 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
 
     // Expandable textview.
+    
+    // for next line excl. first line
     if (currentRect.origin.y > self.previousRect.origin.y && self.previousRect.origin.y != 0){
         text_offset += 15.0f;
+        
+        // expands textview based on content
         self.footerView.mainView.frame = CGRectMake(self.footerView.mainView.frame.origin.x, self.footerView.mainView.frame.origin.y, self.footerView.mainView.frame.size.width, frame.size.height + 20);
+        
+        // moves keyboard to proper height
         [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentOffset.y + 15) animated:YES];
+    
+    // for prev line excl. first line
     }else if (currentRect.origin.y < self.previousRect.origin.y && self.previousRect.origin.y != 0){
         text_offset -= 15.0f;
+        
+        // expands textview based on content
         self.footerView.mainView.frame = CGRectMake(self.footerView.mainView.frame.origin.x, self.footerView.mainView.frame.origin.y, self.footerView.mainView.frame.size.width, frame.size.height + 20);
+        
+        // moves keyboard to proper height
         [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentOffset.y  - 15) animated:YES];
     }
     
@@ -554,6 +563,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+
     [commentTextField resignFirstResponder];
     [scrollView setShowsVerticalScrollIndicator:NO];
 }
@@ -586,6 +596,36 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 -(void)photoDetailsHeaderView:(PAPPhotoDetailsHeaderView *)headerView didTapUserButton:(UIButton *)button user:(PFUser *)user {
     [self shouldPresentAccountViewForUser:user];
 }
+
+
+#pragma mark - UIKeyboard
+
+- (void)keyboardDidHide:(id)sender{
+    
+    [self.tableView setContentSize:CGSizeMake(self.tableView.contentSize.width, self.tableView.contentSize.height+ (self.footerView.mainView.frame.size.height - self.defaultFooterViewFrame.size.height))];
+}
+
+- (void)keyboardWillShow:(NSNotification*)note {
+    
+    // Scroll the view to the comment text box
+    NSDictionary* info = [note userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    NSInteger offset = 0.0f;
+    if ([UIScreen mainScreen].bounds.size.height == 480) {
+        offset = 60.0f;
+    } else {
+        offset = 150.0f;
+    }
+    
+    [self.tableView setContentOffset:CGPointMake(0.0f, (self.tableView.contentSize.height-kbSize.height - offset) + (self.footerView.mainView.frame.size.height - self.defaultFooterViewFrame.size.height)) animated:YES];
+}
+
+-(void)dismissKeyboard {
+    [self.view endEditing:YES];
+    self.autocompleteTableView.hidden = YES;
+    self.dimView.hidden = YES;
+}
+
 
 #pragma mark - ()
 
@@ -781,18 +821,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self.headerView reloadLikeBar];
 }
 
-- (void)keyboardWillShow:(NSNotification*)note {
-    // Scroll the view to the comment text box
-    NSDictionary* info = [note userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    NSInteger offset = 0.0f;
-    if ([UIScreen mainScreen].bounds.size.height == 480) {
-        offset = 60.0f;
-    } else {
-        offset = 150.0f;
-    }
-    [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentSize.height-kbSize.height - offset) animated:YES];
-}
 
 - (void)loadLikers {
     if (self.likersQueryInProgress) {
