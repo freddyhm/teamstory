@@ -250,6 +250,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
             NSString *paddedString = [PAPBaseTextCell padString:contentString withFont:[UIFont systemFontOfSize:13] toWidth:nameSize.width];
             NSRange range = [paddedString rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
             
+            NSString *lowerCaseString = [[paddedString substringWithRange:range] lowercaseString];
+            paddedString = [paddedString stringByReplacingCharactersInRange:range withString:lowerCaseString];
+            
             NSMutableAttributedString *commentText = [[NSMutableAttributedString alloc] initWithString:paddedString];
             [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
             

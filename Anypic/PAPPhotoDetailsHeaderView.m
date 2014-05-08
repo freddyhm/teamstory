@@ -237,6 +237,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         NSRange range = [self.description rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
         
+        NSString *lowerCaseString = [[self.description substringWithRange:range] lowercaseString];
+        self.description = [self.description stringByReplacingCharactersInRange:range withString:lowerCaseString];
+        
         NSMutableAttributedString *captionText = [[NSMutableAttributedString alloc] initWithString:self.description];
         [captionText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
         
