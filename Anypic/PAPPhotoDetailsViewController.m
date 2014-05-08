@@ -48,6 +48,7 @@ enum ActionSheetTags {
 @property CGRect defaultFooterViewFrame;
 @property CGRect defaultCommentTextViewFrame;
 @property CGRect previousRect;
+@property BOOL isKeyboardVisible;
 @end
 
 static const CGFloat kPAPCellInsetWidth = 7.5f;
@@ -151,12 +152,16 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     // Set table footer
     
     self.footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:[PAPPhotoDetailsFooterView rectForView]];
+    
+    self.footerView.layer.borderWidth = 1.0f;
+        self.footerView.layer.borderColor = [UIColor blackColor].CGColor;
     commentTextView = footerView.commentView;
     self.defaultFooterViewFrame = self.footerView.mainView.frame;
     self.defaultCommentTextViewFrame = self.commentTextView.frame;
     commentTextView.delegate = self;
     self.tableView.tableFooterView = self.footerView;
     
+    self.isKeyboardVisible = NO;
     
     self.autocompleteTableView = [[UITableView alloc] init];
     self.autocompleteTableView.delegate = self;
@@ -204,13 +209,17 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLikedOrUnlikedPhoto:) name:PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:self.photo];
     
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardDidHide) name:UIKeyboardDidHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
                                           action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tapOutside];
+    
+    
+    
 
 }
 
@@ -393,6 +402,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         // expands textview based on content
         self.footerView.mainView.frame = CGRectMake(self.footerView.mainView.frame.origin.x, self.footerView.mainView.frame.origin.y, self.footerView.mainView.frame.size.width, frame.size.height + 20);
         
+        // expands footer frame that contains textview
+        self.footerView.frame =  CGRectMake(self.footerView.frame.origin.x, self.footerView.frame.origin.y, self.footerView.frame.size.width, frame.size.height + 20);
+        
         // moves keyboard to proper height
         [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentOffset.y + 15) animated:YES];
     
@@ -402,6 +414,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         
         // expands textview based on content
         self.footerView.mainView.frame = CGRectMake(self.footerView.mainView.frame.origin.x, self.footerView.mainView.frame.origin.y, self.footerView.mainView.frame.size.width, frame.size.height + 20);
+        
+        // expands footer frame that contains textview
+        self.footerView.frame =  CGRectMake(self.footerView.frame.origin.x, self.footerView.frame.origin.y, self.footerView.frame.size.width, frame.size.height + 20);
         
         // moves keyboard to proper height
         [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentOffset.y  - 15) animated:YES];
@@ -600,9 +615,14 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 #pragma mark - UIKeyboard
 
-- (void)keyboardDidHide:(id)sender{
+- (void)keyboardDidHide{
     
-    [self.tableView setContentSize:CGSizeMake(self.tableView.contentSize.width, self.tableView.contentSize.height+ (self.footerView.mainView.frame.size.height - self.defaultFooterViewFrame.size.height))];
+    // set new content size for table, update with current textview height
+    float currentTextViewHeight = self.footerView.mainView.frame.size.height - self.defaultFooterViewFrame.size.height;
+    
+    [self.tableView setContentSize:CGSizeMake(self.tableView.contentSize.width, self.tableView.contentSize.height+ currentTextViewHeight)];
+    
+    self.isKeyboardVisible = NO;
 }
 
 - (void)keyboardWillShow:(NSNotification*)note {
@@ -617,13 +637,25 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         offset = 150.0f;
     }
     
-    [self.tableView setContentOffset:CGPointMake(0.0f, (self.tableView.contentSize.height-kbSize.height - offset) + (self.footerView.mainView.frame.size.height - self.defaultFooterViewFrame.size.height)) animated:YES];
+    // set offset for table based on current table height
+    float currentTextViewHeight = self.footerView.mainView.frame.size.height - self.defaultFooterViewFrame.size.height;
+    
+    [self.tableView setContentOffset:CGPointMake(0.0f, (self.tableView.contentSize.height-kbSize.height - offset) + currentTextViewHeight) animated:YES];
+    
+    self.isKeyboardVisible = YES;
 }
 
--(void)dismissKeyboard {
+- (void)dismissKeyboard {
     [self.view endEditing:YES];
     self.autocompleteTableView.hidden = YES;
     self.dimView.hidden = YES;
+}
+
+- (void)keyboardWillHide{
+    
+    // set new offset for table with current textview height
+    float currentTextViewHeight = self.footerView.mainView.frame.size.height - self.defaultFooterViewFrame.size.height;
+    [self.tableView setContentOffset:CGPointMake(0.0f, (self.tableView.contentOffset.y + currentTextViewHeight)) animated:YES];
 }
 
 
