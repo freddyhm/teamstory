@@ -406,7 +406,11 @@ enum ActionSheetTags {
             photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
             // load images from remote server
             [photoImgView loadInBackground:^(UIImage *image, NSError *error) {
-                [self.imgCache setObject:image forKey:[object objectId]];
+                
+                // check there's no error and image is present before setting
+                if(!error && image != nil){
+                    [self.imgCache setObject:image forKey:[object objectId]];
+                }
             }];
         }
     }
@@ -796,7 +800,7 @@ enum ActionSheetTags {
 
 
 - (void)didTapOnPhotoAction:(UIButton *)sender {
-        
+    
     PFObject *photo = [self.objects objectAtIndex:sender.tag];
     if (photo) {
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
