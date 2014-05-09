@@ -406,7 +406,6 @@ enum ActionSheetTags {
             photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
             // load images from remote server
             [photoImgView loadInBackground:^(UIImage *image, NSError *error) {
-                
                 // check there's no error and image is present before setting
                 if(!error && image != nil){
                     [self.imgCache setObject:image forKey:[object objectId]];
