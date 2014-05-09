@@ -796,10 +796,7 @@ enum ActionSheetTags {
 
 
 - (void)didTapOnPhotoAction:(UIButton *)sender {
-    
-    // analytics
-    [PAPUtility captureEventGA:@"Engagement" action:@"Tap" label:@"Photo"];
-    
+        
     PFObject *photo = [self.objects objectAtIndex:sender.tag];
     if (photo) {
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
