@@ -92,8 +92,10 @@
         
         NSRange range = [self.caption rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
         
-        NSString *lowerCaseString = [[self.caption substringWithRange:range] lowercaseString];
-        self.caption = [self.caption stringByReplacingCharactersInRange:range withString:lowerCaseString];
+        if (range.location != NSNotFound) {
+            NSString *lowerCaseString = [[self.caption substringWithRange:range] lowercaseString];
+            self.caption = [self.caption stringByReplacingCharactersInRange:range withString:lowerCaseString];
+        }
         
         
         NSMutableAttributedString *captionText = [[NSMutableAttributedString alloc] initWithString:self.caption];
