@@ -48,7 +48,6 @@ enum ActionSheetTags {
 @property CGRect defaultFooterViewFrame;
 @property CGRect defaultCommentTextViewFrame;
 @property CGRect previousRect;
-@property BOOL isKeyboardVisible;
 @end
 
 static const CGFloat kPAPCellInsetWidth = 7.5f;
@@ -150,18 +149,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     
     // Set table footer
-    
     self.footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:[PAPPhotoDetailsFooterView rectForView]];
-    
-    self.footerView.layer.borderWidth = 1.0f;
-        self.footerView.layer.borderColor = [UIColor blackColor].CGColor;
     commentTextView = footerView.commentView;
     self.defaultFooterViewFrame = self.footerView.mainView.frame;
     self.defaultCommentTextViewFrame = self.commentTextView.frame;
     commentTextView.delegate = self;
     self.tableView.tableFooterView = self.footerView;
-    
-    self.isKeyboardVisible = NO;
     
     self.autocompleteTableView = [[UITableView alloc] init];
     self.autocompleteTableView.delegate = self;
@@ -170,8 +163,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.autocompleteTableView.scrollEnabled = YES;
     self.autocompleteTableView.hidden = YES;
     [self.view addSubview:self.autocompleteTableView];
-
-
 
     /*
     if ([self currentUserOwnsPhoto]) {
@@ -223,6 +214,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 }
 
+
 - (void)createOutstandingViews {
     
 }
@@ -243,7 +235,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] ||[self.source isEqual:@"activityComment"])){
         [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height + 44)];
     }
-    
 }
 
 
@@ -361,10 +352,79 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     return cell;
 }
 
+#pragma mark - UIKeyboard
+
+- (void)keyboardDidHide{
+    
+    // set new content size for table, update with current textview height
+    [self.tableView setContentSize:CGSizeMake(self.tableView.contentSize.width, [self getCurrentTableContentHeightWithTextView])];
+    
+}
+
+- (void)keyboardWillShow:(NSNotification*)note {
+    
+    // Scroll the view to the comment text box
+    NSDictionary* info = [note userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    NSInteger offset = 0.0f;
+    if ([UIScreen mainScreen].bounds.size.height == 480) {
+        offset = 60.0f;
+    } else {
+        offset = 150.0f;
+    }
+    
+    // set new offset based on custom text view + keyboard + phone offset
+    [self.tableView setContentOffset:CGPointMake(0.0f, ([self getCurrentTableContentHeightWithTextView]- kbSize.height - offset)) animated:YES];
+}
+
+- (void)dismissKeyboard {
+    [self.view endEditing:YES];
+    self.autocompleteTableView.hidden = YES;
+    self.dimView.hidden = YES;
+}
+
+- (void)keyboardWillHide{
+    
+     // set new offset based on custom text view
+     [self.tableView setContentOffset:CGPointMake(0.0f, [self getCurrentTableOffsetWithTextView]) animated:YES];
+}
+
+#pragma mark - Custom TextView
+
+- (void)updateTextView:(float)newHeight{
+    
+    // expands textview based on content
+    self.footerView.mainView.frame = CGRectMake(self.footerView.mainView.frame.origin.x, self.footerView.mainView.frame.origin.y, self.footerView.mainView.frame.size.width, newHeight + 20);
+    
+    // expands footer frame that contains textview
+    self.footerView.frame =  CGRectMake(self.footerView.frame.origin.x, self.footerView.frame.origin.y, self.footerView.frame.size.width, newHeight + 20);
+}
+
+- (float)getCurrentTableContentHeightWithTextView{
+    
+    // set offset for table based on current table height
+    float currentTextViewContentHeight = self.footerView.mainView.frame.size.height - self.defaultFooterViewFrame.size.height;
+    
+    float newTableContentHeight = self.tableView.contentSize.height + currentTextViewContentHeight;
+    
+    return currentTextViewContentHeight != 0 ? newTableContentHeight : self.tableView.contentSize.height;
+}
+
+- (float)getCurrentTableOffsetWithTextView{
+
+    // get new offset for table with current textview height
+    float currentTextViewHeight = self.footerView.mainView.frame.size.height - self.defaultFooterViewFrame.size.height;
+
+    return self.tableView.contentOffset.y + currentTextViewHeight;
+}
+
 #pragma mark - UITextViewDelegate
 
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
+    
+    // update content size - especially important when dragging while editing
+    [self.tableView setContentSize:CGSizeMake(self.tableView.contentSize.width, [self getCurrentTableContentHeightWithTextView])];
     
     if ([[textView text] isEqualToString:@"Add a comment"]) {
         [textView setText:@""];
@@ -393,33 +453,36 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         text_offset = 0;
     }
 
-    // Expandable textview.
+    // Expandable textview
     
     // for next line excl. first line
     if (currentRect.origin.y > self.previousRect.origin.y && self.previousRect.origin.y != 0){
         text_offset += 15.0f;
         
-        // expands textview based on content
-        self.footerView.mainView.frame = CGRectMake(self.footerView.mainView.frame.origin.x, self.footerView.mainView.frame.origin.y, self.footerView.mainView.frame.size.width, frame.size.height + 20);
+        // update custom textview
+        [self updateTextView:frame.size.height];
         
-        // expands footer frame that contains textview
-        self.footerView.frame =  CGRectMake(self.footerView.frame.origin.x, self.footerView.frame.origin.y, self.footerView.frame.size.width, frame.size.height + 20);
-        
+        // update content size - especially important when dragging while editing
+        [self.tableView setContentSize:CGSizeMake(self.tableView.contentSize.width, self.tableView.contentSize.height + 15)];
+      
         // moves keyboard to proper height
         [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentOffset.y + 15) animated:YES];
+        
+        
     
     // for prev line excl. first line
     }else if (currentRect.origin.y < self.previousRect.origin.y && self.previousRect.origin.y != 0){
         text_offset -= 15.0f;
         
-        // expands textview based on content
-        self.footerView.mainView.frame = CGRectMake(self.footerView.mainView.frame.origin.x, self.footerView.mainView.frame.origin.y, self.footerView.mainView.frame.size.width, frame.size.height + 20);
+        // update custom textview
+        [self updateTextView:frame.size.height];
         
-        // expands footer frame that contains textview
-        self.footerView.frame =  CGRectMake(self.footerView.frame.origin.x, self.footerView.frame.origin.y, self.footerView.frame.size.width, frame.size.height + 20);
+        // update content size - especially important when dragging while editing
+        [self.tableView setContentSize:CGSizeMake(self.tableView.contentSize.width, self.tableView.contentSize.height - 15)];
         
         // moves keyboard to proper height
         [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentOffset.y  - 15) animated:YES];
+        
     }
     
     self.previousRect = currentRect;
@@ -611,53 +674,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 -(void)photoDetailsHeaderView:(PAPPhotoDetailsHeaderView *)headerView didTapUserButton:(UIButton *)button user:(PFUser *)user {
     [self shouldPresentAccountViewForUser:user];
 }
-
-
-#pragma mark - UIKeyboard
-
-- (void)keyboardDidHide{
-    
-    // set new content size for table, update with current textview height
-    float currentTextViewHeight = self.footerView.mainView.frame.size.height - self.defaultFooterViewFrame.size.height;
-    
-    [self.tableView setContentSize:CGSizeMake(self.tableView.contentSize.width, self.tableView.contentSize.height+ currentTextViewHeight)];
-    
-    self.isKeyboardVisible = NO;
-}
-
-- (void)keyboardWillShow:(NSNotification*)note {
-    
-    // Scroll the view to the comment text box
-    NSDictionary* info = [note userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    NSInteger offset = 0.0f;
-    if ([UIScreen mainScreen].bounds.size.height == 480) {
-        offset = 60.0f;
-    } else {
-        offset = 150.0f;
-    }
-    
-    // set offset for table based on current table height
-    float currentTextViewHeight = self.footerView.mainView.frame.size.height - self.defaultFooterViewFrame.size.height;
-    
-    [self.tableView setContentOffset:CGPointMake(0.0f, (self.tableView.contentSize.height-kbSize.height - offset) + currentTextViewHeight) animated:YES];
-    
-    self.isKeyboardVisible = YES;
-}
-
-- (void)dismissKeyboard {
-    [self.view endEditing:YES];
-    self.autocompleteTableView.hidden = YES;
-    self.dimView.hidden = YES;
-}
-
-- (void)keyboardWillHide{
-    
-    // set new offset for table with current textview height
-    float currentTextViewHeight = self.footerView.mainView.frame.size.height - self.defaultFooterViewFrame.size.height;
-    [self.tableView setContentOffset:CGPointMake(0.0f, (self.tableView.contentOffset.y + currentTextViewHeight)) animated:YES];
-}
-
 
 #pragma mark - ()
 
@@ -895,5 +911,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 - (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl {
     [self.refreshControl endRefreshing];
     self.tableView.scrollEnabled = YES;
+    
+    // update content size based on current textview
+    [self.tableView setContentSize:CGSizeMake(self.tableView.contentSize.width, [self getCurrentTableContentHeightWithTextView])];
 }
 @end
