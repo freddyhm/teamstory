@@ -457,7 +457,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     // for next line excl. first line
     if (currentRect.origin.y > self.previousRect.origin.y && self.previousRect.origin.y != 0){
-        text_offset += 15.0f;
         
         // update custom textview
         [self updateTextView:frame.size.height];
@@ -468,11 +467,18 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         // moves keyboard to proper height
         [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentOffset.y + 15) animated:YES];
         
-        
+        //reset @mention table.
+        if (self.autocompleteTableView.hidden == NO) {
+            if ([UIScreen mainScreen].bounds.size.height == 480) {
+                self.autocompleteTableView.frame = CGRectMake(7.5f, self.tableView.contentSize.height - 212.0f, 305.0f, 143.0f);
+            } else {
+                self.autocompleteTableView.frame = CGRectMake(7.5f, self.tableView.contentSize.height - 302.0f, 305.0f, 232.0f);
+            }
+            
+        }
     
     // for prev line excl. first line
     }else if (currentRect.origin.y < self.previousRect.origin.y && self.previousRect.origin.y != 0){
-        text_offset -= 15.0f;
         
         // update custom textview
         [self updateTextView:frame.size.height];
@@ -482,7 +488,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         
         // moves keyboard to proper height
         [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentOffset.y  - 15) animated:YES];
-        
     }
     
     self.previousRect = currentRect;
