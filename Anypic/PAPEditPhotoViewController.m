@@ -285,12 +285,12 @@
 
 - (float)getCurrentScrollViewContentHeightWithTextView{
     
-    // set offset for table based on current table height
+    // set offset for  based on current table height
     float currentTextViewContentHeight = self.footerView.mainView.frame.size.height - self.defaultFooterViewFrame.size.height;
     
-    float newTableContentHeight = self.scrollView.contentSize.height + currentTextViewContentHeight;
+    float newScrollViewContentHeight = self.scrollView.contentSize.height + currentTextViewContentHeight;
     
-    return currentTextViewContentHeight != 0 ? newTableContentHeight : self.scrollView.contentSize.height;
+    return currentTextViewContentHeight != 0 ? newScrollViewContentHeight : self.scrollView.contentSize.height;
 }
 
 
