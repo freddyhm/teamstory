@@ -179,7 +179,6 @@
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-  //  [self.commentTextView resignFirstResponder];
 }
 
 
@@ -334,9 +333,11 @@
 # pragma mark - UITextViewDelegate
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
+    
+    CGSize scrollViewContentSize = self.scrollView.bounds.size;
 
     // update content size - especially important when dragging while editing
-    [self.scrollView setContentSize:CGSizeMake(self.scrollView.contentSize.width, [self getCurrentScrollViewContentHeightWithTextView])];
+    [self.scrollView setContentSize:CGSizeMake(self.scrollView.contentSize.width, [self getCurrentScrollViewContentHeightWithTextView] + scrollViewContentSize.height)];
     
     if ([[textView text] isEqualToString:@"Add a caption"]) {
         [textView setText:@""];
