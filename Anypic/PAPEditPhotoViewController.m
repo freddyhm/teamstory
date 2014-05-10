@@ -36,6 +36,8 @@
 @property (nonatomic, strong) UITableView *autocompleteTableView;
 @property (nonatomic, strong) NSString *atmentionSearchString;
 @property (nonatomic, strong) UIView *dimView;
+@property CGRect defaultFooterViewFrame;
+
 @end
 
 @implementation PAPEditPhotoViewController
@@ -108,6 +110,7 @@
     [self.view addSubview:self.dimView];
     
     self.footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:footerRect];
+    self.defaultFooterViewFrame = self.footerView.mainView.frame;
     self.commentTextView = self.footerView.commentView;
     self.commentTextView.text = @"Add a caption";
     self.commentTextView.delegate = self;
@@ -115,6 +118,8 @@
     
 
     [self.scrollView setContentSize:CGSizeMake(self.scrollView.bounds.size.width, photoImageView.frame.origin.y + photoImageView.frame.size.height + self.footerView.frame.size.height)];
+    
+    self.scrollView.scrollEnabled = YES;
 }
 
 - (void)viewDidLoad {
@@ -174,8 +179,9 @@
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    [self.commentTextView resignFirstResponder];
+  //  [self.commentTextView resignFirstResponder];
 }
+
 
 
 #pragma mark - ()
@@ -245,27 +251,7 @@
     return YES;
 }
 
-- (void)keyboardWillShow:(NSNotification *)note {
-    CGRect keyboardFrameEnd = [[note.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGSize scrollViewContentSize = self.scrollView.bounds.size;
-    scrollViewContentSize.height += keyboardFrameEnd.size.height;
-    [self.scrollView setContentSize:scrollViewContentSize];
-    
-    CGPoint scrollViewContentOffset = self.scrollView.contentOffset;
-    // Align the bottom edge of the photo with the keyboard
-    scrollViewContentOffset.y = scrollViewContentOffset.y + keyboardFrameEnd.size.height*3.0f - [UIScreen mainScreen].bounds.size.height + 35.0f;
-    
-    [self.scrollView setContentOffset:scrollViewContentOffset animated:YES];
-}
 
-- (void)keyboardWillHide:(NSNotification *)note {
-    CGRect keyboardFrameEnd = [[note.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGSize scrollViewContentSize = self.scrollView.bounds.size;
-    scrollViewContentSize.height -= keyboardFrameEnd.size.height;
-    [UIView animateWithDuration:0.200f animations:^{
-        [self.scrollView setContentSize:scrollViewContentSize];
-    }];
-}
 
 #pragma mark - UITableViewDelegate
 
@@ -286,9 +272,72 @@
     return [self.filteredArray count];
 }
 
+#pragma mark - Custom TextView
 
+- (void)updateTextView:(float)newHeight{
+    
+    // expands textview based on content
+    self.footerView.mainView.frame = CGRectMake(self.footerView.mainView.frame.origin.x, self.footerView.mainView.frame.origin.y, self.footerView.mainView.frame.size.width, newHeight + 20);
+    
+    // expands footer frame that contains textview
+    self.footerView.frame =  CGRectMake(self.footerView.frame.origin.x, self.footerView.frame.origin.y, self.footerView.frame.size.width, newHeight + 20);
+}
+
+- (float)getCurrentScrollViewContentHeightWithTextView{
+    
+    // set offset for  based on current table height
+    float currentTextViewContentHeight = self.footerView.mainView.frame.size.height - self.defaultFooterViewFrame.size.height;
+    
+    float newScrollViewContentHeight = self.scrollView.contentSize.height + currentTextViewContentHeight;
+    
+    return currentTextViewContentHeight != 0 ? newScrollViewContentHeight : self.scrollView.contentSize.height;
+}
+
+
+- (float)getCurrentTextViewHeight{
+    
+    float currentTextViewHeight = (self.footerView.mainView.frame.size.height - self.defaultFooterViewFrame.size.height) == 0 ? self.defaultFooterViewFrame.size.height : self.footerView.mainView.frame.size.height - self.defaultFooterViewFrame.size.height;
+    
+    return currentTextViewHeight;
+}
+
+#pragma mark - UIKeyboard 
+
+- (void)keyboardWillShow:(NSNotification *)note {
+    CGRect keyboardFrameEnd = [[note.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    float scrollViewContentSize = [self getCurrentScrollViewContentHeightWithTextView];
+    scrollViewContentSize += keyboardFrameEnd.size.height;
+    [self.scrollView setContentSize:CGSizeMake(self.scrollView.contentSize.width, scrollViewContentSize)];
+    
+    CGPoint scrollViewContentOffset = self.scrollView.contentOffset;
+    
+    // Align the bottom edge of the photo with the keyboard
+    scrollViewContentOffset.y = scrollViewContentOffset.y + keyboardFrameEnd.size.height*3.0f - [UIScreen mainScreen].bounds.size.height + [self getCurrentTextViewHeight] + 30;
+    
+    
+    [self.scrollView setContentOffset:scrollViewContentOffset animated:YES];
+}
+
+- (void)keyboardWillHide:(NSNotification *)note {
+    CGRect keyboardFrameEnd = [[note.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGSize scrollViewContentSize = self.scrollView.bounds.size;
+    scrollViewContentSize.height -= keyboardFrameEnd.size.height;
+    [UIView animateWithDuration:0.200f animations:^{
+        
+        [self.scrollView setContentSize:scrollViewContentSize];
+        
+        // set new content size for scrollview, update with current textview height
+        [self.scrollView setContentSize:CGSizeMake(self.scrollView.contentSize.width, [self getCurrentScrollViewContentHeightWithTextView] + scrollViewContentSize.height)];
+    }];
+}
+
+# pragma mark - UITextViewDelegate
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
+
+    // update content size - especially important when dragging while editing
+    [self.scrollView setContentSize:CGSizeMake(self.scrollView.contentSize.width, [self getCurrentScrollViewContentHeightWithTextView])];
+    
     if ([[textView text] isEqualToString:@"Add a caption"]) {
         [textView setText:@""];
     }
@@ -316,8 +365,9 @@
     // for next line excl. first line
     if (currentRect.origin.y > self.previousRect.origin.y && self.previousRect.origin.y != 0){
         text_offset += 15.0f;
+        
         // expands textview based on content
-        self.footerView.mainView.frame = CGRectMake(self.footerView.mainView.frame.origin.x, self.footerView.mainView.frame.origin.y, self.footerView.mainView.frame.size.width, frame.size.height + 20);
+        [self updateTextView:frame.size.height];
         
         // moves keyboard to proper height
         [self.scrollView setContentOffset:CGPointMake(0.0f, self.scrollView.contentOffset.y + 15) animated:YES];
@@ -325,8 +375,9 @@
     // for prev line excl. first line
     }else if (currentRect.origin.y < self.previousRect.origin.y && self.previousRect.origin.y != 0){
         text_offset -= 15.0f;
+        
         // expands textview based on content
-        self.footerView.mainView.frame = CGRectMake(self.footerView.mainView.frame.origin.x, self.footerView.mainView.frame.origin.y, self.footerView.mainView.frame.size.width, frame.size.height + 20);
+        [self updateTextView:frame.size.height];
         
         // moves keyboard to proper height
         [self.scrollView setContentOffset:CGPointMake(0.0f, self.scrollView.contentOffset.y  - 15) animated:YES];
