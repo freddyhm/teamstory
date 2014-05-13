@@ -115,7 +115,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.likeCommentButton setTitle:@"• Like •" forState:UIControlStateNormal];
             [self.likeCommentButton setTitle:@"• Unlike •" forState:UIControlStateSelected];
             [self.likeCommentButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-            [[self.likeCommentButton titleLabel] setFont:[UIFont systemFontOfSize:11.0f]];
+            [[self.likeCommentButton titleLabel] setFont:[UIFont systemFontOfSize:10.0f]];
             [self.likeCommentButton addTarget:self action:@selector(didTapLikeCommentButtonAction:) forControlEvents:UIControlEventTouchUpInside];
             
             // Create the counter heart shape (disabled button)
@@ -123,10 +123,11 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.likeCommentHeart setBackgroundColor:[UIColor clearColor]];
             [self.likeCommentHeart setBackgroundImage:[UIImage imageNamed:@"ButtonLikeCommentSelected.png"] forState:UIControlStateSelected];
             [self.likeCommentHeart setBackgroundImage:[UIImage imageNamed:@"ButtonLikeComment.png"] forState:UIControlStateNormal];
+            [self.likeCommentHeart addTarget:self action:@selector(didTapCommentHeartAction) forControlEvents:UIControlEventTouchUpInside];
             
             // Create the counter label next to heart
             self.likeCommentCount = [[UILabel alloc] init];
-            [self.likeCommentCount setFont:[UIFont systemFontOfSize:11.0f]];
+            [self.likeCommentCount setFont:[UIFont systemFontOfSize:10.0f]];
             self.likeCommentCount.textColor = [UIColor grayColor];
             
             // hide by default heart and label
@@ -237,6 +238,12 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [self.delegate didTapCommentLikeButton:self];
     }
 }
+
+- (void)didTapCommentHeartAction{
+    
+    [PAPUtility captureEventGA:@"Testing" action:@"Tapped Heart" label:nil];
+}
+
 
 #pragma mark - PAPBaseTextCell
 
