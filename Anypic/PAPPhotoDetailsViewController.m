@@ -212,8 +212,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                                           action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tapOutside];
-
 }
+
+
 
 - (void)createOutstandingViews {
     
@@ -337,6 +338,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 [self setLikedComments:obj];
             }
             
+            // reload table with updated data from cache/server
+            [self.tableView reloadData];
+            
             // hide spinner and blocking comments view
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.spinner stopAnimating];
@@ -425,25 +429,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     return cell;
 }
-
--(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    /*
-    PAPBaseTextCell *customCell = (PAPBaseTextCell *)cell;
-    [customCell setLikeCommentButtonState:NO forCurrentUser:NO];*/
-    
-}
-
-/*
-
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if([indexPath row] == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] firstObject]).row){
-        //end of loading
-
-    }
-}
- */
 
 #pragma mark - UITextViewDelegate
 
@@ -689,7 +674,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
         // increment in cache
         [[PAPCache sharedCache] incrementLikerCountForComment:comment];
-        
         
     } else {
         if ([likeCommentCount intValue] > 0) {
