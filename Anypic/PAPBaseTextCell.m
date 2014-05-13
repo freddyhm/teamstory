@@ -127,7 +127,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             
             // Create the counter label next to heart
             self.likeCommentCount = [[UILabel alloc] init];
-            [self.likeCommentCount setFont:[UIFont systemFontOfSize:10.0f]];
+            [self.likeCommentCount setFont:[UIFont systemFontOfSize:09.0f]];
             self.likeCommentCount.textColor = [UIColor grayColor];
             
             // hide by default heart and label
