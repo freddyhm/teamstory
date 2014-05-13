@@ -127,7 +127,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             
             // Create the counter label next to heart
             self.likeCommentCount = [[UILabel alloc] init];
-            [self.likeCommentCount setFont:[UIFont systemFontOfSize:10.0f]];
+            [self.likeCommentCount setFont:[UIFont systemFontOfSize:9.0f]];
             self.likeCommentCount.textColor = [UIColor grayColor];
             
             // hide by default heart and label
@@ -214,10 +214,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.likeCommentButton.frame = CGRectMake((self.timeLabel.frame.origin.x + self.timeLabel.frame.size.width), self.timeLabel.frame.origin.y, unlikeButtonDimWidth, unlikeButtonDimHeight);
         
         // layout the heart
-        self.likeCommentHeart.frame = CGRectMake((self.likeCommentButton.frame.origin.x + self.likeCommentButton.frame.size.width) - 1, timeLabel.frame.origin.y + 1, likeCounterAndHeartButtonDim, likeCounterAndHeartButtonDim);
+        self.likeCommentHeart.frame = CGRectMake((self.likeCommentButton.frame.origin.x + self.likeCommentButton.frame.size.width) - 1, timeLabel.frame.origin.y + 2, likeCounterAndHeartButtonDim, likeCounterAndHeartButtonDim);
         
         // layout the counter
-        [self.likeCommentCount setFrame:CGRectMake((self.likeCommentHeart.frame.origin.x + self.likeCommentHeart.frame.size.width), timeLabel.frame.origin.y + 1, likeCounterAndHeartButtonDim, likeCounterAndHeartButtonDim)];
+        [self.likeCommentCount setFrame:CGRectMake((self.likeCommentHeart.frame.origin.x + self.likeCommentHeart.frame.size.width), timeLabel.frame.origin.y + 2, likeCounterAndHeartButtonDim, likeCounterAndHeartButtonDim)];
         
     }
 }
