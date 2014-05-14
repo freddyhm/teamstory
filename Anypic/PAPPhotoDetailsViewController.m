@@ -302,7 +302,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self.headerView reloadLikeBar];
     [self loadLikers];
     
-    BOOL newLikes = [self.source isEqual:@"activityLikeComment"];
+    BOOL newLikes = [self.source isEqual:@"activityLikeComment"] || [self.source isEqual:@"notificationLikeComment"];
     
     [self refreshCommentLikes:self.objects pullFromServer:newLikes block:^(BOOL succeeded) {
         if(succeeded){

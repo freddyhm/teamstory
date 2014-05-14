@@ -714,8 +714,8 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
             
             if([type isEqualToString:kPAPPushPayloadActivityCommentKey]){
                 detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notificationComment"];
-            }else{
-                detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notification"];
+            }else if([type isEqualToString:kPAPPushPayloadActivityLikeCommentKey]){
+                detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notificationLikeComment"];
             }
            
             [homeNavigationController pushViewController:detailViewController animated:YES];

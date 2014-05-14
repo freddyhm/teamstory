@@ -127,6 +127,7 @@ extern NSString *const kPAPPushPayloadPayloadTypeActivityKey;
 
 extern NSString *const kPAPPushPayloadActivityTypeKey;
 extern NSString *const kPAPPushPayloadActivityLikeKey;
+extern NSString *const kPAPPushPayloadActivityLikeCommentKey;
 extern NSString *const kPAPPushPayloadActivityCommentKey;
 extern NSString *const kPAPPushPayloadActivityFollowKey;
 
