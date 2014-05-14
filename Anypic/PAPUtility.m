@@ -91,29 +91,6 @@
             if (completionBlock) {
                 completionBlock(succeeded,error);
             }
-            
-            /*
-            // refresh cache --> notify and save in cache likers/commenters
-            PFQuery *query = [PAPUtility queryForActivitiesOnComment:comment cachePolicy:kPFCachePolicyNetworkOnly];
-            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                if (!error) {
-                    
-                    NSMutableArray *likers = [NSMutableArray array];
-                    BOOL isLikedByCurrentUser = NO;
-                    
-                    for (PFObject *activity in objects) {
-                        [likers addObject:[activity objectForKey:kPAPActivityFromUserKey]];
-                        if ([[[activity objectForKey:kPAPActivityFromUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
-                            isLikedByCurrentUser = YES;
-                        }
-                    }
-                    
-                    [[PAPCache sharedCache] setAttributesForComment:comment commentLikers:likers likedByCurrentUser:isLikedByCurrentUser];
-                    
-                }
-            }];
-             
-             */
         }];
     }];
 }
@@ -135,38 +112,6 @@
                 completionBlock(YES,nil);
             }
             
-            /*
-            
-            // refresh cache --> notify and save in cache likers/commenters
-            PFQuery *query = [PAPUtility queryForActivitiesOnPhoto:photo cachePolicy:kPFCachePolicyNetworkOnly];
-            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                if (!error) {
-                    
-                    NSMutableArray *likers = [NSMutableArray array];
-                    NSMutableArray *commenters = [NSMutableArray array];
-                    
-                    BOOL isLikedByCurrentUser = NO;
-                    
-                    for (PFObject *activity in objects) {
-                        if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeLike]) {
-                            [likers addObject:[activity objectForKey:kPAPActivityFromUserKey]];
-                        } else if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeComment]) {
-                            [commenters addObject:[activity objectForKey:kPAPActivityFromUserKey]];
-                        }
-                        
-                        if ([[[activity objectForKey:kPAPActivityFromUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
-                            if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeLike]) {
-                                isLikedByCurrentUser = YES;
-                            }
-                        }
-                    }
-                    
-                    [[PAPCache sharedCache] setAttributesForPhoto:photo likers:likers commenters:commenters likedByCurrentUser:isLikedByCurrentUser];
-                }
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:photo userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotificationUserInfoLikedKey]];
-            }];
-            */
         } else {
             if (completionBlock) {
                 completionBlock(NO,error);

@@ -129,11 +129,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             self.likeCommentCount = [[UILabel alloc] init];
             [self.likeCommentCount setFont:[UIFont systemFontOfSize:9.0f]];
             self.likeCommentCount.textColor = [UIColor grayColor];
-            
-            // hide by default heart and label
-           // self.likeCommentHeart.hidden = YES;
-           // self.likeCommentCount.hidden = YES;
-            
+                        
             // add to mainview 
             [mainView addSubview:self.likeCommentButton];
             [mainView addSubview:self.likeCommentHeart];

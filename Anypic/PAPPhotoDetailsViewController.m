@@ -304,8 +304,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     BOOL newLikes = [self.source isEqual:@"activityLikeComment"] || [self.source isEqual:@"notificationLikeComment"];
     
+    // refresh based on source
     [self refreshCommentLikes:self.objects pullFromServer:newLikes block:^(BOOL succeeded) {
         if(succeeded){
+            
+            // move to last comments when notification relates to a new comment
             if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] || [self.source isEqual:@"activityComment"])){
                 [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height + 44)];
             }
@@ -319,9 +322,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     // add comment block view while we refresh cache
     float tableCommentVerticalPos = self.tableView.tableHeaderView.frame.origin.y + self.tableView.tableHeaderView.frame.size.height;
     float tableCommentHeight =  self.tableView.tableFooterView.frame.origin.y;
-    
     self.hideCommentsView = [[UIView alloc] initWithFrame:CGRectMake(7.5f, tableCommentVerticalPos, 305.0f, tableCommentHeight)];
-    
     [self.hideCommentsView setBackgroundColor:[UIColor whiteColor]];
     
     // add spinner
@@ -382,7 +383,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             [cell setLikeCommentButtonState:YES forCurrentUser:likedByCurrentUser];
             [cell.likeCommentCount setText:[likeCount stringValue]];
             
-            // take out heart and count if like count is 0
+            // take out heart and count if like count is 0, should never occur but left here as a fail safe
             if([likeCount intValue]  == 0){
                 cell.likeCommentHeart.hidden = YES;
                 cell.likeCommentCount.hidden = YES;
@@ -728,7 +729,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     // get comment info from cache
     NSDictionary *attributesForComment = [[PAPCache sharedCache] attributesForComment:comment];
     
-    // check cache before pulling from server
+    // check cache before pulling from server or pull directly if refresh flag true
     if (!attributesForComment || refreshCache){
         
         // get all likes for comment
@@ -748,7 +749,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 }
             }
         
-            // add comment to cache with updated count
+            // add comment count to cache when count is at least one
             [[PAPCache sharedCache] setLikesForComment:comment count:(int)[activities count]];
         }
         

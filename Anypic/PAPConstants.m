@@ -110,6 +110,7 @@ NSString *const kPAPPushPayloadPayloadTypeActivityKey  = @"a";
 
 NSString *const kPAPPushPayloadActivityTypeKey     = @"t";
 NSString *const kPAPPushPayloadActivityLikeKey     = @"l";
+NSString *const kPAPPushPayloadActivityLikeCommentKey  = @"lc";
 NSString *const kPAPPushPayloadActivityCommentKey  = @"c";
 NSString *const kPAPPushPayloadActivityFollowKey   = @"f";
 
