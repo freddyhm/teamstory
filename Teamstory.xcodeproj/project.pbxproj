@@ -307,6 +307,10 @@
 		C4F102E7156C58570061BC3E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C4F102E5156C58570061BC3E /* InfoPlist.strings */; };
 		C4F102EF156C58E00061BC3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102EC156C58E00061BC3E /* main.m */; };
 		D51C98A218E28D16001230DA /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D51C98A118E28D16001230DA /* libGoogleAnalyticsServices.a */; };
+		D528C37F191034DE00CEEA35 /* ButtonLikeComment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D528C37C191034DE00CEEA35 /* ButtonLikeComment@2x.png */; };
+		D528C380191034DE00CEEA35 /* ButtonLikeCommentSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = D528C37D191034DE00CEEA35 /* ButtonLikeCommentSelected.png */; };
+		D528C381191034DE00CEEA35 /* ButtonLikeCommentSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D528C37E191034DE00CEEA35 /* ButtonLikeCommentSelected@2x.png */; };
+		D528C383191034F100CEEA35 /* ButtonLikeComment.png in Resources */ = {isa = PBXBuildFile; fileRef = D528C382191034F100CEEA35 /* ButtonLikeComment.png */; };
 		D52C1E2118D9515D00625887 /* KonotorConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D52C1DEC18D9515D00625887 /* KonotorConversationViewController.m */; };
 		D52C1E2218D9515D00625887 /* KonotorConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D52C1DED18D9515D00625887 /* KonotorConversationViewController.xib */; };
 		D52C1E2318D9515D00625887 /* KonotorEventHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = D52C1DEF18D9515D00625887 /* KonotorEventHandler.m */; };
@@ -753,6 +757,10 @@
 		D51C989F18E28D16001230DA /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
 		D51C98A018E28D16001230DA /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
 		D51C98A118E28D16001230DA /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
+		D528C37C191034DE00CEEA35 /* ButtonLikeComment@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonLikeComment@2x.png"; sourceTree = "<group>"; };
+		D528C37D191034DE00CEEA35 /* ButtonLikeCommentSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonLikeCommentSelected.png; sourceTree = "<group>"; };
+		D528C37E191034DE00CEEA35 /* ButtonLikeCommentSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonLikeCommentSelected@2x.png"; sourceTree = "<group>"; };
+		D528C382191034F100CEEA35 /* ButtonLikeComment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonLikeComment.png; sourceTree = "<group>"; };
 		D52C1DE918D9515D00625887 /* Konotor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Konotor.h; sourceTree = "<group>"; };
 		D52C1DEB18D9515D00625887 /* KonotorConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorConversationViewController.h; sourceTree = "<group>"; };
 		D52C1DEC18D9515D00625887 /* KonotorConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorConversationViewController.m; sourceTree = "<group>"; };
@@ -1039,6 +1047,10 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				D528C382191034F100CEEA35 /* ButtonLikeComment.png */,
+				D528C37C191034DE00CEEA35 /* ButtonLikeComment@2x.png */,
+				D528C37D191034DE00CEEA35 /* ButtonLikeCommentSelected.png */,
+				D528C37E191034DE00CEEA35 /* ButtonLikeCommentSelected@2x.png */,
 				46839E8018E1E8C100BD60DB /* bg-intro@2x.png */,
 				46839E8118E1E8C100BD60DB /* bg-login@2x.png */,
 				46839E8218E1E8C100BD60DB /* btn-back.png */,
@@ -1818,11 +1830,13 @@
 				D52C1E3618D9515D00625887 /* konotor_profile@2x.png in Resources */,
 				465DE3561895AA9600C37EF8 /* dropdown_arrow.png in Resources */,
 				4602FCF618BAB2CA0097DBEC /* partner@2x.png in Resources */,
+				D528C380191034DE00CEEA35 /* ButtonLikeCommentSelected.png in Resources */,
 				46B31EEF184E35150028D11C /* profileLocation@2x.png in Resources */,
 				D59B997E18C59836002D6EFE /* AppIcon80x80.png in Resources */,
 				462FCB85188C8533005059F3 /* button_back.png in Resources */,
 				467154A618835E470000C0CA /* privacy.png in Resources */,
 				4602FD1618BD553B0097DBEC /* positionly-popup.png in Resources */,
+				D528C381191034DE00CEEA35 /* ButtonLikeCommentSelected@2x.png in Resources */,
 				D52C1E4218D9515D00625887 /* konotor_supportprofile@2x.png in Resources */,
 				462FCB8A188C863E005059F3 /* button_setting_selected@2x.png in Resources */,
 				465B19B518B81FE500EDBCFC /* browser-refresh.png in Resources */,
@@ -1943,6 +1957,7 @@
 				4602FD2518BD553B0097DBEC /* konotor-logo@2x.png in Resources */,
 				D52C1E3B18D9515D00625887 /* konotor_send.png in Resources */,
 				4602FD2318BD553B0097DBEC /* konotor-popup@2x.png in Resources */,
+				D528C37F191034DE00CEEA35 /* ButtonLikeComment@2x.png in Resources */,
 				46FB0A801888989800E978CD /* tab-startup-unselected.png in Resources */,
 				D52C1E2718D9515D00625887 /* konotor_cancel.png in Resources */,
 				46ABD74518B143A4008F5AAB /* news4@2x.png in Resources */,
@@ -1950,6 +1965,7 @@
 				46839EA018E1E8C100BD60DB /* tut1.png in Resources */,
 				4691B50718BFD9B200B7DF6A /* button-more.png in Resources */,
 				D52C1E2A18D9515D00625887 /* konotor_chatbox@2x.png in Resources */,
+				D528C383191034F100CEEA35 /* ButtonLikeComment.png in Resources */,
 				D5BFDEDF18CC84A5004FEC42 /* toronto.png in Resources */,
 				46FB0A821888989800E978CD /* tab-startup-selected.png in Resources */,
 				462FCB6E188C79E1005059F3 /* IconActivitySelected@2x.png in Resources */,

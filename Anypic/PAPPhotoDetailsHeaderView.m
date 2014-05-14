@@ -461,7 +461,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     PFUser *user = [self.likeUsers objectAtIndex:button.tag];
     if (delegate && [delegate respondsToSelector:@selector(photoDetailsHeaderView:didTapUserButton:user:)]) {
         [delegate photoDetailsHeaderView:self didTapUserButton:button user:user];
-    }    
+    }
 }
 
 - (void)didTapUserNameButtonAction:(UIButton *)button {

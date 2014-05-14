@@ -543,13 +543,26 @@ static const CGFloat kDetailsLabelFontSize = 12.f;
 	
 	// Center HUD
 	CGRect allRect = self.bounds;
-	// Draw rounded HUD bacgroud rect
+	
+    // Draw rounded HUD bacgroud rect
 	CGRect boxRect = CGRectMake(roundf((allRect.size.width - size.width) / 2) + self.xOffset,
 								roundf((allRect.size.height - size.height) / 2) + self.yOffset, size.width, size.height);
 	float radius = 10.0f;
 	CGContextBeginPath(context);
-	CGContextSetGrayFillColor(context, 0.0f, self.opacity);
-	CGContextMoveToPoint(context, CGRectGetMinX(boxRect) + radius, CGRectGetMinY(boxRect));
+    
+    
+
+    
+    // Set background rect color
+    if (self.color) {
+        CGContextSetFillColorWithColor(context, self.color.CGColor);
+    } else {
+        CGContextSetGrayFillColor(context, 0.0f, self.opacity);
+    }
+	
+    
+    
+    CGContextMoveToPoint(context, CGRectGetMinX(boxRect) + radius, CGRectGetMinY(boxRect));
 	CGContextAddArc(context, CGRectGetMaxX(boxRect) - radius, CGRectGetMinY(boxRect) + radius, radius, 3 * (float)M_PI / 2, 0, 0);
 	CGContextAddArc(context, CGRectGetMaxX(boxRect) - radius, CGRectGetMaxY(boxRect) - radius, radius, 0, (float)M_PI / 2, 0);
 	CGContextAddArc(context, CGRectGetMinX(boxRect) + radius, CGRectGetMaxY(boxRect) - radius, radius, (float)M_PI / 2, (float)M_PI, 0);

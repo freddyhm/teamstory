@@ -25,6 +25,9 @@
 /*! The cell's views. These shouldn't be modified but need to be exposed for the subclass */
 @property (nonatomic, strong) UIView *mainView;
 @property (nonatomic, strong) UIButton *nameButton;
+@property (nonatomic, strong) UIButton *likeCommentButton;
+@property (nonatomic, strong) UIButton *likeCommentHeart;
+@property (nonatomic, strong) UILabel *likeCommentCount;
 @property (nonatomic, strong) UIButton *avatarImageButton;
 @property (nonatomic, strong) PAPProfileImageView *avatarImageView;
 @property (nonatomic, strong) UILabel *contentLabel;
@@ -36,6 +39,13 @@
 
 /*! The horizontal inset of the cell */
 @property (nonatomic) CGFloat cellInsetWidth;
+
+
+/*! Like comment */
+- (void)setLikeCommentButtonState:(BOOL)selected forCurrentUser:(BOOL)forCurrentUser;
+- (void)shouldEnableLikeCommentButton:(BOOL)enable;
+- (void)removeCommentCountHeart;
+
 
 /*! Setters for the cell's content */
 - (void)setContentText:(NSString *)contentString;
@@ -83,6 +93,12 @@
  @param aUser the PFUser of the user that was tapped
  */
 - (void)cell:(PAPBaseTextCell *)cellView didTapUserButton:(PFUser *)aUser cellType:(NSString *)cellType;
+
+/*!
+ Sent to the delegate when a like button is tapped
+ */
+- (void)didTapCommentLikeButton:(PAPBaseTextCell *)cellView;
+
 
 @end
 

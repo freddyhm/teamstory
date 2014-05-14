@@ -13,6 +13,7 @@
 #import "PAPLoadMoreCell.h"
 #import "PAPUtility.h"
 #import "SVProgressHUD.h"
+#import "MBProgressHUD.h"
 
 
 enum ActionSheetTags {
@@ -28,6 +29,7 @@ enum ActionSheetTags {
     NSRange atmentionRange;
     NSInteger text_offset;
 }
+@property (nonatomic, strong) UIActivityIndicatorView *spinner;
 @property (nonatomic, strong) UITextField *commentTextField;
 @property (nonatomic, strong) PAPPhotoDetailsHeaderView *headerView;
 @property (nonatomic, assign) BOOL likersQueryInProgress;
@@ -45,6 +47,7 @@ enum ActionSheetTags {
 @property (nonatomic, strong) PFQuery *userQuery;
 @property (nonatomic, strong) NSMutableArray *atmentionUserArray;
 @property (nonatomic, strong) UIView *dimView;
+@property (nonatomic, strong) UIView *hideCommentsView;
 @property CGRect defaultFooterViewFrame;
 @property CGRect defaultCommentTextViewFrame;
 @property CGRect previousRect;
@@ -231,10 +234,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     if (!hasCachedLikers) {
         [self loadLikers];
     }
-    
-    if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] ||[self.source isEqual:@"activityComment"])){
-        [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height + 44)];
-    }
 }
 
 
@@ -289,15 +288,65 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     return query;
 }
 
-- (void)objectsDidLoad:(NSError *)error {
+- (void)objectsWillLoad{
+    [super objectsWillLoad];
+}
 
+- (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
     [self.headerView reloadLikeBar];
     [self loadLikers];
     
-    if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] ||[self.source isEqual:@"activityComment"])){
-        [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height + 44)];
-    }
+    BOOL newLikes = [self.source isEqual:@"activityLikeComment"] || [self.source isEqual:@"notificationLikeComment"];
+    
+    // refresh based on source
+    [self refreshCommentLikes:self.objects pullFromServer:newLikes block:^(BOOL succeeded) {
+        if(succeeded){
+            
+            // move to last comments when notification relates to a new comment
+            if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] || [self.source isEqual:@"activityComment"])){
+                [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height + 44)];
+            }
+        }
+    }];
+    
+}
+
+- (void)refreshCommentLikes:(NSArray *)comments pullFromServer:(BOOL)pullFromServer block:(void (^)(BOOL succeeded))completionBlock{
+    
+    // add comment block view while we refresh cache
+    float tableCommentVerticalPos = self.tableView.tableHeaderView.frame.origin.y + self.tableView.tableHeaderView.frame.size.height;
+    float tableCommentHeight =  self.tableView.tableFooterView.frame.origin.y;
+    self.hideCommentsView = [[UIView alloc] initWithFrame:CGRectMake(7.5f, tableCommentVerticalPos, 305.0f, tableCommentHeight)];
+    [self.hideCommentsView setBackgroundColor:[UIColor whiteColor]];
+    
+    // add spinner
+    self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width/2 - 50,0,100,100)];
+    self.spinner.activityIndicatorViewStyle =UIActivityIndicatorViewStyleWhiteLarge;
+    self.spinner.color = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
+    [self.hideCommentsView addSubview:self.spinner];
+    self.spinner.hidesWhenStopped = YES;
+    [self.spinner startAnimating];
+    [self.view addSubview:self.hideCommentsView];
+    
+    //refresh comment(s) on background thread
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        
+            // set like comments for loaded comments
+            for (PFObject *obj in comments) {
+                [self setLikedComments:obj refreshCache:pullFromServer];
+            }
+            
+            // reload table with updated data from cache/server
+            [self.tableView reloadData];
+            
+            // hide spinner and blocking comments view
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.spinner stopAnimating];
+                [self.hideCommentsView removeFromSuperview];
+                completionBlock(YES);
+            });
+    });
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -305,6 +354,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         static NSString *cellID = @"CommentCell";
         // Try to dequeue a cell and create one if necessary
         PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+        
         if (cell == nil) {
             cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
             cell.cellInsetWidth = kPAPCellInsetWidth;
@@ -314,7 +364,34 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [cell setUser:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityFromUserKey]];
         [cell setContentText:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityContentKey]];
         [cell setDate:[[self.objects objectAtIndex:indexPath.row] createdAt]];
+        
+        // get comment info from cache
+        NSDictionary *attributesForComment = [[PAPCache sharedCache] attributesForComment:[self.objects objectAtIndex:indexPath.row]];
+        
+        // only comments with a comment like count of more than 0 will be added to the cache from server
+        // hide the heart and count if we don't have the comment count in cache or if saved from local
+        if(attributesForComment){
+            
+            BOOL likedByCurrentUser = [[PAPCache sharedCache] isCommentLikedByCurrentUser:[self.objects objectAtIndex:indexPath.row]];
+            NSNumber *likeCount = [attributesForComment objectForKey:kPAPCommentAttributesLikeCountKey];
+        
+            [cell setLikeCommentButtonState:YES forCurrentUser:likedByCurrentUser];
+            [cell.likeCommentCount setText:[likeCount stringValue]];
+            
+            // take out heart and count if like count is 0, should never occur but left here as a fail safe
+            if([likeCount intValue]  == 0){
+                cell.likeCommentHeart.hidden = YES;
+                cell.likeCommentCount.hidden = YES;
+            }
+            
+        }
+        else{
+            cell.likeCommentHeart.hidden = YES;
+            cell.likeCommentCount.hidden = YES;
+        }
+
         return cell;
+        
     } else {
         static NSString *cellID = @"atmentionCell";
         // Try to dequeue a cell and create one if necessary
@@ -673,6 +750,72 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
 }
 
+- (void)didTapCommentLikeButton:(PAPBaseTextCell *)cellView{
+    
+    // set button as liked
+    UIButton *cellLikeCommentButton = cellView.likeCommentButton;
+    UILabel *cellLikeCommentCount = cellView.likeCommentCount;
+    BOOL liked = !cellLikeCommentButton.selected;
+   
+    [cellView setLikeCommentButtonState:liked forCurrentUser:YES];
+    
+    // get comment object
+    NSIndexPath *cellIndexPath = [self.tableView indexPathForCell:cellView];
+    PFObject *comment = [self.objects  objectAtIndex:cellIndexPath.row];
+    
+    // disable like button temp
+    [cellView shouldEnableLikeCommentButton:NO];
+    
+    // get count from button string
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+    NSNumber *likeCommentCount = [numberFormatter numberFromString:cellLikeCommentCount.text];
+    
+    if (liked) {
+        
+        // analytics
+        [PAPUtility captureEventGA:@"Engagement" action:@"Like Comment" label:@"Photo"];
+        likeCommentCount = [NSNumber numberWithInt:[likeCommentCount intValue] + 1];
+    
+        // increment in cache
+        [[PAPCache sharedCache] incrementLikerCountForComment:comment];
+        
+    } else {
+        if ([likeCommentCount intValue] > 0) {
+            likeCommentCount = [NSNumber numberWithInt:[likeCommentCount intValue] - 1];
+            
+            // if likes equal to 0, remove heart and counter
+            if([likeCommentCount intValue] == 0){
+                [cellView removeCommentCountHeart];
+            }
+        }
+        
+        // decrement in cache
+        [[PAPCache sharedCache] decrementLikerCountForComment:comment];
+    }
+    
+    // update liked by current user in cache
+    [[PAPCache sharedCache] setCommentIsLikedByCurrentUser:comment liked:liked];
+    
+    [cellLikeCommentCount setText:[numberFormatter stringFromNumber:likeCommentCount]];
+    
+    if (liked) {
+        [PAPUtility likeCommentInBackground:comment photo:self.photo block:^(BOOL succeeded, NSError *error) {
+            [cellView shouldEnableLikeCommentButton:YES];
+            if (!succeeded) {
+                [cellView setLikeCommentButtonState:NO forCurrentUser:YES];
+            }
+        }];
+        
+    } else {
+        [PAPUtility unlikeCommentInBackground:comment block:^(BOOL succeeded, NSError *error) {
+            [cellView shouldEnableLikeCommentButton:YES];
+            if (!succeeded) {
+                [cellView setLikeCommentButtonState:YES forCurrentUser:YES];
+            }
+        }];
+    }
+}
 
 #pragma mark - PAPPhotoDetailsHeaderViewDelegate
 
@@ -681,6 +824,38 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 #pragma mark - ()
+
+-(void)setLikedComments:(PFObject *)comment refreshCache:(BOOL)refreshCache{
+    
+    // get comment info from cache
+    NSDictionary *attributesForComment = [[PAPCache sharedCache] attributesForComment:comment];
+    
+    // check cache before pulling from server or pull directly if refresh flag true
+    if (!attributesForComment || refreshCache){
+        
+        // get all likes for comment
+        PFQuery *queryExistingCommentLikes = [PFQuery queryWithClassName:kPAPActivityClassKey];
+        [queryExistingCommentLikes whereKey:@"forComment" equalTo:comment];
+        [queryExistingCommentLikes whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeLikeComment];
+        [queryExistingCommentLikes setCachePolicy:kPFCachePolicyNetworkOnly];
+        [queryExistingCommentLikes includeKey:kPAPActivityFromUserKey];
+        NSArray *activities = [queryExistingCommentLikes findObjects];
+    
+        if ([activities count] > 0) {
+            
+            // check if current user likes comment
+            for (PFObject *obj in activities) {
+                if([[[obj objectForKey:@"fromUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]]){
+                    [[PAPCache sharedCache] setCommentIsLikedByCurrentUser:comment liked:YES];
+                }
+            }
+        
+            // add comment count to cache when count is at least one
+            [[PAPCache sharedCache] setLikesForComment:comment count:(int)[activities count]];
+        }
+        
+    }
+}
 
 
 - (void) moreActionButton_inflator:(PFUser *)user photo:(PFObject *)user_photo {
@@ -799,8 +974,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 default:
                     break;
             }
-            
-            //NSLog(@"%@", kPAPPhotoClassKey);
             
             MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
             mc.mailComposeDelegate = self;

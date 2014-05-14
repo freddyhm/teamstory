@@ -47,9 +47,11 @@ NSString *const kPAPActivityFromUserKey    = @"fromUser";
 NSString *const kPAPActivityToUserKey      = @"toUser";
 NSString *const kPAPActivityContentKey     = @"content";
 NSString *const kPAPActivityPhotoKey       = @"photo";
+NSString *const kPAPActivityForCommentKey     = @"forComment";
 
 // Type values
 NSString *const kPAPActivityTypeLike       = @"like";
+NSString *const kPAPActivityTypeLikeComment = @"like comment";
 NSString *const kPAPActivityTypeFollow     = @"follow";
 NSString *const kPAPActivityTypeComment    = @"comment";
 NSString *const kPAPActivityTypeJoined     = @"joined";
@@ -75,6 +77,11 @@ NSString *const kPAPPhotoThumbnailKey       = @"thumbnail";
 NSString *const kPAPPhotoUserKey            = @"user";
 NSString *const kPAPPhotoOpenGraphIDKey    = @"fbOpenGraphID";
 
+
+#pragma mark - Cached Comment Attributes
+// keys
+NSString *const kPAPCommentAttributesIsLikedByCurrentUserKey = @"commentIsLikedByCurrentUser";
+NSString *const kPAPCommentAttributesLikeCountKey            = @"commentLikeCount";
 
 #pragma mark - Cached Photo Attributes
 // keys
@@ -103,6 +110,7 @@ NSString *const kPAPPushPayloadPayloadTypeActivityKey  = @"a";
 
 NSString *const kPAPPushPayloadActivityTypeKey     = @"t";
 NSString *const kPAPPushPayloadActivityLikeKey     = @"l";
+NSString *const kPAPPushPayloadActivityLikeCommentKey  = @"lc";
 NSString *const kPAPPushPayloadActivityCommentKey  = @"c";
 NSString *const kPAPPushPayloadActivityFollowKey   = @"f";
 

@@ -112,6 +112,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 - (void)setActivity:(PFObject *)activity isSubscription:(BOOL)isSubscription{
     // Set the activity property
     _activity = activity;
+    
     if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeFollow] || [[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeJoined]) {
         [self setActivityImageFile:nil];
     } else {
@@ -122,6 +123,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
     
     if ([[activity objectForKey:@"atmention"] count] > 0) {
         activityString = NSLocalizedString(@"mentioned you in a post", nil);
+    }else if([[activity objectForKey:@"type"] isEqualToString:@"like comment"]){
+        activityString = NSLocalizedString(@"liked your comment", nil);
     }
     
     self.user = [activity objectForKey:kPAPActivityFromUserKey];

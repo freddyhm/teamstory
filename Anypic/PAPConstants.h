@@ -63,11 +63,13 @@ extern NSString *const kPAPActivityClassKey;
 extern NSString *const kPAPActivityTypeKey;
 extern NSString *const kPAPActivityFromUserKey;
 extern NSString *const kPAPActivityToUserKey;
+extern NSString *const kPAPActivityForCommentKey;
 extern NSString *const kPAPActivityContentKey;
 extern NSString *const kPAPActivityPhotoKey;
 
 // Type values
 extern NSString *const kPAPActivityTypeLike;
+extern NSString *const kPAPActivityTypeLikeComment;
 extern NSString *const kPAPActivityTypeFollow;
 extern NSString *const kPAPActivityTypeComment;
 extern NSString *const kPAPActivityTypeJoined;
@@ -95,6 +97,9 @@ extern NSString *const kPAPPhotoThumbnailKey;
 extern NSString *const kPAPPhotoUserKey;
 extern NSString *const kPAPPhotoOpenGraphIDKey;
 
+#pragma mark - Cached Comment Attributes
+extern NSString *const kPAPCommentAttributesIsLikedByCurrentUserKey;
+extern NSString *const kPAPCommentAttributesLikeCountKey;
 
 #pragma mark - Cached Photo Attributes
 // keys
@@ -122,6 +127,7 @@ extern NSString *const kPAPPushPayloadPayloadTypeActivityKey;
 
 extern NSString *const kPAPPushPayloadActivityTypeKey;
 extern NSString *const kPAPPushPayloadActivityLikeKey;
+extern NSString *const kPAPPushPayloadActivityLikeCommentKey;
 extern NSString *const kPAPPushPayloadActivityCommentKey;
 extern NSString *const kPAPPushPayloadActivityFollowKey;
 

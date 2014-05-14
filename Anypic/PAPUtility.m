@@ -56,6 +56,71 @@
     [currentInstallation saveInBackground];
 }
 
+#pragma mark Like Comments
+
++ (void)likeCommentInBackground:(id)comment photo:(id)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
+    
+    PFQuery *queryExistingCommentLikes = [PFQuery queryWithClassName:kPAPActivityClassKey];
+    [queryExistingCommentLikes whereKey:@"forComment" equalTo:comment];
+    [queryExistingCommentLikes whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeLikeComment];
+    [queryExistingCommentLikes whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
+    [queryExistingCommentLikes whereKey:kPAPActivityPhotoKey equalTo:photo];
+    [queryExistingCommentLikes setCachePolicy:kPFCachePolicyNetworkOnly];
+    [queryExistingCommentLikes findObjectsInBackgroundWithBlock:^(NSArray *activities, NSError *error) {
+        if (!error) {
+            for (PFObject *activity in activities) {
+                [activity delete];
+            }
+        }
+        
+        // proceed to creating new like comment
+        PFObject *likeCommentActivity = [PFObject objectWithClassName:kPAPActivityClassKey];
+        [likeCommentActivity setObject:kPAPActivityTypeLikeComment forKey:kPAPActivityTypeKey];
+        [likeCommentActivity setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey];
+        [likeCommentActivity setObject:photo forKey:kPAPActivityPhotoKey];
+        [likeCommentActivity setObject:[comment objectForKey:kPAPActivityFromUserKey] forKey:kPAPActivityToUserKey];
+        [likeCommentActivity setObject:comment forKey:kPAPActivityForCommentKey];
+
+        
+        PFACL *likeCommentACL = [PFACL ACLWithUser:[PFUser currentUser]];
+        [likeCommentACL setPublicReadAccess:YES];
+        [likeCommentACL setWriteAccess:YES forUser:[PFUser currentUser]];
+        likeCommentActivity.ACL = likeCommentACL;
+        
+        [likeCommentActivity saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (completionBlock) {
+                completionBlock(succeeded,error);
+            }
+        }];
+    }];
+}
+
++ (void)unlikeCommentInBackground:(id)comment block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
+    
+    PFQuery *queryExistingLikes = [PFQuery queryWithClassName:kPAPActivityClassKey];
+    [queryExistingLikes whereKey:kPAPActivityForCommentKey equalTo:comment];
+    [queryExistingLikes whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeLikeComment];
+    [queryExistingLikes whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
+    [queryExistingLikes setCachePolicy:kPFCachePolicyNetworkOnly];
+    [queryExistingLikes findObjectsInBackgroundWithBlock:^(NSArray *activities, NSError *error) {
+        if (!error) {
+            for (PFObject *activity in activities) {
+                [activity delete];
+            }
+            
+            if (completionBlock) {
+                completionBlock(YES,nil);
+            }
+            
+        } else {
+            if (completionBlock) {
+                completionBlock(NO,error);
+            }
+        }
+    }];
+}
+
+
 #pragma mark Like Photos
 
 + (void)likePhotoInBackground:(id)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
@@ -385,6 +450,15 @@
     [query includeKey:kPAPActivityPhotoKey];
 
     return query;
+}
+
++ (PFQuery *)queryForActivitiesOnComment:(PFObject *)comment cachePolicy:(PFCachePolicy)cachePolicy {
+    PFQuery *queryLikes = [PFQuery queryWithClassName:kPAPActivityClassKey];
+    [queryLikes whereKey:kPAPActivityForCommentKey equalTo:comment];
+    [queryLikes whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeLikeComment];
+    [queryLikes setCachePolicy:cachePolicy];
+    
+    return queryLikes;
 }
 
 

@@ -10,6 +10,11 @@
 #import "PAPUtility.h"
 #import "PAPwebviewViewController.h"
 
+#define unlikeButtonDimHeight 15.0f
+#define unlikeButtonDimWidth 50.0f
+#define likeCounterAndHeartButtonDim 10.0f
+
+
 static TTTTimeIntervalFormatter *timeFormatter;
 
 @interface PAPBaseTextCell () {
@@ -78,7 +83,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         self.nameButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.nameButton setBackgroundColor:[UIColor clearColor]];
-
+        
         if ([reuseIdentifier isEqualToString:@"atmentionCell"]) {
             [mainView setBackgroundColor:[UIColor colorWithRed:241.0f/255.0f green:242.0f/255.0f blue:246.0f/255.0f alpha:1.0f]];
             [self.nameButton setTitleColor:[UIColor colorWithWhite:0.5f alpha:0.95f] forState:UIControlStateNormal];
@@ -87,7 +92,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.nameButton addTarget:self action:@selector(didTapUserButtonAction:) forControlEvents:UIControlEventTouchUpInside];
             self.separatorImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"SeparatorComments.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 1, 0, 1)]];
             self.separatorImage.frame = CGRectMake(50.0f, 0.0f, 255.0f, 1.0f);
-        } else {
+            
+        }else{
             [mainView setBackgroundColor:[UIColor whiteColor]];
         
             [self.nameButton setTitleColor:[UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
@@ -98,6 +104,36 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.contentLabel setTextColor:[UIColor colorWithRed:119.0f/255.0f green:119.0f/255.0f blue:119.0f/255.0f alpha:1.0f]];
             self.separatorImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"SeparatorComments.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 1, 0, 1)]];
 
+        }
+        
+        if ([reuseIdentifier isEqualToString:@"CommentCell"]) {
+            
+            // Create the like button
+            self.likeCommentButton = [UIButton buttonWithType:UIButtonTypeCustom];
+           // self. likeCommentButton.layer.borderColor = [[UIColor blackColor] CGColor];
+           // self.likeCommentButton.layer.borderWidth=1.0f;
+            [self.likeCommentButton setTitle:@"• Like •" forState:UIControlStateNormal];
+            [self.likeCommentButton setTitle:@"• Unlike •" forState:UIControlStateSelected];
+            [self.likeCommentButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+            [[self.likeCommentButton titleLabel] setFont:[UIFont systemFontOfSize:10.0f]];
+            [self.likeCommentButton addTarget:self action:@selector(didTapLikeCommentButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+            
+            // Create the counter heart shape (disabled button)
+            self.likeCommentHeart = [UIButton buttonWithType:UIButtonTypeCustom];
+            [self.likeCommentHeart setBackgroundColor:[UIColor clearColor]];
+            [self.likeCommentHeart setBackgroundImage:[UIImage imageNamed:@"ButtonLikeCommentSelected.png"] forState:UIControlStateSelected];
+            [self.likeCommentHeart setBackgroundImage:[UIImage imageNamed:@"ButtonLikeComment.png"] forState:UIControlStateNormal];
+            [self.likeCommentHeart addTarget:self action:@selector(didTapCommentHeartAction) forControlEvents:UIControlEventTouchUpInside];
+            
+            // Create the counter label next to heart
+            self.likeCommentCount = [[UILabel alloc] init];
+            [self.likeCommentCount setFont:[UIFont systemFontOfSize:9.0f]];
+            self.likeCommentCount.textColor = [UIColor grayColor];
+                        
+            // add to mainview 
+            [mainView addSubview:self.likeCommentButton];
+            [mainView addSubview:self.likeCommentHeart];
+            [mainView addSubview:self.likeCommentCount];
         }
         
         [mainView addSubview:self.avatarImageView];
@@ -121,6 +157,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 
+#pragma mark - ()
+
 #pragma mark - UIView
 
 - (void)layoutSubviews {
@@ -139,7 +177,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     if ([self.cellType isEqualToString:@"atmentionCell"]) {
         fontSize = 15;
         name_height_origin = nameY + 3;
-    } else {
+    }else{
         fontSize = 13;
         name_height_origin = nameY;
     }
@@ -149,7 +187,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     if ([self.cellType isEqualToString:@"atmentionCell"]) {
         [self.nameButton setFrame:CGRectMake(nameX, 0.0f, nameMaxWidth, 44.0f)];
         self.nameButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    } else {
+    }else {
         [self.nameButton setFrame:CGRectMake(nameX, name_height_origin, nameSize.width, nameSize.height)];
         
         // Layour separator
@@ -166,6 +204,18 @@ static TTTTimeIntervalFormatter *timeFormatter;
     // Layout the timestamp label
     CGSize timeSize = [self.timeLabel.text sizeWithFont:[UIFont systemFontOfSize:11] forWidth:horizontalTextSpace lineBreakMode:NSLineBreakByTruncatingTail];
     [self.timeLabel setFrame:CGRectMake(timeX, contentLabel.frame.origin.y + contentLabel.frame.size.height + vertElemSpacing, timeSize.width, timeSize.height)];
+    
+    if ([self.cellType isEqualToString:@"CommentCell"]) {
+        // Layout the like button (default)
+        self.likeCommentButton.frame = CGRectMake((self.timeLabel.frame.origin.x + self.timeLabel.frame.size.width), self.timeLabel.frame.origin.y, unlikeButtonDimWidth, unlikeButtonDimHeight);
+        
+        // layout the heart
+        self.likeCommentHeart.frame = CGRectMake((self.likeCommentButton.frame.origin.x + self.likeCommentButton.frame.size.width) - 1, timeLabel.frame.origin.y + 2, likeCounterAndHeartButtonDim, likeCounterAndHeartButtonDim);
+        
+        // layout the counter
+        [self.likeCommentCount setFrame:CGRectMake((self.likeCommentHeart.frame.origin.x + self.likeCommentHeart.frame.size.width), timeLabel.frame.origin.y + 2, likeCounterAndHeartButtonDim, likeCounterAndHeartButtonDim)];
+        
+    }
 }
 
 
@@ -178,8 +228,29 @@ static TTTTimeIntervalFormatter *timeFormatter;
     }    
 }
 
+/* Inform delegate that a like for a comment has been tapped */
+- (void)didTapLikeCommentButtonAction:(UIButton *)button {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(didTapCommentLikeButton:)]) {
+        [self.delegate didTapCommentLikeButton:self];
+    }
+}
+
+- (void)didTapCommentHeartAction{
+    
+    [PAPUtility captureEventGA:@"Testing" action:@"Tapped Heart" label:nil];
+}
+
 
 #pragma mark - PAPBaseTextCell
+
+- (void)shouldEnableLikeCommentButton:(BOOL)enable{
+    
+    if (enable) {
+        [self.likeCommentButton addTarget:self action:@selector(didTapLikeCommentButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    } else {
+        [self.likeCommentButton removeTarget:self action:@selector(didTapLikeCommentButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+}
 
 /* Static helper to get the height for a cell if it had the given name and content */
 + (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content {
@@ -221,6 +292,22 @@ static TTTTimeIntervalFormatter *timeFormatter;
     // Add final spaces to be ready for first word
     [paddedString appendString:[NSString stringWithFormat:@" %@",string]];
     return paddedString;
+}
+
+- (void)setLikeCommentButtonState:(BOOL)selected forCurrentUser:(BOOL)forCurrentUser{
+    
+    if(forCurrentUser){
+        self.likeCommentHeart.selected = selected;
+        self.likeCommentButton.selected = selected;
+    }
+    
+    self.likeCommentHeart.hidden = NO;
+    self.likeCommentCount.hidden = NO;
+}
+
+- (void)removeCommentCountHeart{
+    self.likeCommentHeart.hidden = YES;
+    self.likeCommentCount.hidden = YES;
 }
 
 - (void)setUser:(PFUser *)aUser {
