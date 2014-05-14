@@ -28,7 +28,7 @@
 @property (nonatomic, strong) NSString *displayName_user;
 @property (nonatomic, strong) NSString *description_user;
 @property (nonatomic, strong) NSString *email_user;
-@property (nonatomic, strong) UIView *backgroundView;
+@property (nonatomic, strong) UIScrollView *backgroundView;
 @property (nonatomic, strong) PFImageView* profilePictureImageView;
 @property (nonatomic, strong) PFFile *imageProfileFile;
 @property (nonatomic, strong) UIButton *saveButton;
@@ -90,11 +90,11 @@
     bool profileExist = [profilExist_num boolValue];
     
     // Initialization
-    UIColor *backgroundColor = [UIColor whiteColor];
-    UIColor *lineColor = [UIColor colorWithWhite:245.0f/255.0f alpha:1.0];
+    UIColor *backgroundColor = [UIColor colorWithWhite:0.95f alpha:0.8f];
+    UIColor *lineColor = [UIColor colorWithWhite:0.87f alpha:0.9f];
     UIFont *fonts = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     
-    backgroundView = [[UIView alloc] init];
+    backgroundView = [[UIScrollView alloc] init];
     [backgroundView setBackgroundColor:backgroundColor];
     [self.view addSubview:backgroundView];
     
@@ -127,7 +127,7 @@
                 website_user = @"Website";
             }
             if ([displayName_user length] == 0) {
-                displayName_user = @"Display Name";
+                displayName_user = @"Display or Company Name";
             }
             if ([description_user length] == 0) {
                 description_user = @"Description";
@@ -168,21 +168,30 @@
                 
                 if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
                     profileImagePicker.frame = CGRectMake( 122.5f, 35.0f, 75.0f, 75.0f );
-                    backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 345.0f, self.view.bounds.size.width, 345.0f);
+                    backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 400.0f, self.view.bounds.size.width, 345.0f);
+                    [backgroundView setContentSize:CGSizeMake(320.0f, 520.0f)];
                     saveButton.frame = CGRectMake(35.0f, backgroundView.bounds.size.height - 60.0f, 250.0f, 45.0f);
                     profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 35.0f, 75.0f, 75.0f )];
                 } else {
                     profileImagePicker.frame = CGRectMake( 122.5f, 85.0f, 75.0f, 75.0f );
-                    backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 370.0f, self.view.bounds.size.width, 370.0f);
-                    saveButton.frame = CGRectMake(35.0f, backgroundView.bounds.size.height - 70.0f, 250.0f, 45.0f);
+                    backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 480.0f, self.view.bounds.size.width, 480.0f);
+                    [backgroundView setContentSize:CGSizeMake(320.0f, 520.0f)];
+                    saveButton.frame = CGRectMake(35.0f, 471.5, 250.0f, 45.0f);
                     profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 85.0f, 75.0f, 75.0f )];
                     
-                    UILabel *applyLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 20.0f, 320.0f, 45.0f)];
+                    UILabel *applyLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 10.0f, 320.0f, 45.0f)];
                     [applyLabel setTextColor:[UIColor whiteColor]];
                     [applyLabel setText:@"Apply for Teamstory"];
                     [applyLabel setTextAlignment:NSTextAlignmentCenter];
                     [applyLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:20.0]];
                     [self.view addSubview:applyLabel];
+                    
+                    UILabel *applyText = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 55.0f, 320.0f, 10.0f)];
+                    [applyText setTextColor:[UIColor whiteColor]];
+                    [applyText setText:@"More we know about you, the faster you get into to the community!"];
+                    [applyText setTextAlignment:NSTextAlignmentCenter];
+                    [applyText setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:10.0f]];
+                    [self.view addSubview:applyText];
                 }
             }
             
@@ -215,19 +224,12 @@
             [swipeUpGestureRecognizer setNumberOfTouchesRequired:1];
             [profileImagePicker addGestureRecognizer:swipeUpGestureRecognizer];
             
-
-            
-            /*
             UIImageView *companyImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"companyName.png"]];
-            [companyImageView setFrame:CGRectMake( 15.0f, 61.0f, 40.0f, 40.0f)];
-            [backgroundView addSubview:companyImageView];
-             */
-            UIImageView *companyImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"companyName.png"]];
-            [companyImageView setFrame:CGRectMake( 15.0f, 7.0f, 40.0f, 40.0f)];
+            [companyImageView setFrame:CGRectMake( 65.0f, -7.0f, 40.0f, 40.0f)];
             [backgroundView addSubview:companyImageView];
             
             UIImageView *emailImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon-email.png"]];
-            [emailImageView setFrame:CGRectMake( 15.0f, 61.0f, 40.0f, 40.0f)];
+            [emailImageView setFrame:CGRectMake( 65.0f, 61.0f, 40.0f, 40.0f)];
             [backgroundView addSubview:emailImageView];
             
             UIImageView *locationImageView = [[UIImageView alloc] initWithImage:nil];
@@ -245,22 +247,22 @@
             [websiteImageView setFrame:CGRectMake( 15.0f, 223.0f, 40.0f, 40.0f)];
             [backgroundView addSubview:websiteImageView];
             
-            CGRect companyName_frame = CGRectMake( 80.0f, 14.0f, 205.0f, 25.0f);
+            CGRect companyName_frame = CGRectMake( 115.0f, 0.0f, 205.0f, 25.0f);
             self.companyName = [[UITextField alloc] initWithFrame:companyName_frame];
-            [self.companyName setBackgroundColor:backgroundColor];
+            [self.companyName setBackgroundColor:[UIColor clearColor]];
             [self.companyName setFont:fonts];
             self.companyName.placeholder = displayName_user;
             self.companyName.userInteractionEnabled = YES;
             self.companyName.delegate = self;
             [backgroundView addSubview:self.companyName];
             
-            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 54.0f, self.view.bounds.size.width, 1)];
+            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 40.0f, self.view.bounds.size.width, 1)];
             lineView.backgroundColor = lineColor;
             [backgroundView addSubview:lineView];
 
             CGRect email_address_frame = CGRectMake( 80.0f, 68.0f, 205.0f, 25.0f);
             self.email_address = [[UITextField alloc] initWithFrame:email_address_frame];
-            [self.email_address setBackgroundColor:backgroundColor];
+            [self.email_address setBackgroundColor:[UIColor clearColor]];
             [self.email_address setFont:fonts];
             self.email_address.autocapitalizationType = UITextAutocapitalizationTypeNone;
             if ([email_user length] == 0) {
@@ -279,7 +281,7 @@
 
             CGRect location_frame = CGRectMake( 80.0f, 122.0f, 205.0f, 25.0f);
             self.location = [[UITextField alloc] initWithFrame:location_frame];
-            [self.location setBackgroundColor:backgroundColor];
+            [self.location setBackgroundColor:[UIColor clearColor]];
             [self.location setFont:fonts];
             self.location.placeholder = location_user;
             self.location.userInteractionEnabled = YES;
@@ -293,7 +295,7 @@
             
             CGRect description_frame = CGRectMake( 80.0f, 176.0f, 205.0f, 25.0f);
             self.description = [[UITextField alloc] initWithFrame:description_frame];
-            [self.description setBackgroundColor:backgroundColor];
+            [self.description setBackgroundColor:[UIColor clearColor]];
             [self.description setFont:fonts];
             self.description.placeholder = description_user;
             self.description.userInteractionEnabled = YES;
@@ -307,7 +309,7 @@
             
             CGRect website_frame = CGRectMake( 80.0f, 230.0f, 205.0f, 25.0f);
             self.website = [[UITextField alloc] initWithFrame:website_frame];
-            [self.website setBackgroundColor:backgroundColor];
+            [self.website setBackgroundColor:[UIColor clearColor]];
             [self.website setFont:fonts];
             self.website.placeholder = website_user;
             self.website.userInteractionEnabled = YES;
