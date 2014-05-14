@@ -213,8 +213,21 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self.view addGestureRecognizer:tapOutside];
     
     
+    // set comment block view for spinner
+    float tableCommentVerticalPos = self.tableView.tableHeaderView.frame.origin.y + self.tableView.tableHeaderView.frame.size.height;
+    float tableCommentHeight =  self.tableView.tableFooterView.frame.origin.y;
+    self.hideCommentsView = [[UIView alloc] initWithFrame:CGRectMake(7.5f, tableCommentVerticalPos, 305.0f, tableCommentHeight)];
+    [self.hideCommentsView setBackgroundColor:[UIColor whiteColor]];
     
-
+    // set spinner
+    self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width/2 - 50,0,100,100)];
+    self.spinner.activityIndicatorViewStyle =UIActivityIndicatorViewStyleWhiteLarge;
+    self.spinner.color = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
+    
+    [self.hideCommentsView addSubview:self.spinner];
+    
+    self.spinner.hidesWhenStopped = YES;
+    
 }
 
 
@@ -314,18 +327,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 - (void)refreshCommentLikes:(NSArray *)comments pullFromServer:(BOOL)pullFromServer block:(void (^)(BOOL succeeded))completionBlock{
     
-    // add comment block view while we refresh cache
-    float tableCommentVerticalPos = self.tableView.tableHeaderView.frame.origin.y + self.tableView.tableHeaderView.frame.size.height;
-    float tableCommentHeight =  self.tableView.tableFooterView.frame.origin.y;
-    self.hideCommentsView = [[UIView alloc] initWithFrame:CGRectMake(7.5f, tableCommentVerticalPos, 305.0f, tableCommentHeight)];
-    [self.hideCommentsView setBackgroundColor:[UIColor whiteColor]];
-    
-    // add spinner
-    self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width/2 - 50,0,100,100)];
-    self.spinner.activityIndicatorViewStyle =UIActivityIndicatorViewStyleWhiteLarge;
-    self.spinner.color = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
-    [self.hideCommentsView addSubview:self.spinner];
-    self.spinner.hidesWhenStopped = YES;
+    //start spinner
     [self.spinner startAnimating];
     [self.view addSubview:self.hideCommentsView];
     
