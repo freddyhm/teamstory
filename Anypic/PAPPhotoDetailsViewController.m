@@ -325,32 +325,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
 }
 
-- (void)refreshCommentLikes:(NSArray *)comments pullFromServer:(BOOL)pullFromServer block:(void (^)(BOOL succeeded))completionBlock{
-    
-    //start spinner
-    [self.spinner startAnimating];
-    [self.view addSubview:self.hideCommentsView];
-    
-    //refresh comment(s) on background thread
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-        
-            // set like comments for loaded comments
-            for (PFObject *obj in comments) {
-                [self setLikedComments:obj refreshCache:pullFromServer];
-            }
-            
-            // reload table with updated data from cache/server
-            [self.tableView reloadData];
-            
-            // hide spinner and blocking comments view
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.spinner stopAnimating];
-                [self.hideCommentsView removeFromSuperview];
-                completionBlock(YES);
-            });
-    });
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (tableView != self.autocompleteTableView) {
         static NSString *cellID = @"CommentCell";
@@ -370,22 +344,22 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         // get comment info from cache
         NSDictionary *attributesForComment = [[PAPCache sharedCache] attributesForComment:[self.objects objectAtIndex:indexPath.row]];
         
-        // only comments with a comment like count of more than 0 will be added to the cache from server
-        // hide the heart and count if we don't have the comment count in cache or if saved from local
         if(attributesForComment){
-            
-            BOOL likedByCurrentUser = [[PAPCache sharedCache] isCommentLikedByCurrentUser:[self.objects objectAtIndex:indexPath.row]];
+           
             NSNumber *likeCount = [attributesForComment objectForKey:kPAPCommentAttributesLikeCountKey];
-        
-            [cell setLikeCommentButtonState:YES forCurrentUser:likedByCurrentUser];
-            [cell.likeCommentCount setText:[likeCount stringValue]];
             
-            // take out heart and count if like count is 0, should never occur but left here as a fail safe
+            // take out heart and count if like count is 0
             if([likeCount intValue]  == 0){
                 cell.likeCommentHeart.hidden = YES;
                 cell.likeCommentCount.hidden = YES;
+            }else{
+                
+                // set properties
+                BOOL likedByCurrentUser = [[PAPCache sharedCache] isCommentLikedByCurrentUser:[self.objects objectAtIndex:indexPath.row]];
+                
+                [cell setLikeCommentButtonState:YES forCurrentUser:likedByCurrentUser];
+                [cell.likeCommentCount setText:[likeCount stringValue]];
             }
-            
         }
         else{
             cell.likeCommentHeart.hidden = YES;
@@ -827,6 +801,32 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 #pragma mark - ()
 
+- (void)refreshCommentLikes:(NSArray *)comments pullFromServer:(BOOL)pullFromServer block:(void (^)(BOOL succeeded))completionBlock{
+    
+    //start spinner
+    [self.spinner startAnimating];
+    [self.view addSubview:self.hideCommentsView];
+    
+    //refresh comment(s) on background thread
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        
+        // set like comments for loaded comments
+        for (PFObject *obj in comments) {
+            [self setLikedComments:obj refreshCache:pullFromServer];
+        }
+        
+        // reload table with updated data from cache/server
+        [self.tableView reloadData];
+        
+        // hide spinner and blocking comments view
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.spinner stopAnimating];
+            [self.hideCommentsView removeFromSuperview];
+            completionBlock(YES);
+        });
+    });
+}
+
 -(void)setLikedComments:(PFObject *)comment refreshCache:(BOOL)refreshCache{
     
     // get comment info from cache
@@ -851,11 +851,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                     [[PAPCache sharedCache] setCommentIsLikedByCurrentUser:comment liked:YES];
                 }
             }
-        
-            // add comment count to cache when count is at least one
-            [[PAPCache sharedCache] setLikesForComment:comment count:(int)[activities count]];
         }
         
+        // add comment count to cache when count is at least one
+        [[PAPCache sharedCache] setLikesForComment:comment count:(int)[activities count]];
     }
 }
 
