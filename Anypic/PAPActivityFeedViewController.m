@@ -131,10 +131,15 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row < self.objects.count) {
         PFObject *object = [self.objects objectAtIndex:indexPath.row];
-        NSString *activityString = [[[object objectForKey:@"toUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]] ? [PAPActivityFeedViewController stringForActivityType:(NSString*)[object objectForKey:kPAPActivityTypeKey] object:object] : NSLocalizedString(@"commented on your followed photo", nil);;
+        
+        NSString *activityString = [[[object objectForKey:@"toUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]] ? [PAPActivityFeedViewController stringForActivityType:(NSString*)[object objectForKey:kPAPActivityTypeKey] object:object] : NSLocalizedString(@"commented on your followed photo", nil);
         
         if ([[object objectForKey:@"atmention"] count] > 0) {
-            activityString = NSLocalizedString(@"mentnioned you in a post", nil);
+            activityString = NSLocalizedString(@"mentioned you in a post", nil);
+        }
+        
+        if ([object objectForKey:@"forComment"] != nil){
+            activityString = NSLocalizedString(@"liked your comment", nil);
         }
     
         PFUser *user = (PFUser*)[object objectForKey:kPAPActivityFromUserKey];
