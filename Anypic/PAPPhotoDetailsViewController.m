@@ -239,10 +239,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     if (!hasCachedLikers) {
         [self loadLikers];
     }
-    
-    if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] ||[self.source isEqual:@"activityComment"])){
-        [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height + 44)];
-    }
 }
 
 
@@ -299,42 +295,50 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 - (void)objectsWillLoad{
     [super objectsWillLoad];
-    
-    
 }
 
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
     [self.headerView reloadLikeBar];
     [self loadLikers];
+    
+    BOOL newLikes = [self.source isEqual:@"activityLikeComment"];
+    
+    [self refreshCommentLikes:self.objects pullFromServer:newLikes block:^(BOOL succeeded) {
+        if(succeeded){
+            if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] || [self.source isEqual:@"activityComment"])){
+                [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height + 44)];
+            }
+        }
+    }];
+    
+}
 
-    if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] ||[self.source isEqual:@"activityComment"])){
-        [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height + 44)];
-    }else{
+- (void)refreshCommentLikes:(NSArray *)comments pullFromServer:(BOOL)pullFromServer block:(void (^)(BOOL succeeded))completionBlock{
+    
+    // add comment block view while we refresh cache
+    float tableCommentVerticalPos = self.tableView.tableHeaderView.frame.origin.y + self.tableView.tableHeaderView.frame.size.height;
+    float tableCommentHeight =  self.tableView.tableFooterView.frame.origin.y;
+    
+    self.hideCommentsView = [[UIView alloc] initWithFrame:CGRectMake(7.5f, tableCommentVerticalPos, 305.0f, tableCommentHeight)];
+    
+    [self.hideCommentsView setBackgroundColor:[UIColor whiteColor]];
+    
+    // add spinner
+    self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width/2 - 50,0,100,100)];
+    self.spinner.activityIndicatorViewStyle =UIActivityIndicatorViewStyleWhiteLarge;
+    self.spinner.color = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
+    [self.hideCommentsView addSubview:self.spinner];
+    self.spinner.hidesWhenStopped = YES;
+    [self.spinner startAnimating];
+    [self.view addSubview:self.hideCommentsView];
+    
+    //refresh comment(s) on background thread
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         
-        // add comment block view while we refresh cache
-        float tableCommentVerticalPos = self.tableView.tableHeaderView.frame.origin.y + self.tableView.tableHeaderView.frame.size.height;
-        float tableCommentHeight =  self.tableView.tableFooterView.frame.origin.y;
-        
-        self.hideCommentsView = [[UIView alloc] initWithFrame:CGRectMake(7.5f, tableCommentVerticalPos, 305.0f, tableCommentHeight)];
-        
-        [self.hideCommentsView setBackgroundColor:[UIColor whiteColor]];
-        
-        // add spinner
-        self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width/2 - 50,0,100,100)];
-        self.spinner.activityIndicatorViewStyle =UIActivityIndicatorViewStyleWhiteLarge;
-        self.spinner.color = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
-        [self.hideCommentsView addSubview:self.spinner];
-        self.spinner.hidesWhenStopped = YES;
-        [self.spinner startAnimating];
-        [self.view addSubview:self.hideCommentsView];
-        
-        //resize cropped image and send to filter controller (work on background thread)
-        dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-            
             // set like comments for loaded comments
-            for (PFObject *obj in self.objects) {
-                [self setLikedComments:obj];
+            for (PFObject *obj in comments) {
+                [self setLikedComments:obj refreshCache:pullFromServer];
             }
             
             // reload table with updated data from cache/server
@@ -344,9 +348,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.spinner stopAnimating];
                 [self.hideCommentsView removeFromSuperview];
+                completionBlock(YES);
             });
-        });
-    }
+    });
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -719,13 +723,13 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 #pragma mark - ()
 
--(void)setLikedComments:(PFObject *)comment{
+-(void)setLikedComments:(PFObject *)comment refreshCache:(BOOL)refreshCache{
     
     // get comment info from cache
     NSDictionary *attributesForComment = [[PAPCache sharedCache] attributesForComment:comment];
     
     // check cache before pulling from server
-    if (!attributesForComment){
+    if (!attributesForComment || refreshCache){
         
         // get all likes for comment
         PFQuery *queryExistingCommentLikes = [PFQuery queryWithClassName:kPAPActivityClassKey];
