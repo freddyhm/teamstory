@@ -260,23 +260,9 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     
-    // initiate konotor
-    [Konotor newSession];
-    
-    self.konotorCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
-    
     // syncs icon badge with tab bar badge, resets icon badge back to 0
     if (application.applicationIconBadgeNumber != 0) {
-        
-        if(application.applicationIconBadgeNumber == 1 && [self.konotorCount intValue] > 0){
-            
-            application.applicationIconBadgeNumber = 1;
-            application.applicationIconBadgeNumber = 0;
-            
-            [KonotorFeedbackScreen showFeedbackScreen];
-             self.konotorCount = 0;
-        }else{
-            
+
             // check if tab controllers and activity tab exist
             if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
                 
@@ -295,7 +281,6 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
                 // current view is activity, clear the badge
                 if(selectedtabIndex == PAPActivityTabBarItemIndex){
                     [self.activityViewController setActivityBadge:nil];
-                }
             }
         }
     }
@@ -304,6 +289,19 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
 
     [[FBSession activeSession] handleDidBecomeActive];
+    
+    // initiate konotor
+    [Konotor newSession];
+    
+    // get unread messages, show screen if greater than 0
+    self.konotorCount = 0;
+    
+    // fetch unread messages, show feedback screen
+    self.konotorCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
+    
+    if([self.konotorCount intValue] > 0){
+        [KonotorFeedbackScreen showFeedbackScreen];
+    }
 }
 
 #pragma mark - UITabBarControllerDelegate
