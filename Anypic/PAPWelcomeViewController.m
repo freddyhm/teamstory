@@ -70,7 +70,7 @@
         }else{
             NSLog(@"%@", error);
             
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Login Error" message:@"Logging you off and sending you back to main screen" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Login Error" message:@"Logging you off and sending you back to main screen" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
             alert.alertViewStyle = UIAlertViewStyleDefault;
             [alert show];
             

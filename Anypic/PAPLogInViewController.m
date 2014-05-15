@@ -229,14 +229,14 @@
                                                     }
                                                     
                                                 } else {
-                                                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Wrong Email" message:@"Please check your email address or password" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                                                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Wrong Email" message:@"Please check your email address or password" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                                                     alert.alertViewStyle = UIAlertViewStyleDefault;
                                                     [alert show];
                                                     [SVProgressHUD dismiss];
                                                 }
                                             }];
         } else {
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please check your internet connection" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please check your internet connection" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             alert.alertViewStyle = UIAlertViewStyleDefault;
             [alert show];
         }
@@ -263,17 +263,17 @@
                 
                 [PFUser requestPasswordResetForEmailInBackground:input block:^(BOOL succeeded, NSError *error) {
                     if (succeeded == TRUE){
-                        UIAlertView *successAlert = [[UIAlertView alloc] initWithTitle:@"Reset Password" message:@"You will receive an email with a link to reset your password" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                        UIAlertView *successAlert = [[UIAlertView alloc] initWithTitle:@"Reset Password" message:@"You will receive an email with a link to reset your password" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                         [successAlert show];
                         
                     }else{
-                        UIAlertView *failureAlert = [[UIAlertView alloc] initWithTitle:@"Missing User" message:@"No user account is linked to this email" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                        UIAlertView *failureAlert = [[UIAlertView alloc] initWithTitle:@"Missing User" message:@"No user account is linked to this email" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                         [failureAlert show];
                     }
                 }];
             }else{
                 
-                UIAlertView *notEmailFormat = [[UIAlertView alloc] initWithTitle:@"Invalid Email" message:@"Make sure you enter a valid email address" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                UIAlertView *notEmailFormat = [[UIAlertView alloc] initWithTitle:@"Invalid Email" message:@"Make sure you enter a valid email address" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [notEmailFormat show];
             }
         }

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MBProgressHUD.h"
 
-@interface emailSignUpViewController : UIViewController <UITextFieldDelegate, UINavigationControllerDelegate, MBProgressHUDDelegate>
+@interface emailSignUpViewController : UIViewController <UITextFieldDelegate, UINavigationControllerDelegate, MBProgressHUDDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) UITextField *signUpEmailTextField;
 @property (nonatomic, strong) UITextField *signUpPWTextField;

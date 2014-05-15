@@ -240,13 +240,13 @@
             }];
         } else {
             [SVProgressHUD dismiss];
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Password and confirmation password don't match!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Password and confirmation password don't match!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             alert.alertViewStyle = UIAlertViewStyleDefault;
             [alert show];
         }
     } else {
         [SVProgressHUD dismiss];
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Please fill out all the fields" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Please fill out all the fields" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         alert.alertViewStyle = UIAlertViewStyleDefault;
         [alert show];
     }

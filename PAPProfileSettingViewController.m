@@ -329,7 +329,7 @@
             [SVProgressHUD dismiss];
             
         }else{
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Profile fetch failed. Check your network connection and try again" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Profile fetch failed. Check your network connection and try again" delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
             [alert show];
             
             if(profileExist == true){
@@ -683,7 +683,7 @@
         if (([email_input length] > 0 && [self NSStringIsValidEmail:email_input]) || email_current_input) {
             self.user[@"email"] = email_input;
         } else {
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your email input is not valid." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your email input is not valid." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             alert.alertViewStyle = UIAlertViewStyleDefault;
             [alert show];
             return;
@@ -700,7 +700,7 @@
                 alert.tag = SUCCESSFUL;
                 [alert show];
             }else{
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your Information could not be saved. Reach us at info@teamstoryapp.com" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your Information could not be saved. Reach us at info@teamstoryapp.com" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                 alert.alertViewStyle = UIAlertViewStyleDefault;
                 [alert show];
             }
@@ -760,7 +760,7 @@
                     alert.tag = SUCCESSFUL;
                     [alert show];
                 }else{
-                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your Information could not be saved. Reach us at info@teamstoryapp.com" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your Information could not be saved. Reach us at info@teamstoryapp.com" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                     alert.alertViewStyle = UIAlertViewStyleDefault;
                     [alert show];
                 }
@@ -769,20 +769,20 @@
 
         } else {
             if ([companyName_input length] == 0) {
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter Display Name." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter Display Name." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                 alert.alertViewStyle = UIAlertViewStyleDefault;
                 [alert show];
                 
             } else if ([location_input length] == 0) {
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter your Location." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter your Location." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                 alert.alertViewStyle = UIAlertViewStyleDefault;
                 [alert show];
             } else if ([email_input length] == 0 || !self.user[@"email"] || ![self NSStringIsValidEmail:email_input]){
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your Email input is not valid." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your Email input is not valid." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                 alert.alertViewStyle = UIAlertViewStyleDefault;
                 [alert show];
             } else {
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please choose User Type." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please choose User Type." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                 alert.alertViewStyle = UIAlertViewStyleDefault;
                 [alert show];
             }
@@ -885,7 +885,7 @@
                     alert.tag = SUCCESSFUL;
                     [alert show];
                 }else{
-                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your Information could not be saved. Reach us at info@teamstoryapp.com" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your Information could not be saved. Reach us at info@teamstoryapp.com" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                     alert.alertViewStyle = UIAlertViewStyleDefault;
                     [alert show];
                 }
@@ -924,7 +924,7 @@
                 if (number > 0 || [textField.text length] == 0) {
                     companyName.text = @"";
                     [companyName becomeFirstResponder];
-                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Display name is already in use. Please choose another name." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Display name is already in use. Please choose another name." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                     alert.alertViewStyle = UIAlertViewStyleDefault;
                     [alert show];
                 }
@@ -944,7 +944,7 @@
             if (!error) {
                 if (number > 0) {
                     email_address.text = @"";
-                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"The email address is already in use. Please use another email address." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"The email address is already in use. Please use another email address." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                     alert.alertViewStyle = UIAlertViewStyleDefault;
                     [alert show];
                 }

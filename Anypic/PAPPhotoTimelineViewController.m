@@ -650,7 +650,7 @@ enum ActionSheetTags {
         case MFMailComposeResultSent:
         {
             NSLog(@"Mail sent");
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Successful" message:@"Message has been successfully sent" delegate:self cancelButtonTitle:@"Done" otherButtonTitles:nil];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Successful" message:@"Message has been successfully sent" delegate:nil cancelButtonTitle:@"Done" otherButtonTitles:nil];
             [alertView show];
             break;
         }
@@ -658,7 +658,7 @@ enum ActionSheetTags {
         {
             NSLog(@"Mail sent failure: %@", [error localizedDescription]);
             
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your message was not sent! Please check your internet connection!" delegate:self cancelButtonTitle:@"Done" otherButtonTitles:nil];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your message was not sent! Please check your internet connection!" delegate:nil cancelButtonTitle:@"Done" otherButtonTitles:nil];
             [alertView show];
             break;
         }

@@ -5,7 +5,7 @@
 //
 #import "PAPLogInViewController.h"
 
-@interface PAPLogInViewController : PFLogInViewController <UINavigationControllerDelegate>
+@interface PAPLogInViewController : PFLogInViewController <UINavigationControllerDelegate, UIAlertViewDelegate>
 @property (nonatomic, strong) PAPLogInViewController *loginViewController;
 @property (nonatomic, strong) UINavigationController *emailLoginNavController;
 
