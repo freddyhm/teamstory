@@ -13,6 +13,8 @@
 #define SUCCESSFUL 1
 #define IMAGE_NIL 2
 
+#define offsetHeight 50.0f
+
 @interface PAPProfileSettingViewController() {
     BOOL smallImage;
     int movementDistance;
@@ -32,6 +34,14 @@
 @property (nonatomic, strong) PFImageView* profilePictureImageView;
 @property (nonatomic, strong) PFFile *imageProfileFile;
 @property (nonatomic, strong) UIButton *saveButton;
+@property (nonatomic, strong) UITextField *twitter_textfield;
+@property (nonatomic, strong) UITextField *linkedin_textfield;
+@property (nonatomic, strong) UITextField *angelist_textfield;
+@property (nonatomic, strong) UITextField *industry_textfield;
+@property (nonatomic, strong) NSString *industry_user;
+@property (nonatomic, strong) NSString *twitter_user;
+@property (nonatomic, strong) NSString *linkedin_user;
+@property (nonatomic, strong) NSString *angelist_user;
 
 
 @end
@@ -56,9 +66,14 @@
 @synthesize email_address;
 @synthesize email_user;
 @synthesize saveButton;
-
-
-
+@synthesize twitter_textfield;
+@synthesize linkedin_textfield;
+@synthesize angelist_textfield;
+@synthesize industry_textfield;
+@synthesize industry_user;
+@synthesize twitter_user;
+@synthesize linkedin_user;
+@synthesize angelist_user;
 
 #pragma mark - Initialization
 
@@ -84,8 +99,6 @@
 - (void)refreshView {
     [self.navigationItem setHidesBackButton:YES];
     
-
-    
     NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
     bool profileExist = [profilExist_num boolValue];
     
@@ -105,7 +118,7 @@
     
     [profileImagePicker setImage:[UIImage imageNamed:@"icon-upload.png"] forState:UIControlStateNormal];
     [profileImagePicker addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:profileImagePicker];
+    [backgroundView addSubview:profileImagePicker];
     
     [self.user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         
@@ -118,13 +131,17 @@
             displayName_user = self.user[@"displayName"];
             description_user = self.user[@"description"];
             email_user = self.user[@"email"];
+            industry_user = self.user[@"industry"];
+            twitter_user = self.user[@"twitter_url"];
+            linkedin_user = self.user[@"linkedin_url"];
+            angelist_user = self.user[@"angellist_url"];
             imageProfileFile = [self.user objectForKey:@"profilePictureMedium"];
             
             if ([location_user length] == 0) {
                 location_user = @"Location";
             }
             if ([website_user length] == 0) {
-                website_user = @"Website";
+                website_user = @"Website URL";
             }
             if ([displayName_user length] == 0) {
                 displayName_user = @"Display or Company Name";
@@ -132,7 +149,18 @@
             if ([description_user length] == 0) {
                 description_user = @"Description";
             }
-
+            if ([industry_user length] == 0) {
+                industry_user = @"Industry / Market";
+            }
+            if ([twitter_user length] == 0) {
+                twitter_user = @"Twitter";
+            }
+            if ([linkedin_user length] == 0) {
+                linkedin_user = @"LinkedIn";
+            }
+            if ([angelist_user length] == 0) {
+                angelist_user = @"AngelList";
+            }
             
             // Do not display back button if user is first time logging in.
             if (profileExist == true) {
@@ -163,35 +191,18 @@
                 }
                 
             } else {
-                
                 saveButton = [[UIButton alloc] init];
                 
+                profileImagePicker.frame = CGRectMake( 10.0f, -5.0f, 70.0f, 70.0f );
+                [backgroundView setContentSize:CGSizeMake(320.0f, 430.0f)];
+                profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 10.0f, -5.0f, 70.0f, 70.0f )];
+                
                 if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
-                    profileImagePicker.frame = CGRectMake( 122.5f, 35.0f, 75.0f, 75.0f );
-                    backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 400.0f, self.view.bounds.size.width, 345.0f);
-                    [backgroundView setContentSize:CGSizeMake(320.0f, 520.0f)];
-                    saveButton.frame = CGRectMake(35.0f, backgroundView.bounds.size.height - 60.0f, 250.0f, 45.0f);
-                    profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 35.0f, 75.0f, 75.0f )];
+                    backgroundView.frame = CGRectMake(0.0f, 30.0f, self.view.bounds.size.width, self.view.bounds.size.height - 88.0f);
+                    saveButton.frame = CGRectMake(35.0f, 430.0f, 250.0f, 40.0f);
                 } else {
-                    profileImagePicker.frame = CGRectMake( 122.5f, 85.0f, 75.0f, 75.0f );
-                    backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 480.0f, self.view.bounds.size.width, 480.0f);
-                    [backgroundView setContentSize:CGSizeMake(320.0f, 520.0f)];
-                    saveButton.frame = CGRectMake(35.0f, 471.5, 250.0f, 45.0f);
-                    profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 85.0f, 75.0f, 75.0f )];
-                    
-                    UILabel *applyLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 10.0f, 320.0f, 45.0f)];
-                    [applyLabel setTextColor:[UIColor whiteColor]];
-                    [applyLabel setText:@"Apply for Teamstory"];
-                    [applyLabel setTextAlignment:NSTextAlignmentCenter];
-                    [applyLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:20.0]];
-                    [self.view addSubview:applyLabel];
-                    
-                    UILabel *applyText = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 55.0f, 320.0f, 10.0f)];
-                    [applyText setTextColor:[UIColor whiteColor]];
-                    [applyText setText:@"More we know about you, the faster you get into to the community!"];
-                    [applyText setTextAlignment:NSTextAlignmentCenter];
-                    [applyText setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:10.0f]];
-                    [self.view addSubview:applyText];
+                    backgroundView.frame = CGRectMake(0.0f, 50.0f, self.view.bounds.size.width, 458.0f);
+                    saveButton.frame = CGRectMake(35.0f, 517.5f, 250.0f, 40.0f);
                 }
             }
             
@@ -200,7 +211,7 @@
             [saveButton setTitle:@"Apply for Membership" forState:UIControlStateNormal];
             [saveButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
             [saveButton addTarget:self action:@selector(saveButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-            [backgroundView addSubview:saveButton];
+            [self.view addSubview:saveButton];
             
 
             if (imageProfileFile) {
@@ -225,29 +236,49 @@
             [profileImagePicker addGestureRecognizer:swipeUpGestureRecognizer];
             
             UIImageView *companyImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"companyName.png"]];
-            [companyImageView setFrame:CGRectMake( 65.0f, -7.0f, 40.0f, 40.0f)];
+            [companyImageView setFrame:CGRectMake( 80.0f, -15.0f, 40.0f, 40.0f)];
             [backgroundView addSubview:companyImageView];
             
             UIImageView *emailImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon-email.png"]];
-            [emailImageView setFrame:CGRectMake( 65.0f, 61.0f, 40.0f, 40.0f)];
+            [emailImageView setFrame:CGRectMake( 80.0f, 35.0f, 40.0f, 40.0f)];
             [backgroundView addSubview:emailImageView];
             
             UIImageView *locationImageView = [[UIImageView alloc] initWithImage:nil];
             [locationImageView setImage:[UIImage imageNamed:@"profileLocation.png"]];
-            [locationImageView setFrame:CGRectMake( 15.0f, 115.0f, 40.0f, 40.0f)];
+            [locationImageView setFrame:CGRectMake( 10.0f, 85.0f, 40.0f, 40.0f)];
             [backgroundView addSubview:locationImageView];
             
             UIImageView *descriptionImageView = [[UIImageView alloc] initWithImage:nil];
             [descriptionImageView setImage:[UIImage imageNamed:@"profileDescription.png"]];
-            [descriptionImageView setFrame:CGRectMake( 15.0f, 169.0f, 40.0f, 40.0f)];
+            [descriptionImageView setFrame:CGRectMake( 10.0f, 135.0f, 40.0f, 40.0f)];
             [backgroundView addSubview:descriptionImageView];
+            
+            UIImageView *industryImageView = [[UIImageView alloc] initWithImage:nil];
+            [industryImageView setImage:[UIImage imageNamed:@"icon-industry.png"]];
+            [industryImageView setFrame:CGRectMake( 10.0f, 185.0f, 40.0f, 40.0f)];
+            [backgroundView addSubview:industryImageView];
             
             UIImageView *websiteImageView = [[UIImageView alloc] initWithImage:nil];
             [websiteImageView setImage:[UIImage imageNamed:@"profileWebsite.png"]];
-            [websiteImageView setFrame:CGRectMake( 15.0f, 223.0f, 40.0f, 40.0f)];
+            [websiteImageView setFrame:CGRectMake( 10.0f, 235.0f, 40.0f, 40.0f)];
             [backgroundView addSubview:websiteImageView];
             
-            CGRect companyName_frame = CGRectMake( 115.0f, 0.0f, 205.0f, 25.0f);
+            UIImageView *twitterImageView = [[UIImageView alloc] initWithImage:nil];
+            [twitterImageView setImage:[UIImage imageNamed:@"icon-twitter.png"]];
+            [twitterImageView setFrame:CGRectMake( 10.0f, 285.0f, 40.0f, 40.0f)];
+            [backgroundView addSubview:twitterImageView];
+            
+            UIImageView *linkedInImageView = [[UIImageView alloc] initWithImage:nil];
+            [linkedInImageView setImage:[UIImage imageNamed:@"icon-linkedin.png"]];
+            [linkedInImageView setFrame:CGRectMake( 10.0f, 335.0f, 40.0f, 40.0f)];
+            [backgroundView addSubview:linkedInImageView];
+            
+            UIImageView *angelistImageView = [[UIImageView alloc] initWithImage:nil];
+            [angelistImageView setImage:[UIImage imageNamed:@"icon-angel.png"]];
+            [angelistImageView setFrame:CGRectMake( 10.0f, 385.0f, 40.0f, 40.0f)];
+            [backgroundView addSubview:angelistImageView];
+            
+            CGRect companyName_frame = CGRectMake( 120.0f, -7.5f, 200.0f, 25.0f);
             self.companyName = [[UITextField alloc] initWithFrame:companyName_frame];
             [self.companyName setBackgroundColor:[UIColor clearColor]];
             [self.companyName setFont:fonts];
@@ -256,11 +287,11 @@
             self.companyName.delegate = self;
             [backgroundView addSubview:self.companyName];
             
-            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 40.0f, self.view.bounds.size.width, 1)];
+            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(90.0f, 30.0f, 230.0f, 1)];
             lineView.backgroundColor = lineColor;
             [backgroundView addSubview:lineView];
 
-            CGRect email_address_frame = CGRectMake( 80.0f, 68.0f, 205.0f, 25.0f);
+            CGRect email_address_frame = CGRectMake( 120.0f, -7.5f + offsetHeight, 200.0f, 25.0f);
             self.email_address = [[UITextField alloc] initWithFrame:email_address_frame];
             [self.email_address setBackgroundColor:[UIColor clearColor]];
             [self.email_address setFont:fonts];
@@ -275,11 +306,11 @@
             self.email_address.delegate = self;
             [backgroundView addSubview:self.email_address];
             
-            UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 108.0f, self.view.bounds.size.width, 1)];
+            UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 80.0f, self.view.bounds.size.width, 1)];
             lineView1.backgroundColor = lineColor;
             [backgroundView addSubview:lineView1];
 
-            CGRect location_frame = CGRectMake( 80.0f, 122.0f, 205.0f, 25.0f);
+            CGRect location_frame = CGRectMake( 60.0f, -7.5f + offsetHeight * 2, 250.0f, 25.0f);
             self.location = [[UITextField alloc] initWithFrame:location_frame];
             [self.location setBackgroundColor:[UIColor clearColor]];
             [self.location setFont:fonts];
@@ -289,11 +320,11 @@
             [self.location resignFirstResponder];
             [backgroundView addSubview:self.location];
             
-            UIView *lineView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 162.0f, self.view.bounds.size.width, 1)];
+            UIView *lineView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 130.0f, self.view.bounds.size.width, 1)];
             lineView2.backgroundColor = lineColor;
             [backgroundView addSubview:lineView2];
             
-            CGRect description_frame = CGRectMake( 80.0f, 176.0f, 205.0f, 25.0f);
+            CGRect description_frame = CGRectMake( 60.0f, -7.5f + offsetHeight * 3, 250.0f, 25.0f);
             self.description = [[UITextField alloc] initWithFrame:description_frame];
             [self.description setBackgroundColor:[UIColor clearColor]];
             [self.description setFont:fonts];
@@ -303,11 +334,25 @@
             [self.description resignFirstResponder];
             [backgroundView addSubview:self.description];
             
-            UIView *lineView3 = [[UIView alloc] initWithFrame:CGRectMake(0, 216.0f, self.view.bounds.size.width, 1)];
+            UIView *lineView3 = [[UIView alloc] initWithFrame:CGRectMake(0, 180.0f, self.view.bounds.size.width, 1)];
             lineView3.backgroundColor = lineColor;
             [backgroundView addSubview:lineView3];
             
-            CGRect website_frame = CGRectMake( 80.0f, 230.0f, 205.0f, 25.0f);
+            CGRect industry_frame = CGRectMake( 60.0f, -7.5f + offsetHeight * 4, 250.0f, 25.0f);
+            self.industry_textfield = [[UITextField alloc] initWithFrame:industry_frame];
+            [self.industry_textfield setBackgroundColor:[UIColor clearColor]];
+            [self.industry_textfield setFont:fonts];
+            self.industry_textfield.placeholder = industry_user;
+            self.industry_textfield.userInteractionEnabled = YES;
+            self.industry_textfield.delegate = self;
+            [self.industry_textfield resignFirstResponder];
+            [backgroundView addSubview:self.industry_textfield];
+            
+            UIView *lineView4 = [[UIView alloc] initWithFrame:CGRectMake(0, 230.0f, self.view.bounds.size.width, 1)];
+            lineView4.backgroundColor = lineColor;
+            [backgroundView addSubview:lineView4];
+            
+            CGRect website_frame = CGRectMake( 60.0f, -7.5f + offsetHeight * 5, 250.0f, 25.0f);
             self.website = [[UITextField alloc] initWithFrame:website_frame];
             [self.website setBackgroundColor:[UIColor clearColor]];
             [self.website setFont:fonts];
@@ -318,9 +363,50 @@
             [self.website resignFirstResponder];
             [backgroundView addSubview:self.website];
             
-            UIView *lineView4 = [[UIView alloc] initWithFrame:CGRectMake(0, 270.0f, self.view.bounds.size.width, 1)];
-            lineView4.backgroundColor = lineColor;
-            [backgroundView addSubview:lineView4];
+            UIView *lineView5 = [[UIView alloc] initWithFrame:CGRectMake(0, 280.0f, self.view.bounds.size.width, 1)];
+            lineView5.backgroundColor = lineColor;
+            [backgroundView addSubview:lineView5];
+            
+            CGRect twitter_frame = CGRectMake( 60.0f, -7.5f + offsetHeight * 6, 250.0f, 25.0f);
+            self.twitter_textfield = [[UITextField alloc] initWithFrame:twitter_frame];
+            [self.twitter_textfield setBackgroundColor:[UIColor clearColor]];
+            [self.twitter_textfield setFont:fonts];
+            self.twitter_textfield.placeholder = twitter_user;
+            self.twitter_textfield.userInteractionEnabled = YES;
+            self.twitter_textfield.delegate = self;
+            self.twitter_textfield.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            [self.twitter_textfield resignFirstResponder];
+            [backgroundView addSubview:self.twitter_textfield];
+            
+            UIView *lineView6 = [[UIView alloc] initWithFrame:CGRectMake(0, 330.0f, self.view.bounds.size.width, 1)];
+            lineView6.backgroundColor = lineColor;
+            [backgroundView addSubview:lineView6];
+            
+            CGRect linkedIn_frame = CGRectMake( 60.0f, -7.5f + offsetHeight * 7, 250.0f, 25.0f);
+            self.linkedin_textfield = [[UITextField alloc] initWithFrame:linkedIn_frame];
+            [self.linkedin_textfield setBackgroundColor:[UIColor clearColor]];
+            [self.linkedin_textfield setFont:fonts];
+            self.linkedin_textfield.placeholder = linkedin_user;
+            self.linkedin_textfield.userInteractionEnabled = YES;
+            self.linkedin_textfield.delegate = self;
+            self.linkedin_textfield.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            [self.linkedin_textfield resignFirstResponder];
+            [backgroundView addSubview:self.linkedin_textfield];
+            
+            UIView *lineView7 = [[UIView alloc] initWithFrame:CGRectMake(0, 380.0f, self.view.bounds.size.width, 1)];
+            lineView7.backgroundColor = lineColor;
+            [backgroundView addSubview:lineView7];
+            
+            CGRect angel_frame = CGRectMake( 60.0f, -7.5f + offsetHeight * 8, 250.0f, 25.0f);
+            self.angelist_textfield = [[UITextField alloc] initWithFrame:angel_frame];
+            [self.angelist_textfield setBackgroundColor:[UIColor clearColor]];
+            [self.angelist_textfield setFont:fonts];
+            self.angelist_textfield.placeholder = angelist_user;
+            self.angelist_textfield.userInteractionEnabled = YES;
+            self.angelist_textfield.delegate = self;
+            self.angelist_textfield.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            [self.angelist_textfield resignFirstResponder];
+            [backgroundView addSubview:self.angelist_textfield];
             
             UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                            initWithTarget:self
@@ -615,26 +701,47 @@
     [self shouldPresentPhotoCaptureController];
 }
 
-
-
-
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    NSLog(@"Return Key Pressed");
-    if (textField == self.companyName) {
-        [self.companyName resignFirstResponder];
+    if (textField == companyName && email_address.userInteractionEnabled == YES) {
+        [email_address becomeFirstResponder];
+    } else if (textField == companyName && email_address.userInteractionEnabled == NO) {
+        [location becomeFirstResponder];
+    } else if (textField == location) {
+        [description becomeFirstResponder];
+    } else if (textField == description) {
+        [industry_textfield becomeFirstResponder];
+    } else if (textField == industry_textfield) {
+        [website becomeFirstResponder];
+    } else if (textField == website) {
+        [twitter_textfield becomeFirstResponder];
+    } else if (textField == twitter_textfield) {
+        [linkedin_textfield becomeFirstResponder];
+    } else if (textField == linkedin_textfield) {
+        [angelist_textfield becomeFirstResponder];
+    } else if (textField == angelist_textfield) {
+        [textField endEditing:YES];
     }
-    else if (textField == self.location) {
-        [self.location resignFirstResponder];
+    
+    return YES;
+}
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+
+    
+    return YES;
+}
+
+- (BOOL) textFieldShouldEndEditing:(UITextField *)textField {
+    if (textField == twitter_textfield && [textField.text isEqual: @"https://twitter.com/"]) {
+        textField.text = @"";
+    } else if (textField == linkedin_textfield && [textField.text isEqualToString:@"https://www.linkedin.com/in/"]) {
+        textField.text = @"";
+    } else if (textField == angelist_textfield && [textField.text isEqualToString:@"https://angel.co/"]) {
+        textField.text = @"";
+    } else if (textField == website && [textField.text isEqualToString:@"http://"]) {
+        textField.text = @"";
     }
-    else if (textField == self.description) {
-        [self.description resignFirstResponder];
-    }
-    else if (textField == self.website) {
-        [self.website resignFirstResponder];
-    }
-    else if (textField == self.email_address) {
-        [self.email_address resignFirstResponder];
-    }
+    
     return YES;
 }
 
@@ -652,6 +759,10 @@
     NSString* location_input = self.location.text;
     NSString* description_input = self.description.text;
     NSString* website_input = [self.website.text lowercaseString];
+    NSString* industry_input = self.industry_textfield.text;
+    NSString* twitter_input = self.twitter_textfield.text;
+    NSString* linkedin_input = self.linkedin_textfield.text;
+    NSString* angellist_input = self.angelist_textfield.text;
     NSString* email_input = self.email_address.text;
     NSString* email_current_input = self.user[@"email"];
     NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
@@ -681,6 +792,18 @@
         }
         if ([website_input length] > 0) {
             self.user[@"website"] = website_input;
+        }
+        if ([industry_input length] > 0) {
+            self.user[@"industry"] = industry_input;
+        }
+        if ([twitter_input length] > 0) {
+            self.user[@"twitter_url"] = twitter_input;
+        }
+        if ([linkedin_input length] > 0) {
+            self.user[@"linkedin_url"] = linkedin_input;
+        }
+        if ([angellist_input length] > 0) {
+            self.user[@"angellist_url"] = angellist_input;
         }
         if (([email_input length] > 0 && [self NSStringIsValidEmail:email_input]) || email_current_input) {
             self.user[@"email"] = email_input;
@@ -733,6 +856,18 @@
             }
             if ([website_input length] > 0) {
                 self.user[@"website"] = website_input;
+            }
+            if ([industry_input length] > 0) {
+                self.user[@"industry"] = industry_input;
+            }
+            if ([twitter_input length] > 0) {
+                self.user[@"twitter_url"] = twitter_input;
+            }
+            if ([linkedin_input length] > 0) {
+                self.user[@"linkedin_url"] = linkedin_input;
+            }
+            if ([angellist_input length] > 0) {
+                self.user[@"angellist_url"] = angellist_input;
             }
             
             if ([email_current_input length] == 0) {
@@ -831,6 +966,10 @@
             NSString* description_input = self.description.text;
             NSString* website_input = [self.website.text lowercaseString];
             NSString* email_input = self.email_address.text;
+            NSString* industry_input = self.industry_textfield.text;
+            NSString* twitter_input = self.twitter_textfield.text;
+            NSString* linkedin_input = self.linkedin_textfield.text;
+            NSString* angellist_input = self.angelist_textfield.text;
             bool profileExist_user = self.user[@"profileExist"];
             
             if ([companyName_input length] > 0) {
@@ -847,6 +986,18 @@
             }
             if ([email_input length] > 0 ) {
                 self.user[@"email"] = email_input;
+            }
+            if ([industry_input length] > 0) {
+                self.user[@"industry"] = industry_input;
+            }
+            if ([twitter_input length] > 0) {
+                self.user[@"twitter_url"] = twitter_input;
+            }
+            if ([linkedin_input length] > 0) {
+                self.user[@"linkedin_url"] = linkedin_input;
+            }
+            if ([angellist_input length] > 0) {
+                self.user[@"angellist_url"] = angellist_input;
             }
             
             if (profileExist_user == NO) {
@@ -904,6 +1055,16 @@
     if (textField == companyName || textField == email_address) {
         self.navigationItem.leftBarButtonItem.enabled = NO;
         self.navigationItem.rightBarButtonItem.enabled = NO;
+    }
+    
+    if (textField == twitter_textfield) {
+        twitter_textfield.text = @"https://twitter.com/";
+    } else if (textField == linkedin_textfield) {
+        linkedin_textfield.text = @"https://www.linkedin.com/in/";
+    } else if (textField == angelist_textfield) {
+        angelist_textfield.text = @"https://angel.co/";
+    } else if (textField == website) {
+        website.text = @"http://";
     }
 }
 
@@ -971,22 +1132,13 @@
     [SVProgressHUD dismiss];
     float movementDuration = 0.1f; // tweak as needed
     
-    if (textField == companyName) {
-        movementDistance = 50; // tweak as needed
+    if (movementDistance > 0 && (textField == companyName || textField == email_address || textField == location || textField == description)) {
+        movementDistance = 0;
     }
-    else if (textField == email_address) {
-        movementDistance = 104; // tweak as needed
+    if (textField == industry_textfield || textField == website || textField == twitter_textfield || textField == linkedin_textfield || textField == angelist_textfield) {
+        movementDistance = 215;
     }
-    else if (textField == location) {
-        movementDistance = 158; // tweak as needed
-     }
-    else if (textField == description) {
-        movementDistance = 214; // tweak as needed
-    }
-    else if (textField == self.website) {
-        movementDistance = 214; // tweak as needed
-    }
-
+    
     int movement = (up ? -movementDistance : movementDistance);
     
     [UIView beginAnimations: @"anim" context: nil];
