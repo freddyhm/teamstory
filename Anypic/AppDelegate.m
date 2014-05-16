@@ -148,14 +148,11 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     // Crash analytics
     [Crashlytics startWithAPIKey:@"9075de9af4f252529090970cd8c2f7e426771d92"];
     
-    // Set id for analytics, user id if not fall back to installation id
-    NSString *userId = [[[PFInstallation currentInstallation] objectForKey:@"user"] objectId];
+    // Set installation id for analytics
     NSString *installationId = [[PFInstallation currentInstallation] objectId];
     
-    if(userId != nil){
-        [Crashlytics setUserIdentifier:[@"userId: " stringByAppendingString:userId]];
-    }else if(installationId != nil){
-        [Crashlytics setUserIdentifier:[@"installationId: " stringByAppendingString:installationId]];
+    if(installationId != nil){
+        [Crashlytics setUserIdentifier:installationId];
     }
     
     PFACL *defaultACL = [PFACL ACL];
@@ -407,6 +404,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 }
 
 - (void)presentTutorialViewController {
+    
     PAPLoginTutorialViewController *loginTutorialViewController = [[PAPLoginTutorialViewController alloc] init];
     [self.navController pushViewController:loginTutorialViewController animated:YES];
 }
