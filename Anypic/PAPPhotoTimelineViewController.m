@@ -96,8 +96,7 @@ enum ActionSheetTags {
     UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
     texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     self.tableView.backgroundView = texturedBackgroundView;
-    [self.tableView setShowsVerticalScrollIndicator:NO];
-    
+    self.tableView.showsVerticalScrollIndicator = YES;
 
      // Create custom refresh control, bring to front, after table view
     

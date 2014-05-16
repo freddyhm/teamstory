@@ -176,12 +176,6 @@
     return YES;
 }
 
-#pragma mark - UIScrollViewDelegate
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-}
-
-
 
 #pragma mark - ()
 

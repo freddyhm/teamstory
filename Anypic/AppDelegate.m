@@ -147,7 +147,17 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     
     // Crash analytics
     [Crashlytics startWithAPIKey:@"9075de9af4f252529090970cd8c2f7e426771d92"];
-
+    
+    // Set id for analytics, user id if not fall back to installation id
+    NSString *userId = [[[PFInstallation currentInstallation] objectForKey:@"user"] objectId];
+    NSString *installationId = [[PFInstallation currentInstallation] objectId];
+    
+    if(userId != nil){
+        [Crashlytics setUserIdentifier:[@"userId: " stringByAppendingString:userId]];
+    }else if(installationId != nil){
+        [Crashlytics setUserIdentifier:[@"installationId: " stringByAppendingString:installationId]];
+    }
+    
     PFACL *defaultACL = [PFACL ACL];
     // Enable public read access by default, with any newly created PFObjects belonging to the current user
     [defaultACL setPublicReadAccess:YES];

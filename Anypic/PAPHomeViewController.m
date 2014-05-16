@@ -10,6 +10,7 @@
 #import "PAPFindFriendsViewController.h"
 #import "SVProgressHUD.h"
 #import "KonotorUI.h"
+#import <Crashlytics/Crashlytics.h>
 
 @interface PAPHomeViewController ()
 @property (nonatomic, strong) PAPSettingsActionSheetDelegate *settingsActionSheetDelegate;
@@ -26,7 +27,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+   
+    // register name and email in case of crashes
+    NSString *displayName = [[PFUser currentUser] objectForKey:@"displayName"];
+    NSString *email = [[PFUser currentUser] objectForKey:@"email"];
     
+    if(displayName != nil){
+        [Crashlytics setUserName:displayName];
+    }
+    
+    if(email != nil){
+        [Crashlytics setUserEmail:email];
+    }
+        
     //self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
 
     // button image for feedback

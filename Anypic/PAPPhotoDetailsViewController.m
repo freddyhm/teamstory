@@ -227,7 +227,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self.hideCommentsView addSubview:self.spinner];
     
     self.spinner.hidesWhenStopped = YES;
-    
+    self.tableView.showsVerticalScrollIndicator = NO;
 }
 
 
@@ -693,15 +693,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
 
     return YES;
-}
-
-
-#pragma mark - UIScrollViewDelegate
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-
-    [commentTextField resignFirstResponder];
-    [scrollView setShowsVerticalScrollIndicator:NO];
 }
 
 
