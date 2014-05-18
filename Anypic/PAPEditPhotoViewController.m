@@ -120,7 +120,7 @@
     [self.scrollView setContentSize:CGSizeMake(self.scrollView.bounds.size.width, photoImageView.frame.origin.y + photoImageView.frame.size.height + self.footerView.frame.size.height)];
     
     self.scrollView.scrollEnabled = YES;
-}
+  }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -155,6 +155,7 @@
                                           action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tapOutside];
+    
 }
 
 -(void)dismissKeyboard {
