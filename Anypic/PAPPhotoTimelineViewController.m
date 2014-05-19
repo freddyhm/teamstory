@@ -405,8 +405,11 @@ enum ActionSheetTags {
             photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
             // load images from remote server
             [photoImgView loadInBackground:^(UIImage *image, NSError *error) {
+                
+                NSLog(@"%@", error);
+                
                 // check there's no error and image is present before setting
-                if(!error && image != nil){
+                if(!error && image){
                     [self.imgCache setObject:image forKey:[object objectId]];
                 }
             }];
@@ -464,7 +467,9 @@ enum ActionSheetTags {
                 if ([cell.imageView.file isDataAvailable]) {
                     [cell.imageView loadInBackground:^(UIImage *image, NSError *error) {
                         cell.imageView.image = image;
-                        [self.imgCache setObject:cell.imageView.image forKey:[object objectId]];
+                        if(!error && image){
+                            [self.imgCache setObject:cell.imageView.image forKey:[object objectId]];
+                        }
                     }];
                 }
             }
