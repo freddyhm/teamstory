@@ -46,7 +46,6 @@
 - (IBAction)saveImg:(id)sender {
     
     UILabel *label = [[UILabel alloc] initWithFrame:self.textView.frame];
-    label.backgroundColor = [UIColor redColor];
     label.text = self.textView.text;
     label.font = [self.textView font];
     label.numberOfLines = 0;
