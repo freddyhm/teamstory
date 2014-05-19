@@ -312,17 +312,20 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     BOOL newLikes = [self.source isEqual:@"activityLikeComment"] || [self.source isEqual:@"notificationLikeComment"];
     
-    // refresh based on source
-    [self refreshCommentLikes:self.objects pullFromServer:newLikes block:^(BOOL succeeded) {
-        if(succeeded){
-            
-            // move to last comments when notification relates to a new comment
-            if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] || [self.source isEqual:@"activityComment"])){
-                [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height + 44)];
-            }
-        }
-    }];
+    // send mutable copy of objects
+    NSMutableArray *loadedObjects = [[NSMutableArray alloc]initWithArray:self.objects];
     
+    // refresh based on source when comments are present
+    if([loadedObjects count] > 0){
+        [self refreshCommentLikes:loadedObjects pullFromServer:newLikes block:^(BOOL succeeded) {
+            if(succeeded){
+                // move to last comments when notification relates to a new comment
+                if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] || [self.source isEqual:@"activityComment"])){
+                    [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height + 44)];
+                }
+            }
+        }];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -792,7 +795,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 #pragma mark - ()
 
-- (void)refreshCommentLikes:(NSArray *)comments pullFromServer:(BOOL)pullFromServer block:(void (^)(BOOL succeeded))completionBlock{
+- (void)refreshCommentLikes:(NSMutableArray *)comments pullFromServer:(BOOL)pullFromServer block:(void (^)(BOOL succeeded))completionBlock{
     
     //start spinner
     [self.spinner startAnimating];
