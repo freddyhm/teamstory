@@ -79,7 +79,8 @@
     
     if ([self.caption length] > 0) {
         CGSize maximumLabelSize = CGSizeMake(295.0f, 9999.0f);
-        CGSize expectedSize = [self.caption sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:maximumLabelSize];
+
+        CGSize expectedSize = ([self.caption boundingRectWithSize:maximumLabelSize options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]} context:nil]).size;
         
         if (expectedSize.height > 46.527f) {
             expectedSize.height = 46.527f;

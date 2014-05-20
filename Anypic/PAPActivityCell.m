@@ -85,12 +85,19 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [self.activityImageButton setHidden:YES];
     }
 
-    // Change frame of the content text so it doesn't go through the right-hand side picture
-    CGSize contentSize = [self.contentLabel.text sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 72.0f - 46.0f, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+
+    NSMutableParagraphStyle *paragraphStyleWordWrapping = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyleWordWrapping.lineBreakMode = NSLineBreakByWordWrapping;
+    
+    CGSize contentSize = ([self.contentLabel.text boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 72.0f - 46.0f, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f], NSParagraphStyleAttributeName: paragraphStyleWordWrapping.copy} context:nil]).size;
+    
+    
     [self.contentLabel setFrame:CGRectMake( 46.0f, 10.0f, contentSize.width, contentSize.height)];
     
-    // Layout the timestamp label given new vertical 
-    CGSize timeSize = [self.timeLabel.text sizeWithFont:[UIFont systemFontOfSize:11.0f] forWidth:[UIScreen mainScreen].bounds.size.width - 72.0f - 46.0f lineBreakMode:NSLineBreakByWordWrapping];
+    // Layout the timestamp label given new vertical
+    CGSize timeSize = ([self.timeLabel.text boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 72.0f - 46.0f, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11.0f], NSParagraphStyleAttributeName: paragraphStyleWordWrapping.copy} context:nil]).size;
+    
+
     [self.timeLabel setFrame:CGRectMake( 46.0f, self.contentLabel.frame.origin.y + self.contentLabel.frame.size.height + 2.0f, timeSize.width, timeSize.height)];
 }
 
@@ -146,7 +153,12 @@ static TTTTimeIntervalFormatter *timeFormatter;
     }
 
     if (self.user) {
-        CGSize nameSize = [self.nameButton.titleLabel.text sizeWithFont:[UIFont boldSystemFontOfSize:13.0f] forWidth:nameMaxWidth lineBreakMode:NSLineBreakByTruncatingTail];
+        
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
+        
+        CGSize nameSize = ([self.nameButton.titleLabel.text boundingRectWithSize:CGSizeMake(nameMaxWidth,CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:13.0f], NSParagraphStyleAttributeName: paragraphStyle.copy} context:nil]).size;
+        
         NSString *paddedString = [PAPBaseTextCell padString:activityString withFont:[UIFont systemFontOfSize:13.0f] toWidth:nameSize.width];    
         [self.contentLabel setText:paddedString];
     } else { // Otherwise we ignore the padding and we'll add it after we set the user
@@ -187,13 +199,22 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 + (CGFloat)heightForCellWithName:(NSString *)name contentString:(NSString *)content cellInsetWidth:(CGFloat)cellInset {
-    CGSize nameSize = [name sizeWithFont:[UIFont boldSystemFontOfSize:13.0f] forWidth:200.0f lineBreakMode:NSLineBreakByTruncatingTail];
+    
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
+    
+    CGSize nameSize = ([name boundingRectWithSize:CGSizeMake(200.0f, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:13.0f], NSParagraphStyleAttributeName: paragraphStyle.copy} context:nil]).size;
+    
     NSString *paddedString = [PAPBaseTextCell padString:content withFont:[UIFont systemFontOfSize:13.0f] toWidth:nameSize.width];
     CGFloat horizontalTextSpace = [PAPActivityCell horizontalTextSpaceForInsetWidth:cellInset];
     
-    CGSize contentSize = [paddedString sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:CGSizeMake(horizontalTextSpace, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
-    CGFloat singleLineHeight = [@"Test" sizeWithFont:[UIFont systemFontOfSize:13.0f]].height;
-
+    NSMutableParagraphStyle *paragraphStyleWordWrap = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyleWordWrap.lineBreakMode = NSLineBreakByWordWrapping;
+    
+    CGSize contentSize = ([paddedString boundingRectWithSize:CGSizeMake(horizontalTextSpace, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f], NSParagraphStyleAttributeName: paragraphStyleWordWrap.copy} context:nil]).size;
+    
+    CGFloat singleLineHeight = [@"Test" sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}].height;
+    
     // Calculate the added height necessary for multiline text. Ensure value is not below 0.
     CGFloat multilineHeightAddition = contentSize.height - singleLineHeight;
 

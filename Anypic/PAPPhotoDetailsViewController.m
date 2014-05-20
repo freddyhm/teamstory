@@ -133,8 +133,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     if ([caption_local length] > 0) {
         CGSize maximumLabelSize = CGSizeMake(320.0f - 7.5f * 4, 9999.0f);
-        CGSize expectedSize = [caption_local sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:maximumLabelSize];
         
+        CGSize expectedSize = ([caption_local boundingRectWithSize:maximumLabelSize options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]} context:nil]).size;
+                
         // Set table header
         self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 351.0f + expectedSize.height + 43.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
         self.headerView.delegate = self;
