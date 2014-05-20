@@ -406,8 +406,6 @@ enum ActionSheetTags {
             // load images from remote server
             [photoImgView loadInBackground:^(UIImage *image, NSError *error) {
                 
-                NSLog(@"%@", error);
-                
                 // check there's no error and image is present before setting
                 if(!error && image){
                     [self.imgCache setObject:image forKey:[object objectId]];

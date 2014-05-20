@@ -215,7 +215,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     // set comment block view for spinner
     float tableCommentVerticalPos = self.tableView.tableHeaderView.frame.origin.y + self.tableView.tableHeaderView.frame.size.height;
-    float tableCommentHeight =  self.tableView.tableFooterView.frame.origin.y;
+    float tableCommentHeight = self.tableView.tableFooterView.frame.origin.y + (self.tableView.tableFooterView.frame.size.height * 2);
     self.hideCommentsView = [[UIView alloc] initWithFrame:CGRectMake(7.5f, tableCommentVerticalPos, 305.0f, tableCommentHeight)];
     [self.hideCommentsView setBackgroundColor:[UIColor whiteColor]];
     
