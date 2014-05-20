@@ -970,7 +970,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                     break;
             }
             
-            MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+            MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];            
             mc.mailComposeDelegate = self;
             [mc setSubject:emailTitle];
             [mc setMessageBody:messageBody isHTML:NO];
