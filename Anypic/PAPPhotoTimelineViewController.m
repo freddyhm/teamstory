@@ -784,6 +784,8 @@ enum ActionSheetTags {
 
 - (void)userDidPublishPhoto:(NSNotification *)note {
     
+    [SVProgressHUD show];
+    
     // analytics
     [PAPUtility captureEventGA:@"Engagement" action:@"Upload" label:@"Photo"];
     

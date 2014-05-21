@@ -418,6 +418,7 @@
             }
     
     }else if ([text isEqualToString:@"\n"]) {
+        
         NSDictionary *userInfo = [NSDictionary dictionary];
         NSString *trimmedComment = [self.commentTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         if (trimmedComment.length != 0) {
@@ -464,6 +465,8 @@
         self.photoPostBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
             [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
         }];
+        
+
         
         // save
         [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
