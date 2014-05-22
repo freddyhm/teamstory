@@ -15,6 +15,9 @@
 @property (nonatomic,strong) UIImagePickerController *imagePicker;
 @property (nonatomic,strong) NSDictionary *imagePickerInfo;
 @property (nonatomic, strong) UIPopoverController *popoverController;
+@property (nonatomic, strong) UIView *postMenu;
+@property (nonatomic, strong) UIButton *photoPostButton;
+@property (nonatomic, strong) UIButton *thoughtPostButton;
 
 @end
 
@@ -35,6 +38,18 @@
     //[[self tabBar] setSelectionIndicatorImage:[UIImage imageNamed:@"BackgroundTabBarItemSelected.png"]];
     
     self.navController = [[UINavigationController alloc] init];
+    
+    self.postMenu = [[UIView alloc]initWithFrame:CGRectMake(0, 200, self.view.frame.size.width, 50)];
+    self.postMenu.backgroundColor = [UIColor whiteColor];
+    self.photoPostButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 200, 10, 10)];
+    self.photoPostButton.titleLabel.text = @"Share Moment";
+    
+    self.thoughtPostButton = [[UIButton alloc] initWithFrame:CGRectMake(40, 200, 10, 10)];
+    self.thoughtPostButton.titleLabel.text = @"Share Thought";
+    
+    [self.postMenu addSubview:self.photoPostButton];
+    [self.postMenu addSubview:self.thoughtPostButton];
+    
     //[PAPUtility addBottomDropShadowToNavigationBarForNavigationController:self.navController];
 }
 
@@ -44,17 +59,20 @@
 - (void)setViewControllers:(NSArray *)viewControllers animated:(BOOL)animated {
     [super setViewControllers:viewControllers animated:animated];
     
-    UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    cameraButton.frame = CGRectMake( (self.tabBar.bounds.size.width / 5) * 2, -12.0f, 67.0f, 60.0f);
-    [cameraButton setImage:[UIImage imageNamed:@"ButtonCamera.png"] forState:UIControlStateNormal];
-    [cameraButton setImage:[UIImage imageNamed:@"ButtonCameraSelected.png"] forState:UIControlStateHighlighted];
-    [cameraButton addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.tabBar addSubview:cameraButton];
+    UIButton *postButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    postButton.frame = CGRectMake( (self.tabBar.bounds.size.width / 5) * 2, -12.0f, 67.0f, 60.0f);
+    [postButton setImage:[UIImage imageNamed:@"ButtonCamera.png"] forState:UIControlStateNormal];
+    [postButton setImage:[UIImage imageNamed:@"ButtonCameraSelected.png"] forState:UIControlStateHighlighted];
+    [postButton addTarget:self action:@selector(postButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.tabBar addSubview:postButton];
+    
+    
+    
     
     UISwipeGestureRecognizer *swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
     [swipeUpGestureRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
     [swipeUpGestureRecognizer setNumberOfTouchesRequired:1];
-    [cameraButton addGestureRecognizer:swipeUpGestureRecognizer];
+    [postButton addGestureRecognizer:swipeUpGestureRecognizer];
 }
 
 
@@ -143,8 +161,13 @@
 
 #pragma mark - ()
 
-- (void)photoCaptureButtonAction:(id)sender {
-
+- (void)postButtonAction:(id)sender {
+    
+    
+    
+    [self.view addSubview:self.postMenu];
+    
+    
     BOOL cameraDeviceAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
     BOOL photoLibraryAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
     
