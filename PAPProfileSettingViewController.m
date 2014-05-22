@@ -1186,6 +1186,10 @@
 
 -(void)dismissKeyboard {
     [self.view endEditing:YES];
+    
+    self.dimView.hidden = YES;
+    [self.industry_pickerView removeFromSuperview];
+    [self.industry_chooseButton removeFromSuperview];
 }
 
 -(BOOL)NSStringIsValidEmail:(NSString *)checkString {
