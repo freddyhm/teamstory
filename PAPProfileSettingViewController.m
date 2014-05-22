@@ -22,6 +22,7 @@
     CGRect email_address_frame;
     int lineStartPoint;
     int industry_pickerRow;
+    bool profileExist;
 }
 
 @property (nonatomic,strong) UINavigationController *navController;
@@ -41,7 +42,7 @@
 @property (nonatomic, strong) UITextField *twitter_textfield;
 @property (nonatomic, strong) UITextField *linkedin_textfield;
 @property (nonatomic, strong) UITextField *angelist_textfield;
-@property (nonatomic, strong) UITextField *industry_textfield;
+@property (nonatomic, strong) UIButton *industry_button;
 @property (nonatomic, strong) NSString *industry_user;
 @property (nonatomic, strong) NSString *twitter_user;
 @property (nonatomic, strong) NSString *linkedin_user;
@@ -77,7 +78,7 @@
 @synthesize twitter_textfield;
 @synthesize linkedin_textfield;
 @synthesize angelist_textfield;
-@synthesize industry_textfield;
+@synthesize industry_button;
 @synthesize industry_user;
 @synthesize twitter_user;
 @synthesize linkedin_user;
@@ -120,7 +121,7 @@
     industry_dataSource = [NSArray arrayWithObjects:@"Information Technology", @"Consumers", @"Enterprises", @"Media", @"Education", @"Health Care", @"Finance", @"Sales and Marketing", @"Fashion", @"Health and Wellness", @"Retail", @"Sports", @"UI/UX Design", @"Travel", @"Web Development", @"Real Estate", @"Recruiting", @"Entertainment", @"Clean Technology", @"Events", @"B2B", @"Restaurants", @"Lifestyle", @"Big Data Analytics", @"Music Services", @"Event Management", @"Non Profits", @"Discovery", @"Incubators", @"Other", nil];
     
     NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
-    bool profileExist = [profilExist_num boolValue];
+    profileExist = [profilExist_num boolValue];
     
     // Initialization
     UIColor *backgroundColor = [UIColor colorWithWhite:0.95f alpha:0.8f];
@@ -378,14 +379,14 @@
             [self.backgroundView addSubview:lineView3];
             
             CGRect industry_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 4, 250.0f, 25.0f);
-            self.industry_textfield = [[UITextField alloc] initWithFrame:industry_frame];
-            [self.industry_textfield setBackgroundColor:[UIColor clearColor]];
-            [self.industry_textfield setFont:fonts];
-            self.industry_textfield.placeholder = industry_user;
-            self.industry_textfield.userInteractionEnabled = YES;
-            self.industry_textfield.delegate = self;
-            [self.industry_textfield resignFirstResponder];
-            [self.backgroundView addSubview:self.industry_textfield];
+            self.industry_button = [[UIButton alloc] initWithFrame:industry_frame];
+            [self.industry_button setTitle:industry_user forState:UIControlStateNormal];
+            [self.industry_button setBackgroundColor:[UIColor clearColor]];
+            [self.industry_button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+            [self.industry_button.titleLabel setFont:fonts];
+            self.industry_button.titleLabel.textColor = [UIColor colorWithWhite:0.7f alpha:1.0f];
+            [self.industry_button addTarget:self action:@selector(industry_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+            [self.backgroundView addSubview:self.industry_button];
             
             UIView *lineView4 = [[UIView alloc] initWithFrame:CGRectMake(0, 250.0f, self.view.bounds.size.width, 1)];
             lineView4.backgroundColor = lineColor;
@@ -723,10 +724,6 @@
         [location becomeFirstResponder];
     } else if (textField == location) {
         [description becomeFirstResponder];
-    } else if (textField == description) {
-        [industry_textfield becomeFirstResponder];
-    } else if (textField == industry_textfield) {
-        [website becomeFirstResponder];
     } else if (textField == website) {
         [twitter_textfield becomeFirstResponder];
     } else if (textField == twitter_textfield) {
@@ -768,8 +765,8 @@
     NSString* location_input = self.location.text;
     NSString* description_input = self.description.text;
     NSString* website_input = [self.website.text lowercaseString];
-    NSString* industry_input = self.industry_textfield.text;
     NSString* twitter_input = self.twitter_textfield.text;
+    NSString* industry_input = self.industry_button.titleLabel.text;
     NSString* linkedin_input = self.linkedin_textfield.text;
     NSString* angellist_input = self.angelist_textfield.text;
     NSString* email_input = self.email_address.text;
@@ -803,7 +800,7 @@
         if ([website_input length] > 0) {
             self.user[@"website"] = website_input;
         }
-        if ([industry_input length] > 0) {
+        if ([industry_input length] > 0 && ![industry_input isEqualToString:@"Industry / Market"]) {
             self.user[@"industry"] = industry_input;
         }
         if ([twitter_input length] > 0) {
@@ -867,7 +864,7 @@
             if ([website_input length] > 0) {
                 self.user[@"website"] = website_input;
             }
-            if ([industry_input length] > 0) {
+            if ([industry_input length] > 0 && ![industry_input isEqualToString:@"Industry / Market"]) {
                 self.user[@"industry"] = industry_input;
             }
             if ([twitter_input length] > 0) {
@@ -950,7 +947,7 @@
             
             if (profileExist_user != true) {
                 //Checking profile existence.
-                bool profileExist = YES; // either YES or NO
+                profileExist = YES; // either YES or NO
                 NSNumber *profileBoolNum = [NSNumber numberWithBool: profileExist];
                 [[PFUser currentUser] setObject: profileBoolNum forKey: @"profileExist"];
                 
@@ -977,7 +974,7 @@
             NSString* description_input = self.description.text;
             NSString* website_input = [self.website.text lowercaseString];
             NSString* email_input = self.email_address.text;
-            NSString* industry_input = self.industry_textfield.text;
+            NSString* industry_input = self.industry_button.titleLabel.text;
             NSString* twitter_input = self.twitter_textfield.text;
             NSString* linkedin_input = self.linkedin_textfield.text;
             NSString* angellist_input = self.angelist_textfield.text;
@@ -998,7 +995,7 @@
             if ([email_input length] > 0 ) {
                 self.user[@"email"] = email_input;
             }
-            if ([industry_input length] > 0) {
+            if ([industry_input length] > 0 && ![industry_input isEqualToString:@"Industry / Market"]) {
                 self.user[@"industry"] = industry_input;
             }
             if ([twitter_input length] > 0) {
@@ -1068,7 +1065,8 @@
         self.navigationItem.rightBarButtonItem.enabled = NO;
     }
     
-    if (textField == twitter_textfield) {
+    
+    if (textField == twitter_textfield ) {
         twitter_textfield.text = @"https://twitter.com/";
     } else if (textField == linkedin_textfield) {
         linkedin_textfield.text = @"https://www.linkedin.com/in/";
@@ -1077,23 +1075,38 @@
     } else if (textField == website) {
         website.text = @"http://";
     }
-    
-    if (textField == industry_textfield) {
-        [self.view endEditing:YES];
-        dimView.hidden = NO;
-        
-        industry_pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 270.0f, 320.0f, 0.0f)];
-        industry_pickerView.delegate = self;
-        industry_pickerView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.95f];
-        industry_pickerView.showsSelectionIndicator = YES;
-        [self.view addSubview:industry_pickerView];
-        
-        industry_chooseButton = [[UIButton alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 54.0f, 320.0f, 54.0f)];
-        [industry_chooseButton setBackgroundColor:[UIColor colorWithRed:91.0f/255.0f green:194.0f/255.0f blue:165.0f/255.0f alpha:1.0f]];
-        [industry_chooseButton setTitle:@"Choose" forState:UIControlStateNormal];
-        [industry_chooseButton addTarget:self action:@selector(industry_chooseButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:industry_chooseButton];
+    if (textField == twitter_textfield && ![twitter_user isEqualToString:@"Twitter"]) {
+        twitter_textfield.text = twitter_user;
+    } else if (textField == linkedin_textfield && ![linkedin_user isEqualToString:@"LinkedIn"]) {
+        linkedin_textfield.text = linkedin_user;
+    } else if (textField == angelist_textfield && ![angelist_user isEqualToString:@"AngelList"]) {
+        angelist_textfield.text = angelist_user;
+    } else if (textField == website && ![website_user isEqualToString:@"Website URL"]) {
+        website.text = website_user;
+    } else if (textField == description && ![description_user isEqualToString:@"Description"]) {
+        description.text = description_user;
+    } else if (textField == companyName && ![displayName_user isEqualToString:@"Display or Company Name"]) {
+        companyName.text = displayName_user;
+    } else if (textField == location && ![location_user isEqualToString:@"Location"]) {
+        location.text = location_user;
     }
+}
+
+- (void) industry_buttonAction:(id)sender {
+    [self.view endEditing:YES];
+    dimView.hidden = NO;
+    
+    industry_pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 270.0f, 320.0f, 0.0f)];
+    industry_pickerView.delegate = self;
+    industry_pickerView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.95f];
+    industry_pickerView.showsSelectionIndicator = YES;
+    [self.view addSubview:industry_pickerView];
+    
+    industry_chooseButton = [[UIButton alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 54.0f, 320.0f, 54.0f)];
+    [industry_chooseButton setBackgroundColor:[UIColor colorWithRed:91.0f/255.0f green:194.0f/255.0f blue:165.0f/255.0f alpha:1.0f]];
+    [industry_chooseButton setTitle:@"Choose" forState:UIControlStateNormal];
+    [industry_chooseButton addTarget:self action:@selector(industry_chooseButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:industry_chooseButton];
 }
 
 - (void) industry_chooseButtonAction:(id)sender {
@@ -1101,7 +1114,8 @@
     [industry_pickerView removeFromSuperview];
     [industry_chooseButton removeFromSuperview];
     
-    industry_textfield.text = [industry_dataSource objectAtIndex:industry_pickerRow];
+    [industry_button setTitle:[industry_dataSource objectAtIndex:industry_pickerRow] forState:UIControlStateNormal];
+    [self.industry_button.titleLabel setTextColor:[UIColor blackColor]];
 }
 
 
@@ -1120,7 +1134,11 @@
             [self textfieldUserInteractionControl:YES];
             
             if (!error) {
-                if (number > 0 || [textField.text length] == 0) {
+                if ((number > 0 || [textField.text length] == 0) && (![[[PFUser currentUser] objectForKey:@"displayName"] isEqualToString:textField.text])) {
+                    self.dimView.hidden = YES;
+                    [self.view endEditing:YES];
+                    [self.industry_chooseButton removeFromSuperview];
+                    [self.industry_pickerView removeFromSuperview];
                     companyName.text = @"";
                     [companyName becomeFirstResponder];
                     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Display name is already in use. Please choose another name." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
@@ -1168,12 +1186,33 @@
     [SVProgressHUD dismiss];
     float movementDuration = 0.1f; // tweak as needed
     
-    if (movementDistance > 0 && (textField == companyName || textField == email_address || textField == location || textField == description)) {
-        movementDistance = 0;
+    if (profileExist == YES) {
+        if ([UIScreen mainScreen].bounds.size.height == 480) {
+            movementDistance = 130;
+            if (textField == twitter_textfield || textField == linkedin_textfield || textField == angelist_textfield) {
+                movementDistance = 200;
+            }
+        } else {
+            movementDistance = 200;
+        }
+    } else {
+        if ([UIScreen mainScreen].bounds.size.height == 480) {
+            if (textField == twitter_textfield || textField == linkedin_textfield || textField == angelist_textfield || textField == website) {
+                movementDistance = 200;
+            } else if (textField == description) {
+                movementDistance = 100;
+            } else {
+                movementDistance = 0;
+            }
+        } else {
+            if (textField == twitter_textfield || textField == linkedin_textfield || textField == angelist_textfield || textField == website) {
+                movementDistance = 200;
+            } else {
+                movementDistance = 0;
+            }
+        }
     }
-    if (textField == industry_textfield || textField == website || textField == twitter_textfield || textField == linkedin_textfield || textField == angelist_textfield) {
-        movementDistance = 215;
-    }
+    
     
     int movement = (up ? -movementDistance : movementDistance);
     
