@@ -30,6 +30,8 @@
 @property (nonatomic, strong) UILabel *followerCountLabel;
 @property (nonatomic, strong) UILabel *followingCountLabel;
 @property (nonatomic, strong) UIButton *websiteLink;
+@property (nonatomic, strong) NSString *industry;
+@property (nonatomic, strong) UILabel *industryLabel;
 @property int userStatUpdateCount;
 
 
@@ -54,6 +56,8 @@
 @synthesize displayName;
 @synthesize userDisplayNameLabel;
 @synthesize websiteLink;
+@synthesize industry;
+@synthesize industryLabel;
 
 
 #pragma mark - Initialization
@@ -86,17 +90,22 @@
             self.descriptionInfo = [self.user objectForKey:@"description"];
             self.websiteInfo = [self.user objectForKey:@"website"];
             self.displayName = [self.user objectForKey:@"displayName"];
+            self.industry = [self.user objectForKey:@"industry"];
+            
             
             if (imageFile && locationInfo && displayName) {
+                self.industryLabel = [[UILabel alloc] init];
+                self.industryLabel.text = self.industry;
                 
                 descriptionLabel = [[UILabel alloc] init];
                 descriptionLabel.font = [UIFont fontWithName:@"Helvetica" size:13.0f];
                 [descriptionLabel setTextColor:[UIColor colorWithRed:178.0f/255.0f green:184.0f/255.0f blue:189.0f/255.0f alpha:1.0f]];
-                descriptionLabel.text = descriptionInfo;
+                descriptionLabel.text = self.descriptionInfo;
                 descriptionLabel.numberOfLines = 0;
-                CGSize maximumLabelSize = CGSizeMake(300.0f, 32.0f);
+                CGSize maximumLabelSize = CGSizeMake(300.0f, 22.0f);
                 
                 CGSize expectedSize = [descriptionLabel sizeThatFits:maximumLabelSize];
+                CGSize industry_expectedSize = [industryLabel sizeThatFits:maximumLabelSize];
                 
                 UIColor *textColor = [UIColor colorWithRed:158.0f/255.0f green:158.0f/255.0f blue:158.0f/255.0f alpha:1.0f];
                 
@@ -106,9 +115,9 @@
                 self.headerView = [[UIView alloc] init];
                 
                 if ([websiteInfo length] > 0) {
-                    self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + 26.0f);
+                    self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + 26.0f + 33.0f);
                 } else {
-                    self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height);
+                    self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + 33.0f);
                 }
                 
                 [self.headerView setBackgroundColor:[UIColor clearColor]]; // should be clear, this will be the container for our avatar, photo count, follower count, following count, and so on
@@ -169,9 +178,30 @@
                     NSLog(@"locationInfo Not found");
                 }
                 
+                [industryLabel setFrame:CGRectMake(320.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + 16.0f, industry_expectedSize.width, 22.0f)];
+                NSLog(@"%f", industry_expectedSize.width);
+                industryLabel.textAlignment = NSTextAlignmentCenter;
+                [industryLabel setBackgroundColor:[UIColor colorWithRed:201.0f/255.0f green:205.0f/255.0f blue:208.0f/255.0f alpha:1.0f]];
+                [industryLabel.layer setCornerRadius:3.0f];
+                [industryLabel setClipsToBounds:YES];
+                [industryLabel setFont:[UIFont systemFontOfSize:13.0f]];
+                [industryLabel setTextColor:[UIColor whiteColor]];
+                [self.headerView addSubview:industryLabel];
                 
                 [descriptionLabel setFrame:CGRectMake(10.0f, 88.0f, expectedSize.width, expectedSize.height)];
                 [self.headerView addSubview:descriptionLabel];
+                
+                UIButton *linkedIn_button = [[UIButton alloc] initWithFrame:CGRectMake(10.0f, 97.0f + expectedSize.height + 16.0f, 22.0f, 22.0f)];
+                [linkedIn_button setImage:[UIImage imageNamed:@"icon-linkedin-profile.png"] forState:UIControlStateNormal];
+                [self.headerView addSubview:linkedIn_button];
+                
+                UIButton *twitter_button = [[UIButton alloc] initWithFrame:CGRectMake(42.0f, 97.0f + expectedSize.height + 16.0f, 22.0f, 22.0f)];
+                [twitter_button setImage:[UIImage imageNamed:@"icon-twitter-profile.png"] forState:UIControlStateNormal];
+                [self.headerView addSubview:twitter_button];
+                
+                UIButton *angellist_button = [[UIButton alloc] initWithFrame:CGRectMake(74.0f, 97.0f + expectedSize.height + 16.0f, 22.0f, 22.0f)];
+                [angellist_button setImage:[UIImage imageNamed:@"icon-angel-profile.png"] forState:UIControlStateNormal];
+                [self.headerView addSubview:angellist_button];
                  
                 UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
                 [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]]];
@@ -329,6 +359,8 @@
         self.descriptionLabel.text = [self.user objectForKey:@"description"];
         [self.websiteLink setTitle:[self.user objectForKey:@"website"] forState:UIControlStateNormal];
         self.websiteInfo = [self.user objectForKey:@"website"];
+        //self.industryLabel.text = [self.user objectForKey:@"industry"];
+        
         
         [profilePictureImageView setFile:[self.user objectForKey:@"profilePictureMedium"]];
         [profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {

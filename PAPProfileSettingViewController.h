@@ -12,7 +12,7 @@
 #import "PAPEditPhotoViewController.h"
 
 
-@interface PAPProfileSettingViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextFieldDelegate, UINavigationControllerDelegate, UIActionSheetDelegate> {
+@interface PAPProfileSettingViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextFieldDelegate, UINavigationControllerDelegate, UIActionSheetDelegate,UIScrollViewDelegate,UIPickerViewDataSource,UIPickerViewDelegate> {
     
     NSArray *dropDownMenu;
     BOOL flag;

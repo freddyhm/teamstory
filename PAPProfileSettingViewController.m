@@ -18,6 +18,10 @@
 @interface PAPProfileSettingViewController() {
     BOOL smallImage;
     int movementDistance;
+    CGRect companyName_frame;
+    CGRect email_address_frame;
+    int lineStartPoint;
+    int industry_pickerRow;
 }
 
 @property (nonatomic,strong) UINavigationController *navController;
@@ -42,7 +46,11 @@
 @property (nonatomic, strong) NSString *twitter_user;
 @property (nonatomic, strong) NSString *linkedin_user;
 @property (nonatomic, strong) NSString *angelist_user;
-
+@property (nonatomic, strong) NSArray *industry_dataSource;
+@property (nonatomic, strong) UIView *dimView;
+@property (nonatomic, strong) NSString *industry_chosen;
+@property (nonatomic, strong) UIPickerView *industry_pickerView;
+@property (nonatomic, strong) UIButton *industry_chooseButton;
 
 @end
 
@@ -74,6 +82,11 @@
 @synthesize twitter_user;
 @synthesize linkedin_user;
 @synthesize angelist_user;
+@synthesize industry_dataSource;
+@synthesize dimView;
+@synthesize industry_chosen;
+@synthesize industry_pickerView;
+@synthesize industry_chooseButton;
 
 #pragma mark - Initialization
 
@@ -99,6 +112,13 @@
 - (void)refreshView {
     [self.navigationItem setHidesBackButton:YES];
     
+    dimView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, [UIScreen mainScreen].bounds.size.height)];
+    dimView.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.8f];
+    dimView.hidden = YES;
+
+    
+    industry_dataSource = [NSArray arrayWithObjects:@"Information Technology", @"Consumers", @"Enterprises", @"Media", @"Education", @"Health Care", @"Finance", @"Sales and Marketing", @"Fashion", @"Health and Wellness", @"Retail", @"Sports", @"UI/UX Design", @"Travel", @"Web Development", @"Real Estate", @"Recruiting", @"Entertainment", @"Clean Technology", @"Events", @"B2B", @"Restaurants", @"Lifestyle", @"Big Data Analytics", @"Music Services", @"Event Management", @"Non Profits", @"Discovery", @"Incubators", @"Other", nil];
+    
     NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
     bool profileExist = [profilExist_num boolValue];
     
@@ -107,9 +127,9 @@
     UIColor *lineColor = [UIColor colorWithWhite:0.87f alpha:0.9f];
     UIFont *fonts = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
     
-    backgroundView = [[UIScrollView alloc] init];
-    [backgroundView setBackgroundColor:backgroundColor];
-    [self.view addSubview:backgroundView];
+    self.backgroundView = [[UIScrollView alloc] init];
+    self.backgroundView.delegate = self;
+    [self.backgroundView setBackgroundColor:backgroundColor];
     
     UIButton *profileImagePicker = [UIButton buttonWithType:UIButtonTypeCustom];
     
@@ -118,10 +138,9 @@
     
     [profileImagePicker setImage:[UIImage imageNamed:@"icon-upload.png"] forState:UIControlStateNormal];
     [profileImagePicker addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [backgroundView addSubview:profileImagePicker];
+
     
     [self.user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        
         if(!error){
             
             self.user = (PFUser *)object;
@@ -178,40 +197,70 @@
                 [navSaveButton setBackgroundImage:[UIImage imageNamed:@"button_done_selected.png"] forState:UIControlStateHighlighted];
                 self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:navSaveButton];
                 
+                [self.view addSubview:profileImagePicker];
+                companyName_frame = CGRectMake( 60.0f, 12.5f, 250.0f, 25.0f);
+                email_address_frame = CGRectMake( 60.0f, 12.5f + offsetHeight, 250.0f, 25.0f);
+                [self.backgroundView setContentSize:CGSizeMake(320.0f, 500.0f)];
+                
                 if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
                     profileImagePicker.frame = CGRectMake( 122.5f, 95.0f, 75.0f, 75.0f );
-                    backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 280.0f, self.view.bounds.size.width, 345.0f);
-                    saveButton.frame = CGRectMake(35.0f, backgroundView.bounds.size.height - 60.0f, 250.0f, 45.0f);
+                    self.backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 280.0f, self.view.bounds.size.width, 280.0f);
+                    saveButton.frame = CGRectMake(35.0f, self.backgroundView.bounds.size.height - 60.0f, 250.0f, 45.0f);
                     profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 95.0f, 75.0f, 75.0f )];
                 } else {
                     profileImagePicker.frame = CGRectMake( 122.5f, 135.0f, 75.0f, 75.0f );
-                    backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 280.0f, self.view.bounds.size.width, 370.0f);
-                    saveButton.frame = CGRectMake(35.0f, backgroundView.bounds.size.height - 70.0f, 250.0f, 45.0f);
+                    self.backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 280.0f, self.view.bounds.size.width, 280.0f);
+                    saveButton.frame = CGRectMake(35.0f, self.backgroundView.bounds.size.height - 70.0f, 250.0f, 45.0f);
                     profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 135.0f, 75.0f, 75.0f )];
                 }
+                
+                UIImageView *companyImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"companyName.png"]];
+                [companyImageView setFrame:CGRectMake( 10.0f, 5.0f, 40.0f, 40.0f)];
+                [self.backgroundView addSubview:companyImageView];
+                
+                UIImageView *emailImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon-email.png"]];
+                [emailImageView setFrame:CGRectMake( 10.0f, 55.0f, 40.0f, 40.0f)];
+                [self.backgroundView addSubview:emailImageView];
+                
+                lineStartPoint = 0;
                 
             } else {
                 saveButton = [[UIButton alloc] init];
                 
-                profileImagePicker.frame = CGRectMake( 10.0f, -5.0f, 70.0f, 70.0f );
-                [backgroundView setContentSize:CGSizeMake(320.0f, 430.0f)];
+                profileImagePicker.frame = CGRectMake( 10.0f, 15.0f, 70.0f, 70.0f );
                 profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 10.0f, -5.0f, 70.0f, 70.0f )];
+                [self.backgroundView addSubview:profileImagePicker];
+                companyName_frame = CGRectMake( 120.0f, 12.5f , 200.0f, 25.0f);
+                email_address_frame = CGRectMake( 120.0f, 12.5f + offsetHeight, 200.0f, 25.0f);
                 
                 if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
-                    backgroundView.frame = CGRectMake(0.0f, 30.0f, self.view.bounds.size.width, self.view.bounds.size.height - 88.0f);
-                    saveButton.frame = CGRectMake(35.0f, 430.0f, 250.0f, 40.0f);
+                    [self.backgroundView setContentSize:CGSizeMake(320.0f, 500.0f)];
+                    self.backgroundView.frame = CGRectMake(0.0f, 50.0f, self.view.bounds.size.width, self.view.bounds.size.height - 50.0f);
+                    saveButton.frame = CGRectMake(35.0f, 455.0f, 250.0f, 40.0f);
                 } else {
-                    backgroundView.frame = CGRectMake(0.0f, 50.0f, self.view.bounds.size.width, 458.0f);
-                    saveButton.frame = CGRectMake(35.0f, 517.5f, 250.0f, 40.0f);
+                    self.backgroundView.frame = CGRectMake(0.0f, 50.0f, self.view.bounds.size.width, self.view.bounds.size.height - 50.0f);
+                    saveButton.frame = CGRectMake(35.0f, 460.0f, 250.0f, 40.0f);
                 }
+                
+                UIImageView *companyImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"companyName.png"]];
+                [companyImageView setFrame:CGRectMake( 80.0f, 5.0f, 40.0f, 40.0f)];
+                [self.backgroundView addSubview:companyImageView];
+                
+                UIImageView *emailImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon-email.png"]];
+                [emailImageView setFrame:CGRectMake( 80.0f, 55.0f, 40.0f, 40.0f)];
+                [self.backgroundView addSubview:emailImageView];
+                
+                lineStartPoint = 90;
             }
+            
+            [self.view addSubview:self.backgroundView];
             
             [[saveButton titleLabel] setFont:[UIFont boldSystemFontOfSize:14.0f]];
             [saveButton setBackgroundColor:[UIColor colorWithRed:91.0f/255.0f green:194.0f/255.0f blue:165.0f/255.0f alpha:1.0f]];
             [saveButton setTitle:@"Apply for Membership" forState:UIControlStateNormal];
             [saveButton setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
             [saveButton addTarget:self action:@selector(saveButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-            [self.view addSubview:saveButton];
+            [backgroundView addSubview:saveButton];
             
 
             if (imageProfileFile) {
@@ -235,63 +284,53 @@
             [swipeUpGestureRecognizer setNumberOfTouchesRequired:1];
             [profileImagePicker addGestureRecognizer:swipeUpGestureRecognizer];
             
-            UIImageView *companyImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"companyName.png"]];
-            [companyImageView setFrame:CGRectMake( 80.0f, -15.0f, 40.0f, 40.0f)];
-            [backgroundView addSubview:companyImageView];
-            
-            UIImageView *emailImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon-email.png"]];
-            [emailImageView setFrame:CGRectMake( 80.0f, 35.0f, 40.0f, 40.0f)];
-            [backgroundView addSubview:emailImageView];
-            
             UIImageView *locationImageView = [[UIImageView alloc] initWithImage:nil];
             [locationImageView setImage:[UIImage imageNamed:@"profileLocation.png"]];
-            [locationImageView setFrame:CGRectMake( 10.0f, 85.0f, 40.0f, 40.0f)];
-            [backgroundView addSubview:locationImageView];
+            [locationImageView setFrame:CGRectMake( 10.0f, 105.0f, 40.0f, 40.0f)];
+            [self.backgroundView addSubview:locationImageView];
             
             UIImageView *descriptionImageView = [[UIImageView alloc] initWithImage:nil];
             [descriptionImageView setImage:[UIImage imageNamed:@"profileDescription.png"]];
-            [descriptionImageView setFrame:CGRectMake( 10.0f, 135.0f, 40.0f, 40.0f)];
-            [backgroundView addSubview:descriptionImageView];
+            [descriptionImageView setFrame:CGRectMake( 10.0f, 155.0f, 40.0f, 40.0f)];
+            [self.backgroundView addSubview:descriptionImageView];
             
             UIImageView *industryImageView = [[UIImageView alloc] initWithImage:nil];
             [industryImageView setImage:[UIImage imageNamed:@"icon-industry.png"]];
-            [industryImageView setFrame:CGRectMake( 10.0f, 185.0f, 40.0f, 40.0f)];
-            [backgroundView addSubview:industryImageView];
+            [industryImageView setFrame:CGRectMake( 10.0f, 205.0f, 40.0f, 40.0f)];
+            [self.backgroundView addSubview:industryImageView];
             
             UIImageView *websiteImageView = [[UIImageView alloc] initWithImage:nil];
             [websiteImageView setImage:[UIImage imageNamed:@"profileWebsite.png"]];
-            [websiteImageView setFrame:CGRectMake( 10.0f, 235.0f, 40.0f, 40.0f)];
-            [backgroundView addSubview:websiteImageView];
+            [websiteImageView setFrame:CGRectMake( 10.0f, 255.0f, 40.0f, 40.0f)];
+            [self.backgroundView addSubview:websiteImageView];
             
             UIImageView *twitterImageView = [[UIImageView alloc] initWithImage:nil];
             [twitterImageView setImage:[UIImage imageNamed:@"icon-twitter.png"]];
-            [twitterImageView setFrame:CGRectMake( 10.0f, 285.0f, 40.0f, 40.0f)];
-            [backgroundView addSubview:twitterImageView];
+            [twitterImageView setFrame:CGRectMake( 10.0f, 305.0f, 40.0f, 40.0f)];
+            [self.backgroundView addSubview:twitterImageView];
             
             UIImageView *linkedInImageView = [[UIImageView alloc] initWithImage:nil];
             [linkedInImageView setImage:[UIImage imageNamed:@"icon-linkedin.png"]];
-            [linkedInImageView setFrame:CGRectMake( 10.0f, 335.0f, 40.0f, 40.0f)];
-            [backgroundView addSubview:linkedInImageView];
+            [linkedInImageView setFrame:CGRectMake( 10.0f, 355.0f, 40.0f, 40.0f)];
+            [self.backgroundView addSubview:linkedInImageView];
             
             UIImageView *angelistImageView = [[UIImageView alloc] initWithImage:nil];
             [angelistImageView setImage:[UIImage imageNamed:@"icon-angel.png"]];
-            [angelistImageView setFrame:CGRectMake( 10.0f, 385.0f, 40.0f, 40.0f)];
-            [backgroundView addSubview:angelistImageView];
+            [angelistImageView setFrame:CGRectMake( 10.0f, 405.0f, 40.0f, 40.0f)];
+            [self.backgroundView addSubview:angelistImageView];
             
-            CGRect companyName_frame = CGRectMake( 120.0f, -7.5f, 200.0f, 25.0f);
             self.companyName = [[UITextField alloc] initWithFrame:companyName_frame];
             [self.companyName setBackgroundColor:[UIColor clearColor]];
             [self.companyName setFont:fonts];
             self.companyName.placeholder = displayName_user;
             self.companyName.userInteractionEnabled = YES;
             self.companyName.delegate = self;
-            [backgroundView addSubview:self.companyName];
+            [self.backgroundView addSubview:self.companyName];
             
-            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(90.0f, 30.0f, 230.0f, 1)];
+            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(lineStartPoint, 50.0f, 320.0f, 1)];
             lineView.backgroundColor = lineColor;
-            [backgroundView addSubview:lineView];
+            [self.backgroundView addSubview:lineView];
 
-            CGRect email_address_frame = CGRectMake( 120.0f, -7.5f + offsetHeight, 200.0f, 25.0f);
             self.email_address = [[UITextField alloc] initWithFrame:email_address_frame];
             [self.email_address setBackgroundColor:[UIColor clearColor]];
             [self.email_address setFont:fonts];
@@ -304,13 +343,13 @@
                 self.email_address.userInteractionEnabled = NO;
             }
             self.email_address.delegate = self;
-            [backgroundView addSubview:self.email_address];
+            [self.backgroundView addSubview:self.email_address];
             
-            UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 80.0f, self.view.bounds.size.width, 1)];
+            UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 100.0f, self.view.bounds.size.width, 1)];
             lineView1.backgroundColor = lineColor;
-            [backgroundView addSubview:lineView1];
+            [self.backgroundView addSubview:lineView1];
 
-            CGRect location_frame = CGRectMake( 60.0f, -7.5f + offsetHeight * 2, 250.0f, 25.0f);
+            CGRect location_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 2, 250.0f, 25.0f);
             self.location = [[UITextField alloc] initWithFrame:location_frame];
             [self.location setBackgroundColor:[UIColor clearColor]];
             [self.location setFont:fonts];
@@ -318,13 +357,13 @@
             self.location.userInteractionEnabled = YES;
             self.location.delegate = self;
             [self.location resignFirstResponder];
-            [backgroundView addSubview:self.location];
+            [self.backgroundView addSubview:self.location];
             
-            UIView *lineView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 130.0f, self.view.bounds.size.width, 1)];
+            UIView *lineView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 150.0f, self.view.bounds.size.width, 1)];
             lineView2.backgroundColor = lineColor;
-            [backgroundView addSubview:lineView2];
+            [self.backgroundView addSubview:lineView2];
             
-            CGRect description_frame = CGRectMake( 60.0f, -7.5f + offsetHeight * 3, 250.0f, 25.0f);
+            CGRect description_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 3, 250.0f, 25.0f);
             self.description = [[UITextField alloc] initWithFrame:description_frame];
             [self.description setBackgroundColor:[UIColor clearColor]];
             [self.description setFont:fonts];
@@ -332,13 +371,13 @@
             self.description.userInteractionEnabled = YES;
             self.description.delegate = self;
             [self.description resignFirstResponder];
-            [backgroundView addSubview:self.description];
+            [self.backgroundView addSubview:self.description];
             
-            UIView *lineView3 = [[UIView alloc] initWithFrame:CGRectMake(0, 180.0f, self.view.bounds.size.width, 1)];
+            UIView *lineView3 = [[UIView alloc] initWithFrame:CGRectMake(0, 200.0f, self.view.bounds.size.width, 1)];
             lineView3.backgroundColor = lineColor;
-            [backgroundView addSubview:lineView3];
+            [self.backgroundView addSubview:lineView3];
             
-            CGRect industry_frame = CGRectMake( 60.0f, -7.5f + offsetHeight * 4, 250.0f, 25.0f);
+            CGRect industry_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 4, 250.0f, 25.0f);
             self.industry_textfield = [[UITextField alloc] initWithFrame:industry_frame];
             [self.industry_textfield setBackgroundColor:[UIColor clearColor]];
             [self.industry_textfield setFont:fonts];
@@ -346,13 +385,13 @@
             self.industry_textfield.userInteractionEnabled = YES;
             self.industry_textfield.delegate = self;
             [self.industry_textfield resignFirstResponder];
-            [backgroundView addSubview:self.industry_textfield];
+            [self.backgroundView addSubview:self.industry_textfield];
             
-            UIView *lineView4 = [[UIView alloc] initWithFrame:CGRectMake(0, 230.0f, self.view.bounds.size.width, 1)];
+            UIView *lineView4 = [[UIView alloc] initWithFrame:CGRectMake(0, 250.0f, self.view.bounds.size.width, 1)];
             lineView4.backgroundColor = lineColor;
-            [backgroundView addSubview:lineView4];
+            [self.backgroundView addSubview:lineView4];
             
-            CGRect website_frame = CGRectMake( 60.0f, -7.5f + offsetHeight * 5, 250.0f, 25.0f);
+            CGRect website_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 5, 250.0f, 25.0f);
             self.website = [[UITextField alloc] initWithFrame:website_frame];
             [self.website setBackgroundColor:[UIColor clearColor]];
             [self.website setFont:fonts];
@@ -361,13 +400,13 @@
             self.website.delegate = self;
             self.website.autocapitalizationType = UITextAutocapitalizationTypeNone;
             [self.website resignFirstResponder];
-            [backgroundView addSubview:self.website];
+            [self.backgroundView addSubview:self.website];
             
-            UIView *lineView5 = [[UIView alloc] initWithFrame:CGRectMake(0, 280.0f, self.view.bounds.size.width, 1)];
+            UIView *lineView5 = [[UIView alloc] initWithFrame:CGRectMake(0, 300.0f, self.view.bounds.size.width, 1)];
             lineView5.backgroundColor = lineColor;
-            [backgroundView addSubview:lineView5];
+            [self.backgroundView addSubview:lineView5];
             
-            CGRect twitter_frame = CGRectMake( 60.0f, -7.5f + offsetHeight * 6, 250.0f, 25.0f);
+            CGRect twitter_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 6, 250.0f, 25.0f);
             self.twitter_textfield = [[UITextField alloc] initWithFrame:twitter_frame];
             [self.twitter_textfield setBackgroundColor:[UIColor clearColor]];
             [self.twitter_textfield setFont:fonts];
@@ -376,13 +415,13 @@
             self.twitter_textfield.delegate = self;
             self.twitter_textfield.autocapitalizationType = UITextAutocapitalizationTypeNone;
             [self.twitter_textfield resignFirstResponder];
-            [backgroundView addSubview:self.twitter_textfield];
+            [self.backgroundView addSubview:self.twitter_textfield];
             
-            UIView *lineView6 = [[UIView alloc] initWithFrame:CGRectMake(0, 330.0f, self.view.bounds.size.width, 1)];
+            UIView *lineView6 = [[UIView alloc] initWithFrame:CGRectMake(0, 350.0f, self.view.bounds.size.width, 1)];
             lineView6.backgroundColor = lineColor;
-            [backgroundView addSubview:lineView6];
+            [self.backgroundView addSubview:lineView6];
             
-            CGRect linkedIn_frame = CGRectMake( 60.0f, -7.5f + offsetHeight * 7, 250.0f, 25.0f);
+            CGRect linkedIn_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 7, 250.0f, 25.0f);
             self.linkedin_textfield = [[UITextField alloc] initWithFrame:linkedIn_frame];
             [self.linkedin_textfield setBackgroundColor:[UIColor clearColor]];
             [self.linkedin_textfield setFont:fonts];
@@ -391,13 +430,13 @@
             self.linkedin_textfield.delegate = self;
             self.linkedin_textfield.autocapitalizationType = UITextAutocapitalizationTypeNone;
             [self.linkedin_textfield resignFirstResponder];
-            [backgroundView addSubview:self.linkedin_textfield];
+            [self.backgroundView addSubview:self.linkedin_textfield];
             
-            UIView *lineView7 = [[UIView alloc] initWithFrame:CGRectMake(0, 380.0f, self.view.bounds.size.width, 1)];
+            UIView *lineView7 = [[UIView alloc] initWithFrame:CGRectMake(0, 400.0f, self.view.bounds.size.width, 1)];
             lineView7.backgroundColor = lineColor;
-            [backgroundView addSubview:lineView7];
+            [self.backgroundView addSubview:lineView7];
             
-            CGRect angel_frame = CGRectMake( 60.0f, -7.5f + offsetHeight * 8, 250.0f, 25.0f);
+            CGRect angel_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 8, 250.0f, 25.0f);
             self.angelist_textfield = [[UITextField alloc] initWithFrame:angel_frame];
             [self.angelist_textfield setBackgroundColor:[UIColor clearColor]];
             [self.angelist_textfield setFont:fonts];
@@ -406,14 +445,14 @@
             self.angelist_textfield.delegate = self;
             self.angelist_textfield.autocapitalizationType = UITextAutocapitalizationTypeNone;
             [self.angelist_textfield resignFirstResponder];
-            [backgroundView addSubview:self.angelist_textfield];
+            [self.backgroundView addSubview:self.angelist_textfield];
             
             UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                            initWithTarget:self
                                            action:@selector(dismissKeyboard)];
             
             [self.view addGestureRecognizer:tapOutside];
-            
+            [self.view addSubview:dimView];
             [SVProgressHUD dismiss];
             
         }else{
@@ -461,6 +500,7 @@
     bool profileExist_user = [profilExist_num boolValue];
     
     if (!profileExist_user) {
+        /*
         if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
             cameraButton.frame = CGRectMake( 122.5f, 35.0f, 75.0f, 75.0f );
             cameraButton.center = CGPointMake(160.0f, 73.0f);
@@ -468,6 +508,16 @@
             cameraButton.frame = CGRectMake( 122.5f, 85.0f, 75.0f, 75.0f );
             cameraButton.center = CGPointMake(160.0f, 123.0f);
         }
+        */
+        
+        //prevents from poping back to -20 pixels;
+        [self.backgroundView setContentOffset:CGPointMake(0, 0)];
+        
+        cameraButton.frame = CGRectMake(10.0f, 15.0f, 70.0f, 70.0f);
+        cameraButton.frame = CGRectIntegral(cameraButton.frame);
+        [cameraButton setImage:resizedImage forState:UIControlStateNormal];
+        [cameraButton addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [self.backgroundView addSubview:cameraButton];
     } else {
         if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
             cameraButton.frame = CGRectMake( 122.5f, 35.0f, 75.0f, 75.0f );
@@ -476,13 +526,13 @@
             cameraButton.frame = CGRectMake( 122.5f, 85.0f, 75.0f, 75.0f );
             cameraButton.center = CGPointMake(160.0f, 172.0f);
         }
+        
+        
+        cameraButton.frame = CGRectIntegral(cameraButton.frame);
+        [cameraButton setImage:resizedImage forState:UIControlStateNormal];
+        [cameraButton addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:cameraButton];
     }
-
-    cameraButton.frame = CGRectIntegral(cameraButton.frame);
-    [cameraButton setImage:resizedImage forState:UIControlStateNormal];
-    //cameraButton.clipsToBounds = YES;
-    [cameraButton addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:cameraButton];
     
     UISwipeGestureRecognizer *swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
     [swipeUpGestureRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
@@ -500,25 +550,9 @@
     
     user = [PFUser currentUser];
     user[@"profilePictureSmall"] = imageFile;
-    /*
-    [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (error) {
-            NSLog(@"uploadImage_small: %@ %@", error, [error userInfo]);
-        }
-        [SVProgressHUD dismiss];
-    }];
-     */
+    
     [user saveInBackground];
     [SVProgressHUD dismiss];
-    /*
-    [user saveEventually:^(BOOL succeeded, NSError *error) {
-        if (error) {
-            NSLog(@"uploadImage_small: %@ %@", error, [error userInfo]);
-        } else {
-            NSLog(@"successful");
-        }
-
-    }];*/
 }
 
 -(void)uploadImage_medium:(NSData *)imageData {
@@ -527,28 +561,9 @@
     [SVProgressHUD show];
     user = [PFUser currentUser];
     user[@"profilePictureMedium"] = imageFile;
-    
-    /*
-    [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (error) {
-            NSLog(@"uploadImage_medium: %@ %@", error, [error userInfo]);
-        } else {
-            NSLog(@"successful");
-        }
-        [SVProgressHUD dismiss];
-    }];
-     */
+ 
     [user saveInBackground];
     [SVProgressHUD dismiss];
-    /*
-    [user saveEventually:^(BOOL succeeded, NSError *error) {
-        if (error) {
-            NSLog(@"uploadImage_medium: %@ %@", error, [error userInfo]);
-        } else {
-            NSLog(@"successful");
-        }
-        [SVProgressHUD dismiss];
-    }];*/
 }
 
 #pragma mark - UINavigationControllerDelegate
@@ -725,12 +740,6 @@
     return YES;
 }
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
-
-    
-    return YES;
-}
-
 - (BOOL) textFieldShouldEndEditing:(UITextField *)textField {
     if (textField == twitter_textfield && [textField.text isEqual: @"https://twitter.com/"]) {
         textField.text = @"";
@@ -767,6 +776,7 @@
     NSString* email_current_input = self.user[@"email"];
     NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
     bool profileExist_user = [profilExist_num boolValue];
+    saveButton.userInteractionEnabled = NO;
     
     if (profileExist_user == true) {
         if (!imageData_picker) {
@@ -902,9 +912,10 @@
                     [alert show];
                 }
             }];
-            //[[PFUser currentUser] saveEventually];
 
         } else {
+            saveButton.enabled = YES;
+            
             if ([companyName_input length] == 0) {
                 UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter Display Name." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                 alert.alertViewStyle = UIAlertViewStyleDefault;
@@ -1066,6 +1077,31 @@
     } else if (textField == website) {
         website.text = @"http://";
     }
+    
+    if (textField == industry_textfield) {
+        [self.view endEditing:YES];
+        dimView.hidden = NO;
+        
+        industry_pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 270.0f, 320.0f, 0.0f)];
+        industry_pickerView.delegate = self;
+        industry_pickerView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:0.95f];
+        industry_pickerView.showsSelectionIndicator = YES;
+        [self.view addSubview:industry_pickerView];
+        
+        industry_chooseButton = [[UIButton alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 54.0f, 320.0f, 54.0f)];
+        [industry_chooseButton setBackgroundColor:[UIColor colorWithRed:91.0f/255.0f green:194.0f/255.0f blue:165.0f/255.0f alpha:1.0f]];
+        [industry_chooseButton setTitle:@"Choose" forState:UIControlStateNormal];
+        [industry_chooseButton addTarget:self action:@selector(industry_chooseButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:industry_chooseButton];
+    }
+}
+
+- (void) industry_chooseButtonAction:(id)sender {
+    dimView.hidden = YES;
+    [industry_pickerView removeFromSuperview];
+    [industry_chooseButton removeFromSuperview];
+    
+    industry_textfield.text = [industry_dataSource objectAtIndex:industry_pickerRow];
 }
 
 
@@ -1100,7 +1136,7 @@
         [SVProgressHUD showWithStatus:@"Validating Email"];
         
         PFQuery *userQuery = [PFUser query];
-        [userQuery whereKey:@"email" equalTo:email_address.text];
+        [userQuery whereKey:@"email" equalTo :email_address.text];
         [userQuery countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
             [SVProgressHUD dismiss];
             
@@ -1159,6 +1195,33 @@
     NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
     return [emailTest evaluateWithObject:checkString];
+}
+
+#pragma mark - UIPickerViewDelegate
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return 30;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    NSUInteger numRows = 30;
+    
+    return numRows;
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow: (NSInteger)row inComponent:(NSInteger)component {
+    industry_pickerRow = row;
+}
+
+// tell the picker the width of each row for a given component
+- (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component {
+    int sectionWidth = 300;
+    
+    return sectionWidth;
+}
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    return [industry_dataSource objectAtIndex:row];
 }
 
 @end
