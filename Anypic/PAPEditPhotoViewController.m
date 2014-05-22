@@ -183,7 +183,7 @@
 - (void)exitPhoto{
     
     // hide custom grey bar and pop to home
-    [[self navigationController] setNavigationBarHidden:YES animated:NO];
+    [[self navigationController] setNavigationBarHidden:YES animated:YES];
     
     // get tab bar and home controller from stack
     PAPTabBarController *tabBarController =[[self.navigationController viewControllers] objectAtIndex:1];

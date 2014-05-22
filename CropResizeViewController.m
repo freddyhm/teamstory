@@ -7,7 +7,6 @@
 //
 
 #import "CropResizeViewController.h"
-#import "ImageTextViewController.h"
 #import "PAPTabBarController.h"
 #import "CameraFilterViewController.h"
 #import "UIImage+ResizeAdditions.h"
@@ -162,12 +161,9 @@
             [SVProgressHUD dismiss];
 
             // add to filters
-           //8 CameraFilterViewController *filterController = [[CameraFilterViewController alloc]initWithImage:self.croppedImg nib:@"CameraFilterViewController" source:self.imageSource];
-            
-            ImageTextViewController *imageTextViewController = [[ImageTextViewController alloc]init];
-            
+            CameraFilterViewController *filterController = [[CameraFilterViewController alloc]initWithImage:self.croppedImg nib:@"CameraFilterViewController" source:self.imageSource];
             // push filter controller to nav stack
-            [self.navigationController pushViewController:imageTextViewController animated:YES];
+            [self.navigationController pushViewController:filterController animated:YES];
         });
     });
 }

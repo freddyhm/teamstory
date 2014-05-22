@@ -8,6 +8,7 @@
 #import  "CameraFilterViewController.h"
 #import "MBProgressHUD.h"
 #import "CropResizeViewController.h"
+#import "ThoughtPostViewController.h"
 
 @interface PAPTabBarController ()
 @property (nonatomic,strong) NSString *imageSource;
@@ -38,14 +39,23 @@
     //[[self tabBar] setSelectionIndicatorImage:[UIImage imageNamed:@"BackgroundTabBarItemSelected.png"]];
     
     self.navController = [[UINavigationController alloc] init];
+   
     
-    self.postMenu = [[UIView alloc]initWithFrame:CGRectMake(0, 200, self.view.frame.size.width, 50)];
+    // create post menu
+    self.postMenu = [[UIView alloc]initWithFrame:CGRectMake(self.tabBar.frame.origin.x, self.tabBar.frame.origin.y - self.tabBar.frame.size.height, self.tabBar.frame.size.width, self.tabBar.frame.size.height)];
     self.postMenu.backgroundColor = [UIColor whiteColor];
-    self.photoPostButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 200, 10, 10)];
-    self.photoPostButton.titleLabel.text = @"Share Moment";
     
-    self.thoughtPostButton = [[UIButton alloc] initWithFrame:CGRectMake(40, 200, 10, 10)];
-    self.thoughtPostButton.titleLabel.text = @"Share Thought";
+    self.photoPostButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.tabBar.frame.size.width/2, self.tabBar.frame.size.height)];
+    [self.photoPostButton setTitle:@"Share Moment" forState:UIControlStateNormal];
+    [self.photoPostButton addTarget:self action:@selector(cameraButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        self.photoPostButton.titleLabel.textColor = [UIColor blackColor];
+   // self.photoPostButton.backgroundColor = [UIColor blackColor];
+    
+    self.thoughtPostButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tabBar.frame.size.width/2, 0, self.tabBar.frame.size.width/2, self.tabBar.frame.size.height)];
+    [self.thoughtPostButton setTitle:@"Share Thought" forState:UIControlStateNormal];
+    [self.thoughtPostButton addTarget:self action:@selector(thoughtButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    self.thoughtPostButton.titleLabel.textColor = [UIColor blackColor];
+   // self.thoughtPostButton.backgroundColor = [UIColor redColor];
     
     [self.postMenu addSubview:self.photoPostButton];
     [self.postMenu addSubview:self.thoughtPostButton];
@@ -163,10 +173,10 @@
 
 - (void)postButtonAction:(id)sender {
     
-    
-    
     [self.view addSubview:self.postMenu];
-    
+}
+
+- (void)cameraButtonAction:(id)sender{
     
     BOOL cameraDeviceAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
     BOOL photoLibraryAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
@@ -178,6 +188,12 @@
         // if we don't have at least two options, we automatically show whichever is available (camera or roll)
         [self shouldPresentPhotoCaptureController];
     }
+}
+
+- (void)thoughtButtonAction:(id)sender{
+    
+    ThoughtPostViewController *thoughtPostViewController = [[ThoughtPostViewController alloc]init];
+    [self.navigationController pushViewController:thoughtPostViewController animated:YES];
 }
 
 - (BOOL)shouldStartCameraController {

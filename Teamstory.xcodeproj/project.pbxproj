@@ -358,8 +358,8 @@
 		D530C3F318FB22FC00739027 /* iRate.m in Sources */ = {isa = PBXBuildFile; fileRef = D530C3F118FB22FC00739027 /* iRate.m */; };
 		D531F7CC18B5DE11008AE73F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D531F7CB18B5DE11008AE73F /* CoreVideo.framework */; };
 		D531F7CE18B5DE44008AE73F /* Appsee.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D531F7CD18B5DE44008AE73F /* Appsee.framework */; };
-		D53D99D019293CB5008BCA40 /* ImageTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D53D99CE19293CB5008BCA40 /* ImageTextViewController.m */; };
-		D53D99D119293CB5008BCA40 /* ImageTextViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D53D99CF19293CB5008BCA40 /* ImageTextViewController.xib */; };
+		D5903C75192EBBF900DC9896 /* ThoughtPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */; };
+		D5903C76192EBBF900DC9896 /* ThoughtPostViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5903C74192EBBF900DC9896 /* ThoughtPostViewController.xib */; };
 		D594C20418EFEBAD0008F5DF /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D594C20118EFEBAD0008F5DF /* SVProgressHUD.bundle */; };
 		D594C20518EFEBAD0008F5DF /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = D594C20318EFEBAD0008F5DF /* SVProgressHUD.m */; };
 		D59AE7B618CD501D007F882B /* valley.png in Resources */ = {isa = PBXBuildFile; fileRef = D59AE7B418CD501D007F882B /* valley.png */; };
@@ -822,9 +822,9 @@
 		D530C3F118FB22FC00739027 /* iRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iRate.m; sourceTree = "<group>"; };
 		D531F7CB18B5DE11008AE73F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		D531F7CD18B5DE44008AE73F /* Appsee.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Appsee.framework; path = External/Appsee.framework; sourceTree = "<group>"; };
-		D53D99CD19293CB5008BCA40 /* ImageTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageTextViewController.h; sourceTree = SOURCE_ROOT; };
-		D53D99CE19293CB5008BCA40 /* ImageTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageTextViewController.m; sourceTree = SOURCE_ROOT; };
-		D53D99CF19293CB5008BCA40 /* ImageTextViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageTextViewController.xib; sourceTree = SOURCE_ROOT; };
+		D5903C72192EBBF900DC9896 /* ThoughtPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThoughtPostViewController.h; sourceTree = SOURCE_ROOT; };
+		D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThoughtPostViewController.m; sourceTree = SOURCE_ROOT; };
+		D5903C74192EBBF900DC9896 /* ThoughtPostViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ThoughtPostViewController.xib; sourceTree = SOURCE_ROOT; };
 		D594C20018EFEBAD0008F5DF /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
 		D594C20118EFEBAD0008F5DF /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
 		D594C20218EFEBAD0008F5DF /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
@@ -1355,6 +1355,7 @@
 				C4F102A5156C57620061BC3E /* PAPPhotoDetailsFooterView.h */,
 				C4F102A6156C57620061BC3E /* PAPPhotoDetailsFooterView.m */,
 				D5FC095918A9B586000D85F1 /* CameraFilterViewController.xib */,
+				D5903C74192EBBF900DC9896 /* ThoughtPostViewController.xib */,
 			);
 			name = PhotoDetailsViews;
 			sourceTree = "<group>";
@@ -1468,9 +1469,8 @@
 				C4F102DB156C58170061BC3E /* PAPEditPhotoViewController.m */,
 				D5FC095618A9B552000D85F1 /* FilterCell.h */,
 				D5FC095718A9B552000D85F1 /* FilterCell.m */,
-				D53D99CD19293CB5008BCA40 /* ImageTextViewController.h */,
-				D53D99CE19293CB5008BCA40 /* ImageTextViewController.m */,
-				D53D99CF19293CB5008BCA40 /* ImageTextViewController.xib */,
+				D5903C72192EBBF900DC9896 /* ThoughtPostViewController.h */,
+				D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */,
 			);
 			name = "Take Photo";
 			sourceTree = "<group>";
@@ -1857,7 +1857,6 @@
 				C4BE670F157FC7D000A291C2 /* Icon-Small-50.png in Resources */,
 				4602FD1318BD553B0097DBEC /* foundersuite-popup@2x.png in Resources */,
 				4602FD1F18BD553B0097DBEC /* slingbot-popup@2x.png in Resources */,
-				D53D99D119293CB5008BCA40 /* ImageTextViewController.xib in Resources */,
 				C4BE6710157FC7D000A291C2 /* Icon-Small.png in Resources */,
 				4602FD2418BD553B0097DBEC /* konotor-logo.png in Resources */,
 				C4BE6711157FC7D000A291C2 /* Icon-Small@2x.png in Resources */,
@@ -1874,6 +1873,7 @@
 				C4BE676D157FC7F700A291C2 /* BackgroundComments.png in Resources */,
 				4691B51D18C1477100B7DF6A /* intro2-iphone5@2x.png in Resources */,
 				465DE3471895983A00C37EF8 /* profileType@2x.png in Resources */,
+				D5903C76192EBBF900DC9896 /* ThoughtPostViewController.xib in Resources */,
 				C4BE676E157FC7F700A291C2 /* BackgroundComments@2x.png in Resources */,
 				D52C1E3C18D9515D00625887 /* konotor_send@2x.png in Resources */,
 				465B19AD18B81FE500EDBCFC /* browser-button-forward-no.png in Resources */,
@@ -2175,7 +2175,6 @@
 				462B363E1880AB5D008C28AE /* discoverPageViewController.m in Sources */,
 				C4F102CB156C57EE0061BC3E /* PAPActivityFeedViewController.m in Sources */,
 				C4F102CC156C57EE0061BC3E /* PAPHomeViewController.m in Sources */,
-				D53D99D019293CB5008BCA40 /* ImageTextViewController.m in Sources */,
 				C4F102CD156C57EE0061BC3E /* PAPPhotoTimelineViewController.m in Sources */,
 				C4F102D2156C57FD0061BC3E /* PAPAccountViewController.m in Sources */,
 				C4F102D3156C57FD0061BC3E /* PAPPhotoDetailsViewController.m in Sources */,
@@ -2195,6 +2194,7 @@
 				D52C1E4918D9515D00625887 /* KonotorVoiceInputOverlay.m in Sources */,
 				C4A6A246158FF842003F64A8 /* MBProgressHUD.m in Sources */,
 				46E1EB6F183BCA6300F64274 /* PAPProfileSettingViewController.m in Sources */,
+				D5903C75192EBBF900DC9896 /* ThoughtPostViewController.m in Sources */,
 				C47DDDE61592761F002114F6 /* Reachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
