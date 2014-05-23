@@ -759,8 +759,7 @@
 }
 
 - (void)saveButtonAction:(id)sender {
-    [self.companyName resignFirstResponder];
-    [self.email_address resignFirstResponder];
+    [self.view endEditing:YES];
     NSString* companyName_input = self.companyName.text;
     NSString* location_input = self.location.text;
     NSString* description_input = self.description.text;
@@ -812,6 +811,7 @@
         if ([angellist_input length] > 0) {
             self.user[@"angellist_url"] = angellist_input;
         }
+        /*
         if (([email_input length] > 0 && [self NSStringIsValidEmail:email_input]) || email_current_input) {
             self.user[@"email"] = email_input;
         } else {
@@ -820,7 +820,7 @@
             [alert show];
             return;
         }
-        
+        */
         //[[PFUser currentUser] saveEventually];
         [SVProgressHUD show];
         [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {

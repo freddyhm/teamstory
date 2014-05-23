@@ -436,6 +436,19 @@
         self.twitter_url = [self.user objectForKey:@"twitter_url"];
         self.linkedin_url = [self.user objectForKey:@"linkedin_url"];
         
+        if ([websiteInfo isEqualToString:@"http://"]) {
+            websiteInfo = nil;
+        }
+        if ([self.linkedin_url isEqualToString:@"https://www.linkedin.com/in/"]) {
+            self.linkedin_url = nil;
+        }
+        if ([self.twitter_url isEqualToString:@"https://twitter.com/"]) {
+            self.twitter_url = nil;
+        }
+        if ([self.angellist_url isEqualToString:@"https://angel.co/"]) {
+            self.angellist_url = nil;
+        }
+        
         if ([self.angellist_url length] > 0) {
             alphaValue_angellist = 1.0f;
             button_enable_angellist = YES;
