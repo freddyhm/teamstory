@@ -1066,13 +1066,13 @@
     }
     
     
-    if (textField == twitter_textfield ) {
+    if (textField == twitter_textfield && [textField.text length] == 0) {
         twitter_textfield.text = @"https://twitter.com/";
-    } else if (textField == linkedin_textfield) {
+    } else if (textField == linkedin_textfield && [textField.text length] == 0) {
         linkedin_textfield.text = @"https://www.linkedin.com/in/";
-    } else if (textField == angelist_textfield) {
+    } else if (textField == angelist_textfield && [textField.text length] == 0) {
         angelist_textfield.text = @"https://angel.co/";
-    } else if (textField == website) {
+    } else if (textField == website && [textField.text length] == 0) {
         website.text = @"http://";
     }
     if (textField == twitter_textfield && ![twitter_user isEqualToString:@"Twitter"]) {
