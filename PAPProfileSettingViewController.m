@@ -1172,6 +1172,22 @@
         
     }
     
+    if (textField == twitter_textfield && ![twitter_user isEqualToString:@"Twitter"]) {
+        twitter_user = twitter_textfield.text;
+    } else if (textField == linkedin_textfield && ![linkedin_user isEqualToString:@"LinkedIn"]) {
+        linkedin_user = linkedin_textfield.text;
+    } else if (textField == angelist_textfield && ![angelist_user isEqualToString:@"AngelList"]) {
+        angelist_user = angelist_textfield.text;
+    } else if (textField == website && ![website_user isEqualToString:@"Website URL"]) {
+        website_user = website.text;
+    } else if (textField == description && ![description_user isEqualToString:@"Description"]) {
+        description_user = description.text;
+    } else if (textField == companyName && ![displayName_user isEqualToString:@"Display or Company Name"]) {
+        displayName_user = companyName.text;
+    } else if (textField == location && ![location_user isEqualToString:@"Location"]) {
+        location_user = location.text;
+    }
+    
 }
 
 - (void) textfieldUserInteractionControl:(BOOL) enable {
