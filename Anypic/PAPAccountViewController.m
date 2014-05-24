@@ -47,6 +47,7 @@
 @property (nonatomic, strong) UIButton *angellist_button;
 @property (nonatomic, strong) UIButton *twitter_button;
 @property (nonatomic, strong) UIButton *linkedIn_button;
+@property (nonatomic, strong) UIView *whiteBackground;
 @property int userStatUpdateCount;
 
 
@@ -79,6 +80,7 @@
 @synthesize angellist_button;
 @synthesize twitter_button;
 @synthesize linkedIn_button;
+@synthesize whiteBackground;
 
 
 #pragma mark - Initialization
@@ -141,7 +143,7 @@
                 [self.descriptionLabel setTextColor:[UIColor colorWithRed:178.0f/255.0f green:184.0f/255.0f blue:189.0f/255.0f alpha:1.0f]];
                 self.descriptionLabel.text = self.descriptionInfo;
                 self.descriptionLabel.numberOfLines = 0;
-                CGSize maximumLabelSize = CGSizeMake(300.0f, 32.0f);
+                CGSize maximumLabelSize = CGSizeMake(300.0f, MAXFLOAT);
                 
                 CGSize expectedSize = [self.descriptionLabel sizeThatFits:maximumLabelSize];
                 CGSize industry_expectedSize = [self.industry sizeWithFont:[UIFont systemFontOfSize:13.0f]];
@@ -161,8 +163,11 @@
                 
                 self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + website_expectedSize.height + 43.0f);
                 [self.headerView setBackgroundColor:[UIColor clearColor]]; // should be clear, this will be the container for our avatar, photo count, follower count, following count, and so on
+                [self.view addSubview:self.headerView];
                 
-                UIView *whiteBackground = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, self.headerView.bounds.size.height - 10.0f)];
+                
+                whiteBackground = [[UIView alloc] init];
+                [whiteBackground setFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, self.headerView.bounds.size.height - 10.0f)];
                 [whiteBackground setBackgroundColor:[UIColor whiteColor]];
                 [self.headerView addSubview:whiteBackground];
                 
@@ -218,7 +223,11 @@
                     NSLog(@"locationInfo Not found");
                 }
                 
-                [industryLabel setFrame:CGRectMake(320.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + website_expectedSize.height, industry_expectedSize.width + 10.0f, 22.0f)];
+                if ([self.industry length] > 0) {
+                    [industryLabel setFrame:CGRectMake(320.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + website_expectedSize.height, industry_expectedSize.width + 10.0f, 22.0f)];
+                } else {
+                    [industryLabel setFrame:CGRectMake(0.0f, 0.0f, 0.0f, 0.0f)];
+                }
                 industryLabel.textAlignment = NSTextAlignmentCenter;
                 [industryLabel setBackgroundColor:[UIColor colorWithRed:201.0f/255.0f green:205.0f/255.0f blue:208.0f/255.0f alpha:1.0f]];
                 [industryLabel.layer setCornerRadius:3.0f];
@@ -301,7 +310,7 @@
                 
                 if ([websiteInfo length] > 0) {
                     websiteLink = [UIButton buttonWithType:UIButtonTypeCustom];
-                    [websiteLink setFrame:CGRectMake( 10.0f, 86.0f + expectedSize.height, 300.0f, 16.0f)];
+                    [websiteLink setFrame:CGRectMake( 10.0f, 88.0f + expectedSize.height, website_expectedSize.width, website_expectedSize.height)];
                     [websiteLink setTitle:websiteInfo forState:UIControlStateNormal];
                     [websiteLink setTitleColor:[UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
                     websiteLink.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
@@ -310,21 +319,24 @@
                     [self.headerView addSubview:websiteLink];
                 }
                 
-                linkedIn_button = [[UIButton alloc] initWithFrame:CGRectMake(10.0f, 97.0f + expectedSize.height + website_expectedSize.height, 22.0f, 22.0f)];
+                linkedIn_button = [[UIButton alloc] init];
+                [linkedIn_button setFrame:CGRectMake(10.0f, 97.0f + expectedSize.height + website_expectedSize.height, 22.0f, 22.0f)];
                 [linkedIn_button setBackgroundImage:[UIImage imageNamed:@"icon-linkedin-profile.png"] forState:UIControlStateNormal];
                 [linkedIn_button setAlpha:alphaValue_linkedin];
                 linkedIn_button.enabled = button_enable_linkedin;
                 [linkedIn_button addTarget:self action:@selector(linkedin_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
                 [self.headerView addSubview:linkedIn_button];
                 
-                twitter_button = [[UIButton alloc] initWithFrame:CGRectMake(42.0f, 97.0f + expectedSize.height + website_expectedSize.height, 22.0f, 22.0f)];
+                twitter_button = [[UIButton alloc] init];
+                twitter_button.frame = CGRectMake(42.0f, 97.0f + expectedSize.height + website_expectedSize.height, 22.0f, 22.0f);
                 [twitter_button setAlpha:alphaValue_twitter];
                 twitter_button.enabled = button_enable_twitter;
                 [twitter_button addTarget:self action:@selector(twitter_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
                 [twitter_button setBackgroundImage:[UIImage imageNamed:@"icon-twitter-profile.png"] forState:UIControlStateNormal];
                 [self.headerView addSubview:twitter_button];
                 
-                angellist_button = [[UIButton alloc] initWithFrame:CGRectMake(74.0f, 97.0f + expectedSize.height + website_expectedSize.height, 22.0f, 22.0f)];
+                angellist_button = [[UIButton alloc] init];
+                angellist_button.frame = CGRectMake(74.0f, 97.0f + expectedSize.height + website_expectedSize.height, 22.0f, 22.0f);
                 [angellist_button setBackgroundImage:[UIImage imageNamed:@"icon-angel-profile.png"] forState:UIControlStateNormal];
                 [angellist_button setAlpha:alphaValue_angellist];
                 angellist_button.enabled = button_enable_angellist;
@@ -431,7 +443,7 @@
         self.descriptionLabel.text = [self.user objectForKey:@"description"];
         [self.websiteLink setTitle:[self.user objectForKey:@"website"] forState:UIControlStateNormal];
         self.websiteInfo = [self.user objectForKey:@"website"];
-        self.industryLabel.text = [self.user objectForKey:@"industry"];
+        self.industry = [self.user objectForKey:@"industry"];
         self.angellist_url = [self.user objectForKey:@"angellist_url"];
         self.twitter_url = [self.user objectForKey:@"twitter_url"];
         self.linkedin_url = [self.user objectForKey:@"linkedin_url"];
@@ -484,10 +496,12 @@
             }
         }];
         
-        CGSize maximumLabelSize = CGSizeMake(300.0f, 32.0f);
+        CGSize maximumLabelSize = CGSizeMake(300.0f, MAXFLOAT);
         
         CGSize expectedSize = [self.descriptionLabel sizeThatFits:maximumLabelSize];
-        CGSize industry_expectedSize = [self.industryLabel.text sizeWithFont:[UIFont systemFontOfSize:13.0f]];
+        
+        
+        CGSize industry_expectedSize = [self.industry sizeWithFont:[UIFont systemFontOfSize:13.0f]];
         
         if ([self.websiteInfo length] > 0) {
             website_expectedSize = [self.websiteInfo sizeWithFont:[UIFont systemFontOfSize:13.0f]];
@@ -496,7 +510,31 @@
         }
         
         self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + website_expectedSize.height + 43.0f);
+        
+        self.industryLabel = [[UILabel alloc] init];
+        if ([self.industry length] > 0) {
+            [industryLabel setFrame:CGRectMake(320.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + website_expectedSize.height, industry_expectedSize.width + 10.0f, 22.0f)];
+        } else {
+            [industryLabel setFrame:CGRectMake(0.0f, 0.0f, 0.0f, 0.0f)];
+        }
+        
+        industryLabel.textAlignment = NSTextAlignmentCenter;
+        industryLabel.text = self.industry;
+        [industryLabel setBackgroundColor:[UIColor colorWithRed:201.0f/255.0f green:205.0f/255.0f blue:208.0f/255.0f alpha:1.0f]];
+        [industryLabel.layer setCornerRadius:3.0f];
+        [industryLabel setClipsToBounds:YES];
+        [industryLabel setFont:[UIFont systemFontOfSize:13.0f]];
+        [industryLabel setTextColor:[UIColor whiteColor]];
+        [self.headerView addSubview:industryLabel];
+        
+        [descriptionLabel setFrame:CGRectMake(10.0f, 88.0f, expectedSize.width, expectedSize.height)];
+        [websiteLink setFrame:CGRectMake( 10.0f, 88.0f + expectedSize.height, website_expectedSize.width, website_expectedSize.height)];
         [self.industryLabel setFrame:CGRectMake(320.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + website_expectedSize.height, industry_expectedSize.width + 10.0f, 22.0f)];
+        [whiteBackground setFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, self.headerView.bounds.size.height - 10.0f)];
+        
+        linkedIn_button.frame = CGRectMake(10.0f, 97.0f + expectedSize.height + website_expectedSize.height, 22.0f, 22.0f);
+        angellist_button.frame = CGRectMake(74.0f, 97.0f + expectedSize.height + website_expectedSize.height, 22.0f, 22.0f);
+        twitter_button.frame = CGRectMake(42.0f, 97.0f + expectedSize.height + website_expectedSize.height, 22.0f, 22.0f);
         
         // refresh user stats, dismiss progress hud when finished
         [self refreshFollowerCount:^(BOOL completed) {
