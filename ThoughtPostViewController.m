@@ -66,6 +66,13 @@
 
 #pragma mark - UITextViewDelegate
 
+-(void)textViewDidBeginEditing:(UITextView *)textView{
+
+    if(!self.placeholder.hidden){
+        self.placeholder.hidden = YES;
+    }
+}
+
 - (void)dismissKeyboard {
     [self.view endEditing:YES];
 }
