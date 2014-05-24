@@ -59,7 +59,9 @@
 #define numLikePics 7.0f
 static CGSize expectedSize;
 
-@interface PAPPhotoDetailsHeaderView ()
+@interface PAPPhotoDetailsHeaderView () {
+    float viewOffset;
+}
 
 
 // View components
@@ -269,8 +271,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
         UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(baseHorizontalOffset, nameHeaderHeight, mainImageWidth, expectedSize.height + 20.0f)];
         [backgroundView setBackgroundColor:[UIColor whiteColor]];
         [self addSubview:backgroundView];
-        
-        self.photoDescriptionLabel.frame = CGRectMake(baseHorizontalOffset * 2, nameHeaderHeight + 5.0f, mainImageWidth - baseHorizontalOffset * 2, expectedSize.height + 5.0f);
+        viewOffset = 20;
+        self.photoDescriptionLabel.frame = CGRectMake(baseHorizontalOffset * 2, nameHeaderHeight + 5.0f, mainImageWidth - baseHorizontalOffset * 2 + viewOffset, expectedSize.height + 5.0f);
         [self addSubview:self.photoDescriptionLabel];
         
         self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height + 15.0f, mainImageWidth, mainImageHeight)];
@@ -287,6 +289,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         [self addSubview:self.photoImageView];
     } else {
+        viewOffset = 0;
         self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
         self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
         self.photoImageView.backgroundColor = [UIColor blackColor];
@@ -368,7 +371,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
         /*
          Create bottom section fo the header view; the likes
          */
-        likeBarView = [[UIView alloc] initWithFrame:CGRectMake(likeBarX, likeBarY + expectedSize.height, likeBarWidth, likeBarHeight)];
+        likeBarView = [[UIView alloc] init];
+        [likeBarView setFrame:CGRectMake(likeBarX, likeBarY + expectedSize.height + viewOffset, likeBarWidth, likeBarHeight)];
         [likeBarView setBackgroundColor:[UIColor whiteColor]];
         [self addSubview:likeBarView];
         
