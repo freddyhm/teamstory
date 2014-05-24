@@ -318,11 +318,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/PAPAccountViewController.m"
-            timestampString = "422631967.786128"
+            timestampString = "422646933.342766"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "222"
-            endingLineNumber = "222"
+            startingLineNumber = "221"
+            endingLineNumber = "221"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
@@ -430,7 +430,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/PAPAccountViewController.m"
-            timestampString = "422632817.773086"
+            timestampString = "422647093.747499"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "241"

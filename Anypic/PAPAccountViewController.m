@@ -133,9 +133,8 @@
             
             
             if (imageFile && locationInfo && displayName) {
-                if ([self.industry length] > 0) {
-                    self.industryLabel = [[UILabel alloc] init];
-                }
+                self.industryLabel = [[UILabel alloc] init];
+                
                 self.industryLabel.text = self.industry;
                 
                 self.descriptionLabel = [[UILabel alloc] init];
@@ -224,9 +223,10 @@
                 }
                 
                 if ([self.industry length] > 0) {
+                    industryLabel.hidden = NO;
                     [industryLabel setFrame:CGRectMake(320.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + website_expectedSize.height, industry_expectedSize.width + 10.0f, 22.0f)];
                 } else {
-                    [industryLabel setFrame:CGRectMake(0.0f, 0.0f, 0.0f, 0.0f)];
+                    industryLabel.hidden = YES;
                 }
                 industryLabel.textAlignment = NSTextAlignmentCenter;
                 [industryLabel setBackgroundColor:[UIColor colorWithRed:201.0f/255.0f green:205.0f/255.0f blue:208.0f/255.0f alpha:1.0f]];
@@ -443,7 +443,7 @@
         self.descriptionLabel.text = [self.user objectForKey:@"description"];
         [self.websiteLink setTitle:[self.user objectForKey:@"website"] forState:UIControlStateNormal];
         self.websiteInfo = [self.user objectForKey:@"website"];
-        self.industry = [self.user objectForKey:@"industry"];
+        self.industryLabel.text = [self.user objectForKey:@"industry"];
         self.angellist_url = [self.user objectForKey:@"angellist_url"];
         self.twitter_url = [self.user objectForKey:@"twitter_url"];
         self.linkedin_url = [self.user objectForKey:@"linkedin_url"];
@@ -511,21 +511,12 @@
         
         self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + website_expectedSize.height + 43.0f);
         
-        self.industryLabel = [[UILabel alloc] init];
-        if ([self.industry length] > 0) {
+        if ([self.industryLabel.text length] > 0) {
+            industryLabel.hidden = NO;
             [industryLabel setFrame:CGRectMake(320.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + website_expectedSize.height, industry_expectedSize.width + 10.0f, 22.0f)];
         } else {
-            [industryLabel setFrame:CGRectMake(0.0f, 0.0f, 0.0f, 0.0f)];
+            industryLabel.hidden = YES;
         }
-        
-        industryLabel.textAlignment = NSTextAlignmentCenter;
-        industryLabel.text = self.industry;
-        [industryLabel setBackgroundColor:[UIColor colorWithRed:201.0f/255.0f green:205.0f/255.0f blue:208.0f/255.0f alpha:1.0f]];
-        [industryLabel.layer setCornerRadius:3.0f];
-        [industryLabel setClipsToBounds:YES];
-        [industryLabel setFont:[UIFont systemFontOfSize:13.0f]];
-        [industryLabel setTextColor:[UIColor whiteColor]];
-        [self.headerView addSubview:industryLabel];
         
         [descriptionLabel setFrame:CGRectMake(10.0f, 88.0f, expectedSize.width, expectedSize.height)];
         [websiteLink setFrame:CGRectMake( 10.0f, 88.0f + expectedSize.height, website_expectedSize.width, website_expectedSize.height)];
