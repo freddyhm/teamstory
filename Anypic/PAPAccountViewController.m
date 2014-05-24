@@ -236,7 +236,6 @@
                 [industryLabel setTextColor:[UIColor whiteColor]];
                 [self.headerView addSubview:industryLabel];
                 
-                
                 [descriptionLabel setFrame:CGRectMake(10.0f, 88.0f, expectedSize.width, expectedSize.height)];
                 [self.headerView addSubview:descriptionLabel];
                 
@@ -501,7 +500,7 @@
         CGSize expectedSize = [self.descriptionLabel sizeThatFits:maximumLabelSize];
         
         
-        CGSize industry_expectedSize = [self.industry sizeWithFont:[UIFont systemFontOfSize:13.0f]];
+        CGSize industry_expectedSize = [self.industryLabel.text sizeWithFont:[UIFont systemFontOfSize:13.0f]];
         
         if ([self.websiteInfo length] > 0) {
             website_expectedSize = [self.websiteInfo sizeWithFont:[UIFont systemFontOfSize:13.0f]];
