@@ -50,9 +50,6 @@
     [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
     
     
-    self.imageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
-    self.textView.text = @"Enter";
-    
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
                                           action:@selector(dismissKeyboard)];
@@ -77,16 +74,16 @@
 
 - (IBAction)saveEdit:(id)sender {
     
-    UILabel *label = [[UILabel alloc] initWithFrame:self.textView.frame];
-    label.text = self.textView.text;
-    label.font = [self.textView font];
+    UILabel *label = [[UILabel alloc] initWithFrame:self.thoughtTextView.frame];
+    label.text = self.thoughtTextView.text;
+    label.font = [self.thoughtTextView font];
     label.numberOfLines = 0;
     [label sizeToFit];
     
-    [self.imageView addSubview:label];
+    [self.backgroundImg addSubview:label];
     
-    UIGraphicsBeginImageContextWithOptions(self.imageView.bounds.size, NO, 0.0); //retina res
-    [self.imageView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIGraphicsBeginImageContextWithOptions(self.backgroundImg.bounds.size, NO, 0.0); //retina res
+    [self.backgroundImg.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
@@ -221,4 +218,9 @@
     [super didReceiveMemoryWarning];
 }
 
+- (IBAction)rightNav:(id)sender {
+}
+
+- (IBAction)leftNav:(id)sender {
+}
 @end

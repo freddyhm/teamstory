@@ -9,11 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface ThoughtPostViewController : UIViewController
-@property (strong, nonatomic) IBOutlet UIImageView *imageView;
-@property (strong, nonatomic) IBOutlet UITextView *textView;
-@property (strong, nonatomic) IBOutlet UIButton *submit;
-
-- (IBAction)saveEdit:(id)sender;
-
+@property (strong, nonatomic) IBOutlet UIImageView *backgroundImg;
+@property (strong, nonatomic) IBOutlet UIImageView *placeholder;
+@property (strong, nonatomic) IBOutlet UITextView *thoughtTextView;
+- (IBAction)rightNav:(id)sender;
+- (IBAction)leftNav:(id)sender;
 
 @end
