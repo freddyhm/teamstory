@@ -8,8 +8,17 @@
 
 #import "ThoughtPostViewController.h"
 #import "CameraFilterViewController.h"
+#import "PAPEditPhotoViewController.h"
+#import "UIImage+ResizeAdditions.h"
+#import "PAPTabBarController.h"
+#import "PAPHomeViewController.h"
 
 @interface ThoughtPostViewController ()
+
+@property (nonatomic, strong) PFFile *photoFile;
+@property (nonatomic, strong) PFFile *thumbnailFile;
+@property (nonatomic, assign) UIBackgroundTaskIdentifier fileUploadBackgroundTaskId;
+@property (nonatomic, assign) UIBackgroundTaskIdentifier photoPostBackgroundTaskId;
 
 @end
 
@@ -83,11 +92,122 @@
     
     [label removeFromSuperview];
     
-    CameraFilterViewController *filterController = [[CameraFilterViewController alloc]initWithImage:image nib:@"CameraFilterViewController" source:@"one"];
+   
     
-    [self.navigationController pushViewController:filterController animated:YES];
+    if([self shouldUploadImage:image]){
+        
+        if (!self.photoFile || !self.thumbnailFile) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+            [alert show];
+            return;
+        }
+        
+        // both files have finished uploading
+        
+        // create a photo object
+        PFObject *photo = [PFObject objectWithClassName:kPAPPhotoClassKey];
+        [photo setObject:[PFUser currentUser] forKey:kPAPPhotoUserKey];
+        [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
+        [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
+        
+        // photos are public, but may only be modified by the user who uploaded them
+        PFACL *photoACL = [PFACL ACLWithUser:[PFUser currentUser]];
+        [photoACL setPublicReadAccess:YES];
+        photo.ACL = photoACL;
+        
+        // Request a background execution task to allow us to finish uploading the photo even if the app is backgrounded
+        self.photoPostBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+            [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
+        }];
+        
+        // save
+        [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                NSLog(@"Photo uploaded");
+                
+                [[PAPCache sharedCache] setAttributesForPhoto:photo likers:[NSArray array] commenters:[NSArray array] likedByCurrentUser:NO];
+                [[NSNotificationCenter defaultCenter] postNotificationName:PAPTabBarControllerDidFinishEditingPhotoNotification object:photo];
+            } else {
+                NSLog(@"Photo failed to save: %@", error);
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+                [alert show];
+            }
+            [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
+        }];
+        
+        [self exitPhoto];
+
+    }
+    
+   
     
 }
+
+- (BOOL)shouldUploadImage:(UIImage *)anImage {
+    
+    UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:10.0f interpolationQuality:kCGInterpolationDefault];
+    
+    // JPEG to decrease file size and enable faster uploads & downloads
+    NSData *imageData = UIImageJPEGRepresentation(anImage, 0.8f);
+    NSData *thumbnailImageData = UIImagePNGRepresentation(thumbnailImage);
+    
+    if (!imageData || !thumbnailImageData) {
+        return NO;
+    }
+    
+    self.photoFile = [PFFile fileWithData:imageData];
+    self.thumbnailFile = [PFFile fileWithData:thumbnailImageData];
+    
+    // Request a background execution task to allow us to finish uploading the photo even if the app is backgrounded
+    self.fileUploadBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        [[UIApplication sharedApplication] endBackgroundTask:self.fileUploadBackgroundTaskId];
+    }];
+    
+    NSLog(@"Requested background expiration task with id %d for Teamstory photo upload", (int)self.fileUploadBackgroundTaskId);
+    [self.photoFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            NSLog(@"Photo uploaded successfully");
+            [self.thumbnailFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (succeeded) {
+                    NSLog(@"Thumbnail uploaded successfully");
+                }
+                [[UIApplication sharedApplication] endBackgroundTask:self.fileUploadBackgroundTaskId];
+            }];
+        } else {
+            [[UIApplication sharedApplication] endBackgroundTask:self.fileUploadBackgroundTaskId];
+        }
+    }];
+    
+    return YES;
+}
+
+- (void)exitPhoto{
+    
+    // hide custom grey bar and pop to home
+    [[self navigationController] setNavigationBarHidden:YES animated:YES];
+    
+    // get tab bar and home controller from stack
+    PAPTabBarController *tabBarController =[[self.navigationController viewControllers] objectAtIndex:1];
+    NSArray *tabBarViewControllers = [tabBarController viewControllers];
+    
+    // get home and phototimeline, if there are children pop 'em to get back to timeline
+    PAPHomeViewController *homeViewController = [tabBarViewControllers objectAtIndex:0];
+    PAPPhotoTimelineViewController *photoViewController = [homeViewController.childViewControllers objectAtIndex:0];
+    
+    if([homeViewController.childViewControllers count] > 1){
+        [photoViewController.navigationController popViewControllerAnimated:NO];
+    }
+    
+    [tabBarController setSelectedViewController:homeViewController];
+    
+    NSArray *m = homeViewController.childViewControllers;
+    
+    [m objectAtIndex:0];
+    
+    // push tab bar with home controller now selected
+    [self.navigationController popToViewController:tabBarController animated:YES];
+}
+
 
 - (void)backButtonAction:(id)sender {
     
