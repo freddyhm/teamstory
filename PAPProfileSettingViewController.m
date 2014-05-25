@@ -52,6 +52,7 @@
 @property (nonatomic, strong) NSString *industry_chosen;
 @property (nonatomic, strong) UIPickerView *industry_pickerView;
 @property (nonatomic, strong) UIButton *industry_chooseButton;
+@property (nonatomic, strong) NSString *placeholderText;
 
 @end
 
@@ -88,6 +89,7 @@
 @synthesize industry_chosen;
 @synthesize industry_pickerView;
 @synthesize industry_chooseButton;
+@synthesize placeholderText;
 
 #pragma mark - Initialization
 
@@ -1060,6 +1062,9 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     [self animateTextField: textField up: YES];
+    placeholderText = textField.placeholder;
+    textField.placeholder = nil;
+    
     if (textField == companyName || textField == email_address) {
         self.navigationItem.leftBarButtonItem.enabled = NO;
         self.navigationItem.rightBarButtonItem.enabled = NO;
@@ -1075,6 +1080,7 @@
     } else if (textField == website && [textField.text length] == 0) {
         website.text = @"http://";
     }
+    
     if (textField == twitter_textfield && ![twitter_user isEqualToString:@"Twitter"]) {
         twitter_textfield.text = twitter_user;
     } else if (textField == linkedin_textfield && ![linkedin_user isEqualToString:@"LinkedIn"]) {
@@ -1121,6 +1127,7 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     [self animateTextField: textField up: NO];
+    textField.placeholder = placeholderText;
     
     if (textField == companyName && [(AppDelegate*)[[UIApplication sharedApplication] delegate] isParseReachable]) {
         [SVProgressHUD showWithStatus:@"Validating User Name"];
@@ -1245,6 +1252,7 @@
     self.dimView.hidden = YES;
     [self.industry_pickerView removeFromSuperview];
     [self.industry_chooseButton removeFromSuperview];
+    self.industry_button.titleLabel.textColor = [UIColor colorWithWhite:0.7f alpha:1.0f];
 }
 
 -(BOOL)NSStringIsValidEmail:(NSString *)checkString {
