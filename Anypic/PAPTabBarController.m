@@ -17,6 +17,7 @@
 @property (nonatomic,strong) NSDictionary *imagePickerInfo;
 @property (nonatomic, strong) UIPopoverController *popoverController;
 @property (nonatomic, strong) UIView *postMenu;
+@property (nonatomic, strong) UIImageView *postMenuBkgd;
 @property (nonatomic, strong) UIButton *photoPostButton;
 @property (nonatomic, strong) UIButton *thoughtPostButton;
 
@@ -42,8 +43,9 @@
    
     
     // create post menu
-    self.postMenu = [[UIView alloc]initWithFrame:CGRectMake(self.tabBar.frame.origin.x, self.tabBar.frame.origin.y - self.tabBar.frame.size.height, self.tabBar.frame.size.width, self.tabBar.frame.size.height)];
-    self.postMenu.backgroundColor = [UIColor whiteColor];
+    self.postMenu = [[UIView alloc]initWithFrame:CGRectMake(self.tabBar.frame.origin.x, self.tabBar.frame.origin.y - self.tabBar.frame.size.height - 10, self.tabBar.frame.size.width, self.tabBar.frame.size.height)];
+    self.postMenuBkgd = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"post_bubble.png"]];
+    [self.postMenu addSubview:self.postMenuBkgd];
     
     self.photoPostButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.tabBar.frame.size.width/2, self.tabBar.frame.size.height)];
     [self.photoPostButton setTitle:@"Share Moment" forState:UIControlStateNormal];
@@ -69,15 +71,15 @@
 - (void)setViewControllers:(NSArray *)viewControllers animated:(BOOL)animated {
     [super setViewControllers:viewControllers animated:animated];
     
+    
+
     UIButton *postButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    postButton.frame = CGRectMake( (self.tabBar.bounds.size.width / 5) * 2, -12.0f, 67.0f, 60.0f);
-    [postButton setImage:[UIImage imageNamed:@"ButtonCamera.png"] forState:UIControlStateNormal];
-    [postButton setImage:[UIImage imageNamed:@"ButtonCameraSelected.png"] forState:UIControlStateHighlighted];
+    [postButton setImage:[UIImage imageNamed:@"nav_post.png"] forState:UIControlStateNormal];
+    postButton.frame = CGRectMake( (self.tabBar.bounds.size.width / 5) * 2, 0.0f, 67.0f, 50.0f);
+    postButton.backgroundColor = [UIColor colorWithRed:88.0f/255.0f green:186.0f/255.0f blue:159.0f/255.0f alpha:1.0f];
+
     [postButton addTarget:self action:@selector(postButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.tabBar addSubview:postButton];
-    
-    
-    
     
     UISwipeGestureRecognizer *swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
     [swipeUpGestureRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
