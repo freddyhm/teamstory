@@ -76,6 +76,7 @@ NSString *const kPAPPhotoPictureKey         = @"image";
 NSString *const kPAPPhotoThumbnailKey       = @"thumbnail";
 NSString *const kPAPPhotoUserKey            = @"user";
 NSString *const kPAPPhotoOpenGraphIDKey    = @"fbOpenGraphID";
+NSString *const kPAPPhotoType         = @"type";
 
 
 #pragma mark - Cached Comment Attributes

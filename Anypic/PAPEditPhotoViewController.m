@@ -419,6 +419,11 @@
             }
     
     }else if ([text isEqualToString:@"\n"]) {
+        
+        // analytics
+        [PAPUtility captureEventGA:@"Engagement" action:@"Upload Picture" label:@"Photo"];
+        
+        
         NSDictionary *userInfo = [NSDictionary dictionary];
         NSString *trimmedComment = [self.commentTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         if (trimmedComment.length != 0) {
@@ -440,6 +445,7 @@
         [photo setObject:[PFUser currentUser] forKey:kPAPPhotoUserKey];
         [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
         [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
+        [photo setObject:@"picture" forKey:kPAPPhotoType];
         
         // storing atmention user list to the array (only filtered cases).
         if ([self.atmentionUserArray count] > 0) {
@@ -554,6 +560,9 @@
 
 - (void)doneButtonAction:(id)sender {
     
+    // analytics
+    [PAPUtility captureEventGA:@"Engagement" action:@"Upload Picture" label:@"Photo"];
+    
     // make sure placeholder gets erased
     if([[self.commentTextView text] isEqualToString:@"Add a caption"]){
         [self.commentTextView setText:@""];
@@ -580,6 +589,7 @@
     [photo setObject:[PFUser currentUser] forKey:kPAPPhotoUserKey];
     [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
     [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
+    [photo setObject:@"picture" forKey:kPAPPhotoType];
     
     // storing atmention user list to the array (only filtered cases).
     if ([self.atmentionUserArray count] > 0) {

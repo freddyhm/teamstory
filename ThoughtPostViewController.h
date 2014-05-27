@@ -14,5 +14,6 @@
 @property (strong, nonatomic) IBOutlet UITextView *thoughtTextView;
 - (IBAction)rightNav:(id)sender;
 - (IBAction)leftNav:(id)sender;
+- (void)exitPost;
 
 @end

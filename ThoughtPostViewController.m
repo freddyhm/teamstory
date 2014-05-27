@@ -7,6 +7,7 @@
 //
 
 #import "ThoughtPostViewController.h"
+#import "SVProgressHUD.h"
 #import "CameraFilterViewController.h"
 #import "PAPEditPhotoViewController.h"
 #import "UIImage+ResizeAdditions.h"
@@ -138,11 +139,16 @@
     [self updateTextColor];
 }
 
-- (IBAction)saveEdit:(id)sender {
+- (void)saveEdit:(id)sender {
+    
+    
+    // analytics
+    [PAPUtility captureEventGA:@"Engagement" action:@"Upload Thought" label:@"Photo"];
     
     UILabel *label = [[UILabel alloc] initWithFrame:self.thoughtTextView.frame];
     label.text = self.thoughtTextView.text;
-    label.font = [self.thoughtTextView font];
+    label.font = self.thoughtTextView.font;
+    label.textColor = self.thoughtTextView.textColor;
     label.numberOfLines = 0;
     [label sizeToFit];
     
@@ -156,54 +162,61 @@
     [label removeFromSuperview];
     
    
+    [SVProgressHUD show];
     
-    if([self shouldUploadImage:image]){
+    [self shouldUploadImage:image block:^(BOOL completed) {
         
-        if (!self.photoFile || !self.thumbnailFile) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
-            [alert show];
-            return;
-        }
-        
-        // both files have finished uploading
-        
-        // create a photo object
-        PFObject *photo = [PFObject objectWithClassName:kPAPPhotoClassKey];
-        [photo setObject:[PFUser currentUser] forKey:kPAPPhotoUserKey];
-        [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
-        [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
-        
-        // photos are public, but may only be modified by the user who uploaded them
-        PFACL *photoACL = [PFACL ACLWithUser:[PFUser currentUser]];
-        [photoACL setPublicReadAccess:YES];
-        photo.ACL = photoACL;
-        
-        // Request a background execution task to allow us to finish uploading the photo even if the app is backgrounded
-        self.photoPostBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-            [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
-        }];
-        
-        // save
-        [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (succeeded) {
-                NSLog(@"Photo uploaded");
-                
-                [[PAPCache sharedCache] setAttributesForPhoto:photo likers:[NSArray array] commenters:[NSArray array] likedByCurrentUser:NO];
-                [[NSNotificationCenter defaultCenter] postNotificationName:PAPTabBarControllerDidFinishEditingPhotoNotification object:photo];
-            } else {
-                NSLog(@"Photo failed to save: %@", error);
+        if(completed){
+            if (!self.photoFile || !self.thumbnailFile) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
                 [alert show];
+                return;
             }
-            [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
-        }];
-        
-        [self exitPhoto];
-
-    }
+            
+            // both files have finished uploading
+            
+            // create a photo object
+            PFObject *photo = [PFObject objectWithClassName:kPAPPhotoClassKey];
+            [photo setObject:[PFUser currentUser] forKey:kPAPPhotoUserKey];
+            [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
+            [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
+            [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
+            [photo setObject:@"thought" forKey:kPAPPhotoType];
+            
+            // photos are public, but may only be modified by the user who uploaded them
+            PFACL *photoACL = [PFACL ACLWithUser:[PFUser currentUser]];
+            [photoACL setPublicReadAccess:YES];
+            photo.ACL = photoACL;
+            
+            // Request a background execution task to allow us to finish uploading the photo even if the app is backgrounded
+            self.photoPostBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+                [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
+            }];
+            
+            // save
+            [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (succeeded) {
+                    NSLog(@"Photo uploaded");
+                    
+                    [[PAPCache sharedCache] setAttributesForPhoto:photo likers:[NSArray array] commenters:[NSArray array] likedByCurrentUser:NO];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:PAPTabBarControllerDidFinishEditingPhotoNotification object:photo];
+                } else {
+                    NSLog(@"Photo failed to save: %@", error);
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+                    [alert show];
+                }
+                [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
+            }];
+            
+            [self exitPost];
+        }else{
+            [SVProgressHUD dismiss];
+        }
+    }];
 }
 
-- (BOOL)shouldUploadImage:(UIImage *)anImage {
+- (void)shouldUploadImage:(UIImage *)anImage block:(void (^)(BOOL))completed
+{
     
     UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:10.0f interpolationQuality:kCGInterpolationDefault];
     
@@ -212,7 +225,7 @@
     NSData *thumbnailImageData = UIImagePNGRepresentation(thumbnailImage);
     
     if (!imageData || !thumbnailImageData) {
-        return NO;
+        completed(NO);
     }
     
     self.photoFile = [PFFile fileWithData:imageData];
@@ -233,15 +246,15 @@
                 }
                 [[UIApplication sharedApplication] endBackgroundTask:self.fileUploadBackgroundTaskId];
             }];
+            completed(YES);
         } else {
             [[UIApplication sharedApplication] endBackgroundTask:self.fileUploadBackgroundTaskId];
+            completed(NO);
         }
     }];
-    
-    return YES;
 }
 
-- (void)exitPhoto{
+- (void)exitPost{
     
     // hide custom grey bar and pop to home
     [[self navigationController] setNavigationBarHidden:YES animated:YES];

@@ -793,9 +793,6 @@ enum ActionSheetTags {
 
 - (void)userDidPublishPhoto:(NSNotification *)note {
     
-    // analytics
-    [PAPUtility captureEventGA:@"Engagement" action:@"Upload" label:@"Photo"];
-    
     if (self.objects.count > 0) {
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
