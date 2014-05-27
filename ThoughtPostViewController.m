@@ -19,6 +19,8 @@
 @property (nonatomic, strong) PFFile *thumbnailFile;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier fileUploadBackgroundTaskId;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier photoPostBackgroundTaskId;
+@property (nonatomic, strong) NSMutableArray *bkgdOptions;
+@property int prevBkgdIndex;
 
 @end
 
@@ -49,7 +51,21 @@
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
     [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
     
+    UIColor *original = [UIColor colorWithRed:249.0f/255.0f green:249.0f/255.0f blue:249.0f/255.0f alpha:1];
+    UIColor *green = [UIColor colorWithRed:156.0f/255.0f green:209.0f/255.0f blue:105.0f/255.0f alpha:1];
+    UIColor *blue = [UIColor colorWithRed:19.0f/255.0f green:149.0f/255.0f blue:217.0f/255.0f alpha:1];
+    UIColor *deepPurple = [UIColor colorWithRed:166.0f/255.0f green:109.0f/255.0f blue:170.0f/255.0f alpha:1];
+    UIColor *pink = [UIColor colorWithRed:234.0f/255.0f green:108.0f/255.0f blue:135.0f/255.0f alpha:1];
+    UIColor *pinkRed = [UIColor colorWithRed:253.0f/255.0f green:89.0f/255.0f blue:89.0f/255.0f alpha:1];
+    UIColor *yellow = [UIColor colorWithRed:236.0f/255.0f green:198.0f/255.0f blue:84.0f/255.0f alpha:1];
+    UIColor *orange = [UIColor colorWithRed:249.0f/255.0f green:155.0f/255.0f blue:72.0f/255.0f alpha:1];
+    UIColor *blueGrey = [UIColor colorWithRed:89.0f/255.0f green:94.0f/255.0f blue:100.0f/255.0f alpha:1];
+    UIColor *darkGrey = [UIColor colorWithRed:41.0f/255.0f green:41.0f/255.0f blue:41.0f/255.0f alpha:1];
     
+    self.bkgdOptions = [[NSMutableArray alloc]initWithObjects:original, green, blue, deepPurple, pink, pinkRed, yellow, orange, blueGrey, darkGrey, nil];
+    self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:0];
+    self.prevBkgdIndex = 0;
+
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
                                           action:@selector(dismissKeyboard)];
@@ -78,6 +94,32 @@
 }
 
 #pragma mark - ()
+
+- (IBAction)rightNav:(id)sender{
+    
+    int currentBkgdIndex = self.prevBkgdIndex + 1;
+    
+    if(currentBkgdIndex < [self.bkgdOptions count]){
+        self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:currentBkgdIndex];
+        self.prevBkgdIndex = currentBkgdIndex;
+    }else{
+        self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:0];
+        self.prevBkgdIndex = 0;
+    }
+}
+
+- (IBAction)leftNav:(id)sender{
+    
+    int currentBkgdIndex = self.prevBkgdIndex - 1;
+    
+    if(currentBkgdIndex > -1){
+        self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:currentBkgdIndex];
+        self.prevBkgdIndex = currentBkgdIndex;
+    }else{
+        self.prevBkgdIndex = [self.bkgdOptions count] - 1;
+        self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:self.prevBkgdIndex];
+    }
+}
 
 - (IBAction)saveEdit:(id)sender {
     
@@ -225,9 +267,4 @@
     [super didReceiveMemoryWarning];
 }
 
-- (IBAction)rightNav:(id)sender {
-}
-
-- (IBAction)leftNav:(id)sender {
-}
 @end
