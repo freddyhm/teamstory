@@ -51,6 +51,7 @@
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
     [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
     
+    // set colors
     UIColor *original = [UIColor colorWithRed:249.0f/255.0f green:249.0f/255.0f blue:249.0f/255.0f alpha:1];
     UIColor *green = [UIColor colorWithRed:156.0f/255.0f green:209.0f/255.0f blue:105.0f/255.0f alpha:1];
     UIColor *blue = [UIColor colorWithRed:19.0f/255.0f green:149.0f/255.0f blue:217.0f/255.0f alpha:1];
@@ -62,10 +63,12 @@
     UIColor *blueGrey = [UIColor colorWithRed:89.0f/255.0f green:94.0f/255.0f blue:100.0f/255.0f alpha:1];
     UIColor *darkGrey = [UIColor colorWithRed:41.0f/255.0f green:41.0f/255.0f blue:41.0f/255.0f alpha:1];
     
+    // color selection
     self.bkgdOptions = [[NSMutableArray alloc]initWithObjects:original, green, blue, deepPurple, pink, pinkRed, yellow, orange, blueGrey, darkGrey, nil];
     self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:0];
     self.prevBkgdIndex = 0;
-
+    
+    
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
                                           action:@selector(dismissKeyboard)];
@@ -82,8 +85,8 @@
 
 #pragma mark - UITextViewDelegate
 
--(void)textViewDidBeginEditing:(UITextView *)textView{
-
+- (void)textViewDidBeginEditing:(UITextView *)textView{
+    
     if(!self.placeholder.hidden){
         self.placeholder.hidden = YES;
     }
@@ -95,8 +98,15 @@
 
 #pragma mark - ()
 
+- (void)updateTextColor{
+    
+    // check if current bkgd is white or not
+    self.thoughtTextView.textColor = self.prevBkgdIndex == 0 ? [UIColor blackColor]:[UIColor whiteColor];
+}
+
 - (IBAction)rightNav:(id)sender{
     
+    // update index, reset to first if reached end of array
     int currentBkgdIndex = self.prevBkgdIndex + 1;
     
     if(currentBkgdIndex < [self.bkgdOptions count]){
@@ -106,10 +116,14 @@
         self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:0];
         self.prevBkgdIndex = 0;
     }
+    
+    // change present text color
+    [self updateTextColor];
 }
 
 - (IBAction)leftNav:(id)sender{
     
+    // update index, set to last if reached end of array
     int currentBkgdIndex = self.prevBkgdIndex - 1;
     
     if(currentBkgdIndex > -1){
@@ -119,6 +133,9 @@
         self.prevBkgdIndex = [self.bkgdOptions count] - 1;
         self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:self.prevBkgdIndex];
     }
+    
+    // change present text color
+    [self updateTextColor];
 }
 
 - (IBAction)saveEdit:(id)sender {
@@ -184,9 +201,6 @@
         [self exitPhoto];
 
     }
-    
-   
-    
 }
 
 - (BOOL)shouldUploadImage:(UIImage *)anImage {
