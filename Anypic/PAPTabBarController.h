@@ -10,6 +10,8 @@
 
 @interface PAPTabBarController : UITabBarController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate>
 
+@property (nonatomic, strong) UIView *postMenu;
+
 - (BOOL)shouldPresentPhotoCaptureController;
 - (void)shouldPresentController:(NSString *)typeController;
 

@@ -5,6 +5,7 @@
 //
 
 #import "PAPPhotoTimelineViewController.h"
+#import "PAPTabBarController.h"
 #import "PAPPhotoCell.h"
 #import "PAPAccountViewController.h"
 #import "PAPHomeViewController.h"
@@ -117,7 +118,10 @@ enum ActionSheetTags {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLikeOrUnlikePhoto:) name:PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLikeOrUnlikePhoto:) name:PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidCommentOnPhoto:) name:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:nil];
+ 
 }
+
+
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -743,6 +747,14 @@ enum ActionSheetTags {
 
 #pragma mark - ()
 
+- (void)dismissTabBarMenu{
+    PAPTabBarController *tabBar = (PAPTabBarController *)self.tabBarController;
+    
+    if(!tabBar.postMenu.hidden){
+        tabBar.postMenu.hidden = YES;
+    }
+}
+
 - (NSIndexPath *)indexPathForObject:(PFObject *)targetObject {
     for (int i = 0; i < self.objects.count; i++) {
         PFObject *object = [self.objects objectAtIndex:i];
@@ -799,6 +811,8 @@ enum ActionSheetTags {
 
 - (void)didTapOnPhotoAction:(UIButton *)sender {
     
+    [self dismissTabBarMenu];
+    
     PFObject *photo = [self.objects objectAtIndex:sender.tag];
     if (photo) {
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
@@ -808,6 +822,10 @@ enum ActionSheetTags {
 
 - (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl {
     [self loadObjects];
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    [self dismissTabBarMenu];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
