@@ -78,6 +78,9 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     
+    // analytics
+    [PAPUtility captureScreenGA:@"Thought Post"];
+    
     // set color of nav bar to teal
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
@@ -142,8 +145,9 @@
 - (void)saveEdit:(id)sender {
     
     
-    // analytics
+    // analytics for upload and background
     [PAPUtility captureEventGA:@"Engagement" action:@"Upload Thought" label:@"Photo"];
+    [PAPUtility captureEventGA:@"Thought Bkgd" action:[[NSNumber numberWithInt:self.prevBkgdIndex] stringValue] label:@"Photo"];
     
     UILabel *label = [[UILabel alloc] initWithFrame:self.thoughtTextView.frame];
     label.text = self.thoughtTextView.text;
