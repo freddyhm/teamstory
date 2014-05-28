@@ -74,6 +74,11 @@
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
                                           action:@selector(dismissKeyboard)];
+    
+    [self.leftSwipe addTarget:self action:@selector(leftNav:)];
+    [self.rightSwipe addTarget:self action:@selector(rightNav:)];
+    
+     
     [self.view addGestureRecognizer:tapOutside];
 
 }
@@ -129,6 +134,7 @@
     // check if current bkgd is white or not
     self.thoughtTextView.textColor = self.prevBkgdIndex == 0 ? [UIColor blackColor]:[UIColor whiteColor];
 }
+
 
 - (IBAction)rightNav:(id)sender{
     
