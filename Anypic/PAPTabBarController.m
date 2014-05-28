@@ -51,20 +51,20 @@
     [self.postMenu addSubview:self.postMenuBkgd];
     
     // photo button + icon
-    self.photoPostButton = [[UIButton alloc] initWithFrame:CGRectMake(50.0f, 7.0f, self.tabBar.frame.size.width/3, self.tabBar.frame.size.height)];
+    self.photoPostButton = [[UIButton alloc] initWithFrame:CGRectMake(50.0f, 9.0f, self.tabBar.frame.size.width/3, self.tabBar.frame.size.height)];
     [self.photoPostButton setTitle:@"Share Moment" forState:UIControlStateNormal];
     self.photoPostButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:13.0f];
     [self.photoPostButton addTarget:self action:@selector(cameraButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     self.photoPostButton.titleLabel.textColor = [UIColor whiteColor];
    
     self.photoPostButtonIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"post_camera.png"]];
-    self.photoPostButtonIcon.frame = CGRectMake(20.0f, 21.0f, self.photoPostButtonIcon.frame.size.width, self.photoPostButtonIcon.frame.size.height);
+    self.photoPostButtonIcon.frame = CGRectMake(20.0f, 23.0f, self.photoPostButtonIcon.frame.size.width, self.photoPostButtonIcon.frame.size.height);
     
     [self.postMenu addSubview:self.photoPostButtonIcon];
     [self.postMenu addSubview:self.photoPostButton];
     
     // thought button + icon
-    self.thoughtPostButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tabBar.frame.size.width/2 + 35.0f, 7.0f, self.tabBar.frame.size.width/3, self.tabBar.frame.size.height)];
+    self.thoughtPostButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tabBar.frame.size.width/2 + 35.0f, 9.0f, self.tabBar.frame.size.width/3, self.tabBar.frame.size.height)];
     [self.thoughtPostButton setTitle:@"Share Thought" forState:UIControlStateNormal];
     self.thoughtPostButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:13.0f];
     [self.thoughtPostButton addTarget:self action:@selector(thoughtButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -72,7 +72,7 @@
     self.thoughtPostButton.titleLabel.textAlignment = NSTextAlignmentRight;
     
     self.thoughtPostButtonIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"post_thought.png"]];
-    self.thoughtPostButtonIcon.frame = CGRectMake(self.tabBar.frame.size.width/2 + 10.0f, 21.0f, self.thoughtPostButtonIcon.frame.size.width, self.thoughtPostButtonIcon.frame.size.height);
+    self.thoughtPostButtonIcon.frame = CGRectMake(self.tabBar.frame.size.width/2 + 10.0f, 23.0f, self.thoughtPostButtonIcon.frame.size.width, self.thoughtPostButtonIcon.frame.size.height);
     
     [self.postMenu addSubview:self.thoughtPostButtonIcon];
     [self.postMenu addSubview:self.thoughtPostButton];
@@ -189,8 +189,9 @@
 #pragma mark - ()
 
 - (void)postButtonAction:(id)sender {
-
-    self.postMenu.hidden = NO;
+    
+    // hide/show post menu toggle
+    self.postMenu.hidden = self.postMenu.hidden ? NO : YES;
 }
 
 - (void)cameraButtonAction:(id)sender{

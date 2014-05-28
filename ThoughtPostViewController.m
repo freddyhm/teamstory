@@ -75,8 +75,7 @@
                                           initWithTarget:self
                                           action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tapOutside];
-    
-    [self.thoughtTextView addObserver:self forKeyPath:@"contentSize" options:(NSKeyValueObservingOptionNew) context:NULL];
+
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -90,37 +89,40 @@
     self.navigationController.navigationBar.translucent = NO;
 }
 
-#pragma mark - UITextViewDelegate
+#pragma mark - UITextViewDelegate & TextView related methods
 
 - (void)textViewDidBeginEditing:(UITextView *)textView{
+    
+    // align cursor vertically
+    [self verticalAlignTextview];
     
     if(!self.placeholder.hidden){
         self.placeholder.hidden = YES;
     }
-    
-    
 }
 
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    UITextView *tv = object;
+- (void)textViewDidChange:(UITextView *)textView {
+    
+    // align cursor vertically dynamically
+    [self verticalAlignTextview];
+}
+
+-(void)verticalAlignTextview{
+    
+    UITextView *tv = self.thoughtTextView;
+    
     //Center vertical alignment
-    CGFloat topCorrect = ([tv bounds].size.height - [tv contentSize].height * [tv zoomScale])/2.0;
+    CGFloat topCorrect = ([tv bounds].size.height - [tv sizeThatFits:tv.bounds.size].height * [tv zoomScale])/2.0;
     topCorrect = ( topCorrect < 0.0 ? 0.0 : topCorrect );
     tv.contentOffset = (CGPoint){.x = 0, .y = -topCorrect};
-    
-    /*
-    //Bottom vertical alignment
-    CGFloat topCorrect = ([tv bounds].size.height - [tv contentSize].height);
-    topCorrect = (topCorrect <0.0 ? 0.0 : topCorrect);
-    tv.contentOffset = (CGPoint){.x = 0, .y = -topCorrect};
-     */
 }
-
-#pragma mark - ()
 
 - (void)dismissKeyboard {
     [self.view endEditing:YES];
 }
+
+
+#pragma mark - ()
 
 - (void)updateTextColor{
     
@@ -169,24 +171,15 @@
     [PAPUtility captureEventGA:@"Engagement" action:@"Upload Thought" label:@"Photo"];
     [PAPUtility captureEventGA:@"Thought Bkgd" action:[[NSNumber numberWithInt:self.prevBkgdIndex] stringValue] label:@"Photo"];
     
-    UILabel *label = [[UILabel alloc] initWithFrame:self.thoughtTextView.frame];
-    label.text = self.thoughtTextView.text;
-    label.font = self.thoughtTextView.font;
-    label.textColor = self.thoughtTextView.textColor;
-    label.textAlignment = self.thoughtTextView.textAlignment;
-    label.numberOfLines = 0;
-    [label sizeToFit];
+    // add textview to background image for picture
+    [self.backgroundImg addSubview:self.thoughtTextView];
     
-    [self.backgroundImg addSubview:label];
-    
+    // create image
     UIGraphicsBeginImageContextWithOptions(self.backgroundImg.bounds.size, NO, 0.0); //retina res
     [self.backgroundImg.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    [label removeFromSuperview];
-    
-   
     [SVProgressHUD show];
     
     [self shouldUploadImage:image block:^(BOOL completed) {
