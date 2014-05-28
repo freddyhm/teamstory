@@ -38,6 +38,7 @@
 
 - (void)viewDidLoad
 {
+    
     [super viewDidLoad];
     
     // init nav bar
@@ -74,6 +75,8 @@
                                           initWithTarget:self
                                           action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tapOutside];
+    
+    [self.thoughtTextView addObserver:self forKeyPath:@"contentSize" options:(NSKeyValueObservingOptionNew) context:NULL];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -94,13 +97,30 @@
     if(!self.placeholder.hidden){
         self.placeholder.hidden = YES;
     }
+    
+    
 }
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    UITextView *tv = object;
+    //Center vertical alignment
+    CGFloat topCorrect = ([tv bounds].size.height - [tv contentSize].height * [tv zoomScale])/2.0;
+    topCorrect = ( topCorrect < 0.0 ? 0.0 : topCorrect );
+    tv.contentOffset = (CGPoint){.x = 0, .y = -topCorrect};
+    
+    /*
+    //Bottom vertical alignment
+    CGFloat topCorrect = ([tv bounds].size.height - [tv contentSize].height);
+    topCorrect = (topCorrect <0.0 ? 0.0 : topCorrect);
+    tv.contentOffset = (CGPoint){.x = 0, .y = -topCorrect};
+     */
+}
+
+#pragma mark - ()
 
 - (void)dismissKeyboard {
     [self.view endEditing:YES];
 }
-
-#pragma mark - ()
 
 - (void)updateTextColor{
     
@@ -153,6 +173,7 @@
     label.text = self.thoughtTextView.text;
     label.font = self.thoughtTextView.font;
     label.textColor = self.thoughtTextView.textColor;
+    label.textAlignment = self.thoughtTextView.textAlignment;
     label.numberOfLines = 0;
     [label sizeToFit];
     
