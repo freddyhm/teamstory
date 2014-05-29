@@ -131,8 +131,18 @@
 
 - (void)updateTextColor{
     
-    // check if current bkgd is white or not
-    self.thoughtTextView.textColor = self.prevBkgdIndex == 0 ? [UIColor blackColor]:[UIColor whiteColor];
+    // check if current bkgd is white or not, change arrows and text color
+    if(self.prevBkgdIndex != 0){
+        self.thoughtTextView.textColor = [UIColor whiteColor];
+        [self.leftNavSelector setImage:[UIImage imageNamed:@"arrow_left_white.png"] forState:UIControlStateNormal];
+        [self.rightNavSelector setImage:[UIImage imageNamed:@"arrow_right_white.png"] forState:UIControlStateNormal];
+        [self.placeholderSign setImage:[UIImage imageNamed:@"share_thought_white.png"]];
+    }else{
+        self.thoughtTextView.textColor = [UIColor blackColor];
+        [self.leftNavSelector setImage:[UIImage imageNamed:@"arrow_left.png"] forState:UIControlStateNormal];
+        [self.rightNavSelector setImage:[UIImage imageNamed:@"arrow_right.png"] forState:UIControlStateNormal];
+        [self.placeholderSign setImage:[UIImage imageNamed:@"share_thought_grey.png"]];
+    }
 }
 
 
@@ -162,7 +172,7 @@
         self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:currentBkgdIndex];
         self.prevBkgdIndex = currentBkgdIndex;
     }else{
-        self.prevBkgdIndex = [self.bkgdOptions count] - 1;
+        self.prevBkgdIndex = (int)[self.bkgdOptions count] - 1;
         self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:self.prevBkgdIndex];
     }
     

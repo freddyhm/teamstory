@@ -8,8 +8,11 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ThoughtPostViewController">
             <connections>
                 <outlet property="backgroundImg" destination="0Of-tk-kJa" id="Dx7-Em-Vkv"/>
+                <outlet property="leftNavSelector" destination="L3r-dl-eFg" id="bcU-59-dq6"/>
                 <outlet property="leftSwipe" destination="5XT-Ua-Fft" id="cI3-vd-mAo"/>
                 <outlet property="placeholder" destination="zuT-kM-lGp" id="myd-no-Tek"/>
+                <outlet property="placeholderSign" destination="zuT-kM-lGp" id="JRf-7I-680"/>
+                <outlet property="rightNavSelector" destination="Hse-na-Kmj" id="dqe-oM-5LR"/>
                 <outlet property="rightSwipe" destination="YP5-J5-ut2" id="44b-Zt-jR7"/>
                 <outlet property="thoughtTextView" destination="Aqj-BT-zjy" id="XSS-kK-ria"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -30,7 +33,7 @@
                         <outletCollection property="gestureRecognizers" destination="YP5-J5-ut2" appends="YES" id="cWc-7j-0aj"/>
                     </connections>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="share_thought.png" translatesAutoresizingMaskIntoConstraints="NO" id="zuT-kM-lGp">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="share_thought_grey.png" translatesAutoresizingMaskIntoConstraints="NO" id="zuT-kM-lGp">
                     <rect key="frame" x="75" y="128" width="170" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
@@ -140,6 +143,6 @@
     <resources>
         <image name="arrow_left.png" width="15" height="15"/>
         <image name="arrow_right.png" width="15" height="15"/>
-        <image name="share_thought.png" width="170" height="50"/>
+        <image name="share_thought_grey.png" width="200" height="50"/>
     </resources>
 </document>
