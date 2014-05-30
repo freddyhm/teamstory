@@ -118,7 +118,7 @@
     
     //Center vertical alignment
     CGFloat topCorrect = ([tv bounds].size.height - [tv sizeThatFits:tv.bounds.size].height * [tv zoomScale])/2.0;
-    topCorrect = ( topCorrect < 0.0 ? 0.0 : topCorrect );
+    topCorrect = ( topCorrect < 0.0 ? 0.0 : (topCorrect - 20.0f) );
     tv.contentOffset = (CGPoint){.x = 0, .y = -topCorrect};
 }
 
