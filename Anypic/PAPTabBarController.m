@@ -8,6 +8,7 @@
 #import  "CameraFilterViewController.h"
 #import "MBProgressHUD.h"
 #import "CropResizeViewController.h"
+#import "ThoughtPostViewController.h"
 
 @interface PAPTabBarController ()
 @property (nonatomic,strong) NSString *imageSource;
@@ -15,6 +16,13 @@
 @property (nonatomic,strong) UIImagePickerController *imagePicker;
 @property (nonatomic,strong) NSDictionary *imagePickerInfo;
 @property (nonatomic, strong) UIPopoverController *popoverController;
+@property (nonatomic, strong) UIImageView *postMenuBkgd;
+@property (nonatomic, strong) UIButton *photoPostButton;
+@property (nonatomic, strong) UIButton *thoughtPostButton;
+@property (nonatomic, strong) UIImageView *photoPostButtonIcon;
+@property (nonatomic, strong) UIImageView *thoughtPostButtonIcon;
+
+
 
 @end
 
@@ -35,7 +43,43 @@
     //[[self tabBar] setSelectionIndicatorImage:[UIImage imageNamed:@"BackgroundTabBarItemSelected.png"]];
     
     self.navController = [[UINavigationController alloc] init];
-    //[PAPUtility addBottomDropShadowToNavigationBarForNavigationController:self.navController];
+   
+    
+    // create post menu
+    self.postMenu = [[UIView alloc]initWithFrame:CGRectMake(self.tabBar.frame.origin.x, self.tabBar.frame.origin.y - self.tabBar.frame.size.height - 20, self.tabBar.frame.size.width, self.tabBar.frame.size.height)];
+    self.postMenuBkgd = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"post_bubble.png"]];
+    [self.postMenu addSubview:self.postMenuBkgd];
+    
+    // photo button + icon
+    self.photoPostButton = [[UIButton alloc] initWithFrame:CGRectMake(50.0f, 9.0f, self.tabBar.frame.size.width/3, self.tabBar.frame.size.height)];
+    [self.photoPostButton setTitle:@"Share Moment" forState:UIControlStateNormal];
+    self.photoPostButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:13.0f];
+    [self.photoPostButton addTarget:self action:@selector(cameraButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    self.photoPostButton.titleLabel.textColor = [UIColor whiteColor];
+   
+    self.photoPostButtonIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"post_camera.png"]];
+    self.photoPostButtonIcon.frame = CGRectMake(20.0f, 23.0f, self.photoPostButtonIcon.frame.size.width, self.photoPostButtonIcon.frame.size.height);
+    
+    [self.postMenu addSubview:self.photoPostButtonIcon];
+    [self.postMenu addSubview:self.photoPostButton];
+    
+    // thought button + icon
+    self.thoughtPostButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tabBar.frame.size.width/2 + 35.0f, 9.0f, self.tabBar.frame.size.width/3, self.tabBar.frame.size.height)];
+    [self.thoughtPostButton setTitle:@"Share Thought" forState:UIControlStateNormal];
+    self.thoughtPostButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:13.0f];
+    [self.thoughtPostButton addTarget:self action:@selector(thoughtButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    self.thoughtPostButton.titleLabel.textColor = [UIColor whiteColor];
+    self.thoughtPostButton.titleLabel.textAlignment = NSTextAlignmentRight;
+    
+    self.thoughtPostButtonIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"post_thought.png"]];
+    self.thoughtPostButtonIcon.frame = CGRectMake(self.tabBar.frame.size.width/2 + 10.0f, 23.0f, self.thoughtPostButtonIcon.frame.size.width, self.thoughtPostButtonIcon.frame.size.height);
+    
+    [self.postMenu addSubview:self.thoughtPostButtonIcon];
+    [self.postMenu addSubview:self.thoughtPostButton];
+    
+    self.postMenu.hidden = YES;
+    
+    [self.view addSubview:self.postMenu];
 }
 
 
@@ -44,17 +88,18 @@
 - (void)setViewControllers:(NSArray *)viewControllers animated:(BOOL)animated {
     [super setViewControllers:viewControllers animated:animated];
     
-    UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    cameraButton.frame = CGRectMake( (self.tabBar.bounds.size.width / 5) * 2, -12.0f, 67.0f, 60.0f);
-    [cameraButton setImage:[UIImage imageNamed:@"ButtonCamera.png"] forState:UIControlStateNormal];
-    [cameraButton setImage:[UIImage imageNamed:@"ButtonCameraSelected.png"] forState:UIControlStateHighlighted];
-    [cameraButton addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.tabBar addSubview:cameraButton];
+    UIButton *postButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [postButton setImage:[UIImage imageNamed:@"nav_post.png"] forState:UIControlStateNormal];
+    postButton.frame = CGRectMake( (self.tabBar.bounds.size.width / 5) * 2, 0.0f, 67.0f, 50.0f);
+    postButton.backgroundColor = [UIColor colorWithRed:88.0f/255.0f green:186.0f/255.0f blue:159.0f/255.0f alpha:1.0f];
+
+    [postButton addTarget:self action:@selector(postButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.tabBar addSubview:postButton];
     
     UISwipeGestureRecognizer *swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
     [swipeUpGestureRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
     [swipeUpGestureRecognizer setNumberOfTouchesRequired:1];
-    [cameraButton addGestureRecognizer:swipeUpGestureRecognizer];
+    [postButton addGestureRecognizer:swipeUpGestureRecognizer];
 }
 
 
@@ -143,8 +188,16 @@
 
 #pragma mark - ()
 
-- (void)photoCaptureButtonAction:(id)sender {
+- (void)postButtonAction:(id)sender {
+    
+    // hide/show post menu toggle
+    self.postMenu.hidden = self.postMenu.hidden ? NO : YES;
+}
 
+- (void)cameraButtonAction:(id)sender{
+    
+    self.postMenu.hidden = YES;
+    
     BOOL cameraDeviceAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
     BOOL photoLibraryAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
     
@@ -155,6 +208,14 @@
         // if we don't have at least two options, we automatically show whichever is available (camera or roll)
         [self shouldPresentPhotoCaptureController];
     }
+}
+
+- (void)thoughtButtonAction:(id)sender{
+    
+    self.postMenu.hidden = YES;
+    
+    ThoughtPostViewController *thoughtPostViewController = [[ThoughtPostViewController alloc]init];
+    [self.navigationController pushViewController:thoughtPostViewController animated:YES];
 }
 
 - (BOOL)shouldStartCameraController {

@@ -314,6 +314,12 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 #pragma mark - UITabBarControllerDelegate
 
 - (BOOL)tabBarController:(UITabBarController *)aTabBarController shouldSelectViewController:(UIViewController *)viewController {
+    
+    // check if tab bar post menu is present, hide if so
+    PAPTabBarController *tabBar = (PAPTabBarController *)aTabBarController;
+    if(!tabBar.postMenu.hidden){
+        tabBar.postMenu.hidden = YES;
+    }
     // The empty UITabBarItem behind our Camera button should not load a view controller
     return ![viewController isEqual:aTabBarController.viewControllers[PAPEmptyTabBarItemIndex]];
 }
@@ -441,21 +447,21 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 
     
     UITabBarItem *homeTabBarItem = [[UITabBarItem alloc] init];
-    [homeTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"IconHomeSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"IconHome.png"]];
+    [homeTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"IconHomeSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"nav_home.png"]];
     homeTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
     
     UITabBarItem *activityFeedTabBarItem = [[UITabBarItem alloc] init];
-    [activityFeedTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"IconActivitySelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"IconActivity.png"]];
+    [activityFeedTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"IconActivitySelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"nav_activity.png"]];
     activityFeedTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
 
     
     UITabBarItem *perksTabBarItem = [[UITabBarItem alloc] init];
-    [perksTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"IconDiscoverSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"IconDiscover.png"]];
+    [perksTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"IconDiscoverSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"nav_discover.png"]];
     perksTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
 
     
     UITabBarItem *accountTabBarItem = [[UITabBarItem alloc] init];
-    [accountTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"IconProfileSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"IconProfile.png"]];
+    [accountTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"IconProfileSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"nav_profile.png"]];
     accountTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
     
     

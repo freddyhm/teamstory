@@ -120,7 +120,7 @@
     [self.scrollView setContentSize:CGSizeMake(self.scrollView.bounds.size.width, photoImageView.frame.origin.y + photoImageView.frame.size.height + self.footerView.frame.size.height)];
     
     self.scrollView.scrollEnabled = YES;
-}
+  }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -155,6 +155,7 @@
                                           action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tapOutside];
+    
 }
 
 -(void)dismissKeyboard {
@@ -182,7 +183,7 @@
 - (void)exitPhoto{
     
     // hide custom grey bar and pop to home
-    [[self navigationController] setNavigationBarHidden:YES animated:NO];
+    [[self navigationController] setNavigationBarHidden:YES animated:YES];
     
     // get tab bar and home controller from stack
     PAPTabBarController *tabBarController =[[self.navigationController viewControllers] objectAtIndex:1];
@@ -440,6 +441,7 @@
         [photo setObject:[PFUser currentUser] forKey:kPAPPhotoUserKey];
         [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
         [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
+        [photo setObject:@"picture" forKey:kPAPPhotoType];
         
         // storing atmention user list to the array (only filtered cases).
         if ([self.atmentionUserArray count] > 0) {
@@ -556,6 +558,9 @@
 
 - (void)doneButtonAction:(id)sender {
     
+    // analytics
+    [PAPUtility captureEventGA:@"Engagement" action:@"Upload Picture" label:@"Photo"];
+    
     // make sure placeholder gets erased
     if([[self.commentTextView text] isEqualToString:@"Add a caption"]){
         [self.commentTextView setText:@""];
@@ -582,6 +587,7 @@
     [photo setObject:[PFUser currentUser] forKey:kPAPPhotoUserKey];
     [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
     [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
+    [photo setObject:@"picture" forKey:kPAPPhotoType];
     
     // storing atmention user list to the array (only filtered cases).
     if ([self.atmentionUserArray count] > 0) {
