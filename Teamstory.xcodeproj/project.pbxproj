@@ -350,7 +350,6 @@
 		D530C3F318FB22FC00739027 /* iRate.m in Sources */ = {isa = PBXBuildFile; fileRef = D530C3F118FB22FC00739027 /* iRate.m */; };
 		D531F7CC18B5DE11008AE73F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D531F7CB18B5DE11008AE73F /* CoreVideo.framework */; };
 		D531F7CE18B5DE44008AE73F /* Appsee.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D531F7CD18B5DE44008AE73F /* Appsee.framework */; };
-		D53547AF19368A6B00F4F58B /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D53547AE19368A6B00F4F58B /* Default@2x.png */; };
 		D57683EA1933E6DD008BAA2C /* post_bubble.png in Resources */ = {isa = PBXBuildFile; fileRef = D57683E41933E6DD008BAA2C /* post_bubble.png */; };
 		D57683EB1933E6DD008BAA2C /* post_bubble@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D57683E51933E6DD008BAA2C /* post_bubble@2x.png */; };
 		D57683EC1933E6DD008BAA2C /* post_camera.png in Resources */ = {isa = PBXBuildFile; fileRef = D57683E61933E6DD008BAA2C /* post_camera.png */; };
@@ -390,7 +389,6 @@
 		D59B998418C5A165002D6EFE /* Default-568h@2x-new-but-old.png in Resources */ = {isa = PBXBuildFile; fileRef = D59B998118C5A165002D6EFE /* Default-568h@2x-new-but-old.png */; };
 		D59B998718C5A508002D6EFE /* Default-new-but-old.png in Resources */ = {isa = PBXBuildFile; fileRef = D59B998518C5A507002D6EFE /* Default-new-but-old.png */; };
 		D59B998818C5A508002D6EFE /* Default@2x-new-but-old.png in Resources */ = {isa = PBXBuildFile; fileRef = D59B998618C5A508002D6EFE /* Default@2x-new-but-old.png */; };
-		D59B998C18C5A902002D6EFE /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = D59B998918C5A902002D6EFE /* Default.png */; };
 		D59B998E18C5A902002D6EFE /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D59B998B18C5A902002D6EFE /* Default-568h@2x.png */; };
 		D5A5F51E18D2C3C1000BB243 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A5F51D18D2C3C1000BB243 /* FacebookSDK.framework */; };
 		D5A5F52018D2C3CD000BB243 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A5F51F18D2C3CD000BB243 /* Parse.framework */; };
@@ -834,7 +832,6 @@
 		D530C3F118FB22FC00739027 /* iRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iRate.m; sourceTree = "<group>"; };
 		D531F7CB18B5DE11008AE73F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		D531F7CD18B5DE44008AE73F /* Appsee.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Appsee.framework; path = External/Appsee.framework; sourceTree = "<group>"; };
-		D53547AE19368A6B00F4F58B /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		D57683E41933E6DD008BAA2C /* post_bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = post_bubble.png; sourceTree = "<group>"; };
 		D57683E51933E6DD008BAA2C /* post_bubble@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "post_bubble@2x.png"; sourceTree = "<group>"; };
 		D57683E61933E6DD008BAA2C /* post_camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = post_camera.png; sourceTree = "<group>"; };
@@ -877,7 +874,6 @@
 		D59B998118C5A165002D6EFE /* Default-568h@2x-new-but-old.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x-new-but-old.png"; sourceTree = "<group>"; };
 		D59B998518C5A507002D6EFE /* Default-new-but-old.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-new-but-old.png"; sourceTree = "<group>"; };
 		D59B998618C5A508002D6EFE /* Default@2x-new-but-old.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x-new-but-old.png"; sourceTree = "<group>"; };
-		D59B998918C5A902002D6EFE /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		D59B998B18C5A902002D6EFE /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		D5A5F51D18D2C3C1000BB243 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = External/FacebookSDK.framework; sourceTree = "<group>"; };
 		D5A5F51F18D2C3CD000BB243 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = External/Parse.framework; sourceTree = "<group>"; };
@@ -1572,8 +1568,6 @@
 		C4B60864155B085600EFA90C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				D53547AE19368A6B00F4F58B /* Default@2x.png */,
-				D59B998918C5A902002D6EFE /* Default.png */,
 				D59B998B18C5A902002D6EFE /* Default-568h@2x.png */,
 				D59B998518C5A507002D6EFE /* Default-new-but-old.png */,
 				D59B998618C5A508002D6EFE /* Default@2x-new-but-old.png */,
@@ -2063,7 +2057,6 @@
 				4602FD1E18BD553B0097DBEC /* slingbot-popup.png in Resources */,
 				4691B50218BFB0AD00B7DF6A /* intro1-iphone4.png in Resources */,
 				46ABD73F18B1381D008F5AAB /* discover-content-button@2x.png in Resources */,
-				D59B998C18C5A902002D6EFE /* Default.png in Resources */,
 				D52C1E3518D9515D00625887 /* konotor_profile.png in Resources */,
 				D57683EA1933E6DD008BAA2C /* post_bubble.png in Resources */,
 				C4BE67A5157FC7F700A291C2 /* IconComment.png in Resources */,
@@ -2147,7 +2140,6 @@
 				D52C1E2C18D9515D00625887 /* konotor_chatbubble_ios7_other@2x.png in Resources */,
 				C4BE67C7157FC8F600A291C2 /* TextFieldComment.png in Resources */,
 				D5BFDEDC18CC84A5004FEC42 /* normal@2x.png in Resources */,
-				D53547AF19368A6B00F4F58B /* Default@2x.png in Resources */,
 				D57684131933F917008BAA2C /* IconActivitySelected@2x.png in Resources */,
 				C4BE67C8157FC8F600A291C2 /* TextFieldComment@2x.png in Resources */,
 				46839E9F18E1E8C100BD60DB /* icon-upload@2x.png in Resources */,
