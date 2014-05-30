@@ -132,11 +132,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     NSString *caption_local = [self.photo objectForKey:@"caption"];
     
     if ([caption_local length] > 0) {
-        CGSize maximumLabelSize = CGSizeMake(320.0f - 7.5f * 4, 9999.0f);
+        CGSize maximumLabelSize = CGSizeMake(320.0f - 7.5f * 4, MAXFLOAT);
         CGSize expectedSize = [caption_local sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:maximumLabelSize];
         
         // Set table header
-        self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 351.0f + expectedSize.height + 43.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
+        self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 351.0f + expectedSize.height + 43.0f + 20.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
         self.headerView.delegate = self;
         self.tableView.tableHeaderView = self.headerView;
     } else {
@@ -230,10 +230,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.tableView.showsVerticalScrollIndicator = NO;
 }
 
-
-- (void)createOutstandingViews {
-    
-}
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];

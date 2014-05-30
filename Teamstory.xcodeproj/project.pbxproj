@@ -146,6 +146,20 @@
 		4691B52418C56AAF00B7DF6A /* tnz-popup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B52218C56AAF00B7DF6A /* tnz-popup@2x.png */; };
 		4691B52518C56AAF00B7DF6A /* tnz-popup.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B52318C56AAF00B7DF6A /* tnz-popup.png */; };
 		4691B52E18CCE81600B7DF6A /* PAPLoginSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4691B52D18CCE81600B7DF6A /* PAPLoginSelectionViewController.m */; };
+		46A72974192420CC003C77A4 /* icon-twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A72972192420CC003C77A4 /* icon-twitter.png */; };
+		46A72975192420CC003C77A4 /* icon-twitter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A72973192420CC003C77A4 /* icon-twitter@2x.png */; };
+		46A7297A192420DA003C77A4 /* icon-angel.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A72976192420DA003C77A4 /* icon-angel.png */; };
+		46A7297B192420DA003C77A4 /* icon-angel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A72977192420DA003C77A4 /* icon-angel@2x.png */; };
+		46A7297C192420DA003C77A4 /* icon-linkedin.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A72978192420DA003C77A4 /* icon-linkedin.png */; };
+		46A7297D192420DA003C77A4 /* icon-linkedin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A72979192420DA003C77A4 /* icon-linkedin@2x.png */; };
+		46A72980192421EC003C77A4 /* icon-industry.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A7297E192421EC003C77A4 /* icon-industry.png */; };
+		46A72981192421EC003C77A4 /* icon-industry@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A7297F192421EC003C77A4 /* icon-industry@2x.png */; };
+		46A7298819294535003C77A4 /* icon-angel-profile.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A7298219294535003C77A4 /* icon-angel-profile.png */; };
+		46A7298919294535003C77A4 /* icon-angel-profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A7298319294535003C77A4 /* icon-angel-profile@2x.png */; };
+		46A7298A19294535003C77A4 /* icon-twitter-profile.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A7298419294535003C77A4 /* icon-twitter-profile.png */; };
+		46A7298B19294535003C77A4 /* icon-twitter-profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A7298519294535003C77A4 /* icon-twitter-profile@2x.png */; };
+		46A7298C19294535003C77A4 /* icon-linkedin-profile.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A7298619294535003C77A4 /* icon-linkedin-profile.png */; };
+		46A7298D19294535003C77A4 /* icon-linkedin-profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A7298719294535003C77A4 /* icon-linkedin-profile@2x.png */; };
 		46ABD72F18AADFFB008F5AAB /* default-pic.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD72D18AADFFB008F5AAB /* default-pic.png */; };
 		46ABD73018AADFFB008F5AAB /* default-pic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */; };
 		46ABD73318B12E01008F5AAB /* PAPperksoverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 46ABD73218B12E01008F5AAB /* PAPperksoverlay.m */; };
@@ -567,6 +581,20 @@
 		4691B52318C56AAF00B7DF6A /* tnz-popup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tnz-popup.png"; sourceTree = "<group>"; };
 		4691B52C18CCE81600B7DF6A /* PAPLoginSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPLoginSelectionViewController.h; path = Anypic/PAPLoginSelectionViewController.h; sourceTree = SOURCE_ROOT; };
 		4691B52D18CCE81600B7DF6A /* PAPLoginSelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPLoginSelectionViewController.m; path = Anypic/PAPLoginSelectionViewController.m; sourceTree = SOURCE_ROOT; };
+		46A72972192420CC003C77A4 /* icon-twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-twitter.png"; sourceTree = "<group>"; };
+		46A72973192420CC003C77A4 /* icon-twitter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-twitter@2x.png"; sourceTree = "<group>"; };
+		46A72976192420DA003C77A4 /* icon-angel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-angel.png"; sourceTree = "<group>"; };
+		46A72977192420DA003C77A4 /* icon-angel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-angel@2x.png"; sourceTree = "<group>"; };
+		46A72978192420DA003C77A4 /* icon-linkedin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-linkedin.png"; sourceTree = "<group>"; };
+		46A72979192420DA003C77A4 /* icon-linkedin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-linkedin@2x.png"; sourceTree = "<group>"; };
+		46A7297E192421EC003C77A4 /* icon-industry.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-industry.png"; sourceTree = "<group>"; };
+		46A7297F192421EC003C77A4 /* icon-industry@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-industry@2x.png"; sourceTree = "<group>"; };
+		46A7298219294535003C77A4 /* icon-angel-profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-angel-profile.png"; sourceTree = "<group>"; };
+		46A7298319294535003C77A4 /* icon-angel-profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-angel-profile@2x.png"; sourceTree = "<group>"; };
+		46A7298419294535003C77A4 /* icon-twitter-profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-twitter-profile.png"; sourceTree = "<group>"; };
+		46A7298519294535003C77A4 /* icon-twitter-profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-twitter-profile@2x.png"; sourceTree = "<group>"; };
+		46A7298619294535003C77A4 /* icon-linkedin-profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-linkedin-profile.png"; sourceTree = "<group>"; };
+		46A7298719294535003C77A4 /* icon-linkedin-profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-linkedin-profile@2x.png"; sourceTree = "<group>"; };
 		46ABD72D18AADFFB008F5AAB /* default-pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-pic.png"; sourceTree = "<group>"; };
 		46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-pic@2x.png"; sourceTree = "<group>"; };
 		46ABD73118B12E01008F5AAB /* PAPperksoverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPperksoverlay.h; path = Anypic/PAPperksoverlay.h; sourceTree = SOURCE_ROOT; };
@@ -1888,6 +1916,7 @@
 				D51072CA1937EF7300B1FF0E /* arrow_left_white@2x.png in Resources */,
 				4602FCE818BA9F390097DBEC /* update.png in Resources */,
 				4602FD1D18BD553B0097DBEC /* clarity-logo@2x.png in Resources */,
+				46A72974192420CC003C77A4 /* icon-twitter.png in Resources */,
 				D52C1E3718D9515D00625887 /* konotor_progress_black.png in Resources */,
 				D57684031933EBA3008BAA2C /* nav_profile@2x.png in Resources */,
 				4602FD1818BD553B0097DBEC /* positionly-logo.png in Resources */,
@@ -1949,6 +1978,7 @@
 				D52C1E3D18D9515D00625887 /* konotor_sent.png in Resources */,
 				D5D1042B18B5CF4E0084C901 /* button-feedback.png in Resources */,
 				4602FD1A18BD553B0097DBEC /* clarity-popup.png in Resources */,
+				46A7298919294535003C77A4 /* icon-angel-profile@2x.png in Resources */,
 				4602FCEC18BAA7760097DBEC /* teamstorycrew@2x.png in Resources */,
 				D57683ED1933E6DD008BAA2C /* post_camera@2x.png in Resources */,
 				D52C1E4118D9515D00625887 /* konotor_supportprofile.png in Resources */,
@@ -1956,6 +1986,7 @@
 				D51072DB1937F43200B1FF0E /* post_bubble_rightclick.png in Resources */,
 				D52C1E2218D9515D00625887 /* KonotorConversationViewController.xib in Resources */,
 				D5BFDEDB18CC84A5004FEC42 /* normal.png in Resources */,
+				46A7297B192420DA003C77A4 /* icon-angel@2x.png in Resources */,
 				4691B52418C56AAF00B7DF6A /* tnz-popup@2x.png in Resources */,
 				46839EA218E1E8C100BD60DB /* tut2.png in Resources */,
 				D52C1E3818D9515D00625887 /* konotor_progress_black@2x.png in Resources */,
@@ -1967,6 +1998,7 @@
 				C4BE6779157FC7F700A291C2 /* BackgroundNewActivity.png in Resources */,
 				D52C1E4318D9515D00625887 /* konotor_uploading.png in Resources */,
 				46FB0A7D1888989800E978CD /* tab-product-unselected@2x.png in Resources */,
+				46A7297D192420DA003C77A4 /* icon-linkedin@2x.png in Resources */,
 				C4BE677A157FC7F700A291C2 /* BackgroundNewActivity@2x.png in Resources */,
 				C4BE677B157FC7F700A291C2 /* BackgroundTabBar.png in Resources */,
 				D594C20418EFEBAD0008F5DF /* SVProgressHUD.bundle in Resources */,
@@ -1996,7 +2028,9 @@
 				465A4ED918A8222A00E43DC6 /* iconlocation.png in Resources */,
 				465A4EDD18A8382900E43DC6 /* comingsoon@2x.png in Resources */,
 				46ABD74418B143A4008F5AAB /* news4.png in Resources */,
+				46A7298819294535003C77A4 /* icon-angel-profile.png in Resources */,
 				D5BFDED618CC84A5004FEC42 /* la@2x.png in Resources */,
+				46A72975192420CC003C77A4 /* icon-twitter@2x.png in Resources */,
 				4691B50618BFD9B200B7DF6A /* button-more@2x.png in Resources */,
 				46FB0A9A1888E4C200E978CD /* bg.png in Resources */,
 				465B19B618B81FE500EDBCFC /* browser-refresh@2x.png in Resources */,
@@ -2045,6 +2079,8 @@
 				D57684121933F917008BAA2C /* IconActivitySelected.png in Resources */,
 				D528C383191034F100CEEA35 /* ButtonLikeComment.png in Resources */,
 				D5BFDEDF18CC84A5004FEC42 /* toronto.png in Resources */,
+				46A72981192421EC003C77A4 /* icon-industry@2x.png in Resources */,
+				46A7298C19294535003C77A4 /* icon-linkedin-profile.png in Resources */,
 				46FB0A821888989800E978CD /* tab-startup-selected.png in Resources */,
 				465A4EE518A83D5100E43DC6 /* share.png in Resources */,
 				4691B50318BFB0AD00B7DF6A /* intro1-iphone5@2x.png in Resources */,
@@ -2103,6 +2139,7 @@
 				46FB0A831888989800E978CD /* tab-startup-selected@2x.png in Resources */,
 				46FB0A7E1888989800E978CD /* tab-product-selected.png in Resources */,
 				C4BE67B7157FC7F700A291C2 /* LogoNavigationBar.png in Resources */,
+				46A7297A192420DA003C77A4 /* icon-angel.png in Resources */,
 				467154B7188368350000C0CA /* Default-old.png in Resources */,
 				D52C1E2B18D9515D00625887 /* konotor_chatbubble_ios7_other.png in Resources */,
 				46ABD73818B13671008F5AAB /* deezer-logo@2x.png in Resources */,
@@ -2125,6 +2162,7 @@
 				C4BE67BB157FC7F700A291C2 /* SeparatorComments.png in Resources */,
 				C4BE67BC157FC7F700A291C2 /* SeparatorComments@2x.png in Resources */,
 				4691B52018C5691A00B7DF6A /* news5@2x.png in Resources */,
+				46A7298A19294535003C77A4 /* icon-twitter-profile.png in Resources */,
 				4602FD2218BD553B0097DBEC /* konotor-popup.png in Resources */,
 				D52C1E4018D9515D00625887 /* konotor_stop@2x.png in Resources */,
 				4691B4E418BE994800B7DF6A /* asana-popup@2x.png in Resources */,
@@ -2347,7 +2385,7 @@
 				BUNDLE_DISPLAY_NAME_SUFFIX = "∆";
 				BUNDLE_ID_SUFFIX = .dev;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Tobok Lee (J6C82HHGJA)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				FACBEOOK_URL_TYPE = fb290587851092940;
@@ -2377,7 +2415,7 @@
 					"$(PROJECT_DIR)/External/GoogleAnalytics",
 				);
 				PRODUCT_NAME = Teamstory;
-				PROVISIONING_PROFILE = "EDBA27D8-6F8A-46F7-B42F-0C2E787029AA";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2389,7 +2427,7 @@
 				BUNDLE_DISPLAY_NAME_SUFFIX = "";
 				BUNDLE_ID_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Tobok Lee (J6C82HHGJA)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FACBEOOK_URL_TYPE = fb533792813373044;
@@ -2453,7 +2491,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_DISPLAY_NAME_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Tobok Lee (J6C82HHGJA)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FACBEOOK_URL_TYPE = "";
@@ -2479,7 +2517,7 @@
 					"$(PROJECT_DIR)/External/GoogleAnalytics",
 				);
 				PRODUCT_NAME = Teamstory;
-				PROVISIONING_PROFILE = "90F3A78C-691F-40FC-8116-9D8528892DB2";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
@@ -2519,7 +2557,7 @@
 				BUNDLE_DISPLAY_NAME_SUFFIX = "";
 				BUNDLE_ID_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Tobok Lee (J6C82HHGJA)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FACBEOOK_URL_TYPE = "";
