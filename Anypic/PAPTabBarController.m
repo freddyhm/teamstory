@@ -17,10 +17,14 @@
 @property (nonatomic,strong) NSDictionary *imagePickerInfo;
 @property (nonatomic, strong) UIPopoverController *popoverController;
 @property (nonatomic, strong) UIImageView *postMenuBkgd;
+
 @property (nonatomic, strong) UIButton *photoPostButton;
 @property (nonatomic, strong) UIButton *thoughtPostButton;
 @property (nonatomic, strong) UIImageView *photoPostButtonIcon;
 @property (nonatomic, strong) UIImageView *thoughtPostButtonIcon;
+@property (nonatomic, strong) UILabel *photoPostTitle;
+@property (nonatomic, strong) UILabel *thoughtPostTitle;
+
 
 
 
@@ -47,36 +51,52 @@
     
     // create post menu
     self.postMenu = [[UIView alloc]initWithFrame:CGRectMake(self.tabBar.frame.origin.x, self.tabBar.frame.origin.y - self.tabBar.frame.size.height - 20, self.tabBar.frame.size.width, self.tabBar.frame.size.height)];
-    self.postMenuBkgd = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"post_bubble.png"]];
-    [self.postMenu addSubview:self.postMenuBkgd];
     
-    // photo button + icon
-    self.photoPostButton = [[UIButton alloc] initWithFrame:CGRectMake(50.0f, 9.0f, self.tabBar.frame.size.width/3, self.tabBar.frame.size.height)];
-    [self.photoPostButton setTitle:@"Share Moment" forState:UIControlStateNormal];
-    self.photoPostButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:13.0f];
+    // photo button
+    self.photoPostButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tabBar.frame.origin.x, 9.0f, self.tabBar.frame.size.width/2, self.tabBar.frame.size.height)];
+    [self.photoPostButton setBackgroundImage:[UIImage imageNamed:@"bubble_left.png"] forState:UIControlStateNormal];
+    [self.photoPostButton setBackgroundImage:[UIImage imageNamed:@"bubble_left_selected.png"] forState:UIControlStateSelected];
     [self.photoPostButton addTarget:self action:@selector(cameraButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.photoPostButton.titleLabel.textColor = [UIColor whiteColor];
-   
-    self.photoPostButtonIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"post_camera.png"]];
-    self.photoPostButtonIcon.frame = CGRectMake(20.0f, 23.0f, self.photoPostButtonIcon.frame.size.width, self.photoPostButtonIcon.frame.size.height);
     
-    [self.postMenu addSubview:self.photoPostButtonIcon];
+    // photo title
+    self.photoPostTitle = [[UILabel alloc] initWithFrame:CGRectMake(56.0f, 18.0f, 110.0, 10)];
+    //self.photoPostTitle.backgroundColor= [UIColor grayColor];
+    self.photoPostTitle.text = @"Share Moment";
+    self.photoPostTitle.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:13.0f];
+    self.photoPostTitle.textColor = [UIColor whiteColor];
+   
+    // photo icon
+    self.photoPostButtonIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"post_camera.png"]];
+    self.photoPostButtonIcon.frame = CGRectMake(20.0f, 11.0f, self.photoPostButtonIcon.frame.size.width, self.photoPostButtonIcon.frame.size.height);
+    
+    // add to proper views
+    [self.photoPostButton addSubview:self.photoPostTitle];
+    [self.photoPostButton addSubview:self.photoPostButtonIcon];
     [self.postMenu addSubview:self.photoPostButton];
     
-    // thought button + icon
-    self.thoughtPostButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tabBar.frame.size.width/2 + 35.0f, 9.0f, self.tabBar.frame.size.width/3, self.tabBar.frame.size.height)];
-    [self.thoughtPostButton setTitle:@"Share Thought" forState:UIControlStateNormal];
-    self.thoughtPostButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:13.0f];
+    // thought button
+    self.thoughtPostButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tabBar.frame.size.width/2, 9.0f, self.tabBar.frame.size.width/2, self.tabBar.frame.size.height)];
+    [self.thoughtPostButton setBackgroundImage:[UIImage imageNamed:@"bubble_right.png"] forState:UIControlStateNormal];
+    [self.thoughtPostButton setBackgroundImage:[UIImage imageNamed:@"bubble_right_selected.png"] forState:UIControlStateSelected];
     [self.thoughtPostButton addTarget:self action:@selector(thoughtButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.thoughtPostButton.titleLabel.textColor = [UIColor whiteColor];
-    self.thoughtPostButton.titleLabel.textAlignment = NSTextAlignmentRight;
     
+    // thought title
+    self.thoughtPostTitle = [[UILabel alloc] initWithFrame:CGRectMake(44.0f, 15.0f, 110.0, 15.0f)];
+    //self.photoPostTitle.backgroundColor= [UIColor grayColor];
+    self.thoughtPostTitle.text = @"Share Thought";
+    self.thoughtPostTitle.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:13.0f];
+    self.thoughtPostTitle.textColor = [UIColor whiteColor];
+    
+    // thought icon
     self.thoughtPostButtonIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"post_thought.png"]];
-    self.thoughtPostButtonIcon.frame = CGRectMake(self.tabBar.frame.size.width/2 + 10.0f, 23.0f, self.thoughtPostButtonIcon.frame.size.width, self.thoughtPostButtonIcon.frame.size.height);
+    self.thoughtPostButtonIcon.frame = CGRectMake(8.0f, 11.0f, self.thoughtPostButtonIcon.frame.size.width, self.thoughtPostButtonIcon.frame.size.height);
     
-    [self.postMenu addSubview:self.thoughtPostButtonIcon];
+    // add to proper views
+    [self.thoughtPostButton addSubview:self.thoughtPostTitle];
+    [self.thoughtPostButton addSubview:self.thoughtPostButtonIcon];
     [self.postMenu addSubview:self.thoughtPostButton];
     
+    // hide by default
     self.postMenu.hidden = YES;
     
     [self.view addSubview:self.postMenu];
