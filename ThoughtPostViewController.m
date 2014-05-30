@@ -182,6 +182,7 @@
 
 - (void)saveEdit:(id)sender {
     
+    // dismiss keyboard before taking picture
     [self dismissKeyboard];
     
     // analytics for upload and background
