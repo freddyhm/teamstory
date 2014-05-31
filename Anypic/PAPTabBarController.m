@@ -50,16 +50,17 @@
    
     
     // create post menu
-    self.postMenu = [[UIView alloc]initWithFrame:CGRectMake(self.tabBar.frame.origin.x, self.tabBar.frame.origin.y - self.tabBar.frame.size.height - 20, self.tabBar.frame.size.width, self.tabBar.frame.size.height)];
+    self.postMenu = [[UIView alloc]initWithFrame:CGRectMake(self.tabBar.frame.origin.x, self.tabBar.frame.origin.y - self.tabBar.frame.size.height - 25, self.tabBar.frame.size.width, self.tabBar.frame.size.height)];
     
     // photo button
-    self.photoPostButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tabBar.frame.origin.x, 9.0f, self.tabBar.frame.size.width/2, self.tabBar.frame.size.height)];
-    [self.photoPostButton setBackgroundImage:[UIImage imageNamed:@"bubble_left.png"] forState:UIControlStateNormal];
+    UIImage *bubbleLeft = [UIImage imageNamed:@"bubble_left.png"];
+    self.photoPostButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tabBar.frame.origin.x, 9.0f, bubbleLeft.size.width, bubbleLeft.size.height)];
+    [self.photoPostButton setBackgroundImage:bubbleLeft forState:UIControlStateNormal];
     [self.photoPostButton setBackgroundImage:[UIImage imageNamed:@"bubble_left_selected.png"] forState:UIControlStateSelected];
     [self.photoPostButton addTarget:self action:@selector(cameraButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
     // photo title
-    self.photoPostTitle = [[UILabel alloc] initWithFrame:CGRectMake(56.0f, 18.0f, 110.0, 10)];
+    self.photoPostTitle = [[UILabel alloc] initWithFrame:CGRectMake(56.0f, 28.0f, 110.0, 10)];
     //self.photoPostTitle.backgroundColor= [UIColor grayColor];
     self.photoPostTitle.text = @"Share Moment";
     self.photoPostTitle.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:13.0f];
@@ -67,7 +68,7 @@
    
     // photo icon
     self.photoPostButtonIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"post_camera.png"]];
-    self.photoPostButtonIcon.frame = CGRectMake(20.0f, 11.0f, self.photoPostButtonIcon.frame.size.width, self.photoPostButtonIcon.frame.size.height);
+    self.photoPostButtonIcon.frame = CGRectMake(20.0f, 21.0f, self.photoPostButtonIcon.frame.size.width, self.photoPostButtonIcon.frame.size.height);
     
     // add to proper views
     [self.photoPostButton addSubview:self.photoPostTitle];
@@ -75,13 +76,14 @@
     [self.postMenu addSubview:self.photoPostButton];
     
     // thought button
-    self.thoughtPostButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tabBar.frame.size.width/2, 9.0f, self.tabBar.frame.size.width/2, self.tabBar.frame.size.height)];
+    UIImage *bubbleRight = [UIImage imageNamed:@"bubble_right.png"];
+    self.thoughtPostButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tabBar.frame.size.width/2, 9.0f, bubbleRight.size.width, bubbleRight.size.height)];
     [self.thoughtPostButton setBackgroundImage:[UIImage imageNamed:@"bubble_right.png"] forState:UIControlStateNormal];
     [self.thoughtPostButton setBackgroundImage:[UIImage imageNamed:@"bubble_right_selected.png"] forState:UIControlStateSelected];
     [self.thoughtPostButton addTarget:self action:@selector(thoughtButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
     // thought title
-    self.thoughtPostTitle = [[UILabel alloc] initWithFrame:CGRectMake(44.0f, 15.0f, 110.0, 15.0f)];
+    self.thoughtPostTitle = [[UILabel alloc] initWithFrame:CGRectMake(44.0f, 26.0f, 110.0, 15.0f)];
     //self.photoPostTitle.backgroundColor= [UIColor grayColor];
     self.thoughtPostTitle.text = @"Share Thought";
     self.thoughtPostTitle.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:13.0f];
@@ -89,7 +91,7 @@
     
     // thought icon
     self.thoughtPostButtonIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"post_thought.png"]];
-    self.thoughtPostButtonIcon.frame = CGRectMake(8.0f, 11.0f, self.thoughtPostButtonIcon.frame.size.width, self.thoughtPostButtonIcon.frame.size.height);
+    self.thoughtPostButtonIcon.frame = CGRectMake(8.0f, 22.0f, self.thoughtPostButtonIcon.frame.size.width, self.thoughtPostButtonIcon.frame.size.height);
     
     // add to proper views
     [self.thoughtPostButton addSubview:self.thoughtPostTitle];
