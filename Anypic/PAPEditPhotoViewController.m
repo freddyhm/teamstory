@@ -212,7 +212,7 @@
     UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:10.0f interpolationQuality:kCGInterpolationDefault];
     
     // JPEG to decrease file size and enable faster uploads & downloads
-    NSData *imageData = UIImageJPEGRepresentation(anImage, 0.8f);
+    NSData *imageData = UIImageJPEGRepresentation(anImage, 1.0f);
     NSData *thumbnailImageData = UIImagePNGRepresentation(thumbnailImage);
     
     if (!imageData || !thumbnailImageData) {
