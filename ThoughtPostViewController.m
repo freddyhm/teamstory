@@ -21,6 +21,7 @@
 @property (nonatomic, assign) UIBackgroundTaskIdentifier fileUploadBackgroundTaskId;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier photoPostBackgroundTaskId;
 @property (nonatomic, strong) NSMutableArray *bkgdOptions;
+@property (nonatomic, strong) UIBarButtonItem *rightNavButton;
 @property int prevBkgdIndex;
 
 @end
@@ -48,10 +49,10 @@
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonAction:)];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_done.png"] style:UIBarButtonItemStylePlain target:self action:@selector(saveEdit:)];
+    self.rightNavButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_done.png"] style:UIBarButtonItemStylePlain target:self action:@selector(saveEdit:)];
+    self.rightNavButton.tintColor = [UIColor whiteColor];
     
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
-    [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
     
     // set colors
     UIColor *original = [UIColor colorWithRed:249.0f/255.0f green:249.0f/255.0f blue:249.0f/255.0f alpha:1];
@@ -108,6 +109,8 @@
 
 - (void)textViewDidChange:(UITextView *)textView {
     
+    self.navigationItem.rightBarButtonItem = [textView.text isEqualToString:@""] ? nil : self.rightNavButton;
+
     // align cursor vertically dynamically
     [self verticalAlignTextview];
 }
@@ -118,7 +121,7 @@
     
     //Center vertical alignment
     CGFloat topCorrect = ([tv bounds].size.height - [tv sizeThatFits:tv.bounds.size].height * [tv zoomScale])/2.0;
-    topCorrect = ( topCorrect < 0.0 ? 0.0 : (topCorrect - 20.0f) );
+    topCorrect = ( topCorrect < 0.0 ? 0.0 : (topCorrect - 10.0f) );
     tv.contentOffset = (CGPoint){.x = 0, .y = -topCorrect};
 }
 
