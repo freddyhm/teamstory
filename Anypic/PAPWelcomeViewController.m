@@ -34,11 +34,14 @@
     }
 
     // Show spinning indicator while user is being refreshed
+    [SVProgressHUD setForegroundColor:[UIColor whiteColor]];
     [SVProgressHUD show];
+    
     
     [user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         
        [SVProgressHUD dismissQuickly];
+        [SVProgressHUD setForegroundColor:[UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
     
         if(!error){
             NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
