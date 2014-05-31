@@ -60,7 +60,7 @@
     [self.photoPostButton addTarget:self action:@selector(cameraButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
     // photo title
-    self.photoPostTitle = [[UILabel alloc] initWithFrame:CGRectMake(56.0f, 28.0f, 110.0, 10)];
+    self.photoPostTitle = [[UILabel alloc] initWithFrame:CGRectMake(56.0f, 26.5f, 110.0, 10)];
     //self.photoPostTitle.backgroundColor= [UIColor grayColor];
     self.photoPostTitle.text = @"Share Moment";
     self.photoPostTitle.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:13.0f];
@@ -83,7 +83,7 @@
     [self.thoughtPostButton addTarget:self action:@selector(thoughtButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
     // thought title
-    self.thoughtPostTitle = [[UILabel alloc] initWithFrame:CGRectMake(44.0f, 26.0f, 110.0, 15.0f)];
+    self.thoughtPostTitle = [[UILabel alloc] initWithFrame:CGRectMake(44.0f, 23.0f, 110.0, 15.0f)];
     //self.photoPostTitle.backgroundColor= [UIColor grayColor];
     self.thoughtPostTitle.text = @"Share Thought";
     self.thoughtPostTitle.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:13.0f];
@@ -91,7 +91,7 @@
     
     // thought icon
     self.thoughtPostButtonIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"post_thought.png"]];
-    self.thoughtPostButtonIcon.frame = CGRectMake(8.0f, 22.0f, self.thoughtPostButtonIcon.frame.size.width, self.thoughtPostButtonIcon.frame.size.height);
+    self.thoughtPostButtonIcon.frame = CGRectMake(12.0f, 21.0f, self.thoughtPostButtonIcon.frame.size.width, self.thoughtPostButtonIcon.frame.size.height);
     
     // add to proper views
     [self.thoughtPostButton addSubview:self.thoughtPostTitle];
@@ -112,7 +112,7 @@
     
     UIButton *postButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [postButton setImage:[UIImage imageNamed:@"nav_post.png"] forState:UIControlStateNormal];
-    postButton.frame = CGRectMake( (self.tabBar.bounds.size.width / 5) * 2, 0.0f, 67.0f, 50.0f);
+    postButton.frame = CGRectMake( (self.tabBar.bounds.size.width / 5) * 2, 0.0f, 63.0f, 50.0f);
     postButton.backgroundColor = [UIColor colorWithRed:88.0f/255.0f green:186.0f/255.0f blue:159.0f/255.0f alpha:1.0f];
 
     [postButton addTarget:self action:@selector(postButtonAction:) forControlEvents:UIControlEventTouchUpInside];
