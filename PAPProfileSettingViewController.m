@@ -1277,7 +1277,7 @@
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow: (NSInteger)row inComponent:(NSInteger)component {
-    industry_pickerRow = row;
+    industry_pickerRow = (int)row;
 }
 
 // tell the picker the width of each row for a given component
