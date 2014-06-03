@@ -141,7 +141,7 @@ var alertMessage = function(request) {
         }
     } else if (request.object.get("type") === "comment" && atmentionUserArray.length > 0) {
         if (request.user.get('displayName')) {
-            message = request.user.get('displayName') + ': ' + 'mentioned you in a post';
+            message = request.user.get('displayName') + ' mentioned you in a post';
         } else {
             message = "Someone mentioned you in a post.";
         }

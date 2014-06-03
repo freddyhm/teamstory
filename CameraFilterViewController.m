@@ -164,7 +164,7 @@
 - (IBAction)saveEdit:(id)sender{
     
     // analytics
-    [PAPUtility captureEventGA:@"Engagement" action:self.currentFilterName label:@"Filter"];
+    [PAPUtility captureEventGA:@"Filter" action:self.currentFilterName label:nil];
     
     // send selected image to edit controller
     PAPEditPhotoViewController *editController = [[PAPEditPhotoViewController alloc] initWithImage:[self.croppedImageView image]];

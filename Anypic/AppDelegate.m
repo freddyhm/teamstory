@@ -314,6 +314,12 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 #pragma mark - UITabBarControllerDelegate
 
 - (BOOL)tabBarController:(UITabBarController *)aTabBarController shouldSelectViewController:(UIViewController *)viewController {
+    
+    // check if tab bar post menu is present, hide if so
+    PAPTabBarController *tabBar = (PAPTabBarController *)aTabBarController;
+    if(!tabBar.postMenu.hidden){
+        tabBar.postMenu.hidden = YES;
+    }
     // The empty UITabBarItem behind our Camera button should not load a view controller
     return ![viewController isEqual:aTabBarController.viewControllers[PAPEmptyTabBarItemIndex]];
 }
@@ -442,34 +448,34 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     
     UITabBarItem *homeTabBarItem = [[UITabBarItem alloc] init];
     
-    [homeTabBarItem setImage:[[UIImage imageNamed:@"IconHome.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [homeTabBarItem setImage:[[UIImage imageNamed:@"nav_home.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     
     [homeTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconHomeSelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-    
+
     homeTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
     
     
     UITabBarItem *activityFeedTabBarItem = [[UITabBarItem alloc] init];
     
-    [activityFeedTabBarItem setImage:[[UIImage imageNamed:@"IconActivity.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [activityFeedTabBarItem setImage:[[UIImage imageNamed:@"nav_activity.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     
     [activityFeedTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconActivitySelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-    
+
     activityFeedTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
 
     
     UITabBarItem *perksTabBarItem = [[UITabBarItem alloc] init];
     
-    [perksTabBarItem setImage:[[UIImage imageNamed:@"IconDiscover.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [perksTabBarItem setImage:[[UIImage imageNamed:@"nav_discover.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     
     [perksTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconDiscoverSelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-    
+   
     perksTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
 
     
     UITabBarItem *accountTabBarItem = [[UITabBarItem alloc] init];
-    
-    [accountTabBarItem setImage:[[UIImage imageNamed:@"IconProfile.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+
+    [accountTabBarItem setImage:[[UIImage imageNamed:@"nav_profile.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     
     [accountTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconProfileSelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     

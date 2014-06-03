@@ -12,7 +12,16 @@
 #import "SVProgressHUD.h"
 #import "PAPwebviewViewController.h"
 
-@interface PAPAccountViewController()
+@interface PAPAccountViewController() {
+    float alphaValue_twitter;
+    float alphaValue_angellist;
+    float alphaValue_linkedin;
+    BOOL button_enable_twitter;
+    BOOL button_enable_angellist;
+    BOOL button_enable_linkedin;
+    
+    CGSize website_expectedSize;
+}
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) UILabel *userDisplayName;
 @property (nonatomic, strong) UILabel *locationLabel;
@@ -30,6 +39,15 @@
 @property (nonatomic, strong) UILabel *followerCountLabel;
 @property (nonatomic, strong) UILabel *followingCountLabel;
 @property (nonatomic, strong) UIButton *websiteLink;
+@property (nonatomic, strong) NSString *industry;
+@property (nonatomic, strong) UILabel *industryLabel;
+@property (nonatomic, strong) NSString *linkedin_url;
+@property (nonatomic, strong) NSString *angellist_url;
+@property (nonatomic, strong) NSString *twitter_url;
+@property (nonatomic, strong) UIButton *angellist_button;
+@property (nonatomic, strong) UIButton *twitter_button;
+@property (nonatomic, strong) UIButton *linkedIn_button;
+@property (nonatomic, strong) UIView *whiteBackground;
 @property int userStatUpdateCount;
 
 
@@ -54,6 +72,15 @@
 @synthesize displayName;
 @synthesize userDisplayNameLabel;
 @synthesize websiteLink;
+@synthesize industry;
+@synthesize industryLabel;
+@synthesize twitter_url;
+@synthesize angellist_url;
+@synthesize linkedin_url;
+@synthesize angellist_button;
+@synthesize twitter_button;
+@synthesize linkedIn_button;
+@synthesize whiteBackground;
 
 
 #pragma mark - Initialization
@@ -86,17 +113,45 @@
             self.descriptionInfo = [self.user objectForKey:@"description"];
             self.websiteInfo = [self.user objectForKey:@"website"];
             self.displayName = [self.user objectForKey:@"displayName"];
+            self.industry = [self.user objectForKey:@"industry"];
+            self.linkedin_url = [self.user objectForKey:@"linkedin_url"];
+            self.twitter_url = [self.user objectForKey:@"twitter_url"];
+            self.angellist_url = [self.user objectForKey:@"angellist_url"];
+            
+            if ([websiteInfo isEqualToString:@"http://"]) {
+                websiteInfo = nil;
+            }
+            if ([self.linkedin_url isEqualToString:@"https://www.linkedin.com/in/"]) {
+                self.linkedin_url = nil;
+            }
+            if ([self.twitter_url isEqualToString:@"https://twitter.com/"]) {
+                self.twitter_url = nil;
+            }
+            if ([self.angellist_url isEqualToString:@"https://angel.co/"]) {
+                self.angellist_url = nil;
+            }
+            
             
             if (imageFile && locationInfo && displayName) {
+                self.industryLabel = [[UILabel alloc] init];
                 
-                descriptionLabel = [[UILabel alloc] init];
-                descriptionLabel.font = [UIFont fontWithName:@"Helvetica" size:13.0f];
-                [descriptionLabel setTextColor:[UIColor colorWithRed:178.0f/255.0f green:184.0f/255.0f blue:189.0f/255.0f alpha:1.0f]];
-                descriptionLabel.text = descriptionInfo;
-                descriptionLabel.numberOfLines = 0;
-                CGSize maximumLabelSize = CGSizeMake(300.0f, 32.0f);
+                self.industryLabel.text = self.industry;
                 
-                CGSize expectedSize = [descriptionLabel sizeThatFits:maximumLabelSize];
+                self.descriptionLabel = [[UILabel alloc] init];
+                self.descriptionLabel.font = [UIFont fontWithName:@"Helvetica" size:13.0f];
+                [self.descriptionLabel setTextColor:[UIColor colorWithRed:178.0f/255.0f green:184.0f/255.0f blue:189.0f/255.0f alpha:1.0f]];
+                self.descriptionLabel.text = self.descriptionInfo;
+                self.descriptionLabel.numberOfLines = 0;
+                CGSize maximumLabelSize = CGSizeMake(300.0f, MAXFLOAT);
+                
+                CGSize expectedSize = [self.descriptionLabel sizeThatFits:maximumLabelSize];
+                CGSize industry_expectedSize = [self.industry sizeWithFont:[UIFont systemFontOfSize:13.0f]];
+                
+                if ([self.websiteInfo length] > 0) {
+                    website_expectedSize = [self.websiteInfo sizeWithFont:[UIFont systemFontOfSize:13.0f]];
+                } else {
+                    website_expectedSize = CGSizeMake(0.0f, 0.0f);
+                }
                 
                 UIColor *textColor = [UIColor colorWithRed:158.0f/255.0f green:158.0f/255.0f blue:158.0f/255.0f alpha:1.0f];
                 
@@ -105,15 +160,13 @@
                 
                 self.headerView = [[UIView alloc] init];
                 
-                if ([websiteInfo length] > 0) {
-                    self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + 26.0f);
-                } else {
-                    self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height);
-                }
-                
+                self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + website_expectedSize.height + 43.0f);
                 [self.headerView setBackgroundColor:[UIColor clearColor]]; // should be clear, this will be the container for our avatar, photo count, follower count, following count, and so on
+                [self.view addSubview:self.headerView];
                 
-                UIView *whiteBackground = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, self.headerView.bounds.size.height - 10.0f)];
+                
+                whiteBackground = [[UIView alloc] init];
+                [whiteBackground setFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, self.headerView.bounds.size.height - 10.0f)];
                 [whiteBackground setBackgroundColor:[UIColor whiteColor]];
                 [self.headerView addSubview:whiteBackground];
                 
@@ -169,9 +222,46 @@
                     NSLog(@"locationInfo Not found");
                 }
                 
+                if ([self.industry length] > 0) {
+                    industryLabel.hidden = NO;
+                    [industryLabel setFrame:CGRectMake(320.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + website_expectedSize.height, industry_expectedSize.width + 10.0f, 22.0f)];
+                } else {
+                    industryLabel.hidden = YES;
+                }
+                industryLabel.textAlignment = NSTextAlignmentCenter;
+                [industryLabel setBackgroundColor:[UIColor colorWithRed:201.0f/255.0f green:205.0f/255.0f blue:208.0f/255.0f alpha:1.0f]];
+                [industryLabel.layer setCornerRadius:3.0f];
+                [industryLabel setClipsToBounds:YES];
+                [industryLabel setFont:[UIFont systemFontOfSize:13.0f]];
+                [industryLabel setTextColor:[UIColor whiteColor]];
+                [self.headerView addSubview:industryLabel];
                 
                 [descriptionLabel setFrame:CGRectMake(10.0f, 88.0f, expectedSize.width, expectedSize.height)];
                 [self.headerView addSubview:descriptionLabel];
+                
+                if ([self.twitter_url length] > 0) {
+                    alphaValue_twitter = 1.0f;
+                    button_enable_twitter = YES;
+                } else {
+                    alphaValue_twitter = 0.4f;
+                    button_enable_twitter = NO;
+                }
+                
+                if ([self.angellist_url length] > 0) {
+                    alphaValue_angellist = 1.0f;
+                    button_enable_angellist = YES;
+                } else {
+                    alphaValue_angellist = 0.4f;
+                    button_enable_angellist = NO;
+                }
+                
+                if ([self.linkedin_url length] > 0) {
+                    alphaValue_linkedin = 1.0f;
+                    button_enable_linkedin = YES;
+                } else {
+                    alphaValue_linkedin = 0.4f;
+                    button_enable_linkedin = NO;
+                }
                  
                 UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
                 [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]]];
@@ -219,7 +309,7 @@
                 
                 if ([websiteInfo length] > 0) {
                     websiteLink = [UIButton buttonWithType:UIButtonTypeCustom];
-                    [websiteLink setFrame:CGRectMake( 10.0f, 86.0f + expectedSize.height, 300.0f, 16.0f)];
+                    [websiteLink setFrame:CGRectMake( 10.0f, 88.0f + expectedSize.height, website_expectedSize.width, website_expectedSize.height)];
                     [websiteLink setTitle:websiteInfo forState:UIControlStateNormal];
                     [websiteLink setTitleColor:[UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
                     websiteLink.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
@@ -227,6 +317,30 @@
                     [websiteLink addTarget:self action:@selector(websiteLinkAction:) forControlEvents:UIControlEventTouchUpInside];
                     [self.headerView addSubview:websiteLink];
                 }
+                
+                linkedIn_button = [[UIButton alloc] init];
+                [linkedIn_button setFrame:CGRectMake(10.0f, 97.0f + expectedSize.height + website_expectedSize.height, 22.0f, 22.0f)];
+                [linkedIn_button setBackgroundImage:[UIImage imageNamed:@"icon-linkedin-profile.png"] forState:UIControlStateNormal];
+                [linkedIn_button setAlpha:alphaValue_linkedin];
+                linkedIn_button.enabled = button_enable_linkedin;
+                [linkedIn_button addTarget:self action:@selector(linkedin_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+                [self.headerView addSubview:linkedIn_button];
+                
+                twitter_button = [[UIButton alloc] init];
+                twitter_button.frame = CGRectMake(42.0f, 97.0f + expectedSize.height + website_expectedSize.height, 22.0f, 22.0f);
+                [twitter_button setAlpha:alphaValue_twitter];
+                twitter_button.enabled = button_enable_twitter;
+                [twitter_button addTarget:self action:@selector(twitter_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+                [twitter_button setBackgroundImage:[UIImage imageNamed:@"icon-twitter-profile.png"] forState:UIControlStateNormal];
+                [self.headerView addSubview:twitter_button];
+                
+                angellist_button = [[UIButton alloc] init];
+                angellist_button.frame = CGRectMake(74.0f, 97.0f + expectedSize.height + website_expectedSize.height, 22.0f, 22.0f);
+                [angellist_button setBackgroundImage:[UIImage imageNamed:@"icon-angel-profile.png"] forState:UIControlStateNormal];
+                [angellist_button setAlpha:alphaValue_angellist];
+                angellist_button.enabled = button_enable_angellist;
+                [angellist_button addTarget:self action:@selector(angellist_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+                [self.headerView addSubview:angellist_button];
                 
                 [photoCountLabel setText:@"0 photos"];
                 
@@ -321,7 +435,6 @@
     }
 
     [self.user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        
         self.user = (PFUser *)object;
     
         self.userDisplayNameLabel.text = [self.user objectForKey:@"displayName"];
@@ -329,6 +442,48 @@
         self.descriptionLabel.text = [self.user objectForKey:@"description"];
         [self.websiteLink setTitle:[self.user objectForKey:@"website"] forState:UIControlStateNormal];
         self.websiteInfo = [self.user objectForKey:@"website"];
+        self.industryLabel.text = [self.user objectForKey:@"industry"];
+        self.angellist_url = [self.user objectForKey:@"angellist_url"];
+        self.twitter_url = [self.user objectForKey:@"twitter_url"];
+        self.linkedin_url = [self.user objectForKey:@"linkedin_url"];
+        
+        if ([websiteInfo isEqualToString:@"http://"]) {
+            websiteInfo = nil;
+        }
+        if ([self.linkedin_url isEqualToString:@"https://www.linkedin.com/in/"]) {
+            self.linkedin_url = nil;
+        }
+        if ([self.twitter_url isEqualToString:@"https://twitter.com/"]) {
+            self.twitter_url = nil;
+        }
+        if ([self.angellist_url isEqualToString:@"https://angel.co/"]) {
+            self.angellist_url = nil;
+        }
+        
+        if ([self.angellist_url length] > 0) {
+            alphaValue_angellist = 1.0f;
+            button_enable_angellist = YES;
+        } else {
+            alphaValue_angellist = 0.4f;
+            button_enable_angellist = NO;
+        }
+        
+        if ([self.linkedin_url length] > 0) {
+            alphaValue_linkedin = 1.0f;
+            button_enable_linkedin = YES;
+        } else {
+            alphaValue_linkedin = 0.4f;
+            button_enable_linkedin = NO;
+        }
+        
+        angellist_button.enabled = button_enable_angellist;
+        angellist_button.alpha = alphaValue_angellist;
+        
+        twitter_button.enabled = button_enable_twitter;
+        twitter_button.alpha = alphaValue_twitter;
+        
+        linkedIn_button.enabled = button_enable_linkedin;
+        linkedIn_button.alpha = alphaValue_linkedin;
         
         [profilePictureImageView setFile:[self.user objectForKey:@"profilePictureMedium"]];
         [profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {
@@ -340,15 +495,36 @@
             }
         }];
         
-        CGSize maximumLabelSize = CGSizeMake(300.0f, 32.0f);
+        CGSize maximumLabelSize = CGSizeMake(300.0f, MAXFLOAT);
         
         CGSize expectedSize = [self.descriptionLabel sizeThatFits:maximumLabelSize];
         
-        if ([websiteInfo length] > 0) {
-            self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + 26.0f);
+        
+        CGSize industry_expectedSize = [self.industryLabel.text sizeWithFont:[UIFont systemFontOfSize:13.0f]];
+        
+        if ([self.websiteInfo length] > 0) {
+            website_expectedSize = [self.websiteInfo sizeWithFont:[UIFont systemFontOfSize:13.0f]];
         } else {
-            self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height);
+            website_expectedSize = CGSizeMake(0.0f, 0.0f);
         }
+        
+        self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + website_expectedSize.height + 43.0f);
+        
+        if ([self.industryLabel.text length] > 0) {
+            industryLabel.hidden = NO;
+            [industryLabel setFrame:CGRectMake(320.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + website_expectedSize.height, industry_expectedSize.width + 10.0f, 22.0f)];
+        } else {
+            industryLabel.hidden = YES;
+        }
+        
+        [descriptionLabel setFrame:CGRectMake(10.0f, 88.0f, expectedSize.width, expectedSize.height)];
+        [websiteLink setFrame:CGRectMake( 10.0f, 88.0f + expectedSize.height, website_expectedSize.width, website_expectedSize.height)];
+        [self.industryLabel setFrame:CGRectMake(320.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + website_expectedSize.height, industry_expectedSize.width + 10.0f, 22.0f)];
+        [whiteBackground setFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, self.headerView.bounds.size.height - 10.0f)];
+        
+        linkedIn_button.frame = CGRectMake(10.0f, 97.0f + expectedSize.height + website_expectedSize.height, 22.0f, 22.0f);
+        angellist_button.frame = CGRectMake(74.0f, 97.0f + expectedSize.height + website_expectedSize.height, 22.0f, 22.0f);
+        twitter_button.frame = CGRectMake(42.0f, 97.0f + expectedSize.height + website_expectedSize.height, 22.0f, 22.0f);
         
         // refresh user stats, dismiss progress hud when finished
         [self refreshFollowerCount:^(BOOL completed) {
@@ -376,6 +552,27 @@
     webviewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:webviewController animated:YES];
 
+}
+
+- (void)twitter_buttonAction:(id)sender {
+    NSLog(@"twitter button pressed");
+    PAPwebviewViewController *webviewController = [[PAPwebviewViewController alloc] initWithWebsite:self.twitter_url];
+    webviewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:webviewController animated:YES];
+}
+
+- (void)angellist_buttonAction:(id)sender {
+        NSLog(@"angellist button pressed");
+    PAPwebviewViewController *webviewController = [[PAPwebviewViewController alloc] initWithWebsite:self.angellist_url];
+    webviewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:webviewController animated:YES];
+}
+
+- (void)linkedin_buttonAction:(id)sender {
+        NSLog(@"linkedin button pressed");
+    PAPwebviewViewController *webviewController = [[PAPwebviewViewController alloc] initWithWebsite:self.linkedin_url];
+    webviewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:webviewController animated:YES];
 }
 
 

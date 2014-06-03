@@ -96,6 +96,7 @@ extern NSString *const kPAPPhotoPictureKey;
 extern NSString *const kPAPPhotoThumbnailKey;
 extern NSString *const kPAPPhotoUserKey;
 extern NSString *const kPAPPhotoOpenGraphIDKey;
+extern NSString *const kPAPPhotoType;
 
 #pragma mark - Cached Comment Attributes
 extern NSString *const kPAPCommentAttributesIsLikedByCurrentUserKey;

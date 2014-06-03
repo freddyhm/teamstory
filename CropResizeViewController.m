@@ -162,7 +162,6 @@
 
             // add to filters
             CameraFilterViewController *filterController = [[CameraFilterViewController alloc]initWithImage:self.croppedImg nib:@"CameraFilterViewController" source:self.imageSource];
-            
             // push filter controller to nav stack
             [self.navigationController pushViewController:filterController animated:YES];
         });

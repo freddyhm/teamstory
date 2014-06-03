@@ -120,7 +120,7 @@
     [self.scrollView setContentSize:CGSizeMake(self.scrollView.bounds.size.width, photoImageView.frame.origin.y + photoImageView.frame.size.height + self.footerView.frame.size.height)];
     
     self.scrollView.scrollEnabled = YES;
-}
+  }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -155,6 +155,7 @@
                                           action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tapOutside];
+    
 }
 
 -(void)dismissKeyboard {
@@ -182,7 +183,7 @@
 - (void)exitPhoto{
     
     // hide custom grey bar and pop to home
-    [[self navigationController] setNavigationBarHidden:YES animated:NO];
+    [[self navigationController] setNavigationBarHidden:YES animated:YES];
     
     // get tab bar and home controller from stack
     PAPTabBarController *tabBarController =[[self.navigationController viewControllers] objectAtIndex:1];
@@ -211,7 +212,7 @@
     UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:10.0f interpolationQuality:kCGInterpolationDefault];
     
     // JPEG to decrease file size and enable faster uploads & downloads
-    NSData *imageData = UIImageJPEGRepresentation(anImage, 0.8f);
+    NSData *imageData = UIImageJPEGRepresentation(anImage, 1.0f);
     NSData *thumbnailImageData = UIImagePNGRepresentation(thumbnailImage);
     
     if (!imageData || !thumbnailImageData) {
@@ -418,6 +419,7 @@
             }
     
     }else if ([text isEqualToString:@"\n"]) {
+        
         NSDictionary *userInfo = [NSDictionary dictionary];
         NSString *trimmedComment = [self.commentTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         if (trimmedComment.length != 0) {
@@ -439,6 +441,7 @@
         [photo setObject:[PFUser currentUser] forKey:kPAPPhotoUserKey];
         [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
         [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
+        [photo setObject:@"picture" forKey:kPAPPhotoType];
         
         // storing atmention user list to the array (only filtered cases).
         if ([self.atmentionUserArray count] > 0) {
@@ -464,6 +467,8 @@
         self.photoPostBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
             [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
         }];
+        
+
         
         // save
         [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -553,6 +558,9 @@
 
 - (void)doneButtonAction:(id)sender {
     
+    // analytics
+    [PAPUtility captureEventGA:@"Engagement" action:@"Upload Picture" label:@"Photo"];
+    
     // make sure placeholder gets erased
     if([[self.commentTextView text] isEqualToString:@"Add a caption"]){
         [self.commentTextView setText:@""];
@@ -579,6 +587,7 @@
     [photo setObject:[PFUser currentUser] forKey:kPAPPhotoUserKey];
     [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
     [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
+    [photo setObject:@"picture" forKey:kPAPPhotoType];
     
     // storing atmention user list to the array (only filtered cases).
     if ([self.atmentionUserArray count] > 0) {
