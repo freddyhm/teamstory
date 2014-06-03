@@ -272,7 +272,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [backgroundView setBackgroundColor:[UIColor whiteColor]];
         [self addSubview:backgroundView];
         viewOffset = 20;
-        self.photoDescriptionLabel.frame = CGRectMake(baseHorizontalOffset * 2, nameHeaderHeight + 5.0f, mainImageWidth - baseHorizontalOffset * 2 + viewOffset, expectedSize.height + 5.0f);
+        self.photoDescriptionLabel.frame = CGRectMake(baseHorizontalOffset * 2, nameHeaderHeight + 5.0f, 295.0f, expectedSize.height + 5.0f);
+                
         [self addSubview:self.photoDescriptionLabel];
         
         self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height + 15.0f, mainImageWidth, mainImageHeight)];

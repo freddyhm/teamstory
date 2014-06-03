@@ -276,7 +276,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     CGFloat horizontalTextSpace = [PAPBaseTextCell horizontalTextSpaceForInsetWidth:cellInset];
    
     NSMutableParagraphStyle *paragraphStyleWordWrap = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyleWordWrap.lineBreakMode = NSLineBreakByTruncatingTail;
+    paragraphStyleWordWrap.lineBreakMode = NSLineBreakByWordWrapping;   
     
     CGSize contentSize = ([paddedString boundingRectWithSize:CGSizeMake(horizontalTextSpace, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13], NSParagraphStyleAttributeName: paragraphStyleWordWrap.copy} context:nil]).size;
     
