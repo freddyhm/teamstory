@@ -74,9 +74,7 @@
 }
 
 -(void)userRefreshControl{
-        NSLog(@"pressed");
-    
-    [self.tableView setContentOffset:CGPointMake(0.0f, -50.0f) animated:YES];
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
     [self loadObjects];
 }
 

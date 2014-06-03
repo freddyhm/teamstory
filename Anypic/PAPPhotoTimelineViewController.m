@@ -16,7 +16,9 @@
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
-@interface PAPPhotoTimelineViewController ()
+@interface PAPPhotoTimelineViewController () {
+    NSInteger scrollPosition;
+}
 @property (nonatomic, assign) BOOL shouldReloadOnAppear;
 @property (nonatomic, strong) NSMutableSet *reusableSectionHeaderViews;
 @property (nonatomic, strong) NSMutableDictionary *outstandingSectionHeaderQueries;
@@ -816,7 +818,6 @@ enum ActionSheetTags {
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    
     BOOL isHome = [[self.navigationController.viewControllers lastObject] isKindOfClass:PAPHomeViewController.class];
     
     // make sure pull-to-refresh set only for home
@@ -835,6 +836,17 @@ enum ActionSheetTags {
             }
         }
     }
+    /*
+    if (scrollView.contentOffset.y < scrollPosition) {
+        // Detect scrolling up.
+        
+    } else {
+        // Detect scrolling down.
+    
+    }
+    
+    scrollPosition = scrollView.contentOffset.y;
+     */
 }
 
 // see if scrolling near end, refresh when decelerating if so
