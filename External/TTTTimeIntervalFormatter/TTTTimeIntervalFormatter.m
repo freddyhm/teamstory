@@ -213,7 +213,7 @@ static inline NSCalendarUnit NSCalendarUnitFromString(NSString *string) {
         return @"last year";
     } else if ([components month] == -1) {
         return @"last month";
-    } else if ([components week] == -1) {
+    } else if ([components weekOfYear] == -1) {
         return @"last week";
     } else if ([components day] == -1) {
         return @"yesterday";
@@ -223,7 +223,7 @@ static inline NSCalendarUnit NSCalendarUnitFromString(NSString *string) {
         return @"next year";
     } else if ([components month] == 1) {
         return @"next month";
-    } else if ([components week] == 1) {
+    } else if ([components weekOfYear] == 1) {
         return @"next week";
     } else if ([components day] == 1) {
         return @"tomorrow";
