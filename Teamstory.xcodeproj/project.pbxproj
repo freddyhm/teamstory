@@ -306,6 +306,7 @@
 		D51072D21937F33F00B1FF0E /* share_thought_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D51072CE1937F33F00B1FF0E /* share_thought_grey@2x.png */; };
 		D51072D31937F33F00B1FF0E /* share_thought_white.png in Resources */ = {isa = PBXBuildFile; fileRef = D51072CF1937F33F00B1FF0E /* share_thought_white.png */; };
 		D51072D41937F33F00B1FF0E /* share_thought_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D51072D01937F33F00B1FF0E /* share_thought_white@2x.png */; };
+		D5182C93193E1FDE00DD578C /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5182C92193E1FDE00DD578C /* Default@2x.png */; };
 		D51C98A218E28D16001230DA /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D51C98A118E28D16001230DA /* libGoogleAnalyticsServices.a */; };
 		D528C37F191034DE00CEEA35 /* ButtonLikeComment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D528C37C191034DE00CEEA35 /* ButtonLikeComment@2x.png */; };
 		D528C380191034DE00CEEA35 /* ButtonLikeCommentSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = D528C37D191034DE00CEEA35 /* ButtonLikeCommentSelected.png */; };
@@ -783,6 +784,7 @@
 		D51072CE1937F33F00B1FF0E /* share_thought_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "share_thought_grey@2x.png"; sourceTree = "<group>"; };
 		D51072CF1937F33F00B1FF0E /* share_thought_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = share_thought_white.png; sourceTree = "<group>"; };
 		D51072D01937F33F00B1FF0E /* share_thought_white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "share_thought_white@2x.png"; sourceTree = "<group>"; };
+		D5182C92193E1FDE00DD578C /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		D51C989B18E28D16001230DA /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
 		D51C989C18E28D16001230DA /* GAIDictionaryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIDictionaryBuilder.h; sourceTree = "<group>"; };
 		D51C989D18E28D16001230DA /* GAIFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIFields.h; sourceTree = "<group>"; };
@@ -1612,6 +1614,7 @@
 		C4B60864155B085600EFA90C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D5182C92193E1FDE00DD578C /* Default@2x.png */,
 				D59B998B18C5A902002D6EFE /* Default-568h@2x.png */,
 				7460D3AD1565557A00F755E4 /* Assets */,
 				C4BE6703157FC7CB00A291C2 /* Icon-72.png */,
@@ -1995,6 +1998,7 @@
 				D52C1E4118D9515D00625887 /* konotor_supportprofile.png in Resources */,
 				462FCB60188C6AE9005059F3 /* ProfileNavigationBar@2x.png in Resources */,
 				D52C1E2218D9515D00625887 /* KonotorConversationViewController.xib in Resources */,
+				D5182C93193E1FDE00DD578C /* Default@2x.png in Resources */,
 				D5BFDEDB18CC84A5004FEC42 /* normal.png in Resources */,
 				4691B52418C56AAF00B7DF6A /* tnz-popup@2x.png in Resources */,
 				46839EA218E1E8C100BD60DB /* tut2.png in Resources */,

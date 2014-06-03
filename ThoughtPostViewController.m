@@ -79,6 +79,9 @@
     [self.leftSwipe addTarget:self action:@selector(leftNav:)];
     [self.rightSwipe addTarget:self action:@selector(rightNav:)];
     
+    
+    [self.thoughtTextView setAutocorrectionType:UITextAutocorrectionTypeNo];
+    
      
     [self.view addGestureRecognizer:tapOutside];
 
