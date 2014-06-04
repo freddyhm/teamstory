@@ -119,6 +119,7 @@
             
             if (![notificationCachedResult isEqualToString:notificationContent]) {
                 [[[[UIApplication sharedApplication] delegate] window] addSubview:notificationBar];
+                [notificationBar setTitle:nil forState:UIControlStateNormal];
                 notificationBar.frame = CGRectMake(0.0f, 64.0f, 320.0f, 0.0f);
                 currentScrollPosition = 0;
             }
@@ -242,11 +243,13 @@
 }
 
 - (void)promptFeedback:(id)sender{
-   [KonotorFeedbackScreen showFeedbackScreen];
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+    [KonotorFeedbackScreen showFeedbackScreen];
 }
 
 -(void)notificationBarButton:(id)sender {
     [[PAPCache sharedCache] notificationCache:notificationContent];
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     
     if (notificationPhoto) {
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:notificationPhoto source:@"Notification"];
