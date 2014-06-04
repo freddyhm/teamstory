@@ -91,13 +91,19 @@
                 if (error) {
                     NSLog(@"error");
                 } else {
-                    UILabel *successLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 250.0f, 320.f, 30.0f)];
+                    UILabel *successLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 250.0f, 320.0f, 30.0f)];
                     successLabel.text = @"Saved Successfully";
                     [self.view addSubview:successLabel];
                 }
             }];
+        } else {
+            [SVProgressHUD dismiss];
+            NSString *errorMessage = [error localizedDescription];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Alert" message:errorMessage delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
+            [alertView show];
         }
     }];
+    
     
     
 }
