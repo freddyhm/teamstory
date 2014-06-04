@@ -853,7 +853,6 @@
 		D530C3F018FB22FC00739027 /* iRate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iRate.h; sourceTree = "<group>"; };
 		D530C3F118FB22FC00739027 /* iRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iRate.m; sourceTree = "<group>"; };
 		D531F7CB18B5DE11008AE73F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
-		D531F7CD18B5DE44008AE73F /* Appsee.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Appsee.framework; path = External/Appsee.framework; sourceTree = "<group>"; };
 		D57683E41933E6DD008BAA2C /* post_bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = post_bubble.png; sourceTree = "<group>"; };
 		D57683E51933E6DD008BAA2C /* post_bubble@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "post_bubble@2x.png"; sourceTree = "<group>"; };
 		D57683E61933E6DD008BAA2C /* post_camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = post_camera.png; sourceTree = "<group>"; };
@@ -1011,7 +1010,6 @@
 			children = (
 				D5A5F51F18D2C3CD000BB243 /* Parse.framework */,
 				D5A5F51D18D2C3C1000BB243 /* FacebookSDK.framework */,
-				D531F7CD18B5DE44008AE73F /* Appsee.framework */,
 				D531F7CB18B5DE11008AE73F /* CoreVideo.framework */,
 				D5FC09CB18A9C2FF000D85F1 /* OpenGLES.framework */,
 				D5FC09C918A9C2C2000D85F1 /* CoreImage.framework */,
