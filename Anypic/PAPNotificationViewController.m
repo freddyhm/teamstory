@@ -10,9 +10,14 @@
 
 @interface PAPNotificationViewController ()
 
+@property (nonatomic, strong) UIButton *saveButton;
+@property (nonatomic, strong) UITextField *notificationTextField;
+
 @end
 
 @implementation PAPNotificationViewController
+@synthesize saveButton;
+@synthesize notificationTextField;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -28,11 +33,11 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
-    UITextField *notificationTextField = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, 100.0f, 300.0f, 30.0f)];
+    notificationTextField = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, 100.0f, 300.0f, 30.0f)];
     [notificationTextField setBackgroundColor:[UIColor orangeColor]];
     [self.view addSubview:notificationTextField];
     
-    UIButton *saveButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0f, 150.0f, 300.0f, 30.0f)];
+    saveButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0f, 150.0f, 300.0f, 30.0f)];
     [saveButton setTitle:@"Save" forState:UIControlStateNormal];
     [saveButton.titleLabel setTextColor:[UIColor blackColor]];
     [saveButton setBackgroundColor:[UIColor grayColor]];
@@ -62,7 +67,18 @@
 #pragma mark - ()
 
 -(void)saveButtonAction:(id)sender {
+    PFObject *notificiation = [PFObject objectWithClassName:@"Notification"];
+    [notificiation setObject:notificationTextField.text forKey:@"Content"];
     
+    [notificiation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (error) {
+            NSLog(@"error");
+        } else {
+            UILabel *successLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 200.0f, 320.f, 30.0f)];
+            successLabel.text = @"Saved Successfully";
+            [self.view addSubview:successLabel];
+        }
+    }];
 }
 
 @end

@@ -677,6 +677,7 @@ enum ActionSheetTags {
 #pragma mark - PAPPhotoHeaderViewDelegate
 
 - (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapUserButton:(UIButton *)button user:(PFUser *)user {
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithStyle:UITableViewStylePlain];
     [accountViewController setUser:user];
     [self.navigationController pushViewController:accountViewController animated:YES];
@@ -740,6 +741,7 @@ enum ActionSheetTags {
 }
 
 - (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapCommentOnPhotoButton:(UIButton *)button  photo:(PFObject *)photo {
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"commentButton"];
     [self.navigationController pushViewController:photoDetailsVC animated:YES];
 }
@@ -804,7 +806,7 @@ enum ActionSheetTags {
 
 
 - (void)didTapOnPhotoAction:(UIButton *)sender {
-    
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     PFObject *photo = [self.objects objectAtIndex:sender.tag];
     if (photo) {
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];

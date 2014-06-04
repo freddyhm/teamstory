@@ -21,6 +21,8 @@
 @property (nonatomic, strong) PAPSettingsActionSheetDelegate *settingsActionSheetDelegate;
 @property (nonatomic, strong) UIView *blankTimelineView;
 @property (nonatomic, strong) UIButton *notificationBar;
+@property (nonatomic, strong) UIScrollView *inheritScrollView;
+@property (nonatomic, strong) NSString *notificationContent;
 @end
 
 @implementation PAPHomeViewController
@@ -28,6 +30,8 @@
 @synthesize settingsActionSheetDelegate;
 @synthesize blankTimelineView;
 @synthesize notificationBar;
+@synthesize inheritScrollView;
+@synthesize notificationContent;
 
 
 #pragma mark - UIViewController
@@ -75,9 +79,12 @@
     [notificationBar setBackgroundColor:[UIColor orangeColor]];
     [notificationBar addTarget:self action:@selector(notificationBarButton:) forControlEvents:UIControlEventTouchUpInside];
     notificationBar.hidden = YES;
-    [[[[UIApplication sharedApplication] delegate] window] addSubview:notificationBar];
+    [notificationBar setTag:100];
 
-    
+    //[self.tableView addSubview:notificationBar];
+    //[self.tableView bringSubviewToFront:notificationBar];
+
+
     
     /*
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -98,6 +105,22 @@
 
     // analytics
     [PAPUtility captureScreenGA:@"Home"];
+    
+    [[[[UIApplication sharedApplication] delegate] window] addSubview:notificationBar];
+    notificationBar.frame = CGRectMake(0.0f, 64.0f, 320.0f, 0.0f);
+    currentScrollPosition = 0;
+    
+    PFQuery *notificationQuery = [PFQuery queryWithClassName:@"Notification"];
+    [notificationQuery orderByDescending:@"createdAt"];
+    [notificationQuery getFirstObject];
+    
+    [notificationQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            notificationContent = [[objects objectAtIndex:0] objectForKey:@"Content"];
+        } else {
+            NSLog(@"%@", error);
+        }
+    }];
 }
 
 #pragma mark - PFQueryTableViewController
@@ -150,13 +173,19 @@
          
          }
         
-    if (currentScrollPosition < 0) {
-        currentScrollPosition = 0;
-    } else if (currentScrollPosition > 45) {
-        currentScrollPosition = 45;
-    }
-    scrollPosition = scrollView.contentOffset.y;
-    notificationBar.frame = CGRectMake(0.0f, 64.0f, 320.0f, currentScrollPosition);
+        if (currentScrollPosition < 0) {
+            currentScrollPosition = 0;
+        } else if (currentScrollPosition > 45) {
+            currentScrollPosition = 45;
+        }
+        
+        if (currentScrollPosition > 30) {
+            [notificationBar setTitle:notificationContent forState:UIControlStateNormal];
+        } else {
+            [notificationBar setTitle:nil forState:UIControlStateNormal];
+        }
+        scrollPosition = scrollView.contentOffset.y;
+        notificationBar.frame = CGRectMake(0.0f, 64.0f, 320.0f, currentScrollPosition);
     }
     
 }

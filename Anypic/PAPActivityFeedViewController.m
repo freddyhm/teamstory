@@ -112,6 +112,7 @@
     
     // analytics
     [PAPUtility captureScreenGA:@"Activity"];
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     
     // reset badge number on server and activity bar when user checks activity feed and badge value is present
     if(self.navigationController.tabBarItem.badgeValue != nil){

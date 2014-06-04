@@ -436,6 +436,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     // analytics
     [super viewWillAppear:YES];
     [PAPUtility captureScreenGA:@"Account"];
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     
     
     if(![SVProgressHUD isVisible]){
