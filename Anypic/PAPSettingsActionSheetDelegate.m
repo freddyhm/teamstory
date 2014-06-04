@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "PAPProfileSettingViewController.h"
 #import "PAPwebviewViewController.h"
+#import "PAPNotificationViewController.h"
 
 // ActionSheet button indexes
 typedef enum {
@@ -18,6 +19,7 @@ typedef enum {
     kPAPPrivacyPolicy,
     kPAPTermsofUse,
     kPAPSettingsLogout,
+    kPAPNotification,
     kPAPSettingsNumberOfButtons
 } kPAPSettingsActionSheetButtons;
  
@@ -99,6 +101,14 @@ typedef enum {
             PAPwebviewViewController *webviewController = [[PAPwebviewViewController alloc] initWithWebsite:@"http://teamstoryapp.com/version"];
             webviewController.hidesBottomBarWhenPushed = YES;
             [navController pushViewController:webviewController animated:YES];
+            break;
+        }
+        case kPAPNotification:
+        {
+            PAPNotificationViewController *notificationController = [[PAPNotificationViewController alloc] init];
+            notificationController.hidesBottomBarWhenPushed = YES;
+            [navController pushViewController:notificationController animated:YES];
+
             break;
         }
         default:

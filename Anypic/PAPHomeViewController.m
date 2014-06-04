@@ -12,22 +12,29 @@
 #import "KonotorUI.h"
 #import <Crashlytics/Crashlytics.h>
 
-@interface PAPHomeViewController ()
+@interface PAPHomeViewController () {
+    NSInteger scrollPosition;
+    NSInteger currentScrollPosition;
+    BOOL currentScrollDirectionDown;
+    BOOL scrollDirectionDown;
+}
 @property (nonatomic, strong) PAPSettingsActionSheetDelegate *settingsActionSheetDelegate;
 @property (nonatomic, strong) UIView *blankTimelineView;
+@property (nonatomic, strong) UIButton *notificationBar;
 @end
 
 @implementation PAPHomeViewController
 @synthesize firstLaunch;
 @synthesize settingsActionSheetDelegate;
 @synthesize blankTimelineView;
+@synthesize notificationBar;
 
 
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-   
+    
     // register name and email in case of crashes
     NSString *displayName = [[PFUser currentUser] objectForKey:@"displayName"];
     NSString *email = [[PFUser currentUser] objectForKey:@"email"];
@@ -63,6 +70,14 @@
     self.navigationItem.rightBarButtonItem = promptTrigger;
 
     self.blankTimelineView = [[UIView alloc] initWithFrame:self.tableView.bounds];
+    
+    notificationBar = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 64.0f, 320.0f, 0.0f)];
+    [notificationBar setBackgroundColor:[UIColor orangeColor]];
+    [notificationBar addTarget:self action:@selector(notificationBarButton:) forControlEvents:UIControlEventTouchUpInside];
+    notificationBar.hidden = YES;
+    [[[[UIApplication sharedApplication] delegate] window] addSubview:notificationBar];
+
+    
     
     /*
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -109,6 +124,62 @@
 }
 
 
+#pragma mark - UIScrollViewDelegate
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+     [self scrollViewWillBeginDragging:scrollView];
+    if (scrollView.contentOffset.y > 0) {
+         if (scrollView.contentOffset.y < scrollPosition) {
+              currentScrollDirectionDown = NO;
+             
+             // Detect scrolling up.
+             if (scrollDirectionDown == NO) {
+               currentScrollPosition += 2.5;
+                 notificationBar.hidden = NO;
+             }
+         } else if (scrollView.contentOffset.y > scrollPosition) {
+              currentScrollDirectionDown = YES;
+             // Detect scrolling down.
+             if (currentScrollPosition == 0) {
+                 
+             } else {
+                 if (scrollDirectionDown == YES) {
+                     currentScrollPosition -= 2.5;
+                 }
+             }
+         
+         }
+        
+    if (currentScrollPosition < 0) {
+        currentScrollPosition = 0;
+    } else if (currentScrollPosition > 45) {
+        currentScrollPosition = 45;
+    }
+    scrollPosition = scrollView.contentOffset.y;
+    notificationBar.frame = CGRectMake(0.0f, 64.0f, 320.0f, currentScrollPosition);
+    }
+    
+}
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    if (currentScrollDirectionDown == NO){
+        // Detect scrolling down.
+        scrollDirectionDown = NO;
+    } else {
+        scrollDirectionDown = YES;
+    }
+}
+
+
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    if (currentScrollDirectionDown == NO){
+        // Detect scrolling down.
+        scrollDirectionDown = NO;
+    } else {
+        scrollDirectionDown = YES;
+    }
+}
+
 #pragma mark - ()
 /*
 - (void)settingsButtonAction:(id)sender {
@@ -126,6 +197,10 @@
 
 - (void)promptFeedback:(id)sender{
    [KonotorFeedbackScreen showFeedbackScreen];
+}
+
+-(void)notificationBarButton:(id)sender {
+    
 }
 
 @end

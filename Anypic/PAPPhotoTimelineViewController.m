@@ -17,7 +17,6 @@
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
 @interface PAPPhotoTimelineViewController () {
-    NSInteger scrollPosition;
 }
 @property (nonatomic, assign) BOOL shouldReloadOnAppear;
 @property (nonatomic, strong) NSMutableSet *reusableSectionHeaderViews;
@@ -836,17 +835,6 @@ enum ActionSheetTags {
             }
         }
     }
-    /*
-    if (scrollView.contentOffset.y < scrollPosition) {
-        // Detect scrolling up.
-        
-    } else {
-        // Detect scrolling down.
-    
-    }
-    
-    scrollPosition = scrollView.contentOffset.y;
-     */
 }
 
 // see if scrolling near end, refresh when decelerating if so
