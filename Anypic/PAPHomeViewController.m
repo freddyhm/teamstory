@@ -11,6 +11,7 @@
 #import "SVProgressHUD.h"
 #import "KonotorUI.h"
 #import <Crashlytics/Crashlytics.h>
+#import "PAPCache.h"
 
 @interface PAPHomeViewController () {
     NSInteger scrollPosition;
@@ -23,6 +24,7 @@
 @property (nonatomic, strong) UIButton *notificationBar;
 @property (nonatomic, strong) UIScrollView *inheritScrollView;
 @property (nonatomic, strong) NSString *notificationContent;
+@property (nonatomic, strong) PFObject *notificationPhoto;
 @end
 
 @implementation PAPHomeViewController
@@ -32,6 +34,7 @@
 @synthesize notificationBar;
 @synthesize inheritScrollView;
 @synthesize notificationContent;
+@synthesize notificationPhoto;
 
 
 #pragma mark - UIViewController
@@ -106,17 +109,31 @@
     // analytics
     [PAPUtility captureScreenGA:@"Home"];
     
-    [[[[UIApplication sharedApplication] delegate] window] addSubview:notificationBar];
-    notificationBar.frame = CGRectMake(0.0f, 64.0f, 320.0f, 0.0f);
-    currentScrollPosition = 0;
-    
     PFQuery *notificationQuery = [PFQuery queryWithClassName:@"Notification"];
     [notificationQuery orderByDescending:@"createdAt"];
-    [notificationQuery getFirstObject];
     
-    [notificationQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+    [notificationQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if (!error) {
-            notificationContent = [[objects objectAtIndex:0] objectForKey:@"Content"];
+            notificationContent = [object objectForKey:@"Content"];
+            NSString *notificationCachedResult = [[PAPCache sharedCache] notificationContent];
+            
+            if (![notificationCachedResult isEqualToString:notificationContent]) {
+                [[[[UIApplication sharedApplication] delegate] window] addSubview:notificationBar];
+                notificationBar.frame = CGRectMake(0.0f, 64.0f, 320.0f, 0.0f);
+                currentScrollPosition = 0;
+            }
+            
+            PFQuery *notificationPhotoQuery = [PFQuery queryWithClassName:@"Photo"];
+            [notificationPhotoQuery whereKey:@"objectId" equalTo:[[object objectForKey:@"Photo"] objectId]];
+            
+            [notificationPhotoQuery getFirstObjectInBackgroundWithBlock:^(PFObject *photoObject, NSError *error) {
+                if (!error) {
+                    notificationPhoto = photoObject;
+                    
+                } else {
+                    NSLog(@"%@", error);
+                }
+            }];
         } else {
             NSLog(@"%@", error);
         }
@@ -229,6 +246,12 @@
 }
 
 -(void)notificationBarButton:(id)sender {
+    [[PAPCache sharedCache] notificationCache:notificationContent];
+    
+    if (notificationPhoto) {
+        PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:notificationPhoto source:@"Notification"];
+        [self.navigationController pushViewController:photoDetailsVC animated:YES];
+    }
     
 }
 

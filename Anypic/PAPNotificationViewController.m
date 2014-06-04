@@ -7,17 +7,20 @@
 //
 
 #import "PAPNotificationViewController.h"
+#import "SVProgressHUD.h"
 
 @interface PAPNotificationViewController ()
 
 @property (nonatomic, strong) UIButton *saveButton;
 @property (nonatomic, strong) UITextField *notificationTextField;
+@property (nonatomic, strong) UITextField *photoIdTextField;
 
 @end
 
 @implementation PAPNotificationViewController
 @synthesize saveButton;
 @synthesize notificationTextField;
+@synthesize photoIdTextField;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -35,9 +38,15 @@
     
     notificationTextField = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, 100.0f, 300.0f, 30.0f)];
     [notificationTextField setBackgroundColor:[UIColor orangeColor]];
+    notificationTextField.placeholder = @"Content";
     [self.view addSubview:notificationTextField];
     
-    saveButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0f, 150.0f, 300.0f, 30.0f)];
+    photoIdTextField = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, 150.0f, 300.0f, 30.0f)];
+    [photoIdTextField setBackgroundColor:[UIColor orangeColor]];
+    photoIdTextField.placeholder = @"PhotoId";
+    [self.view addSubview:photoIdTextField];
+    
+    saveButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0f, 200.0f, 300.0f, 30.0f)];
     [saveButton setTitle:@"Save" forState:UIControlStateNormal];
     [saveButton.titleLabel setTextColor:[UIColor blackColor]];
     [saveButton setBackgroundColor:[UIColor grayColor]];
@@ -67,18 +76,30 @@
 #pragma mark - ()
 
 -(void)saveButtonAction:(id)sender {
+    [SVProgressHUD show];
+    
     PFObject *notificiation = [PFObject objectWithClassName:@"Notification"];
     [notificiation setObject:notificationTextField.text forKey:@"Content"];
     
-    [notificiation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (error) {
-            NSLog(@"error");
-        } else {
-            UILabel *successLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 200.0f, 320.f, 30.0f)];
-            successLabel.text = @"Saved Successfully";
-            [self.view addSubview:successLabel];
+    PFQuery *query = [PFQuery queryWithClassName:@"Photo"];
+    [query whereKey:@"objectId" equalTo:photoIdTextField.text];
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if (!error) {
+            [notificiation setObject:object forKey:@"Photo"];
+            [notificiation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                [SVProgressHUD dismiss];
+                if (error) {
+                    NSLog(@"error");
+                } else {
+                    UILabel *successLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 250.0f, 320.f, 30.0f)];
+                    successLabel.text = @"Saved Successfully";
+                    [self.view addSubview:successLabel];
+                }
+            }];
         }
     }];
+    
+    
 }
 
 @end
