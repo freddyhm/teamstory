@@ -969,6 +969,7 @@
             NSLog(@"image_nil tag");
             
             [self photo_picker_init];
+            saveButton.userInteractionEnabled = YES;
             
         } else if (buttonIndex == 0) {
             NSString* companyName_input = self.companyName.text;
