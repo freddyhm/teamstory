@@ -25,6 +25,7 @@
 @property (nonatomic, strong) UIScrollView *inheritScrollView;
 @property (nonatomic, strong) NSString *notificationContent;
 @property (nonatomic, strong) PFObject *notificationPhoto;
+@property (nonatomic, strong) UIButton *notificationExitButton;
 @end
 
 @implementation PAPHomeViewController
@@ -35,6 +36,7 @@
 @synthesize inheritScrollView;
 @synthesize notificationContent;
 @synthesize notificationPhoto;
+@synthesize notificationExitButton;
 
 
 #pragma mark - UIViewController
@@ -83,6 +85,12 @@
     [notificationBar addTarget:self action:@selector(notificationBarButton:) forControlEvents:UIControlEventTouchUpInside];
     notificationBar.hidden = YES;
     [notificationBar setTag:100];
+    
+    notificationExitButton = [[UIButton alloc] initWithFrame:CGRectMake(275.0f, 0.0f, 45.0f, 45.0f)];
+    [notificationExitButton addTarget:self action:@selector(notificationExitButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [notificationExitButton setBackgroundColor:[UIColor blackColor]];
+    notificationExitButton.hidden = YES;
+    [notificationBar addSubview:notificationExitButton];
 
     //[self.tableView addSubview:notificationBar];
     //[self.tableView bringSubviewToFront:notificationBar];
@@ -195,6 +203,9 @@
             currentScrollPosition = 0;
         } else if (currentScrollPosition > 45) {
             currentScrollPosition = 45;
+            notificationExitButton.hidden = NO;
+        } else {
+            notificationExitButton.hidden = YES;
         }
         
         if (currentScrollPosition > 30) {
@@ -202,11 +213,23 @@
         } else {
             [notificationBar setTitle:nil forState:UIControlStateNormal];
         }
+        
+        if (scrollView.contentOffset.y <= 45) {
+            currentScrollPosition = 0;
+            notificationExitButton.hidden = YES;
+            [notificationBar setTitle:nil forState:UIControlStateNormal];
+            
+            [UIView animateWithDuration:0.5 animations:^{
+                notificationBar.frame = CGRectMake(0.0f, 64.0f, 320.0f, currentScrollPosition);
+            }];
+        }
+        
         scrollPosition = scrollView.contentOffset.y;
         notificationBar.frame = CGRectMake(0.0f, 64.0f, 320.0f, currentScrollPosition);
     }
     
 }
+
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     if (currentScrollDirectionDown == NO){
@@ -256,6 +279,11 @@
         [self.navigationController pushViewController:photoDetailsVC animated:YES];
     }
     
+}
+
+-(void)notificationExitButtonAction:(id)sender {
+    [[PAPCache sharedCache] notificationCache:notificationContent];
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
 }
 
 @end
