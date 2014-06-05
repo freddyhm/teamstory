@@ -1449,7 +1449,7 @@
 			name = Login;
 			sourceTree = "<group>";
 		};
-		74B86B911562DB2600CAFFD2 /* PhotoDetailsViews */ = {
+		74B86B911562DB2600CAFFD2 /* PhotoViews */ = {
 			isa = PBXGroup;
 			children = (
 				C4F102A7156C57620061BC3E /* PAPPhotoDetailsHeaderView.h */,
@@ -1459,7 +1459,7 @@
 				D5FC095918A9B586000D85F1 /* CameraFilterViewController.xib */,
 				D5903C74192EBBF900DC9896 /* ThoughtPostViewController.xib */,
 			);
-			name = PhotoDetailsViews;
+			name = PhotoViews;
 			sourceTree = "<group>";
 		};
 		C46AEBF8157FE078009CBA03 /* PAPBaseTextCell */ = {
@@ -1599,7 +1599,7 @@
 			children = (
 				46FB0A3F1888769000E978CD /* discoverViews */,
 				74A504E31565F0E400CFA4E3 /* TimelineViews */,
-				74B86B911562DB2600CAFFD2 /* PhotoDetailsViews */,
+				74B86B911562DB2600CAFFD2 /* PhotoViews */,
 				74A504E21565F0C200CFA4E3 /* UITableViewCells */,
 				C4F102B7156C57B90061BC3E /* PAPSettingsButtonItem.h */,
 				C4F102B8156C57B90061BC3E /* PAPSettingsButtonItem.m */,
