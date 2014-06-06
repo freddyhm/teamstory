@@ -194,17 +194,9 @@
     // analytics for upload and background
     [PAPUtility captureEventGA:@"Engagement" action:@"Upload Thought" label:@"Photo"];
     [PAPUtility captureEventGA:@"Thought Bkgd" action:[[NSNumber numberWithInt:self.prevBkgdIndex] stringValue] label:@"Photo"];
-    
-    UILabel *thoughtMsg = [[UILabel alloc] initWithFrame:self.thoughtTextView.frame];
-    thoughtMsg.text = self.thoughtTextView.text;
-    thoughtMsg.textAlignment = NSTextAlignmentCenter;
-    thoughtMsg.textColor = self.thoughtTextView.textColor;
-    thoughtMsg.font = self.thoughtTextView.font;
-    thoughtMsg.lineBreakMode = NSLineBreakByWordWrapping;
-    thoughtMsg.numberOfLines = 100;
-    
+   
     // add label to background image for picture
-    [self.backgroundImg addSubview:thoughtMsg];
+    [self.backgroundImg addSubview:self.thoughtTextView];
     
     // create image
     UIGraphicsBeginImageContextWithOptions(self.backgroundImg.bounds.size, NO, 0.0); //retina res
