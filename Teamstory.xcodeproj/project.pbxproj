@@ -1560,7 +1560,7 @@
 			name = Settings;
 			sourceTree = "<group>";
 		};
-		C4A894941558796C00DC57D3 /* Take Photo */ = {
+		C4A894941558796C00DC57D3 /* Photo & Post */ = {
 			isa = PBXGroup;
 			children = (
 				D5FC094F18A9B518000D85F1 /* CropResizeViewController.h */,
@@ -1574,7 +1574,7 @@
 				D5903C72192EBBF900DC9896 /* ThoughtPostViewController.h */,
 				D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */,
 			);
-			name = "Take Photo";
+			name = "Photo & Post";
 			sourceTree = "<group>";
 		};
 		C4A89496155879F600DC57D3 /* Controllers */ = {
@@ -1584,7 +1584,7 @@
 				46E1EB6C183BCA4600F64274 /* ProfileSetting */,
 				74A504E51565F17E00CFA4E3 /* Login */,
 				C4A894921558795F00DC57D3 /* Home */,
-				C4A894941558796C00DC57D3 /* Take Photo */,
+				C4A894941558796C00DC57D3 /* Photo & Post */,
 				C4BB4B85156D5CB7008B4B56 /* Activity */,
 				74A504E41565F13C00CFA4E3 /* Detail */,
 				C4A894931558796400DC57D3 /* Settings */,
