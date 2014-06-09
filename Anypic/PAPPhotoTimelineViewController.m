@@ -818,6 +818,7 @@ enum ActionSheetTags {
 
 
 - (void)didTapOnPhotoAction:(UIButton *)sender {
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     
     [self dismissTabBarMenu];
     

@@ -29,8 +29,8 @@
             timestampString = "423585014.361851"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "170"
-            endingLineNumber = "170"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
             landmarkName = "-tableView:viewForHeaderInSection:"
             landmarkType = "5">
             <Locations>
