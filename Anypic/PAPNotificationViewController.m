@@ -14,6 +14,7 @@
 @property (nonatomic, strong) UIButton *saveButton;
 @property (nonatomic, strong) UITextField *notificationTextField;
 @property (nonatomic, strong) UITextField *photoIdTextField;
+@property (nonatomic, strong) UIButton *radioButton;
 
 @end
 
@@ -21,15 +22,8 @@
 @synthesize saveButton;
 @synthesize notificationTextField;
 @synthesize photoIdTextField;
+@synthesize radioButton;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
@@ -52,6 +46,16 @@
     [saveButton setBackgroundColor:[UIColor grayColor]];
     [saveButton addTarget:self action:@selector(saveButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:saveButton];
+    
+    UILabel *radioButtonLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, 70.0f, 200.0f, 20.0f)];
+    [radioButtonLabel setText:@"With photoID"];
+    [self.view addSubview:radioButtonLabel];
+    
+    radioButton = [[UIButton alloc] initWithFrame:CGRectMake(200.0f, 70.0f, 20.0f, 20.0f)];
+    [radioButton setBackgroundColor:[UIColor clearColor]];
+    [radioButton.layer setBorderWidth:2.0f];
+    [radioButton addTarget:self action:@selector(radioButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:radioButton];
     
     // Do any additional setup after loading the view.
 }
@@ -81,31 +85,50 @@
     PFObject *notificiation = [PFObject objectWithClassName:@"Notification"];
     [notificiation setObject:notificationTextField.text forKey:@"Content"];
     
-    PFQuery *query = [PFQuery queryWithClassName:@"Photo"];
-    [query whereKey:@"objectId" equalTo:photoIdTextField.text];
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        if (!error) {
-            [notificiation setObject:object forKey:@"Photo"];
-            [notificiation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+    if (radioButton.backgroundColor == [UIColor blackColor]) {
+        PFQuery *query = [PFQuery queryWithClassName:@"Photo"];
+        [query whereKey:@"objectId" equalTo:photoIdTextField.text];
+        [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+            if (!error) {
+                [notificiation setObject:object forKey:@"Photo"];
+                [notificiation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    [SVProgressHUD dismiss];
+                    if (error) {
+                        NSLog(@"error");
+                    } else {
+                        UILabel *successLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 250.0f, 320.0f, 30.0f)];
+                        successLabel.text = @"Saved Successfully";
+                        [self.view addSubview:successLabel];
+                    }
+                }];
+            } else {
                 [SVProgressHUD dismiss];
-                if (error) {
-                    NSLog(@"error");
-                } else {
-                    UILabel *successLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 250.0f, 320.0f, 30.0f)];
-                    successLabel.text = @"Saved Successfully";
-                    [self.view addSubview:successLabel];
-                }
-            }];
-        } else {
+                NSString *errorMessage = [error localizedDescription];
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Alert" message:errorMessage delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
+                [alertView show];
+            }
+        }];
+    } else {
+        [notificiation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             [SVProgressHUD dismiss];
-            NSString *errorMessage = [error localizedDescription];
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Alert" message:errorMessage delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
-            [alertView show];
-        }
-    }];
+            if (error) {
+                NSLog(@"error");
+            } else {
+                UILabel *successLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 250.0f, 320.0f, 30.0f)];
+                successLabel.text = @"Saved Successfully";
+                [self.view addSubview:successLabel];
+            }
+        }];
+    }
     
-    
-    
+}
+
+-(void)radioButtonAction:(id)sender {
+    if (radioButton.backgroundColor == [UIColor blackColor]) {
+        radioButton.backgroundColor = [UIColor clearColor];
+    } else {
+        radioButton.backgroundColor = [UIColor blackColor];
+    }
 }
 
 @end

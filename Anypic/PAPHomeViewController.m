@@ -26,6 +26,7 @@
 @property (nonatomic, strong) NSString *notificationContent;
 @property (nonatomic, strong) PFObject *notificationPhoto;
 @property (nonatomic, strong) UIButton *notificationExitButton;
+@property (nonatomic, strong) UIImageView *notificationStar;
 @end
 
 @implementation PAPHomeViewController
@@ -37,6 +38,7 @@
 @synthesize notificationContent;
 @synthesize notificationPhoto;
 @synthesize notificationExitButton;
+@synthesize notificationStar;
 
 
 #pragma mark - UIViewController
@@ -81,21 +83,25 @@
     self.blankTimelineView = [[UIView alloc] initWithFrame:self.tableView.bounds];
     
     notificationBar = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 64.0f, 320.0f, 0.0f)];
-    [notificationBar setBackgroundColor:[UIColor orangeColor]];
+    [notificationBar setBackgroundColor:[UIColor colorWithRed:251.0f/255.0f green:176.0f/255.0f blue:70.0f/255.0f alpha:1.0f]];
     [notificationBar addTarget:self action:@selector(notificationBarButton:) forControlEvents:UIControlEventTouchUpInside];
+    [notificationBar.titleLabel setFont:[UIFont systemFontOfSize:13.0f]];
+    notificationBar.titleEdgeInsets = UIEdgeInsetsMake(0.0f, 30.0f, 0.0f, 30.0f);
+    notificationBar.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [notificationBar.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
     notificationBar.hidden = YES;
     [notificationBar setTag:100];
     
-    notificationExitButton = [[UIButton alloc] initWithFrame:CGRectMake(275.0f, 0.0f, 45.0f, 45.0f)];
+    notificationExitButton = [[UIButton alloc] initWithFrame:CGRectMake(285.0f, 0.0f, 45.0f, 45.0f)];
     [notificationExitButton addTarget:self action:@selector(notificationExitButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [notificationExitButton setBackgroundColor:[UIColor blackColor]];
+    [notificationExitButton setBackgroundImage:[UIImage imageNamed:@"notif_close.png"] forState:UIControlStateNormal];
     notificationExitButton.hidden = YES;
     [notificationBar addSubview:notificationExitButton];
-
-    //[self.tableView addSubview:notificationBar];
-    //[self.tableView bringSubviewToFront:notificationBar];
-
-
+    
+    notificationStar = [[UIImageView alloc] initWithFrame:CGRectMake(-9.0f, 0.0f, 45.0f, 45.0f)];
+    [notificationStar setImage:[UIImage imageNamed:@"notif_star.png"]];
+    notificationStar.hidden = YES;
+    [notificationBar addSubview:notificationStar];
     
     /*
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -131,18 +137,20 @@
                 notificationBar.frame = CGRectMake(0.0f, 64.0f, 320.0f, 0.0f);
                 currentScrollPosition = 0;
             }
-            
-            PFQuery *notificationPhotoQuery = [PFQuery queryWithClassName:@"Photo"];
-            [notificationPhotoQuery whereKey:@"objectId" equalTo:[[object objectForKey:@"Photo"] objectId]];
-            
-            [notificationPhotoQuery getFirstObjectInBackgroundWithBlock:^(PFObject *photoObject, NSError *error) {
-                if (!error) {
-                    notificationPhoto = photoObject;
-                    
-                } else {
-                    NSLog(@"%@", error);
-                }
-            }];
+            if ([object objectForKey:@"Photo"]) {
+                PFQuery *notificationPhotoQuery = [PFQuery queryWithClassName:@"Photo"];
+                [notificationPhotoQuery whereKey:@"objectId" equalTo:[[object objectForKey:@"Photo"] objectId]];
+                
+                [notificationPhotoQuery getFirstObjectInBackgroundWithBlock:^(PFObject *photoObject, NSError *error) {
+                    if (!error) {
+                        notificationPhoto = photoObject;
+                    } else {
+                        NSLog(@"%@", error);
+                    }
+                }];
+            } else {
+                notificationPhoto = nil;
+            }
         } else {
             NSLog(@"%@", error);
         }
@@ -176,7 +184,10 @@
 #pragma mark - UIScrollViewDelegate
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-     [self scrollViewWillBeginDragging:scrollView];
+    [self scrollViewWillBeginDragging:scrollView];
+    notificationExitButton.hidden = YES;
+    notificationStar.hidden = YES;
+    
     if (scrollView.contentOffset.y > 0) {
          if (scrollView.contentOffset.y < scrollPosition) {
               currentScrollDirectionDown = NO;
@@ -203,9 +214,11 @@
             currentScrollPosition = 0;
         } else if (currentScrollPosition > 45) {
             currentScrollPosition = 45;
+        }
+        
+        if (currentScrollPosition > 37) {
             notificationExitButton.hidden = NO;
-        } else {
-            notificationExitButton.hidden = YES;
+            notificationStar.hidden = NO;
         }
         
         if (currentScrollPosition > 30) {

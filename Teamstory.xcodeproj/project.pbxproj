@@ -50,6 +50,10 @@
 		4602FD2418BD553B0097DBEC /* konotor-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 4602FD1018BD553B0097DBEC /* konotor-logo.png */; };
 		4602FD2518BD553B0097DBEC /* konotor-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4602FD1118BD553B0097DBEC /* konotor-logo@2x.png */; };
 		46076EE7193E9A6000A7B317 /* PAPNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46076EE6193E9A6000A7B317 /* PAPNotificationViewController.m */; };
+		46076EEC193FE3EF00A7B317 /* notif_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46076EE8193FE3EF00A7B317 /* notif_close@2x.png */; };
+		46076EED193FE3EF00A7B317 /* notif_star.png in Resources */ = {isa = PBXBuildFile; fileRef = 46076EE9193FE3EF00A7B317 /* notif_star.png */; };
+		46076EEE193FE3EF00A7B317 /* notif_star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46076EEA193FE3EF00A7B317 /* notif_star@2x.png */; };
+		46076EEF193FE3EF00A7B317 /* notif_close.png in Resources */ = {isa = PBXBuildFile; fileRef = 46076EEB193FE3EF00A7B317 /* notif_close.png */; };
 		460997531938119A00C5AD96 /* icon-angel-profile.png in Resources */ = {isa = PBXBuildFile; fileRef = 460997451938119A00C5AD96 /* icon-angel-profile.png */; };
 		460997541938119A00C5AD96 /* icon-angel-profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460997461938119A00C5AD96 /* icon-angel-profile@2x.png */; };
 		460997551938119A00C5AD96 /* icon-angel.png in Resources */ = {isa = PBXBuildFile; fileRef = 460997471938119A00C5AD96 /* icon-angel.png */; };
@@ -462,6 +466,10 @@
 		4602FD1118BD553B0097DBEC /* konotor-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor-logo@2x.png"; sourceTree = "<group>"; };
 		46076EE5193E9A6000A7B317 /* PAPNotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPNotificationViewController.h; path = Anypic/PAPNotificationViewController.h; sourceTree = SOURCE_ROOT; };
 		46076EE6193E9A6000A7B317 /* PAPNotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPNotificationViewController.m; path = Anypic/PAPNotificationViewController.m; sourceTree = SOURCE_ROOT; };
+		46076EE8193FE3EF00A7B317 /* notif_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notif_close@2x.png"; sourceTree = "<group>"; };
+		46076EE9193FE3EF00A7B317 /* notif_star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notif_star.png; sourceTree = "<group>"; };
+		46076EEA193FE3EF00A7B317 /* notif_star@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notif_star@2x.png"; sourceTree = "<group>"; };
+		46076EEB193FE3EF00A7B317 /* notif_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notif_close.png; sourceTree = "<group>"; };
 		460997451938119A00C5AD96 /* icon-angel-profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-angel-profile.png"; sourceTree = "<group>"; };
 		460997461938119A00C5AD96 /* icon-angel-profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-angel-profile@2x.png"; sourceTree = "<group>"; };
 		460997471938119A00C5AD96 /* icon-angel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-angel.png"; sourceTree = "<group>"; };
@@ -1087,6 +1095,10 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				46076EE8193FE3EF00A7B317 /* notif_close@2x.png */,
+				46076EE9193FE3EF00A7B317 /* notif_star.png */,
+				46076EEA193FE3EF00A7B317 /* notif_star@2x.png */,
+				46076EEB193FE3EF00A7B317 /* notif_close.png */,
 				460997451938119A00C5AD96 /* icon-angel-profile.png */,
 				460997461938119A00C5AD96 /* icon-angel-profile@2x.png */,
 				460997471938119A00C5AD96 /* icon-angel.png */,
@@ -1875,6 +1887,7 @@
 				465DE34E1895A56200C37EF8 /* bg_dropdown.png in Resources */,
 				46B31EF0184E35150028D11C /* companyName.png in Resources */,
 				46839E9A18E1E8C100BD60DB /* icon-fblogin.png in Resources */,
+				46076EED193FE3EF00A7B317 /* notif_star.png in Resources */,
 				4602FCE818BA9F390097DBEC /* update.png in Resources */,
 				4602FD1D18BD553B0097DBEC /* clarity-logo@2x.png in Resources */,
 				D52C1E3718D9515D00625887 /* konotor_progress_black.png in Resources */,
@@ -1891,6 +1904,7 @@
 				462FCB85188C8533005059F3 /* button_back.png in Resources */,
 				467154A618835E470000C0CA /* privacy.png in Resources */,
 				4602FD1618BD553B0097DBEC /* positionly-popup.png in Resources */,
+				46076EEE193FE3EF00A7B317 /* notif_star@2x.png in Resources */,
 				D528C381191034DE00CEEA35 /* ButtonLikeCommentSelected@2x.png in Resources */,
 				D52C1E4218D9515D00625887 /* konotor_supportprofile@2x.png in Resources */,
 				462FCB8A188C863E005059F3 /* button_setting_selected@2x.png in Resources */,
@@ -1905,6 +1919,7 @@
 				4602FD1318BD553B0097DBEC /* foundersuite-popup@2x.png in Resources */,
 				4602FD1F18BD553B0097DBEC /* slingbot-popup@2x.png in Resources */,
 				C4BE6710157FC7D000A291C2 /* Icon-Small.png in Resources */,
+				46076EEC193FE3EF00A7B317 /* notif_close@2x.png in Resources */,
 				4602FD2418BD553B0097DBEC /* konotor-logo.png in Resources */,
 				C4BE6711157FC7D000A291C2 /* Icon-Small@2x.png in Resources */,
 				D52C1E2618D9515D00625887 /* KonotorFeedbackScreenViewController.xib in Resources */,
@@ -1969,6 +1984,7 @@
 				460997561938119A00C5AD96 /* icon-angel@2x.png in Resources */,
 				465B19B118B81FE500EDBCFC /* browser-button-no.png in Resources */,
 				D5BFDED718CC84A5004FEC42 /* london.png in Resources */,
+				46076EEF193FE3EF00A7B317 /* notif_close.png in Resources */,
 				46839E9B18E1E8C100BD60DB /* icon-fblogin@2x.png in Resources */,
 				46839E9818E1E8C100BD60DB /* icon-email.png in Resources */,
 				4691B51C18C1477100B7DF6A /* intro2-iphone4.png in Resources */,
