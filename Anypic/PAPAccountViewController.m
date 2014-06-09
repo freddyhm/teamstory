@@ -11,6 +11,7 @@
 #import "PAPSettingsActionSheetDelegate.h"
 #import "SVProgressHUD.h"
 #import "PAPwebviewViewController.h"
+#import "PAPFindFriendsViewController.h"
 
 @interface PAPAccountViewController() {
     float alphaValue_twitter;
@@ -259,48 +260,82 @@
                 [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]]];
                 self.tableView.backgroundView = texturedBackgroundView;
                 
+                UITapGestureRecognizer *tap1 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
+                
+                UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
+                
+                UITapGestureRecognizer *tap3 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
+                
+                UITapGestureRecognizer *tap4 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
+                
+                UITapGestureRecognizer *tap5 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
+                
+                UITapGestureRecognizer *tap6 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
+                
                 UILabel *photoCount= [[UILabel alloc] initWithFrame:CGRectMake( 110.0f, 25.0f, 30.0f, 22.0f)];
                 [photoCount setBackgroundColor:[UIColor clearColor]];
                 [photoCount setTextColor:textColor];
                 [photoCount setFont:[UIFont boldSystemFontOfSize:12.0f]];
+                [photoCount addGestureRecognizer:tap1];
+                [photoCount setUserInteractionEnabled:YES];
                 [self.headerView addSubview:photoCount];
                 
                 UILabel *photoCountTitle = [[UILabel alloc] init];
                 [photoCountTitle setFont:[UIFont systemFontOfSize:10.0f]];
                 [photoCountTitle setFrame:CGRectMake(90.0f, 47.50f, 50.0f, 15.0f)];
+                [photoCountTitle addGestureRecognizer:tap2];
+                [photoCountTitle setUserInteractionEnabled:YES];
                 photoCountTitle.text = @"moments";
+                
                 [self.headerView addSubview:photoCountTitle];
                 
                 self.followerCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( photoCount.frame.origin.x + photoCount.frame.size.width, photoCount.frame.origin.y, photoCount.frame.size.width, photoCount.frame.size.height)];
                 [self.followerCountLabel setBackgroundColor:[UIColor clearColor]];
                 [self.followerCountLabel setTextColor:textColor];
                 [self.followerCountLabel setFont:[UIFont boldSystemFontOfSize:12.0f]];
+                [self.followerCountLabel addGestureRecognizer:tap3];
+                [self.followerCountLabel setUserInteractionEnabled:YES];
+                
                 [self.headerView addSubview:self.followerCountLabel];
                 
                 UILabel *followersTitle = [[UILabel alloc] init];
                 [followersTitle setFrame:CGRectMake( photoCountTitle.frame.origin.x + photoCountTitle.frame.size.width, photoCountTitle.frame.origin.y, photoCountTitle.frame.size.width, photoCountTitle.frame.size.height)];
                 followersTitle.text = @"followers";
                 [followersTitle setFont:[UIFont systemFontOfSize:10.0f]];
+                
+                [followersTitle addGestureRecognizer:tap4];
+                [followersTitle setUserInteractionEnabled:YES];
+                
                 [self.headerView addSubview:followersTitle];
                 
                 self.followingCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( self.followerCountLabel.frame.origin.x + self.followerCountLabel.frame.size.width, self.followerCountLabel.frame.origin.y, self.followerCountLabel.frame.size.width, self.followerCountLabel.frame.size.height)];
                 [self.followingCountLabel setBackgroundColor:[UIColor clearColor]];
                 [self.followingCountLabel setTextColor:textColor];
                 [self.followingCountLabel setFont:[UIFont boldSystemFontOfSize:12.0f]];
+                
+                [self.followingCountLabel addGestureRecognizer:tap5];
+                [self.followingCountLabel setUserInteractionEnabled:YES];
+                
                 [self.headerView addSubview:self.followingCountLabel];
                 
                 UILabel *followingTitle = [[UILabel alloc] init];
                 [followingTitle setFrame:CGRectMake( followersTitle.frame.origin.x + followersTitle.frame.size.width, followersTitle.frame.origin.y, followersTitle.frame.size.width, followersTitle.frame.size.height)];
                 followingTitle.text = @"following";
                 [followingTitle setFont:[UIFont systemFontOfSize:10.0f]];
+                
+                [followingTitle addGestureRecognizer:tap6];
+                [followingTitle setUserInteractionEnabled:YES];
+                
                 [self.headerView addSubview:followingTitle];
                 
                 
-                self.multiActionButton = [[UIButton alloc]initWithFrame:CGRectMake(photoCountTitle.frame.origin.x, photoCountTitle.frame.origin.y, 80.0f, 50.0f)];
+                self.multiActionButton = [[UIButton alloc]initWithFrame:CGRectMake(photoCountTitle.frame.origin.x, photoCountTitle.frame.origin.y + 20.0f, 80.0f, 20.0f)];
                 [self.multiActionButton setTitle:@"Edit Profile" forState:UIControlStateNormal];
                 self.multiActionButton.titleLabel.font = [UIFont systemFontOfSize:13.0f];
-                self.multiActionButton.titleLabel.textColor = [UIColor blackColor];
+                [self.multiActionButton setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
+                [self.multiActionButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                 [self.multiActionButton addTarget:self action:@selector(settingsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+                [self.multiActionButton setBackgroundColor:[UIColor redColor]];
         
                 [self.headerView addSubview:self.multiActionButton];
                 
@@ -448,6 +483,12 @@
         }
     }];
 
+}
+
+- (void)showFollowers:(id)selector{
+    PAPFindFriendsViewController *showFriends = [[PAPFindFriendsViewController alloc]init];
+    
+    [self.navigationController pushViewController:showFriends animated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -702,35 +743,18 @@
 - (void)configureFollowButton {
     
     self.multiActionButton.titleLabel.text = @"Follow";
-    /*
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button setBackgroundImage:[UIImage imageNamed:@"follow.png"] forState:UIControlStateNormal];
-    button.frame=CGRectMake(0,0, 22.0f, 22.0f);
-    [button addTarget:self action:@selector(followButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithCustomView:button];
-    self.navigationItem.rightBarButtonItem = followButton;
-     */
-    
-    //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow.png"] style:UIBarButtonItemStylePlain target:self action:@selector(followButtonAction:)];
+    [self.multiActionButton removeTarget:self action:@selector(settingsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.multiActionButton addTarget:self action:@selector(followButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+
     [[PAPCache sharedCache] setFollowStatus:NO user:self.user];
 }
 
 - (void)configureUnfollowButton {
     
     self.multiActionButton.titleLabel.text = @"Unfollow";
+    [self.multiActionButton removeTarget:self action:@selector(settingsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.multiActionButton addTarget:self action:@selector(unfollowButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
-    /*
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button setBackgroundImage:[UIImage imageNamed:@"unfollow.png"] forState:UIControlStateNormal];
-    button.frame=CGRectMake(0,0, 22.0f, 22.0f);
-    [button addTarget:self action:@selector(unfollowButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIBarButtonItem *unfollowButton = [[UIBarButtonItem alloc] initWithCustomView:button];
-    self.navigationItem.rightBarButtonItem = unfollowButton;
-    
-    //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"unfollow.png"] style:UIBarButtonItemStylePlain target:self action:@selector(unfollowButtonAction:)];
-     */
     [[PAPCache sharedCache] setFollowStatus:YES user:self.user];
 }
 
