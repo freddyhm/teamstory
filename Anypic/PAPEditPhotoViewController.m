@@ -305,11 +305,6 @@
     
     CGPoint scrollViewContentOffset = self.scrollView.contentOffset;
     
-    /*
-    // Align the bottom edge of the photo with the keyboard
-    scrollViewContentOffset.y = scrollViewContentOffset.y + keyboardFrameEnd.size.height*3.0f - [UIScreen mainScreen].bounds.size.height + [self getCurrentTextViewHeight] + 30;
-    */
-    
     // Check system version for keyboard offset, ios8 added suggestion bar
     // Align the bottom edge of the photo with the keyboardr
     if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
@@ -318,8 +313,6 @@
         // Align the bottom edge of the photo with the keyboard
         scrollViewContentOffset.y = scrollViewContentOffset.y + keyboardFrameEnd.size.height*3.0f - [UIScreen mainScreen].bounds.size.height + [self getCurrentTextViewHeight] + 30;
     }
-    
-    
     
     [self.scrollView setContentOffset:scrollViewContentOffset animated:YES];
 }
