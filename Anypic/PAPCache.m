@@ -36,6 +36,13 @@
 
 #pragma mark - PAPCache
 
+- (void) notificationCache:(NSString *)content{
+    if (![[self.cache objectForKey:@"Notification"] isEqualToString:content]) {
+        [self.cache setObject:content forKey:@"Notification"];
+        [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+    }
+}
+
 - (void)clear {
     [self.cache removeAllObjects];
 }
@@ -70,6 +77,10 @@
 - (NSDictionary *)attributesForPhoto:(PFObject *)photo {
     NSString *key = [self keyForPhoto:photo];
     return [self.cache objectForKey:key];
+}
+
+- (NSString *)notificationContent {
+    return [self.cache objectForKey:@"Notification"];
 }
 
 - (NSNumber *)likeCountForPhoto:(PFObject *)photo {

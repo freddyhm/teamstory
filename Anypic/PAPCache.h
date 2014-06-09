@@ -11,10 +11,12 @@
 + (id)sharedCache;
 
 - (void)clear;
+- (void)notificationCache:(NSString *)content;
 - (void)setAttributesForPhoto:(PFObject *)photo likers:(NSArray *)likers commenters:(NSArray *)commenters likedByCurrentUser:(BOOL)likedByCurrentUser;
 - (void)setAttributesForComment:(PFObject *)comment commentLikers:(NSArray *)commentLikers likedByCurrentUser:(BOOL)commentLikedByCurrentUser;
 - (NSDictionary *)attributesForPhoto:(PFObject *)photo;
 - (NSDictionary *)attributesForComment:(PFObject *)photo;
+- (NSString *)notificationContent;
 - (NSNumber *)likeCountForPhoto:(PFObject *)photo;
 - (NSNumber *)likeCountForComment:(PFObject *)comment;
 - (NSNumber *)commentCountForPhoto:(PFObject *)photo;
