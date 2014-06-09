@@ -161,6 +161,9 @@
                 
                 self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ProfileNavigationBar.png"]];
                 
+                self.navigationItem.rightBarButtonItem = [[PAPSettingsButtonItem alloc] initWithTarget:self action:@selector(settingsButtonAction:)];
+                
+                
                 self.headerView = [[UIView alloc] init];
                 
                 self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + website_expectedSize.height + 43.0f);
@@ -334,7 +337,7 @@
                 self.multiActionButton.titleLabel.font = [UIFont systemFontOfSize:13.0f];
                 [self.multiActionButton setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
                 [self.multiActionButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-                [self.multiActionButton addTarget:self action:@selector(settingsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+                [self.multiActionButton addTarget:self action:@selector(editProfileAction:) forControlEvents:UIControlEventTouchUpInside];
                 [self.multiActionButton setBackgroundColor:[UIColor redColor]];
         
                 [self.headerView addSubview:self.multiActionButton];
@@ -645,9 +648,17 @@
 
 - (void)settingsButtonAction:(id)sender {
     self.settingsActionSheetDelegate = [[PAPSettingsActionSheetDelegate alloc] initWithNavigationController:self.navigationController];
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self.settingsActionSheetDelegate cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Edit Profile",@"About This Version",@"Privacy Policy",@"Terms of Use",@"Log Out", nil];
+    
+    
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self.settingsActionSheetDelegate cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"About This Version",@"Privacy Policy",@"Terms of Use",@"Log Out", nil];
     
     [actionSheet showFromTabBar:self.tabBarController.tabBar];
+}
+
+- (void)editProfileAction:(id)sender{
+    PAPProfileSettingViewController *profileViewController = [[PAPProfileSettingViewController alloc] init];
+    profileViewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:profileViewController animated:YES];
 }
 
 
