@@ -277,23 +277,28 @@
                 
                 /* followers/following count & title */
                 
-                UIFont *countFont = [UIFont fontWithName:@"HelveticaNeue-Medium" size:15.0f];
+                UIFont *countFont = [UIFont fontWithName:@"HelveticaNeue" size:15.0f];
                 UIColor *countColor = [UIColor colorWithRed:118.0f/255.0f green:118.0f/255.0f blue:118.0f/255.0f alpha:1.0f];
+                
+                UIColor *countTitleColor = [UIColor colorWithRed:178.0f/255.0f green:184.0f/255.0f blue:189.0f/255.0f alpha:1.0f];
+                UIFont *countTitleFont = [UIFont fontWithName:@"HelveticaNeue-Light" size:12.0f];
                 
                 // photo/moment count
                 
+                // Title
                 UILabel *photoCountTitle = [[UILabel alloc] init];
-                [photoCountTitle setTextColor:textColor];
-                [photoCountTitle setFont:[UIFont systemFontOfSize:10.0f]];
+                [photoCountTitle setTextColor:countTitleColor];
+                [photoCountTitle setFont:countTitleFont];
                 [photoCountTitle setText:@"moments"];
                 
-                CGFloat photoCountTitleWidth = [photoCountTitle.text sizeWithAttributes:@{NSFontAttributeName: [UIFont systemFontOfSize:10.0f]}].width;
+                CGFloat photoCountTitleWidth = [photoCountTitle.text sizeWithAttributes:@{NSFontAttributeName: countTitleFont}].width;
                 
-                [photoCountTitle setFrame:CGRectMake(120.0f, 30.0f, photoCountTitleWidth, 15.0f)];
+                [photoCountTitle setFrame:CGRectMake(110.0f, 30.0f, photoCountTitleWidth, 15.0f)];
                 [photoCountTitle addGestureRecognizer:tap2];
                 [photoCountTitle setUserInteractionEnabled:YES];
                 
-                UILabel *photoCountLabel= [[UILabel alloc] initWithFrame:CGRectMake(120.0f, 10.0f, photoCountTitleWidth, 22.0f)];
+                // Count
+                UILabel *photoCountLabel= [[UILabel alloc] initWithFrame:CGRectMake(110.0f, 10.0f, photoCountTitleWidth, 22.0f)];
                 [photoCountLabel setTextAlignment:NSTextAlignmentCenter];
                 [photoCountLabel setTextColor:countColor];
                 [photoCountLabel setFont:countFont];
@@ -304,7 +309,21 @@
                 [self.headerView addSubview:photoCountTitle];
                 
                 // follower count & label
-                self.followerCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( photoCountLabel.frame.origin.x + photoCountLabel.frame.size.width + 20.0f, photoCountLabel.frame.origin.y, photoCountLabel.frame.size.width, photoCountLabel.frame.size.height)];
+                
+                // Title
+                UILabel *followersTitle = [[UILabel alloc] init];
+                [followersTitle setTextColor:countTitleColor];
+                [followersTitle setFont:countTitleFont];
+                [followersTitle setText:@"followers"];
+                
+                CGFloat followersTitleWidth = [followersTitle.text sizeWithAttributes:@{NSFontAttributeName: countTitleFont}].width;
+
+                [followersTitle setFrame:CGRectMake( photoCountTitle.frame.origin.x + photoCountTitle.frame.size.width + 31.0f, photoCountTitle.frame.origin.y, followersTitleWidth, photoCountTitle.frame.size.height)];
+                [followersTitle addGestureRecognizer:tap4];
+                [followersTitle setUserInteractionEnabled:YES];
+                
+                // Count
+                self.followerCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( photoCountLabel.frame.origin.x + photoCountLabel.frame.size.width + 31.0f, photoCountLabel.frame.origin.y, followersTitleWidth, photoCountLabel.frame.size.height)];
                 [self.followerCountLabel setTextAlignment:NSTextAlignmentCenter];
                 [self.followerCountLabel setTextColor:countColor];
                 [self.followerCountLabel setFont:countFont];
@@ -312,70 +331,60 @@
                 [self.followerCountLabel setUserInteractionEnabled:YES];
                 
                 [self.headerView addSubview:self.followerCountLabel];
-                
-                UILabel *followersTitle = [[UILabel alloc] init];
-                [followersTitle setFrame:CGRectMake( photoCountTitle.frame.origin.x + photoCountTitle.frame.size.width + 20.0f, photoCountTitle.frame.origin.y, photoCountTitle.frame.size.width, photoCountTitle.frame.size.height)];
-                followersTitle.text = @"followers";
-                [followersTitle setTextColor:textColor];
-                [followersTitle setFont:[UIFont systemFontOfSize:10.0f]];
-                
-                [followersTitle addGestureRecognizer:tap4];
-                [followersTitle setUserInteractionEnabled:YES];
-                
                 [self.headerView addSubview:followersTitle];
                 
                 // following count & label
-                self.followingCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.followerCountLabel.frame.origin.x + self.followerCountLabel.frame.size.width + 20.0f, self.followerCountLabel.frame.origin.y, self.followerCountLabel.frame.size.width, self.followerCountLabel.frame.size.height)];
+                
+                // Title
+                UILabel *followingTitle = [[UILabel alloc] init];
+                [followingTitle setTextColor:countTitleColor];
+                [followingTitle setFont:countTitleFont];
+                [followingTitle setText:@"following"];
+                
+                CGFloat followingCountLabelWidth = [followingTitle.text sizeWithAttributes:@{NSFontAttributeName: countTitleFont}].width;
+                
+                [followingTitle setFrame:CGRectMake( followersTitle.frame.origin.x + followersTitle.frame.size.width + 31.0f, followersTitle.frame.origin.y, followingCountLabelWidth, followersTitle.frame.size.height)];
+                [followingTitle addGestureRecognizer:tap6];
+                [followingTitle setUserInteractionEnabled:YES];
+                
+                // Count
+                self.followingCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.followerCountLabel.frame.origin.x + self.followerCountLabel.frame.size.width + 31.0f, self.followerCountLabel.frame.origin.y, followingCountLabelWidth, self.followerCountLabel.frame.size.height)];
                 self.followingCountLabel.textAlignment = NSTextAlignmentCenter;
                 [self.followingCountLabel setFont:countFont];
                 [self.followingCountLabel setTextColor:countColor];
-                
                 [self.followingCountLabel addGestureRecognizer:tap5];
                 [self.followingCountLabel setUserInteractionEnabled:YES];
                 
                 [self.headerView addSubview:self.followingCountLabel];
-                
-                UILabel *followingTitle = [[UILabel alloc] init];
-                [followingTitle setFrame:CGRectMake( followersTitle.frame.origin.x + followersTitle.frame.size.width + 20.0f, followersTitle.frame.origin.y, followersTitle.frame.size.width, followersTitle.frame.size.height)];
-                followingTitle.text = @"following";
-                [followingTitle setTextColor:textColor];
-                [followingTitle setFont:[UIFont systemFontOfSize:10.0f]];
-                
-                [followingTitle addGestureRecognizer:tap6];
-                [followingTitle setUserInteractionEnabled:YES];
-                
                 [self.headerView addSubview:followingTitle];
                 
-                
                 // follow/unfollow/editprofile big button
-                
                 UIImage *editProfileBtn = [UIImage imageNamed:@"btn_editprofile.png"];
                 self.multiActionButton = [[UIButton alloc]initWithFrame:CGRectMake(photoCountTitle.frame.origin.x, photoCountTitle.frame.origin.y + 20.0f, editProfileBtn.size.width, editProfileBtn.size.height)];
-                [self.multiActionButton setTitle:@"Edit Profile" forState:UIControlStateNormal];
                 [self.multiActionButton setImage:editProfileBtn forState:UIControlStateNormal];
                 self.multiActionButton.titleLabel.font = [UIFont systemFontOfSize:13.0f];
-                [self.multiActionButton setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
-                [self.multiActionButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                 [self.multiActionButton addTarget:self action:@selector(editProfileAction:) forControlEvents:UIControlEventTouchUpInside];
-                [self.multiActionButton setBackgroundColor:[UIColor redColor]];
         
                 [self.headerView addSubview:self.multiActionButton];
                 
                 UIImageView *locationIconImageView = [[UIImageView alloc] initWithImage:nil];
                 [locationIconImageView setImage:[UIImage imageNamed:@"iconlocation.png"]];
-                [locationIconImageView setFrame:CGRectMake( 10.0f, 88.0f + expectedSize.height, 15.0f, 15.0f)];
+                [locationIconImageView setFrame:CGRectMake(6.0f, 88.0f + expectedSize.height, 15.0f, 15.0f)];
                 [self.headerView addSubview:locationIconImageView];
                 
                 if ([self.locationInfo length] > 0) {
                     
+                    UIFont *locationFont = [UIFont fontWithName:@"Helvetica" size:13.0f];
+                    UIColor *locationColor = [UIColor colorWithRed:158.0f/255.0f green:158.0f/255.0f blue:158.0f/255.0f alpha:1];
+                    
                     self.locationLabel = [[UILabel alloc]init];
                     [self.locationLabel setBackgroundColor:[UIColor clearColor]];
-                    [self.locationLabel setTextColor:textColor];
-                    [self.locationLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:13.0f]];
+                    [self.locationLabel setTextColor:locationColor];
+                    [self.locationLabel setFont:locationFont];
                     
                     CGFloat locationLabelWidth = [self.locationLabel.text sizeWithAttributes:
                                    @{NSFontAttributeName:
-                                         [UIFont systemFontOfSize:13.0f]}].width;
+                                         self.locationLabel.font}].width;
                     
                     [self.locationLabel setFrame:CGRectMake(locationIconImageView.frame.origin.x + 20.0f, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, 16.0f)];
                     
@@ -385,6 +394,7 @@
                     NSLog(@"locationInfo Not found");
                 }
                 
+                // the bar separating location and website link
                 self.locationSiteSeparator = [[UILabel alloc] init];
                 
                 self.locationSiteSeparator.frame = CGRectMake(self.locationLabel.frame.origin.x + self.locationLabel.frame.size.width + 10.0f, self.locationLabel.frame.origin.y + 2.0f, 10.0f, 10.0f);
@@ -613,7 +623,7 @@
         // re-calculate width size for location label and reset frame
         CGFloat locationLabelWidth = [self.locationLabel.text sizeWithAttributes:
                        @{NSFontAttributeName:
-                             [UIFont systemFontOfSize:13.0f]}].width;
+                             self.locationLabel.font}].width;
         
         [self.locationLabel setFrame:CGRectMake(self.locationLabel.frame.origin.x,self.locationLabel.frame.origin.y, locationLabelWidth + 10.0f, self.locationLabel.frame.size.height)];
         
@@ -784,7 +794,7 @@
 
 - (void)configureFollowButton {
     
-    self.multiActionButton.titleLabel.text = @"Follow";
+    [self.multiActionButton setImage:[UIImage imageNamed:@"btn_follow.png"] forState:UIControlStateNormal];
     [self.multiActionButton removeTarget:self action:@selector(settingsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.multiActionButton addTarget:self action:@selector(followButtonAction:) forControlEvents:UIControlEventTouchUpInside];
 
@@ -793,7 +803,7 @@
 
 - (void)configureUnfollowButton {
     
-    self.multiActionButton.titleLabel.text = @"Unfollow";
+    [self.multiActionButton setImage:[UIImage imageNamed:@"btn_following.png"] forState:UIControlStateNormal];
     [self.multiActionButton removeTarget:self action:@selector(settingsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.multiActionButton addTarget:self action:@selector(unfollowButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
