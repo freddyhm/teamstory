@@ -293,12 +293,12 @@
                 
                 CGFloat photoCountTitleWidth = [photoCountTitle.text sizeWithAttributes:@{NSFontAttributeName: countTitleFont}].width;
                 
-                [photoCountTitle setFrame:CGRectMake(110.0f, 30.0f, photoCountTitleWidth, 15.0f)];
+                [photoCountTitle setFrame:CGRectMake(108.0f, 30.0f, photoCountTitleWidth, 15.0f)];
                 [photoCountTitle addGestureRecognizer:tap2];
                 [photoCountTitle setUserInteractionEnabled:YES];
                 
                 // Count
-                UILabel *photoCountLabel= [[UILabel alloc] initWithFrame:CGRectMake(110.0f, 10.0f, photoCountTitleWidth, 22.0f)];
+                UILabel *photoCountLabel= [[UILabel alloc] initWithFrame:CGRectMake(108.0f, 10.0f, photoCountTitleWidth, 22.0f)];
                 [photoCountLabel setTextAlignment:NSTextAlignmentCenter];
                 [photoCountLabel setTextColor:countColor];
                 [photoCountLabel setFont:countFont];
@@ -613,7 +613,7 @@
         
         if ([self.industryLabel.text length] > 0) {
             industryLabel.hidden = NO;
-            [industryLabel setFrame:CGRectMake(320.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + website_expectedSize.height, industry_expectedSize.width + 10.0f, 22.0f)];
+            [industryLabel setFrame:CGRectMake(318.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + website_expectedSize.height, industry_expectedSize.width + 10.0f, 22.0f)];
         } else {
             industryLabel.hidden = YES;
         }
