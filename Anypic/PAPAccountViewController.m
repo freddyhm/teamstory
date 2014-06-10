@@ -50,6 +50,7 @@
 @property (nonatomic, strong) UIButton *linkedIn_button;
 @property (nonatomic, strong) UIView *whiteBackground;
 @property (nonatomic, strong) UIButton *multiActionButton;
+@property (nonatomic, strong) UILabel *locationSiteSeparator;
 @property int userStatUpdateCount;
 
 
@@ -159,17 +160,15 @@
                 
                 UIColor *textColor = [UIColor colorWithRed:158.0f/255.0f green:158.0f/255.0f blue:158.0f/255.0f alpha:1.0f];
                 
-                self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ProfileNavigationBar.png"]];
+                self.navigationItem.title = self.displayName;
                 
                 self.navigationItem.rightBarButtonItem = [[PAPSettingsButtonItem alloc] initWithTarget:self action:@selector(settingsButtonAction:)];
-                
                 
                 self.headerView = [[UIView alloc] init];
                 
                 self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + website_expectedSize.height + 43.0f);
                 [self.headerView setBackgroundColor:[UIColor clearColor]]; // should be clear, this will be the container for our avatar, photo count, follower count, following count, and so on
                 [self.view addSubview:self.headerView];
-                
                 
                 whiteBackground = [[UIView alloc] init];
                 [whiteBackground setFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, self.headerView.bounds.size.height - 10.0f)];
@@ -263,6 +262,7 @@
                 [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]]];
                 self.tableView.backgroundView = texturedBackgroundView;
                 
+                // taps for followers/following section, all point to same method
                 UITapGestureRecognizer *tap1 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
                 
                 UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
@@ -275,35 +275,37 @@
                 
                 UITapGestureRecognizer *tap6 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
                 
-                UILabel *photoCount= [[UILabel alloc] initWithFrame:CGRectMake( 110.0f, 25.0f, 30.0f, 22.0f)];
-                [photoCount setBackgroundColor:[UIColor clearColor]];
-                [photoCount setTextColor:textColor];
-                [photoCount setFont:[UIFont boldSystemFontOfSize:12.0f]];
+                // followers/following count & title
+                UILabel *photoCount= [[UILabel alloc] initWithFrame:CGRectMake(120.0f, 10.0f, 50.0f, 22.0f)];
+                photoCount.textAlignment = NSTextAlignmentCenter;
+                [photoCount setFont:[UIFont boldSystemFontOfSize:14.0f]];
                 [photoCount addGestureRecognizer:tap1];
                 [photoCount setUserInteractionEnabled:YES];
                 [self.headerView addSubview:photoCount];
                 
                 UILabel *photoCountTitle = [[UILabel alloc] init];
+                [photoCountTitle setTextColor:textColor];
                 [photoCountTitle setFont:[UIFont systemFontOfSize:10.0f]];
-                [photoCountTitle setFrame:CGRectMake(90.0f, 47.50f, 50.0f, 15.0f)];
+                [photoCountTitle setFrame:CGRectMake(120.0f, 25.50f, 50.0f, 15.0f)];
                 [photoCountTitle addGestureRecognizer:tap2];
                 [photoCountTitle setUserInteractionEnabled:YES];
                 photoCountTitle.text = @"moments";
                 
                 [self.headerView addSubview:photoCountTitle];
                 
-                self.followerCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( photoCount.frame.origin.x + photoCount.frame.size.width, photoCount.frame.origin.y, photoCount.frame.size.width, photoCount.frame.size.height)];
+                self.followerCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( photoCount.frame.origin.x + photoCount.frame.size.width + 20.0f, photoCount.frame.origin.y, photoCount.frame.size.width, photoCount.frame.size.height)];
+                self.followerCountLabel.textAlignment = NSTextAlignmentCenter;
                 [self.followerCountLabel setBackgroundColor:[UIColor clearColor]];
-                [self.followerCountLabel setTextColor:textColor];
-                [self.followerCountLabel setFont:[UIFont boldSystemFontOfSize:12.0f]];
+                [self.followerCountLabel setFont:[UIFont boldSystemFontOfSize:14.0f]];
                 [self.followerCountLabel addGestureRecognizer:tap3];
                 [self.followerCountLabel setUserInteractionEnabled:YES];
                 
                 [self.headerView addSubview:self.followerCountLabel];
                 
                 UILabel *followersTitle = [[UILabel alloc] init];
-                [followersTitle setFrame:CGRectMake( photoCountTitle.frame.origin.x + photoCountTitle.frame.size.width, photoCountTitle.frame.origin.y, photoCountTitle.frame.size.width, photoCountTitle.frame.size.height)];
+                [followersTitle setFrame:CGRectMake( photoCountTitle.frame.origin.x + photoCountTitle.frame.size.width + 20.0f, photoCountTitle.frame.origin.y, photoCountTitle.frame.size.width, photoCountTitle.frame.size.height)];
                 followersTitle.text = @"followers";
+                [followersTitle setTextColor:textColor];
                 [followersTitle setFont:[UIFont systemFontOfSize:10.0f]];
                 
                 [followersTitle addGestureRecognizer:tap4];
@@ -311,10 +313,10 @@
                 
                 [self.headerView addSubview:followersTitle];
                 
-                self.followingCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( self.followerCountLabel.frame.origin.x + self.followerCountLabel.frame.size.width, self.followerCountLabel.frame.origin.y, self.followerCountLabel.frame.size.width, self.followerCountLabel.frame.size.height)];
+                self.followingCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.followerCountLabel.frame.origin.x + self.followerCountLabel.frame.size.width + 20.0f, self.followerCountLabel.frame.origin.y, self.followerCountLabel.frame.size.width, self.followerCountLabel.frame.size.height)];
+                self.followingCountLabel.textAlignment = NSTextAlignmentCenter;
                 [self.followingCountLabel setBackgroundColor:[UIColor clearColor]];
-                [self.followingCountLabel setTextColor:textColor];
-                [self.followingCountLabel setFont:[UIFont boldSystemFontOfSize:12.0f]];
+                [self.followingCountLabel setFont:[UIFont boldSystemFontOfSize:14.0f]];
                 
                 [self.followingCountLabel addGestureRecognizer:tap5];
                 [self.followingCountLabel setUserInteractionEnabled:YES];
@@ -322,8 +324,9 @@
                 [self.headerView addSubview:self.followingCountLabel];
                 
                 UILabel *followingTitle = [[UILabel alloc] init];
-                [followingTitle setFrame:CGRectMake( followersTitle.frame.origin.x + followersTitle.frame.size.width, followersTitle.frame.origin.y, followersTitle.frame.size.width, followersTitle.frame.size.height)];
+                [followingTitle setFrame:CGRectMake( followersTitle.frame.origin.x + followersTitle.frame.size.width + 20.0f, followersTitle.frame.origin.y, followersTitle.frame.size.width, followersTitle.frame.size.height)];
                 followingTitle.text = @"following";
+                [followingTitle setTextColor:textColor];
                 [followingTitle setFont:[UIFont systemFontOfSize:10.0f]];
                 
                 [followingTitle addGestureRecognizer:tap6];
@@ -332,6 +335,7 @@
                 [self.headerView addSubview:followingTitle];
                 
                 
+                // follow/unfollow/editprofile big button
                 self.multiActionButton = [[UIButton alloc]initWithFrame:CGRectMake(photoCountTitle.frame.origin.x, photoCountTitle.frame.origin.y + 20.0f, 80.0f, 20.0f)];
                 [self.multiActionButton setTitle:@"Edit Profile" forState:UIControlStateNormal];
                 self.multiActionButton.titleLabel.font = [UIFont systemFontOfSize:13.0f];
@@ -342,31 +346,49 @@
         
                 [self.headerView addSubview:self.multiActionButton];
                 
-                
                 UIImageView *locationIconImageView = [[UIImageView alloc] initWithImage:nil];
                 [locationIconImageView setImage:[UIImage imageNamed:@"iconlocation.png"]];
                 [locationIconImageView setFrame:CGRectMake( 10.0f, 88.0f + expectedSize.height, 15.0f, 15.0f)];
                 [self.headerView addSubview:locationIconImageView];
                 
-                if ([locationInfo length] > 0) {
+                if ([self.locationInfo length] > 0) {
                     
-                    locationLabel = [[UILabel alloc]init];
-                    [locationLabel setText:locationInfo];
-    
-                    CGFloat width = [locationInfo sizeWithAttributes:@{NSFontAttributeName: [UIFont boldSystemFontOfSize:12.0f]}].width;
-                
-                    [locationLabel setFrame:CGRectMake(20.0f, 88.0f + expectedSize.height, width, 16.0f)];
-            
-                    [locationLabel setBackgroundColor:[UIColor clearColor]];
-                    [locationLabel setTextColor:textColor];
-                    [self.headerView addSubview:locationLabel];
+                    self.locationLabel = [[UILabel alloc]init];
+                    [self.locationLabel setBackgroundColor:[UIColor clearColor]];
+                    [self.locationLabel setTextColor:textColor];
+                    [self.locationLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:13.0f]];
+                    
+                    CGFloat locationLabelWidth = [self.locationLabel.text sizeWithAttributes:
+                                   @{NSFontAttributeName:
+                                         [UIFont systemFontOfSize:13.0f]}].width;
+                    
+                    
+                    
+                    [self.locationLabel setFrame:CGRectMake(locationIconImageView.frame.origin.x + 20.0f, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, 16.0f)];
+                    
+
+                    [self.headerView addSubview:self.locationLabel];
+                    
+                                        NSLog(@"Width:%f", locationLabelWidth);
+                                                            NSLog(@"text:%@", self.locationLabel.text);
+
                 } else {
                     NSLog(@"locationInfo Not found");
                 }
                 
+                self.locationSiteSeparator = [[UILabel alloc] init];
+                
+                self.locationSiteSeparator.frame = CGRectMake(self.locationLabel.frame.origin.x + self.locationLabel.frame.size.width + 10.0f, self.locationLabel.frame.origin.y + 2.0f, 10.0f, 10.0f);
+                
+                self.locationSiteSeparator.font = [UIFont fontWithName:@"Helvetica" size:13.0f];
+                self.locationSiteSeparator.textColor = textColor;
+                self.locationSiteSeparator.text = @"|";
+            
+                [self.headerView addSubview: self.locationSiteSeparator];
+                
                 if ([websiteInfo length] > 0) {
                     websiteLink = [UIButton buttonWithType:UIButtonTypeCustom];
-                    [websiteLink setFrame:CGRectMake( 10.0f, locationLabel.frame.origin.y + locationLabel.frame.size.width, website_expectedSize.width, website_expectedSize.height)];
+                    [websiteLink setFrame:CGRectMake(self.locationSiteSeparator.frame.origin.x + self.locationSiteSeparator.frame.size.width + 10.0f, self.locationLabel.frame.origin.y, website_expectedSize.width, website_expectedSize.height)];
                     [websiteLink setTitle:websiteInfo forState:UIControlStateNormal];
                     [websiteLink setTitleColor:[UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
                     websiteLink.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
@@ -374,16 +396,6 @@
                     [websiteLink addTarget:self action:@selector(websiteLinkAction:) forControlEvents:UIControlEventTouchUpInside];
                     [self.headerView addSubview:websiteLink];
                 }
-
-                
-                userDisplayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94.0f, 12.0f, self.headerView.bounds.size.width, 16.0f)];
-                [userDisplayNameLabel setBackgroundColor:[UIColor clearColor]];
-                [userDisplayNameLabel setTextColor:[UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
-                [userDisplayNameLabel setText:displayName];
-                [userDisplayNameLabel setFont:[UIFont boldSystemFontOfSize:13.0f]];
-                [self.headerView addSubview:userDisplayNameLabel];
-                
-                
                 
                 linkedIn_button = [[UIButton alloc] init];
                 [linkedIn_button setFrame:CGRectMake(10.0f, 97.0f + expectedSize.height + website_expectedSize.height, 22.0f, 22.0f)];
@@ -507,7 +519,7 @@
     [self.user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         self.user = (PFUser *)object;
     
-        self.userDisplayNameLabel.text = [self.user objectForKey:@"displayName"];
+        self.navigationItem.title  = [self.user objectForKey:@"displayName"];
         self.locationLabel.text = [self.user objectForKey:@"location"];
         self.descriptionLabel.text = [self.user objectForKey:@"description"];
         [self.websiteLink setTitle:[self.user objectForKey:@"website"] forState:UIControlStateNormal];
@@ -588,7 +600,17 @@
         }
         
         [descriptionLabel setFrame:CGRectMake(10.0f, 88.0f, expectedSize.width, expectedSize.height)];
-        [websiteLink setFrame:CGRectMake( self.locationLabel.frame.size.width + 10.0f, 88.0f + expectedSize.height, website_expectedSize.width, website_expectedSize.height)];
+        
+        // re-calculate width size for location label and reset frame
+        CGFloat locationLabelWidth = [self.locationLabel.text sizeWithAttributes:
+                       @{NSFontAttributeName:
+                             [UIFont systemFontOfSize:13.0f]}].width;
+        
+        [self.locationLabel setFrame:CGRectMake(self.locationLabel.frame.origin.x,self.locationLabel.frame.origin.y, locationLabelWidth + 10.0f, self.locationLabel.frame.size.height)];
+        
+        self.locationSiteSeparator.frame = CGRectMake(locationLabelWidth + self.locationLabel.frame.origin.x + 10.0f, self.locationLabel.frame.origin.y + 3.0f, 10.0f, 10.0f);
+        
+        [websiteLink setFrame:CGRectMake(self.locationSiteSeparator.frame.origin.x + self.locationSiteSeparator.frame.size.width, 89.0f + expectedSize.height, website_expectedSize.width, website_expectedSize.height)];
         [self.industryLabel setFrame:CGRectMake(320.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + website_expectedSize.height, industry_expectedSize.width + 10.0f, 22.0f)];
         [whiteBackground setFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, self.headerView.bounds.size.height - 10.0f)];
         
