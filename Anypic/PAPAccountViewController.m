@@ -348,8 +348,11 @@
                 
                 
                 // follow/unfollow/editprofile big button
-                self.multiActionButton = [[UIButton alloc]initWithFrame:CGRectMake(photoCountTitle.frame.origin.x, photoCountTitle.frame.origin.y + 20.0f, 80.0f, 20.0f)];
+                
+                UIImage *editProfileBtn = [UIImage imageNamed:@"btn_editprofile.png"];
+                self.multiActionButton = [[UIButton alloc]initWithFrame:CGRectMake(photoCountTitle.frame.origin.x, photoCountTitle.frame.origin.y + 20.0f, editProfileBtn.size.width, editProfileBtn.size.height)];
                 [self.multiActionButton setTitle:@"Edit Profile" forState:UIControlStateNormal];
+                [self.multiActionButton setImage:editProfileBtn forState:UIControlStateNormal];
                 self.multiActionButton.titleLabel.font = [UIFont systemFontOfSize:13.0f];
                 [self.multiActionButton setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
                 [self.multiActionButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
