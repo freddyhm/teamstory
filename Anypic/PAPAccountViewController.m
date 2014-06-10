@@ -275,28 +275,39 @@
                 
                 UITapGestureRecognizer *tap6 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
                 
-                // followers/following count & title
-                UILabel *photoCount= [[UILabel alloc] initWithFrame:CGRectMake(120.0f, 10.0f, 50.0f, 22.0f)];
-                photoCount.textAlignment = NSTextAlignmentCenter;
-                [photoCount setFont:[UIFont boldSystemFontOfSize:14.0f]];
-                [photoCount addGestureRecognizer:tap1];
-                [photoCount setUserInteractionEnabled:YES];
-                [self.headerView addSubview:photoCount];
+                /* followers/following count & title */
+                
+                UIFont *countFont = [UIFont fontWithName:@"HelveticaNeue-Medium" size:15.0f];
+                UIColor *countColor = [UIColor colorWithRed:118.0f/255.0f green:118.0f/255.0f blue:118.0f/255.0f alpha:1.0f];
+                
+                // photo/moment count
                 
                 UILabel *photoCountTitle = [[UILabel alloc] init];
                 [photoCountTitle setTextColor:textColor];
                 [photoCountTitle setFont:[UIFont systemFontOfSize:10.0f]];
-                [photoCountTitle setFrame:CGRectMake(120.0f, 25.50f, 50.0f, 15.0f)];
+                [photoCountTitle setText:@"moments"];
+                
+                CGFloat photoCountTitleWidth = [photoCountTitle.text sizeWithAttributes:@{NSFontAttributeName: [UIFont systemFontOfSize:10.0f]}].width;
+                
+                [photoCountTitle setFrame:CGRectMake(120.0f, 30.0f, photoCountTitleWidth, 15.0f)];
                 [photoCountTitle addGestureRecognizer:tap2];
                 [photoCountTitle setUserInteractionEnabled:YES];
-                photoCountTitle.text = @"moments";
                 
+                UILabel *photoCountLabel= [[UILabel alloc] initWithFrame:CGRectMake(120.0f, 10.0f, photoCountTitleWidth, 22.0f)];
+                [photoCountLabel setTextAlignment:NSTextAlignmentCenter];
+                [photoCountLabel setTextColor:countColor];
+                [photoCountLabel setFont:countFont];
+                [photoCountLabel addGestureRecognizer:tap1];
+                [photoCountLabel setUserInteractionEnabled:YES];
+                
+                [self.headerView addSubview:photoCountLabel];
                 [self.headerView addSubview:photoCountTitle];
                 
-                self.followerCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( photoCount.frame.origin.x + photoCount.frame.size.width + 20.0f, photoCount.frame.origin.y, photoCount.frame.size.width, photoCount.frame.size.height)];
-                self.followerCountLabel.textAlignment = NSTextAlignmentCenter;
-                [self.followerCountLabel setBackgroundColor:[UIColor clearColor]];
-                [self.followerCountLabel setFont:[UIFont boldSystemFontOfSize:14.0f]];
+                // follower count & label
+                self.followerCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( photoCountLabel.frame.origin.x + photoCountLabel.frame.size.width + 20.0f, photoCountLabel.frame.origin.y, photoCountLabel.frame.size.width, photoCountLabel.frame.size.height)];
+                [self.followerCountLabel setTextAlignment:NSTextAlignmentCenter];
+                [self.followerCountLabel setTextColor:countColor];
+                [self.followerCountLabel setFont:countFont];
                 [self.followerCountLabel addGestureRecognizer:tap3];
                 [self.followerCountLabel setUserInteractionEnabled:YES];
                 
@@ -313,10 +324,11 @@
                 
                 [self.headerView addSubview:followersTitle];
                 
+                // following count & label
                 self.followingCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.followerCountLabel.frame.origin.x + self.followerCountLabel.frame.size.width + 20.0f, self.followerCountLabel.frame.origin.y, self.followerCountLabel.frame.size.width, self.followerCountLabel.frame.size.height)];
                 self.followingCountLabel.textAlignment = NSTextAlignmentCenter;
-                [self.followingCountLabel setBackgroundColor:[UIColor clearColor]];
-                [self.followingCountLabel setFont:[UIFont boldSystemFontOfSize:14.0f]];
+                [self.followingCountLabel setFont:countFont];
+                [self.followingCountLabel setTextColor:countColor];
                 
                 [self.followingCountLabel addGestureRecognizer:tap5];
                 [self.followingCountLabel setUserInteractionEnabled:YES];
@@ -362,16 +374,10 @@
                                    @{NSFontAttributeName:
                                          [UIFont systemFontOfSize:13.0f]}].width;
                     
-                    
-                    
                     [self.locationLabel setFrame:CGRectMake(locationIconImageView.frame.origin.x + 20.0f, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, 16.0f)];
                     
-
                     [self.headerView addSubview:self.locationLabel];
-                    
-                                        NSLog(@"Width:%f", locationLabelWidth);
-                                                            NSLog(@"text:%@", self.locationLabel.text);
-
+                
                 } else {
                     NSLog(@"locationInfo Not found");
                 }
@@ -421,14 +427,14 @@
                 [angellist_button addTarget:self action:@selector(angellist_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
                 [self.headerView addSubview:angellist_button];
                 
-                [photoCount setText:@"0"];
+                [photoCountLabel setText:@"0"];
                 
                 PFQuery *queryPhotoCount = [PFQuery queryWithClassName:@"Photo"];
                 [queryPhotoCount whereKey:kPAPPhotoUserKey equalTo:self.user];
                 [queryPhotoCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
                 [queryPhotoCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
                     if (!error) {
-                        [photoCount setText:[NSString stringWithFormat:@"%d", number]];
+                        [photoCountLabel setText:[NSString stringWithFormat:@"%d", number]];
                         [[PAPCache sharedCache] setPhotoCount:[NSNumber numberWithInt:number] user:self.user];
                     }
                 }];
