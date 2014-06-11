@@ -20,7 +20,6 @@ typedef enum {
 @interface PAPFindFriendsViewController ()
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, assign) PAPFindFriendsFollowStatus followStatus;
-@property (nonatomic, strong) NSString *selectedEmailAddress;
 @property (nonatomic, strong) NSMutableDictionary *outstandingFollowQueries;
 @property (nonatomic, strong) NSMutableDictionary *outstandingCountQueries;
 @end
@@ -33,7 +32,6 @@ typedef enum {
 @implementation PAPFindFriendsViewController
 @synthesize headerView;
 @synthesize followStatus;
-@synthesize selectedEmailAddress;
 @synthesize outstandingFollowQueries;
 @synthesize outstandingCountQueries;
 #pragma mark - Initialization
@@ -50,6 +48,8 @@ typedef enum {
         
         // Used to determine Follow/Unfollow All button status
         self.followStatus = PAPFindFriendsFollowingSome;
+        
+        self.pullToRefreshEnabled = NO;
     }
     return self;
 }
@@ -61,6 +61,7 @@ typedef enum {
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
     [super viewDidLoad];
+
     
     self.navigationItem.title = @"Followers";
     
@@ -70,6 +71,7 @@ typedef enum {
     [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
     [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+
 }
 
 
@@ -97,10 +99,10 @@ typedef enum {
     // Query for all auto-follow accounts
     NSMutableArray *autoFollowAccountFacebookIds = [[NSMutableArray alloc] initWithArray:kPAPAutoFollowAccountFacebookIds];
     [autoFollowAccountFacebookIds removeObject:[[PFUser currentUser] objectForKey:kPAPUserFacebookIDKey]];
-    PFQuery *parseEmployeeQuery = [PFUser query];
-    [parseEmployeeQuery whereKey:kPAPUserFacebookIDKey containedIn:autoFollowAccountFacebookIds];
+    PFQuery *teamstoryStaffQuery = [PFUser query];
+    [teamstoryStaffQuery whereKey:kPAPUserFacebookIDKey containedIn:autoFollowAccountFacebookIds];
         
-    PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:friendsQuery, parseEmployeeQuery, nil]];
+    PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:friendsQuery, teamstoryStaffQuery, nil]];
     query.cachePolicy = kPFCachePolicyNetworkOnly;
     
     if (self.objects.count == 0) {
@@ -125,19 +127,16 @@ typedef enum {
         if (!error) {
             if (number == self.objects.count) {
                 self.followStatus = PAPFindFriendsFollowingAll;
-                [self configureUnfollowAllButton];
                 for (PFUser *user in self.objects) {
                     [[PAPCache sharedCache] setFollowStatus:YES user:user];
                 }
             } else if (number == 0) {
                 self.followStatus = PAPFindFriendsFollowingNone;
-                [self configureFollowAllButton];
                 for (PFUser *user in self.objects) {
                     [[PAPCache sharedCache] setFollowStatus:NO user:user];
                 }
             } else {
                 self.followStatus = PAPFindFriendsFollowingSome;
-                [self configureFollowAllButton];
             }
         }
         
@@ -271,108 +270,16 @@ typedef enum {
 }
 
 
-#pragma mark - ABPeoplePickerDelegate
-
-/* Called when the user cancels the address book view controller. We simply dismiss it. */
-- (void)peoplePickerNavigationControllerDidCancel:(ABPeoplePickerNavigationController *)peoplePicker {
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-/* Called when a member of the address book is selected, we return YES to display the member's details. */
-- (BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person {
-    return YES;
-}
-
-/* Called when the user selects a property of a person in their address book (ex. phone, email, location,...)
-   This method will allow them to send a text or email inviting them to Teamstory.  */
-- (BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person property:(ABPropertyID)property identifier:(ABMultiValueIdentifier)identifier {
-
-    if (property == kABPersonEmailProperty) {
-
-        ABMultiValueRef emailProperty = ABRecordCopyValue(person,property);
-        NSString *email = (__bridge_transfer NSString *)ABMultiValueCopyValueAtIndex(emailProperty,identifier);
-        self.selectedEmailAddress = email;
-
-        if ([MFMailComposeViewController canSendMail] && [MFMessageComposeViewController canSendText]) {
-            // ask user
-            UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:[NSString stringWithFormat:@"Invite %@",@""] delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Email", @"iMessage", nil];
-            [actionSheet showFromTabBar:self.tabBarController.tabBar];
-        } else if ([MFMailComposeViewController canSendMail]) {
-            // go directly to mail
-            [self presentMailComposeViewController:email];
-        } else if ([MFMessageComposeViewController canSendText]) {
-            // go directly to iMessage
-            [self presentMessageComposeViewController:email];
-        }
-
-    } else if (property == kABPersonPhoneProperty) {
-        ABMultiValueRef phoneProperty = ABRecordCopyValue(person,property);
-        NSString *phone = (__bridge_transfer NSString *)ABMultiValueCopyValueAtIndex(phoneProperty,identifier);
-        
-        if ([MFMessageComposeViewController canSendText]) {
-            [self presentMessageComposeViewController:phone];
-        }
-    }
-    
-    return NO;
-}
-
-#pragma mark - MFMailComposeDelegate
-
-/* Simply dismiss the MFMailComposeViewController when the user sends an email or cancels */
-- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
-    [self dismissViewControllerAnimated:YES completion:nil];  
-}
-
-
-#pragma mark - MFMessageComposeDelegate
-
-/* Simply dismiss the MFMessageComposeViewController when the user sends a text or cancels */
-- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-
-#pragma mark - UIActionSheetDelegate
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == actionSheet.cancelButtonIndex) {
-        return;
-    }
-
-    if (buttonIndex == 0) {
-        [self presentMailComposeViewController:self.selectedEmailAddress];
-    } else if (buttonIndex == 1) {
-        [self presentMessageComposeViewController:self.selectedEmailAddress];
-    }
-}
-
 #pragma mark - ()
 
 - (void)backButtonAction:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)inviteFriendsButtonAction:(id)sender {
-    ABPeoplePickerNavigationController *addressBook = [[ABPeoplePickerNavigationController alloc] init];
-    addressBook.peoplePickerDelegate = self;
-    
-    if ([MFMailComposeViewController canSendMail] && [MFMessageComposeViewController canSendText]) {
-        addressBook.displayedProperties = [NSArray arrayWithObjects:[NSNumber numberWithInt:kABPersonEmailProperty], [NSNumber numberWithInt:kABPersonPhoneProperty], nil];
-    } else if ([MFMailComposeViewController canSendMail]) {
-        addressBook.displayedProperties = [NSArray arrayWithObject:[NSNumber numberWithInt:kABPersonEmailProperty]];
-    } else if ([MFMessageComposeViewController canSendText]) {
-        addressBook.displayedProperties = [NSArray arrayWithObject:[NSNumber numberWithInt:kABPersonPhoneProperty]];
-    }
-
-    [self presentViewController:addressBook animated:YES completion:nil];
-}
-
 - (void)followAllFriendsButtonAction:(id)sender {
     [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
 
     self.followStatus = PAPFindFriendsFollowingAll;
-    [self configureUnfollowAllButton];
     
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.01 * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
@@ -402,8 +309,7 @@ typedef enum {
     [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
 
     self.followStatus = PAPFindFriendsFollowingNone;
-    [self configureFollowAllButton];
-
+    
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.01 * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
 
@@ -444,45 +350,6 @@ typedef enum {
             }
         }];
     }
-}
-
-- (void)configureUnfollowAllButton {
-   
-}
-
-- (void)configureFollowAllButton {
-}
-
-- (void)presentMailComposeViewController:(NSString *)recipient {
-    // Create the compose email view controller
-    MFMailComposeViewController *composeEmailViewController = [[MFMailComposeViewController alloc] init];
-    
-    // Set the recipient to the selected email and a default text
-    [composeEmailViewController setMailComposeDelegate:self];
-    [composeEmailViewController setSubject:@"Join me on Teamstory"];
-    [composeEmailViewController setToRecipients:[NSArray arrayWithObjects:recipient, nil]];
-    [composeEmailViewController setMessageBody:@"<h2>Share your pictures, share your story.</h2><p><a href=\"http://Teamstory.org\">Teamstory</a> is the easiest way to share photos with your friends. Get the app and share your fun photos with the world.</p><p><a href=\"http://Teamstory.org\">Teamstory</a> is fully powered by <a href=\"http://parse.com\">Parse</a>.</p>" isHTML:YES];
-    
-    // Dismiss the current modal view controller and display the compose email one.
-    // Note that we do not animate them. Doing so would require us to present the compose
-    // mail one only *after* the address book is dismissed.
-    [self dismissViewControllerAnimated:NO completion:nil];
-    [self presentViewController:composeEmailViewController animated:NO completion:nil];
-}
-
-- (void)presentMessageComposeViewController:(NSString *)recipient {
-    // Create the compose text message view controller
-    MFMessageComposeViewController *composeTextViewController = [[MFMessageComposeViewController alloc] init];
-    
-    // Send the destination phone number and a default text
-    [composeTextViewController setMessageComposeDelegate:self];
-    [composeTextViewController setRecipients:[NSArray arrayWithObjects:recipient, nil]];
-    [composeTextViewController setBody:@"Check out Teamstory! http://Teamstory.org"];
-    
-    // Dismiss the current modal view controller and display the compose text one.
-    // See previous use for reason why these are not animated.
-    [self dismissViewControllerAnimated:NO completion:nil];
-    [self presentViewController:composeTextViewController animated:NO completion:nil];
 }
 
 - (void)followUsersTimerFired:(NSTimer *)timer {

@@ -43,12 +43,8 @@
         self.paginationEnabled = YES;
         
         // Whether the built-in pull-to-refresh is enabled
-        if (NSClassFromString(@"UIRefreshControl")) {
-            self.pullToRefreshEnabled = NO;
-        } else {
-            self.pullToRefreshEnabled = YES;
-        }
-
+        self.pullToRefreshEnabled = NO;
+       
         // The number of objects to show per page
         self.objectsPerPage = 15;
         
@@ -96,16 +92,8 @@
     //[button addTarget:self action:@selector(inviteFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.blankTimelineView addSubview:button];
     
-    // Use the new iOS 6 refresh control.
-    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl = refreshControl;
-    self.refreshControl.tintColor = [UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:1.0f];
-    [self.refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
-    self.pullToRefreshEnabled = YES;
-    
+
     self.tableView.bounces = YES;
-    
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -529,11 +517,5 @@
     }
 }
 
-
-- (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl {
-    [self.refreshControl endRefreshing];
-    self.tableView.tableHeaderView = nil;
-    self.tableView.scrollEnabled = YES;
-}
 
 @end
