@@ -263,17 +263,14 @@
                 self.tableView.backgroundView = texturedBackgroundView;
                 
                 // taps for followers/following section, all point to same method
-                UITapGestureRecognizer *tap1 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
-                
-                UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
                 
                 UITapGestureRecognizer *tap3 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
                 
                 UITapGestureRecognizer *tap4 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
                 
-                UITapGestureRecognizer *tap5 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
+                UITapGestureRecognizer *tap5 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowing:)];
                 
-                UITapGestureRecognizer *tap6 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
+                UITapGestureRecognizer *tap6 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowing:)];
                 
                 /* followers/following count & title */
                 
@@ -294,7 +291,6 @@
                 CGFloat photoCountTitleWidth = [photoCountTitle.text sizeWithAttributes:@{NSFontAttributeName: countTitleFont}].width;
                 
                 [photoCountTitle setFrame:CGRectMake(108.0f, 30.0f, photoCountTitleWidth, 15.0f)];
-                [photoCountTitle addGestureRecognizer:tap2];
                 [photoCountTitle setUserInteractionEnabled:YES];
                 
                 // Count
@@ -302,7 +298,6 @@
                 [photoCountLabel setTextAlignment:NSTextAlignmentCenter];
                 [photoCountLabel setTextColor:countColor];
                 [photoCountLabel setFont:countFont];
-                [photoCountLabel addGestureRecognizer:tap1];
                 [photoCountLabel setUserInteractionEnabled:YES];
                 
                 [self.headerView addSubview:photoCountLabel];
@@ -522,9 +517,15 @@
 }
 
 - (void)showFollowers:(id)selector{
-    PAPFindFriendsViewController *showFriends = [[PAPFindFriendsViewController alloc]init];
+    PAPFindFriendsViewController *showFollowers = [[PAPFindFriendsViewController alloc]initWithStyle:UITableViewStylePlain type:@"followers"];
     
-    [self.navigationController pushViewController:showFriends animated:YES];
+    [self.navigationController pushViewController:showFollowers animated:YES];
+}
+
+- (void)showFollowing:(id)selector{
+    PAPFindFriendsViewController *showFollowing = [[PAPFindFriendsViewController alloc]initWithStyle:UITableViewStylePlain type:@"following"];
+    
+    [self.navigationController pushViewController:showFollowing animated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated{

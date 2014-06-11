@@ -8,4 +8,6 @@
 
 @interface PAPFindFriendsViewController : PFQueryTableViewController <PAPFindFriendsCellDelegate>
 
+- (id)initWithStyle:(UITableViewStyle)style type:(NSString *)type;
+
 @end

@@ -6,10 +6,8 @@
 
 #import "PAPFindFriendsViewController.h"
 #import "PAPProfileImageView.h"
-#import "AppDelegate.h"
 #import "PAPLoadMoreCell.h"
 #import "PAPAccountViewController.h"
-#import "MBProgressHUD.h"
 
 typedef enum {
     PAPFindFriendsFollowingNone = 0,    // User isn't following anybody in Friends list
@@ -19,6 +17,7 @@ typedef enum {
 
 @interface PAPFindFriendsViewController ()
 @property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, assign) NSString *type;
 @property (nonatomic, assign) PAPFindFriendsFollowStatus followStatus;
 @property (nonatomic, strong) NSMutableDictionary *outstandingFollowQueries;
 @property (nonatomic, strong) NSMutableDictionary *outstandingCountQueries;
@@ -36,9 +35,11 @@ typedef enum {
 @synthesize outstandingCountQueries;
 #pragma mark - Initialization
 
-- (id)initWithStyle:(UITableViewStyle)style {
+- (id)initWithStyle:(UITableViewStyle)style type:(NSString *)type{
     self = [super initWithStyle:style];
     if (self) {
+        
+        self.type = type;
         
         self.outstandingFollowQueries = [NSMutableDictionary dictionary];
         self.outstandingCountQueries = [NSMutableDictionary dictionary];
@@ -55,15 +56,15 @@ typedef enum {
 }
 
 
+
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
     [super viewDidLoad];
-
     
-    self.navigationItem.title = @"Followers";
+    self.navigationItem.title = [self.type isEqualToString:@"following"] ? @"Following" : @"Followers";
     
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [backButton setFrame:CGRectMake(0, 0, 22.0f, 22.0f)];
@@ -89,20 +90,39 @@ typedef enum {
 #pragma mark - PFQueryTableViewController
 
 - (PFQuery *)queryForTable {
-    // Use cached facebook friend ids
-    NSArray *facebookFriends = [[PAPCache sharedCache] facebookFriends];
     
-    // Query for all friends you have on facebook and who are using the app
-    PFQuery *friendsQuery = [PFUser query];
-    [friendsQuery whereKey:kPAPUserFacebookIDKey containedIn:facebookFriends];
+    PFQuery *query;
     
-    // Query for all auto-follow accounts
-    NSMutableArray *autoFollowAccountFacebookIds = [[NSMutableArray alloc] initWithArray:kPAPAutoFollowAccountFacebookIds];
-    [autoFollowAccountFacebookIds removeObject:[[PFUser currentUser] objectForKey:kPAPUserFacebookIDKey]];
-    PFQuery *teamstoryStaffQuery = [PFUser query];
-    [teamstoryStaffQuery whereKey:kPAPUserFacebookIDKey containedIn:autoFollowAccountFacebookIds];
+    if([self.type isEqualToString:@"following"]){
         
-    PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:friendsQuery, teamstoryStaffQuery, nil]];
+        // Use cached facebook friend ids
+        NSArray *facebookFriends = [[PAPCache sharedCache] facebookFriends];
+        
+        // Query for all friends you have on facebook and who are using the app
+        PFQuery *friendsQuery = [PFUser query];
+        [friendsQuery whereKey:kPAPUserFacebookIDKey containedIn:facebookFriends];
+        
+        // Query for all auto-follow accounts
+        NSMutableArray *autoFollowAccountFacebookIds = [[NSMutableArray alloc] initWithArray:kPAPAutoFollowAccountFacebookIds];
+        [autoFollowAccountFacebookIds removeObject:[[PFUser currentUser] objectForKey:kPAPUserFacebookIDKey]];
+        PFQuery *teamstoryStaffQuery = [PFUser query];
+        [teamstoryStaffQuery whereKey:kPAPUserFacebookIDKey containedIn:autoFollowAccountFacebookIds];
+            
+        query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:friendsQuery, teamstoryStaffQuery, nil]];
+        
+    }else if([self.type isEqualToString:@"followers"]){
+        
+        PFQuery *queryFollowerCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
+        [queryFollowerCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
+        [queryFollowerCount whereKey:kPAPActivityToUserKey equalTo:[PFUser currentUser]];
+        [queryFollowerCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
+        
+        [queryFollowerCount includeKey:kPAPActivityFromUserKey];
+        
+        query = queryFollowerCount;
+    }
+    
+    
     query.cachePolicy = kPFCachePolicyNetworkOnly;
     
     if (self.objects.count == 0) {
@@ -116,38 +136,34 @@ typedef enum {
 
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
-   
-    PFQuery *isFollowingQuery = [PFQuery queryWithClassName:kPAPActivityClassKey];
-    [isFollowingQuery whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
-    [isFollowingQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
-    [isFollowingQuery whereKey:kPAPActivityToUserKey containedIn:self.objects];
-    [isFollowingQuery setCachePolicy:kPFCachePolicyNetworkOnly];
     
-    [isFollowingQuery countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
-        if (!error) {
-            if (number == self.objects.count) {
-                self.followStatus = PAPFindFriendsFollowingAll;
-                for (PFUser *user in self.objects) {
-                    [[PAPCache sharedCache] setFollowStatus:YES user:user];
-                }
-            } else if (number == 0) {
-                self.followStatus = PAPFindFriendsFollowingNone;
-                for (PFUser *user in self.objects) {
-                    [[PAPCache sharedCache] setFollowStatus:NO user:user];
-                }
-            } else {
-                self.followStatus = PAPFindFriendsFollowingSome;
+        // get user objects based on type of screen
+        NSMutableArray *results = [[NSMutableArray alloc]init];
+    
+        if([self.type isEqualToString:@"following"]){
+            [results addObjectsFromArray:self.objects];
+        }else if([self.type isEqualToString:@"followers"]){
+            for (PFObject *obj in self.objects) {
+                [results addObject:[obj objectForKey:kPAPActivityFromUserKey]];
             }
         }
-        
-        if (self.objects.count == 0) {
-            self.navigationItem.rightBarButtonItem = nil;
-        }
-    }];
     
-    if (self.objects.count == 0) {
-        self.navigationItem.rightBarButtonItem = nil;
-    }
+        PFQuery *isFollowingQuery = [PFQuery queryWithClassName:kPAPActivityClassKey];
+        [isFollowingQuery whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
+        [isFollowingQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
+        [isFollowingQuery whereKey:kPAPActivityToUserKey containedIn:results];
+        [isFollowingQuery setCachePolicy:kPFCachePolicyNetworkOnly];
+    
+        [isFollowingQuery includeKey:kPAPActivityToUserKey];
+        
+        [isFollowingQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                for (PFObject *obj in objects) {
+                    PFUser *followUser = [obj objectForKey:kPAPActivityToUserKey];
+                    [[PAPCache sharedCache] setFollowStatus:YES user:followUser];
+                }
+            }
+        }];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
@@ -158,83 +174,19 @@ typedef enum {
         cell = [[PAPFindFriendsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FriendCellIdentifier];
         [cell setDelegate:self];
     }
-        
-    [cell setUser:(PFUser*)object];
-
-    [cell.photoLabel setText:@"0 photos"];
     
-    NSDictionary *attributes = [[PAPCache sharedCache] attributesForUser:(PFUser *)object];
+    PFUser *followUser = [self.type isEqualToString:@"followers"] ? [object objectForKey:@"fromUser"]:(PFUser *)object;
     
-    if (attributes) {
-        // set them now
-        NSString *pluralizedPhoto;
-        NSNumber *number = [[PAPCache sharedCache] photoCountForUser:(PFUser *)object];
-        if ([number intValue] == 1) {
-            pluralizedPhoto = @"photo";
-        } else {
-            pluralizedPhoto = @"photos";
-        }
-        [cell.photoLabel setText:[NSString stringWithFormat:@"%@ %@", number, pluralizedPhoto]];
-    } else {
-        @synchronized(self) {
-            NSNumber *outstandingCountQueryStatus = [self.outstandingCountQueries objectForKey:indexPath];
-            if (!outstandingCountQueryStatus) {
-                [self.outstandingCountQueries setObject:[NSNumber numberWithBool:YES] forKey:indexPath];
-                PFQuery *photoNumQuery = [PFQuery queryWithClassName:kPAPPhotoClassKey];
-                [photoNumQuery whereKey:kPAPPhotoUserKey equalTo:object];
-                [photoNumQuery setCachePolicy:kPFCachePolicyCacheThenNetwork];
-                [photoNumQuery countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
-                    @synchronized(self) {
-                        [[PAPCache sharedCache] setPhotoCount:[NSNumber numberWithInt:number] user:(PFUser *)object];
-                        [self.outstandingCountQueries removeObjectForKey:indexPath];
-                    }
-                    PAPFindFriendsCell *actualCell = (PAPFindFriendsCell*)[tableView cellForRowAtIndexPath:indexPath];
-                    NSString *pluralizedPhoto;
-                    if (number == 1) {
-                        pluralizedPhoto = @"photo";
-                    } else {
-                        pluralizedPhoto = @"photos";
-                    }
-                    [actualCell.photoLabel setText:[NSString stringWithFormat:@"%d %@", number, pluralizedPhoto]];
-                    
-                }];
-            };
-        }
-    }
+    [cell setUser:followUser];
+    
+    NSDictionary *attributes = [[PAPCache sharedCache] attributesForUser:followUser];
 
     cell.followButton.selected = NO;
     cell.tag = indexPath.row;
     
-    if (self.followStatus == PAPFindFriendsFollowingSome) {
-        if (attributes) {
-            [cell.followButton setSelected:[[PAPCache sharedCache] followStatusForUser:(PFUser *)object]];
-        } else {
-            @synchronized(self) {
-                NSNumber *outstandingQuery = [self.outstandingFollowQueries objectForKey:indexPath];
-                if (!outstandingQuery) {
-                    [self.outstandingFollowQueries setObject:[NSNumber numberWithBool:YES] forKey:indexPath];
-                    PFQuery *isFollowingQuery = [PFQuery queryWithClassName:kPAPActivityClassKey];
-                    [isFollowingQuery whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
-                    [isFollowingQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
-                    [isFollowingQuery whereKey:kPAPActivityToUserKey equalTo:object];
-                    [isFollowingQuery setCachePolicy:kPFCachePolicyCacheThenNetwork];
-                    
-                    [isFollowingQuery countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
-                        @synchronized(self) {
-                            [self.outstandingFollowQueries removeObjectForKey:indexPath];
-                            [[PAPCache sharedCache] setFollowStatus:(!error && number > 0) user:(PFUser *)object];
-                        }
-                        if (cell.tag == indexPath.row) {
-                            [cell.followButton setSelected:(!error && number > 0)];
-                        }
-                    }];
-                }
-            }
-        }
-    } else {
-        [cell.followButton setSelected:(self.followStatus == PAPFindFriendsFollowingAll)];
+    if (attributes) {
+        [cell.followButton setSelected:[[PAPCache sharedCache] followStatusForUser:followUser]];
     }
-        
     return cell;
 }
 
@@ -274,62 +226,6 @@ typedef enum {
 
 - (void)backButtonAction:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)followAllFriendsButtonAction:(id)sender {
-    [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
-
-    self.followStatus = PAPFindFriendsFollowingAll;
-    
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.01 * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-       
-        NSMutableArray *indexPaths = [NSMutableArray arrayWithCapacity:self.objects.count];
-        for (int r = 0; r < self.objects.count; r++) {
-            PFObject *user = [self.objects objectAtIndex:r];
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:r inSection:0];
-            PAPFindFriendsCell *cell = (PAPFindFriendsCell *)[self tableView:self.tableView cellForRowAtIndexPath:indexPath object:user];
-            cell.followButton.selected = YES;
-            [indexPaths addObject:indexPath];
-        }
-        
-        [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-        [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
-        
-        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:2.0f target:self selector:@selector(followUsersTimerFired:) userInfo:nil repeats:NO];
-        [PAPUtility followUsersEventually:self.objects block:^(BOOL succeeded, NSError *error) {
-            // note -- this block is called once for every user that is followed successfully. We use a timer to only execute the completion block once no more saveEventually blocks have been called in 2 seconds
-            [timer setFireDate:[NSDate dateWithTimeIntervalSinceNow:2.0f]];
-        }];
-
-    });
-}
-
-- (void)unfollowAllFriendsButtonAction:(id)sender {
-    [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
-
-    self.followStatus = PAPFindFriendsFollowingNone;
-    
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.01 * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-
-        NSMutableArray *indexPaths = [NSMutableArray arrayWithCapacity:self.objects.count];
-        for (int r = 0; r < self.objects.count; r++) {
-            PFObject *user = [self.objects objectAtIndex:r];
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:r inSection:0];
-            PAPFindFriendsCell *cell = (PAPFindFriendsCell *)[self tableView:self.tableView cellForRowAtIndexPath:indexPath object:user];
-            cell.followButton.selected = NO;
-            [indexPaths addObject:indexPath];
-        }
-        
-        [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-        [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
-
-        [PAPUtility unfollowUsersEventually:self.objects];
-
-        [[NSNotificationCenter defaultCenter] postNotificationName:PAPUtilityUserFollowingChangedNotification object:nil];
-    });
-
 }
 
 - (void)shouldToggleFollowFriendForCell:(PAPFindFriendsCell*)cell {
