@@ -45,9 +45,6 @@
         self.avatarImageView = [[PAPProfileImageView alloc] init];
         [self.avatarImageView setFrame:CGRectMake( 10.0f, 14.0f, 40.0f, 40.0f)];
         
-        self.avatarImageView.layer.cornerRadius = 20.0f;
-        self.avatarImageView.layer.masksToBounds = YES;
-        
         [self.contentView addSubview:self.avatarImageView];
         
         self.avatarImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
