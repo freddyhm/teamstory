@@ -482,6 +482,8 @@
                 
                 if (![[self.user objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
                     
+                    self.navigationItem.rightBarButtonItem = nil;
+                    
                     // check if the currentUser is following this user
                     PFQuery *queryIsFollowing = [PFQuery queryWithClassName:kPAPActivityClassKey];
                     [queryIsFollowing whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
@@ -802,7 +804,7 @@
 }
 
 - (void)configureUnfollowButton {
-    
+        
     [self.multiActionButton setImage:[UIImage imageNamed:@"btn_following.png"] forState:UIControlStateNormal];
     [self.multiActionButton removeTarget:self action:@selector(settingsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.multiActionButton addTarget:self action:@selector(unfollowButtonAction:) forControlEvents:UIControlEventTouchUpInside];
