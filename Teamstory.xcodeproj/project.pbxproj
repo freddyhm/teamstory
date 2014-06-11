@@ -429,6 +429,10 @@
 		D5D1042818B5C7AF0084C901 /* konotor.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042718B5C7AF0084C901 /* konotor.png */; };
 		D5D1042B18B5CF4E0084C901 /* button-feedback.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042918B5CF4E0084C901 /* button-feedback.png */; };
 		D5D1042C18B5CF4E0084C901 /* button-feedback@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */; };
+		D5D571151947F8E900354340 /* btn_following_user.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571111947F8E900354340 /* btn_following_user.png */; };
+		D5D571161947F8E900354340 /* btn_following_user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571121947F8E900354340 /* btn_following_user@2x.png */; };
+		D5D571171947F8E900354340 /* btn_no_follow_user.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571131947F8E900354340 /* btn_no_follow_user.png */; };
+		D5D571181947F8E900354340 /* btn_no_follow_user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571141947F8E900354340 /* btn_no_follow_user@2x.png */; };
 		D5FB8E6C18F79E2D0034CAE6 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FB8E6B18F79E2D0034CAE6 /* Crashlytics.framework */; };
 		D5FC095218A9B518000D85F1 /* CropResizeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095018A9B518000D85F1 /* CropResizeViewController.m */; };
 		D5FC095518A9B543000D85F1 /* CameraFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095418A9B543000D85F1 /* CameraFilterViewController.m */; };
@@ -936,6 +940,10 @@
 		D5D1042718B5C7AF0084C901 /* konotor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor.png; sourceTree = "<group>"; };
 		D5D1042918B5CF4E0084C901 /* button-feedback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback.png"; sourceTree = "<group>"; };
 		D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback@2x.png"; sourceTree = "<group>"; };
+		D5D571111947F8E900354340 /* btn_following_user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_following_user.png; sourceTree = "<group>"; };
+		D5D571121947F8E900354340 /* btn_following_user@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_following_user@2x.png"; sourceTree = "<group>"; };
+		D5D571131947F8E900354340 /* btn_no_follow_user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_no_follow_user.png; sourceTree = "<group>"; };
+		D5D571141947F8E900354340 /* btn_no_follow_user@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_no_follow_user@2x.png"; sourceTree = "<group>"; };
 		D5D659F119155A1E00FAC142 /* activity.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = activity.js; sourceTree = "<group>"; };
 		D5D659F219155A1E00FAC142 /* app.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = app.js; sourceTree = "<group>"; };
 		D5D659F319155A1E00FAC142 /* installation.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = installation.js; sourceTree = "<group>"; };
@@ -1130,6 +1138,10 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				D5D571111947F8E900354340 /* btn_following_user.png */,
+				D5D571121947F8E900354340 /* btn_following_user@2x.png */,
+				D5D571131947F8E900354340 /* btn_no_follow_user.png */,
+				D5D571141947F8E900354340 /* btn_no_follow_user@2x.png */,
 				D575A0691947834C00C6BCC2 /* btn_editprofile.png */,
 				D575A06A1947834C00C6BCC2 /* btn_editprofile@2x.png */,
 				D575A06B1947834C00C6BCC2 /* btn_follow.png */,
@@ -1976,6 +1988,7 @@
 				D528C381191034DE00CEEA35 /* ButtonLikeCommentSelected@2x.png in Resources */,
 				D52C1E4218D9515D00625887 /* konotor_supportprofile@2x.png in Resources */,
 				462FCB8A188C863E005059F3 /* button_setting_selected@2x.png in Resources */,
+				D5D571181947F8E900354340 /* btn_no_follow_user@2x.png in Resources */,
 				465B19B518B81FE500EDBCFC /* browser-refresh.png in Resources */,
 				46B31EEE184E35150028D11C /* profileLocation.png in Resources */,
 				C4BE670D157FC7D000A291C2 /* Icon-72.png in Resources */,
@@ -1992,6 +2005,7 @@
 				D52C1E2618D9515D00625887 /* KonotorFeedbackScreenViewController.xib in Resources */,
 				C4BE6712157FC7D000A291C2 /* Icon.png in Resources */,
 				D52C1E4418D9515D00625887 /* konotor_uploading@2x.png in Resources */,
+				D5D571171947F8E900354340 /* btn_no_follow_user.png in Resources */,
 				C4BE6713157FC7D000A291C2 /* Icon@2x.png in Resources */,
 				D5BFDED918CC84A5004FEC42 /* newyork.png in Resources */,
 				C4BE6714157FC7D000A291C2 /* iTunesArtwork in Resources */,
@@ -2011,6 +2025,7 @@
 				D52C1E3C18D9515D00625887 /* konotor_send@2x.png in Resources */,
 				465B19AD18B81FE500EDBCFC /* browser-button-forward-no.png in Resources */,
 				D5BFDEE118CC84A5004FEC42 /* vancity.png in Resources */,
+				D5D571151947F8E900354340 /* btn_following_user.png in Resources */,
 				4602FD1418BD553B0097DBEC /* foundersuite-logo.png in Resources */,
 				D59B998E18C5A902002D6EFE /* Default-568h@2x.png in Resources */,
 				462FCB61188C6AE9005059F3 /* DiscoverNavigationBar.png in Resources */,
@@ -2139,6 +2154,7 @@
 				C4BE67A5157FC7F700A291C2 /* IconComment.png in Resources */,
 				C4BE67A6157FC7F700A291C2 /* IconComment@2x.png in Resources */,
 				465A4EDA18A8222A00E43DC6 /* iconlocation@2x.png in Resources */,
+				D5D571161947F8E900354340 /* btn_following_user@2x.png in Resources */,
 				D5C0312019391749000C98B7 /* bubble_left.png in Resources */,
 				46B31EF8184E3DCB0028D11C /* profileAddNew.png in Resources */,
 				46FB0A841888989800E978CD /* tab-people-unselected.png in Resources */,

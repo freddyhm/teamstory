@@ -44,26 +44,12 @@ typedef enum {
         
         self.outstandingFollowQueries = [NSMutableDictionary dictionary];
         self.outstandingCountQueries = [NSMutableDictionary dictionary];
-        
-        self.selectedEmailAddress = @"";
-
-        // Whether the built-in pull-to-refresh is enabled
-        self.pullToRefreshEnabled = YES;
-        
-        // Whether the built-in pull-to-refresh is enabled
-        if (NSClassFromString(@"UIRefreshControl")) {
-            self.pullToRefreshEnabled = NO;
-        } else {
-            self.pullToRefreshEnabled = YES;
-        }
-        
+            
         // The number of objects to show per page
         self.objectsPerPage = 15;
         
         // Used to determine Follow/Unfollow All button status
         self.followStatus = PAPFindFriendsFollowingSome;
-        
-        [self.tableView setSeparatorColor:[UIColor colorWithRed:210.0f/255.0f green:203.0f/255.0f blue:182.0f/255.0f alpha:1.0]];
     }
     return self;
 }
@@ -72,13 +58,11 @@ typedef enum {
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    
     [super viewDidLoad];
     
-    UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
-    [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]]];
-    self.tableView.backgroundView = texturedBackgroundView;
-        
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"TitleFindFriends.png"]];
+    self.navigationItem.title = @"Followers";
     
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [backButton setFrame:CGRectMake(0, 0, 22.0f, 22.0f)];
@@ -86,39 +70,6 @@ typedef enum {
     [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
     [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    
-    if ([MFMailComposeViewController canSendMail] || [MFMessageComposeViewController canSendText]) {
-        self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 67)];
-        [self.headerView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundFindFriendsCell.png"]]];
-        UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [clearButton setBackgroundColor:[UIColor clearColor]];
-        [clearButton addTarget:self action:@selector(inviteFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-        [clearButton setFrame:self.headerView.frame];
-        [self.headerView addSubview:clearButton];
-        NSString *inviteString = @"Invite friends";
-        
-        CGSize inviteStringSize = ([inviteString boundingRectWithSize:CGSizeMake(310, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:18]} context:nil]).size;
-        
-        UILabel *inviteLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, (self.headerView.frame.size.height-inviteStringSize.height)/2, inviteStringSize.width, inviteStringSize.height)];
-        [inviteLabel setText:inviteString];
-        [inviteLabel setFont:[UIFont boldSystemFontOfSize:18]];
-        [inviteLabel setTextColor:[UIColor colorWithRed:87.0f/255.0f green:72.0f/255.0f blue:49.0f/255.0f alpha:1.0]];
-        [inviteLabel setBackgroundColor:[UIColor clearColor]];
-        [self.headerView addSubview:inviteLabel];
-        UIImageView *separatorImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"SeparatorTimeline.png"]];
-        [separatorImage setFrame:CGRectMake(0, self.headerView.frame.size.height-2, 320, 2)];
-        [self.headerView addSubview:separatorImage];
-        [self.tableView setTableHeaderView:self.headerView];
-    }
-    
-    if (NSClassFromString(@"UIRefreshControl")) {
-        // Use the new iOS 6 refresh control.
-        UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-        self.refreshControl = refreshControl;
-        self.refreshControl.tintColor = [UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:1.0f];
-        [self.refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
-        self.pullToRefreshEnabled = NO;
-    }
 }
 
 
@@ -163,11 +114,7 @@ typedef enum {
 
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
-    
-    if (NSClassFromString(@"UIRefreshControl")) {
-        [self.refreshControl endRefreshing];
-    }
-
+   
     PFQuery *isFollowingQuery = [PFQuery queryWithClassName:kPAPActivityClassKey];
     [isFollowingQuery whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
     [isFollowingQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
@@ -212,7 +159,7 @@ typedef enum {
         cell = [[PAPFindFriendsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FriendCellIdentifier];
         [cell setDelegate:self];
     }
-    
+        
     [cell setUser:(PFUser*)object];
 
     [cell.photoLabel setText:@"0 photos"];
@@ -288,7 +235,7 @@ typedef enum {
     } else {
         [cell.followButton setSelected:(self.followStatus == PAPFindFriendsFollowingAll)];
     }
-    
+        
     return cell;
 }
 
@@ -429,8 +376,7 @@ typedef enum {
     
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.01 * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Unfollow All" style:UIBarButtonItemStyleBordered target:self action:@selector(unfollowAllFriendsButtonAction:)];
-
+       
         NSMutableArray *indexPaths = [NSMutableArray arrayWithCapacity:self.objects.count];
         for (int r = 0; r < self.objects.count; r++) {
             PFObject *user = [self.objects objectAtIndex:r];
@@ -460,7 +406,6 @@ typedef enum {
 
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.01 * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Follow All" style:UIBarButtonItemStyleBordered target:self action:@selector(followAllFriendsButtonAction:)];
 
         NSMutableArray *indexPaths = [NSMutableArray arrayWithCapacity:self.objects.count];
         for (int r = 0; r < self.objects.count; r++) {
@@ -502,11 +447,10 @@ typedef enum {
 }
 
 - (void)configureUnfollowAllButton {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Unfollow All" style:UIBarButtonItemStyleBordered target:self action:@selector(unfollowAllFriendsButtonAction:)];
+   
 }
 
 - (void)configureFollowAllButton {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Follow All" style:UIBarButtonItemStyleBordered target:self action:@selector(followAllFriendsButtonAction:)];
 }
 
 - (void)presentMailComposeViewController:(NSString *)recipient {
@@ -544,10 +488,6 @@ typedef enum {
 - (void)followUsersTimerFired:(NSTimer *)timer {
     [self.tableView reloadData];
     [[NSNotificationCenter defaultCenter] postNotificationName:PAPUtilityUserFollowingChangedNotification object:nil];
-}
-
-- (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl {
-    [self loadObjects];
 }
 
 @end
