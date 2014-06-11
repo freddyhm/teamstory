@@ -491,7 +491,6 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [self dismissKeyboard];
-    [self dismissViewControllerAnimated:NO completion:nil];
     [self.profilePictureImageView removeFromSuperview];
     
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
@@ -522,7 +521,7 @@
         */
         
         //prevents from poping back to -20 pixels;
-        [self.backgroundView setContentOffset:CGPointMake(0, 0)];
+        [self.backgroundView setContentOffset:CGPointMake(0, 20)];
         
         cameraButton.frame = CGRectMake(10.0f, 15.0f, 70.0f, 70.0f);
         cameraButton.frame = CGRectIntegral(cameraButton.frame);
