@@ -486,6 +486,7 @@
 #pragma mark - UIImagePickerDelegate
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [self.backgroundView setContentOffset:CGPointMake(0, 20)];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
