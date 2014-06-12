@@ -272,7 +272,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [backgroundView setBackgroundColor:[UIColor whiteColor]];
         [self addSubview:backgroundView];
         viewOffset = 20;
-        self.photoDescriptionLabel.frame = CGRectMake(baseHorizontalOffset * 2, nameHeaderHeight + 5.0f, mainImageWidth - baseHorizontalOffset * 2 + viewOffset, expectedSize.height + 5.0f);
+        self.photoDescriptionLabel.frame = CGRectMake(baseHorizontalOffset * 2, nameHeaderHeight + 5.0f, 292.0f, expectedSize.height + 5.0f);
+                
         [self addSubview:self.photoDescriptionLabel];
         
         self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height + 15.0f, mainImageWidth, mainImageHeight)];
@@ -348,14 +349,29 @@ static TTTTimeIntervalFormatter *timeFormatter;
             // we resize the button to fit the user's name to avoid having a huge touch area
             CGPoint userButtonPoint = CGPointMake(50.0f, 6.0f);
             CGFloat constrainWidth = self.nameHeaderView.bounds.size.width - (avatarImageView.bounds.origin.x + avatarImageView.bounds.size.width);
+            
             CGSize constrainSize = CGSizeMake(constrainWidth, self.nameHeaderView.bounds.size.height - userButtonPoint.y*2.0f);
-            CGSize userButtonSize = [userButton.titleLabel.text sizeWithFont:userButton.titleLabel.font constrainedToSize:constrainSize lineBreakMode:NSLineBreakByTruncatingTail];
+            
+            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+            paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
+            
+            CGSize userButtonSize = ([userButton.titleLabel.text boundingRectWithSize:constrainSize
+                                                                                   options:NSStringDrawingUsesLineFragmentOrigin
+                                                                                attributes:@{NSFontAttributeName:userButton.titleLabel.font, NSParagraphStyleAttributeName: paragraphStyle.copy}
+                                                                                   context:nil]).size;
+            
             CGRect userButtonFrame = CGRectMake(userButtonPoint.x, userButtonPoint.y, userButtonSize.width, userButtonSize.height);
             [userButton setFrame:userButtonFrame];
             
             // Create time label
             NSString *timeString = [timeFormatter stringForTimeIntervalFromDate:[NSDate date] toDate:[self.photo createdAt]];
-            CGSize timeLabelSize = [timeString sizeWithFont:[UIFont systemFontOfSize:11] constrainedToSize:CGSizeMake(nameLabelMaxWidth, CGFLOAT_MAX) lineBreakMode:NSLineBreakByTruncatingTail];
+            
+            
+            CGSize timeLabelSize = ([timeString boundingRectWithSize:CGSizeMake(nameLabelMaxWidth, CGFLOAT_MAX)
+                                                                              options:NSStringDrawingUsesLineFragmentOrigin
+                                                                           attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11], NSParagraphStyleAttributeName: paragraphStyle.copy}
+                                                                              context:nil]).size;
+            
             UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(timeLabelX, nameLabelY+userButtonSize.height, timeLabelSize.width, timeLabelSize.height)];
             [timeLabel setText:timeString];
             [timeLabel setFont:[UIFont systemFontOfSize:11.0f]];

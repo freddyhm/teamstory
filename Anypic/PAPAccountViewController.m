@@ -145,10 +145,12 @@
                 CGSize maximumLabelSize = CGSizeMake(300.0f, MAXFLOAT);
                 
                 CGSize expectedSize = [self.descriptionLabel sizeThatFits:maximumLabelSize];
-                CGSize industry_expectedSize = [self.industry sizeWithFont:[UIFont systemFontOfSize:13.0f]];
                 
+                
+                CGSize industry_expectedSize = [self.industry sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}];
+
                 if ([self.websiteInfo length] > 0) {
-                    website_expectedSize = [self.websiteInfo sizeWithFont:[UIFont systemFontOfSize:13.0f]];
+                    website_expectedSize = [self.websiteInfo sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}];
                 } else {
                     website_expectedSize = CGSizeMake(0.0f, 0.0f);
                 }
@@ -500,10 +502,10 @@
         CGSize expectedSize = [self.descriptionLabel sizeThatFits:maximumLabelSize];
         
         
-        CGSize industry_expectedSize = [self.industryLabel.text sizeWithFont:[UIFont systemFontOfSize:13.0f]];
+        CGSize industry_expectedSize = [self.industryLabel.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}];
         
         if ([self.websiteInfo length] > 0) {
-            website_expectedSize = [self.websiteInfo sizeWithFont:[UIFont systemFontOfSize:13.0f]];
+            website_expectedSize = [self.websiteInfo sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}];
         } else {
             website_expectedSize = CGSizeMake(0.0f, 0.0f);
         }

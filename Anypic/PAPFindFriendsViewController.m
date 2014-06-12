@@ -96,7 +96,9 @@ typedef enum {
         [clearButton setFrame:self.headerView.frame];
         [self.headerView addSubview:clearButton];
         NSString *inviteString = @"Invite friends";
-        CGSize inviteStringSize = [inviteString sizeWithFont:[UIFont boldSystemFontOfSize:18] constrainedToSize:CGSizeMake(310, CGFLOAT_MAX) lineBreakMode:NSLineBreakByTruncatingTail];
+        
+        CGSize inviteStringSize = ([inviteString boundingRectWithSize:CGSizeMake(310, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:18]} context:nil]).size;
+        
         UILabel *inviteLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, (self.headerView.frame.size.height-inviteStringSize.height)/2, inviteStringSize.width, inviteStringSize.height)];
         [inviteLabel setText:inviteString];
         [inviteLabel setFont:[UIFont boldSystemFontOfSize:18]];

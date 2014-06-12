@@ -15,7 +15,6 @@
 #import "SVProgressHUD.h"
 #import "MBProgressHUD.h"
 
-
 enum ActionSheetTags {
     MainActionSheetTag = 0,
     reportTypeTag = 1,
@@ -132,9 +131,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     NSString *caption_local = [self.photo objectForKey:@"caption"];
     
     if ([caption_local length] > 0) {
+
         CGSize maximumLabelSize = CGSizeMake(320.0f - 7.5f * 4, MAXFLOAT);
-        CGSize expectedSize = [caption_local sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:maximumLabelSize];
+
         
+        CGSize expectedSize = ([caption_local boundingRectWithSize:maximumLabelSize options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]} context:nil]).size;
+                
         // Set table header
         self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 351.0f + expectedSize.height + 43.0f + 20.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
         self.headerView.delegate = self;
@@ -419,12 +421,22 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     NSDictionary* info = [note userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     NSInteger offset = 0.0f;
-    if ([UIScreen mainScreen].bounds.size.height == 480) {
-        offset = 60.0f;
-    } else {
-        offset = 150.0f;
-    }
     
+    // Check system version for keyboard offset, ios8 added suggestion bar 
+    if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
+        if ([UIScreen mainScreen].bounds.size.height == 480) {
+            offset = -20.0f;
+        } else {
+            offset = 60.0f;
+        }
+    }else{
+        if ([UIScreen mainScreen].bounds.size.height == 480) {
+            offset = 60.0f;
+        } else {
+            offset = 150.0f;
+        }
+    }
+
     // set new offset based on custom text view + keyboard + phone offset
     [self.tableView setContentOffset:CGPointMake(0.0f, ([self getCurrentTableContentHeightWithTextView]- kbSize.height - offset)) animated:YES];
 }
