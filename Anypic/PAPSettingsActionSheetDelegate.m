@@ -10,6 +10,8 @@
 #import "AppDelegate.h"
 #import "PAPProfileSettingViewController.h"
 #import "PAPwebviewViewController.h"
+#import "PAPNotificationViewController.h"
+
 
 // ActionSheet button indexes
 typedef enum {
@@ -18,12 +20,23 @@ typedef enum {
     kPAPPrivacyPolicy,
     kPAPTermsofUse,
     kPAPSettingsLogout,
+    kPAPNotification,
     kPAPSettingsNumberOfButtons
 } kPAPSettingsActionSheetButtons;
  
 @implementation PAPSettingsActionSheetDelegate
 
 @synthesize navController;
+
+#if DEBUG
+static NSString *const kevin_account = @"wKx1GsCnSq";
+static NSString *const justin_account = @"WUZTy3Ayxy";
+static NSString *const freddy_account = @"4Su2vXzhFq";
+#else
+static NSString *const kevin_account = @"3KiW2NoGuT";
+static NSString *const justin_account = @"vB648p1bT1";
+static NSString *const freddy_account = @"rblDQcdZcY";
+#endif
 
 #pragma mark - Initialization
 
@@ -99,6 +112,17 @@ typedef enum {
             PAPwebviewViewController *webviewController = [[PAPwebviewViewController alloc] initWithWebsite:@"http://teamstoryapp.com/version"];
             webviewController.hidesBottomBarWhenPushed = YES;
             [navController pushViewController:webviewController animated:YES];
+            break;
+        }
+        case kPAPNotification:
+        {
+            if ([[[PFUser currentUser] objectId] isEqualToString:kevin_account] || [[[PFUser currentUser] objectId] isEqualToString:justin_account] || [[[PFUser currentUser] objectId] isEqualToString:freddy_account]) {
+                
+                PAPNotificationViewController *notificationController = [[PAPNotificationViewController alloc] init];
+                notificationController.hidesBottomBarWhenPushed = YES;
+                [navController pushViewController:notificationController animated:YES];
+            }
+
             break;
         }
         default:

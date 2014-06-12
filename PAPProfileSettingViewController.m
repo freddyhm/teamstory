@@ -335,6 +335,7 @@
             [self.backgroundView addSubview:lineView];
 
             self.email_address = [[UITextField alloc] initWithFrame:email_address_frame];
+            self.email_address.autocorrectionType = UITextAutocorrectionTypeNo;
             [self.email_address setBackgroundColor:[UIColor clearColor]];
             [self.email_address setFont:fonts];
             self.email_address.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -354,6 +355,7 @@
 
             CGRect location_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 2, 250.0f, 25.0f);
             self.location = [[UITextField alloc] initWithFrame:location_frame];
+            self.location.autocorrectionType = UITextAutocorrectionTypeNo;
             [self.location setBackgroundColor:[UIColor clearColor]];
             [self.location setFont:fonts];
             self.location.placeholder = location_user;
@@ -368,6 +370,7 @@
             
             CGRect description_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 3, 250.0f, 25.0f);
             self.description = [[UITextField alloc] initWithFrame:description_frame];
+            self.description.autocorrectionType = UITextAutocorrectionTypeNo;
             [self.description setBackgroundColor:[UIColor clearColor]];
             [self.description setFont:fonts];
             self.description.placeholder = description_user;
@@ -384,9 +387,10 @@
             self.industry_button = [[UIButton alloc] initWithFrame:industry_frame];
             [self.industry_button setTitle:industry_user forState:UIControlStateNormal];
             [self.industry_button setBackgroundColor:[UIColor clearColor]];
+   //         [self.industry_button.titleLabel setTextColor:[UIColor colorWithWhite:0.7f alpha:1.0f]];
+            [self.industry_button setTitleColor:[UIColor colorWithWhite:0.7f alpha:1.0f] forState:UIControlStateNormal];
             [self.industry_button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
             [self.industry_button.titleLabel setFont:fonts];
-            self.industry_button.titleLabel.textColor = [UIColor colorWithWhite:0.7f alpha:1.0f];
             [self.industry_button addTarget:self action:@selector(industry_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
             [self.backgroundView addSubview:self.industry_button];
             
@@ -397,6 +401,7 @@
             CGRect website_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 5, 250.0f, 25.0f);
             self.website = [[UITextField alloc] initWithFrame:website_frame];
             [self.website setBackgroundColor:[UIColor clearColor]];
+            self.website.autocorrectionType = UITextAutocorrectionTypeNo;
             [self.website setFont:fonts];
             self.website.placeholder = website_user;
             self.website.userInteractionEnabled = YES;
@@ -411,6 +416,7 @@
             
             CGRect twitter_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 6, 250.0f, 25.0f);
             self.twitter_textfield = [[UITextField alloc] initWithFrame:twitter_frame];
+            self.twitter_textfield.autocorrectionType = UITextAutocorrectionTypeNo;
             [self.twitter_textfield setBackgroundColor:[UIColor clearColor]];
             [self.twitter_textfield setFont:fonts];
             self.twitter_textfield.placeholder = twitter_user;
@@ -427,6 +433,7 @@
             CGRect linkedIn_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 7, 250.0f, 25.0f);
             self.linkedin_textfield = [[UITextField alloc] initWithFrame:linkedIn_frame];
             [self.linkedin_textfield setBackgroundColor:[UIColor clearColor]];
+            self.linkedin_textfield.autocorrectionType = UITextAutocorrectionTypeNo;
             [self.linkedin_textfield setFont:fonts];
             self.linkedin_textfield.placeholder = linkedin_user;
             self.linkedin_textfield.userInteractionEnabled = YES;
@@ -441,6 +448,7 @@
             
             CGRect angel_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 8, 250.0f, 25.0f);
             self.angelist_textfield = [[UITextField alloc] initWithFrame:angel_frame];
+            self.angelist_textfield.autocorrectionType = UITextAutocorrectionTypeNo;
             [self.angelist_textfield setBackgroundColor:[UIColor clearColor]];
             [self.angelist_textfield setFont:fonts];
             self.angelist_textfield.placeholder = angelist_user;
@@ -478,12 +486,12 @@
 #pragma mark - UIImagePickerDelegate
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [self.backgroundView setContentOffset:CGPointMake(0, 20)];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [self dismissKeyboard];
-    [self dismissViewControllerAnimated:NO completion:nil];
     [self.profilePictureImageView removeFromSuperview];
     
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
@@ -514,7 +522,7 @@
         */
         
         //prevents from poping back to -20 pixels;
-        [self.backgroundView setContentOffset:CGPointMake(0, 0)];
+        [self.backgroundView setContentOffset:CGPointMake(0, 20)];
         
         cameraButton.frame = CGRectMake(10.0f, 15.0f, 70.0f, 70.0f);
         cameraButton.frame = CGRectIntegral(cameraButton.frame);
@@ -1122,7 +1130,7 @@
     [industry_chooseButton removeFromSuperview];
     
     [industry_button setTitle:[industry_dataSource objectAtIndex:industry_pickerRow] forState:UIControlStateNormal];
-    [self.industry_button.titleLabel setTextColor:[UIColor blackColor]];
+    [self.industry_button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
 }
 
 
@@ -1253,7 +1261,9 @@
     self.dimView.hidden = YES;
     [self.industry_pickerView removeFromSuperview];
     [self.industry_chooseButton removeFromSuperview];
-    self.industry_button.titleLabel.textColor = [UIColor colorWithWhite:0.7f alpha:1.0f];
+    if (self.industry_button.titleLabel.textColor != [UIColor blackColor]) {
+        [self.industry_button setTitleColor:[UIColor colorWithWhite:0.7f alpha:1.0f] forState:UIControlStateNormal];
+    }
 }
 
 -(BOOL)NSStringIsValidEmail:(NSString *)checkString {
