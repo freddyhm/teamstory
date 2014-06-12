@@ -95,6 +95,7 @@ typedef enum {
     
     if([self.type isEqualToString:@"following"]){
         
+        /*
         // Use cached facebook friend ids
         NSArray *facebookFriends = [[PAPCache sharedCache] facebookFriends];
         
@@ -107,8 +108,19 @@ typedef enum {
         [autoFollowAccountFacebookIds removeObject:[[PFUser currentUser] objectForKey:kPAPUserFacebookIDKey]];
         PFQuery *teamstoryStaffQuery = [PFUser query];
         [teamstoryStaffQuery whereKey:kPAPUserFacebookIDKey containedIn:autoFollowAccountFacebookIds];
-            
-        query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:friendsQuery, teamstoryStaffQuery, nil]];
+         */
+        // Query for all current following
+        
+        //query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:friendsQuery, teamstoryStaffQuery, nil]];
+        
+        PFQuery *queryFollowingCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
+        [queryFollowingCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
+        [queryFollowingCount whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
+        [queryFollowingCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
+        
+        [queryFollowingCount includeKey:kPAPActivityToUserKey];
+        
+        query = queryFollowingCount;
         
     }else if([self.type isEqualToString:@"followers"]){
         
@@ -141,7 +153,11 @@ typedef enum {
         NSMutableArray *results = [[NSMutableArray alloc]init];
     
         if([self.type isEqualToString:@"following"]){
-            [results addObjectsFromArray:self.objects];
+            for (PFObject *obj in self.objects) {
+                [results addObject:[obj objectForKey:kPAPActivityToUserKey]];
+            }
+            
+            
         }else if([self.type isEqualToString:@"followers"]){
             for (PFObject *obj in self.objects) {
                 [results addObject:[obj objectForKey:kPAPActivityFromUserKey]];
@@ -153,7 +169,7 @@ typedef enum {
         [isFollowingQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
         [isFollowingQuery whereKey:kPAPActivityToUserKey containedIn:results];
         [isFollowingQuery setCachePolicy:kPFCachePolicyNetworkOnly];
-    
+        
         [isFollowingQuery includeKey:kPAPActivityToUserKey];
         
         [isFollowingQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -164,6 +180,7 @@ typedef enum {
                 }
             }
         }];
+
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
@@ -175,7 +192,7 @@ typedef enum {
         [cell setDelegate:self];
     }
     
-    PFUser *followUser = [self.type isEqualToString:@"followers"] ? [object objectForKey:@"fromUser"]:(PFUser *)object;
+    PFUser *followUser = [self.type isEqualToString:@"followers"] ? [object objectForKey:@"fromUser"]:[object objectForKey:@"toUser"];
     
     [cell setUser:followUser];
     
