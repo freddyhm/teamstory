@@ -352,7 +352,12 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.contentLabel setAttributedText:commentText];
             [self.contentLabel setUserInteractionEnabled:YES];
             
-            if (range.length > 0) {
+            if (range.length > 0 && [[self.user objectForKey:@"displayName"] isEqualToString:self.nameButton.titleLabel.text]) {
+                UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentInflatorAction:)];
+                gestureRec.numberOfTouchesRequired = 1;
+                gestureRec.numberOfTapsRequired = 1;
+                [self.contentLabel addGestureRecognizer:gestureRec];
+            } else if (range.length > 0) {
                 UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openUrl:)];
                 gestureRec.numberOfTouchesRequired = 1;
                 gestureRec.numberOfTapsRequired = 1;
@@ -364,6 +369,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
     
     [self setNeedsDisplay];
 
+}
+
+-(void)commentInflatorAction:(id)sender {
+    NSLog(@"touched");
 }
 
 - (void)openUrl:(id)sender {
