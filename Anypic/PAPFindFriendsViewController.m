@@ -8,29 +8,18 @@
 #import "PAPProfileImageView.h"
 #import "PAPLoadMoreCell.h"
 #import "PAPAccountViewController.h"
+#import "SVProgressHUD.h"
 
-typedef enum {
-    PAPFindFriendsFollowingNone = 0,    // User isn't following anybody in Friends list
-    PAPFindFriendsFollowingAll,         // User is following all Friends
-    PAPFindFriendsFollowingSome         // User is following some of their Friends
-} PAPFindFriendsFollowStatus;
 
 @interface PAPFindFriendsViewController ()
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, assign) NSString *type;
-@property (nonatomic, assign) PAPFindFriendsFollowStatus followStatus;
 @property (nonatomic, strong) NSMutableDictionary *outstandingFollowQueries;
 @property (nonatomic, strong) NSMutableDictionary *outstandingCountQueries;
 @end
 
-//static NSUInteger const kPAPCellFollowTag = 2;
-//static NSUInteger const kPAPCellNameLabelTag = 3;
-//static NSUInteger const kPAPCellAvatarTag = 4;
-//static NSUInteger const kPAPCellPhotoNumLabelTag = 5;
-
 @implementation PAPFindFriendsViewController
 @synthesize headerView;
-@synthesize followStatus;
 @synthesize outstandingFollowQueries;
 @synthesize outstandingCountQueries;
 #pragma mark - Initialization
@@ -46,10 +35,7 @@ typedef enum {
             
         // The number of objects to show per page
         self.objectsPerPage = 15;
-        
-        // Used to determine Follow/Unfollow All button status
-        self.followStatus = PAPFindFriendsFollowingSome;
-        
+                
         self.pullToRefreshEnabled = NO;
     }
     return self;
@@ -73,6 +59,7 @@ typedef enum {
     [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
 
+    [SVProgressHUD show];
 }
 
 
@@ -91,54 +78,49 @@ typedef enum {
 
 - (PFQuery *)queryForTable {
     
-    PFQuery *query;
     
+    /*
+     
+     // prepopulate list with facebook friends on teamstory
+     
+     // Use cached facebook friend ids
+     NSArray *facebookFriends = [[PAPCache sharedCache] facebookFriends];
+     
+     // Query for all friends you have on facebook and who are using the app
+     PFQuery *friendsQuery = [PFUser query];
+     [friendsQuery whereKey:kPAPUserFacebookIDKey containedIn:facebookFriends];
+     
+     // Query for all auto-follow accounts
+     NSMutableArray *autoFollowAccountFacebookIds = [[NSMutableArray alloc] initWithArray:kPAPAutoFollowAccountFacebookIds];
+     [autoFollowAccountFacebookIds removeObject:[[PFUser currentUser] objectForKey:kPAPUserFacebookIDKey]];
+     PFQuery *teamstoryStaffQuery = [PFUser query];
+     [teamstoryStaffQuery whereKey:kPAPUserFacebookIDKey containedIn:autoFollowAccountFacebookIds];
+     */
+    // Query for all current following
+    
+    //query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:friendsQuery, teamstoryStaffQuery, nil]];
+    
+
+    PFQuery *query = [PFQuery queryWithClassName:kPAPActivityClassKey];
+    [query whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
+   
     if([self.type isEqualToString:@"following"]){
         
-        /*
-        // Use cached facebook friend ids
-        NSArray *facebookFriends = [[PAPCache sharedCache] facebookFriends];
-        
-        // Query for all friends you have on facebook and who are using the app
-        PFQuery *friendsQuery = [PFUser query];
-        [friendsQuery whereKey:kPAPUserFacebookIDKey containedIn:facebookFriends];
-        
-        // Query for all auto-follow accounts
-        NSMutableArray *autoFollowAccountFacebookIds = [[NSMutableArray alloc] initWithArray:kPAPAutoFollowAccountFacebookIds];
-        [autoFollowAccountFacebookIds removeObject:[[PFUser currentUser] objectForKey:kPAPUserFacebookIDKey]];
-        PFQuery *teamstoryStaffQuery = [PFUser query];
-        [teamstoryStaffQuery whereKey:kPAPUserFacebookIDKey containedIn:autoFollowAccountFacebookIds];
-         */
-        // Query for all current following
-        
-        //query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:friendsQuery, teamstoryStaffQuery, nil]];
-        
-        PFQuery *queryFollowingCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
-        [queryFollowingCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
-        [queryFollowingCount whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
-        [queryFollowingCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
-        
-        [queryFollowingCount includeKey:kPAPActivityToUserKey];
-        
-        query = queryFollowingCount;
+        // get following for current user
+        [query whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
+        [query includeKey:kPAPActivityToUserKey];
         
     }else if([self.type isEqualToString:@"followers"]){
         
-        PFQuery *queryFollowerCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
-        [queryFollowerCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
-        [queryFollowerCount whereKey:kPAPActivityToUserKey equalTo:[PFUser currentUser]];
-        [queryFollowerCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
-        
-        [queryFollowerCount includeKey:kPAPActivityFromUserKey];
-        
-        query = queryFollowerCount;
+        // get followers for current user
+        [query whereKey:kPAPActivityToUserKey equalTo:[PFUser currentUser]];
+        [query includeKey:kPAPActivityFromUserKey];
     }
-    
-    
-    query.cachePolicy = kPFCachePolicyNetworkOnly;
     
     if (self.objects.count == 0) {
         query.cachePolicy = kPFCachePolicyCacheThenNetwork;
+    }else{
+        query.cachePolicy = kPFCachePolicyNetworkOnly;
     }
     
     [query orderByAscending:kPAPUserDisplayNameKey];
@@ -149,37 +131,35 @@ typedef enum {
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
     
-        // get user objects based on type of screen
-        NSMutableArray *results = [[NSMutableArray alloc]init];
+    // get user objects based on type of screen
+    NSMutableArray *results = [[NSMutableArray alloc]init];
     
-        if([self.type isEqualToString:@"following"]){
-            for (PFObject *obj in self.objects) {
-                [results addObject:[obj objectForKey:kPAPActivityToUserKey]];
+    // get proper users based on type
+    NSString *targetUser = [self.type isEqualToString:@"following"] ? kPAPActivityToUserKey : kPAPActivityFromUserKey;
+    
+    for (PFObject *obj in self.objects) {
+        [results addObject:[obj objectForKey:targetUser]];
+    }
+
+    // check and set following status for user list
+    PFQuery *isFollowingQuery = [PFQuery queryWithClassName:kPAPActivityClassKey];
+    [isFollowingQuery whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
+    [isFollowingQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
+    [isFollowingQuery whereKey:kPAPActivityToUserKey containedIn:results];
+    [isFollowingQuery setCachePolicy:kPFCachePolicyNetworkOnly];
+    
+    [isFollowingQuery includeKey:kPAPActivityToUserKey];
+    
+    [isFollowingQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            for (PFObject *obj in objects) {
+                PFUser *followUser = [obj objectForKey:kPAPActivityToUserKey];
+                [[PAPCache sharedCache] setFollowStatus:YES user:followUser];
             }
             
-            
-        }else if([self.type isEqualToString:@"followers"]){
-            for (PFObject *obj in self.objects) {
-                [results addObject:[obj objectForKey:kPAPActivityFromUserKey]];
-            }
+            [SVProgressHUD dismiss];
         }
-    
-        PFQuery *isFollowingQuery = [PFQuery queryWithClassName:kPAPActivityClassKey];
-        [isFollowingQuery whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
-        [isFollowingQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
-        [isFollowingQuery whereKey:kPAPActivityToUserKey containedIn:results];
-        [isFollowingQuery setCachePolicy:kPFCachePolicyNetworkOnly];
-        
-        [isFollowingQuery includeKey:kPAPActivityToUserKey];
-        
-        [isFollowingQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            if (!error) {
-                for (PFObject *obj in objects) {
-                    PFUser *followUser = [obj objectForKey:kPAPActivityToUserKey];
-                    [[PAPCache sharedCache] setFollowStatus:YES user:followUser];
-                }
-            }
-        }];
+    }];
 
 }
 
@@ -197,13 +177,17 @@ typedef enum {
     [cell setUser:followUser];
     
     NSDictionary *attributes = [[PAPCache sharedCache] attributesForUser:followUser];
-
-    cell.followButton.selected = NO;
+    
     cell.tag = indexPath.row;
     
-    if (attributes) {
+    if([self.type isEqualToString:@"following"]){
+        cell.followButton.selected = YES;
+    }else if (attributes) {
         [cell.followButton setSelected:[[PAPCache sharedCache] followStatusForUser:followUser]];
+    }else{
+        cell.followButton.selected = NO;
     }
+
     return cell;
 }
 

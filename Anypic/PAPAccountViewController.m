@@ -96,10 +96,6 @@
     
     [self.navigationItem setHidesBackButton:YES];
     
-    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-    [refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
-    self.refreshControl = refreshControl;
-
     if (!self.user) {
         [NSException raise:NSInvalidArgumentException format:@"user cannot be nil"];
     }
@@ -517,6 +513,7 @@
 }
 
 - (void)showFollowers:(id)selector{
+    
     PAPFindFriendsViewController *showFollowers = [[PAPFindFriendsViewController alloc]initWithStyle:UITableViewStylePlain type:@"followers"];
     
     [self.navigationController pushViewController:showFollowers animated:YES];
@@ -860,9 +857,5 @@
     }];
 }
 
-- (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl {
-    [self.refreshControl endRefreshing];
-    self.tableView.scrollEnabled = YES;
-}
 
 @end
