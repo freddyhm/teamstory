@@ -101,11 +101,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     return self;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:YES];
-}
-
-
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
@@ -331,7 +326,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         
         if (cell == nil) {
-            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID tabBarController:self.tabBarController object:[self.objects objectAtIndex:indexPath.row] photo:self.photo];
             cell.cellInsetWidth = kPAPCellInsetWidth;
             cell.delegate = self;
         }

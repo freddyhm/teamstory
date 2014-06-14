@@ -7,7 +7,7 @@
 @class PAPProfileImageView;
 @protocol PAPBaseTextCellDelegate;
 
-@interface PAPBaseTextCell : UITableViewCell {
+@interface PAPBaseTextCell : UITableViewCell <UIActionSheetDelegate, UIAlertViewDelegate>{
     NSUInteger horizontalTextSpace;
     id _delegate;
 }
@@ -40,6 +40,8 @@
 /*! The horizontal inset of the cell */
 @property (nonatomic) CGFloat cellInsetWidth;
 
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier tabBarController:(UITabBarController *)tabBarController object:(PFObject *)object photo:(PFObject *)photo;
 
 /*! Like comment */
 - (void)setLikeCommentButtonState:(BOOL)selected forCurrentUser:(BOOL)forCurrentUser;

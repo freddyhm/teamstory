@@ -9,10 +9,18 @@
 #import "PAPProfileImageView.h"
 #import "PAPUtility.h"
 #import "PAPwebviewViewController.h"
+#import "PAPPhotoDetailsViewController.h"
+#import "SVProgressHUD.h"
 
 #define unlikeButtonDimHeight 15.0f
 #define unlikeButtonDimWidth 50.0f
 #define likeCounterAndHeartButtonDim 10.0f
+
+enum ActionSheetTags {
+    withUrl = 0,
+    withOutUrl = 1,
+    confirmation = 2
+};
 
 
 static TTTTimeIntervalFormatter *timeFormatter;
@@ -20,6 +28,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
 @interface PAPBaseTextCell () {
     BOOL hideSeparator; // True if the separator shouldn't be shown
 }
+
+@property (nonatomic, strong) UITabBarController *ih_tabBarController;
+@property (nonatomic, strong) PFObject *ih_object;
+@property (nonatomic, strong) PFObject *ih_photo;
 
 /* Private static helper to obtain the horizontal space left for name and content after taking the inset and image in consideration */
 + (CGFloat)horizontalTextSpaceForInsetWidth:(CGFloat)insetWidth;
@@ -40,10 +52,13 @@ static TTTTimeIntervalFormatter *timeFormatter;
 @synthesize website;
 @synthesize navController;
 @synthesize cellType;
+@synthesize ih_tabBarController;
+@synthesize ih_object;
+@synthesize ih_photo;
 
 #pragma mark - NSObject
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier tabBarController:(UITabBarController *)tabBarController object:(PFObject *)object photo:(PFObject *)photo{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
 
     if (self) {
@@ -54,6 +69,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         //self.navController = anavController;
         self.cellType = reuseIdentifier;
+        
+        self.ih_tabBarController = tabBarController;
+        self.ih_object = object;
+        self.ih_photo = photo;
         
         cellInsetWidth = 0.0f;
         hideSeparator = NO;
@@ -352,12 +371,20 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.contentLabel setAttributedText:commentText];
             [self.contentLabel setUserInteractionEnabled:YES];
             
-            if (range.length > 0 && [[self.user objectForKey:@"displayName"] isEqualToString:self.nameButton.titleLabel.text]) {
+//            NSLog(@"%@", [[self.ih_object objectForKey:@"fromUser"] objectid]);
+  //          NSLog(@"%@", [PFUser currentUser]);
+            
+            if (range.length > 0 && [[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]]) {
+                UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentInflatorActionWithUrl:)];
+                gestureRec.numberOfTouchesRequired = 1;
+                gestureRec.numberOfTapsRequired = 1;
+                [self.contentLabel addGestureRecognizer:gestureRec];
+            } else if ([[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]]){
                 UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentInflatorAction:)];
                 gestureRec.numberOfTouchesRequired = 1;
                 gestureRec.numberOfTapsRequired = 1;
                 [self.contentLabel addGestureRecognizer:gestureRec];
-            } else if (range.length > 0) {
+            }else if (range.length > 0) {
                 UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openUrl:)];
                 gestureRec.numberOfTouchesRequired = 1;
                 gestureRec.numberOfTapsRequired = 1;
@@ -371,8 +398,25 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 }
 
--(void)commentInflatorAction:(id)sender {
-    NSLog(@"touched");
+- (void)commentInflatorActionWithUrl:(id)sender {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
+    actionSheet.delegate = self;
+    actionSheet.tag = withUrl;
+    [actionSheet addButtonWithTitle:@"Open Url"];
+    [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Edit Comment"]];
+    [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Delete Comment"]];
+    [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
+    [actionSheet showFromTabBar:self.ih_tabBarController.tabBar];
+}
+
+- (void)commentInflatorAction:(id)sender {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
+    actionSheet.delegate = self;
+    actionSheet.tag = withOutUrl;
+    [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Edit Comment"]];
+    [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Delete Comment"]];
+    [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
+    [actionSheet showFromTabBar:self.ih_tabBarController.tabBar];
 }
 
 - (void)openUrl:(id)sender {
@@ -418,6 +462,97 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 - (void)hideSeparator:(BOOL)hide {
     hideSeparator = hide;
+}
+
+#pragma mark - UIActionSheetDelegate
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if(actionSheet.tag == withOutUrl) {
+        if(buttonIndex == 0) {
+            //Edit comment button
+            NSString *comment = [self.contentLabel.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Edit Comment" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+            alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+            [alertView textFieldAtIndex:0].text = comment;
+            [alertView show];
+            
+        } else if (buttonIndex == 1) {
+            //Delete comment button
+            UIActionSheet *confirmationActionSheet = [[UIActionSheet alloc] init];
+            confirmationActionSheet.delegate = self;
+            confirmationActionSheet.tag = confirmation;
+            [confirmationActionSheet setDestructiveButtonIndex:[confirmationActionSheet addButtonWithTitle:@"Delete"]];
+            [confirmationActionSheet setCancelButtonIndex:[confirmationActionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
+            [confirmationActionSheet showFromTabBar:self.ih_tabBarController.tabBar];
+        }
+    } else if (actionSheet.tag == withUrl) {
+        if(buttonIndex == 0) {
+            //Open Url
+            [self openUrl:self];
+        } else if (buttonIndex == 1) {
+            //Edit Comment Button
+            NSString *comment = [self.contentLabel.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Edit Comment" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+            alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+            [alertView textFieldAtIndex:0].text = comment;
+            [alertView show];
+        } else if (buttonIndex == 2) {
+            //Delete Comment Button
+            
+            UIActionSheet *confirmationActionSheet = [[UIActionSheet alloc] init];
+            confirmationActionSheet.delegate = self;
+            confirmationActionSheet.tag = confirmation;
+            [confirmationActionSheet setDestructiveButtonIndex:[confirmationActionSheet addButtonWithTitle:@"Delete"]];
+            [confirmationActionSheet setCancelButtonIndex:[confirmationActionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
+            [confirmationActionSheet showFromTabBar:self.ih_tabBarController.tabBar];
+        }
+    } else if (actionSheet.tag == confirmation) {
+        if (buttonIndex == 0) {
+            //Delete comment
+            [self shouldDeleteComment];
+        }
+    }
+}
+
+- (void)shouldDeleteComment {
+    [SVProgressHUD show];
+    // Delete all activites related to this photo
+    [self.ih_object deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            //initially pop view and recreating screen in order to refresh the view.
+            [self.navController popViewControllerAnimated:NO];
+            
+            PAPPhotoDetailsViewController *photoDetailsViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:self.ih_photo source:@"tapPhoto"];
+            [self.navController pushViewController:photoDetailsViewController animated:NO];
+            
+        } else {
+            NSLog(@"%@", error);
+        }
+        [SVProgressHUD dismiss];
+    }];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        //Pressed Okay
+        [SVProgressHUD show];
+        self.ih_object[@"content"] = [alertView textFieldAtIndex:0].text;
+        
+        [self.ih_object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (!error) {
+                [SVProgressHUD dismiss];
+                
+                [self.navController popViewControllerAnimated:NO];
+                
+                PAPPhotoDetailsViewController *photoDetailsViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:self.ih_photo source:@"tapPhoto"];
+                [self.navController pushViewController:photoDetailsViewController animated:NO];
+            } else {
+                NSLog(@"%@", error);
+            }
+        }];
+    }
 }
 
 @end
