@@ -97,6 +97,7 @@
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
     
+
     CGSize nameSize = ([nameString boundingRectWithSize:CGSizeMake(144.0f, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:16.0f], NSParagraphStyleAttributeName: paragraphStyle.copy} context:nil]).size;
 
     [nameButton setTitle:[self.user objectForKey:kPAPUserDisplayNameKey] forState:UIControlStateNormal];
@@ -105,6 +106,7 @@
     [nameButton setFrame:CGRectMake( 60.0f, 17.0f, nameSize.width, nameSize.height)];
     
     // Set photo number label
+
     CGSize photoLabelSize = ([@"photos" boundingRectWithSize:CGSizeMake(144.0f, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11.0f], NSParagraphStyleAttributeName: paragraphStyle.copy} context:nil]).size;
     
     [photoLabel setFrame:CGRectMake( 60.0f, 17.0f + nameSize.height, 140.0f, photoLabelSize.height)];

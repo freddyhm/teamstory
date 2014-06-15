@@ -180,7 +180,19 @@
     CGPoint userButtonPoint = CGPointMake(50.0f, 6.0f);
     constrainWidth -= userButtonPoint.x;
     CGSize constrainSize = CGSizeMake(constrainWidth, containerView.bounds.size.height - userButtonPoint.y*2.0f);
-    CGSize userButtonSize = [self.userButton.titleLabel.text sizeWithFont:self.userButton.titleLabel.font constrainedToSize:constrainSize lineBreakMode:NSLineBreakByTruncatingTail];
+    
+    
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
+        
+    CGSize userButtonSize = ([self.userButton.titleLabel.text boundingRectWithSize:constrainSize
+                                         options:NSStringDrawingUsesLineFragmentOrigin
+                                      attributes:@{NSFontAttributeName:self.userButton.titleLabel.font, NSParagraphStyleAttributeName: paragraphStyle.copy}
+                                         context:nil]).size;
+
+    
+    
+    
     CGRect userButtonFrame = CGRectMake(userButtonPoint.x, userButtonPoint.y, userButtonSize.width, userButtonSize.height);
     [self.userButton setFrame:userButtonFrame];
     
