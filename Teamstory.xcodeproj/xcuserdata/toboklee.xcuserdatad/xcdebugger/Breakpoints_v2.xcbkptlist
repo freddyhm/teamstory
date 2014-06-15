@@ -464,11 +464,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/PAPBaseTextCell.m"
-            timestampString = "424415293.7338"
+            timestampString = "424536464.878111"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "558"
-            endingLineNumber = "558"
+            startingLineNumber = "572"
+            endingLineNumber = "572"
             landmarkName = "@implementation PAPBaseTextCell"
             landmarkType = "3">
          </BreakpointContent>

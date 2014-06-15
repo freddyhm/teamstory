@@ -32,6 +32,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 @property (nonatomic, strong) UITabBarController *ih_tabBarController;
 @property (nonatomic, strong) PFObject *ih_object;
 @property (nonatomic, strong) PFObject *ih_photo;
+@property (nonatomic, strong) UIButton *editButton;
 
 /* Private static helper to obtain the horizontal space left for name and content after taking the inset and image in consideration */
 + (CGFloat)horizontalTextSpaceForInsetWidth:(CGFloat)insetWidth;
@@ -55,6 +56,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 @synthesize ih_tabBarController;
 @synthesize ih_object;
 @synthesize ih_photo;
+@synthesize editButton;
 
 #pragma mark - NSObject
 
@@ -103,6 +105,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.nameButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.nameButton setBackgroundColor:[UIColor clearColor]];
         
+        self.editButton = [[UIButton alloc] init];
+        [self.editButton setBackgroundColor:[UIColor clearColor]];
+        
         if ([reuseIdentifier isEqualToString:@"atmentionCell"]) {
             [mainView setBackgroundColor:[UIColor colorWithRed:241.0f/255.0f green:242.0f/255.0f blue:246.0f/255.0f alpha:1.0f]];
             [self.nameButton setTitleColor:[UIColor colorWithWhite:0.5f alpha:0.95f] forState:UIControlStateNormal];
@@ -124,6 +129,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
             self.separatorImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"SeparatorComments.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 1, 0, 1)]];
 
         }
+        
+        [mainView addSubview:self.editButton];
         
         if ([reuseIdentifier isEqualToString:@"CommentCell"]) {
             
@@ -200,6 +207,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         fontSize = 13;
         name_height_origin = nameY;
     }
+    
     // Layout the name button
     CGSize nameSize = [self.nameButton.titleLabel.text sizeWithFont:[UIFont boldSystemFontOfSize:fontSize] forWidth:nameMaxWidth lineBreakMode:NSLineBreakByTruncatingTail];
     
@@ -219,6 +227,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     CGSize contentSize = [self.contentLabel sizeThatFits:maximumLabelSize];
     self.contentLabel.font = [UIFont systemFontOfSize:13.0f];
     [self.contentLabel setFrame:CGRectMake(nameX, vertTextBorderSpacing, contentSize.width, contentSize.height)];
+    self.editButton.frame = CGRectMake(0.0f, 0.0f, mainView.bounds.size.width, mainView.bounds.size.height);
     
     // Layout the timestamp label
     CGSize timeSize = [self.timeLabel.text sizeWithFont:[UIFont systemFontOfSize:11] forWidth:horizontalTextSpace lineBreakMode:NSLineBreakByTruncatingTail];
@@ -371,15 +380,16 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.contentLabel setAttributedText:commentText];
             [self.contentLabel setUserInteractionEnabled:YES];
             
-//            NSLog(@"%@", [[self.ih_object objectForKey:@"fromUser"] objectid]);
-  //          NSLog(@"%@", [PFUser currentUser]);
-            
             if (range.length > 0 && [[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]]) {
+                [self.editButton addTarget:self action:@selector(commentInflatorActionWithUrl:) forControlEvents:UIControlEventTouchUpInside];
+                
                 UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentInflatorActionWithUrl:)];
                 gestureRec.numberOfTouchesRequired = 1;
                 gestureRec.numberOfTapsRequired = 1;
                 [self.contentLabel addGestureRecognizer:gestureRec];
             } else if ([[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]]){
+                [self.editButton addTarget:self action:@selector(commentInflatorAction:) forControlEvents:UIControlEventTouchUpInside];
+                
                 UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentInflatorAction:)];
                 gestureRec.numberOfTouchesRequired = 1;
                 gestureRec.numberOfTapsRequired = 1;
@@ -553,6 +563,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
             }
         }];
     }
+}
+
+-(void)editButtonAction:(id)sender {
+    
 }
 
 @end
