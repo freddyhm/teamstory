@@ -146,7 +146,12 @@ static NSString *microphoneAccessDenied=@"KonotorMicrophoneAccessDenied";
     //
     if(KONOTOR_PUSH_ON_NAVIGATIONCONTROLLER){
         [self.navigationItem setTitle:@"Feedback"];
-        self.navigationController.navigationBar.titleTextAttributes=[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], UITextAttributeTextColor, [UIColor clearColor], UITextAttributeTextShadowColor,[NSValue valueWithUIOffset:UIOffsetMake(1, 1)], UITextAttributeTextShadowOffset,[UIFont fontWithName:@"HelveticaNeue-UltraLight" size:28.0],UITextAttributeFont,nil];
+        
+        NSShadow *shadow = [NSShadow new];
+        [shadow setShadowColor: [UIColor clearColor]];
+        [shadow setShadowOffset:CGSizeMake(1, 1)];
+                
+        self.navigationController.navigationBar.titleTextAttributes=[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], NSForegroundColorAttributeName, shadow, NSShadowAttributeName,[UIFont fontWithName:@"HelveticaNeue-UltraLight" size:28.0],NSFontAttributeName,nil];
         
         
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];

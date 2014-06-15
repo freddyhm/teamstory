@@ -440,21 +440,38 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 
     
     UITabBarItem *homeTabBarItem = [[UITabBarItem alloc] init];
-    [homeTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"IconHomeSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"nav_home.png"]];
+    
+    [homeTabBarItem setImage:[[UIImage imageNamed:@"nav_home.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    
+    [homeTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconHomeSelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+
     homeTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
     
+    
     UITabBarItem *activityFeedTabBarItem = [[UITabBarItem alloc] init];
-    [activityFeedTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"IconActivitySelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"nav_activity.png"]];
+    
+    [activityFeedTabBarItem setImage:[[UIImage imageNamed:@"nav_activity.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    
+    [activityFeedTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconActivitySelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+
     activityFeedTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
 
     
     UITabBarItem *perksTabBarItem = [[UITabBarItem alloc] init];
-    [perksTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"IconDiscoverSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"nav_discover.png"]];
+    
+    [perksTabBarItem setImage:[[UIImage imageNamed:@"nav_discover.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    
+    [perksTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconDiscoverSelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+   
     perksTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
 
     
     UITabBarItem *accountTabBarItem = [[UITabBarItem alloc] init];
-    [accountTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"IconProfileSelected.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"nav_profile.png"]];
+
+    [accountTabBarItem setImage:[[UIImage imageNamed:@"nav_profile.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    
+    [accountTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconProfileSelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    
     accountTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
     
     
@@ -534,22 +551,25 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:0.498f green:0.388f blue:0.329f alpha:1.0f]];
     
     
-    [[UINavigationBar appearance] setTitleTextAttributes:@{
-                                UITextAttributeTextColor: [UIColor whiteColor],
-                          UITextAttributeTextShadowColor: [UIColor colorWithWhite:0.0f alpha:0.750f],
-                         UITextAttributeTextShadowOffset: [NSValue valueWithCGSize:CGSizeMake(0.0f, 1.0f)]
-     }];
-     
+    NSShadow *shadow = [NSShadow new];
+    [shadow setShadowColor: [UIColor colorWithWhite:0.0f alpha:0.750f]];
+    [shadow setShadowOffset: CGSizeMake(0.0f, 1.0f)];
+    
+    NSDictionary *navBarAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],
+                                 NSShadowAttributeName: shadow
+                                 };
+
+    [[UINavigationBar appearance] setTitleTextAttributes:navBarAttributes];
     
     [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"BackgroundNavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
     
+    NSDictionary *barButtonItemAttributes = @{NSForegroundColorAttributeName:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0f],
+                                              NSShadowAttributeName: shadow
+                                              };
+    
     [[UIButton appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
-
-    [[UIBarButtonItem appearance] setTitleTextAttributes:@{
-                                UITextAttributeTextColor: [UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0f],
-                          UITextAttributeTextShadowColor: [UIColor colorWithWhite:0.0f alpha:0.750f],
-                         UITextAttributeTextShadowOffset: [NSValue valueWithCGSize:CGSizeMake(0.0f, 1.0f)]
-     } forState:UIControlStateNormal];
+    
+    [[UIBarButtonItem appearance] setTitleTextAttributes:barButtonItemAttributes forState:UIControlStateNormal];
      
  
     

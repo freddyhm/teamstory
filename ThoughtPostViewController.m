@@ -194,8 +194,8 @@
     // analytics for upload and background
     [PAPUtility captureEventGA:@"Engagement" action:@"Upload Thought" label:@"Photo"];
     [PAPUtility captureEventGA:@"Thought Bkgd" action:[[NSNumber numberWithInt:self.prevBkgdIndex] stringValue] label:@"Photo"];
-    
-    // add textview to background image for picture
+   
+    // add label to background image for picture
     [self.backgroundImg addSubview:self.thoughtTextView];
     
     // create image
