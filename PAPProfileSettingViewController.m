@@ -769,6 +769,8 @@
 }
 
 - (void)saveButtonAction:(id)sender {
+    [SVProgressHUD show];
+    
     [self.view endEditing:YES];
     NSString* companyName_input = self.companyName.text;
     NSString* location_input = self.location.text;
@@ -906,7 +908,7 @@
             
             [SVProgressHUD show];
             [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                [SVProgressHUD dismiss];
+            [SVProgressHUD dismiss];
                 
                 if(succeeded){
                     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
