@@ -208,9 +208,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
         name_height_origin = nameY;
     }
     
-    // Layout the name button
-    CGSize nameSize = [self.nameButton.titleLabel.text sizeWithFont:[UIFont boldSystemFontOfSize:fontSize] forWidth:nameMaxWidth lineBreakMode:NSLineBreakByTruncatingTail];
-    
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
     

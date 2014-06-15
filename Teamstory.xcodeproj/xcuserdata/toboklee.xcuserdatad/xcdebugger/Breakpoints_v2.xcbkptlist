@@ -464,13 +464,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/PAPBaseTextCell.m"
-            timestampString = "424536464.878111"
+            timestampString = "424561211.595274"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "572"
-            endingLineNumber = "572"
-            landmarkName = "@implementation PAPBaseTextCell"
-            landmarkType = "3">
+            startingLineNumber = "569"
+            endingLineNumber = "569"
+            landmarkName = "-alertView:clickedButtonAtIndex:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
