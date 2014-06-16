@@ -293,6 +293,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     // initiate konotor
     [Konotor newSession];
     
+    /*
     // get unread messages, show screen if greater than 0
     self.konotorCount = 0;
     
@@ -302,6 +303,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     if([self.konotorCount intValue] > 0){
         [KonotorFeedbackScreen showFeedbackScreen];
     }
+     */
 }
 
 #pragma mark - UITabBarControllerDelegate

@@ -508,13 +508,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [alertView show];
             
         } else if (buttonIndex == 1) {
-            //Delete comment button
-            UIActionSheet *confirmationActionSheet = [[UIActionSheet alloc] init];
-            confirmationActionSheet.delegate = self;
-            confirmationActionSheet.tag = confirmation;
-            [confirmationActionSheet setDestructiveButtonIndex:[confirmationActionSheet addButtonWithTitle:@"Delete"]];
-            [confirmationActionSheet setCancelButtonIndex:[confirmationActionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
-            [confirmationActionSheet showFromTabBar:self.ih_tabBarController.tabBar];
+            
+            //Delete comment
+            [self shouldDeleteComment];
         }
     } else if (actionSheet.tag == withUrl) {
         if(buttonIndex == 0) {
@@ -529,17 +525,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [alertView textFieldAtIndex:0].text = comment;
             [alertView show];
         } else if (buttonIndex == 2) {
-            //Delete Comment Button
             
-            UIActionSheet *confirmationActionSheet = [[UIActionSheet alloc] init];
-            confirmationActionSheet.delegate = self;
-            confirmationActionSheet.tag = confirmation;
-            [confirmationActionSheet setDestructiveButtonIndex:[confirmationActionSheet addButtonWithTitle:@"Delete"]];
-            [confirmationActionSheet setCancelButtonIndex:[confirmationActionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
-            [confirmationActionSheet showFromTabBar:self.ih_tabBarController.tabBar];
-        }
-    } else if (actionSheet.tag == confirmation) {
-        if (buttonIndex == 0) {
             //Delete comment
             [self shouldDeleteComment];
         }
