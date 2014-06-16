@@ -12,6 +12,9 @@
 #import "KonotorUI.h"
 #import <Crashlytics/Crashlytics.h>
 #import "PAPCache.h"
+#import "PAPTabBarController.h"
+
+#define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
 @interface PAPHomeViewController () {
     NSInteger scrollPosition;
@@ -183,7 +186,36 @@
 
 #pragma mark - UIScrollViewDelegate
 
+// see if scrolling near end, refresh when decelerating if so
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    
+    float bottomEdge = scrollView.contentOffset.y + scrollView.frame.size.height;
+    
+    if (bottomEdge >= (scrollView.contentSize.height * 0.78)) {
+        [self loadNextPage];
+    }
+}
+
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    BOOL isHome = [[self.navigationController.viewControllers lastObject] isKindOfClass:PAPHomeViewController.class];
+    
+    // make sure pull-to-refresh set only for home
+    if(isHome){
+        if(scrollView.contentOffset.y <= -100){
+            
+            if(![SVProgressHUD isVisible]){
+                CGFloat hudOffset = IS_WIDESCREEN ? -160.0f : -120.0f;
+                [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, hudOffset)];
+                [SVProgressHUD show];
+            }
+        }else{
+            if([SVProgressHUD isVisible]){
+                [SVProgressHUD dismiss];
+                [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, 0.0f)];
+            }
+        }
+    }
+    
     [self scrollViewWillBeginDragging:scrollView];
     notificationExitButton.hidden = YES;
     notificationStar.hidden = YES;
@@ -245,6 +277,8 @@
 
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [self dismissTabBarMenu];
+    
     if (currentScrollDirectionDown == NO){
         // Detect scrolling down.
         scrollDirectionDown = NO;
@@ -297,6 +331,14 @@
 -(void)notificationExitButtonAction:(id)sender {
     [[PAPCache sharedCache] notificationCache:notificationContent];
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+}
+
+- (void)dismissTabBarMenu{
+    PAPTabBarController *tabBar = (PAPTabBarController *)self.tabBarController;
+    
+    if(!tabBar.postMenu.hidden){
+        tabBar.postMenu.hidden = YES;
+    }
 }
 
 @end
