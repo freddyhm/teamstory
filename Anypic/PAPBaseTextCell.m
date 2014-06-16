@@ -60,7 +60,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 #pragma mark - NSObject
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier tabBarController:(UITabBarController *)tabBarController object:(PFObject *)object photo:(PFObject *)photo{
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
 
     if (self) {
@@ -71,10 +71,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         //self.navController = anavController;
         self.cellType = reuseIdentifier;
-        
-        self.ih_tabBarController = tabBarController;
-        self.ih_object = object;
-        self.ih_photo = photo;
         
         cellInsetWidth = 0.0f;
         hideSeparator = NO;
@@ -371,6 +367,17 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 - (void)navigationController:(UINavigationController *)anavController {
     self.navController = anavController;
+}
+
+-(void)tabBarController:(UITabBarController *)tabBarController {
+    self.ih_tabBarController = tabBarController;
+}
+
+-(void)object:(PFObject *)object {
+    self.ih_object = object;
+}
+-(void)photo:(PFObject *)photo {
+    self.ih_photo = photo;
 }
 
 - (void)setContentText:(NSString *)contentString {

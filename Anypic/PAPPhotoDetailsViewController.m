@@ -328,11 +328,15 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         
         if (cell == nil) {
-            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID tabBarController:self.tabBarController object:[self.objects objectAtIndex:indexPath.row] photo:self.photo];
+            cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
             cell.cellInsetWidth = kPAPCellInsetWidth;
             cell.delegate = self;
         }
         [cell navigationController:self.navigationController];
+        [cell object:[self.objects objectAtIndex:indexPath.row]];
+        [cell tabBarController:self.tabBarController];
+        [cell photo:self.photo];
+        
         [cell setUser:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityFromUserKey]];
         [cell setContentText:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityContentKey]];
         [cell setDate:[[self.objects objectAtIndex:indexPath.row] createdAt]];

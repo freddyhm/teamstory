@@ -41,7 +41,9 @@
 @property (nonatomic) CGFloat cellInsetWidth;
 
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier tabBarController:(UITabBarController *)tabBarController object:(PFObject *)object photo:(PFObject *)photo;
+-(void)tabBarController:(UITabBarController *)tabBarController;
+-(void)object:(PFObject *)object;
+-(void)photo:(PFObject *)photo;
 
 /*! Like comment */
 - (void)setLikeCommentButtonState:(BOOL)selected forCurrentUser:(BOOL)forCurrentUser;
