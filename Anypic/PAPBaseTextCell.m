@@ -101,8 +101,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.nameButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.nameButton setBackgroundColor:[UIColor clearColor]];
         
-        self.editButton = [[UIButton alloc] init];
-        [self.editButton setBackgroundColor:[UIColor clearColor]];
+        if ([reuseIdentifier isEqualToString:@"CommentCell"]) {
+            self.editButton = [[UIButton alloc] init];
+            [self.editButton setBackgroundColor:[UIColor clearColor]];
+        }
         
         if ([reuseIdentifier isEqualToString:@"atmentionCell"]) {
             [mainView setBackgroundColor:[UIColor colorWithRed:241.0f/255.0f green:242.0f/255.0f blue:246.0f/255.0f alpha:1.0f]];
