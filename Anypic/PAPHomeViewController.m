@@ -277,7 +277,6 @@
 
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    [self dismissTabBarMenu];
     
     if (currentScrollDirectionDown == NO){
         // Detect scrolling down.
@@ -331,14 +330,6 @@
 -(void)notificationExitButtonAction:(id)sender {
     [[PAPCache sharedCache] notificationCache:notificationContent];
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
-}
-
-- (void)dismissTabBarMenu{
-    PAPTabBarController *tabBar = (PAPTabBarController *)self.tabBarController;
-    
-    if(!tabBar.postMenu.hidden){
-        tabBar.postMenu.hidden = YES;
-    }
 }
 
 @end
