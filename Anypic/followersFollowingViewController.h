@@ -6,7 +6,7 @@
 
 #import "PAPFindFriendsCell.h"
 
-@interface followersFollowingViewController : PFQueryTableViewController <PAPFindFriendsCellDelegate>
+@interface FollowersFollowingViewController : PFQueryTableViewController <PAPFindFriendsCellDelegate>
 
 - (id)initWithStyle:(UITableViewStyle)style type:(NSString *)type forUser:(PFUser *)user;
 

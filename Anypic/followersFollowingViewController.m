@@ -4,21 +4,21 @@
 //
 //
 
-#import "followersFollowingViewController.h"
+#import "FollowersFollowingViewController.h"
 #import "PAPProfileImageView.h"
 #import "PAPLoadMoreCell.h"
 #import "PAPAccountViewController.h"
 #import "SVProgressHUD.h"
 
 
-@interface followersFollowingViewController ()
+@interface FollowersFollowingViewController ()
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, assign) NSString *type;
 @property (nonatomic, strong) NSMutableArray *results;
 @property (nonatomic, strong) PFUser *selectedUser;
 @end
 
-@implementation followersFollowingViewController
+@implementation FollowersFollowingViewController
 @synthesize headerView;
 #pragma mark - Initialization
 

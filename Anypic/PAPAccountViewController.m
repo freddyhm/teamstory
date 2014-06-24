@@ -11,7 +11,7 @@
 #import "PAPSettingsActionSheetDelegate.h"
 #import "SVProgressHUD.h"
 #import "PAPwebviewViewController.h"
-#import "followersFollowingViewController.h"
+#import "FollowersFollowingViewController.h"
 
 @interface PAPAccountViewController() {
     float alphaValue_twitter;
@@ -24,6 +24,7 @@
     CGSize website_expectedSize;
 }
 @property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) UIImageView *locationIconImageView;
 @property (nonatomic, strong) UILabel *userDisplayName;
 @property (nonatomic, strong) UILabel *locationLabel;
 @property (nonatomic, strong) UILabel *descriptionLabel;
@@ -159,7 +160,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 if ([self.websiteInfo length] > 0) {
                     website_expectedSize = [self.websiteInfo sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}];
                 } else {
-                    website_expectedSize = CGSizeMake(0.0f, 0.0f);
+                    website_expectedSize = CGSizeMake(132.01f, 15.50f);
                 }
                 
                 UIColor *textColor = [UIColor colorWithRed:158.0f/255.0f green:158.0f/255.0f blue:158.0f/255.0f alpha:1.0f];
@@ -235,8 +236,8 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 [industryLabel setTextColor:[UIColor whiteColor]];
                 [self.headerView addSubview:industryLabel];
                 
-                [descriptionLabel setFrame:CGRectMake(10.0f, 88.0f, expectedSize.width, expectedSize.height)];
-                [self.headerView addSubview:descriptionLabel];
+                [self.descriptionLabel setFrame:CGRectMake(10.0f, 88.0f, expectedSize.width, expectedSize.height)];
+                [self.headerView addSubview:self.descriptionLabel];
                 
                 if ([self.twitter_url length] > 0) {
                     alphaValue_twitter = 1.0f;
@@ -366,10 +367,10 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         
                 [self.headerView addSubview:self.multiActionButton];
                 
-                UIImageView *locationIconImageView = [[UIImageView alloc] initWithImage:nil];
-                [locationIconImageView setImage:[UIImage imageNamed:@"iconlocation.png"]];
-                [locationIconImageView setFrame:CGRectMake(6.0f, 88.0f + expectedSize.height, 15.0f, 15.0f)];
-                [self.headerView addSubview:locationIconImageView];
+                self.locationIconImageView = [[UIImageView alloc] initWithImage:nil];
+                [self.locationIconImageView setImage:[UIImage imageNamed:@"iconlocation.png"]];
+                [self.locationIconImageView setFrame:CGRectMake(6.0f, 88.0f + expectedSize.height, 15.0f, 15.0f)];
+                [self.headerView addSubview:self.locationIconImageView];
                 
                 if ([self.locationInfo length] > 0) {
                     
@@ -385,7 +386,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                                    @{NSFontAttributeName:
                                          self.locationLabel.font}].width;
                     
-                    [self.locationLabel setFrame:CGRectMake(locationIconImageView.frame.origin.x + 20.0f, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, 16.0f)];
+                    [self.locationLabel setFrame:CGRectMake(self.locationIconImageView.frame.origin.x + 20.0f, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, 16.0f)];
                     
                     [self.headerView addSubview:self.locationLabel];
                 
@@ -395,12 +396,10 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 
                 // the bar separating location and website link
                 self.locationSiteSeparator = [[UILabel alloc] init];
-                
-                self.locationSiteSeparator.frame = CGRectMake(self.locationLabel.frame.origin.x + self.locationLabel.frame.size.width + 10.0f, self.locationLabel.frame.origin.y + 2.0f, 10.0f, 10.0f);
-                
                 self.locationSiteSeparator.font = [UIFont fontWithName:@"Helvetica" size:13.0f];
                 self.locationSiteSeparator.textColor = textColor;
                 self.locationSiteSeparator.text = @"|";
+                self.locationSiteSeparator.frame = CGRectMake(self.locationLabel.frame.origin.x + self.locationLabel.frame.size.width + 10.0f, 91.0f + expectedSize.height, 10.0f, 10.0f);
             
                 [self.headerView addSubview: self.locationSiteSeparator];
                 
@@ -413,6 +412,8 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                     websiteLink.titleLabel.font = [UIFont systemFontOfSize:13.0f];
                     [websiteLink addTarget:self action:@selector(websiteLinkAction:) forControlEvents:UIControlEventTouchUpInside];
                     [self.headerView addSubview:websiteLink];
+                }else{
+                    website_expectedSize = CGSizeMake(132.01f, 15.50f);
                 }
                 
                 linkedIn_button = [[UIButton alloc] init];
@@ -534,13 +535,13 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 
 - (void)showFollowers:(id)selector{
     
-    followersFollowingViewController *showFollowers = [[followersFollowingViewController alloc]initWithStyle:UITableViewStylePlain type:@"followers" forUser:self.user];
+    FollowersFollowingViewController *showFollowers = [[FollowersFollowingViewController alloc]initWithStyle:UITableViewStylePlain type:@"followers" forUser:self.user];
     
     [self.navigationController pushViewController:showFollowers animated:YES];
 }
 
 - (void)showFollowing:(id)selector{
-    followersFollowingViewController *showFollowing = [[followersFollowingViewController alloc]initWithStyle:UITableViewStylePlain type:@"following" forUser:self.user];
+    FollowersFollowingViewController *showFollowing = [[FollowersFollowingViewController alloc]initWithStyle:UITableViewStylePlain type:@"following" forUser:self.user];
     
     [self.navigationController pushViewController:showFollowing animated:YES];
 }
@@ -627,7 +628,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         if ([self.websiteInfo length] > 0) {
             website_expectedSize = [self.websiteInfo sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}];
         } else {
-            website_expectedSize = CGSizeMake(0.0f, 0.0f);
+            website_expectedSize = CGSizeMake(132.01f, 15.50f);
         }
         
         self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + website_expectedSize.height + 43.0f);
@@ -641,14 +642,16 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         
         [descriptionLabel setFrame:CGRectMake(10.0f, 88.0f, expectedSize.width, expectedSize.height)];
         
-        // re-calculate width size for location label and reset frame
+        // re-calculate width size for location label, image, and separator
         CGFloat locationLabelWidth = [self.locationLabel.text sizeWithAttributes:
                        @{NSFontAttributeName:
                              self.locationLabel.font}].width;
         
-        [self.locationLabel setFrame:CGRectMake(self.locationLabel.frame.origin.x,self.locationLabel.frame.origin.y, locationLabelWidth + 10.0f, self.locationLabel.frame.size.height)];
+        [self.locationLabel setFrame:CGRectMake(self.locationLabel.frame.origin.x, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, self.locationLabel.frame.size.height)];
+        self.locationSiteSeparator.frame = CGRectMake(locationLabelWidth + self.locationLabel.frame.origin.x + 10.0f, 91.5f + expectedSize.height, 10.0f, 10.0f);
+        [self.locationIconImageView setFrame:CGRectMake(6.0f, 88.0f + expectedSize.height, 15.0f, 15.0f)];
         
-        self.locationSiteSeparator.frame = CGRectMake(locationLabelWidth + self.locationLabel.frame.origin.x + 10.0f, self.locationLabel.frame.origin.y + 3.0f, 10.0f, 10.0f);
+        
         
         [websiteLink setFrame:CGRectMake(self.locationSiteSeparator.frame.origin.x + self.locationSiteSeparator.frame.size.width, 89.0f + expectedSize.height, website_expectedSize.width, website_expectedSize.height)];
         [self.industryLabel setFrame:CGRectMake(320.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + website_expectedSize.height, industry_expectedSize.width + 10.0f, 22.0f)];

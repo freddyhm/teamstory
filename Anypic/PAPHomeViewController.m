@@ -7,7 +7,7 @@
 #import "PAPHomeViewController.h"
 #import "PAPSettingsActionSheetDelegate.h"
 #import "PAPSettingsButtonItem.h"
-#import "followersFollowingViewController.h"
+#import "FollowersFollowingViewController.h"
 #import "SVProgressHUD.h"
 #import "KonotorUI.h"
 #import <Crashlytics/Crashlytics.h>
@@ -307,7 +307,7 @@
 */
 
 - (void)inviteFriendsButtonAction:(id)sender {
-    followersFollowingViewController *detailViewController = [[followersFollowingViewController alloc] init];
+    FollowersFollowingViewController *detailViewController = [[FollowersFollowingViewController alloc] init];
     [self.navigationController pushViewController:detailViewController animated:YES];
 }
 

@@ -11,7 +11,7 @@
 #import "PAPBaseTextCell.h"
 #import "PAPLoadMoreCell.h"
 #import "PAPSettingsButtonItem.h"
-#import "followersFollowingViewController.h"
+#import "FollowersFollowingViewController.h"
 #import "SVProgressHUD.h"
 
 @interface PAPActivityFeedViewController ()
@@ -452,7 +452,7 @@
 }
 
 - (void)inviteFriendsButtonAction:(id)sender {
-    followersFollowingViewController *detailViewController = [[followersFollowingViewController alloc] init];
+    FollowersFollowingViewController *detailViewController = [[FollowersFollowingViewController alloc] init];
     [self.navigationController pushViewController:detailViewController animated:YES];
 }
 
