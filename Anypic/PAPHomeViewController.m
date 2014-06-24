@@ -30,6 +30,9 @@
 @property (nonatomic, strong) PFObject *notificationPhoto;
 @property (nonatomic, strong) UIButton *notificationExitButton;
 @property (nonatomic, strong) UIImageView *notificationStar;
+@property (nonatomic, strong) UIImageView *feedbackImgView;
+
+@property NSNumber *konotorCount;
 @end
 
 @implementation PAPHomeViewController
@@ -64,10 +67,10 @@
     //self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
 
     // button image for feedback
-    UIImageView *feedbackImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"button-feedback.png"]];
-    UIBarButtonItem *promptTrigger = [[UIBarButtonItem alloc] initWithCustomView:feedbackImgView];
-    feedbackImgView.userInteractionEnabled = YES;
-    [feedbackImgView addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(promptFeedback:)]];
+    self.feedbackImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"button-feedback.png"]];
+    UIBarButtonItem *promptTrigger = [[UIBarButtonItem alloc] initWithCustomView:self.feedbackImgView];
+    self.feedbackImgView.userInteractionEnabled = YES;
+    [self.feedbackImgView addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(promptFeedback:)]];
     
     UIView *navBarTitleView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 94.0f, 30.0f)];
     [navBarTitleView setBackgroundColor:[UIColor clearColor]];
@@ -126,6 +129,15 @@
     // analytics
     [PAPUtility captureScreenGA:@"Home"];
     
+    // fetch unread messages, show feedback screen
+    self.konotorCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
+    
+    if([self.konotorCount intValue] > 0){
+        [self.feedbackImgView setImage:[UIImage imageNamed:@"button-feedback-notify.png"]];
+    }else{
+        [self.feedbackImgView setImage:[UIImage imageNamed:@"button-feedback.png"]];
+    }
+
     PFQuery *notificationQuery = [PFQuery queryWithClassName:@"Notification"];
     [notificationQuery orderByDescending:@"createdAt"];
     
