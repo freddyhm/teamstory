@@ -186,12 +186,17 @@
     
     cell.tag = indexPath.row;
     
-    if([self.type isEqualToString:@"following"]){
-        cell.followButton.selected = YES;
-    }else if (attributes) {
-        [cell.followButton setSelected:[[PAPCache sharedCache] followStatusForUser:followUser]];
+    // remove follow button for current user
+    if(![[followUser objectId] isEqualToString:[[PFUser currentUser] objectId]]){
+        if([self.type isEqualToString:@"following"]){
+            cell.followButton.selected = YES;
+        }else if (attributes) {
+            [cell.followButton setSelected:[[PAPCache sharedCache] followStatusForUser:followUser]];
+        }else{
+            cell.followButton.selected = NO;
+        }
     }else{
-        cell.followButton.selected = NO;
+        cell.followButton.hidden = YES;
     }
 
     return cell;
