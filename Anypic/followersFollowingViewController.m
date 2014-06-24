@@ -14,16 +14,12 @@
 @interface followersFollowingViewController ()
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, assign) NSString *type;
-@property (nonatomic, strong) NSMutableDictionary *outstandingFollowQueries;
-@property (nonatomic, strong) NSMutableDictionary *outstandingCountQueries;
 @property (nonatomic, strong) NSMutableArray *results;
 @property (nonatomic, strong) PFUser *selectedUser;
 @end
 
 @implementation followersFollowingViewController
 @synthesize headerView;
-@synthesize outstandingFollowQueries;
-@synthesize outstandingCountQueries;
 #pragma mark - Initialization
 
 - (id)initWithStyle:(UITableViewStyle)style type:(NSString *)type forUser:(PFUser *)user{
@@ -32,12 +28,12 @@
         
         self.type = type;
         self.selectedUser = user;
-        self.outstandingFollowQueries = [NSMutableDictionary dictionary];
-        self.outstandingCountQueries = [NSMutableDictionary dictionary];
-            
+
         // The number of objects to show per page
         self.objectsPerPage = 15;
-                
+        
+        // Remove default loading indicator
+        self.loadingViewEnabled = NO;
         self.pullToRefreshEnabled = NO;
     }
     return self;
