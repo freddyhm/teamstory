@@ -5,7 +5,7 @@
 //
 
 #import "PAPSettingsActionSheetDelegate.h"
-#import "PAPFindFriendsViewController.h"
+#import "followersFollowingViewController.h"
 #import "PAPAccountViewController.h"
 #import "AppDelegate.h"
 #import "PAPProfileSettingViewController.h"

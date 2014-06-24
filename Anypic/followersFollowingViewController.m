@@ -4,32 +4,34 @@
 //
 //
 
-#import "PAPFindFriendsViewController.h"
+#import "followersFollowingViewController.h"
 #import "PAPProfileImageView.h"
 #import "PAPLoadMoreCell.h"
 #import "PAPAccountViewController.h"
 #import "SVProgressHUD.h"
 
 
-@interface PAPFindFriendsViewController ()
+@interface followersFollowingViewController ()
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, assign) NSString *type;
 @property (nonatomic, strong) NSMutableDictionary *outstandingFollowQueries;
 @property (nonatomic, strong) NSMutableDictionary *outstandingCountQueries;
+@property (nonatomic, strong) NSMutableArray *results;
+@property (nonatomic, strong) PFUser *selectedUser;
 @end
 
-@implementation PAPFindFriendsViewController
+@implementation followersFollowingViewController
 @synthesize headerView;
 @synthesize outstandingFollowQueries;
 @synthesize outstandingCountQueries;
 #pragma mark - Initialization
 
-- (id)initWithStyle:(UITableViewStyle)style type:(NSString *)type{
+- (id)initWithStyle:(UITableViewStyle)style type:(NSString *)type forUser:(PFUser *)user{
     self = [super initWithStyle:style];
     if (self) {
         
         self.type = type;
-        
+        self.selectedUser = user;
         self.outstandingFollowQueries = [NSMutableDictionary dictionary];
         self.outstandingCountQueries = [NSMutableDictionary dictionary];
             
@@ -78,7 +80,6 @@
 
 - (PFQuery *)queryForTable {
     
-    
     /*
      
      // prepopulate list with facebook friends on teamstory
@@ -103,26 +104,30 @@
 
     PFQuery *query = [PFQuery queryWithClassName:kPAPActivityClassKey];
     [query whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
-   
+    
+    
+    // filter out zombie pointers (manually deleted users)
+    PFQuery *noZombieQuery = [PFUser query];
+    [noZombieQuery whereKeyExists:@"objectId"];
+    
     if([self.type isEqualToString:@"following"]){
         
         // get following for current user
-        [query whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
+        [query whereKey:kPAPActivityFromUserKey equalTo:self.selectedUser];
         [query includeKey:kPAPActivityToUserKey];
+        
+        [query whereKey:kPAPActivityToUserKey matchesQuery:noZombieQuery];
         
     }else if([self.type isEqualToString:@"followers"]){
         
         // get followers for current user
-        [query whereKey:kPAPActivityToUserKey equalTo:[PFUser currentUser]];
+        [query whereKey:kPAPActivityToUserKey equalTo:self.selectedUser];
         [query includeKey:kPAPActivityFromUserKey];
+        
+        [query whereKey:kPAPActivityFromUserKey matchesQuery:noZombieQuery];
     }
     
-    if (self.objects.count == 0) {
-        query.cachePolicy = kPFCachePolicyCacheThenNetwork;
-    }else{
-        query.cachePolicy = kPFCachePolicyNetworkOnly;
-    }
-    
+    query.cachePolicy = kPFCachePolicyNetworkOnly;
     [query orderByAscending:kPAPUserDisplayNameKey];
     
     return query;
@@ -132,20 +137,24 @@
     [super objectsDidLoad:error];
     
     // get user objects based on type of screen
-    NSMutableArray *results = [[NSMutableArray alloc]init];
+    self.results = [[NSMutableArray alloc]init];
     
     // get proper users based on type
     NSString *targetUser = [self.type isEqualToString:@"following"] ? kPAPActivityToUserKey : kPAPActivityFromUserKey;
-    
+
     for (PFObject *obj in self.objects) {
-        [results addObject:[obj objectForKey:targetUser]];
+        
+        // make sure the from/to key's value (user in list) is not nil
+        if([obj objectForKey:targetUser] != nil){
+            [self.results addObject:[obj objectForKey:targetUser]];
+        }
     }
 
     // check and set following status for user list
     PFQuery *isFollowingQuery = [PFQuery queryWithClassName:kPAPActivityClassKey];
     [isFollowingQuery whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
     [isFollowingQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
-    [isFollowingQuery whereKey:kPAPActivityToUserKey containedIn:results];
+    [isFollowingQuery whereKey:kPAPActivityToUserKey containedIn:self.results];
     [isFollowingQuery setCachePolicy:kPFCachePolicyNetworkOnly];
     
     [isFollowingQuery includeKey:kPAPActivityToUserKey];
@@ -164,6 +173,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
+    
     static NSString *FriendCellIdentifier = @"FriendCell";
     
     PAPFindFriendsCell *cell = [tableView dequeueReusableCellWithIdentifier:FriendCellIdentifier];

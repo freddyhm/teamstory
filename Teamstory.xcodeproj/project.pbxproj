@@ -358,7 +358,7 @@
 		D530C3F318FB22FC00739027 /* iRate.m in Sources */ = {isa = PBXBuildFile; fileRef = D530C3F118FB22FC00739027 /* iRate.m */; };
 		D531F7CC18B5DE11008AE73F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D531F7CB18B5DE11008AE73F /* CoreVideo.framework */; };
 		D531F7CE18B5DE44008AE73F /* Appsee.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D531F7CD18B5DE44008AE73F /* Appsee.framework */; };
-		D5743808194629280040C96A /* PAPFindFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5743807194629280040C96A /* PAPFindFriendsViewController.m */; };
+		D5743808194629280040C96A /* followersFollowingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5743807194629280040C96A /* followersFollowingViewController.m */; };
 		D575A06F1947834C00C6BCC2 /* btn_editprofile.png in Resources */ = {isa = PBXBuildFile; fileRef = D575A0691947834C00C6BCC2 /* btn_editprofile.png */; };
 		D575A0701947834C00C6BCC2 /* btn_editprofile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D575A06A1947834C00C6BCC2 /* btn_editprofile@2x.png */; };
 		D575A0711947834C00C6BCC2 /* btn_follow.png in Resources */ = {isa = PBXBuildFile; fileRef = D575A06B1947834C00C6BCC2 /* btn_follow.png */; };
@@ -775,8 +775,8 @@
 		C4F102CF156C57FD0061BC3E /* PAPAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = PAPAccountViewController.m; path = Anypic/PAPAccountViewController.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C4F102D0156C57FD0061BC3E /* PAPPhotoDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPPhotoDetailsViewController.h; path = Anypic/PAPPhotoDetailsViewController.h; sourceTree = SOURCE_ROOT; };
 		C4F102D1156C57FD0061BC3E /* PAPPhotoDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = PAPPhotoDetailsViewController.m; path = Anypic/PAPPhotoDetailsViewController.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		C4F102D4156C580C0061BC3E /* PAPFindFriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPFindFriendsViewController.h; path = Anypic/PAPFindFriendsViewController.h; sourceTree = SOURCE_ROOT; };
-		C4F102D5156C580C0061BC3E /* PAPFindFriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = PAPFindFriendsViewController.m; path = Anypic/PAPFindFriendsViewController.m; sourceTree = SOURCE_ROOT; };
+		C4F102D4156C580C0061BC3E /* followersFollowingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = followersFollowingViewController.h; path = Anypic/followersFollowingViewController.h; sourceTree = SOURCE_ROOT; };
+		C4F102D5156C580C0061BC3E /* followersFollowingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = followersFollowingViewController.m; path = Anypic/followersFollowingViewController.m; sourceTree = SOURCE_ROOT; };
 		C4F102D6156C580C0061BC3E /* PAPSettingsActionSheetDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPSettingsActionSheetDelegate.h; path = Anypic/PAPSettingsActionSheetDelegate.h; sourceTree = SOURCE_ROOT; };
 		C4F102D7156C580C0061BC3E /* PAPSettingsActionSheetDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPSettingsActionSheetDelegate.m; path = Anypic/PAPSettingsActionSheetDelegate.m; sourceTree = SOURCE_ROOT; };
 		C4F102DA156C58170061BC3E /* PAPEditPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPEditPhotoViewController.h; path = Anypic/PAPEditPhotoViewController.h; sourceTree = SOURCE_ROOT; };
@@ -865,8 +865,8 @@
 		D530C3F118FB22FC00739027 /* iRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iRate.m; sourceTree = "<group>"; };
 		D531F7CB18B5DE11008AE73F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		D531F7CD18B5DE44008AE73F /* Appsee.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Appsee.framework; path = External/Appsee.framework; sourceTree = "<group>"; };
-		D5743806194629280040C96A /* PAPFindFriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPFindFriendsViewController.h; path = Anypic/PAPFindFriendsViewController.h; sourceTree = SOURCE_ROOT; };
-		D5743807194629280040C96A /* PAPFindFriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPFindFriendsViewController.m; path = Anypic/PAPFindFriendsViewController.m; sourceTree = SOURCE_ROOT; };
+		D5743806194629280040C96A /* followersFollowingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = followersFollowingViewController.h; path = Anypic/followersFollowingViewController.h; sourceTree = SOURCE_ROOT; };
+		D5743807194629280040C96A /* followersFollowingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = followersFollowingViewController.m; path = Anypic/followersFollowingViewController.m; sourceTree = SOURCE_ROOT; };
 		D575A0691947834C00C6BCC2 /* btn_editprofile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_editprofile.png; sourceTree = "<group>"; };
 		D575A06A1947834C00C6BCC2 /* btn_editprofile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_editprofile@2x.png"; sourceTree = "<group>"; };
 		D575A06B1947834C00C6BCC2 /* btn_follow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_follow.png; sourceTree = "<group>"; };
@@ -1577,8 +1577,8 @@
 				C4F102C8156C57ED0061BC3E /* PAPHomeViewController.m */,
 				C4F102CE156C57FD0061BC3E /* PAPAccountViewController.h */,
 				C4F102CF156C57FD0061BC3E /* PAPAccountViewController.m */,
-				D5743806194629280040C96A /* PAPFindFriendsViewController.h */,
-				D5743807194629280040C96A /* PAPFindFriendsViewController.m */,
+				D5743806194629280040C96A /* followersFollowingViewController.h */,
+				D5743807194629280040C96A /* followersFollowingViewController.m */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -1586,8 +1586,8 @@
 		C4A894931558796400DC57D3 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				C4F102D4156C580C0061BC3E /* PAPFindFriendsViewController.h */,
-				C4F102D5156C580C0061BC3E /* PAPFindFriendsViewController.m */,
+				C4F102D4156C580C0061BC3E /* followersFollowingViewController.h */,
+				C4F102D5156C580C0061BC3E /* followersFollowingViewController.m */,
 				C4F102D6156C580C0061BC3E /* PAPSettingsActionSheetDelegate.h */,
 				C4F102D7156C580C0061BC3E /* PAPSettingsActionSheetDelegate.m */,
 			);
@@ -2342,7 +2342,7 @@
 				C4F102BC156C57CD0061BC3E /* PAPTabBarController.m in Sources */,
 				C4F102C2156C57DA0061BC3E /* PAPLogInViewController.m in Sources */,
 				C4F102C3156C57DA0061BC3E /* PAPWelcomeViewController.m in Sources */,
-				D5743808194629280040C96A /* PAPFindFriendsViewController.m in Sources */,
+				D5743808194629280040C96A /* followersFollowingViewController.m in Sources */,
 				D52C1E2318D9515D00625887 /* KonotorEventHandler.m in Sources */,
 				D52C1E2418D9515D00625887 /* KonotorFeedbackScreen.m in Sources */,
 				462B363E1880AB5D008C28AE /* discoverPageViewController.m in Sources */,

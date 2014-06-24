@@ -11,7 +11,7 @@
 #import "PAPSettingsActionSheetDelegate.h"
 #import "SVProgressHUD.h"
 #import "PAPwebviewViewController.h"
-#import "PAPFindFriendsViewController.h"
+#import "followersFollowingViewController.h"
 
 @interface PAPAccountViewController() {
     float alphaValue_twitter;
@@ -445,10 +445,18 @@
                 
                 [self.followerCountLabel setText:@"0"];
                 
+                // filter out zombie pointers (manually deleted users)
+                PFQuery *noZombieQuery = [PFUser query];
+                [noZombieQuery whereKeyExists:@"objectId"];
+                
                 PFQuery *queryFollowerCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
                 [queryFollowerCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
                 [queryFollowerCount whereKey:kPAPActivityToUserKey equalTo:self.user];
                 [queryFollowerCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
+                
+                // get followers for current user
+                [queryFollowerCount whereKey:kPAPActivityFromUserKey matchesQuery:noZombieQuery];
+                
                 [queryFollowerCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
                     if (!error) {
                         [self.followerCountLabel setText:[NSString stringWithFormat:@"%d",number]];
@@ -465,6 +473,10 @@
                 [queryFollowingCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
                 [queryFollowingCount whereKey:kPAPActivityFromUserKey equalTo:self.user];
                 [queryFollowingCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
+                
+                // get followers for current user
+                [queryFollowingCount whereKey:kPAPActivityToUserKey matchesQuery:noZombieQuery];
+                
                 [queryFollowingCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
                     if (!error) {
                         [self.followingCountLabel setText:[NSString stringWithFormat:@"%d", number]];
@@ -514,13 +526,13 @@
 
 - (void)showFollowers:(id)selector{
     
-    PAPFindFriendsViewController *showFollowers = [[PAPFindFriendsViewController alloc]initWithStyle:UITableViewStylePlain type:@"followers"];
+    followersFollowingViewController *showFollowers = [[followersFollowingViewController alloc]initWithStyle:UITableViewStylePlain type:@"followers" forUser:self.user];
     
     [self.navigationController pushViewController:showFollowers animated:YES];
 }
 
 - (void)showFollowing:(id)selector{
-    PAPFindFriendsViewController *showFollowing = [[PAPFindFriendsViewController alloc]initWithStyle:UITableViewStylePlain type:@"following"];
+    followersFollowingViewController *showFollowing = [[followersFollowingViewController alloc]initWithStyle:UITableViewStylePlain type:@"following" forUser:self.user];
     
     [self.navigationController pushViewController:showFollowing animated:YES];
 }
@@ -812,6 +824,10 @@
 
 -(void)refreshFollowerCount:(void (^)(BOOL))completed{
     
+    // filter out zombie pointers (manually deleted users)
+    PFQuery *noZombieQuery = [PFUser query];
+    [noZombieQuery whereKeyExists:@"objectId"];
+    
     // return completed when both queries have finished
     self.userStatUpdateCount = 0;
     
@@ -820,6 +836,8 @@
     [queryFollowerCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
     [queryFollowerCount whereKey:kPAPActivityToUserKey equalTo:self.user];
     [queryFollowerCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
+    [queryFollowerCount whereKey:kPAPActivityFromUserKey matchesQuery:noZombieQuery];
+    
     [queryFollowerCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
         if (!error) {
             
@@ -843,6 +861,8 @@
     [queryFollowingCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
     [queryFollowingCount whereKey:kPAPActivityFromUserKey equalTo:self.user];
     [queryFollowingCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
+    [queryFollowingCount whereKey:kPAPActivityToUserKey matchesQuery:noZombieQuery];
+    
     [queryFollowingCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
         if (!error) {
             
