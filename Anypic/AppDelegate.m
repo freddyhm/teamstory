@@ -7,7 +7,6 @@
 #import "AppDelegate.h"
 
 #import "GAI.h"
-#import <Appsee/Appsee.h>
 #import "Konotor.h"
 #import "KonotorEventHandler.h"
 #import "Reachability.h"
@@ -93,7 +92,6 @@ static NSString *const TWITTER_KEY = @"VGiCnk6P01PjqV13rm34Bw";
 static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0z9Q";
 #else
 static NSString *const GOOGLE_TRACKING_ID = @"UA-49381420-1";
-static NSString *const APPSEE = @"ee2b6679635f492dbc1d36a14fe196ae";
 static NSString *const KONOTOR_APP_ID = @"ab785be6-9398-4b6a-8ae6-4d83431edad9";
 static NSString *const KONOTOR_APP_KEY = @"3784ef60-6e0f-48fc-9a6c-3ac71c127dcb";
 static NSString *const PARSE_APP_ID = @"SPQlkxDYPDcVhbICHFzjwSsREHaSqKQIKwkijDaJ";
@@ -118,11 +116,6 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     
     // Initialize tracker. Replace with your tracking ID.
     [[GAI sharedInstance] trackerWithTrackingId:GOOGLE_TRACKING_ID];
-    
-    // Appsee setup only for release
-    #if RELEASE
-        [Appsee start:APPSEE];
-    #endif
     
     // Konotor setup
     [Konotor InitWithAppID:KONOTOR_APP_ID AppKey:KONOTOR_APP_KEY withDelegate:[KonotorEventHandler sharedInstance]];
@@ -300,6 +293,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     // initiate konotor
     [Konotor newSession];
     
+    /*
     // get unread messages, show screen if greater than 0
     self.konotorCount = 0;
     
@@ -309,6 +303,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     if([self.konotorCount intValue] > 0){
         [KonotorFeedbackScreen showFeedbackScreen];
     }
+     */
 }
 
 #pragma mark - UITabBarControllerDelegate

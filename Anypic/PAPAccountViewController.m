@@ -86,7 +86,15 @@
 @synthesize whiteBackground;
 
 
-#pragma mark - Initialization
+#if DEBUG
+static NSString *const kevin_account = @"wKx1GsCnSq";
+static NSString *const justin_account = @"WUZTy3Ayxy";
+static NSString *const freddy_account = @"4Su2vXzhFq";
+#else
+static NSString *const kevin_account = @"3KiW2NoGuT";
+static NSString *const justin_account = @"vB648p1bT1";
+static NSString *const freddy_account = @"rblDQcdZcY";
+#endif
 
 
 #pragma mark - UIViewController
@@ -541,6 +549,7 @@
     // analytics
     [super viewWillAppear:YES];
     [PAPUtility captureScreenGA:@"Account"];
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     
     
     if(![SVProgressHUD isVisible]){
@@ -705,7 +714,13 @@
     
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self.settingsActionSheetDelegate cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"About This Version",@"Privacy Policy",@"Terms of Use",@"Log Out", nil];
     
-    [actionSheet showFromTabBar:self.tabBarController.tabBar];
+    if ([[self.user objectId] isEqualToString:kevin_account] || [[self.user objectId] isEqualToString:justin_account] || [[self.user objectId] isEqualToString:freddy_account]) {
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self.settingsActionSheetDelegate cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Edit Profile",@"About This Version",@"Privacy Policy",@"Terms of Use",@"Log Out", @"Notification Control", nil];
+        [actionSheet showFromTabBar:self.tabBarController.tabBar];
+    } else {
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self.settingsActionSheetDelegate cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Edit Profile",@"About This Version",@"Privacy Policy",@"Terms of Use",@"Log Out", nil];
+        [actionSheet showFromTabBar:self.tabBarController.tabBar];
+    }
 }
 
 - (void)editProfileAction:(id)sender{

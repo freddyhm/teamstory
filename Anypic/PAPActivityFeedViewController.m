@@ -100,6 +100,7 @@
     
     // analytics
     [PAPUtility captureScreenGA:@"Activity"];
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     
     // reset badge number on server and activity bar when user checks activity feed and badge value is present
     if(self.navigationController.tabBarItem.badgeValue != nil){
@@ -123,7 +124,13 @@
         NSString *activityString = [[[object objectForKey:@"toUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]] ? [PAPActivityFeedViewController stringForActivityType:(NSString*)[object objectForKey:kPAPActivityTypeKey] object:object] : NSLocalizedString(@"commented on your followed photo", nil);
         
         if ([[object objectForKey:@"atmention"] count] > 0) {
-            activityString = NSLocalizedString(@"mentioned you in a post", nil);
+            for (int i = 0; i < [[object objectForKey:@"atmention"] count]; i++) {
+                if ([[[[object objectForKey:@"atmention"] objectAtIndex:i] objectId] isEqualToString:[PFUser currentUser].objectId]) {
+                    NSLog(@"goes through at mention %d", i);
+                    activityString = NSLocalizedString(@"mentioned you in a post", nil);
+                    break;
+                }
+            }
         }
         
         if ([object objectForKey:@"forComment"] != nil){
@@ -416,13 +423,13 @@
                 if ([[[[object objectForKey:@"atmention"] objectAtIndex:i] objectId] isEqualToString:[PFUser currentUser].objectId]) {
                     NSLog(@"goes through at mention %d", i);
                     return NSLocalizedString(@"mentioned you in a post", nil);
+                    break;
                 }
             }
             return NSLocalizedString(@"commented on your photo", nil);
         } else {
             return NSLocalizedString(@"commented on your photo", nil);
         }
-    
     } else if ([activityType isEqualToString:kPAPActivityTypeJoined]) {
         return NSLocalizedString(@"joined Teamstory", nil);
     } else {

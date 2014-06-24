@@ -48,6 +48,8 @@
     UIColor *color = [UIColor colorWithRed:134.0f/255.0f green:134.0f/255.0f blue:134.0f/255.0f alpha:1.0f];
     
     if ([self.login_type isEqualToString:@"signIn"]) {
+        
+        UIFont *defaultFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:15.0f];
         user_email = [[UITextField alloc] init];
         user_email.layer.cornerRadius = 1.5f;
         user_email.leftView = paddingView;
@@ -56,7 +58,7 @@
         user_email.delegate = self;
         user_email.autocapitalizationType = UITextAutocapitalizationTypeNone;
         [user_email setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.6f]];
-        user_email.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email" attributes:@{NSForegroundColorAttributeName: color, NSFontAttributeName:@"HelveticaNeue-Thin"}];
+        user_email.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email" attributes:@{NSForegroundColorAttributeName: color, NSFontAttributeName:defaultFont}];
         [self.logInView addSubview:user_email];
         
         user_pw = [[UITextField alloc] init];
@@ -64,7 +66,7 @@
         user_pw.placeholder = @"Password";
         [user_pw setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.6f]];
         [user_pw setFont:[UIFont systemFontOfSize:15]];
-        user_pw.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{NSForegroundColorAttributeName: color, NSFontAttributeName:@"HelveticaNeue-Thin"}];
+        user_pw.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{NSForegroundColorAttributeName: color, NSFontAttributeName:defaultFont}];
         user_pw.userInteractionEnabled = YES;
         user_pw.leftView = paddingView2;
         user_pw.returnKeyType = UIReturnKeyNext;

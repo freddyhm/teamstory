@@ -9,10 +9,18 @@
 #import "PAPProfileImageView.h"
 #import "PAPUtility.h"
 #import "PAPwebviewViewController.h"
+#import "PAPPhotoDetailsViewController.h"
+#import "SVProgressHUD.h"
 
 #define unlikeButtonDimHeight 15.0f
 #define unlikeButtonDimWidth 50.0f
 #define likeCounterAndHeartButtonDim 10.0f
+
+enum ActionSheetTags {
+    withUrl = 0,
+    withOutUrl = 1,
+    confirmation = 2
+};
 
 
 static TTTTimeIntervalFormatter *timeFormatter;
@@ -20,6 +28,11 @@ static TTTTimeIntervalFormatter *timeFormatter;
 @interface PAPBaseTextCell () {
     BOOL hideSeparator; // True if the separator shouldn't be shown
 }
+
+@property (nonatomic, strong) UITabBarController *ih_tabBarController;
+@property (nonatomic, strong) PFObject *ih_object;
+@property (nonatomic, strong) PFObject *ih_photo;
+@property (nonatomic, strong) UIButton *editButton;
 
 /* Private static helper to obtain the horizontal space left for name and content after taking the inset and image in consideration */
 + (CGFloat)horizontalTextSpaceForInsetWidth:(CGFloat)insetWidth;
@@ -40,6 +53,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
 @synthesize website;
 @synthesize navController;
 @synthesize cellType;
+@synthesize ih_tabBarController;
+@synthesize ih_object;
+@synthesize ih_photo;
+@synthesize editButton;
 
 #pragma mark - NSObject
 
@@ -84,6 +101,11 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.nameButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.nameButton setBackgroundColor:[UIColor clearColor]];
         
+        if ([reuseIdentifier isEqualToString:@"CommentCell"]) {
+            self.editButton = [[UIButton alloc] init];
+            [self.editButton setBackgroundColor:[UIColor clearColor]];
+        }
+        
         if ([reuseIdentifier isEqualToString:@"atmentionCell"]) {
             [mainView setBackgroundColor:[UIColor colorWithRed:241.0f/255.0f green:242.0f/255.0f blue:246.0f/255.0f alpha:1.0f]];
             [self.nameButton setTitleColor:[UIColor colorWithWhite:0.5f alpha:0.95f] forState:UIControlStateNormal];
@@ -105,6 +127,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
             self.separatorImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"SeparatorComments.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 1, 0, 1)]];
 
         }
+        
+        [mainView addSubview:self.editButton];
         
         if ([reuseIdentifier isEqualToString:@"CommentCell"]) {
             
@@ -204,6 +228,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     CGSize contentSize = [self.contentLabel sizeThatFits:maximumLabelSize];
     self.contentLabel.font = [UIFont systemFontOfSize:13.0f];
     [self.contentLabel setFrame:CGRectMake(nameX, vertTextBorderSpacing, contentSize.width, contentSize.height)];
+    self.editButton.frame = CGRectMake(0.0f, 0.0f, mainView.bounds.size.width, mainView.bounds.size.height);
     
     // Layout the timestamp label
     CGSize timeSize = ([self.timeLabel.text boundingRectWithSize:CGSizeMake(horizontalTextSpace, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11], NSParagraphStyleAttributeName: paragraphStyle.copy} context:nil]).size;
@@ -346,6 +371,17 @@ static TTTTimeIntervalFormatter *timeFormatter;
     self.navController = anavController;
 }
 
+-(void)tabBarController:(UITabBarController *)tabBarController {
+    self.ih_tabBarController = tabBarController;
+}
+
+-(void)object:(PFObject *)object {
+    self.ih_object = object;
+}
+-(void)photo:(PFObject *)photo {
+    self.ih_photo = photo;
+}
+
 - (void)setContentText:(NSString *)contentString {
     // If we have a user we pad the content with spaces to make room for the name
         if (self.user) {
@@ -373,7 +409,21 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.contentLabel setAttributedText:commentText];
             [self.contentLabel setUserInteractionEnabled:YES];
             
-            if (range.length > 0) {
+            if (range.length > 0 && [[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]]) {
+                [self.editButton addTarget:self action:@selector(commentInflatorActionWithUrl:) forControlEvents:UIControlEventTouchUpInside];
+                
+                UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentInflatorActionWithUrl:)];
+                gestureRec.numberOfTouchesRequired = 1;
+                gestureRec.numberOfTapsRequired = 1;
+                [self.contentLabel addGestureRecognizer:gestureRec];
+            } else if ([[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]]){
+                [self.editButton addTarget:self action:@selector(commentInflatorAction:) forControlEvents:UIControlEventTouchUpInside];
+                
+                UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentInflatorAction:)];
+                gestureRec.numberOfTouchesRequired = 1;
+                gestureRec.numberOfTapsRequired = 1;
+                [self.contentLabel addGestureRecognizer:gestureRec];
+            }else if (range.length > 0) {
                 UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openUrl:)];
                 gestureRec.numberOfTouchesRequired = 1;
                 gestureRec.numberOfTapsRequired = 1;
@@ -385,6 +435,27 @@ static TTTTimeIntervalFormatter *timeFormatter;
     
     [self setNeedsDisplay];
 
+}
+
+- (void)commentInflatorActionWithUrl:(id)sender {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
+    actionSheet.delegate = self;
+    actionSheet.tag = withUrl;
+    [actionSheet addButtonWithTitle:@"Open Url"];
+    [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Edit Comment"]];
+    [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Delete Comment"]];
+    [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
+    [actionSheet showFromTabBar:self.ih_tabBarController.tabBar];
+}
+
+- (void)commentInflatorAction:(id)sender {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
+    actionSheet.delegate = self;
+    actionSheet.tag = withOutUrl;
+    [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Edit Comment"]];
+    [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Delete Comment"]];
+    [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
+    [actionSheet showFromTabBar:self.ih_tabBarController.tabBar];
 }
 
 - (void)openUrl:(id)sender {
@@ -430,6 +501,87 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 - (void)hideSeparator:(BOOL)hide {
     hideSeparator = hide;
+}
+
+#pragma mark - UIActionSheetDelegate
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if(actionSheet.tag == withOutUrl) {
+        if(buttonIndex == 0) {
+            //Edit comment button
+            NSString *comment = [self.contentLabel.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Edit Comment" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+            alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+            [alertView textFieldAtIndex:0].text = comment;
+            [alertView show];
+            
+        } else if (buttonIndex == 1) {
+            
+            //Delete comment
+            [self shouldDeleteComment];
+        }
+    } else if (actionSheet.tag == withUrl) {
+        if(buttonIndex == 0) {
+            //Open Url
+            [self openUrl:self];
+        } else if (buttonIndex == 1) {
+            //Edit Comment Button
+            NSString *comment = [self.contentLabel.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Edit Comment" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+            alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+            [alertView textFieldAtIndex:0].text = comment;
+            [alertView show];
+        } else if (buttonIndex == 2) {
+            
+            //Delete comment
+            [self shouldDeleteComment];
+        }
+    }
+}
+
+- (void)shouldDeleteComment {
+    [SVProgressHUD show];
+    // Delete all activites related to this photo
+    [self.ih_object deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            //initially pop view and recreating screen in order to refresh the view.
+            [self.navController popViewControllerAnimated:NO];
+            
+            PAPPhotoDetailsViewController *photoDetailsViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:self.ih_photo source:@"tapPhoto"];
+            [self.navController pushViewController:photoDetailsViewController animated:NO];
+            
+        } else {
+            NSLog(@"%@", error);
+        }
+        [SVProgressHUD dismiss];
+    }];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        //Pressed Okay
+        [SVProgressHUD show];
+        self.ih_object[@"content"] = [alertView textFieldAtIndex:0].text;
+        
+        [self.ih_object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (!error) {
+                [SVProgressHUD dismiss];
+                
+                [self.navController popViewControllerAnimated:NO];
+                
+                PAPPhotoDetailsViewController *photoDetailsViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:self.ih_photo source:@"tapPhoto"];
+                [self.navController pushViewController:photoDetailsViewController animated:NO];
+            } else {
+                NSLog(@"%@", error);
+            }
+        }];
+    }
+}
+
+-(void)editButtonAction:(id)sender {
+    
 }
 
 @end

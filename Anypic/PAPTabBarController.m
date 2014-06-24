@@ -220,6 +220,7 @@
     
     self.postMenu.hidden = YES;
     
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     BOOL cameraDeviceAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
     BOOL photoLibraryAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
     

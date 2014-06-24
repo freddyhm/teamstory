@@ -129,8 +129,16 @@ static TTTTimeIntervalFormatter *timeFormatter;
     NSString *activityString = isSubscription ? @"commented on a followed photo" : [PAPActivityFeedViewController stringForActivityType:(NSString*)[activity objectForKey:kPAPActivityTypeKey] object:activity];
     
     if ([[activity objectForKey:@"atmention"] count] > 0) {
-        activityString = NSLocalizedString(@"mentioned you in a post", nil);
-    }else if([[activity objectForKey:@"type"] isEqualToString:@"like comment"]){
+        for (int i = 0; i < [[activity objectForKey:@"atmention"] count]; i++) {
+            if ([[[[activity objectForKey:@"atmention"] objectAtIndex:i] objectId] isEqualToString:[PFUser currentUser].objectId]) {
+                NSLog(@"goes through at mention %d", i);
+                activityString = NSLocalizedString(@"mentioned you in a post", nil);
+                break;
+            }
+        }
+    }
+    
+    if ([[activity objectForKey:@"type"] isEqualToString:@"like comment"]) {
         activityString = NSLocalizedString(@"liked your comment", nil);
     }
     

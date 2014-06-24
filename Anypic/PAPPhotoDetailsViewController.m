@@ -15,7 +15,6 @@
 #import "SVProgressHUD.h"
 #import "MBProgressHUD.h"
 
-
 enum ActionSheetTags {
     MainActionSheetTag = 0,
     reportTypeTag = 1,
@@ -100,11 +99,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
     return self;
 }
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:YES];
-}
-
 
 #pragma mark - UIViewController
 
@@ -339,6 +333,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             cell.delegate = self;
         }
         [cell navigationController:self.navigationController];
+        [cell object:[self.objects objectAtIndex:indexPath.row]];
+        [cell tabBarController:self.tabBarController];
+        [cell photo:self.photo];
+        
         [cell setUser:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityFromUserKey]];
         [cell setContentText:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityContentKey]];
         [cell setDate:[[self.objects objectAtIndex:indexPath.row] createdAt]];
@@ -422,12 +420,22 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     NSDictionary* info = [note userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     NSInteger offset = 0.0f;
-    if ([UIScreen mainScreen].bounds.size.height == 480) {
-        offset = 60.0f;
-    } else {
-        offset = 150.0f;
-    }
     
+    // Check system version for keyboard offset, ios8 added suggestion bar 
+    if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
+        if ([UIScreen mainScreen].bounds.size.height == 480) {
+            offset = -20.0f;
+        } else {
+            offset = 60.0f;
+        }
+    }else{
+        if ([UIScreen mainScreen].bounds.size.height == 480) {
+            offset = 60.0f;
+        } else {
+            offset = 150.0f;
+        }
+    }
+
     // set new offset based on custom text view + keyboard + phone offset
     [self.tableView setContentOffset:CGPointMake(0.0f, ([self getCurrentTableContentHeightWithTextView]- kbSize.height - offset)) animated:YES];
 }

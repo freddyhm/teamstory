@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		092354B313A1D7EB00DA740F /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 092354B213A1D7EB00DA740F /* CFNetwork.framework */; };
 		092354B513A1D7F000DA740F /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 092354B413A1D7F000DA740F /* SystemConfiguration.framework */; };
 		092354B713A1D83C00DA740F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 092354B613A1D83C00DA740F /* MobileCoreServices.framework */; };
 		095ACE8613C68EA300566243 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 095ACE8513C68EA300566243 /* AudioToolbox.framework */; };
@@ -49,6 +48,11 @@
 		4602FD2318BD553B0097DBEC /* konotor-popup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4602FD0F18BD553B0097DBEC /* konotor-popup@2x.png */; };
 		4602FD2418BD553B0097DBEC /* konotor-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 4602FD1018BD553B0097DBEC /* konotor-logo.png */; };
 		4602FD2518BD553B0097DBEC /* konotor-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4602FD1118BD553B0097DBEC /* konotor-logo@2x.png */; };
+		46076EE7193E9A6000A7B317 /* PAPNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46076EE6193E9A6000A7B317 /* PAPNotificationViewController.m */; };
+		46076EEC193FE3EF00A7B317 /* notif_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46076EE8193FE3EF00A7B317 /* notif_close@2x.png */; };
+		46076EED193FE3EF00A7B317 /* notif_star.png in Resources */ = {isa = PBXBuildFile; fileRef = 46076EE9193FE3EF00A7B317 /* notif_star.png */; };
+		46076EEE193FE3EF00A7B317 /* notif_star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46076EEA193FE3EF00A7B317 /* notif_star@2x.png */; };
+		46076EEF193FE3EF00A7B317 /* notif_close.png in Resources */ = {isa = PBXBuildFile; fileRef = 46076EEB193FE3EF00A7B317 /* notif_close.png */; };
 		460997531938119A00C5AD96 /* icon-angel-profile.png in Resources */ = {isa = PBXBuildFile; fileRef = 460997451938119A00C5AD96 /* icon-angel-profile.png */; };
 		460997541938119A00C5AD96 /* icon-angel-profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460997461938119A00C5AD96 /* icon-angel-profile@2x.png */; };
 		460997551938119A00C5AD96 /* icon-angel.png in Resources */ = {isa = PBXBuildFile; fileRef = 460997471938119A00C5AD96 /* icon-angel.png */; };
@@ -158,6 +162,7 @@
 		4691B52418C56AAF00B7DF6A /* tnz-popup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B52218C56AAF00B7DF6A /* tnz-popup@2x.png */; };
 		4691B52518C56AAF00B7DF6A /* tnz-popup.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B52318C56AAF00B7DF6A /* tnz-popup.png */; };
 		4691B52E18CCE81600B7DF6A /* PAPLoginSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4691B52D18CCE81600B7DF6A /* PAPLoginSelectionViewController.m */; };
+		46A0C25D194E4A2D00811CBC /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 092354B213A1D7EB00DA740F /* CFNetwork.framework */; };
 		46ABD72F18AADFFB008F5AAB /* default-pic.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD72D18AADFFB008F5AAB /* default-pic.png */; };
 		46ABD73018AADFFB008F5AAB /* default-pic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */; };
 		46ABD73318B12E01008F5AAB /* PAPperksoverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 46ABD73218B12E01008F5AAB /* PAPperksoverlay.m */; };
@@ -489,6 +494,12 @@
 		4602FD0F18BD553B0097DBEC /* konotor-popup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor-popup@2x.png"; sourceTree = "<group>"; };
 		4602FD1018BD553B0097DBEC /* konotor-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor-logo.png"; sourceTree = "<group>"; };
 		4602FD1118BD553B0097DBEC /* konotor-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "konotor-logo@2x.png"; sourceTree = "<group>"; };
+		46076EE5193E9A6000A7B317 /* PAPNotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPNotificationViewController.h; path = Anypic/PAPNotificationViewController.h; sourceTree = SOURCE_ROOT; };
+		46076EE6193E9A6000A7B317 /* PAPNotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPNotificationViewController.m; path = Anypic/PAPNotificationViewController.m; sourceTree = SOURCE_ROOT; };
+		46076EE8193FE3EF00A7B317 /* notif_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notif_close@2x.png"; sourceTree = "<group>"; };
+		46076EE9193FE3EF00A7B317 /* notif_star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notif_star.png; sourceTree = "<group>"; };
+		46076EEA193FE3EF00A7B317 /* notif_star@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notif_star@2x.png"; sourceTree = "<group>"; };
+		46076EEB193FE3EF00A7B317 /* notif_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notif_close.png; sourceTree = "<group>"; };
 		460997451938119A00C5AD96 /* icon-angel-profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-angel-profile.png"; sourceTree = "<group>"; };
 		460997461938119A00C5AD96 /* icon-angel-profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-angel-profile@2x.png"; sourceTree = "<group>"; };
 		460997471938119A00C5AD96 /* icon-angel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-angel.png"; sourceTree = "<group>"; };
@@ -977,11 +988,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46A0C25D194E4A2D00811CBC /* CFNetwork.framework in Frameworks */,
+				09ABC07413A1D52D009C3FCF /* Foundation.framework in Frameworks */,
 				D51C98A218E28D16001230DA /* libGoogleAnalyticsServices.a in Frameworks */,
 				D5FC09C818A9C272000D85F1 /* CoreData.framework in Frameworks */,
 				D5A5F52018D2C3CD000BB243 /* Parse.framework in Frameworks */,
 				D5A5F51E18D2C3C1000BB243 /* FacebookSDK.framework in Frameworks */,
-				D531F7CE18B5DE44008AE73F /* Appsee.framework in Frameworks */,
 				D531F7CC18B5DE11008AE73F /* CoreVideo.framework in Frameworks */,
 				D5FC09CC18A9C2FF000D85F1 /* OpenGLES.framework in Frameworks */,
 				D5FC09CA18A9C2C2000D85F1 /* CoreImage.framework in Frameworks */,
@@ -1000,11 +1012,9 @@
 				09BEF34C13D51C3F001BBCDB /* Security.framework in Frameworks */,
 				095ACE8613C68EA300566243 /* AudioToolbox.framework in Frameworks */,
 				092354B513A1D7F000DA740F /* SystemConfiguration.framework in Frameworks */,
-				092354B313A1D7EB00DA740F /* CFNetwork.framework in Frameworks */,
 				09ABC07613A1D52D009C3FCF /* CoreGraphics.framework in Frameworks */,
 				D5FB8E6C18F79E2D0034CAE6 /* Crashlytics.framework in Frameworks */,
 				09ABC07213A1D52D009C3FCF /* UIKit.framework in Frameworks */,
-				09ABC07413A1D52D009C3FCF /* Foundation.framework in Frameworks */,
 				D52C1E4B18D9515D00625887 /* libKonotorCombined.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1035,7 +1045,6 @@
 			children = (
 				D5A5F51F18D2C3CD000BB243 /* Parse.framework */,
 				D5A5F51D18D2C3C1000BB243 /* FacebookSDK.framework */,
-				D531F7CD18B5DE44008AE73F /* Appsee.framework */,
 				D531F7CB18B5DE11008AE73F /* CoreVideo.framework */,
 				D5FC09CB18A9C2FF000D85F1 /* OpenGLES.framework */,
 				D5FC09C918A9C2C2000D85F1 /* CoreImage.framework */,
@@ -1098,6 +1107,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		46076EE4193E9A3A00A7B317 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				46076EE5193E9A6000A7B317 /* PAPNotificationViewController.h */,
+				46076EE6193E9A6000A7B317 /* PAPNotificationViewController.m */,
+			);
+			name = Notification;
+			sourceTree = "<group>";
+		};
 		46ABD75C18B53C1D008F5AAB /* webview */ = {
 			isa = PBXGroup;
 			children = (
@@ -1156,6 +1174,10 @@
 				D5C0311B19391749000C98B7 /* bubble_right_selected@2x.png */,
 				D5C0311C19391749000C98B7 /* bubble_right.png */,
 				D5C0311D19391749000C98B7 /* bubble_right@2x.png */,
+				46076EE8193FE3EF00A7B317 /* notif_close@2x.png */,
+				46076EE9193FE3EF00A7B317 /* notif_star.png */,
+				46076EEA193FE3EF00A7B317 /* notif_star@2x.png */,
+				46076EEB193FE3EF00A7B317 /* notif_close.png */,
 				460997451938119A00C5AD96 /* icon-angel-profile.png */,
 				460997461938119A00C5AD96 /* icon-angel-profile@2x.png */,
 				460997471938119A00C5AD96 /* icon-angel.png */,
@@ -1481,7 +1503,7 @@
 			name = Login;
 			sourceTree = "<group>";
 		};
-		74B86B911562DB2600CAFFD2 /* PhotoDetailsViews */ = {
+		74B86B911562DB2600CAFFD2 /* PhotoViews */ = {
 			isa = PBXGroup;
 			children = (
 				C4F102A7156C57620061BC3E /* PAPPhotoDetailsHeaderView.h */,
@@ -1491,7 +1513,7 @@
 				D5FC095918A9B586000D85F1 /* CameraFilterViewController.xib */,
 				D5903C74192EBBF900DC9896 /* ThoughtPostViewController.xib */,
 			);
-			name = PhotoDetailsViews;
+			name = PhotoViews;
 			sourceTree = "<group>";
 		};
 		C46AEBF8157FE078009CBA03 /* PAPBaseTextCell */ = {
@@ -1594,7 +1616,7 @@
 			name = Settings;
 			sourceTree = "<group>";
 		};
-		C4A894941558796C00DC57D3 /* Take Photo */ = {
+		C4A894941558796C00DC57D3 /* Photo & Post */ = {
 			isa = PBXGroup;
 			children = (
 				D5FC094F18A9B518000D85F1 /* CropResizeViewController.h */,
@@ -1608,17 +1630,18 @@
 				D5903C72192EBBF900DC9896 /* ThoughtPostViewController.h */,
 				D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */,
 			);
-			name = "Take Photo";
+			name = "Photo & Post";
 			sourceTree = "<group>";
 		};
 		C4A89496155879F600DC57D3 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				46076EE4193E9A3A00A7B317 /* Notification */,
 				46ABD75C18B53C1D008F5AAB /* webview */,
 				46E1EB6C183BCA4600F64274 /* ProfileSetting */,
 				74A504E51565F17E00CFA4E3 /* Login */,
 				C4A894921558795F00DC57D3 /* Home */,
-				C4A894941558796C00DC57D3 /* Take Photo */,
+				C4A894941558796C00DC57D3 /* Photo & Post */,
 				C4BB4B85156D5CB7008B4B56 /* Activity */,
 				74A504E41565F13C00CFA4E3 /* Detail */,
 				C4A894931558796400DC57D3 /* Settings */,
@@ -1633,7 +1656,7 @@
 			children = (
 				46FB0A3F1888769000E978CD /* discoverViews */,
 				74A504E31565F0E400CFA4E3 /* TimelineViews */,
-				74B86B911562DB2600CAFFD2 /* PhotoDetailsViews */,
+				74B86B911562DB2600CAFFD2 /* PhotoViews */,
 				74A504E21565F0C200CFA4E3 /* UITableViewCells */,
 				C4F102B7156C57B90061BC3E /* PAPSettingsButtonItem.h */,
 				C4F102B8156C57B90061BC3E /* PAPSettingsButtonItem.m */,
@@ -1907,7 +1930,7 @@
 		09ABC06413A1D52D009C3FCF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0600;
 				TargetAttributes = {
 					09ABC06C13A1D52D009C3FCF = {
 						DevelopmentTeam = NJ5SX3QK2K;
@@ -1963,6 +1986,7 @@
 				46839E9A18E1E8C100BD60DB /* icon-fblogin.png in Resources */,
 				D57683FE1933EB9B008BAA2C /* nav_home.png in Resources */,
 				D51072CA1937EF7300B1FF0E /* arrow_left_white@2x.png in Resources */,
+				46076EED193FE3EF00A7B317 /* notif_star.png in Resources */,
 				4602FCE818BA9F390097DBEC /* update.png in Resources */,
 				4602FD1D18BD553B0097DBEC /* clarity-logo@2x.png in Resources */,
 				D52C1E3718D9515D00625887 /* konotor_progress_black.png in Resources */,
@@ -1985,6 +2009,7 @@
 				462FCB85188C8533005059F3 /* button_back.png in Resources */,
 				467154A618835E470000C0CA /* privacy.png in Resources */,
 				4602FD1618BD553B0097DBEC /* positionly-popup.png in Resources */,
+				46076EEE193FE3EF00A7B317 /* notif_star@2x.png in Resources */,
 				D528C381191034DE00CEEA35 /* ButtonLikeCommentSelected@2x.png in Resources */,
 				D52C1E4218D9515D00625887 /* konotor_supportprofile@2x.png in Resources */,
 				462FCB8A188C863E005059F3 /* button_setting_selected@2x.png in Resources */,
@@ -2000,6 +2025,7 @@
 				4602FD1318BD553B0097DBEC /* foundersuite-popup@2x.png in Resources */,
 				4602FD1F18BD553B0097DBEC /* slingbot-popup@2x.png in Resources */,
 				C4BE6710157FC7D000A291C2 /* Icon-Small.png in Resources */,
+				46076EEC193FE3EF00A7B317 /* notif_close@2x.png in Resources */,
 				4602FD2418BD553B0097DBEC /* konotor-logo.png in Resources */,
 				C4BE6711157FC7D000A291C2 /* Icon-Small@2x.png in Resources */,
 				D52C1E2618D9515D00625887 /* KonotorFeedbackScreenViewController.xib in Resources */,
@@ -2069,6 +2095,7 @@
 				460997561938119A00C5AD96 /* icon-angel@2x.png in Resources */,
 				465B19B118B81FE500EDBCFC /* browser-button-no.png in Resources */,
 				D5BFDED718CC84A5004FEC42 /* london.png in Resources */,
+				46076EEF193FE3EF00A7B317 /* notif_close.png in Resources */,
 				46839E9B18E1E8C100BD60DB /* icon-fblogin@2x.png in Resources */,
 				46839E9818E1E8C100BD60DB /* icon-email.png in Resources */,
 				4691B51C18C1477100B7DF6A /* intro2-iphone4.png in Resources */,
@@ -2325,6 +2352,7 @@
 				D52C1E4618D9515D00625887 /* KonotorTextInputOverlay.m in Sources */,
 				C4F102A1156C574A0061BC3E /* PAPProfileImageView.m in Sources */,
 				C4F102A4156C57560061BC3E /* PAPPhotoHeaderView.m in Sources */,
+				46076EE7193E9A6000A7B317 /* PAPNotificationViewController.m in Sources */,
 				C4F102A9156C57620061BC3E /* PAPPhotoDetailsFooterView.m in Sources */,
 				46ABD75F18B53C46008F5AAB /* PAPwebviewViewController.m in Sources */,
 				C4F102AA156C57620061BC3E /* PAPPhotoDetailsHeaderView.m in Sources */,
@@ -2393,8 +2421,10 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
@@ -2408,7 +2438,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -2422,8 +2452,10 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -2434,7 +2466,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 			};
@@ -2529,8 +2561,10 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -2541,7 +2575,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 			};
@@ -2594,8 +2628,10 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -2606,7 +2642,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 			};

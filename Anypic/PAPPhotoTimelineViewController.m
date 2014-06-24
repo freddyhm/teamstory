@@ -17,7 +17,8 @@
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
-@interface PAPPhotoTimelineViewController ()
+@interface PAPPhotoTimelineViewController () {
+}
 @property (nonatomic, assign) BOOL shouldReloadOnAppear;
 @property (nonatomic, strong) NSMutableSet *reusableSectionHeaderViews;
 @property (nonatomic, strong) NSMutableDictionary *outstandingSectionHeaderQueries;
@@ -681,6 +682,7 @@ enum ActionSheetTags {
 #pragma mark - PAPPhotoHeaderViewDelegate
 
 - (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapUserButton:(UIButton *)button user:(PFUser *)user {
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithStyle:UITableViewStylePlain];
     [accountViewController setUser:user];
     [self.navigationController pushViewController:accountViewController animated:YES];
@@ -744,20 +746,13 @@ enum ActionSheetTags {
 }
 
 - (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapCommentOnPhotoButton:(UIButton *)button  photo:(PFObject *)photo {
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"commentButton"];
     [self.navigationController pushViewController:photoDetailsVC animated:YES];
 }
 
 
 #pragma mark - ()
-
-- (void)dismissTabBarMenu{
-    PAPTabBarController *tabBar = (PAPTabBarController *)self.tabBarController;
-    
-    if(!tabBar.postMenu.hidden){
-        tabBar.postMenu.hidden = YES;
-    }
-}
 
 - (NSIndexPath *)indexPathForObject:(PFObject *)targetObject {
     for (int i = 0; i < self.objects.count; i++) {
@@ -816,8 +811,7 @@ enum ActionSheetTags {
 
 
 - (void)didTapOnPhotoAction:(UIButton *)sender {
-    
-    [self dismissTabBarMenu];
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     
     PFObject *photo = [self.objects objectAtIndex:sender.tag];
     if (photo) {
@@ -830,12 +824,7 @@ enum ActionSheetTags {
     [self loadObjects];
 }
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    [self dismissTabBarMenu];
-}
-
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    
     BOOL isHome = [[self.navigationController.viewControllers lastObject] isKindOfClass:PAPHomeViewController.class];
     
     // make sure pull-to-refresh set only for home

@@ -16,5 +16,4 @@
 
 - (id)initWithPhoto:(PFObject *)aPhoto source:(NSString *)source;
 
-
 @end
