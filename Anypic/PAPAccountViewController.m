@@ -11,6 +11,7 @@
 #import "PAPSettingsActionSheetDelegate.h"
 #import "SVProgressHUD.h"
 #import "PAPwebviewViewController.h"
+#import "FollowersFollowingViewController.h"
 
 @interface PAPAccountViewController() {
     float alphaValue_twitter;
@@ -23,6 +24,7 @@
     CGSize website_expectedSize;
 }
 @property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) UIImageView *locationIconImageView;
 @property (nonatomic, strong) UILabel *userDisplayName;
 @property (nonatomic, strong) UILabel *locationLabel;
 @property (nonatomic, strong) UILabel *descriptionLabel;
@@ -48,6 +50,8 @@
 @property (nonatomic, strong) UIButton *twitter_button;
 @property (nonatomic, strong) UIButton *linkedIn_button;
 @property (nonatomic, strong) UIView *whiteBackground;
+@property (nonatomic, strong) UIButton *multiActionButton;
+@property (nonatomic, strong) UILabel *locationSiteSeparator;
 @property int userStatUpdateCount;
 
 
@@ -101,10 +105,6 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     [self.navigationItem setHidesBackButton:YES];
     
-    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-    [refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
-    self.refreshControl = refreshControl;
-
     if (!self.user) {
         [NSException raise:NSInvalidArgumentException format:@"user cannot be nil"];
     }
@@ -160,12 +160,13 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 if ([self.websiteInfo length] > 0) {
                     website_expectedSize = [self.websiteInfo sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}];
                 } else {
-                    website_expectedSize = CGSizeMake(0.0f, 0.0f);
+                    website_expectedSize = CGSizeMake(132.01f, 15.50f);
                 }
                 
                 UIColor *textColor = [UIColor colorWithRed:158.0f/255.0f green:158.0f/255.0f blue:158.0f/255.0f alpha:1.0f];
                 
-                self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ProfileNavigationBar.png"]];
+                self.navigationItem.title = self.displayName;
+                
                 self.navigationItem.rightBarButtonItem = [[PAPSettingsButtonItem alloc] initWithTarget:self action:@selector(settingsButtonAction:)];
                 
                 self.headerView = [[UIView alloc] init];
@@ -173,7 +174,6 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + website_expectedSize.height + 43.0f);
                 [self.headerView setBackgroundColor:[UIColor clearColor]]; // should be clear, this will be the container for our avatar, photo count, follower count, following count, and so on
                 [self.view addSubview:self.headerView];
-                
                 
                 whiteBackground = [[UIView alloc] init];
                 [whiteBackground setFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, self.headerView.bounds.size.height - 10.0f)];
@@ -221,16 +221,6 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                     NSLog(@"ImageFile Not found");
                 }
 
-                if ([locationInfo length] > 0) {
-                    locationLabel = [[UILabel alloc] initWithFrame:CGRectMake( 110.0f, 30.0f, self.headerView.bounds.size.width, 16.0f )];
-                    [locationLabel setText:locationInfo];
-                    [locationLabel setBackgroundColor:[UIColor clearColor]];
-                    [locationLabel setTextColor:textColor];
-                    [locationLabel setFont:[UIFont boldSystemFontOfSize:12.0f]];
-                    [self.headerView addSubview:locationLabel];
-                } else {
-                    NSLog(@"locationInfo Not found");
-                }
                 
                 if ([self.industry length] > 0) {
                     industryLabel.hidden = NO;
@@ -246,8 +236,8 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 [industryLabel setTextColor:[UIColor whiteColor]];
                 [self.headerView addSubview:industryLabel];
                 
-                [descriptionLabel setFrame:CGRectMake(10.0f, 88.0f, expectedSize.width, expectedSize.height)];
-                [self.headerView addSubview:descriptionLabel];
+                [self.descriptionLabel setFrame:CGRectMake(10.0f, 88.0f, expectedSize.width, expectedSize.height)];
+                [self.headerView addSubview:self.descriptionLabel];
                 
                 if ([self.twitter_url length] > 0) {
                     alphaValue_twitter = 1.0f;
@@ -277,55 +267,153 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]]];
                 self.tableView.backgroundView = texturedBackgroundView;
                 
-                UILabel *photoCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 110.0f, 45.0f, 92.0f, 22.0f)];
-                [photoCountLabel setBackgroundColor:[UIColor clearColor]];
-                [photoCountLabel setTextColor:textColor];
-                [photoCountLabel setFont:[UIFont boldSystemFontOfSize:12.0f]];
+                // taps for followers/following section, all point to same method
+                
+                UITapGestureRecognizer *tap3 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
+                
+                UITapGestureRecognizer *tap4 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
+                
+                UITapGestureRecognizer *tap5 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowing:)];
+                
+                UITapGestureRecognizer *tap6 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowing:)];
+                
+                /* followers/following count & title */
+                
+                UIFont *countFont = [UIFont fontWithName:@"HelveticaNeue" size:15.0f];
+                UIColor *countColor = [UIColor colorWithRed:118.0f/255.0f green:118.0f/255.0f blue:118.0f/255.0f alpha:1.0f];
+                
+                UIColor *countTitleColor = [UIColor colorWithRed:178.0f/255.0f green:184.0f/255.0f blue:189.0f/255.0f alpha:1.0f];
+                UIFont *countTitleFont = [UIFont fontWithName:@"HelveticaNeue-Light" size:12.0f];
+                
+                // photo/moment count
+                
+                // Title
+                UILabel *photoCountTitle = [[UILabel alloc] init];
+                [photoCountTitle setTextColor:countTitleColor];
+                [photoCountTitle setFont:countTitleFont];
+                [photoCountTitle setText:@"moments"];
+                
+                CGFloat photoCountTitleWidth = [photoCountTitle.text sizeWithAttributes:@{NSFontAttributeName: countTitleFont}].width;
+                
+                [photoCountTitle setFrame:CGRectMake(108.0f, 30.0f, photoCountTitleWidth, 15.0f)];
+                [photoCountTitle setUserInteractionEnabled:YES];
+                
+                // Count
+                UILabel *photoCountLabel= [[UILabel alloc] initWithFrame:CGRectMake(108.0f, 10.0f, photoCountTitleWidth, 22.0f)];
+                [photoCountLabel setTextAlignment:NSTextAlignmentCenter];
+                [photoCountLabel setTextColor:countColor];
+                [photoCountLabel setFont:countFont];
+                [photoCountLabel setUserInteractionEnabled:YES];
+                
                 [self.headerView addSubview:photoCountLabel];
+                [self.headerView addSubview:photoCountTitle];
                 
-                UIImageView *photoCountIconImageView = [[UIImageView alloc] initWithImage:nil];
-                [photoCountIconImageView setImage:[UIImage imageNamed:@"icon-pics.png"]];
-                [photoCountIconImageView setFrame:CGRectMake( 90.0f, 47.50f, 15.0f, 15.0f)];
-                [self.headerView addSubview:photoCountIconImageView];
+                // follower count & label
                 
-                UIImageView *followersIconImageView = [[UIImageView alloc] initWithImage:nil];
-                [followersIconImageView setImage:[UIImage imageNamed:@"icon-followers.png"]];
-                [followersIconImageView setFrame:CGRectMake( 90.0f, 65.0f, 15.0f, 15.0f)];
-                [self.headerView addSubview:followersIconImageView];
+                // Title
+                UILabel *followersTitle = [[UILabel alloc] init];
+                [followersTitle setTextColor:countTitleColor];
+                [followersTitle setFont:countTitleFont];
+                [followersTitle setText:@"followers"];
                 
-                UIImageView *locationIconImageView = [[UIImageView alloc] initWithImage:nil];
-                [locationIconImageView setImage:[UIImage imageNamed:@"iconlocation.png"]];
-                [locationIconImageView setFrame:CGRectMake( 90.0f, 30.0f, 15.0f, 15.0f)];
-                [self.headerView addSubview:locationIconImageView];
+                CGFloat followersTitleWidth = [followersTitle.text sizeWithAttributes:@{NSFontAttributeName: countTitleFont}].width;
+
+                [followersTitle setFrame:CGRectMake( photoCountTitle.frame.origin.x + photoCountTitle.frame.size.width + 31.0f, photoCountTitle.frame.origin.y, followersTitleWidth, photoCountTitle.frame.size.height)];
+                [followersTitle addGestureRecognizer:tap4];
+                [followersTitle setUserInteractionEnabled:YES];
                 
-                self.followerCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 110.0f, 65.0f, self.headerView.bounds.size.width, 16.0f)];
-                [self.followerCountLabel setBackgroundColor:[UIColor clearColor]];
-                [self.followerCountLabel setTextColor:textColor];
-                [self.followerCountLabel setFont:[UIFont boldSystemFontOfSize:12.0f]];
+                // Count
+                self.followerCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( photoCountLabel.frame.origin.x + photoCountLabel.frame.size.width + 31.0f, photoCountLabel.frame.origin.y, followersTitleWidth, photoCountLabel.frame.size.height)];
+                [self.followerCountLabel setTextAlignment:NSTextAlignmentCenter];
+                [self.followerCountLabel setTextColor:countColor];
+                [self.followerCountLabel setFont:countFont];
+                [self.followerCountLabel addGestureRecognizer:tap3];
+                [self.followerCountLabel setUserInteractionEnabled:YES];
+                
                 [self.headerView addSubview:self.followerCountLabel];
+                [self.headerView addSubview:followersTitle];
                 
-                self.followingCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 193.0f, 65.0f, self.headerView.bounds.size.width, 16.0f)];
-                [self.followingCountLabel setBackgroundColor:[UIColor clearColor]];
-                [self.followingCountLabel setTextColor:textColor];
-                [self.followingCountLabel setFont:[UIFont boldSystemFontOfSize:12.0f]];
+                // following count & label
+                
+                // Title
+                UILabel *followingTitle = [[UILabel alloc] init];
+                [followingTitle setTextColor:countTitleColor];
+                [followingTitle setFont:countTitleFont];
+                [followingTitle setText:@"following"];
+                
+                CGFloat followingCountLabelWidth = [followingTitle.text sizeWithAttributes:@{NSFontAttributeName: countTitleFont}].width;
+                
+                [followingTitle setFrame:CGRectMake( followersTitle.frame.origin.x + followersTitle.frame.size.width + 31.0f, followersTitle.frame.origin.y, followingCountLabelWidth, followersTitle.frame.size.height)];
+                [followingTitle addGestureRecognizer:tap6];
+                [followingTitle setUserInteractionEnabled:YES];
+                
+                // Count
+                self.followingCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.followerCountLabel.frame.origin.x + self.followerCountLabel.frame.size.width + 31.0f, self.followerCountLabel.frame.origin.y, followingCountLabelWidth, self.followerCountLabel.frame.size.height)];
+                self.followingCountLabel.textAlignment = NSTextAlignmentCenter;
+                [self.followingCountLabel setFont:countFont];
+                [self.followingCountLabel setTextColor:countColor];
+                [self.followingCountLabel addGestureRecognizer:tap5];
+                [self.followingCountLabel setUserInteractionEnabled:YES];
+                
                 [self.headerView addSubview:self.followingCountLabel];
+                [self.headerView addSubview:followingTitle];
                 
-                userDisplayNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(94.0f, 12.0f, self.headerView.bounds.size.width, 16.0f)];
-                [userDisplayNameLabel setBackgroundColor:[UIColor clearColor]];
-                [userDisplayNameLabel setTextColor:[UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
-                [userDisplayNameLabel setText:displayName];
-                [userDisplayNameLabel setFont:[UIFont boldSystemFontOfSize:13.0f]];
-                [self.headerView addSubview:userDisplayNameLabel];
+                // follow/unfollow/editprofile big button
+                UIImage *editProfileBtn = [UIImage imageNamed:@"btn_editprofile.png"];
+                self.multiActionButton = [[UIButton alloc]initWithFrame:CGRectMake(photoCountTitle.frame.origin.x, photoCountTitle.frame.origin.y + 20.0f, editProfileBtn.size.width, editProfileBtn.size.height)];
+                [self.multiActionButton setImage:editProfileBtn forState:UIControlStateNormal];
+                self.multiActionButton.titleLabel.font = [UIFont systemFontOfSize:13.0f];
+                [self.multiActionButton addTarget:self action:@selector(editProfileAction:) forControlEvents:UIControlEventTouchUpInside];
+        
+                [self.headerView addSubview:self.multiActionButton];
+                
+                self.locationIconImageView = [[UIImageView alloc] initWithImage:nil];
+                [self.locationIconImageView setImage:[UIImage imageNamed:@"iconlocation.png"]];
+                [self.locationIconImageView setFrame:CGRectMake(6.0f, 88.0f + expectedSize.height, 15.0f, 15.0f)];
+                [self.headerView addSubview:self.locationIconImageView];
+                
+                if ([self.locationInfo length] > 0) {
+                    
+                    UIFont *locationFont = [UIFont fontWithName:@"Helvetica" size:13.0f];
+                    UIColor *locationColor = [UIColor colorWithRed:158.0f/255.0f green:158.0f/255.0f blue:158.0f/255.0f alpha:1];
+                    
+                    self.locationLabel = [[UILabel alloc]init];
+                    [self.locationLabel setBackgroundColor:[UIColor clearColor]];
+                    [self.locationLabel setTextColor:locationColor];
+                    [self.locationLabel setFont:locationFont];
+                    
+                    CGFloat locationLabelWidth = [self.locationLabel.text sizeWithAttributes:
+                                   @{NSFontAttributeName:
+                                         self.locationLabel.font}].width;
+                    
+                    [self.locationLabel setFrame:CGRectMake(self.locationIconImageView.frame.origin.x + 20.0f, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, 16.0f)];
+                    
+                    [self.headerView addSubview:self.locationLabel];
+                
+                } else {
+                    NSLog(@"locationInfo Not found");
+                }
+                
+                // the bar separating location and website link
+                self.locationSiteSeparator = [[UILabel alloc] init];
+                self.locationSiteSeparator.font = [UIFont fontWithName:@"Helvetica" size:13.0f];
+                self.locationSiteSeparator.textColor = textColor;
+                self.locationSiteSeparator.text = @"|";
+                self.locationSiteSeparator.frame = CGRectMake(self.locationLabel.frame.origin.x + self.locationLabel.frame.size.width + 10.0f, 91.0f + expectedSize.height, 10.0f, 10.0f);
+            
+                [self.headerView addSubview: self.locationSiteSeparator];
                 
                 if ([websiteInfo length] > 0) {
                     websiteLink = [UIButton buttonWithType:UIButtonTypeCustom];
-                    [websiteLink setFrame:CGRectMake( 10.0f, 88.0f + expectedSize.height, website_expectedSize.width, website_expectedSize.height)];
+                    [websiteLink setFrame:CGRectMake(self.locationSiteSeparator.frame.origin.x + self.locationSiteSeparator.frame.size.width + 10.0f, self.locationLabel.frame.origin.y, website_expectedSize.width, website_expectedSize.height)];
                     [websiteLink setTitle:websiteInfo forState:UIControlStateNormal];
                     [websiteLink setTitleColor:[UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
                     websiteLink.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
                     websiteLink.titleLabel.font = [UIFont systemFontOfSize:13.0f];
                     [websiteLink addTarget:self action:@selector(websiteLinkAction:) forControlEvents:UIControlEventTouchUpInside];
                     [self.headerView addSubview:websiteLink];
+                }else{
+                    website_expectedSize = CGSizeMake(132.01f, 15.50f);
                 }
                 
                 linkedIn_button = [[UIButton alloc] init];
@@ -352,50 +440,61 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 [angellist_button addTarget:self action:@selector(angellist_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
                 [self.headerView addSubview:angellist_button];
                 
-                [photoCountLabel setText:@"0 photos"];
+                [photoCountLabel setText:@"0"];
                 
                 PFQuery *queryPhotoCount = [PFQuery queryWithClassName:@"Photo"];
                 [queryPhotoCount whereKey:kPAPPhotoUserKey equalTo:self.user];
                 [queryPhotoCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
                 [queryPhotoCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
                     if (!error) {
-                        [photoCountLabel setText:[NSString stringWithFormat:@"%d moment%@", number, number==1?@"":@"s"]];
+                        [photoCountLabel setText:[NSString stringWithFormat:@"%d", number]];
                         [[PAPCache sharedCache] setPhotoCount:[NSNumber numberWithInt:number] user:self.user];
                     }
                 }];
                 
-                [self.followerCountLabel setText:@"0 followers"];
+                [self.followerCountLabel setText:@"0"];
+                
+                // filter out zombie pointers (manually deleted users)
+                PFQuery *noZombieQuery = [PFUser query];
+                [noZombieQuery whereKeyExists:@"objectId"];
                 
                 PFQuery *queryFollowerCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
                 [queryFollowerCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
                 [queryFollowerCount whereKey:kPAPActivityToUserKey equalTo:self.user];
                 [queryFollowerCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
+                
+                // get followers for current user
+                [queryFollowerCount whereKey:kPAPActivityFromUserKey matchesQuery:noZombieQuery];
+                
                 [queryFollowerCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
                     if (!error) {
-                        [self.followerCountLabel setText:[NSString stringWithFormat:@"%d follower%@  |", number, number==1?@"":@"s"]];
+                        [self.followerCountLabel setText:[NSString stringWithFormat:@"%d",number]];
                     }
                 }];
                 
                 NSDictionary *followingDictionary = [[PFUser currentUser] objectForKey:@"following"];
-                [self.followingCountLabel setText:@"0 following"];
+                [self.followingCountLabel setText:@"0"];
                 if (followingDictionary) {
-                    [self.followingCountLabel setText:[NSString stringWithFormat:@"%d following", (int)[[followingDictionary allValues] count]]];
+                    [self.followingCountLabel setText:[NSString stringWithFormat:@"%d", (int)[[followingDictionary allValues] count]]];
                 }
                 
                 PFQuery *queryFollowingCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
                 [queryFollowingCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
                 [queryFollowingCount whereKey:kPAPActivityFromUserKey equalTo:self.user];
                 [queryFollowingCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
+                
+                // get followers for current user
+                [queryFollowingCount whereKey:kPAPActivityToUserKey matchesQuery:noZombieQuery];
+                
                 [queryFollowingCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
                     if (!error) {
-                        [self.followingCountLabel setText:[NSString stringWithFormat:@"%d following", number]];
+                        [self.followingCountLabel setText:[NSString stringWithFormat:@"%d", number]];
                     }
                 }];
                 
                 if (![[self.user objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
-                    UIActivityIndicatorView *loadingActivityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-                    [loadingActivityIndicatorView startAnimating];
-                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:loadingActivityIndicatorView];
+                    
+                    self.navigationItem.rightBarButtonItem = nil;
                     
                     // check if the currentUser is following this user
                     PFQuery *queryIsFollowing = [PFQuery queryWithClassName:kPAPActivityClassKey];
@@ -434,6 +533,19 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 
 }
 
+- (void)showFollowers:(id)selector{
+    
+    FollowersFollowingViewController *showFollowers = [[FollowersFollowingViewController alloc]initWithStyle:UITableViewStylePlain type:@"followers" forUser:self.user];
+    
+    [self.navigationController pushViewController:showFollowers animated:YES];
+}
+
+- (void)showFollowing:(id)selector{
+    FollowersFollowingViewController *showFollowing = [[FollowersFollowingViewController alloc]initWithStyle:UITableViewStylePlain type:@"following" forUser:self.user];
+    
+    [self.navigationController pushViewController:showFollowing animated:YES];
+}
+
 - (void)viewWillAppear:(BOOL)animated{
     // analytics
     [super viewWillAppear:YES];
@@ -448,7 +560,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     [self.user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         self.user = (PFUser *)object;
     
-        self.userDisplayNameLabel.text = [self.user objectForKey:@"displayName"];
+        self.navigationItem.title  = [self.user objectForKey:@"displayName"];
         self.locationLabel.text = [self.user objectForKey:@"location"];
         self.descriptionLabel.text = [self.user objectForKey:@"description"];
         [self.websiteLink setTitle:[self.user objectForKey:@"website"] forState:UIControlStateNormal];
@@ -516,20 +628,32 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         if ([self.websiteInfo length] > 0) {
             website_expectedSize = [self.websiteInfo sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}];
         } else {
-            website_expectedSize = CGSizeMake(0.0f, 0.0f);
+            website_expectedSize = CGSizeMake(132.01f, 15.50f);
         }
         
         self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + website_expectedSize.height + 43.0f);
         
         if ([self.industryLabel.text length] > 0) {
             industryLabel.hidden = NO;
-            [industryLabel setFrame:CGRectMake(320.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + website_expectedSize.height, industry_expectedSize.width + 10.0f, 22.0f)];
+            [industryLabel setFrame:CGRectMake(318.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + website_expectedSize.height, industry_expectedSize.width + 10.0f, 22.0f)];
         } else {
             industryLabel.hidden = YES;
         }
         
         [descriptionLabel setFrame:CGRectMake(10.0f, 88.0f, expectedSize.width, expectedSize.height)];
-        [websiteLink setFrame:CGRectMake( 10.0f, 88.0f + expectedSize.height, website_expectedSize.width, website_expectedSize.height)];
+        
+        // re-calculate width size for location label, image, and separator
+        CGFloat locationLabelWidth = [self.locationLabel.text sizeWithAttributes:
+                       @{NSFontAttributeName:
+                             self.locationLabel.font}].width;
+        
+        [self.locationLabel setFrame:CGRectMake(self.locationLabel.frame.origin.x, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, self.locationLabel.frame.size.height)];
+        self.locationSiteSeparator.frame = CGRectMake(locationLabelWidth + self.locationLabel.frame.origin.x + 10.0f, 91.5f + expectedSize.height, 10.0f, 10.0f);
+        [self.locationIconImageView setFrame:CGRectMake(6.0f, 88.0f + expectedSize.height, 15.0f, 15.0f)];
+        
+        
+        
+        [websiteLink setFrame:CGRectMake(self.locationSiteSeparator.frame.origin.x + self.locationSiteSeparator.frame.size.width, 89.0f + expectedSize.height, website_expectedSize.width, website_expectedSize.height)];
         [self.industryLabel setFrame:CGRectMake(320.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + website_expectedSize.height, industry_expectedSize.width + 10.0f, 22.0f)];
         [whiteBackground setFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, self.headerView.bounds.size.height - 10.0f)];
         
@@ -591,12 +715,18 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     self.settingsActionSheetDelegate = [[PAPSettingsActionSheetDelegate alloc] initWithNavigationController:self.navigationController];
     
     if ([[self.user objectId] isEqualToString:kevin_account] || [[self.user objectId] isEqualToString:justin_account] || [[self.user objectId] isEqualToString:freddy_account]) {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self.settingsActionSheetDelegate cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Edit Profile",@"About This Version",@"Privacy Policy",@"Terms of Use",@"Log Out", @"Notification Control", nil];
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self.settingsActionSheetDelegate cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"About This Version",@"Privacy Policy",@"Terms of Use",@"Log Out", @"Notification Control", nil];
         [actionSheet showFromTabBar:self.tabBarController.tabBar];
     } else {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self.settingsActionSheetDelegate cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Edit Profile",@"About This Version",@"Privacy Policy",@"Terms of Use",@"Log Out", nil];
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self.settingsActionSheetDelegate cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"About This Version",@"Privacy Policy",@"Terms of Use",@"Log Out", nil];
         [actionSheet showFromTabBar:self.tabBarController.tabBar];
     }
+}
+
+- (void)editProfileAction:(id)sender{
+    PAPProfileSettingViewController *profileViewController = [[PAPProfileSettingViewController alloc] init];
+    profileViewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:profileViewController animated:YES];
 }
 
 
@@ -690,32 +820,28 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 
 
 - (void)configureFollowButton {
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button setBackgroundImage:[UIImage imageNamed:@"follow.png"] forState:UIControlStateNormal];
-    button.frame=CGRectMake(0,0, 22.0f, 22.0f);
-    [button addTarget:self action:@selector(followButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
-    UIBarButtonItem *followButton = [[UIBarButtonItem alloc] initWithCustomView:button];
-    self.navigationItem.rightBarButtonItem = followButton;
-    
-    //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow.png"] style:UIBarButtonItemStylePlain target:self action:@selector(followButtonAction:)];
+    [self.multiActionButton setImage:[UIImage imageNamed:@"btn_follow.png"] forState:UIControlStateNormal];
+    [self.multiActionButton removeTarget:self action:@selector(settingsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.multiActionButton addTarget:self action:@selector(followButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+
     [[PAPCache sharedCache] setFollowStatus:NO user:self.user];
 }
 
 - (void)configureUnfollowButton {
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button setBackgroundImage:[UIImage imageNamed:@"unfollow.png"] forState:UIControlStateNormal];
-    button.frame=CGRectMake(0,0, 22.0f, 22.0f);
-    [button addTarget:self action:@selector(unfollowButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        
+    [self.multiActionButton setImage:[UIImage imageNamed:@"btn_following.png"] forState:UIControlStateNormal];
+    [self.multiActionButton removeTarget:self action:@selector(settingsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.multiActionButton addTarget:self action:@selector(unfollowButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
-    UIBarButtonItem *unfollowButton = [[UIBarButtonItem alloc] initWithCustomView:button];
-    self.navigationItem.rightBarButtonItem = unfollowButton;
-    
-    //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"unfollow.png"] style:UIBarButtonItemStylePlain target:self action:@selector(unfollowButtonAction:)];
     [[PAPCache sharedCache] setFollowStatus:YES user:self.user];
 }
 
 -(void)refreshFollowerCount:(void (^)(BOOL))completed{
+    
+    // filter out zombie pointers (manually deleted users)
+    PFQuery *noZombieQuery = [PFUser query];
+    [noZombieQuery whereKeyExists:@"objectId"];
     
     // return completed when both queries have finished
     self.userStatUpdateCount = 0;
@@ -725,10 +851,12 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     [queryFollowerCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
     [queryFollowerCount whereKey:kPAPActivityToUserKey equalTo:self.user];
     [queryFollowerCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
+    [queryFollowerCount whereKey:kPAPActivityFromUserKey matchesQuery:noZombieQuery];
+    
     [queryFollowerCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
         if (!error) {
             
-            [self.followerCountLabel setText:[NSString stringWithFormat:@"%d follower%@  |", number, number==1?@"":@"s"]];
+            [self.followerCountLabel setText:[NSString stringWithFormat:@"%d", number]];
             
             // increment and check if we're done updating
             self.userStatUpdateCount++;
@@ -740,7 +868,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     NSDictionary *followingDictionary = [[PFUser currentUser] objectForKey:@"following"];
     if (followingDictionary) {
-        [self.followingCountLabel setText:[NSString stringWithFormat:@"%d following", (int)[[followingDictionary allValues] count]]];
+        [self.followingCountLabel setText:[NSString stringWithFormat:@"%d", (int)[[followingDictionary allValues] count]]];
     }
     
     // refresh following count
@@ -748,10 +876,12 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     [queryFollowingCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
     [queryFollowingCount whereKey:kPAPActivityFromUserKey equalTo:self.user];
     [queryFollowingCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
+    [queryFollowingCount whereKey:kPAPActivityToUserKey matchesQuery:noZombieQuery];
+    
     [queryFollowingCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
         if (!error) {
             
-            [self.followingCountLabel setText:[NSString stringWithFormat:@"%d following", number]];
+            [self.followingCountLabel setText:[NSString stringWithFormat:@"%d", number]];
             
             // increment and check if we're done updating
             self.userStatUpdateCount++;
@@ -762,9 +892,5 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     }];
 }
 
-- (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl {
-    [self.refreshControl endRefreshing];
-    self.tableView.scrollEnabled = YES;
-}
 
 @end

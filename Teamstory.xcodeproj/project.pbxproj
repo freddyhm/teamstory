@@ -297,7 +297,6 @@
 		C4F102CD156C57EE0061BC3E /* PAPPhotoTimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102CA156C57EE0061BC3E /* PAPPhotoTimelineViewController.m */; };
 		C4F102D2156C57FD0061BC3E /* PAPAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102CF156C57FD0061BC3E /* PAPAccountViewController.m */; };
 		C4F102D3156C57FD0061BC3E /* PAPPhotoDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102D1156C57FD0061BC3E /* PAPPhotoDetailsViewController.m */; };
-		C4F102D8156C580C0061BC3E /* PAPFindFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102D5156C580C0061BC3E /* PAPFindFriendsViewController.m */; };
 		C4F102D9156C580C0061BC3E /* PAPSettingsActionSheetDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102D7156C580C0061BC3E /* PAPSettingsActionSheetDelegate.m */; };
 		C4F102DC156C58170061BC3E /* PAPEditPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102DB156C58170061BC3E /* PAPEditPhotoViewController.m */; };
 		C4F102E2156C58440061BC3E /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4F102DF156C58440061BC3E /* Entitlements.plist */; };
@@ -311,6 +310,8 @@
 		D51072D21937F33F00B1FF0E /* share_thought_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D51072CE1937F33F00B1FF0E /* share_thought_grey@2x.png */; };
 		D51072D31937F33F00B1FF0E /* share_thought_white.png in Resources */ = {isa = PBXBuildFile; fileRef = D51072CF1937F33F00B1FF0E /* share_thought_white.png */; };
 		D51072D41937F33F00B1FF0E /* share_thought_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D51072D01937F33F00B1FF0E /* share_thought_white@2x.png */; };
+		D5144B1C195951D100650061 /* button-feedback-notify.png in Resources */ = {isa = PBXBuildFile; fileRef = D5144B1A195951D100650061 /* button-feedback-notify.png */; };
+		D5144B1D195951D100650061 /* button-feedback-notify@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5144B1B195951D100650061 /* button-feedback-notify@2x.png */; };
 		D5182C93193E1FDE00DD578C /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5182C92193E1FDE00DD578C /* Default@2x.png */; };
 		D51C98A218E28D16001230DA /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D51C98A118E28D16001230DA /* libGoogleAnalyticsServices.a */; };
 		D528C37F191034DE00CEEA35 /* ButtonLikeComment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D528C37C191034DE00CEEA35 /* ButtonLikeComment@2x.png */; };
@@ -363,6 +364,13 @@
 		D530C3F218FB22FC00739027 /* iRate.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D530C3EF18FB22FC00739027 /* iRate.bundle */; };
 		D530C3F318FB22FC00739027 /* iRate.m in Sources */ = {isa = PBXBuildFile; fileRef = D530C3F118FB22FC00739027 /* iRate.m */; };
 		D531F7CC18B5DE11008AE73F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D531F7CB18B5DE11008AE73F /* CoreVideo.framework */; };
+		D5743808194629280040C96A /* followersFollowingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5743807194629280040C96A /* followersFollowingViewController.m */; };
+		D575A06F1947834C00C6BCC2 /* btn_editprofile.png in Resources */ = {isa = PBXBuildFile; fileRef = D575A0691947834C00C6BCC2 /* btn_editprofile.png */; };
+		D575A0701947834C00C6BCC2 /* btn_editprofile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D575A06A1947834C00C6BCC2 /* btn_editprofile@2x.png */; };
+		D575A0711947834C00C6BCC2 /* btn_follow.png in Resources */ = {isa = PBXBuildFile; fileRef = D575A06B1947834C00C6BCC2 /* btn_follow.png */; };
+		D575A0721947834C00C6BCC2 /* btn_follow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D575A06C1947834C00C6BCC2 /* btn_follow@2x.png */; };
+		D575A0731947834C00C6BCC2 /* btn_following.png in Resources */ = {isa = PBXBuildFile; fileRef = D575A06D1947834C00C6BCC2 /* btn_following.png */; };
+		D575A0741947834C00C6BCC2 /* btn_following@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D575A06E1947834C00C6BCC2 /* btn_following@2x.png */; };
 		D57683EA1933E6DD008BAA2C /* post_bubble.png in Resources */ = {isa = PBXBuildFile; fileRef = D57683E41933E6DD008BAA2C /* post_bubble.png */; };
 		D57683EB1933E6DD008BAA2C /* post_bubble@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D57683E51933E6DD008BAA2C /* post_bubble@2x.png */; };
 		D57683EC1933E6DD008BAA2C /* post_camera.png in Resources */ = {isa = PBXBuildFile; fileRef = D57683E61933E6DD008BAA2C /* post_camera.png */; };
@@ -427,6 +435,10 @@
 		D5D1042818B5C7AF0084C901 /* konotor.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042718B5C7AF0084C901 /* konotor.png */; };
 		D5D1042B18B5CF4E0084C901 /* button-feedback.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042918B5CF4E0084C901 /* button-feedback.png */; };
 		D5D1042C18B5CF4E0084C901 /* button-feedback@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */; };
+		D5D571151947F8E900354340 /* btn_following_user.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571111947F8E900354340 /* btn_following_user.png */; };
+		D5D571161947F8E900354340 /* btn_following_user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571121947F8E900354340 /* btn_following_user@2x.png */; };
+		D5D571171947F8E900354340 /* btn_no_follow_user.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571131947F8E900354340 /* btn_no_follow_user.png */; };
+		D5D571181947F8E900354340 /* btn_no_follow_user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571141947F8E900354340 /* btn_no_follow_user@2x.png */; };
 		D5FB8E6C18F79E2D0034CAE6 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FB8E6B18F79E2D0034CAE6 /* Crashlytics.framework */; };
 		D5FC095218A9B518000D85F1 /* CropResizeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095018A9B518000D85F1 /* CropResizeViewController.m */; };
 		D5FC095518A9B543000D85F1 /* CameraFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095418A9B543000D85F1 /* CameraFilterViewController.m */; };
@@ -775,8 +787,8 @@
 		C4F102CF156C57FD0061BC3E /* PAPAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = PAPAccountViewController.m; path = Anypic/PAPAccountViewController.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C4F102D0156C57FD0061BC3E /* PAPPhotoDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPPhotoDetailsViewController.h; path = Anypic/PAPPhotoDetailsViewController.h; sourceTree = SOURCE_ROOT; };
 		C4F102D1156C57FD0061BC3E /* PAPPhotoDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = PAPPhotoDetailsViewController.m; path = Anypic/PAPPhotoDetailsViewController.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		C4F102D4156C580C0061BC3E /* PAPFindFriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPFindFriendsViewController.h; path = Anypic/PAPFindFriendsViewController.h; sourceTree = SOURCE_ROOT; };
-		C4F102D5156C580C0061BC3E /* PAPFindFriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = PAPFindFriendsViewController.m; path = Anypic/PAPFindFriendsViewController.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		C4F102D4156C580C0061BC3E /* followersFollowingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = followersFollowingViewController.h; path = Anypic/followersFollowingViewController.h; sourceTree = SOURCE_ROOT; };
+		C4F102D5156C580C0061BC3E /* followersFollowingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = followersFollowingViewController.m; path = Anypic/followersFollowingViewController.m; sourceTree = SOURCE_ROOT; };
 		C4F102D6156C580C0061BC3E /* PAPSettingsActionSheetDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPSettingsActionSheetDelegate.h; path = Anypic/PAPSettingsActionSheetDelegate.h; sourceTree = SOURCE_ROOT; };
 		C4F102D7156C580C0061BC3E /* PAPSettingsActionSheetDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPSettingsActionSheetDelegate.m; path = Anypic/PAPSettingsActionSheetDelegate.m; sourceTree = SOURCE_ROOT; };
 		C4F102DA156C58170061BC3E /* PAPEditPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPEditPhotoViewController.h; path = Anypic/PAPEditPhotoViewController.h; sourceTree = SOURCE_ROOT; };
@@ -794,6 +806,8 @@
 		D51072CE1937F33F00B1FF0E /* share_thought_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "share_thought_grey@2x.png"; sourceTree = "<group>"; };
 		D51072CF1937F33F00B1FF0E /* share_thought_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = share_thought_white.png; sourceTree = "<group>"; };
 		D51072D01937F33F00B1FF0E /* share_thought_white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "share_thought_white@2x.png"; sourceTree = "<group>"; };
+		D5144B1A195951D100650061 /* button-feedback-notify.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback-notify.png"; sourceTree = "<group>"; };
+		D5144B1B195951D100650061 /* button-feedback-notify@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback-notify@2x.png"; sourceTree = "<group>"; };
 		D5182C92193E1FDE00DD578C /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		D51C989B18E28D16001230DA /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
 		D51C989C18E28D16001230DA /* GAIDictionaryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIDictionaryBuilder.h; sourceTree = "<group>"; };
@@ -864,6 +878,14 @@
 		D530C3F018FB22FC00739027 /* iRate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iRate.h; sourceTree = "<group>"; };
 		D530C3F118FB22FC00739027 /* iRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iRate.m; sourceTree = "<group>"; };
 		D531F7CB18B5DE11008AE73F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		D5743806194629280040C96A /* followersFollowingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = followersFollowingViewController.h; path = Anypic/followersFollowingViewController.h; sourceTree = SOURCE_ROOT; };
+		D5743807194629280040C96A /* followersFollowingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = followersFollowingViewController.m; path = Anypic/followersFollowingViewController.m; sourceTree = SOURCE_ROOT; };
+		D575A0691947834C00C6BCC2 /* btn_editprofile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_editprofile.png; sourceTree = "<group>"; };
+		D575A06A1947834C00C6BCC2 /* btn_editprofile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_editprofile@2x.png"; sourceTree = "<group>"; };
+		D575A06B1947834C00C6BCC2 /* btn_follow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_follow.png; sourceTree = "<group>"; };
+		D575A06C1947834C00C6BCC2 /* btn_follow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_follow@2x.png"; sourceTree = "<group>"; };
+		D575A06D1947834C00C6BCC2 /* btn_following.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_following.png; sourceTree = "<group>"; };
+		D575A06E1947834C00C6BCC2 /* btn_following@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_following@2x.png"; sourceTree = "<group>"; };
 		D57683E41933E6DD008BAA2C /* post_bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = post_bubble.png; sourceTree = "<group>"; };
 		D57683E51933E6DD008BAA2C /* post_bubble@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "post_bubble@2x.png"; sourceTree = "<group>"; };
 		D57683E61933E6DD008BAA2C /* post_camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = post_camera.png; sourceTree = "<group>"; };
@@ -931,6 +953,10 @@
 		D5D1042718B5C7AF0084C901 /* konotor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor.png; sourceTree = "<group>"; };
 		D5D1042918B5CF4E0084C901 /* button-feedback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback.png"; sourceTree = "<group>"; };
 		D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback@2x.png"; sourceTree = "<group>"; };
+		D5D571111947F8E900354340 /* btn_following_user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_following_user.png; sourceTree = "<group>"; };
+		D5D571121947F8E900354340 /* btn_following_user@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_following_user@2x.png"; sourceTree = "<group>"; };
+		D5D571131947F8E900354340 /* btn_no_follow_user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_no_follow_user.png; sourceTree = "<group>"; };
+		D5D571141947F8E900354340 /* btn_no_follow_user@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_no_follow_user@2x.png"; sourceTree = "<group>"; };
 		D5D659F119155A1E00FAC142 /* activity.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = activity.js; sourceTree = "<group>"; };
 		D5D659F219155A1E00FAC142 /* app.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = app.js; sourceTree = "<group>"; };
 		D5D659F319155A1E00FAC142 /* installation.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = installation.js; sourceTree = "<group>"; };
@@ -1132,6 +1158,16 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				D5D571111947F8E900354340 /* btn_following_user.png */,
+				D5D571121947F8E900354340 /* btn_following_user@2x.png */,
+				D5D571131947F8E900354340 /* btn_no_follow_user.png */,
+				D5D571141947F8E900354340 /* btn_no_follow_user@2x.png */,
+				D575A0691947834C00C6BCC2 /* btn_editprofile.png */,
+				D575A06A1947834C00C6BCC2 /* btn_editprofile@2x.png */,
+				D575A06B1947834C00C6BCC2 /* btn_follow.png */,
+				D575A06C1947834C00C6BCC2 /* btn_follow@2x.png */,
+				D575A06D1947834C00C6BCC2 /* btn_following.png */,
+				D575A06E1947834C00C6BCC2 /* btn_following@2x.png */,
 				D5C0311619391749000C98B7 /* bubble_left_selected.png */,
 				D5C0311719391749000C98B7 /* bubble_left_selected@2x.png */,
 				D5C0311819391749000C98B7 /* bubble_left.png */,
@@ -1144,6 +1180,8 @@
 				46076EE9193FE3EF00A7B317 /* notif_star.png */,
 				46076EEA193FE3EF00A7B317 /* notif_star@2x.png */,
 				46076EEB193FE3EF00A7B317 /* notif_close.png */,
+				D5144B1A195951D100650061 /* button-feedback-notify.png */,
+				D5144B1B195951D100650061 /* button-feedback-notify@2x.png */,
 				460997451938119A00C5AD96 /* icon-angel-profile.png */,
 				460997461938119A00C5AD96 /* icon-angel-profile@2x.png */,
 				460997471938119A00C5AD96 /* icon-angel.png */,
@@ -1565,6 +1603,8 @@
 				C4F102C8156C57ED0061BC3E /* PAPHomeViewController.m */,
 				C4F102CE156C57FD0061BC3E /* PAPAccountViewController.h */,
 				C4F102CF156C57FD0061BC3E /* PAPAccountViewController.m */,
+				D5743806194629280040C96A /* followersFollowingViewController.h */,
+				D5743807194629280040C96A /* followersFollowingViewController.m */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -1572,8 +1612,8 @@
 		C4A894931558796400DC57D3 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				C4F102D4156C580C0061BC3E /* PAPFindFriendsViewController.h */,
-				C4F102D5156C580C0061BC3E /* PAPFindFriendsViewController.m */,
+				C4F102D4156C580C0061BC3E /* followersFollowingViewController.h */,
+				C4F102D5156C580C0061BC3E /* followersFollowingViewController.m */,
 				C4F102D6156C580C0061BC3E /* PAPSettingsActionSheetDelegate.h */,
 				C4F102D7156C580C0061BC3E /* PAPSettingsActionSheetDelegate.m */,
 			);
@@ -1924,6 +1964,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				46ABD74E18B147FC008F5AAB /* button_cancel_selected.png in Resources */,
+				D575A0701947834C00C6BCC2 /* btn_editprofile@2x.png in Resources */,
 				46839E9E18E1E8C100BD60DB /* icon-upload.png in Resources */,
 				C45C260715671D730035BCA6 /* PlaceholderPhoto.png in Resources */,
 				D59AE7B618CD501D007F882B /* valley.png in Resources */,
@@ -1944,6 +1985,7 @@
 				D576841B19341DDA008BAA2C /* arrow_left@2x.png in Resources */,
 				C4F102E7156C58570061BC3E /* InfoPlist.strings in Resources */,
 				465B19AF18B81FE500EDBCFC /* browser-button-forward-normal.png in Resources */,
+				D5144B1C195951D100650061 /* button-feedback-notify.png in Resources */,
 				465DE34E1895A56200C37EF8 /* bg_dropdown.png in Resources */,
 				46B31EF0184E35150028D11C /* companyName.png in Resources */,
 				46839E9A18E1E8C100BD60DB /* icon-fblogin.png in Resources */,
@@ -1961,11 +2003,13 @@
 				46839E9D18E1E8C100BD60DB /* icon-twitterlogin@2x.png in Resources */,
 				D57683F21933E9E3008BAA2C /* nav_post.png in Resources */,
 				D52C1E3618D9515D00625887 /* konotor_profile@2x.png in Resources */,
+				D575A0731947834C00C6BCC2 /* btn_following.png in Resources */,
 				465DE3561895AA9600C37EF8 /* dropdown_arrow.png in Resources */,
 				D51072D11937F33F00B1FF0E /* share_thought_grey.png in Resources */,
 				4602FCF618BAB2CA0097DBEC /* partner@2x.png in Resources */,
 				D5C0312319391749000C98B7 /* bubble_right_selected@2x.png in Resources */,
 				D528C380191034DE00CEEA35 /* ButtonLikeCommentSelected.png in Resources */,
+				D5144B1D195951D100650061 /* button-feedback-notify@2x.png in Resources */,
 				46B31EEF184E35150028D11C /* profileLocation@2x.png in Resources */,
 				D59B997E18C59836002D6EFE /* AppIcon80x80.png in Resources */,
 				462FCB85188C8533005059F3 /* button_back.png in Resources */,
@@ -1975,6 +2019,7 @@
 				D528C381191034DE00CEEA35 /* ButtonLikeCommentSelected@2x.png in Resources */,
 				D52C1E4218D9515D00625887 /* konotor_supportprofile@2x.png in Resources */,
 				462FCB8A188C863E005059F3 /* button_setting_selected@2x.png in Resources */,
+				D5D571181947F8E900354340 /* btn_no_follow_user@2x.png in Resources */,
 				465B19B518B81FE500EDBCFC /* browser-refresh.png in Resources */,
 				46B31EEE184E35150028D11C /* profileLocation.png in Resources */,
 				C4BE670D157FC7D000A291C2 /* Icon-72.png in Resources */,
@@ -1992,6 +2037,7 @@
 				D52C1E2618D9515D00625887 /* KonotorFeedbackScreenViewController.xib in Resources */,
 				C4BE6712157FC7D000A291C2 /* Icon.png in Resources */,
 				D52C1E4418D9515D00625887 /* konotor_uploading@2x.png in Resources */,
+				D5D571171947F8E900354340 /* btn_no_follow_user.png in Resources */,
 				C4BE6713157FC7D000A291C2 /* Icon@2x.png in Resources */,
 				D5BFDED918CC84A5004FEC42 /* newyork.png in Resources */,
 				C4BE6714157FC7D000A291C2 /* iTunesArtwork in Resources */,
@@ -2011,6 +2057,7 @@
 				D52C1E3C18D9515D00625887 /* konotor_send@2x.png in Resources */,
 				465B19AD18B81FE500EDBCFC /* browser-button-forward-no.png in Resources */,
 				D5BFDEE118CC84A5004FEC42 /* vancity.png in Resources */,
+				D5D571151947F8E900354340 /* btn_following_user.png in Resources */,
 				4602FD1418BD553B0097DBEC /* foundersuite-logo.png in Resources */,
 				D59B998E18C5A902002D6EFE /* Default-568h@2x.png in Resources */,
 				462FCB61188C6AE9005059F3 /* DiscoverNavigationBar.png in Resources */,
@@ -2037,6 +2084,7 @@
 				C4BE6779157FC7F700A291C2 /* BackgroundNewActivity.png in Resources */,
 				D52C1E4318D9515D00625887 /* konotor_uploading.png in Resources */,
 				4609975D1938119A00C5AD96 /* icon-twitter-profile.png in Resources */,
+				D575A06F1947834C00C6BCC2 /* btn_editprofile.png in Resources */,
 				46FB0A7D1888989800E978CD /* tab-product-unselected@2x.png in Resources */,
 				C4BE677A157FC7F700A291C2 /* BackgroundNewActivity@2x.png in Resources */,
 				C4BE677B157FC7F700A291C2 /* BackgroundTabBar.png in Resources */,
@@ -2103,6 +2151,7 @@
 				462FCB84188C8533005059F3 /* button_back_selected@2x.png in Resources */,
 				4691B51618C0314600B7DF6A /* discover@2x.png in Resources */,
 				C4BE679A157FC7F700A291C2 /* ButtonLikeSelected@2x.png in Resources */,
+				D575A0741947834C00C6BCC2 /* btn_following@2x.png in Resources */,
 				46ABD73E18B1381D008F5AAB /* discover-content-button.png in Resources */,
 				4602FD2518BD553B0097DBEC /* konotor-logo@2x.png in Resources */,
 				D57683FF1933EB9B008BAA2C /* nav_home@2x.png in Resources */,
@@ -2133,13 +2182,16 @@
 				4691B50218BFB0AD00B7DF6A /* intro1-iphone4.png in Resources */,
 				46ABD73F18B1381D008F5AAB /* discover-content-button@2x.png in Resources */,
 				D52C1E3518D9515D00625887 /* konotor_profile.png in Resources */,
+				D575A0711947834C00C6BCC2 /* btn_follow.png in Resources */,
 				D57683EA1933E6DD008BAA2C /* post_bubble.png in Resources */,
 				C4BE67A5157FC7F700A291C2 /* IconComment.png in Resources */,
 				C4BE67A6157FC7F700A291C2 /* IconComment@2x.png in Resources */,
 				465A4EDA18A8222A00E43DC6 /* iconlocation@2x.png in Resources */,
+				D5D571161947F8E900354340 /* btn_following_user@2x.png in Resources */,
 				D5C0312019391749000C98B7 /* bubble_left.png in Resources */,
 				46B31EF8184E3DCB0028D11C /* profileAddNew.png in Resources */,
 				46FB0A841888989800E978CD /* tab-people-unselected.png in Resources */,
+				D575A0721947834C00C6BCC2 /* btn_follow@2x.png in Resources */,
 				D576840E1933F910008BAA2C /* IconDiscoverSelected.png in Resources */,
 				467154A718835E470000C0CA /* privacy@2x.png in Resources */,
 				D5C0312119391749000C98B7 /* bubble_left@2x.png in Resources */,
@@ -2324,6 +2376,7 @@
 				C4F102BC156C57CD0061BC3E /* PAPTabBarController.m in Sources */,
 				C4F102C2156C57DA0061BC3E /* PAPLogInViewController.m in Sources */,
 				C4F102C3156C57DA0061BC3E /* PAPWelcomeViewController.m in Sources */,
+				D5743808194629280040C96A /* followersFollowingViewController.m in Sources */,
 				D52C1E2318D9515D00625887 /* KonotorEventHandler.m in Sources */,
 				D52C1E2418D9515D00625887 /* KonotorFeedbackScreen.m in Sources */,
 				462B363E1880AB5D008C28AE /* discoverPageViewController.m in Sources */,
@@ -2332,7 +2385,6 @@
 				C4F102CD156C57EE0061BC3E /* PAPPhotoTimelineViewController.m in Sources */,
 				C4F102D2156C57FD0061BC3E /* PAPAccountViewController.m in Sources */,
 				C4F102D3156C57FD0061BC3E /* PAPPhotoDetailsViewController.m in Sources */,
-				C4F102D8156C580C0061BC3E /* PAPFindFriendsViewController.m in Sources */,
 				C4F102D9156C580C0061BC3E /* PAPSettingsActionSheetDelegate.m in Sources */,
 				D52C1E4818D9515D00625887 /* KonotorUtility.m in Sources */,
 				D52C1E2118D9515D00625887 /* KonotorConversationViewController.m in Sources */,

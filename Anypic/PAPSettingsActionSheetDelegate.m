@@ -5,7 +5,7 @@
 //
 
 #import "PAPSettingsActionSheetDelegate.h"
-#import "PAPFindFriendsViewController.h"
+#import "FollowersFollowingViewController.h"
 #import "PAPAccountViewController.h"
 #import "AppDelegate.h"
 #import "PAPProfileSettingViewController.h"
@@ -15,8 +15,7 @@
 
 // ActionSheet button indexes
 typedef enum {
-	kPAPSettingsProfile = 0,
-    kPAPAboutThisVersion,
+    kPAPAboutThisVersion = 0,
     kPAPPrivacyPolicy,
     kPAPTermsofUse,
     kPAPSettingsLogout,
@@ -72,14 +71,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     }
     
     switch ((kPAPSettingsActionSheetButtons)buttonIndex) {
-        case kPAPSettingsProfile:
-        {
-            PAPProfileSettingViewController *profileViewController = [[PAPProfileSettingViewController alloc] init];
-            profileViewController.hidesBottomBarWhenPushed = YES;
-            [navController pushViewController:profileViewController animated:YES];
-            break;
-        }
-            /*
+                   /*
         case kPAPSettingsFindFriends:
         {
             PAPFindFriendsViewController *findFriendsVC = [[PAPFindFriendsViewController alloc] init];

@@ -292,18 +292,6 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     
     // initiate konotor
     [Konotor newSession];
-    
-    /*
-    // get unread messages, show screen if greater than 0
-    self.konotorCount = 0;
-    
-    // fetch unread messages, show feedback screen
-    self.konotorCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
-    
-    if([self.konotorCount intValue] > 0){
-        [KonotorFeedbackScreen showFeedbackScreen];
-    }
-     */
 }
 
 #pragma mark - UITabBarControllerDelegate
@@ -552,28 +540,17 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     
     [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:0.498f green:0.388f blue:0.329f alpha:1.0f]];
     
-    
-    NSShadow *shadow = [NSShadow new];
-    [shadow setShadowColor: [UIColor colorWithWhite:0.0f alpha:0.750f]];
-    [shadow setShadowOffset: CGSizeMake(0.0f, 1.0f)];
-    
-    NSDictionary *navBarAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],
-                                 NSShadowAttributeName: shadow
-                                 };
+    NSDictionary *navBarAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
 
     [[UINavigationBar appearance] setTitleTextAttributes:navBarAttributes];
     
     [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"BackgroundNavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
     
-    NSDictionary *barButtonItemAttributes = @{NSForegroundColorAttributeName:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0f],
-                                              NSShadowAttributeName: shadow
-                                              };
+    NSDictionary *barButtonItemAttributes = @{NSForegroundColorAttributeName:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0f]};
     
     [[UIButton appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
     
     [[UIBarButtonItem appearance] setTitleTextAttributes:barButtonItemAttributes forState:UIControlStateNormal];
-     
- 
     
     [[UISearchBar appearance] setTintColor:[UIColor colorWithRed:32.0f/255.0f green:19.0f/255.0f blue:16.0f/255.0f alpha:1.0f]];    
 }
