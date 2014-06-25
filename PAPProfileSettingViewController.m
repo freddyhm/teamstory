@@ -923,7 +923,7 @@
             }];
 
         } else {
-            saveButton.enabled = YES;
+            saveButton.userInteractionEnabled = YES;
             
             if ([companyName_input length] == 0) {
                 UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter Display Name." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];

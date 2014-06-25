@@ -32,7 +32,7 @@
         self.selectedUser = user;
 
         // The number of objects to show per page
-        self.objectsPerPage = 15;
+        self.objectsPerPage = 1000;
         
         // Remove default loading indicator
         self.loadingViewEnabled = NO;
@@ -112,10 +112,10 @@
     PFQuery *query = [PFQuery queryWithClassName:kPAPActivityClassKey];
     [query whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
     
-    
     // filter out zombie pointers (manually deleted users)
     PFQuery *noZombieQuery = [PFUser query];
     [noZombieQuery whereKeyExists:@"objectId"];
+    [noZombieQuery setLimit:1000];
     
     if([self.type isEqualToString:@"following"]){
         
@@ -150,7 +150,6 @@
     NSString *targetUser = [self.type isEqualToString:@"following"] ? kPAPActivityToUserKey : kPAPActivityFromUserKey;
 
     for (PFObject *obj in self.objects) {
-        
         // make sure the from/to key's value (user in list) is not nil
         if([obj objectForKey:targetUser] != nil){
             [self.results addObject:[obj objectForKey:targetUser]];
@@ -162,6 +161,7 @@
         self.emptyPlaceholder.hidden = NO;
         [SVProgressHUD dismiss];
     }else{
+        
         // check and set following status for user list
         PFQuery *isFollowingQuery = [PFQuery queryWithClassName:kPAPActivityClassKey];
         [isFollowingQuery whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
@@ -184,7 +184,7 @@
     }
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object{
     
     static NSString *FriendCellIdentifier = @"FriendCell";
     

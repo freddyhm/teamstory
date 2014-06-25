@@ -457,6 +457,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 // filter out zombie pointers (manually deleted users)
                 PFQuery *noZombieQuery = [PFUser query];
                 [noZombieQuery whereKeyExists:@"objectId"];
+                [noZombieQuery setLimit:1000];
                 
                 PFQuery *queryFollowerCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
                 [queryFollowerCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
@@ -841,6 +842,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     // filter out zombie pointers (manually deleted users)
     PFQuery *noZombieQuery = [PFUser query];
     [noZombieQuery whereKeyExists:@"objectId"];
+    [noZombieQuery setLimit:1000];
     
     // return completed when both queries have finished
     self.userStatUpdateCount = 0;
