@@ -16,6 +16,8 @@
 @property (nonatomic, assign) NSString *type;
 @property (nonatomic, strong) NSMutableArray *results;
 @property (nonatomic, strong) PFUser *selectedUser;
+@property (nonatomic, strong) UILabel *emptyPlaceholder;
+
 @end
 
 @implementation FollowersFollowingViewController
@@ -56,7 +58,16 @@
     [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
     [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-
+    
+    // Empty case placeholder, hidden by default
+    self.emptyPlaceholder = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/3, self.view.frame.size.width, 40.0f)];
+    self.emptyPlaceholder.font = [UIFont fontWithName:@"Helvetica" size:16.0f];
+    [self.emptyPlaceholder setText:@"Uh Oh! Get to know more startups :)"];
+    self.emptyPlaceholder.textAlignment = NSTextAlignmentCenter;
+    [self.emptyPlaceholder setTextColor:[UIColor colorWithRed:178.0f/255.0f green:184.0f/255.0f blue:189.0f/255.0f alpha:1.0f]];
+    self.emptyPlaceholder.hidden = YES;
+    [self.view addSubview:self.emptyPlaceholder];
+    
     [SVProgressHUD show];
 }
 
@@ -145,27 +156,32 @@
             [self.results addObject:[obj objectForKey:targetUser]];
         }
     }
-
-    // check and set following status for user list
-    PFQuery *isFollowingQuery = [PFQuery queryWithClassName:kPAPActivityClassKey];
-    [isFollowingQuery whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
-    [isFollowingQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
-    [isFollowingQuery whereKey:kPAPActivityToUserKey containedIn:self.results];
-    [isFollowingQuery setCachePolicy:kPFCachePolicyNetworkOnly];
     
-    [isFollowingQuery includeKey:kPAPActivityToUserKey];
-    
-    [isFollowingQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            for (PFObject *obj in objects) {
-                PFUser *followUser = [obj objectForKey:kPAPActivityToUserKey];
-                [[PAPCache sharedCache] setFollowStatus:YES user:followUser];
+    // check if empty, show placeholder if so 
+    if([self.results count] == 0){
+        self.emptyPlaceholder.hidden = NO;
+        [SVProgressHUD dismiss];
+    }else{
+        // check and set following status for user list
+        PFQuery *isFollowingQuery = [PFQuery queryWithClassName:kPAPActivityClassKey];
+        [isFollowingQuery whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
+        [isFollowingQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
+        [isFollowingQuery whereKey:kPAPActivityToUserKey containedIn:self.results];
+        [isFollowingQuery setCachePolicy:kPFCachePolicyNetworkOnly];
+        
+        [isFollowingQuery includeKey:kPAPActivityToUserKey];
+        
+        [isFollowingQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                for (PFObject *obj in objects) {
+                    PFUser *followUser = [obj objectForKey:kPAPActivityToUserKey];
+                    [[PAPCache sharedCache] setFollowStatus:YES user:followUser];
+                }
+                
+                [SVProgressHUD dismiss];
             }
-            
-            [SVProgressHUD dismiss];
-        }
-    }];
-
+        }];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
