@@ -9,6 +9,7 @@
 #import "MBProgressHUD.h"
 #import "CropResizeViewController.h"
 #import "ThoughtPostViewController.h"
+#import "PAPlinkPostViewController.h"
 
 @interface PAPTabBarController ()
 @property (nonatomic,strong) NSString *imageSource;
@@ -20,13 +21,11 @@
 
 @property (nonatomic, strong) UIButton *photoPostButton;
 @property (nonatomic, strong) UIButton *thoughtPostButton;
+@property (nonatomic, strong) UIButton *linkPostButton;
 @property (nonatomic, strong) UIImageView *photoPostButtonIcon;
 @property (nonatomic, strong) UIImageView *thoughtPostButtonIcon;
 @property (nonatomic, strong) UILabel *photoPostTitle;
 @property (nonatomic, strong) UILabel *thoughtPostTitle;
-
-
-
 
 @end
 
@@ -36,6 +35,7 @@
 @synthesize imagePickerInfo;
 @synthesize imageSource;
 @synthesize popoverController;
+@synthesize linkPostButton;
 
 #pragma mark - UIViewController
 
@@ -54,7 +54,7 @@
         
     // photo button
     UIImage *bubbleLeft = [UIImage imageNamed:@"bubble_left.png"];
-    self.photoPostButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tabBar.frame.origin.x, 9.0f, bubbleLeft.size.width, bubbleLeft.size.height)];
+    self.photoPostButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tabBar.frame.origin.x - 40.0f, 9.0f, bubbleLeft.size.width, bubbleLeft.size.height)];
     [self.photoPostButton setBackgroundImage:bubbleLeft forState:UIControlStateNormal];
     [self.photoPostButton setBackgroundImage:[UIImage imageNamed:@"bubble_left_selected.png"] forState:UIControlStateSelected];
     [self.photoPostButton addTarget:self action:@selector(cameraButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -77,7 +77,7 @@
     
     // thought button
     UIImage *bubbleRight = [UIImage imageNamed:@"bubble_right.png"];
-    self.thoughtPostButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tabBar.frame.size.width/2, 9.0f, bubbleRight.size.width, bubbleRight.size.height)];
+    self.thoughtPostButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tabBar.frame.size.width/2 - 40.0f, 9.0f, bubbleRight.size.width, bubbleRight.size.height)];
     [self.thoughtPostButton setBackgroundImage:[UIImage imageNamed:@"bubble_right.png"] forState:UIControlStateNormal];
     [self.thoughtPostButton setBackgroundImage:[UIImage imageNamed:@"bubble_right_selected.png"] forState:UIControlStateSelected];
     [self.thoughtPostButton addTarget:self action:@selector(thoughtButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -97,6 +97,12 @@
     [self.thoughtPostButton addSubview:self.thoughtPostTitle];
     [self.thoughtPostButton addSubview:self.thoughtPostButtonIcon];
     [self.postMenu addSubview:self.thoughtPostButton];
+    
+    // link post button
+    self.linkPostButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tabBar.frame.origin.x + 50.0f, 9.0f, 40.0f, 40.0f)];
+    [self.linkPostButton setBackgroundColor:[UIColor redColor]];
+    [self.linkPostButton addTarget:self action:@selector(linkPostButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.postMenu addSubview:self.linkPostButton];
     
     // hide by default
     self.postMenu.hidden = YES;
@@ -233,11 +239,18 @@
     }
 }
 
+- (void)linkPostButtonAction:(id)sender {
+    self.postMenu.hidden = YES;
+    
+    PAPlinkPostViewController *linkPostViewController = [[PAPlinkPostViewController alloc] init];
+    [self.navigationController pushViewController:linkPostViewController animated:YES];
+}
+
 - (void)thoughtButtonAction:(id)sender{
     
     self.postMenu.hidden = YES;
     
-    ThoughtPostViewController *thoughtPostViewController = [[ThoughtPostViewController alloc]init];
+    ThoughtPostViewController *thoughtPostViewController = [[ThoughtPostViewController alloc] init];
     [self.navigationController pushViewController:thoughtPostViewController animated:YES];
 }
 
