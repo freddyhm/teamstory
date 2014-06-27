@@ -349,9 +349,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             NSNumber *likeCount = [attributesForComment objectForKey:kPAPCommentAttributesLikeCountKey];
             
             // take out heart and count if like count is 0
-            if([likeCount intValue]  == 0){
+            if([likeCount intValue] == 0){
                 cell.likeCommentHeart.hidden = YES;
                 cell.likeCommentCount.hidden = YES;
+                cell.likeCommentButton.selected = NO;
             }else{
                 
                 // set properties
@@ -364,6 +365,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         else{
             cell.likeCommentHeart.hidden = YES;
             cell.likeCommentCount.hidden = YES;
+            cell.likeCommentButton.selected = NO;
         }
 
         return cell;
