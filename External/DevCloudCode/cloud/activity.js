@@ -1,3 +1,60 @@
+
+Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
+           
+        // Set up to modify user data
+        Parse.Cloud.useMasterKey();
+        
+        // Query for all users
+        var queryUser = new Parse.Query(Parse.User);
+        queryUser.limit("1000");
+                
+        var allFollowingEntries;
+                var toDelete = [];
+        var followingQuery = new Parse.Query('Activity');
+                
+        // get all follow activities and include user field
+        followingQuery.equalTo("type", "follow");
+        followingQuery.include("toUser");
+                
+         queryUser.find({
+                        
+                success: function(results){
+                   
+                    for(var i = 0; i < results.length; i++){
+                        
+                       // reset array to hold followings
+                       allFollowingEntries = [];
+                       
+                       // output cleaned user accounts
+                       //console.log("user name = " + results[i].get("displayName"));
+                       
+                       // followings for user
+                       followingQuery.equalTo("fromUser", results[i]);
+                   
+                       
+                        followingQuery.each(function(following){
+                                                  
+                                 // console.log("SUCCESS");
+                                  
+                                  // get following user display name
+                                  var displayName = following.get("toUser").get("displayName");
+                                  
+                                  //console.log("DISPLAY NAME:" + displayName);
+                                       //    console.log(allFollowingEntries);
+                                  // if not already in array, push else destroy duplicate
+                                  if(allFollowingEntries.indexOf(displayName) == -1){
+                                        allFollowingEntries.push(displayName);
+                                  }else{
+                                            following.destroy({});
+                                  }
+                        });
+                        
+                    }
+                }
+        });
+});
+
+
 Parse.Cloud.beforeSave('Activity', function(request, response) {
                        var currentUser = request.user;
                        var objectUser = request.object.get('fromUser');

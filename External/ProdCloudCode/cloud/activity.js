@@ -1,3 +1,55 @@
+
+Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
+                
+                // Set up to modify user data
+                Parse.Cloud.useMasterKey();
+                
+                // Query for all users
+                var queryUser = new Parse.Query(Parse.User);
+                
+                var allFollowingEntries;
+                var followingQuery = new Parse.Query('Activity');
+                
+                // get all follow activities and include user field
+                followingQuery.equalTo("type", "follow");
+                followingQuery.include("toUser");
+                
+                queryUser.each(function(user) {
+                               
+                               // reset array to hold followings
+                               allFollowingEntries = [];
+                               
+                               // output cleaned user accounts
+                               console.log("user name = " + user.get("displayName"));
+                               
+                               // followings for user
+                               followingQuery.equalTo("fromUser", user);
+                               
+                               return followingQuery.each(function(following){
+                                                          
+                                                          // get following user display name
+                                                          var displayName = following.get("toUser").get("displayName");
+                                                          
+                                                          // if not already in array, push else destroy duplicate
+                                                          if(allFollowingEntries.indexOf(displayName) == -1){
+                                                          allFollowingEntries.push(displayName);
+                                                          }else{
+                                                          following.destroy({});
+                                                          }
+                                                          });
+                               
+                }).then(function() {
+                                       // Set the job's success status
+                                       status.success("Follower test completed successfully.");
+                                       }, function(error) {
+                                       // Set the job's error status
+                                       status.error("Uh oh, something went wrong." + error);
+                                       });
+                
+                
+                
+});
+
 Parse.Cloud.beforeSave('Activity', function(request, response) {
                        var currentUser = request.user;
                        var objectUser = request.object.get('fromUser');
