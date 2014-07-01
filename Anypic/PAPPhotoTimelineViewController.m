@@ -304,9 +304,18 @@ enum ActionSheetTags {
         if (expectedSize.height > 46.527f) {
             expectedSize.height = 46.527f;
         }
-        return 305.0f + expectedSize.height + 25.0f;
+        
+        if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
+            return 100.0f + expectedSize.height + 25.0f;
+        } else {
+            return 305.0f + expectedSize.height + 25.0f;
+        }
     } else {
-        return 305.0f;
+        if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
+            return 100.0f;
+        } else {
+            return 305.0f;
+        }
     }
 }
 
@@ -452,7 +461,9 @@ enum ActionSheetTags {
             cell = [[PAPPhotoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             [cell.photoButton addTarget:self action:@selector(didTapOnPhotoAction:) forControlEvents:UIControlEventTouchUpInside];
         }
-
+        
+        [cell setObject:object];
+        
         cell.photoButton.tag = indexPath.section;
         cell.imageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
         

@@ -7,6 +7,11 @@
 //
 
 #import "PAPlinkPostViewController.h"
+#import "Embedly.h"
+#import "SVProgressHUD.h"
+#import "UIImage+ResizeAdditions.h"
+#import "PAPTabBarController.h"
+#import "PAPHomeViewController.h"
 
 
 @interface PAPlinkPostViewController ()
@@ -17,8 +22,17 @@
 @property (nonatomic, strong) UIButton *okayButton;
 @property (nonatomic, strong) UIButton *nextButton;
 @property (nonatomic, strong) UILabel *titleLabel;
-@property (nonatomic, strong) UILabel *descriptionLabel;
+@property (nonatomic, strong) UILabel *popUpBoxurlLabel;
 @property (nonatomic, strong) PFImageView *imageView;
+@property (nonatomic, strong) UITextView *commentTextView;
+@property (nonatomic, strong) UIView *linkPostView;
+@property (nonatomic, strong) UILabel *linkPostViewLabel_title;
+@property (nonatomic, strong) NSString *linkPostDescription;
+@property (nonatomic, strong) NSString *urlString;
+@property (nonatomic, strong) PFFile *photoFile;
+@property (nonatomic, strong) PFFile *thumbnailFile;
+@property (nonatomic, assign) UIBackgroundTaskIdentifier fileUploadBackgroundTaskId;
+@property (nonatomic, assign) UIBackgroundTaskIdentifier photoPostBackgroundTaskId;
 
 @end
 
@@ -30,8 +44,19 @@
 @synthesize okayButton;
 @synthesize nextButton;
 @synthesize titleLabel;
-@synthesize descriptionLabel;
+@synthesize popUpBoxurlLabel;
 @synthesize imageView;
+@synthesize commentTextView;
+@synthesize linkPostView;
+@synthesize linkPostViewLabel_title;
+@synthesize urlString;
+@synthesize photoFile;
+@synthesize thumbnailFile;
+@synthesize fileUploadBackgroundTaskId;
+@synthesize photoPostBackgroundTaskId;
+@synthesize linkPostDescription;
+
+static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 
 - (void)viewDidLoad
 {
@@ -41,6 +66,14 @@
     
     // init nav bar
     [[self navigationController] setNavigationBarHidden:NO animated:YES];
+    
+    UIButton *postButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [postButton setTitle:@"Post" forState:UIControlStateNormal];
+    [postButton setFrame:CGRectMake(0.0f, 0.0f, 40.0f, 20.0f)];
+    [postButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [postButton addTarget:self action:@selector(postButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:postButton];
+    
     
     // set logo and nav bar buttons
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
@@ -94,24 +127,24 @@
     [cancelButton addTarget:self action:@selector(cancelButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [popUpBoxHeader addSubview:cancelButton];
     
-    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(100.0f, 100.0f, 150.0f, 30.0f)];
+    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(90.0f, 95.0f, 180.0f, 55.0f)];
     [self.titleLabel setFont:[UIFont boldSystemFontOfSize:15.0f]];
-    [self.titleLabel setText:@"Link Title Goes Here"];
+    self.titleLabel.numberOfLines = 2;
     [self.popUpBox addSubview:self.titleLabel];
     
-    self.descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(100.0f, 125.0f, 170.0f, 60.0f)];
-    [self.descriptionLabel setText:@"Link Description snippet will go here"];
-    [self.descriptionLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:14.0f]];
-    self.descriptionLabel.numberOfLines = 0;
-    [self.descriptionLabel sizeToFit];
-    [self.descriptionLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:10.0f]];
-    [self.popUpBox  addSubview:self.descriptionLabel];
+    self.popUpBoxurlLabel = [[UILabel alloc] initWithFrame:CGRectMake(90.0f, 120.0f, 180.0f, 60.0f)];
+    [self.popUpBoxurlLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:14.0f]];
+    self.popUpBoxurlLabel.numberOfLines = 1;
+    [self.popUpBoxurlLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:10.0f]];
+    [self.popUpBox addSubview:self.popUpBoxurlLabel];
     
     self.url_textField = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, 60.0f, 200.0f, 30.0f)];
     [self.url_textField setBackgroundColor:[UIColor colorWithWhite:0.9f alpha:1.0f]];
+    self.url_textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.url_textField.delegate = self;
     [self.popUpBox addSubview:self.url_textField];
     
-    self.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(10.0f, 100.0f, 80.0f, 80.0f)];
+    self.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(10.0f, 100.0f, 70.0f, 70.0f)];
     [self.imageView setBackgroundColor:[UIColor colorWithWhite:0.7f alpha:1.0f]];
     [self.popUpBox addSubview:self.imageView];
     
@@ -122,18 +155,24 @@
     self.okayButton.clipsToBounds = YES;
     self.okayButton.layer.cornerRadius = 3.0f;
     [self.okayButton.layer setBorderWidth:2.0f];
+    [self.okayButton setTitleColor:teamStoryColor forState:UIControlStateNormal];
     [self.okayButton.layer setBorderColor:teamStoryColor.CGColor];
     [self.okayButton setTitle:@"OK" forState:UIControlStateNormal];
-    [self.okayButton.titleLabel setTextColor:teamStoryColor];
     [self.okayButton addTarget:self action:@selector(okayButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.popUpBox addSubview:self.okayButton];
     
     self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0f, 190.0f, 260.0f, 30.0f)];
     [self.nextButton setBackgroundColor:teamStoryColor];
     [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
+    [self.nextButton addTarget:self action:@selector(nextButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.popUpBox addSubview:self.nextButton];
     
-    
+    self.commentTextView = [[UITextView alloc] initWithFrame:CGRectMake(5.0f, 71.0f, 310.0f, 110.0f)];
+    self.commentTextView.delegate = self;
+    self.commentTextView.text = @"Add a link comment";
+    self.commentTextView.contentInset = UIEdgeInsetsMake(-65.0f, 0.0f, 0.0f, 0.0f);
+    self.commentTextView.textColor = [UIColor colorWithWhite:0.7f alpha:1.0f];
+    [self.view addSubview:self.commentTextView];
 }
 
 
@@ -144,12 +183,214 @@
 }
 
 - (void)okayButtonAction:(id)sender {
-    
+    [SVProgressHUD show];
+    Embedly *embedlyInit = [[Embedly alloc] initWithKey:EMBEDLY_APP_ID delegate:self];
+    [embedlyInit callEmbedlyApi:@"/1/oembed" withUrl:self.url_textField.text params:nil];
 }
 
 - (void)cancelButtonAction:(id)sender {
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:110].hidden = YES;
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:111].hidden = YES;
+}
+
+- (void)postButtonAction:(id)sender {
+    [self.view endEditing:YES];
+    [self shouldUploadImage:self.imageView.image block:^(BOOL completed) {
+        
+        if(completed){
+            // both files have finished uploading
+            
+            if ([self.commentTextView.text isEqualToString:@"Add a link comment"]) {
+                self.commentTextView.text = @"";
+            }
+            
+            // create a photo object
+            PFObject *photo = [PFObject objectWithClassName:kPAPPhotoClassKey];
+            [photo setObject:[PFUser currentUser] forKey:kPAPPhotoUserKey];
+            [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
+            [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
+            [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
+            [photo setObject:self.commentTextView.text forKey:@"caption"];
+            [photo setObject:@"link" forKey:kPAPPhotoType];
+            [photo setObject:self.url_textField.text forKey:@"link"];
+            [photo setObject:self.linkPostDescription forKey:@"linkDesc"];
+            [photo setObject:self.titleLabel.text forKey:@"linkTitle"];
+            
+            // photos are public, but may only be modified by the user who uploaded them
+            PFACL *photoACL = [PFACL ACLWithUser:[PFUser currentUser]];
+            [photoACL setPublicReadAccess:YES];
+            photo.ACL = photoACL;
+            
+            // Request a background execution task to allow us to finish uploading the photo even if the app is backgrounded
+            self.photoPostBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+                [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
+            }];
+            
+            // save
+            [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (succeeded) {
+                    NSLog(@"Photo uploaded");
+                    
+                    [[PAPCache sharedCache] setAttributesForPhoto:photo likers:[NSArray array] commenters:[NSArray array] likedByCurrentUser:NO];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:PAPTabBarControllerDidFinishEditingPhotoNotification object:photo];
+                } else {
+                    NSLog(@"Photo failed to save: %@", error);
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+                    [alert show];
+                }
+                [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
+            }];
+            
+            [self exitPost];
+        }else{
+            [SVProgressHUD dismiss];
+        }
+    }];
+}
+
+- (void)shouldUploadImage:(UIImage *)anImage block:(void (^)(BOOL))completed
+{
+    
+    UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:10.0f interpolationQuality:kCGInterpolationDefault];
+    
+    // JPEG to decrease file size and enable faster uploads & downloads
+    NSData *imageData = UIImageJPEGRepresentation(anImage, 1.0f);
+    NSData *thumbnailImageData = UIImagePNGRepresentation(thumbnailImage);
+    
+    self.photoFile = [PFFile fileWithData:imageData];
+    self.thumbnailFile = [PFFile fileWithData:thumbnailImageData];
+    
+    // Request a background execution task to allow us to finish uploading the photo even if the app is backgrounded
+    self.fileUploadBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        [[UIApplication sharedApplication] endBackgroundTask:self.fileUploadBackgroundTaskId];
+    }];
+    
+    NSLog(@"Requested background expiration task with id %d for Teamstory photo upload", (int)self.fileUploadBackgroundTaskId);
+    [self.photoFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            NSLog(@"Photo uploaded successfully");
+            [self.thumbnailFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (succeeded) {
+                    NSLog(@"Thumbnail uploaded successfully");
+                }
+                [[UIApplication sharedApplication] endBackgroundTask:self.fileUploadBackgroundTaskId];
+            }];
+            completed(YES);
+        } else {
+            [[UIApplication sharedApplication] endBackgroundTask:self.fileUploadBackgroundTaskId];
+            completed(NO);
+        }
+    }];
+}
+
+- (void)nextButtonAction:(id)sender {
+    [[[[UIApplication sharedApplication] delegate] window] viewWithTag:110].hidden = YES;
+    [[[[UIApplication sharedApplication] delegate] window] viewWithTag:111].hidden = YES;
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:110] endEditing:YES];
+    [self.commentTextView becomeFirstResponder];
+    
+    if ([self.titleLabel.text length] > 0 ) {
+    
+        self.linkPostView = [[UIView alloc] initWithFrame:CGRectMake(5.0f, 187.0f, [UIScreen mainScreen].bounds.size.width - 10.0f, 160.0f)];
+        [self.linkPostView setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:0.5f]];
+        [self.linkPostView.layer setBorderColor:[UIColor colorWithWhite:0.8f alpha:1.0f].CGColor];
+        [self.linkPostView.layer setBorderWidth:0.5f];
+        [self.view addSubview:self.linkPostView];
+        
+        UIImageView *linkPostImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 5.0f, 320.0f, 100.0f)];
+        linkPostImageView.image = self.imageView.image;
+        linkPostImageView.contentMode = UIViewContentModeScaleAspectFit;
+        [self.linkPostView addSubview:linkPostImageView];
+        
+        self.linkPostViewLabel_title = [[UILabel alloc] initWithFrame:CGRectMake(5.0f, 105.0f, self.linkPostView.bounds.size.width - 10.0f, 45.0f)];
+        [self.linkPostViewLabel_title setFont:[UIFont boldSystemFontOfSize:15.0f]];
+        [self.linkPostViewLabel_title setText:self.titleLabel.text];
+        self.linkPostViewLabel_title.numberOfLines = 2;
+        [self.linkPostViewLabel_title sizeToFit];
+        [self.linkPostView addSubview:self.linkPostViewLabel_title];
+        
+        UILabel *urlLabel = [[UILabel alloc] initWithFrame:CGRectMake(5.0f, 140.0f, self.linkPostView.bounds.size.width - 10.0f, 17.5f)];
+        [urlLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:12.0f]];
+        urlLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+        [urlLabel setText:self.urlString];
+        urlLabel.numberOfLines = 1;
+        [self.linkPostView addSubview:urlLabel];
+    }
+    
+}
+
+- (void)exitPost{
+    // hide custom grey bar and pop to home
+    [[self navigationController] setNavigationBarHidden:YES animated:YES];
+    
+    // get tab bar and home controller from stack
+    PAPTabBarController *tabBarController =[[self.navigationController viewControllers] objectAtIndex:1];
+    NSArray *tabBarViewControllers = [tabBarController viewControllers];
+    
+    // get home and phototimeline, if there are children pop 'em to get back to timeline
+    PAPHomeViewController *homeViewController = [tabBarViewControllers objectAtIndex:0];
+    PAPPhotoTimelineViewController *photoViewController = [homeViewController.childViewControllers objectAtIndex:0];
+    
+    if([homeViewController.childViewControllers count] > 1){
+        [photoViewController.navigationController popViewControllerAnimated:NO];
+    }
+    
+    [tabBarController setSelectedViewController:homeViewController];
+    
+    NSArray *m = homeViewController.childViewControllers;
+    
+    [m objectAtIndex:0];
+    
+    // push tab bar with home controller now selected
+    [self.navigationController popToViewController:tabBarController animated:YES];
+}
+
+# pragma mark - Embedly.h
+
+- (void)embedlyFailure:(NSString *)callUrl withError:(NSError *)error endpoint:(NSString *)endpoint operation:(AFHTTPRequestOperation *)operation {
+    
+    [SVProgressHUD dismiss];
+    
+    NSLog(@"embedly failure %@", callUrl);
+}
+
+- (void)embedlySuccess:(NSString *)callUrl withResponse:(id)response endpoint:(NSString *)endpoint operation:(AFHTTPRequestOperation *)operation {
+    
+    [SVProgressHUD dismiss];
+    
+    self.titleLabel.text = [response objectForKey:@"title"];
+    self.popUpBoxurlLabel.text = [response objectForKey:@"url"];
+    self.imageView.image = [self getImageFromURL:[response objectForKey:@"thumbnail_url"]];
+    self.urlString = [response objectForKey:@"url"];
+    self.linkPostDescription = [response objectForKey:@"description"];
+}
+
+-(UIImage *) getImageFromURL:(NSString *)fileURL {
+    UIImage * result;
+    
+    NSData * data = [NSData dataWithContentsOfURL:[NSURL URLWithString:fileURL]];
+    result = [UIImage imageWithData:data];
+    return result;
+}
+
+# pragma mark - UITextFieldDelegate
+
+- (void) textFieldDidBeginEditing:(UITextField *)textField {
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    NSString *lowerCase_pasteboard = [pasteboard.string lowercaseString];
+    
+    // checking for http values.
+    if ([lowerCase_pasteboard hasPrefix:@"http"]) {
+         textField.text = pasteboard.string;
+    }
+}
+
+# pragma mark - UITextViewDelegate
+
+-(void)textViewDidBeginEditing:(UITextView *)textView {
+    if ([textView.text isEqualToString:@"Add a link comment"]) {
+        textView.text = @"";
+    }
 }
 
 @end

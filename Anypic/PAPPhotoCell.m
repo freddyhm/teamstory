@@ -14,6 +14,9 @@
 @synthesize captionLabel;
 @synthesize caption;
 @synthesize backgroundView;
+@synthesize linkTitleLabel;
+@synthesize linkUrlLabel;
+@synthesize linkDescription;
 
 #pragma mark - NSObject
 
@@ -47,6 +50,30 @@
         [self.backgroundView setBackgroundColor:[UIColor whiteColor]];
         [self.contentView addSubview:self.backgroundView];
         
+        self.linkBackgroundView = [[UIView alloc] init];
+        [self.contentView addSubview:self.linkBackgroundView];
+        
+        self.linkBackgroundView_gray = [[UIView alloc] init];
+        [self.contentView addSubview:self.linkBackgroundView_gray];
+        
+        self.linkTitleLabel = [[UILabel alloc] init];
+        self.linkTitleLabel.numberOfLines = 2;
+        self.linkTitleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
+        [self.linkTitleLabel setTextColor:[UIColor colorWithWhite:0.3f alpha:1.0]];
+        [self.contentView addSubview:self.linkTitleLabel];
+        
+        self.linkDescription = [[UILabel alloc] init];
+        self.linkDescription.numberOfLines = 2;
+        self.linkDescription.font = [UIFont systemFontOfSize:12.0f];
+        [self.linkDescription setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
+        [self.contentView addSubview:self.linkDescription];
+        
+        self.linkUrlLabel = [[UILabel alloc] init];
+        self.linkUrlLabel.numberOfLines = 1;
+        self.linkUrlLabel.font = [UIFont systemFontOfSize:11.0f];
+        [self.linkUrlLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
+        [self.contentView addSubview:self.linkUrlLabel];
+        
         self.captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(7.5f, 0.0f, 305.0f, 44.0f)];
         [self.captionLabel setBackgroundColor:[UIColor clearColor]];
         [self.captionLabel setText:self.caption];
@@ -62,10 +89,6 @@
         self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 305.0f, 305.0f);
         self.photoButton.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:self.photoButton];
-        
-        [self.contentView bringSubviewToFront:self.imageView];
-        
-
     }
 
     return self;
@@ -109,12 +132,85 @@
         [self.captionLabel setUserInteractionEnabled:YES];
         self.captionLabel.numberOfLines = 3;
         self.captionLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+        
+        //handling cases of link post
+        if ([[self.ih_object objectForKey:@"type"] isEqualToString:@"link"]) {
+            [self.linkBackgroundView setFrame:CGRectMake(7.5f, expectedSize.height + 25.0f, 305.0f, 100.0f)];
+            [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
+            [self.contentView addSubview:self.linkBackgroundView];
+            [self.contentView sendSubviewToBack:self.linkBackgroundView];
+            
+            [self.linkBackgroundView_gray setFrame:CGRectMake(12.5f, expectedSize.height + 25.0f + 5.0f, 295.0f, 90.0f)];
+            [self.linkBackgroundView_gray setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
+            [self.contentView addSubview:self.linkBackgroundView_gray];
+            
+            [self.linkTitleLabel setFrame:CGRectMake(105.0f,expectedSize.height + 25.0f + 10.0f, 190.0f, 40.0f)];
+            self.linkTitleLabel.text = [self.ih_object objectForKey:@"linkTitle"];
+            self.linkTitleLabel.numberOfLines = 2;
+            
+            self.backgroundView.frame = CGRectMake(7.5f, 0.0f, 305.0f, expectedSize.height + 25.0f);
+            self.captionLabel.frame = CGRectMake(12.5f, 10.0f, 295.0f, expectedSize.height);
+            self.photoButton.frame = CGRectMake( 7.5f, 0.0, 305.0f, 25.0f + expectedSize.height + 100.0f);
+            self.imageView.frame = CGRectMake( 17.5f, expectedSize.height + 25.0f + 10.0f, 80.0f, 80.0f);
+            
+            [self.linkTitleLabel setFrame:CGRectMake(105.0f, 10.0f + expectedSize.height + 25.0f, 190.0f, 30.0f)];
+            self.linkTitleLabel.text = [self.ih_object objectForKey:@"linkTitle"];
+            
+            [self.linkUrlLabel setFrame:CGRectMake(105.0f, 60.0f + expectedSize.height + 25.0f, 190.0f, 30.0f)];
+            self.linkUrlLabel.text = [self.ih_object objectForKey:@"link"];
+            
+            //[self.linkDescription setFrame:CGRectMake(105.0f, 60.0f, <#CGFloat width#>, <#CGFloat height#>)]
+            
+            [self.contentView bringSubviewToFront:self.linkUrlLabel];
+            [self.contentView bringSubviewToFront:self.linkTitleLabel];
+            [self.contentView bringSubviewToFront:self.imageView];
+            [self.contentView bringSubviewToFront:self.photoButton];
+        }
 
     } else {
+        self.captionLabel.text = @"";
         self.captionLabel.frame = CGRectMake(7.5f, 0.0f, 305.0f, 44.0f);
         self.imageView.frame = CGRectMake( 7.5f, 0.0f, 305.0f, 305.0f);
         self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 305.0f, 305.0f);
+
+        if ([[self.ih_object objectForKey:@"type"] isEqualToString:@"link"]) {
+            [self.linkBackgroundView setFrame:CGRectMake(7.5f, 0.0f, 305.0f, 100.0f)];
+            [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
+            [self.contentView addSubview:self.linkBackgroundView];
+            [self.contentView sendSubviewToBack:self.linkBackgroundView];
+            
+            [self.linkBackgroundView_gray setFrame:CGRectMake(12.5f, 5.0f, 295.0f, 90.0f)];
+            [self.linkBackgroundView_gray setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
+            self.linkBackgroundView_gray.layer.borderColor = [UIColor colorWithWhite:0.9f alpha:1.0f].CGColor;
+            self.linkBackgroundView_gray.layer.borderWidth = 0.5f;
+            [self.contentView addSubview:self.linkBackgroundView_gray];
+            
+            [self.linkTitleLabel setFrame:CGRectMake(105.0f, 10.0f, 190.0f, 30.0f)];
+            self.linkTitleLabel.text = [self.ih_object objectForKey:@"linkTitle"];
+            //self.linkTitleLabel.backgroundColor = [UIColor redColor];
+            
+            [self.linkDescription setFrame:CGRectMake(105.0f, 40.0f, 190.0f, 30.0f)];
+            self.linkDescription.text = [self.ih_object objectForKey:@"linkDesc"];
+            
+            [self.linkUrlLabel setFrame:CGRectMake(105.0f, 70.0f, 190.0f, 15.0f)];
+            self.linkUrlLabel.text = [self.ih_object objectForKey:@"link"];
+            
+        
+            self.photoButton.frame = CGRectMake( 7.5f, 0.0, 305.0f, 100.0f);
+            self.imageView.frame = CGRectMake( 17.5f, 10.0f, 80.0f, 80.0f);
+            
+            [self.contentView bringSubviewToFront:self.linkUrlLabel];
+            [self.contentView bringSubviewToFront:self.linkTitleLabel];
+            [self.contentView bringSubviewToFront:self.linkDescription];
+            [self.contentView bringSubviewToFront:self.imageView];
+            [self.contentView bringSubviewToFront:self.photoButton];
+        }
     }
+}
+
+#pragma mark - ()
+-(void)setObject:(PFObject*)object {
+    self.ih_object = object;
 }
 
 @end
