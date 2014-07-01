@@ -165,6 +165,20 @@
 		4699F0B119605915002AAACB /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4699F0B019605915002AAACB /* StoreKit.framework */; };
 		46A0C25D194E4A2D00811CBC /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 092354B213A1D7EB00DA740F /* CFNetwork.framework */; };
 		46A1DCAD195BB6F100729FD0 /* PAPlinkPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46A1DCAC195BB6F100729FD0 /* PAPlinkPostViewController.m */; };
+		46A2FE441963562100D8ED12 /* Moment Popup.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE3E1963562100D8ED12 /* Moment Popup.png */; };
+		46A2FE451963562100D8ED12 /* Moment Popup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE3F1963562100D8ED12 /* Moment Popup@2x.png */; };
+		46A2FE461963562100D8ED12 /* Thought Popup.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE401963562100D8ED12 /* Thought Popup.png */; };
+		46A2FE471963562100D8ED12 /* Thought Popup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE411963562100D8ED12 /* Thought Popup@2x.png */; };
+		46A2FE481963562100D8ED12 /* Link Popup.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE421963562100D8ED12 /* Link Popup.png */; };
+		46A2FE491963562100D8ED12 /* Link Popup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE431963562100D8ED12 /* Link Popup@2x.png */; };
+		46A2FE501963572E00D8ED12 /* Moment Popup_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE4A1963572E00D8ED12 /* Moment Popup_selected.png */; };
+		46A2FE511963572E00D8ED12 /* Moment Popup_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE4B1963572E00D8ED12 /* Moment Popup_selected@2x.png */; };
+		46A2FE521963572E00D8ED12 /* Thought Popup_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE4C1963572E00D8ED12 /* Thought Popup_selected.png */; };
+		46A2FE531963572E00D8ED12 /* Thought Popup_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE4D1963572E00D8ED12 /* Thought Popup_selected@2x.png */; };
+		46A2FE541963572E00D8ED12 /* Link Popup_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE4E1963572E00D8ED12 /* Link Popup_selected.png */; };
+		46A2FE551963572E00D8ED12 /* Link Popup_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE4F1963572E00D8ED12 /* Link Popup_selected@2x.png */; };
+		46A2FE5819635A7000D8ED12 /* btn_close_timeline@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE5619635A7000D8ED12 /* btn_close_timeline@2x.png */; };
+		46A2FE5919635A7000D8ED12 /* btn_close_timeline.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE5719635A7000D8ED12 /* btn_close_timeline.png */; };
 		46ABD72F18AADFFB008F5AAB /* default-pic.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD72D18AADFFB008F5AAB /* default-pic.png */; };
 		46ABD73018AADFFB008F5AAB /* default-pic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */; };
 		46ABD73318B12E01008F5AAB /* PAPperksoverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 46ABD73218B12E01008F5AAB /* PAPperksoverlay.m */; };
@@ -622,6 +636,20 @@
 		4699F0B019605915002AAACB /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		46A1DCAB195BB6F100729FD0 /* PAPlinkPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPlinkPostViewController.h; path = Anypic/PAPlinkPostViewController.h; sourceTree = SOURCE_ROOT; };
 		46A1DCAC195BB6F100729FD0 /* PAPlinkPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPlinkPostViewController.m; path = Anypic/PAPlinkPostViewController.m; sourceTree = SOURCE_ROOT; };
+		46A2FE3E1963562100D8ED12 /* Moment Popup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Moment Popup.png"; sourceTree = "<group>"; };
+		46A2FE3F1963562100D8ED12 /* Moment Popup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Moment Popup@2x.png"; sourceTree = "<group>"; };
+		46A2FE401963562100D8ED12 /* Thought Popup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Thought Popup.png"; sourceTree = "<group>"; };
+		46A2FE411963562100D8ED12 /* Thought Popup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Thought Popup@2x.png"; sourceTree = "<group>"; };
+		46A2FE421963562100D8ED12 /* Link Popup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Link Popup.png"; sourceTree = "<group>"; };
+		46A2FE431963562100D8ED12 /* Link Popup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Link Popup@2x.png"; sourceTree = "<group>"; };
+		46A2FE4A1963572E00D8ED12 /* Moment Popup_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Moment Popup_selected.png"; sourceTree = "<group>"; };
+		46A2FE4B1963572E00D8ED12 /* Moment Popup_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Moment Popup_selected@2x.png"; sourceTree = "<group>"; };
+		46A2FE4C1963572E00D8ED12 /* Thought Popup_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Thought Popup_selected.png"; sourceTree = "<group>"; };
+		46A2FE4D1963572E00D8ED12 /* Thought Popup_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Thought Popup_selected@2x.png"; sourceTree = "<group>"; };
+		46A2FE4E1963572E00D8ED12 /* Link Popup_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Link Popup_selected.png"; sourceTree = "<group>"; };
+		46A2FE4F1963572E00D8ED12 /* Link Popup_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Link Popup_selected@2x.png"; sourceTree = "<group>"; };
+		46A2FE5619635A7000D8ED12 /* btn_close_timeline@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_close_timeline@2x.png"; sourceTree = "<group>"; };
+		46A2FE5719635A7000D8ED12 /* btn_close_timeline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_close_timeline.png; sourceTree = "<group>"; };
 		46ABD72D18AADFFB008F5AAB /* default-pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-pic.png"; sourceTree = "<group>"; };
 		46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-pic@2x.png"; sourceTree = "<group>"; };
 		46ABD73118B12E01008F5AAB /* PAPperksoverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPperksoverlay.h; path = Anypic/PAPperksoverlay.h; sourceTree = SOURCE_ROOT; };
@@ -1171,6 +1199,20 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				46A2FE5619635A7000D8ED12 /* btn_close_timeline@2x.png */,
+				46A2FE5719635A7000D8ED12 /* btn_close_timeline.png */,
+				46A2FE4A1963572E00D8ED12 /* Moment Popup_selected.png */,
+				46A2FE4B1963572E00D8ED12 /* Moment Popup_selected@2x.png */,
+				46A2FE4C1963572E00D8ED12 /* Thought Popup_selected.png */,
+				46A2FE4D1963572E00D8ED12 /* Thought Popup_selected@2x.png */,
+				46A2FE4E1963572E00D8ED12 /* Link Popup_selected.png */,
+				46A2FE4F1963572E00D8ED12 /* Link Popup_selected@2x.png */,
+				46A2FE3E1963562100D8ED12 /* Moment Popup.png */,
+				46A2FE3F1963562100D8ED12 /* Moment Popup@2x.png */,
+				46A2FE401963562100D8ED12 /* Thought Popup.png */,
+				46A2FE411963562100D8ED12 /* Thought Popup@2x.png */,
+				46A2FE421963562100D8ED12 /* Link Popup.png */,
+				46A2FE431963562100D8ED12 /* Link Popup@2x.png */,
 				D5D571111947F8E900354340 /* btn_following_user.png */,
 				D5D571121947F8E900354340 /* btn_following_user@2x.png */,
 				D5D571131947F8E900354340 /* btn_no_follow_user.png */,
@@ -1993,6 +2035,7 @@
 				C4F101F4156C2D800061BC3E /* ActivityFeedBlank.png in Resources */,
 				C4F101F5156C2D800061BC3E /* ActivityFeedBlank@2x.png in Resources */,
 				462FCB7B188C806C005059F3 /* button_done.png in Resources */,
+				46A2FE461963562100D8ED12 /* Thought Popup.png in Resources */,
 				C4F102E2156C58440061BC3E /* Entitlements.plist in Resources */,
 				4691B4F418BEF61C00B7DF6A /* follow.png in Resources */,
 				46839EA318E1E8C100BD60DB /* tut2@2x.png in Resources */,
@@ -2002,6 +2045,7 @@
 				D576841B19341DDA008BAA2C /* arrow_left@2x.png in Resources */,
 				C4F102E7156C58570061BC3E /* InfoPlist.strings in Resources */,
 				465B19AF18B81FE500EDBCFC /* browser-button-forward-normal.png in Resources */,
+				46A2FE5819635A7000D8ED12 /* btn_close_timeline@2x.png in Resources */,
 				D5144B1C195951D100650061 /* button-feedback-notify.png in Resources */,
 				465DE34E1895A56200C37EF8 /* bg_dropdown.png in Resources */,
 				46B31EF0184E35150028D11C /* companyName.png in Resources */,
@@ -2013,6 +2057,7 @@
 				4602FD1D18BD553B0097DBEC /* clarity-logo@2x.png in Resources */,
 				D52C1E3718D9515D00625887 /* konotor_progress_black.png in Resources */,
 				D57684031933EBA3008BAA2C /* nav_profile@2x.png in Resources */,
+				46A2FE521963572E00D8ED12 /* Thought Popup_selected.png in Resources */,
 				4602FD1818BD553B0097DBEC /* positionly-logo.png in Resources */,
 				4602FCF718BAB2CA0097DBEC /* partner.png in Resources */,
 				D576840F1933F910008BAA2C /* IconDiscoverSelected@2x.png in Resources */,
@@ -2023,6 +2068,7 @@
 				D575A0731947834C00C6BCC2 /* btn_following.png in Resources */,
 				465DE3561895AA9600C37EF8 /* dropdown_arrow.png in Resources */,
 				D51072D11937F33F00B1FF0E /* share_thought_grey.png in Resources */,
+				46A2FE551963572E00D8ED12 /* Link Popup_selected@2x.png in Resources */,
 				4602FCF618BAB2CA0097DBEC /* partner@2x.png in Resources */,
 				D5C0312319391749000C98B7 /* bubble_right_selected@2x.png in Resources */,
 				D528C380191034DE00CEEA35 /* ButtonLikeCommentSelected.png in Resources */,
@@ -2041,6 +2087,7 @@
 				46B31EEE184E35150028D11C /* profileLocation.png in Resources */,
 				C4BE670D157FC7D000A291C2 /* Icon-72.png in Resources */,
 				C4BE670E157FC7D000A291C2 /* Icon-72@2x.png in Resources */,
+				46A2FE441963562100D8ED12 /* Moment Popup.png in Resources */,
 				46FB0A7C1888989800E978CD /* tab-product-unselected.png in Resources */,
 				46FB0A961888BBF400E978CD /* news3.png in Resources */,
 				462FCB7E188C806C005059F3 /* button_setting@2x.png in Resources */,
@@ -2049,6 +2096,7 @@
 				4602FD1F18BD553B0097DBEC /* slingbot-popup@2x.png in Resources */,
 				C4BE6710157FC7D000A291C2 /* Icon-Small.png in Resources */,
 				46076EEC193FE3EF00A7B317 /* notif_close@2x.png in Resources */,
+				46A2FE481963562100D8ED12 /* Link Popup.png in Resources */,
 				4602FD2418BD553B0097DBEC /* konotor-logo.png in Resources */,
 				C4BE6711157FC7D000A291C2 /* Icon-Small@2x.png in Resources */,
 				D52C1E2618D9515D00625887 /* KonotorFeedbackScreenViewController.xib in Resources */,
@@ -2129,14 +2177,17 @@
 				46B31EF4184E3D340028D11C /* profileCollaborator.png in Resources */,
 				46D1E717186FA398009CC230 /* dropDownMenu.png in Resources */,
 				46ABD74F18B147FC008F5AAB /* button_cancel_selected@2x.png in Resources */,
+				46A2FE451963562100D8ED12 /* Moment Popup@2x.png in Resources */,
 				D51072CB1937EF7300B1FF0E /* arrow_right_white.png in Resources */,
 				D57683F61933EA96008BAA2C /* nav_discover.png in Resources */,
 				D52C1E3318D9515D00625887 /* konotor_play.png in Resources */,
 				465A4ED918A8222A00E43DC6 /* iconlocation.png in Resources */,
+				46A2FE511963572E00D8ED12 /* Moment Popup_selected@2x.png in Resources */,
 				465A4EDD18A8382900E43DC6 /* comingsoon@2x.png in Resources */,
 				46ABD74418B143A4008F5AAB /* news4.png in Resources */,
 				D5BFDED618CC84A5004FEC42 /* la@2x.png in Resources */,
 				4691B50618BFD9B200B7DF6A /* button-more@2x.png in Resources */,
+				46A2FE471963562100D8ED12 /* Thought Popup@2x.png in Resources */,
 				46FB0A9A1888E4C200E978CD /* bg.png in Resources */,
 				465B19B618B81FE500EDBCFC /* browser-refresh@2x.png in Resources */,
 				465DE3461895983A00C37EF8 /* profileType.png in Resources */,
@@ -2192,6 +2243,7 @@
 				C4BE67A1157FC7F700A291C2 /* IconAddComment.png in Resources */,
 				C4BE67A2157FC7F700A291C2 /* IconAddComment@2x.png in Resources */,
 				D5C0312419391749000C98B7 /* bubble_right.png in Resources */,
+				46A2FE501963572E00D8ED12 /* Moment Popup_selected.png in Resources */,
 				465DE34F1895A56200C37EF8 /* bg_dropdown@2x.png in Resources */,
 				46B31EED184E35150028D11C /* profileDescription@2x.png in Resources */,
 				D51072CC1937EF7300B1FF0E /* arrow_right_white@2x.png in Resources */,
@@ -2202,6 +2254,7 @@
 				D575A0711947834C00C6BCC2 /* btn_follow.png in Resources */,
 				D57683EA1933E6DD008BAA2C /* post_bubble.png in Resources */,
 				C4BE67A5157FC7F700A291C2 /* IconComment.png in Resources */,
+				46A2FE5919635A7000D8ED12 /* btn_close_timeline.png in Resources */,
 				C4BE67A6157FC7F700A291C2 /* IconComment@2x.png in Resources */,
 				465A4EDA18A8222A00E43DC6 /* iconlocation@2x.png in Resources */,
 				D5D571161947F8E900354340 /* btn_following_user@2x.png in Resources */,
@@ -2215,6 +2268,7 @@
 				465A4EE618A83D5100E43DC6 /* share@2x.png in Resources */,
 				4691B51B18C1477100B7DF6A /* intro2-iphone4@2x.png in Resources */,
 				4691B4F018BEF61200B7DF6A /* unfollow.png in Resources */,
+				46A2FE531963572E00D8ED12 /* Thought Popup_selected@2x.png in Resources */,
 				4609975C1938119A00C5AD96 /* icon-linkedin@2x.png in Resources */,
 				D5BFDEDA18CC84A5004FEC42 /* newyork@2x.png in Resources */,
 				D57683EB1933E6DD008BAA2C /* post_bubble@2x.png in Resources */,
@@ -2231,6 +2285,7 @@
 				D5C0312519391749000C98B7 /* bubble_right@2x.png in Resources */,
 				C4BE67AF157FC7F700A291C2 /* IconTick.png in Resources */,
 				4609975F1938119A00C5AD96 /* icon-twitter.png in Resources */,
+				46A2FE541963572E00D8ED12 /* Link Popup_selected.png in Resources */,
 				46FB0A851888989800E978CD /* tab-people-unselected@2x.png in Resources */,
 				46839E9718E1E8C100BD60DB /* btn-back@2x.png in Resources */,
 				D59AE7B718CD501D007F882B /* valley@2x.png in Resources */,
@@ -2243,6 +2298,7 @@
 				D51072D31937F33F00B1FF0E /* share_thought_white.png in Resources */,
 				C4BE67B1157FC7F700A291C2 /* IconTickSelected.png in Resources */,
 				D57683FB1933EB90008BAA2C /* nav_activity@2x.png in Resources */,
+				46A2FE491963562100D8ED12 /* Link Popup@2x.png in Resources */,
 				C4BE67B2157FC7F700A291C2 /* IconTickSelected@2x.png in Resources */,
 				4602FCF818BAB2CA0097DBEC /* hipchat@2x.png in Resources */,
 				4602FD2018BD553B0097DBEC /* slingbot-logo.png in Resources */,

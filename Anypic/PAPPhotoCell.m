@@ -156,13 +156,15 @@
             [self.linkTitleLabel setFrame:CGRectMake(105.0f, 10.0f + expectedSize.height + 25.0f, 190.0f, 30.0f)];
             self.linkTitleLabel.text = [self.ih_object objectForKey:@"linkTitle"];
             
-            [self.linkUrlLabel setFrame:CGRectMake(105.0f, 60.0f + expectedSize.height + 25.0f, 190.0f, 30.0f)];
-            self.linkUrlLabel.text = [self.ih_object objectForKey:@"link"];
+            [self.linkDescription setFrame:CGRectMake(105.0f, 40.0f + expectedSize.height + 25.0f, 190.0f, 30.0f)];
+            self.linkDescription.text = [self.ih_object objectForKey:@"linkDesc"];
             
-            //[self.linkDescription setFrame:CGRectMake(105.0f, 60.0f, <#CGFloat width#>, <#CGFloat height#>)]
+            [self.linkUrlLabel setFrame:CGRectMake(105.0f, 70.0f + expectedSize.height + 25.0f, 190.0f, 15.0f)];
+            self.linkUrlLabel.text = [self.ih_object objectForKey:@"link"];
             
             [self.contentView bringSubviewToFront:self.linkUrlLabel];
             [self.contentView bringSubviewToFront:self.linkTitleLabel];
+            [self.contentView bringSubviewToFront:self.linkDescription];
             [self.contentView bringSubviewToFront:self.imageView];
             [self.contentView bringSubviewToFront:self.photoButton];
         }
