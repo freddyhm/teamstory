@@ -25,7 +25,6 @@ Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
                        // followings for user
                        followingQuery.equalTo("fromUser", results[i]);
                        
-                       
                        followingQuery.each(function(following){
                                            
                               // get following user display name and follower
@@ -47,13 +46,13 @@ Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
                                         allFollowingEntries.push(comboUnique);
                                   }else{
                                            
-                                    console.log("GOING TO DELETE COMBO: " + comboUnique);
-                                    console.log("FOR USER: " + displayName);
+                                    //console.log("GOING TO DELETE COMBO: " + comboUnique);
+                                    //console.log("FOR USER: " + displayName);
                                            
                                     following.destroy({
                                         success: function(result) {
-                                            console.log("DELETED FOLLOWING ID: " + following.id);
-                                            console.log("FOR USER: " + displayName);
+                                            //console.log("DELETED FOLLOWING ID: " + following.id);
+                                            //console.log("FOR USER: " + displayName);
                                                       
                                          }, error: function(result, error){
                                               console.log(error);
@@ -63,8 +62,8 @@ Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
                                }else{
                                     following.destroy({
                                      success: function(result) {
-                                        console.log("GOING TO DELETE COMBO: " + comboUnique);
-                                        console.log("FOR USER: " + displayName);
+                                        //console.log("GOING TO DELETE COMBO: " + comboUnique);
+                                        //console.log("FOR USER: " + displayName);
                                      }, error: function(result, error){
                                      console.log(error);
                                      }
