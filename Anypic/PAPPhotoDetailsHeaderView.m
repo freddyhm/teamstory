@@ -75,6 +75,11 @@ static CGSize expectedSize;
 @property (nonatomic, strong) MBProgressHUD *hud;
 @property (nonatomic, strong) NSString *website;
 @property (nonatomic, strong) UINavigationController *navController;
+@property (nonatomic, strong) UIView *linkBackgroundView;
+@property (nonatomic, strong) UIView *linkContentView;
+@property (nonatomic, strong) UILabel *linkTitleLabel;
+@property (nonatomic, strong) UILabel *linkDescription;
+@property (nonatomic, strong) UILabel *linkUrlLabel;
 
 // Redeclare for edit
 @property (nonatomic, strong, readwrite) PFUser *photographer;
@@ -104,6 +109,11 @@ static TTTTimeIntervalFormatter *timeFormatter;
 @synthesize hud;
 @synthesize website;
 @synthesize navController;
+@synthesize linkBackgroundView;
+@synthesize linkContentView;
+@synthesize linkTitleLabel;
+@synthesize linkDescription;
+@synthesize linkUrlLabel;
 
 #pragma mark - NSObject
 
@@ -276,7 +286,42 @@ static TTTTimeIntervalFormatter *timeFormatter;
                 
         [self addSubview:self.photoDescriptionLabel];
         
-        self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height + 15.0f, mainImageWidth, mainImageHeight)];
+        if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
+            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + self.photoDescriptionLabel.bounds.size.height + 15.0f + 10.0f, 80.0f, 80.0f)];
+            viewOffset = -185.0f;
+            
+            self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height + 15.0f, mainImageWidth, 100.0f)];
+            [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
+            [self addSubview:self.linkBackgroundView];
+            
+            self.linkContentView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX + 5.0f, mainImageY + 5.0f + self.photoDescriptionLabel.bounds.size.height + 15.0f, self.linkBackgroundView.bounds.size.width - 10.0f, self.linkBackgroundView.bounds.size.height - 10.0f)];
+            [self.linkContentView setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
+            [self.linkContentView.layer setBorderColor:[UIColor colorWithWhite:0.9f alpha:1.0f].CGColor];
+            [self addSubview:self.linkContentView];
+            
+            self.linkTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 5.0f, 190.0f, 30.0f)];
+            [self.linkTitleLabel setText:[self.photo objectForKey:@"linkTitle"]];
+            self.linkTitleLabel.numberOfLines = 2;
+            self.linkTitleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
+            [self.linkTitleLabel setTextColor:[UIColor colorWithWhite:0.3f alpha:1.0]];
+            [self.linkContentView addSubview:self.linkTitleLabel];
+            
+            self.linkDescription = [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 35.0f, 190.0f, 30.0f)];
+            self.linkDescription.numberOfLines = 2;
+            [self.linkDescription setText:[self.photo objectForKey:@"linkDesc"]];
+            self.linkDescription.font = [UIFont systemFontOfSize:12.0f];
+            [self.linkDescription setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
+            [self.linkContentView addSubview:self.linkDescription];
+            
+            self.linkUrlLabel = [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 65.0f, 190.0f, 15.0f)];
+            [self.linkUrlLabel setText:[self.photo objectForKey:@"link"]];
+            self.linkUrlLabel.numberOfLines = 1;
+            self.linkUrlLabel.font = [UIFont systemFontOfSize:11.0f];
+            [self.linkUrlLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
+            [self.linkContentView addSubview:self.linkUrlLabel];
+        } else {
+            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height + 15.0f, mainImageWidth, mainImageHeight)];
+        }
         self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
         self.photoImageView.backgroundColor = [UIColor blackColor];
         self.photoImageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -291,7 +336,47 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [self addSubview:self.photoImageView];
     } else {
         viewOffset = 0;
-        self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
+        
+        if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
+            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + self.photoDescriptionLabel.bounds.size.height + 10.0f, 80.0f, 80.0f)];
+            viewOffset = -205.0f;
+            
+            self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height, mainImageWidth, 100.0f)];
+            [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
+            [self addSubview:self.linkBackgroundView];
+            
+            self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height, mainImageWidth, 100.0f)];
+            [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
+            [self addSubview:self.linkBackgroundView];
+            
+            self.linkContentView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX + 5.0f, mainImageY + 5.0f + self.photoDescriptionLabel.bounds.size.height, self.linkBackgroundView.bounds.size.width - 10.0f, self.linkBackgroundView.bounds.size.height - 10.0f)];
+            [self.linkContentView setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
+            [self.linkContentView.layer setBorderColor:[UIColor colorWithWhite:0.9f alpha:1.0f].CGColor];
+            [self addSubview:self.linkContentView];
+            
+            self.linkTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 5.0f, 190.0f, 30.0f)];
+            [self.linkTitleLabel setText:[self.photo objectForKey:@"linkTitle"]];
+            self.linkTitleLabel.numberOfLines = 2;
+            self.linkTitleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
+            [self.linkTitleLabel setTextColor:[UIColor colorWithWhite:0.3f alpha:1.0]];
+            [self.linkContentView addSubview:self.linkTitleLabel];
+            
+            self.linkDescription = [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 35.0f, 190.0f, 30.0f)];
+            self.linkDescription.numberOfLines = 2;
+            [self.linkDescription setText:[self.photo objectForKey:@"linkDesc"]];
+            self.linkDescription.font = [UIFont systemFontOfSize:12.0f];
+            [self.linkDescription setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
+            [self.linkContentView addSubview:self.linkDescription];
+            
+            self.linkUrlLabel = [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 65.0f, 190.0f, 15.0f)];
+            [self.linkUrlLabel setText:[self.photo objectForKey:@"link"]];
+            self.linkUrlLabel.numberOfLines = 1;
+            self.linkUrlLabel.font = [UIFont systemFontOfSize:11.0f];
+            [self.linkUrlLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
+            [self.linkContentView addSubview:self.linkUrlLabel];
+        } else {
+            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height, mainImageWidth, mainImageHeight)];
+        }
         self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
         self.photoImageView.backgroundColor = [UIColor blackColor];
         self.photoImageView.contentMode = UIViewContentModeScaleAspectFit;

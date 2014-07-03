@@ -384,11 +384,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/PAPPhotoDetailsViewController.m"
-            timestampString = "424390686.721239"
+            timestampString = "426112805.311955"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "281"
-            endingLineNumber = "281"
+            startingLineNumber = "289"
+            endingLineNumber = "289"
             landmarkName = "-queryForTable"
             landmarkType = "5">
          </BreakpointContent>
