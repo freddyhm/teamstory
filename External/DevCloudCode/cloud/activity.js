@@ -4,16 +4,17 @@ Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
         // Set up to modify user data
         Parse.Cloud.useMasterKey();
         
-        // Query for all users
+        // Query for all users, used only to break down large +1000 plus query into queries for each user with follows
         var queryUser = new Parse.Query(Parse.User);
         queryUser.limit("1000");
                 
-        var allFollowingEntries;
+        var allFollowingEntries = [];
         var followingQuery = new Parse.Query('Activity');
                 
         // get all follow activities and include user field
         followingQuery.equalTo("type", "follow");
         followingQuery.include("toUser");
+        followingQuery.include("fromUser");
                 
          queryUser.find({
                         
@@ -21,58 +22,60 @@ Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
                    
                     for(var i = 0; i < results.length; i++){
                         
-                       // reset array to hold followings
-                       allFollowingEntries = [];
-                       
-                       // output cleaned user accounts
-                       //console.log("user name = " + results[i].get("displayName"));
-                       
                        // followings for user
                        followingQuery.equalTo("fromUser", results[i]);
                        
+                       
                        followingQuery.each(function(following){
-                                            
-                              // get following user display name
+                                           
+                              // get following user display name and follower
                               var toUser = following.get("toUser");
-                              
+                              var fromUser = following.get("fromUser");
+                             
+                              // create unique combo to check for duplicates through whole db
+                              var comboUnique = toUser.id + fromUser.id;
+                                
                               // make sure the user exists
                               if(typeof toUser !== "undefined"){
-                                  
-                                  var displayName = toUser.get("displayName");
-                                
+                                           
+                                  var displayName = fromUser.get("displayName");
+                                           
+                                  //console.log(allFollowingEntries);
+                                   
                                   // if not already in array, push else destroy duplicate
-                                  if(allFollowingEntries.indexOf(displayName) == -1){
-                                        allFollowingEntries.push(displayName);
+                                  if(allFollowingEntries.indexOf(comboUnique) == -1){
+                                        allFollowingEntries.push(comboUnique);
                                   }else{
+                                           
+                                    console.log("GOING TO DELETE COMBO: " + comboUnique);
+                                    console.log("FOR USER: " + displayName);
+                                           
                                     following.destroy({
                                         success: function(result) {
-                                              console.log("DELETED");
+                                            console.log("DELETED FOLLOWING ID: " + following.id);
+                                            console.log("FOR USER: " + displayName);
+                                                      
                                          }, error: function(result, error){
                                               console.log(error);
                                          }
                                     });
                                   }
-                              }
+                               }else{
+                                    following.destroy({
+                                     success: function(result) {
+                                        console.log("GOING TO DELETE COMBO: " + comboUnique);
+                                        console.log("FOR USER: " + displayName);
+                                     }, error: function(result, error){
+                                     console.log(error);
+                                     }
+                                     });
+                               
+                               }
                        });
                     }
                 }
         });
 });
-
-/*
-
-Parse.Cloud.job("deleteWithIds", function(request, status) {
-      
-    // Set up to modify user data
-    Parse.Cloud.useMasterKey();
-                
-                
-                
-                
-});
- 
- */
-
 
 Parse.Cloud.beforeSave('Activity', function(request, response) {
                        var currentUser = request.user;
