@@ -1,4 +1,4 @@
-
+/*
 Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
                 
                 // Set up to modify user data
@@ -49,6 +49,7 @@ Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
                 
                 
 });
+ */
 
 Parse.Cloud.beforeSave('Activity', function(request, response) {
                        var currentUser = request.user;

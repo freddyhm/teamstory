@@ -9,7 +9,6 @@ Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
         queryUser.limit("1000");
                 
         var allFollowingEntries;
-                var toDelete = [];
         var followingQuery = new Parse.Query('Activity');
                 
         // get all follow activities and include user field
@@ -30,29 +29,49 @@ Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
                        
                        // followings for user
                        followingQuery.equalTo("fromUser", results[i]);
-                   
                        
-                        followingQuery.each(function(following){
-                                                  
-                                 // console.log("SUCCESS");
+                       followingQuery.each(function(following){
+                                            
+                              // get following user display name
+                              var toUser = following.get("toUser");
+                              
+                              // make sure the user exists
+                              if(typeof toUser !== "undefined"){
                                   
-                                  // get following user display name
-                                  var displayName = following.get("toUser").get("displayName");
-                                  
-                                  //console.log("DISPLAY NAME:" + displayName);
-                                       //    console.log(allFollowingEntries);
+                                  var displayName = toUser.get("displayName");
+                                
                                   // if not already in array, push else destroy duplicate
                                   if(allFollowingEntries.indexOf(displayName) == -1){
                                         allFollowingEntries.push(displayName);
                                   }else{
-                                            following.destroy({});
+                                    following.destroy({
+                                        success: function(result) {
+                                              console.log("DELETED");
+                                         }, error: function(result, error){
+                                              console.log(error);
+                                         }
+                                    });
                                   }
-                        });
-                        
+                              }
+                       });
                     }
                 }
         });
 });
+
+/*
+
+Parse.Cloud.job("deleteWithIds", function(request, status) {
+      
+    // Set up to modify user data
+    Parse.Cloud.useMasterKey();
+                
+                
+                
+                
+});
+ 
+ */
 
 
 Parse.Cloud.beforeSave('Activity', function(request, response) {
