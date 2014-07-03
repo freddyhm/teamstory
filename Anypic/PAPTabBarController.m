@@ -202,15 +202,16 @@
 
 - (void)postButtonAction:(id)sender {
     postButton.selected = self.postButton.selected ? NO : YES;
+    
     // hide/show post menu toggle
     self.postMenu.hidden = self.postMenu.hidden ? NO : YES;
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
 }
 
 - (void)cameraButtonAction:(id)sender{
-    
+    postButton.selected = self.postButton.selected ? NO : YES;
     self.postMenu.hidden = YES;
     
-    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     BOOL cameraDeviceAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
     BOOL photoLibraryAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
     
@@ -225,13 +226,14 @@
 
 - (void)linkPostButtonAction:(id)sender {
     self.postMenu.hidden = YES;
+    postButton.selected = self.postButton.selected ? NO : YES;
     
     PAPlinkPostViewController *linkPostViewController = [[PAPlinkPostViewController alloc] init];
     [self.navigationController pushViewController:linkPostViewController animated:YES];
 }
 
 - (void)thoughtButtonAction:(id)sender{
-    
+    postButton.selected = self.postButton.selected ? NO : YES;
     self.postMenu.hidden = YES;
     
     ThoughtPostViewController *thoughtPostViewController = [[ThoughtPostViewController alloc] init];
@@ -313,6 +315,7 @@
 #pragma mark - Custom
 
 - (void)dismissPostMenu:(id)sender {
+    postButton.selected = self.postButton.selected ? NO : YES;
     self.postMenu.hidden = YES;
 }
 

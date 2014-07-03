@@ -89,7 +89,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     float popUpBoxOffset;
     
     if ([UIScreen mainScreen].bounds.size.height == 480) {
-        popUpBoxOffset = 60.0f;
+        popUpBoxOffset = 30.0f;
     } else {
         popUpBoxOffset = 75.0f;
     }
@@ -124,15 +124,17 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     UIButton *cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(popUpBoxHeader.bounds.size.width - 30.0f, 10.0f, 20.0f, 20.0f)];
     [cancelButton setBackgroundImage:[UIImage imageNamed:@"button_cancel_selected.png"] forState:UIControlStateNormal];
-    [cancelButton addTarget:self action:@selector(cancelButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [cancelButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [popUpBoxHeader addSubview:cancelButton];
     
-    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(90.0f, 95.0f, 180.0f, 55.0f)];
+    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(100.0f, 95.0f, 170.0f, 55.0f)];
     [self.titleLabel setFont:[UIFont boldSystemFontOfSize:15.0f]];
+    self.titleLabel.textColor = [UIColor colorWithWhite:0.85f alpha:1.0f];
+    self.titleLabel.text = @"Insert your link bove";
     self.titleLabel.numberOfLines = 2;
     [self.popUpBox addSubview:self.titleLabel];
     
-    self.popUpBoxurlLabel = [[UILabel alloc] initWithFrame:CGRectMake(90.0f, 120.0f, 180.0f, 60.0f)];
+    self.popUpBoxurlLabel = [[UILabel alloc] initWithFrame:CGRectMake(100.0f, 120.0f, 170.0f, 60.0f)];
     [self.popUpBoxurlLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:14.0f]];
     self.popUpBoxurlLabel.numberOfLines = 1;
     [self.popUpBoxurlLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:10.0f]];
@@ -142,10 +144,11 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     [self.url_textField setBackgroundColor:[UIColor colorWithWhite:0.9f alpha:1.0f]];
     self.url_textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.url_textField.delegate = self;
+    [self.url_textField becomeFirstResponder];
     [self.popUpBox addSubview:self.url_textField];
     
-    self.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(10.0f, 100.0f, 70.0f, 70.0f)];
-    [self.imageView setBackgroundColor:[UIColor colorWithWhite:0.7f alpha:1.0f]];
+    self.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(10.0f, 100.0f, 80.0f, 80.0f)];
+    self.imageView.image = [UIImage imageNamed:@"link_thumbnail.png"];
     [self.popUpBox addSubview:self.imageView];
     
     UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
@@ -165,19 +168,23 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     [self.nextButton setBackgroundColor:teamStoryColor];
     [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
     [self.nextButton addTarget:self action:@selector(nextButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    self.nextButton.enabled = NO;
     [self.popUpBox addSubview:self.nextButton];
     
     self.commentTextView = [[UITextView alloc] initWithFrame:CGRectMake(5.0f, 71.0f, 310.0f, 110.0f)];
     self.commentTextView.delegate = self;
     self.commentTextView.text = @"Add a link comment";
     self.commentTextView.contentInset = UIEdgeInsetsMake(-65.0f, 0.0f, 0.0f, 0.0f);
-    self.commentTextView.textColor = [UIColor colorWithWhite:0.7f alpha:1.0f];
+    //self.commentTextView.textColor = [UIColor colorWithWhite:0.7f alpha:1.0f];
     [self.view addSubview:self.commentTextView];
 }
 
 
 # pragma mark - ()
 - (void)backButtonAction:(id)sender {
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:110] removeFromSuperview];
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:111] removeFromSuperview];
+    
     [[self navigationController] setNavigationBarHidden:YES animated:YES];
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -186,11 +193,6 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     [SVProgressHUD show];
     Embedly *embedlyInit = [[Embedly alloc] initWithKey:EMBEDLY_APP_ID delegate:self];
     [embedlyInit callEmbedlyApi:@"/1/oembed" withUrl:self.url_textField.text params:nil];
-}
-
-- (void)cancelButtonAction:(id)sender {
-    [[[[UIApplication sharedApplication] delegate] window] viewWithTag:110].hidden = YES;
-    [[[[UIApplication sharedApplication] delegate] window] viewWithTag:111].hidden = YES;
 }
 
 - (void)postButtonAction:(id)sender {
@@ -290,26 +292,34 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     [self.commentTextView becomeFirstResponder];
     
     if ([self.titleLabel.text length] > 0 ) {
+        
+        float heightOffset;
+        if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
+            heightOffset = 160.0f;
+            self.commentTextView.frame = CGRectMake(5.0f, 71.0f, 310.0f, 85.0f);
+        } else {
+            heightOffset = 245.0f;
+            self.commentTextView.frame = CGRectMake(5.0f, 71.0f, 310.0f, 110.0f);
+        }
     
-        self.linkPostView = [[UIView alloc] initWithFrame:CGRectMake(5.0f, 187.0f, [UIScreen mainScreen].bounds.size.width - 10.0f, 160.0f)];
+        self.linkPostView = [[UIView alloc] initWithFrame:CGRectMake(5.0f, heightOffset, [UIScreen mainScreen].bounds.size.width - 10.0f, 100.0f)];
         [self.linkPostView setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:0.5f]];
         [self.linkPostView.layer setBorderColor:[UIColor colorWithWhite:0.8f alpha:1.0f].CGColor];
         [self.linkPostView.layer setBorderWidth:0.5f];
         [self.view addSubview:self.linkPostView];
         
-        UIImageView *linkPostImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 5.0f, 320.0f, 100.0f)];
+        UIImageView *linkPostImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0f, 10.0f, 80.0f, 80.0f)];
         linkPostImageView.image = self.imageView.image;
         linkPostImageView.contentMode = UIViewContentModeScaleAspectFit;
         [self.linkPostView addSubview:linkPostImageView];
         
-        self.linkPostViewLabel_title = [[UILabel alloc] initWithFrame:CGRectMake(5.0f, 105.0f, self.linkPostView.bounds.size.width - 10.0f, 45.0f)];
+        self.linkPostViewLabel_title = [[UILabel alloc] initWithFrame:CGRectMake(100.0f, 10.0f, self.linkPostView.bounds.size.width - 110.0f, 55.0f)];
         [self.linkPostViewLabel_title setFont:[UIFont boldSystemFontOfSize:15.0f]];
         [self.linkPostViewLabel_title setText:self.titleLabel.text];
         self.linkPostViewLabel_title.numberOfLines = 2;
-        [self.linkPostViewLabel_title sizeToFit];
         [self.linkPostView addSubview:self.linkPostViewLabel_title];
         
-        UILabel *urlLabel = [[UILabel alloc] initWithFrame:CGRectMake(5.0f, 140.0f, self.linkPostView.bounds.size.width - 10.0f, 17.5f)];
+        UILabel *urlLabel = [[UILabel alloc] initWithFrame:CGRectMake(100.0f, 55.0f, self.linkPostView.bounds.size.width - 10.0f, 17.5f)];
         [urlLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:12.0f]];
         urlLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         [urlLabel setText:self.urlString];
@@ -357,7 +367,9 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 - (void)embedlySuccess:(NSString *)callUrl withResponse:(id)response endpoint:(NSString *)endpoint operation:(AFHTTPRequestOperation *)operation {
     
     [SVProgressHUD dismiss];
+    self.nextButton.enabled = YES;
     
+    self.titleLabel.textColor = [UIColor blackColor];
     self.titleLabel.text = [response objectForKey:@"title"];
     self.popUpBoxurlLabel.text = [response objectForKey:@"url"];
     self.imageView.image = [self getImageFromURL:[response objectForKey:@"thumbnail_url"]];

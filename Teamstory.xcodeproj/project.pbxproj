@@ -86,6 +86,8 @@
 		462FCB8A188C863E005059F3 /* button_setting_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 462FCB88188C863E005059F3 /* button_setting_selected@2x.png */; };
 		462FCB8D188C8892005059F3 /* button_done_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 462FCB8B188C8892005059F3 /* button_done_selected.png */; };
 		462FCB8E188C8892005059F3 /* button_done_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 462FCB8C188C8892005059F3 /* button_done_selected@2x.png */; };
+		4639EDF51965CE3D00930873 /* link_thumbnail.png in Resources */ = {isa = PBXBuildFile; fileRef = 4639EDF31965CE3D00930873 /* link_thumbnail.png */; };
+		4639EDF61965CE3D00930873 /* link_thumbnail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4639EDF41965CE3D00930873 /* link_thumbnail@2x.png */; };
 		465A4ED918A8222A00E43DC6 /* iconlocation.png in Resources */ = {isa = PBXBuildFile; fileRef = 465A4ED718A8222A00E43DC6 /* iconlocation.png */; };
 		465A4EDA18A8222A00E43DC6 /* iconlocation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465A4ED818A8222A00E43DC6 /* iconlocation@2x.png */; };
 		465A4EDD18A8382900E43DC6 /* comingsoon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465A4EDB18A8382900E43DC6 /* comingsoon@2x.png */; };
@@ -553,6 +555,8 @@
 		462FCB88188C863E005059F3 /* button_setting_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_setting_selected@2x.png"; sourceTree = "<group>"; };
 		462FCB8B188C8892005059F3 /* button_done_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_done_selected.png; sourceTree = "<group>"; };
 		462FCB8C188C8892005059F3 /* button_done_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_done_selected@2x.png"; sourceTree = "<group>"; };
+		4639EDF31965CE3D00930873 /* link_thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = link_thumbnail.png; sourceTree = "<group>"; };
+		4639EDF41965CE3D00930873 /* link_thumbnail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "link_thumbnail@2x.png"; sourceTree = "<group>"; };
 		465A4ED718A8222A00E43DC6 /* iconlocation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = iconlocation.png; path = Resources/Assets/iconlocation.png; sourceTree = SOURCE_ROOT; };
 		465A4ED818A8222A00E43DC6 /* iconlocation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "iconlocation@2x.png"; path = "Resources/Assets/iconlocation@2x.png"; sourceTree = SOURCE_ROOT; };
 		465A4EDB18A8382900E43DC6 /* comingsoon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "comingsoon@2x.png"; sourceTree = "<group>"; };
@@ -1199,6 +1203,8 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				4639EDF31965CE3D00930873 /* link_thumbnail.png */,
+				4639EDF41965CE3D00930873 /* link_thumbnail@2x.png */,
 				46A2FE5619635A7000D8ED12 /* btn_close_timeline@2x.png */,
 				46A2FE5719635A7000D8ED12 /* btn_close_timeline.png */,
 				46A2FE4A1963572E00D8ED12 /* Moment Popup_selected.png */,
@@ -2217,6 +2223,7 @@
 				D57683F71933EA96008BAA2C /* nav_discover@2x.png in Resources */,
 				C4BE6799157FC7F700A291C2 /* ButtonLikeSelected.png in Resources */,
 				462FCB84188C8533005059F3 /* button_back_selected@2x.png in Resources */,
+				4639EDF61965CE3D00930873 /* link_thumbnail@2x.png in Resources */,
 				4691B51618C0314600B7DF6A /* discover@2x.png in Resources */,
 				C4BE679A157FC7F700A291C2 /* ButtonLikeSelected@2x.png in Resources */,
 				D575A0741947834C00C6BCC2 /* btn_following@2x.png in Resources */,
@@ -2380,6 +2387,7 @@
 				D5BFDED518CC84A5004FEC42 /* la.png in Resources */,
 				4602FCF118BAAA630097DBEC /* jolt@2x.png in Resources */,
 				C499A3041725E6DD0089D40A /* FacebookSDKResources.bundle in Resources */,
+				4639EDF51965CE3D00930873 /* link_thumbnail.png in Resources */,
 				D52C1E2E18D9515D00625887 /* konotor_chatbubble_ios7_you@2x.png in Resources */,
 				D576840B1933F908008BAA2C /* IconProfileSelected@2x.png in Resources */,
 				D576840A1933F908008BAA2C /* IconProfileSelected.png in Resources */,
