@@ -290,6 +290,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
             self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + self.photoDescriptionLabel.bounds.size.height + 15.0f + 10.0f, 80.0f, 80.0f)];
             viewOffset = -185.0f;
             
+            UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(linkPostButtonAction:)];
+            [photoTap setNumberOfTapsRequired:1];
+            [photoTap setNumberOfTouchesRequired:1];
+            
             self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height + 15.0f, mainImageWidth, 100.0f)];
             [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
             [self addSubview:self.linkBackgroundView];
@@ -297,6 +301,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
             self.linkContentView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX + 5.0f, mainImageY + 5.0f + self.photoDescriptionLabel.bounds.size.height + 15.0f, self.linkBackgroundView.bounds.size.width - 10.0f, self.linkBackgroundView.bounds.size.height - 10.0f)];
             [self.linkContentView setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
             [self.linkContentView.layer setBorderColor:[UIColor colorWithWhite:0.9f alpha:1.0f].CGColor];
+            [self.linkContentView addGestureRecognizer:photoTap];
+            [self.linkContentView setUserInteractionEnabled:YES];
             [self addSubview:self.linkContentView];
             
             self.linkTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 5.0f, 190.0f, 30.0f)];
@@ -345,13 +351,15 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
             [self addSubview:self.linkBackgroundView];
             
-            self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height, mainImageWidth, 100.0f)];
-            [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
-            [self addSubview:self.linkBackgroundView];
+            UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(linkPostButtonAction:)];
+            [photoTap setNumberOfTapsRequired:1];
+            [photoTap setNumberOfTouchesRequired:1];
             
             self.linkContentView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX + 5.0f, mainImageY + 5.0f + self.photoDescriptionLabel.bounds.size.height, self.linkBackgroundView.bounds.size.width - 10.0f, self.linkBackgroundView.bounds.size.height - 10.0f)];
             [self.linkContentView setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
             [self.linkContentView.layer setBorderColor:[UIColor colorWithWhite:0.9f alpha:1.0f].CGColor];
+            [self.linkContentView addGestureRecognizer:photoTap];
+            [self.linkContentView setUserInteractionEnabled:YES];
             [self addSubview:self.linkContentView];
             
             self.linkTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 5.0f, 190.0f, 30.0f)];
@@ -501,7 +509,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [likeBarView addSubview:separator];
         
         [self.hud hide:YES];
-  
 }
 
 - (void)moreActionButton_action:(id)sender{
@@ -590,6 +597,12 @@ static TTTTimeIntervalFormatter *timeFormatter;
     webViewController.hidesBottomBarWhenPushed = YES;
     [self.navController pushViewController:webViewController animated:YES];
     
+}
+
+-(void)linkPostButtonAction:(UITapGestureRecognizer *)gr {
+    PAPwebviewViewController *webViewController = [[PAPwebviewViewController alloc] initWithWebsite:[self.photo objectForKey:@"link"]];
+    webViewController.hidesBottomBarWhenPushed = YES;
+    [self.navController pushViewController:webViewController animated:YES];
 }
 
 

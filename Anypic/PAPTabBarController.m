@@ -82,11 +82,6 @@
     [self.linkPostButton addTarget:self action:@selector(linkPostButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.postMenu addSubview:self.linkPostButton];
     
-    UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
-                                          initWithTarget:self
-                                          action:@selector(dismissPostMenu:)];
-    [self.view addGestureRecognizer:tapOutside];
-    
     // hide by default
     self.postMenu.hidden = YES;
     
@@ -313,12 +308,6 @@
 }
 
 #pragma mark - Custom
-
-- (void)dismissPostMenu:(id)sender {
-    postButton.selected = self.postButton.selected ? NO : YES;
-    self.postMenu.hidden = YES;
-}
-
 -(void)backToPhotoAlbum{
     
     // triggered when in selected picture in picker
