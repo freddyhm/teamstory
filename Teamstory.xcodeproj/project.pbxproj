@@ -364,6 +364,16 @@
 		D530C3F218FB22FC00739027 /* iRate.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D530C3EF18FB22FC00739027 /* iRate.bundle */; };
 		D530C3F318FB22FC00739027 /* iRate.m in Sources */ = {isa = PBXBuildFile; fileRef = D530C3F118FB22FC00739027 /* iRate.m */; };
 		D531F7CC18B5DE11008AE73F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D531F7CB18B5DE11008AE73F /* CoreVideo.framework */; };
+		D542D8BE196A6F4700A0384F /* ELCAlbumPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = D542D8AD196A6F4700A0384F /* ELCAlbumPickerController.m */; };
+		D542D8BF196A6F4700A0384F /* ELCAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = D542D8AF196A6F4700A0384F /* ELCAsset.m */; };
+		D542D8C0196A6F4700A0384F /* ELCAssetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D542D8B1196A6F4700A0384F /* ELCAssetCell.m */; };
+		D542D8C1196A6F4700A0384F /* ELCAssetTablePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = D542D8B5196A6F4700A0384F /* ELCAssetTablePicker.m */; };
+		D542D8C2196A6F4700A0384F /* ELCImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = D542D8B7196A6F4700A0384F /* ELCImagePickerController.m */; };
+		D542D8C3196A6F4700A0384F /* ELCAlbumPickerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D542D8B9196A6F4700A0384F /* ELCAlbumPickerController.xib */; };
+		D542D8C4196A6F4700A0384F /* ELCAssetPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = D542D8BA196A6F4700A0384F /* ELCAssetPicker.xib */; };
+		D542D8C5196A6F4700A0384F /* ELCAssetTablePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = D542D8BB196A6F4700A0384F /* ELCAssetTablePicker.xib */; };
+		D542D8C6196A6F4700A0384F /* Overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = D542D8BC196A6F4700A0384F /* Overlay.png */; };
+		D542D8C7196A6F4700A0384F /* Overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D542D8BD196A6F4700A0384F /* Overlay@2x.png */; };
 		D5743808194629280040C96A /* followersFollowingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5743807194629280040C96A /* followersFollowingViewController.m */; };
 		D575A06F1947834C00C6BCC2 /* btn_editprofile.png in Resources */ = {isa = PBXBuildFile; fileRef = D575A0691947834C00C6BCC2 /* btn_editprofile.png */; };
 		D575A0701947834C00C6BCC2 /* btn_editprofile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D575A06A1947834C00C6BCC2 /* btn_editprofile@2x.png */; };
@@ -878,6 +888,23 @@
 		D530C3F018FB22FC00739027 /* iRate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iRate.h; sourceTree = "<group>"; };
 		D530C3F118FB22FC00739027 /* iRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iRate.m; sourceTree = "<group>"; };
 		D531F7CB18B5DE11008AE73F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		D542D8AC196A6F4700A0384F /* ELCAlbumPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELCAlbumPickerController.h; sourceTree = "<group>"; };
+		D542D8AD196A6F4700A0384F /* ELCAlbumPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELCAlbumPickerController.m; sourceTree = "<group>"; };
+		D542D8AE196A6F4700A0384F /* ELCAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELCAsset.h; sourceTree = "<group>"; };
+		D542D8AF196A6F4700A0384F /* ELCAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELCAsset.m; sourceTree = "<group>"; };
+		D542D8B0196A6F4700A0384F /* ELCAssetCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELCAssetCell.h; sourceTree = "<group>"; };
+		D542D8B1196A6F4700A0384F /* ELCAssetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELCAssetCell.m; sourceTree = "<group>"; };
+		D542D8B2196A6F4700A0384F /* ELCAssetPickerFilterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELCAssetPickerFilterDelegate.h; sourceTree = "<group>"; };
+		D542D8B3196A6F4700A0384F /* ELCAssetSelectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELCAssetSelectionDelegate.h; sourceTree = "<group>"; };
+		D542D8B4196A6F4700A0384F /* ELCAssetTablePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELCAssetTablePicker.h; sourceTree = "<group>"; };
+		D542D8B5196A6F4700A0384F /* ELCAssetTablePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELCAssetTablePicker.m; sourceTree = "<group>"; };
+		D542D8B6196A6F4700A0384F /* ELCImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELCImagePickerController.h; sourceTree = "<group>"; };
+		D542D8B7196A6F4700A0384F /* ELCImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELCImagePickerController.m; sourceTree = "<group>"; };
+		D542D8B9196A6F4700A0384F /* ELCAlbumPickerController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ELCAlbumPickerController.xib; sourceTree = "<group>"; };
+		D542D8BA196A6F4700A0384F /* ELCAssetPicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ELCAssetPicker.xib; sourceTree = "<group>"; };
+		D542D8BB196A6F4700A0384F /* ELCAssetTablePicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ELCAssetTablePicker.xib; sourceTree = "<group>"; };
+		D542D8BC196A6F4700A0384F /* Overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Overlay.png; sourceTree = "<group>"; };
+		D542D8BD196A6F4700A0384F /* Overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Overlay@2x.png"; sourceTree = "<group>"; };
 		D5743806194629280040C96A /* followersFollowingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = followersFollowingViewController.h; path = Anypic/followersFollowingViewController.h; sourceTree = SOURCE_ROOT; };
 		D5743807194629280040C96A /* followersFollowingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = followersFollowingViewController.m; path = Anypic/followersFollowingViewController.m; sourceTree = SOURCE_ROOT; };
 		D575A0691947834C00C6BCC2 /* btn_editprofile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_editprofile.png; sourceTree = "<group>"; };
@@ -1558,6 +1585,7 @@
 		C4A0B4FF156C5B9F00E48554 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				D542D8AB196A6F4700A0384F /* ELCImagePicker */,
 				D5D65A0119155E6F00FAC142 /* ProdCloudCode */,
 				D5D659EF19155A1E00FAC142 /* DevCloudCode */,
 				D530C3EE18FB22E700739027 /* iRate */,
@@ -1820,6 +1848,38 @@
 			path = iRate;
 			sourceTree = "<group>";
 		};
+		D542D8AB196A6F4700A0384F /* ELCImagePicker */ = {
+			isa = PBXGroup;
+			children = (
+				D542D8AC196A6F4700A0384F /* ELCAlbumPickerController.h */,
+				D542D8AD196A6F4700A0384F /* ELCAlbumPickerController.m */,
+				D542D8AE196A6F4700A0384F /* ELCAsset.h */,
+				D542D8AF196A6F4700A0384F /* ELCAsset.m */,
+				D542D8B0196A6F4700A0384F /* ELCAssetCell.h */,
+				D542D8B1196A6F4700A0384F /* ELCAssetCell.m */,
+				D542D8B2196A6F4700A0384F /* ELCAssetPickerFilterDelegate.h */,
+				D542D8B3196A6F4700A0384F /* ELCAssetSelectionDelegate.h */,
+				D542D8B4196A6F4700A0384F /* ELCAssetTablePicker.h */,
+				D542D8B5196A6F4700A0384F /* ELCAssetTablePicker.m */,
+				D542D8B6196A6F4700A0384F /* ELCImagePickerController.h */,
+				D542D8B7196A6F4700A0384F /* ELCImagePickerController.m */,
+				D542D8B8196A6F4700A0384F /* Resources */,
+			);
+			path = ELCImagePicker;
+			sourceTree = "<group>";
+		};
+		D542D8B8196A6F4700A0384F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D542D8B9196A6F4700A0384F /* ELCAlbumPickerController.xib */,
+				D542D8BA196A6F4700A0384F /* ELCAssetPicker.xib */,
+				D542D8BB196A6F4700A0384F /* ELCAssetTablePicker.xib */,
+				D542D8BC196A6F4700A0384F /* Overlay.png */,
+				D542D8BD196A6F4700A0384F /* Overlay@2x.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		D594C1FF18EFEBAD0008F5DF /* SVProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
@@ -2059,6 +2119,7 @@
 				D5BFDEE118CC84A5004FEC42 /* vancity.png in Resources */,
 				D5D571151947F8E900354340 /* btn_following_user.png in Resources */,
 				4602FD1418BD553B0097DBEC /* foundersuite-logo.png in Resources */,
+				D542D8C6196A6F4700A0384F /* Overlay.png in Resources */,
 				D59B998E18C5A902002D6EFE /* Default-568h@2x.png in Resources */,
 				462FCB61188C6AE9005059F3 /* DiscoverNavigationBar.png in Resources */,
 				D52C1E3D18D9515D00625887 /* konotor_sent.png in Resources */,
@@ -2176,6 +2237,7 @@
 				C4BE67A2157FC7F700A291C2 /* IconAddComment@2x.png in Resources */,
 				D5C0312419391749000C98B7 /* bubble_right.png in Resources */,
 				465DE34F1895A56200C37EF8 /* bg_dropdown@2x.png in Resources */,
+				D542D8C4196A6F4700A0384F /* ELCAssetPicker.xib in Resources */,
 				46B31EED184E35150028D11C /* profileDescription@2x.png in Resources */,
 				D51072CC1937EF7300B1FF0E /* arrow_right_white@2x.png in Resources */,
 				4602FD1E18BD553B0097DBEC /* slingbot-popup.png in Resources */,
@@ -2281,6 +2343,7 @@
 				D52C1E2D18D9515D00625887 /* konotor_chatbubble_ios7_you.png in Resources */,
 				4602FCE918BA9F390097DBEC /* update@2x.png in Resources */,
 				462FCB79188C806C005059F3 /* button_cancel.png in Resources */,
+				D542D8C7196A6F4700A0384F /* Overlay@2x.png in Resources */,
 				46FB0A7F1888989800E978CD /* tab-product-selected@2x.png in Resources */,
 				D52C1E3E18D9515D00625887 /* konotor_sent@2x.png in Resources */,
 				4602FD1918BD553B0097DBEC /* positionly-logo@2x.png in Resources */,
@@ -2294,6 +2357,7 @@
 				465B19A218B81DD000EDBCFC /* bg-browser-bar@2x.png in Resources */,
 				D5BFDEE218CC84A5004FEC42 /* vancity@2x.png in Resources */,
 				46FB0A861888989800E978CD /* tab-people-selected.png in Resources */,
+				D542D8C5196A6F4700A0384F /* ELCAssetTablePicker.xib in Resources */,
 				4691B52118C5691A00B7DF6A /* news5.png in Resources */,
 				46B31EF9184E3DCB0028D11C /* profileAddNew@2x.png in Resources */,
 				465B19B018B81FE500EDBCFC /* browser-button-forward-normal@2x.png in Resources */,
@@ -2307,6 +2371,7 @@
 				D5BFDED518CC84A5004FEC42 /* la.png in Resources */,
 				4602FCF118BAAA630097DBEC /* jolt@2x.png in Resources */,
 				C499A3041725E6DD0089D40A /* FacebookSDKResources.bundle in Resources */,
+				D542D8C3196A6F4700A0384F /* ELCAlbumPickerController.xib in Resources */,
 				D52C1E2E18D9515D00625887 /* konotor_chatbubble_ios7_you@2x.png in Resources */,
 				D576840B1933F908008BAA2C /* IconProfileSelected@2x.png in Resources */,
 				D576840A1933F908008BAA2C /* IconProfileSelected.png in Resources */,
@@ -2342,17 +2407,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				46839E7E18E1E89600BD60DB /* PAPLoginTutorialViewController.m in Sources */,
+				D542D8BF196A6F4700A0384F /* ELCAsset.m in Sources */,
 				C4F10288156C56F20061BC3E /* UIImage+AlphaAdditions.m in Sources */,
 				D5FC095818A9B552000D85F1 /* FilterCell.m in Sources */,
 				D5FC095518A9B543000D85F1 /* CameraFilterViewController.m in Sources */,
 				46FB0A42188876C400E978CD /* PAPperksView.m in Sources */,
 				D594C20518EFEBAD0008F5DF /* SVProgressHUD.m in Sources */,
+				D542D8BE196A6F4700A0384F /* ELCAlbumPickerController.m in Sources */,
 				C4F1028A156C56F20061BC3E /* UIImage+ResizeAdditions.m in Sources */,
 				46FB0A8A1888BAF700E978CD /* PAPdiscoveryHeaderView.m in Sources */,
 				C4F1028B156C56F20061BC3E /* UIImage+RoundedCornerAdditions.m in Sources */,
 				4688686F185F8B78002BA081 /* emailSignUpViewController.m in Sources */,
 				C4F10291156C571C0061BC3E /* AppDelegate.m in Sources */,
 				C4F10292156C571C0061BC3E /* PAPUtility.m in Sources */,
+				D542D8C1196A6F4700A0384F /* ELCAssetTablePicker.m in Sources */,
 				C4F102A0156C574A0061BC3E /* PAPImageView.m in Sources */,
 				46839E7F18E1E89600BD60DB /* PAPprofileApprovalViewController.m in Sources */,
 				D52C1E4618D9515D00625887 /* KonotorTextInputOverlay.m in Sources */,
@@ -2376,6 +2444,7 @@
 				C4F102BC156C57CD0061BC3E /* PAPTabBarController.m in Sources */,
 				C4F102C2156C57DA0061BC3E /* PAPLogInViewController.m in Sources */,
 				C4F102C3156C57DA0061BC3E /* PAPWelcomeViewController.m in Sources */,
+				D542D8C2196A6F4700A0384F /* ELCImagePickerController.m in Sources */,
 				D5743808194629280040C96A /* followersFollowingViewController.m in Sources */,
 				D52C1E2318D9515D00625887 /* KonotorEventHandler.m in Sources */,
 				D52C1E2418D9515D00625887 /* KonotorFeedbackScreen.m in Sources */,
@@ -2400,6 +2469,7 @@
 				D52C1E4918D9515D00625887 /* KonotorVoiceInputOverlay.m in Sources */,
 				C4A6A246158FF842003F64A8 /* MBProgressHUD.m in Sources */,
 				46E1EB6F183BCA6300F64274 /* PAPProfileSettingViewController.m in Sources */,
+				D542D8C0196A6F4700A0384F /* ELCAssetCell.m in Sources */,
 				D5903C75192EBBF900DC9896 /* ThoughtPostViewController.m in Sources */,
 				C47DDDE61592761F002114F6 /* Reachability.m in Sources */,
 			);
