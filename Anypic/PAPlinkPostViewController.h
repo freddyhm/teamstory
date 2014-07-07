@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PAPlinkPostViewController : UIViewController <UITextFieldDelegate,UITextViewDelegate>
+@interface PAPlinkPostViewController : UIViewController <UITextFieldDelegate,UITextViewDelegate, UIAlertViewDelegate>
 
 @end
