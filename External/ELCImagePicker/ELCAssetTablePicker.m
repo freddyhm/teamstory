@@ -8,11 +8,13 @@
 #import "ELCAssetTablePicker.h"
 #import "ELCAssetCell.h"
 #import "ELCAsset.h"
-#import "ELCAlbumPickerController.h"
+#import "PAPTabBarController.h"
+
 
 @interface ELCAssetTablePicker ()
 
 @property (nonatomic, assign) int columns;
+@property (nonatomic, strong) UIBarButtonItem *doneBtn;
 
 @end
 
@@ -35,19 +37,46 @@
 {
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 	[self.tableView setAllowsSelection:NO];
-
+    
+   
+    
+    // set color of nav bar to custom grey
+    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(79/255.0) green:(91/255.0) blue:(100/255.0) alpha:(0.0/255.0)];
+    
+    // set title to white 
+    //self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+   // [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    self.navigationController.navigationBar.translucent = NO;
+    
+    // cancel button
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_cancel"] style:UIBarButtonItemStylePlain target:self action:@selector(cancelImagePicker)];
+    
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     self.elcAssets = tempArray;
-	
-    if (self.immediateReturn) {
+    
+    if([self.navigationItem.title isEqualToString:@"Camera Roll"]){
         
-    } else {
-        UIBarButtonItem *doneButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneAction:)];
-        [self.navigationItem setRightBarButtonItem:doneButtonItem];
-        [self.navigationItem setTitle:@"Loading..."];
+        ELCAsset *camCell = [[ELCAsset alloc] init];
+        camCell.isCam = YES;
+        [camCell setParent:self];
+        [self.elcAssets addObject:camCell];
     }
 
+    // done button
+    self.doneBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_done.png"] style:UIBarButtonItemStylePlain target:self action:@selector(doneAction:)];;
+    
+    [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
+
 	[self performSelectorInBackground:@selector(preparePhotos) withObject:nil];
+    
+    UIButton * button = [[UIButton alloc]initWithFrame:CGRectZero];
+    [button addTarget:self action:@selector(selectAlbum:) forControlEvents:UIControlEventTouchUpInside];
+    [button setTitle:self.navigationItem.title forState:UIControlStateNormal];
+    [button sizeToFit];
+    
+    self.navigationItem.titleView = button;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -71,29 +100,29 @@
 - (void)preparePhotos
 {
     @autoreleasepool {
-
+        
         [self.assetGroup enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) {
             
             if (result == nil) {
                 return;
             }
-
+            
             ELCAsset *elcAsset = [[ELCAsset alloc] initWithAsset:result];
             [elcAsset setParent:self];
             
             BOOL isAssetFiltered = NO;
             if (self.assetPickerFilterDelegate &&
-               [self.assetPickerFilterDelegate respondsToSelector:@selector(assetTablePicker:isAssetFilteredOut:)])
+                [self.assetPickerFilterDelegate respondsToSelector:@selector(assetTablePicker:isAssetFilteredOut:)])
             {
                 isAssetFiltered = [self.assetPickerFilterDelegate assetTablePicker:self isAssetFilteredOut:(ELCAsset*)elcAsset];
             }
-
+            
             if (!isAssetFiltered) {
                 [self.elcAssets addObject:elcAsset];
             }
-
-         }];
-
+            
+        }];
+        
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
             // scroll to bottom
@@ -102,26 +131,54 @@
             if (section >= 0 && row >= 0) {
                 NSIndexPath *ip = [NSIndexPath indexPathForRow:row
                                                      inSection:section];
-                        [self.tableView scrollToRowAtIndexPath:ip
-                                              atScrollPosition:UITableViewScrollPositionBottom
-                                                      animated:NO];
+                [self.tableView scrollToRowAtIndexPath:ip
+                                      atScrollPosition:UITableViewScrollPositionBottom
+                                              animated:NO];
             }
             
-            [self.navigationItem setTitle:self.singleSelection ? @"Pick Photo" : @"Pick Photos"];
+            
+            
+            
         });
     }
 }
 
+- (void)selectAlbum:(id)sender{
+    ELCAlbumPickerController *pickAlbum = [[ELCAlbumPickerController alloc] init];
+    pickAlbum.parent = self.parent;
+    
+    [self.navigationController pushViewController:pickAlbum animated:YES];
+}
+
+- (void)processCompleted:(ALAssetsGroup *)group{
+    
+    self.assetGroup = group;
+    [self.assetGroup setAssetsFilter:[ALAssetsFilter allAssets]];
+    
+    [self viewDidLoad];
+    
+    [self performSelectorInBackground:@selector(preparePhotos) withObject:nil];
+    
+    
+    [self.tableView reloadData];
+}
+
 - (void)doneAction:(id)sender
-{	
+{
+
 	NSMutableArray *selectedAssetsImages = [[NSMutableArray alloc] init];
-	    
+    
 	for (ELCAsset *elcAsset in self.elcAssets) {
-		if ([elcAsset selected]) {
-			[selectedAssetsImages addObject:[elcAsset asset]];
-		}
+        if ([elcAsset selected]) {
+            [selectedAssetsImages addObject:[elcAsset asset]];
+        }
 	}
     [self.parent selectedAssets:selectedAssetsImages];
+}
+
+- (void)cancelImagePicker{
+
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -131,27 +188,96 @@
     for (ELCAsset *elcAsset in self.elcAssets) {
         if (elcAsset.selected) selectionCount++;
     }
+    
     BOOL shouldSelect = YES;
+    
     if ([self.parent respondsToSelector:@selector(shouldSelectAsset:previousCount:)]) {
         shouldSelect = [self.parent shouldSelectAsset:asset previousCount:selectionCount];
     }
+    
     return shouldSelect;
 }
 
 - (void)assetSelected:(ELCAsset *)asset
 {
-    if (self.singleSelection) {
-
-        for (ELCAsset *elcAsset in self.elcAssets) {
-            if (asset != elcAsset) {
-                elcAsset.selected = NO;
+    if(asset != nil){
+        
+        [self doneButtonEnabled:YES];
+        
+        if(!asset.isCam){
+            if (self.singleSelection) {
+                for (ELCAsset *elcAsset in self.elcAssets) {
+                    if (asset != elcAsset) {
+                        elcAsset.selected = NO;
+                    }
+                }
             }
+            if (self.immediateReturn) {
+                NSArray *singleAssetArray = @[asset.asset];
+                [(NSObject *)self.parent performSelector:@selector(selectedAssets:) withObject:singleAssetArray afterDelay:0];
+            }
+        }else{
+            [self shouldStartCameraController];
         }
+    }else{
+        [self doneButtonEnabled:NO];
     }
-    if (self.immediateReturn) {
-        NSArray *singleAssetArray = @[asset.asset];
-        [(NSObject *)self.parent performSelector:@selector(selectedAssets:) withObject:singleAssetArray afterDelay:0];
+}
+
+- (void)doneButtonEnabled:(BOOL)selected{
+    
+    if(selected){
+        self.navigationItem.rightBarButtonItem = self.doneBtn;
+        [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
+    }else{
+        self.navigationItem.rightBarButtonItem = nil;
     }
+}
+
+- (BOOL)shouldStartCameraController {
+    
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
+        return NO;
+    }
+    
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+    
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]
+        && [[UIImagePickerController availableMediaTypesForSourceType:
+             UIImagePickerControllerSourceTypeCamera] containsObject:(NSString *)kUTTypeImage]) {
+        
+        imagePicker.mediaTypes = [NSArray arrayWithObject:(NSString *) kUTTypeImage];
+        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        
+        if ([UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceRear]) {
+            imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceRear;
+        } else if ([UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceFront]) {
+            imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+        }
+        
+    } else {
+        return NO;
+    }
+    
+    imagePicker.allowsEditing = NO;
+    imagePicker.showsCameraControls = YES;
+    
+    /*
+    
+    // get tab bar and home controller from stack
+    PAPTabBarController *tabBarController =[[self.navigationController viewControllers] objectAtIndex:1];
+    NSArray *tabBarViewControllers = [tabBarController viewControllers];
+    
+    [tab]
+
+    
+    imagePicker.delegate = tabBarController;
+     
+     */
+    
+    [self.navigationController presentViewController:imagePicker animated:YES completion:nil];
+    
+    return YES;
 }
 
 #pragma mark UITableViewDataSource Delegate Methods
@@ -181,12 +307,12 @@
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{    
+{
     static NSString *CellIdentifier = @"Cell";
-        
+    
     ELCAssetCell *cell = (ELCAssetCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-
-    if (cell == nil) {		        
+    
+    if (cell == nil) {
         cell = [[ELCAssetCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
@@ -206,11 +332,16 @@
     
     for (ELCAsset *asset in self.elcAssets) {
 		if (asset.selected) {
-            count++;	
+            count++;
 		}
 	}
     
     return count;
+}
+
+#pragma mark - Sample protocol delegate
+-(void)processCompleted{
+    
 }
 
 

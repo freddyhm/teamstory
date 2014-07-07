@@ -667,6 +667,8 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 }
 
 - (BOOL)handleActionURL:(NSURL *)url {
+    
+    /*
     if ([[url host] isEqualToString:kPAPLaunchURLHostTakePicture]) {
         if ([PFUser currentUser]) {
             return [self.tabBarController shouldPresentPhotoCaptureController];
@@ -680,6 +682,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
             }
         }
     }
+     */
 
     return NO;
 }

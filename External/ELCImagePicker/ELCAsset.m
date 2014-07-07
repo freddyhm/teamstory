@@ -30,6 +30,7 @@
 - (void)setSelected:(BOOL)selected
 {
     if (selected) {
+    
         if ([_parent respondsToSelector:@selector(shouldSelectAsset:)]) {
             if (![_parent shouldSelectAsset:self]) {
                 return;
@@ -41,6 +42,8 @@
         if (_parent != nil && [_parent respondsToSelector:@selector(assetSelected:)]) {
             [_parent assetSelected:self];
         }
+    }else{
+        [_parent assetSelected:nil];
     }
 }
 

@@ -10,10 +10,13 @@
 #import "CropResizeViewController.h"
 #import "ThoughtPostViewController.h"
 
+
 @interface PAPTabBarController ()
 @property (nonatomic,strong) NSString *imageSource;
 @property (nonatomic,strong) UINavigationController *navController;
 @property (nonatomic,strong) UIImagePickerController *imagePicker;
+@property (assign) NSUInteger cameraRollIndex;
+@property (nonatomic, strong) ALAssetsLibrary *specialLibrary;
 @property (nonatomic,strong) NSDictionary *imagePickerInfo;
 @property (nonatomic, strong) UIPopoverController *popoverController;
 @property (nonatomic, strong) UIImageView *postMenuBkgd;
@@ -127,86 +130,25 @@
 
 #pragma mark - UIImagePickerDelegate
 
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
-    
-    // hide nav bar when exiting picker
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
-    [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:1] animated:YES];
-}
-
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    
-    self.imageSource = self.imageSource != nil ? self.imageSource : @"Album";
-    
-    // Check if pic is in correct position, fix rotation if not (pic from camera roll)
-    UIImage *selectedImg = [self fixrotation:[info objectForKey:UIImagePickerControllerOriginalImage]];
-    
-    CropResizeViewController *cropViewController = [[CropResizeViewController alloc] initWithImage:selectedImg nib:nil source:self.imageSource];
-    
-    [self.navigationController pushViewController:cropViewController animated:NO];
-   
+    UIImage *selectedImg = [info objectForKey:UIImagePickerControllerOriginalImage];
+    [self sendPicToCrop:selectedImg];
+}
+
+
+#pragma mark - ELCImagePickerControllerDelegate Methods
+
+- (void)elcImagePickerController:(ELCImagePickerController *)picker didFinishPickingMediaWithInfo:(NSArray *)info
+{
+    UIImage *selectedImg = [[info objectAtIndex:0] objectForKey:UIImagePickerControllerOriginalImage];
+    [self sendPicToCrop:selectedImg];
+}
+
+- (void)elcImagePickerControllerDidCancel:(ELCImagePickerController *)picker
+{
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark - UIActionSheetDelegate
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) {
-        self.imageSource = @"Camera";
-        [self shouldStartCameraController];
-    } else if (buttonIndex == 1) {
-        self.imageSource = @"Album";
-        [self shouldStartPhotoLibraryPickerController];
-    }
-}
-
-#pragma mark - UINavigationControllerDelegate
-
-
-- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    
-    // keep status bar white, in ios7 changes in imagepicker
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    
-    // set nav controller to picker's nav controller so we can access it in backToPhotoAlbum
-    self.navController = navigationController;
-    
-    viewController.navigationItem.titleView =[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
-    viewController.navigationItem.rightBarButtonItem = nil;
-    
-    // set color of nav bar to custom grey
-    [viewController.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
-    viewController.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(79/255.0) green:(91/255.0) blue:(100/255.0) alpha:(0.0/255.0)];
-    viewController.navigationController.navigationBar.translucent = NO;
-    
-    
-    if ([viewController.title isEqualToString:@"Photos"])
-    {
-        viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_cancel"] style:UIBarButtonItemStylePlain target:self action:@selector(imagePickerControllerDidCancel:)];
-        
-    }else{
-        
-        viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(backToPhotoAlbum)];
-        
-    }
-    
-    [viewController.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
-    
-}
-
-#pragma mark - PAPTabBarController
-
-- (BOOL)shouldPresentPhotoCaptureController {
-    BOOL presentedPhotoCaptureController = [self shouldStartCameraController];
-    
-    if (!presentedPhotoCaptureController) {
-        presentedPhotoCaptureController = [self shouldStartPhotoLibraryPickerController];
-    }
-    
-    return presentedPhotoCaptureController;
-}
 
 #pragma mark - ()
 
@@ -220,17 +162,63 @@
     
     self.postMenu.hidden = YES;
     
-    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
-    BOOL cameraDeviceAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
-    BOOL photoLibraryAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
+    // init asset library
+    ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+    self.specialLibrary = library;
     
-    if (cameraDeviceAvailable && photoLibraryAvailable) {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take Photo", @"Choose Photo", nil];
-        [actionSheet showFromTabBar:self.tabBar];
-    } else {
-        // if we don't have at least two options, we automatically show whichever is available (camera or roll)
-        [self shouldPresentPhotoCaptureController];
-    }
+    NSMutableArray *groups = [NSMutableArray array];
+    
+    // keep track of camera roll index
+    self.cameraRollIndex = 0;
+    
+    // fetch all albums and set first pop up to camera roll
+    [_specialLibrary enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+        
+        if (group) {
+            
+            [groups addObject:group];
+            
+            NSString *sGroupPropertyName = (NSString *)[group valueForProperty:ALAssetsGroupPropertyName];
+            
+            if ([[sGroupPropertyName lowercaseString] isEqualToString:@"camera roll"]) {
+                // display camera roll first
+                self.cameraRollIndex = [groups indexOfObject:group];
+            }
+        } else {
+            [self displayPickerForGroup:[groups objectAtIndex:self.cameraRollIndex]];
+        }
+    } failureBlock:^(NSError *error) {
+        
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Album Error: %@ - %@", [error localizedDescription], [error localizedRecoverySuggestion]] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+        
+        NSLog(@"A problem occured %@", [error description]);
+        // an error here means that the asset groups were inaccessable.
+        // Maybe the user or system preferences refused access.
+    }];
+}
+
+- (void)displayPickerForGroup:(ALAssetsGroup *)group
+{
+    
+	ELCAssetTablePicker *tablePicker = [[ELCAssetTablePicker alloc] initWithStyle:UITableViewStylePlain];
+    tablePicker.navigationItem.title = [group valueForProperty:ALAssetsGroupPropertyName];
+    tablePicker.singleSelection = YES;
+    tablePicker.immediateReturn = YES;
+    
+	ELCImagePickerController *elcPicker = [[ELCImagePickerController alloc] initWithRootViewController:tablePicker];
+    elcPicker.maximumImagesCount = 1;
+    elcPicker.imagePickerDelegate = self;
+    elcPicker.returnsOriginalImage = NO; //Only return the fullScreenImage, not the fullResolutionImage
+	tablePicker.parent = elcPicker;
+    
+    // Move me
+    tablePicker.assetGroup = group;
+    
+    
+    [tablePicker.assetGroup setAssetsFilter:[ALAssetsFilter allAssets]];
+    
+    [self presentViewController:elcPicker animated:YES completion:nil];
 }
 
 - (void)thoughtButtonAction:(id)sender{
@@ -241,6 +229,7 @@
     [self.navigationController pushViewController:thoughtPostViewController animated:YES];
 }
 
+/*
 - (BOOL)shouldStartCameraController {
       
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
@@ -274,60 +263,30 @@
     
     return YES;
 }
-
-
-- (BOOL)shouldStartPhotoLibraryPickerController {
-    
-    
-    if (([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary] == NO
-         && [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum] == NO)) {
-        return NO;
-    }
-    
-    self.imagePicker = [[UIImagePickerController alloc] init];
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]
-        && [[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary] containsObject:(NSString *)kUTTypeImage]) {
-        
-        self.imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        self.imagePicker.mediaTypes = [NSArray arrayWithObject:(NSString *) kUTTypeImage];
-        
-    } else if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum]
-               && [[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum] containsObject:(NSString *)kUTTypeImage]) {
-        
-        self.imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-        self.imagePicker.mediaTypes = [NSArray arrayWithObject:(NSString *) kUTTypeImage];
-        
-    } else {
-        return NO;
-    }
-    
-    self.imagePicker.allowsEditing = NO;
-    self.imagePicker.delegate = self;
-    
-    [self presentViewController:self.imagePicker animated:YES completion:nil];
-    
-    return YES;
-}
+*/
 
 - (void)handleGesture:(UIGestureRecognizer *)gestureRecognizer {
-    [self shouldPresentPhotoCaptureController];
+ //   [self shouldPresentPhotoCaptureController];
 }
 
 #pragma mark - Custom
+
+- (void)sendPicToCrop:(UIImage *)image{
+    
+    // Fix rotation
+    UIImage *fixedImg = [self fixrotation:image];
+    
+    CropResizeViewController *cropViewController = [[CropResizeViewController alloc] initWithImage:fixedImg nib:nil source:self.imageSource];
+    
+    [self.navigationController pushViewController:cropViewController animated:NO];
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 -(void)backToPhotoAlbum{
     
     // triggered when in selected picture in picker
     [self.navController popViewControllerAnimated:YES];
-}
-
--(void)shouldPresentController:(NSString *)typeController{
-    
-    if ([typeController isEqualToString:@"Camera"]) {
-        [self shouldStartCameraController];
-    } else if ([typeController isEqualToString:@"Album"]) {
-        [self shouldStartPhotoLibraryPickerController];
-    }
 }
 
 - (UIImage *)fixrotation:(UIImage *)image{

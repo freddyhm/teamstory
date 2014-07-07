@@ -374,6 +374,13 @@
 		D542D8C5196A6F4700A0384F /* ELCAssetTablePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = D542D8BB196A6F4700A0384F /* ELCAssetTablePicker.xib */; };
 		D542D8C6196A6F4700A0384F /* Overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = D542D8BC196A6F4700A0384F /* Overlay.png */; };
 		D542D8C7196A6F4700A0384F /* Overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D542D8BD196A6F4700A0384F /* Overlay@2x.png */; };
+		D542D8C9196A721B00A0384F /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D542D8C8196A721B00A0384F /* AssetsLibrary.framework */; };
+		D542D8CE196A8C1400A0384F /* Overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = D542D8CA196A8C1400A0384F /* Overlay.png */; };
+		D542D8CF196A8C1400A0384F /* Overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D542D8CB196A8C1400A0384F /* Overlay@2x.png */; };
+		D542D8D0196A8C1400A0384F /* elc-ios-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D542D8CC196A8C1400A0384F /* elc-ios-icon@2x.png */; };
+		D542D8D1196A8C1400A0384F /* elc-ios-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D542D8CD196A8C1400A0384F /* elc-ios-icon.png */; };
+		D542D8D4196B211C00A0384F /* btn_camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D542D8D2196B211C00A0384F /* btn_camera@2x.png */; };
+		D542D8D5196B211C00A0384F /* btn_camera.png in Resources */ = {isa = PBXBuildFile; fileRef = D542D8D3196B211C00A0384F /* btn_camera.png */; };
 		D5743808194629280040C96A /* followersFollowingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5743807194629280040C96A /* followersFollowingViewController.m */; };
 		D575A06F1947834C00C6BCC2 /* btn_editprofile.png in Resources */ = {isa = PBXBuildFile; fileRef = D575A0691947834C00C6BCC2 /* btn_editprofile.png */; };
 		D575A0701947834C00C6BCC2 /* btn_editprofile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D575A06A1947834C00C6BCC2 /* btn_editprofile@2x.png */; };
@@ -905,6 +912,13 @@
 		D542D8BB196A6F4700A0384F /* ELCAssetTablePicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ELCAssetTablePicker.xib; sourceTree = "<group>"; };
 		D542D8BC196A6F4700A0384F /* Overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Overlay.png; sourceTree = "<group>"; };
 		D542D8BD196A6F4700A0384F /* Overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Overlay@2x.png"; sourceTree = "<group>"; };
+		D542D8C8196A721B00A0384F /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		D542D8CA196A8C1400A0384F /* Overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Overlay.png; sourceTree = "<group>"; };
+		D542D8CB196A8C1400A0384F /* Overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Overlay@2x.png"; sourceTree = "<group>"; };
+		D542D8CC196A8C1400A0384F /* elc-ios-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "elc-ios-icon@2x.png"; sourceTree = "<group>"; };
+		D542D8CD196A8C1400A0384F /* elc-ios-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "elc-ios-icon.png"; sourceTree = "<group>"; };
+		D542D8D2196B211C00A0384F /* btn_camera@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_camera@2x.png"; sourceTree = "<group>"; };
+		D542D8D3196B211C00A0384F /* btn_camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_camera.png; sourceTree = "<group>"; };
 		D5743806194629280040C96A /* followersFollowingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = followersFollowingViewController.h; path = Anypic/followersFollowingViewController.h; sourceTree = SOURCE_ROOT; };
 		D5743807194629280040C96A /* followersFollowingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = followersFollowingViewController.m; path = Anypic/followersFollowingViewController.m; sourceTree = SOURCE_ROOT; };
 		D575A0691947834C00C6BCC2 /* btn_editprofile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_editprofile.png; sourceTree = "<group>"; };
@@ -1017,6 +1031,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D542D8C9196A721B00A0384F /* AssetsLibrary.framework in Frameworks */,
 				46A0C25D194E4A2D00811CBC /* CFNetwork.framework in Frameworks */,
 				09ABC07413A1D52D009C3FCF /* Foundation.framework in Frameworks */,
 				D51C98A218E28D16001230DA /* libGoogleAnalyticsServices.a in Frameworks */,
@@ -1072,6 +1087,7 @@
 		09ABC07013A1D52D009C3FCF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D542D8C8196A721B00A0384F /* AssetsLibrary.framework */,
 				D5A5F51F18D2C3CD000BB243 /* Parse.framework */,
 				D5A5F51D18D2C3C1000BB243 /* FacebookSDK.framework */,
 				D531F7CB18B5DE11008AE73F /* CoreVideo.framework */,
@@ -1185,6 +1201,12 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				D542D8D2196B211C00A0384F /* btn_camera@2x.png */,
+				D542D8D3196B211C00A0384F /* btn_camera.png */,
+				D542D8CA196A8C1400A0384F /* Overlay.png */,
+				D542D8CB196A8C1400A0384F /* Overlay@2x.png */,
+				D542D8CC196A8C1400A0384F /* elc-ios-icon@2x.png */,
+				D542D8CD196A8C1400A0384F /* elc-ios-icon.png */,
 				D5D571111947F8E900354340 /* btn_following_user.png */,
 				D5D571121947F8E900354340 /* btn_following_user@2x.png */,
 				D5D571131947F8E900354340 /* btn_no_follow_user.png */,
@@ -2089,6 +2111,7 @@
 				462FCB7E188C806C005059F3 /* button_setting@2x.png in Resources */,
 				C4BE670F157FC7D000A291C2 /* Icon-Small-50.png in Resources */,
 				4602FD1318BD553B0097DBEC /* foundersuite-popup@2x.png in Resources */,
+				D542D8D0196A8C1400A0384F /* elc-ios-icon@2x.png in Resources */,
 				4602FD1F18BD553B0097DBEC /* slingbot-popup@2x.png in Resources */,
 				C4BE6710157FC7D000A291C2 /* Icon-Small.png in Resources */,
 				46076EEC193FE3EF00A7B317 /* notif_close@2x.png in Resources */,
@@ -2191,15 +2214,18 @@
 				4602FCFD18BAB9570097DBEC /* deezer-popup.png in Resources */,
 				46839EA518E1E8C100BD60DB /* tut3@2x.png in Resources */,
 				D57683FA1933EB90008BAA2C /* nav_activity.png in Resources */,
+				D542D8CF196A8C1400A0384F /* Overlay@2x.png in Resources */,
 				4602FD1518BD553B0097DBEC /* foundersuite-logo@2x.png in Resources */,
 				4602FCFC18BAB9570097DBEC /* deezer-popup@2x.png in Resources */,
 				4691B4F518BEF61C00B7DF6A /* follow@2x.png in Resources */,
 				D57684071933F8CF008BAA2C /* IconHomeSelected@2x.png in Resources */,
 				46839EA118E1E8C100BD60DB /* tut1@2x.png in Resources */,
 				D57684021933EBA3008BAA2C /* nav_profile.png in Resources */,
+				D542D8D5196B211C00A0384F /* btn_camera.png in Resources */,
 				465A4EDE18A8382900E43DC6 /* comingsoon.png in Resources */,
 				462FCB7C188C806C005059F3 /* button_done@2x.png in Resources */,
 				46ABD74B18B144D4008F5AAB /* news2@2x.png in Resources */,
+				D542D8D1196A8C1400A0384F /* elc-ios-icon.png in Resources */,
 				46B31EEA184E35150028D11C /* profileWebsite.png in Resources */,
 				4602FD1718BD553B0097DBEC /* positionly-popup@2x.png in Resources */,
 				4691B51018C02F7800B7DF6A /* icon-followers@2x.png in Resources */,
@@ -2254,6 +2280,7 @@
 				46B31EF8184E3DCB0028D11C /* profileAddNew.png in Resources */,
 				46FB0A841888989800E978CD /* tab-people-unselected.png in Resources */,
 				D575A0721947834C00C6BCC2 /* btn_follow@2x.png in Resources */,
+				D542D8D4196B211C00A0384F /* btn_camera@2x.png in Resources */,
 				D576840E1933F910008BAA2C /* IconDiscoverSelected.png in Resources */,
 				467154A718835E470000C0CA /* privacy@2x.png in Resources */,
 				D5C0312119391749000C98B7 /* bubble_left@2x.png in Resources */,
@@ -2307,6 +2334,7 @@
 				4691B4E218BE994800B7DF6A /* asana@2x.png in Resources */,
 				4609975A1938119A00C5AD96 /* icon-linkedin-profile@2x.png in Resources */,
 				46FB0A951888BBF400E978CD /* news3@2x.png in Resources */,
+				D542D8CE196A8C1400A0384F /* Overlay.png in Resources */,
 				462FCB8D188C8892005059F3 /* button_done_selected.png in Resources */,
 				4691B4F118BEF61200B7DF6A /* unfollow@2x.png in Resources */,
 				462FCB89188C863E005059F3 /* button_setting_selected.png in Resources */,
