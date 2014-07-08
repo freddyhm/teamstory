@@ -416,6 +416,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 }
 
 - (void)embedlySuccess:(NSString *)callUrl withResponse:(id)response endpoint:(NSString *)endpoint operation:(AFHTTPRequestOperation *)operation {
+    self.imageView.image = [self getImageFromURL:[response objectForKey:@"thumbnail_url"]];
     [SVProgressHUD dismiss];
     self.nextButton.enabled = YES;
     self.nextButton.alpha = 1.0f;
@@ -423,7 +424,6 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     self.titleLabel.textColor = [UIColor blackColor];
     self.titleLabel.text = [response objectForKey:@"title"];
     self.popUpBoxurlLabel.text = [response objectForKey:@"url"];
-    //self.imageView.image = [self getImageFromURL:[response objectForKey:@"thumbnail_url"]];
     self.urlString = [response objectForKey:@"url"];
     self.linkPostDescription = [response objectForKey:@"description"];
     [self.placeholderLabel removeFromSuperview];
