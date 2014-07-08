@@ -126,7 +126,6 @@
         if ([[object objectForKey:@"atmention"] count] > 0) {
             for (int i = 0; i < [[object objectForKey:@"atmention"] count]; i++) {
                 if ([[[[object objectForKey:@"atmention"] objectAtIndex:i] objectId] isEqualToString:[PFUser currentUser].objectId]) {
-                    NSLog(@"goes through at mention %d", i);
                     activityString = NSLocalizedString(@"mentioned you in a post", nil);
                     break;
                 }
@@ -421,7 +420,6 @@
         if ([[object objectForKey:@"atmention"] count] > 0) {
             for (int i = 0; i < [[object objectForKey:@"atmention"] count]; i++) {
                 if ([[[[object objectForKey:@"atmention"] objectAtIndex:i] objectId] isEqualToString:[PFUser currentUser].objectId]) {
-                    NSLog(@"goes through at mention %d", i);
                     return NSLocalizedString(@"mentioned you in a post", nil);
                     break;
                 }

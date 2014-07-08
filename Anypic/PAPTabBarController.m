@@ -53,11 +53,12 @@
    
     
     // create post menu
-    self.postMenu = [[UIView alloc]initWithFrame:CGRectMake(self.tabBar.frame.origin.x, self.tabBar.frame.origin.y - self.tabBar.frame.size.height - 35, self.tabBar.frame.size.width, self.tabBar.frame.size.height + 25)];
-        
+    self.postMenu = [[UIView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    
+    float screenHeight = [UIScreen mainScreen].bounds.size.height;
     // photo button
     UIImage *photoPostImage = [UIImage imageNamed:@"Moment Popup.png"];
-    self.photoPostButton = [[UIButton alloc] initWithFrame:CGRectMake(40.0f, 0.0f, photoPostImage.size.width, photoPostImage.size.height)];
+    self.photoPostButton = [[UIButton alloc] initWithFrame:CGRectMake(40.0f, screenHeight - 130.0f, photoPostImage.size.width, photoPostImage.size.height)];
     [self.photoPostButton setBackgroundImage:photoPostImage forState:UIControlStateNormal];
     [self.photoPostButton setBackgroundImage:[UIImage imageNamed:@"Moment Popup_selected.png"] forState:UIControlStateSelected];
     [self.photoPostButton addTarget:self action:@selector(cameraButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -66,7 +67,7 @@
     
     // thought button
     UIImage *thoughtPostImage = [UIImage imageNamed:@"Thought Popup.png"];
-    self.thoughtPostButton = [[UIButton alloc] initWithFrame:CGRectMake(125.0f, 0.0f, thoughtPostImage.size.width, thoughtPostImage.size.height)];
+    self.thoughtPostButton = [[UIButton alloc] initWithFrame:CGRectMake(125.0f, screenHeight - 130.0f, thoughtPostImage.size.width, thoughtPostImage.size.height)];
     [self.thoughtPostButton setBackgroundImage:thoughtPostImage forState:UIControlStateNormal];
     [self.thoughtPostButton setBackgroundImage:[UIImage imageNamed:@"Thought Popup_selected.png"] forState:UIControlStateSelected];
     [self.thoughtPostButton addTarget:self action:@selector(thoughtButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -76,7 +77,7 @@
     // link post button
     
     UIImage *linkPostImage = [UIImage imageNamed:@"Link Popup.png"];
-    self.linkPostButton = [[UIButton alloc] initWithFrame:CGRectMake(210.0f, 0.0f, linkPostImage.size.width, linkPostImage.size.height)];
+    self.linkPostButton = [[UIButton alloc] initWithFrame:CGRectMake(210.0f, screenHeight - 130.0f, linkPostImage.size.width, linkPostImage.size.height)];
     [self.linkPostButton setBackgroundImage:linkPostImage forState:UIControlStateNormal];
     [self.linkPostButton setBackgroundImage:[UIImage imageNamed:@"Link Popup_selected.png"] forState:UIControlStateSelected];
     [self.linkPostButton addTarget:self action:@selector(linkPostButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -85,6 +86,11 @@
     // hide by default
     self.postMenu.hidden = YES;
     
+    // Handle outside tap gesture.
+    UITapGestureRecognizer *postMenuOutside = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(postMenuOutsideAction:)];
+    
+    [self.postMenu addGestureRecognizer:postMenuOutside];
+    [self.postMenu setUserInteractionEnabled:YES];
     [self.view addSubview:self.postMenu];
 }
 
@@ -194,9 +200,14 @@
 }
 
 #pragma mark - ()
+     
+- (void)postMenuOutsideAction:(id)sender {
+    self.postButton.selected = self.postButton.selected ? NO : YES;
+    self.postMenu.hidden = self.postMenu.hidden ? NO : YES;
+}
 
 - (void)postButtonAction:(id)sender {
-    postButton.selected = self.postButton.selected ? NO : YES;
+    self.postButton.selected = self.postButton.selected ? NO : YES;
     
     // hide/show post menu toggle
     self.postMenu.hidden = self.postMenu.hidden ? NO : YES;

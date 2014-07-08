@@ -131,7 +131,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
     if ([[activity objectForKey:@"atmention"] count] > 0) {
         for (int i = 0; i < [[activity objectForKey:@"atmention"] count]; i++) {
             if ([[[[activity objectForKey:@"atmention"] objectAtIndex:i] objectId] isEqualToString:[PFUser currentUser].objectId]) {
-                NSLog(@"goes through at mention %d", i);
                 activityString = NSLocalizedString(@"mentioned you in a post", nil);
                 break;
             }
