@@ -311,16 +311,17 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 }
 
 - (void)nextButtonAction:(id)sender {
-    if (self.linkPostView) {
-        [self.linkPostView removeFromSuperview];
-    }
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:110] endEditing:YES];
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:110].hidden = YES;
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:111].hidden = YES;
+    
+    if (self.linkPostView) {
+        [self.linkPostView removeFromSuperview];
+    }
+     
     [self.commentTextView becomeFirstResponder];
     
     if ([self.titleLabel.text length] > 0 ) {
-        
         float heightOffset;
         if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
             heightOffset = 160.0f;
@@ -422,7 +423,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     self.titleLabel.textColor = [UIColor blackColor];
     self.titleLabel.text = [response objectForKey:@"title"];
     self.popUpBoxurlLabel.text = [response objectForKey:@"url"];
-    self.imageView.image = [self getImageFromURL:[response objectForKey:@"thumbnail_url"]];
+    //self.imageView.image = [self getImageFromURL:[response objectForKey:@"thumbnail_url"]];
     self.urlString = [response objectForKey:@"url"];
     self.linkPostDescription = [response objectForKey:@"description"];
     [self.placeholderLabel removeFromSuperview];
