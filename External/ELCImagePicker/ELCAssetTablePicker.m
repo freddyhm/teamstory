@@ -38,15 +38,16 @@
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 	[self.tableView setAllowsSelection:NO];
     
-   
+    self.navigationController.navigationBar.shadowImage = nil;
+    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
     
     // set color of nav bar to custom grey
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(79/255.0) green:(91/255.0) blue:(100/255.0) alpha:(0.0/255.0)];
     
     // set title to white 
-    //self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
-   // [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     self.navigationController.navigationBar.translucent = NO;
     
@@ -71,11 +72,14 @@
 
 	[self performSelectorInBackground:@selector(preparePhotos) withObject:nil];
     
+    
     UIButton * button = [[UIButton alloc]initWithFrame:CGRectZero];
     [button addTarget:self action:@selector(selectAlbum:) forControlEvents:UIControlEventTouchUpInside];
     [button setTitle:self.navigationItem.title forState:UIControlStateNormal];
+    [button setTintColor:[UIColor whiteColor]];
     [button sizeToFit];
     
+    self.navigationItem.title = nil;
     self.navigationItem.titleView = button;
 }
 

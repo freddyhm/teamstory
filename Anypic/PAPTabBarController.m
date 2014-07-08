@@ -202,7 +202,12 @@
 {
     
 	ELCAssetTablePicker *tablePicker = [[ELCAssetTablePicker alloc] initWithStyle:UITableViewStylePlain];
-    tablePicker.navigationItem.title = [group valueForProperty:ALAssetsGroupPropertyName];
+    
+    // set title with arrow
+    NSString *downTriangle = @" \U000025BE\U0000FE0E";
+    NSString *albumName = [group valueForProperty:ALAssetsGroupPropertyName];
+    
+    tablePicker.navigationItem.title = [albumName stringByAppendingString:downTriangle];
     tablePicker.singleSelection = YES;
     tablePicker.immediateReturn = NO;
     
