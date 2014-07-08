@@ -96,6 +96,10 @@
     return [self.parent shouldSelectAsset:asset previousCount:previousCount];
 }
 
+- (BOOL)shouldStartCameraController{
+    return NO;
+}
+
 - (void)selectedAssets:(NSArray*)assets
 {
 	[_parent selectedAssets:assets];

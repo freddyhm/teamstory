@@ -14,7 +14,7 @@
 @interface PAPTabBarController ()
 @property (nonatomic,strong) NSString *imageSource;
 @property (nonatomic,strong) UINavigationController *navController;
-@property (nonatomic,strong) UIImagePickerController *imagePicker;
+@property (nonatomic,strong) UIImagePickerController *camera;
 @property (assign) NSUInteger cameraRollIndex;
 @property (nonatomic, strong) ALAssetsLibrary *specialLibrary;
 @property (nonatomic,strong) NSDictionary *imagePickerInfo;
@@ -35,7 +35,7 @@
 
 @implementation PAPTabBarController
 @synthesize navController;
-@synthesize imagePicker;
+@synthesize camera;
 @synthesize imagePickerInfo;
 @synthesize imageSource;
 @synthesize popoverController;
@@ -204,11 +204,12 @@
 	ELCAssetTablePicker *tablePicker = [[ELCAssetTablePicker alloc] initWithStyle:UITableViewStylePlain];
     tablePicker.navigationItem.title = [group valueForProperty:ALAssetsGroupPropertyName];
     tablePicker.singleSelection = YES;
-    tablePicker.immediateReturn = YES;
+    tablePicker.immediateReturn = NO;
     
 	ELCImagePickerController *elcPicker = [[ELCImagePickerController alloc] initWithRootViewController:tablePicker];
     elcPicker.maximumImagesCount = 1;
     elcPicker.imagePickerDelegate = self;
+    elcPicker.defaultImagePickerDelegate = self;
     elcPicker.returnsOriginalImage = NO; //Only return the fullScreenImage, not the fullResolutionImage
 	tablePicker.parent = elcPicker;
     
@@ -229,41 +230,39 @@
     [self.navigationController pushViewController:thoughtPostViewController animated:YES];
 }
 
-/*
-- (BOOL)shouldStartCameraController {
-      
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
-        return NO;
-    }
+
+- (UIImagePickerController *)shouldStartCameraController {
     
-    self.imagePicker = [[UIImagePickerController alloc] init];
+    /* starts camera, sets tabbarcontroller as delegate, and returns image picker */
+    
+    self.camera = [[UIImagePickerController alloc] init];
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]
         && [[UIImagePickerController availableMediaTypesForSourceType:
              UIImagePickerControllerSourceTypeCamera] containsObject:(NSString *)kUTTypeImage]) {
         
-        self.imagePicker.mediaTypes = [NSArray arrayWithObject:(NSString *) kUTTypeImage];
-        self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        self.camera.mediaTypes = [NSArray arrayWithObject:(NSString *) kUTTypeImage];
+        self.camera.sourceType = UIImagePickerControllerSourceTypeCamera;
         
         if ([UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceRear]) {
-            self.imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceRear;
+            self.camera.cameraDevice = UIImagePickerControllerCameraDeviceRear;
         } else if ([UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceFront]) {
-            self.imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+            self.camera.cameraDevice = UIImagePickerControllerCameraDeviceFront;
         }
         
     } else {
         return NO;
     }
     
-    self.imagePicker.allowsEditing = NO;
-    self.imagePicker.showsCameraControls = YES;
-    self.imagePicker.delegate = self;
-    
-    [self presentViewController:self.imagePicker animated:YES completion:nil];
-    
-    return YES;
+    self.camera.allowsEditing = NO;
+    self.camera.showsCameraControls = YES;
+    self.camera.delegate = self;
+
+    return self.camera;
 }
-*/
+
+
+
 
 - (void)handleGesture:(UIGestureRecognizer *)gestureRecognizer {
  //   [self shouldPresentPhotoCaptureController];

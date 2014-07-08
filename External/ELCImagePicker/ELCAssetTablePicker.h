@@ -6,6 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PAPTabBarController.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "ELCAsset.h"
 #import "ELCAssetSelectionDelegate.h"
@@ -14,6 +15,7 @@
 @interface ELCAssetTablePicker : UITableViewController <ELCAssetDelegate>
 
 @property (nonatomic, weak) id <ELCAssetSelectionDelegate> parent;
+
 @property (nonatomic, strong) ALAssetsGroup *assetGroup;
 @property (nonatomic, strong) NSMutableArray *elcAssets;
 @property (nonatomic, strong) IBOutlet UILabel *selectedAssetsLabel;

@@ -45,6 +45,14 @@
 	}
 }
 
+-(UIImagePickerController *)startCamera{
+    
+    // gets & returns a camera controller
+    UIImagePickerController *camera = [self.defaultImagePickerDelegate performSelector:@selector(shouldStartCameraController)];
+    return camera;
+}
+
+
 - (BOOL)shouldSelectAsset:(ELCAsset *)asset previousCount:(NSUInteger)previousCount
 {
     

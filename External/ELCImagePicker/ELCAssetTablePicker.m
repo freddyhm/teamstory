@@ -223,7 +223,7 @@
             
             // start cam when first cell selected, deselect
             asset.selected = NO;
-            [self shouldStartCameraController];
+            [self openCamera];
             
         }
     }else{
@@ -241,50 +241,11 @@
     }
 }
 
-- (BOOL)shouldStartCameraController {
+- (void)openCamera {
     
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
-        return NO;
-    }
-    
-    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-    
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]
-        && [[UIImagePickerController availableMediaTypesForSourceType:
-             UIImagePickerControllerSourceTypeCamera] containsObject:(NSString *)kUTTypeImage]) {
-        
-        imagePicker.mediaTypes = [NSArray arrayWithObject:(NSString *) kUTTypeImage];
-        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        
-        if ([UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceRear]) {
-            imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceRear;
-        } else if ([UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceFront]) {
-            imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
-        }
-        
-    } else {
-        return NO;
-    }
-    
-    imagePicker.allowsEditing = NO;
-    imagePicker.showsCameraControls = YES;
-    
-    /*
-    
-    // get tab bar and home controller from stack
-    PAPTabBarController *tabBarController =[[self.navigationController viewControllers] objectAtIndex:1];
-    NSArray *tabBarViewControllers = [tabBarController viewControllers];
-    
-    [tab]
-
-    
-    imagePicker.delegate = tabBarController;
-     
-     */
-    
-    [self.navigationController presentViewController:imagePicker animated:YES completion:nil];
-    
-    return YES;
+    // gets camera controller from tabbarcontroller
+    UIImagePickerController *camera = [self.parent performSelector:@selector(startCamera)];
+    [self.navigationController presentViewController:camera animated:YES completion:nil];
 }
 
 #pragma mark UITableViewDataSource Delegate Methods

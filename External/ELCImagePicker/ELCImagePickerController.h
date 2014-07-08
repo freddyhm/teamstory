@@ -33,7 +33,9 @@
 @interface ELCImagePickerController : UINavigationController <ELCAssetSelectionDelegate>
 
 @property (nonatomic, weak) id<ELCImagePickerControllerDelegate> imagePickerDelegate;
+@property (nonatomic, weak) id<UIImagePickerControllerDelegate> defaultImagePickerDelegate;
 @property (nonatomic, assign) NSInteger maximumImagesCount;
+- (UIImagePickerController *)startCamera;
 
 /**
  * YES if the picker should return the original image,
