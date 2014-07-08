@@ -125,6 +125,8 @@
         
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
+            
+            /*
             // scroll to bottom
             long section = [self numberOfSectionsInTableView:self.tableView] - 1;
             long row = [self tableView:self.tableView numberOfRowsInSection:section] - 1;
@@ -135,6 +137,7 @@
                                       atScrollPosition:UITableViewScrollPositionBottom
                                               animated:NO];
             }
+             */
             
             
             
@@ -217,7 +220,11 @@
                 [(NSObject *)self.parent performSelector:@selector(selectedAssets:) withObject:singleAssetArray afterDelay:0];
             }
         }else{
+            
+            // start cam when first cell selected, deselect
+            asset.selected = NO;
             [self shouldStartCameraController];
+            
         }
     }else{
         [self doneButtonEnabled:NO];
