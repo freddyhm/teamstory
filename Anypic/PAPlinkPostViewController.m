@@ -416,34 +416,51 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 }
 
 - (void)embedlySuccess:(NSString *)callUrl withResponse:(id)response endpoint:(NSString *)endpoint operation:(AFHTTPRequestOperation *)operation {
-    self.imageView.image = [self getImageFromURL:[response objectForKey:@"thumbnail_url"]];
-    [SVProgressHUD dismiss];
-
-    
-    self.titleLabel.textColor = [UIColor blackColor];
-    self.titleLabel.text = [response objectForKey:@"title"];
-    self.popUpBoxurlLabel.text = [response objectForKey:@"url"];
-    self.urlString = [response objectForKey:@"url"];
-    self.linkPostDescription = [response objectForKey:@"description"];
-    [self.placeholderLabel removeFromSuperview];
-    
     if ([[response objectForKey:@"thumbnail_url"] length] <= 0) {
+        [SVProgressHUD dismiss];
+        
         self.imageView.image = nil;
         self.titleLabel.frame = CGRectMake(10.0f, 85.0f, 260.0f, 55.0f);
         self.popUpBoxurlLabel.frame = CGRectMake(10.0f, 110.0f, 260.0f, 60.0f);
+        
+        self.titleLabel.textColor = [UIColor blackColor];
+        self.titleLabel.text = [response objectForKey:@"title"];
+        self.popUpBoxurlLabel.text = [response objectForKey:@"url"];
+        self.urlString = [response objectForKey:@"url"];
+        self.linkPostDescription = [response objectForKey:@"description"];
+        [self.placeholderLabel removeFromSuperview];
+        
+        self.nextButton.enabled = YES;
+        self.nextButton.alpha = 1.0f;
     } else {
         self.titleLabel.frame = CGRectMake(100.0f, 85.0f, 170.0f, 55.0f);
         self.popUpBoxurlLabel.frame = CGRectMake(100.0f, 110.0f, 170.0f, 60.0f);
+        
+        self.imageView.image = [self getImageFromURL:[response objectForKey:@"thumbnail_url"] block:^(BOOL completed){
+            [SVProgressHUD dismiss];
+            
+            self.titleLabel.textColor = [UIColor blackColor];
+            self.titleLabel.text = [response objectForKey:@"title"];
+            self.popUpBoxurlLabel.text = [response objectForKey:@"url"];
+            self.urlString = [response objectForKey:@"url"];
+            self.linkPostDescription = [response objectForKey:@"description"];
+            [self.placeholderLabel removeFromSuperview];
+            
+            if(completed) {
+                self.nextButton.enabled = YES;
+                self.nextButton.alpha = 1.0f;
+            }
+
+        }];
     }
-    self.nextButton.enabled = YES;
-    self.nextButton.alpha = 1.0f;
 }
 
--(UIImage *) getImageFromURL:(NSString *)fileURL {
+-(UIImage *) getImageFromURL:(NSString *)fileURL block:(void (^)(BOOL))completed{
     UIImage * result;
     
     NSData * data = [NSData dataWithContentsOfURL:[NSURL URLWithString:fileURL]];
     result = [UIImage imageWithData:data];
+    completed(YES);
     return result;
 }
 
