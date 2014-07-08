@@ -437,8 +437,6 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
         self.popUpBoxurlLabel.frame = CGRectMake(100.0f, 110.0f, 170.0f, 60.0f);
         
         self.imageView.image = [self getImageFromURL:[response objectForKey:@"thumbnail_url"] block:^(BOOL completed){
-            [SVProgressHUD dismiss];
-            
             self.titleLabel.textColor = [UIColor blackColor];
             self.titleLabel.text = [response objectForKey:@"title"];
             self.popUpBoxurlLabel.text = [response objectForKey:@"url"];
@@ -447,6 +445,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
             [self.placeholderLabel removeFromSuperview];
             
             if(completed) {
+                [SVProgressHUD dismiss];
                 self.nextButton.enabled = YES;
                 self.nextButton.alpha = 1.0f;
             }
