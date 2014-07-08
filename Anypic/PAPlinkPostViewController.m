@@ -314,9 +314,9 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     if (self.linkPostView) {
         [self.linkPostView removeFromSuperview];
     }
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:110] endEditing:YES];
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:110].hidden = YES;
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:111].hidden = YES;
-    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:110] endEditing:YES];
     [self.commentTextView becomeFirstResponder];
     
     if ([self.titleLabel.text length] > 0 ) {
@@ -363,7 +363,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
             self.urlLabel.frame = CGRectMake(10.0f, 55.0f, self.linkPostView.bounds.size.width - 20.0f, 17.5f);
         } else {
             self.linkPostViewLabel_title.frame = CGRectMake(100.0f, 10.0f, self.linkPostView.bounds.size.width - 110.0f, 55.0f);
-            self.urlLabel.frame = CGRectMake(100.0f, 55.0f, self.linkPostView.bounds.size.width - 10.0f, 17.5f);
+            self.urlLabel.frame = CGRectMake(100.0f, 55.0f, self.linkPostView.bounds.size.width - 110.0f, 17.5f);
         }
     }
     
