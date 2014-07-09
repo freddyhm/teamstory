@@ -81,7 +81,7 @@
             overlayView.hidden = asset.selected ? NO : YES;
         } else {
             if (overlayImage == nil) {
-                overlayImage = [UIImage imageNamed:@"Overlay.png"];
+                overlayImage = [UIImage imageNamed:@"select_overlay.png"];
             }
             UIImageView *overlayView = [[UIImageView alloc] initWithImage:overlayImage];
             [_overlayViewArray addObject:overlayView];
@@ -93,10 +93,10 @@
 - (void)cellTapped:(UITapGestureRecognizer *)tapRecognizer
 {
     CGPoint point = [tapRecognizer locationInView:self];
-    CGFloat totalWidth = self.rowAssets.count * 75 + (self.rowAssets.count - 1) * 4;
+    CGFloat totalWidth = self.rowAssets.count * 102 + (self.rowAssets.count - 1) * 4;
     CGFloat startX = (self.bounds.size.width - totalWidth) / 2;
     
-	CGRect frame = CGRectMake(startX, 2, 75, 75);
+	CGRect frame = CGRectMake(startX, 2, 102, 102);
 	
 	for (int i = 0; i < [_rowAssets count]; ++i) {
     

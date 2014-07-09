@@ -15,6 +15,7 @@
 
 @property (nonatomic, assign) int columns;
 @property (nonatomic, strong) UIBarButtonItem *doneBtn;
+@property BOOL isPicSelected;
 
 @end
 
@@ -37,8 +38,7 @@
 {
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 	[self.tableView setAllowsSelection:NO];
-
-    
+      
     self.navigationController.navigationBar.shadowImage = nil;
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
     
@@ -216,7 +216,6 @@
             // start cam when first cell selected, deselect
             asset.selected = NO;
             [self openCamera];
-            
         }
     }else{
         [self doneButtonEnabled:NO];
