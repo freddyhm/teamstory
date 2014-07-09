@@ -71,10 +71,10 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     // init nav bar
     [[self navigationController] setNavigationBarHidden:NO animated:YES];
     
+    UIImage *navNext = [UIImage imageNamed:@"browser-button-forward-normal.png"];
     UIButton *postButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [postButton setTitle:@"Post" forState:UIControlStateNormal];
-    [postButton setFrame:CGRectMake(0.0f, 0.0f, 40.0f, 20.0f)];
-    [postButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [postButton setImage:navNext forState:UIControlStateNormal];
+    [postButton setFrame:CGRectMake(0.0f, 0.0f, navNext.size.width, navNext.size.height)];
     [postButton addTarget:self action:@selector(postButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:postButton];
     
@@ -214,6 +214,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 
 - (void)postButtonAction:(id)sender {
     [self.view endEditing:YES];
+    [SVProgressHUD show];
     [self shouldUploadImage:self.imageView.image block:^(BOOL completed) {
         
         if(completed){
@@ -378,6 +379,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 }
 
 - (void)exitPost{
+    [SVProgressHUD dismiss];
     // hide custom grey bar and pop to home
     [[self navigationController] setNavigationBarHidden:YES animated:YES];
     
