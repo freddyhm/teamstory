@@ -71,7 +71,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     // init nav bar
     [[self navigationController] setNavigationBarHidden:NO animated:YES];
     
-    UIImage *navNext = [UIImage imageNamed:@"browser-button-forward-normal.png"];
+    UIImage *navNext = [UIImage imageNamed:@"button_done.png"];
     UIButton *postButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [postButton setImage:navNext forState:UIControlStateNormal];
     [postButton setFrame:CGRectMake(0.0f, 0.0f, navNext.size.width, navNext.size.height)];
@@ -324,6 +324,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     if ([self.titleLabel.text length] > 0 ) {
         float heightOffset;
+        heightOffset = 0;
         if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
             heightOffset = 160.0f;
             self.commentTextView.frame = CGRectMake(5.0f, 71.0f, 310.0f, 85.0f);
