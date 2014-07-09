@@ -15,7 +15,7 @@
 
 @property (nonatomic, assign) int columns;
 @property (nonatomic, strong) UIBarButtonItem *doneBtn;
-@property BOOL isPicSelected;
+@property (nonatomic, strong) NSString *albumName;
 
 @end
 
@@ -38,10 +38,7 @@
 {
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 	[self.tableView setAllowsSelection:NO];
-      
-    self.navigationController.navigationBar.shadowImage = nil;
-    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
-    
+          
     // set color of nav bar to custom grey
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(79/255.0) green:(91/255.0) blue:(100/255.0) alpha:(0.0/255.0)];
@@ -58,7 +55,7 @@
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     self.elcAssets = tempArray;
     
-    if([self.navigationItem.title isEqualToString:@"Camera Roll"]){
+    if([self.albumName isEqualToString:@"Camera Roll"]){
         
         ELCAsset *camCell = [[ELCAsset alloc] init];
         camCell.isCam = YES;
@@ -68,24 +65,29 @@
 
     // done button
     self.doneBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_done.png"] style:UIBarButtonItemStylePlain target:self action:@selector(doneAction:)];;
-    
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
-
 	[self performSelectorInBackground:@selector(preparePhotos) withObject:nil];
-
+    
 }
 
 - (void)setButtonTitle:(NSString *)groupName{
     
+    // downwards triange in nav bar
+    NSString *downTriangle = @" \U000025BE\U0000FE0E";
+    
     UIButton * button = [[UIButton alloc]initWithFrame:CGRectZero];
     [button addTarget:self action:@selector(selectAlbum:) forControlEvents:UIControlEventTouchUpInside];
-    [button setTitle:groupName forState:UIControlStateNormal];
+    
+    [button setTitle:[groupName stringByAppendingString:downTriangle] forState:UIControlStateNormal];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
     [button.titleLabel setFont:[UIFont boldSystemFontOfSize:18.0f]];
     [button sizeToFit];
+
     self.navigationItem.titleView = button;
+    self.albumName = groupName;
 }
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -149,18 +151,14 @@
     
     self.assetGroup = group;
     [self.assetGroup setAssetsFilter:[ALAssetsFilter allAssets]];
-    
     [self viewDidLoad];
-    
     [self performSelectorInBackground:@selector(preparePhotos) withObject:nil];
-    
     
     [self.tableView reloadData];
 }
 
 - (void)doneAction:(id)sender
 {
-
 	NSMutableArray *selectedAssetsImages = [[NSMutableArray alloc] init];
     
 	for (ELCAsset *elcAsset in self.elcAssets) {
@@ -197,7 +195,7 @@
 {
     if(asset != nil){
         
-        [self doneButtonEnabled:YES];
+        [self toggleDoneButton];
         
         if(!asset.isCam){
             if (self.singleSelection) {
@@ -218,13 +216,14 @@
             [self openCamera];
         }
     }else{
-        [self doneButtonEnabled:NO];
+        [self toggleDoneButton];
     }
 }
 
-- (void)doneButtonEnabled:(BOOL)selected{
+- (void)toggleDoneButton{
     
-    if(selected){
+    // check if done button is present
+    if(self.navigationItem.rightBarButtonItem == nil){
         self.navigationItem.rightBarButtonItem = self.doneBtn;
         [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
     }else{

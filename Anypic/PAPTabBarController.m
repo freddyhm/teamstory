@@ -204,9 +204,8 @@
 	ELCAssetTablePicker *tablePicker = [[ELCAssetTablePicker alloc] initWithStyle:UITableViewStylePlain];
     
     // set title with arrow
-    NSString *downTriangle = @" \U000025BE\U0000FE0E";
     NSString *albumName = [group valueForProperty:ALAssetsGroupPropertyName];
-    [tablePicker setButtonTitle:[albumName stringByAppendingString:downTriangle]];
+    [tablePicker setButtonTitle:albumName];
     
     tablePicker.singleSelection = YES;
     tablePicker.immediateReturn = NO;

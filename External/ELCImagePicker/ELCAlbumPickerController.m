@@ -164,10 +164,9 @@
     
 	picker.assetPickerFilterDelegate = self.assetPickerFilterDelegate;
     
-    // set title with arrow
-    NSString *downTriangle = @" \U000025BE\U0000FE0E";
+    // set title
     NSString *albumName = [group valueForProperty:ALAssetsGroupPropertyName];
-    [picker setButtonTitle:[albumName stringByAppendingString:downTriangle]];
+    [picker setButtonTitle:albumName];
     
     /*
      ELCImagePickerController *elcPicker = [[ELCImagePickerController alloc] initWithRootViewController:tablePicker];
