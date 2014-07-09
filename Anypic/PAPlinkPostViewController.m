@@ -399,6 +399,9 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     [m objectAtIndex:0];
     
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:110] removeFromSuperview];
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:111] removeFromSuperview];
+    
     // push tab bar with home controller now selected
     [self.navigationController popToViewController:tabBarController animated:YES];
 }
