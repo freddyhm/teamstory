@@ -373,9 +373,7 @@
 		D542D8C4196A6F4700A0384F /* ELCAssetPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = D542D8BA196A6F4700A0384F /* ELCAssetPicker.xib */; };
 		D542D8C5196A6F4700A0384F /* ELCAssetTablePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = D542D8BB196A6F4700A0384F /* ELCAssetTablePicker.xib */; };
 		D542D8C6196A6F4700A0384F /* Overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = D542D8BC196A6F4700A0384F /* Overlay.png */; };
-		D542D8C7196A6F4700A0384F /* Overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D542D8BD196A6F4700A0384F /* Overlay@2x.png */; };
 		D542D8C9196A721B00A0384F /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D542D8C8196A721B00A0384F /* AssetsLibrary.framework */; };
-		D542D8CE196A8C1400A0384F /* Overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = D542D8CA196A8C1400A0384F /* Overlay.png */; };
 		D542D8CF196A8C1400A0384F /* Overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D542D8CB196A8C1400A0384F /* Overlay@2x.png */; };
 		D542D8D0196A8C1400A0384F /* elc-ios-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D542D8CC196A8C1400A0384F /* elc-ios-icon@2x.png */; };
 		D542D8D1196A8C1400A0384F /* elc-ios-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D542D8CD196A8C1400A0384F /* elc-ios-icon.png */; };
@@ -2334,7 +2332,6 @@
 				4691B4E218BE994800B7DF6A /* asana@2x.png in Resources */,
 				4609975A1938119A00C5AD96 /* icon-linkedin-profile@2x.png in Resources */,
 				46FB0A951888BBF400E978CD /* news3@2x.png in Resources */,
-				D542D8CE196A8C1400A0384F /* Overlay.png in Resources */,
 				462FCB8D188C8892005059F3 /* button_done_selected.png in Resources */,
 				4691B4F118BEF61200B7DF6A /* unfollow@2x.png in Resources */,
 				462FCB89188C863E005059F3 /* button_setting_selected.png in Resources */,
@@ -2371,7 +2368,6 @@
 				D52C1E2D18D9515D00625887 /* konotor_chatbubble_ios7_you.png in Resources */,
 				4602FCE918BA9F390097DBEC /* update@2x.png in Resources */,
 				462FCB79188C806C005059F3 /* button_cancel.png in Resources */,
-				D542D8C7196A6F4700A0384F /* Overlay@2x.png in Resources */,
 				46FB0A7F1888989800E978CD /* tab-product-selected@2x.png in Resources */,
 				D52C1E3E18D9515D00625887 /* konotor_sent@2x.png in Resources */,
 				4602FD1918BD553B0097DBEC /* positionly-logo@2x.png in Resources */,

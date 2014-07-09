@@ -206,8 +206,8 @@
     // set title with arrow
     NSString *downTriangle = @" \U000025BE\U0000FE0E";
     NSString *albumName = [group valueForProperty:ALAssetsGroupPropertyName];
+    [tablePicker setButtonTitle:[albumName stringByAppendingString:downTriangle]];
     
-    tablePicker.navigationItem.title = [albumName stringByAppendingString:downTriangle];
     tablePicker.singleSelection = YES;
     tablePicker.immediateReturn = NO;
     

@@ -113,10 +113,10 @@
 
 - (void)layoutSubviews
 {
-    CGFloat totalWidth = self.rowAssets.count * 75 + (self.rowAssets.count - 1) * 4;
+    CGFloat totalWidth = self.rowAssets.count * 102 + (self.rowAssets.count - 1) * 4;
     CGFloat startX = (self.bounds.size.width - totalWidth) / 2;
     
-	CGRect frame = CGRectMake(startX, 2, 75, 75);
+	CGRect frame = CGRectMake(startX, 2, 102, 102);
 	
 	for (int i = 0; i < [_rowAssets count]; ++i) {
 		UIImageView *imageView = [_imageViewArray objectAtIndex:i];

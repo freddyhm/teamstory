@@ -37,6 +37,7 @@
 {
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 	[self.tableView setAllowsSelection:NO];
+
     
     self.navigationController.navigationBar.shadowImage = nil;
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
@@ -71,22 +72,25 @@
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
 
 	[self performSelectorInBackground:@selector(preparePhotos) withObject:nil];
-    
+
+}
+
+- (void)setButtonTitle:(NSString *)groupName{
     
     UIButton * button = [[UIButton alloc]initWithFrame:CGRectZero];
     [button addTarget:self action:@selector(selectAlbum:) forControlEvents:UIControlEventTouchUpInside];
-    [button setTitle:self.navigationItem.title forState:UIControlStateNormal];
-    [button setTintColor:[UIColor whiteColor]];
+    [button setTitle:groupName forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    [button.titleLabel setFont:[UIFont boldSystemFontOfSize:18.0f]];
     [button sizeToFit];
-    
-    self.navigationItem.title = nil;
     self.navigationItem.titleView = button;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.columns = self.view.bounds.size.width / 80;
+    self.columns = self.view.bounds.size.width / 90;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
@@ -97,7 +101,7 @@
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-    self.columns = self.view.bounds.size.width / 80;
+    self.columns = self.view.bounds.size.width / 90;
     [self.tableView reloadData];
 }
 
@@ -129,23 +133,7 @@
         
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
-            
-            /*
-            // scroll to bottom
-            long section = [self numberOfSectionsInTableView:self.tableView] - 1;
-            long row = [self tableView:self.tableView numberOfRowsInSection:section] - 1;
-            if (section >= 0 && row >= 0) {
-                NSIndexPath *ip = [NSIndexPath indexPathForRow:row
-                                                     inSection:section];
-                [self.tableView scrollToRowAtIndexPath:ip
-                                      atScrollPosition:UITableViewScrollPositionBottom
-                                              animated:NO];
-            }
-             */
-            
-            
-            
-            
+
         });
     }
 }
@@ -295,7 +283,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	return 79;
+	return 106;
 }
 
 - (int)totalSelectedAssets
