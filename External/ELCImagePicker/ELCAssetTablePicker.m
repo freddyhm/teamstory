@@ -38,7 +38,7 @@
 {
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 	[self.tableView setAllowsSelection:NO];
-          
+    
     // set color of nav bar to custom grey
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(79/255.0) green:(91/255.0) blue:(100/255.0) alpha:(0.0/255.0)];
@@ -54,6 +54,7 @@
     
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     self.elcAssets = tempArray;
+   
     
     if([self.albumName isEqualToString:@"Camera Roll"]){
         
@@ -67,6 +68,10 @@
     self.doneBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_done.png"] style:UIBarButtonItemStylePlain target:self action:@selector(doneAction:)];;
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
 	[self performSelectorInBackground:@selector(preparePhotos) withObject:nil];
+    
+    self.navigationItem.rightBarButtonItem = self.doneBtn;
+    [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
+
     
 }
 
@@ -161,12 +166,23 @@
 {
 	NSMutableArray *selectedAssetsImages = [[NSMutableArray alloc] init];
     
+    BOOL isSelected = NO;
+    
 	for (ELCAsset *elcAsset in self.elcAssets) {
         if ([elcAsset selected]) {
             [selectedAssetsImages addObject:[elcAsset asset]];
+            isSelected = YES;
         }
 	}
-    [self.parent selectedAssets:selectedAssetsImages];
+    
+    // check if there's a pic selected, show pop up if not
+    if(isSelected){
+        [self.parent selectedAssets:selectedAssetsImages];
+    }else{
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Uh Oh!" message:@"No Picture Selected :(" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+    }
+    
 }
 
 - (void)cancelImagePicker{
@@ -194,9 +210,7 @@
 - (void)assetSelected:(ELCAsset *)asset
 {
     if(asset != nil){
-        
-        [self toggleDoneButton];
-        
+                
         if(!asset.isCam){
             if (self.singleSelection) {
                 for (ELCAsset *elcAsset in self.elcAssets) {
@@ -215,19 +229,6 @@
             asset.selected = NO;
             [self openCamera];
         }
-    }else{
-        [self toggleDoneButton];
-    }
-}
-
-- (void)toggleDoneButton{
-    
-    // check if done button is present
-    if(self.navigationItem.rightBarButtonItem == nil){
-        self.navigationItem.rightBarButtonItem = self.doneBtn;
-        [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
-    }else{
-        self.navigationItem.rightBarButtonItem = nil;
     }
 }
 

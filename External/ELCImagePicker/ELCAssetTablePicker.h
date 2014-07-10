@@ -28,7 +28,6 @@
 - (int)totalSelectedAssets;
 - (void)preparePhotos;
 - (void)setButtonTitle:(NSString *)groupName;
-- (void)toggleDoneButton;
 - (void)doneAction:(id)sender;
 
 @end
