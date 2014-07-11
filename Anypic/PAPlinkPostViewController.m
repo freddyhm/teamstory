@@ -129,7 +129,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     UIButton *cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(popUpBoxHeader.bounds.size.width - 30.0f, 10.0f, 20.0f, 20.0f)];
     [cancelButton setBackgroundImage:[UIImage imageNamed:@"button_cancel_selected.png"] forState:UIControlStateNormal];
-    [cancelButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [cancelButton addTarget:self action:@selector(cancelButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [popUpBoxHeader addSubview:cancelButton];
     
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(100.0f, 85.0f, 170.0f, 55.0f)];
@@ -200,6 +200,19 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 
 
 # pragma mark - ()
+- (void)cancelButtonAction:(id)sender {
+    if ([self.titleLabel.text length] > 0) {
+         [[[[UIApplication sharedApplication] delegate] window] viewWithTag:110].hidden = YES;
+         [[[[UIApplication sharedApplication] delegate] window] viewWithTag:111].hidden = YES;
+     } else {
+        [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:110] removeFromSuperview];
+        [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:111] removeFromSuperview];
+        
+        [[self navigationController] setNavigationBarHidden:YES animated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
+     }
+}
+
 - (void)backButtonAction:(id)sender {
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:110] removeFromSuperview];
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:111] removeFromSuperview];
@@ -314,20 +327,12 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 }
 
 - (void)nextButtonAction:(id)sender {
-    
-    /*
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:110] endEditing:YES];
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:110].hidden = YES;
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:111].hidden = YES;
-    */
+     
     
-    [self.popUpBox removeFromSuperview];
-    [self.dimView removeFromSuperview];
-    
-    
-    if (self.linkPostView) {
-        [self.linkPostView removeFromSuperview];
-    }
+    [self.linkPostView removeFromSuperview];
      
     [self.commentTextView becomeFirstResponder];
     
