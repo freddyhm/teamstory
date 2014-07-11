@@ -132,7 +132,11 @@
 #pragma mark - UIImagePickerDelegate
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
     UIImage *selectedImg = [info objectForKey:UIImagePickerControllerOriginalImage];
+    
+    self.imageSource = @"Camera";
+    
     [self sendPicToCrop:selectedImg];
 }
 
@@ -142,6 +146,9 @@
 - (void)elcImagePickerController:(ELCImagePickerController *)picker didFinishPickingMediaWithInfo:(NSArray *)info
 {
     UIImage *selectedImg = [[info objectAtIndex:0] objectForKey:UIImagePickerControllerOriginalImage];
+    
+    self.imageSource = @"Album";
+    
     [self sendPicToCrop:selectedImg];
 }
 
