@@ -110,9 +110,6 @@ enum ActionSheetTags {
     self.refreshControl.layer.zPosition = self.tableView.backgroundView.layer.zPosition + 1;
      */
     
-    
-    
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidPublishPhoto:) name:PAPTabBarControllerDidFinishEditingPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userFollowingChanged:) name:PAPUtilityUserFollowingChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidDeletePhoto:) name:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:nil];
@@ -169,11 +166,17 @@ enum ActionSheetTags {
         headerView.delegate = self;
         [self.reusableSectionHeaderViews addObject:headerView];
     }
-    
+
     PFObject *photo = [self.objects objectAtIndex:section];
     [headerView setPhoto:photo];
     headerView.tag = section;
     [headerView.likeButton setTag:section];
+    
+    if (section == 0){
+        [headerView firstCell:@"YES"];
+    } else {
+        [headerView firstCell:@"NO"];
+    }
    
     NSDictionary *attributesForPhoto = [[PAPCache sharedCache] attributesForPhoto:photo];
     
@@ -273,17 +276,23 @@ enum ActionSheetTags {
     if (section == self.objects.count) {
         return 0.0f;
     }
+
     return 44.0f;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 16.0f)];
+    
     return footerView;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     if (section == self.objects.count) {
         return 0.0f;
+    }
+    
+    if (section == 0) {
+        return 50.0f;
     }
     return 16.0f;
 }
@@ -293,7 +302,7 @@ enum ActionSheetTags {
         // Load More Section
         return 0.0f;
     }
-    
+
     NSString *caption = [[self.objects objectAtIndex:indexPath.section] objectForKey:@"caption"];
     
     if ([caption length] > 0) {
@@ -463,6 +472,12 @@ enum ActionSheetTags {
         }
         
         [cell setObject:object];
+        
+        if (indexPath.section == 0 && indexPath.row == 0) {
+            [cell firstCell:@"YES"];
+        } else {
+            [cell firstCell:@"NO"];
+        }
         
         cell.photoButton.tag = indexPath.section;
         cell.imageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
@@ -693,7 +708,7 @@ enum ActionSheetTags {
 #pragma mark - PAPPhotoHeaderViewDelegate
 
 - (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapUserButton:(UIButton *)button user:(PFUser *)user {
-    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+    //[[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithStyle:UITableViewStylePlain];
     [accountViewController setUser:user];
     [self.navigationController pushViewController:accountViewController animated:YES];

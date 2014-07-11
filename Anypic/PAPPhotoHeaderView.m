@@ -9,7 +9,10 @@
 #import "TTTTimeIntervalFormatter.h"
 #import "PAPUtility.h"
 
-@interface PAPPhotoHeaderView () 
+@interface PAPPhotoHeaderView () {
+    float notificationBarOffset;
+}
+
 @property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) PAPProfileImageView *avatarImageView;
 @property (nonatomic, strong) UIButton *userButton;
@@ -49,9 +52,8 @@
         
         // translucent portion
         self.containerView = [[UIView alloc] initWithFrame:CGRectMake( 7.5f, 0.0f, self.bounds.size.width - 7.5f * 2.0f, self.bounds.size.height)];
-        [self addSubview:self.containerView];
-        //[self.containerView setBackgroundColor:[UIColor clearColor]];
         [self.containerView setBackgroundColor:[UIColor whiteColor]];
+        [self addSubview:self.containerView];
         
         
         self.avatarImageView = [[PAPProfileImageView alloc] init];
@@ -146,6 +148,7 @@
 
     return self;
 }
+
 
 #pragma mark - PAPPhotoHeaderView
 
@@ -254,6 +257,15 @@
     if (delegate && [delegate respondsToSelector:@selector(photoHeaderView:didTapCommentOnPhotoButton:photo:)]) {
         [delegate photoHeaderView:self didTapCommentOnPhotoButton:sender photo:self.photo];
     }
+}
+
+- (void)firstCell:(NSString *)firstCell {
+    if ([firstCell isEqualToString:@"YES"]) {
+        notificationBarOffset = 34.0f;
+    } else {
+        notificationBarOffset = 0.0f;
+    }
+    self.containerView.frame = CGRectMake( 7.5f, 0.0f + notificationBarOffset, self.bounds.size.width - 7.5f * 2.0f, self.bounds.size.height);
 }
 
 @end

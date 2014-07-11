@@ -88,6 +88,8 @@
 
     self.blankTimelineView = [[UIView alloc] initWithFrame:self.tableView.bounds];
     
+    // diabling notification bar for now.
+    /*
     self.notificationBar = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 64.0f, 320.0f, 0.0f)];
     [self.notificationBar setBackgroundColor:[UIColor colorWithRed:251.0f/255.0f green:176.0f/255.0f blue:70.0f/255.0f alpha:1.0f]];
     [self.notificationBar addTarget:self action:@selector(notificationBarButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -108,7 +110,7 @@
     self.notificationStar.hidden = YES;
     [self.notificationBar addSubview:self.notificationStar];
     
-    /*
+    
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.frame = CGRectMake( 33.0f, 96.0f, 253.0f, 173.0f);
     [button setBackgroundImage:[UIImage imageNamed:@"HomeTimelineBlank.png"] forState:UIControlStateNormal];
@@ -138,7 +140,9 @@
     }else{
         [self.feedbackImgView setImage:[UIImage imageNamed:@"button-feedback.png"]];
     }
-
+    
+    // disabling notification bar for now.
+    /*
     PFQuery *notificationQuery = [PFQuery queryWithClassName:@"Notification"];
     [notificationQuery orderByDescending:@"createdAt"];
     
@@ -172,6 +176,7 @@
             NSLog(@"%@", error);
         }
     }];
+     */
 }
 
 #pragma mark - PFQueryTableViewController
@@ -230,6 +235,8 @@
         }
     }
     
+    // disabling notification bar for now.
+    /*
     [self scrollViewWillBeginDragging:scrollView];
     self.notificationExitButton.hidden = YES;
     self.notificationStar.hidden = YES;
@@ -287,10 +294,10 @@
         scrollPosition = scrollView.contentOffset.y;
         self.notificationBar.frame = CGRectMake(0.0f, 64.0f, 320.0f, currentScrollPosition);
     }
-    
+    */
 }
 
-
+/*
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     
     if (currentScrollDirectionDown == NO){
@@ -310,7 +317,7 @@
         scrollDirectionDown = YES;
     }
 }
-
+*/
 #pragma mark - ()
 /*
 - (void)settingsButtonAction:(id)sender {
@@ -327,13 +334,13 @@
 }
 
 - (void)promptFeedback:(id)sender{
-    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+    //[[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     [KonotorFeedbackScreen showFeedbackScreen];
 }
 
 -(void)notificationBarButton:(id)sender {
     [[PAPCache sharedCache] notificationCache:notificationContent];
-    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+    //[[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     
     if (notificationPhoto) {
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:notificationPhoto source:@"Notification"];
@@ -344,7 +351,7 @@
 
 -(void)notificationExitButtonAction:(id)sender {
     [[PAPCache sharedCache] notificationCache:notificationContent];
-    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+    //[[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
 }
 
 @end
