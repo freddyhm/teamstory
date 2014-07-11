@@ -155,6 +155,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     self.url_textField = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, 50.0f, 200.0f, 30.0f)];
     [self.url_textField setBackgroundColor:[UIColor colorWithWhite:0.9f alpha:1.0f]];
     self.url_textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.url_textField.autocorrectionType = UITextAutocorrectionTypeNo;
     self.url_textField.leftView = paddingView;
     self.url_textField.leftViewMode = UITextFieldViewModeAlways;
     self.url_textField.delegate = self;
@@ -190,6 +191,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     self.commentTextView = [[UITextView alloc] initWithFrame:CGRectMake(5.0f, 71.0f, 310.0f, 110.0f)];
     self.commentTextView.delegate = self;
+    self.commentTextView.autocorrectionType = UITextAutocorrectionTypeNo;
     self.commentTextView.text = @"Add a link comment";
     self.commentTextView.font = [UIFont systemFontOfSize:17.0f];
     self.commentTextView.contentInset = UIEdgeInsetsMake(-65.0f, 0.0f, 0.0f, 0.0f);
@@ -312,9 +314,16 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 }
 
 - (void)nextButtonAction:(id)sender {
+    
+    /*
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:110] endEditing:YES];
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:110].hidden = YES;
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:111].hidden = YES;
+    */
+    
+    [self.popUpBox removeFromSuperview];
+    [self.dimView removeFromSuperview];
+    
     
     if (self.linkPostView) {
         [self.linkPostView removeFromSuperview];
