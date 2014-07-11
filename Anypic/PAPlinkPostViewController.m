@@ -71,10 +71,10 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     // init nav bar
     [[self navigationController] setNavigationBarHidden:NO animated:YES];
     
+    UIImage *navNext = [UIImage imageNamed:@"button_done.png"];
     UIButton *postButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [postButton setTitle:@"Post" forState:UIControlStateNormal];
-    [postButton setFrame:CGRectMake(0.0f, 0.0f, 40.0f, 20.0f)];
-    [postButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [postButton setImage:navNext forState:UIControlStateNormal];
+    [postButton setFrame:CGRectMake(0.0f, 0.0f, navNext.size.width, navNext.size.height)];
     [postButton addTarget:self action:@selector(postButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:postButton];
     
@@ -155,6 +155,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     self.url_textField = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, 50.0f, 200.0f, 30.0f)];
     [self.url_textField setBackgroundColor:[UIColor colorWithWhite:0.9f alpha:1.0f]];
     self.url_textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.url_textField.autocorrectionType = UITextAutocorrectionTypeNo;
     self.url_textField.leftView = paddingView;
     self.url_textField.leftViewMode = UITextFieldViewModeAlways;
     self.url_textField.delegate = self;
@@ -190,6 +191,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     self.commentTextView = [[UITextView alloc] initWithFrame:CGRectMake(5.0f, 71.0f, 310.0f, 110.0f)];
     self.commentTextView.delegate = self;
+    self.commentTextView.autocorrectionType = UITextAutocorrectionTypeNo;
     self.commentTextView.text = @"Add a link comment";
     self.commentTextView.font = [UIFont systemFontOfSize:17.0f];
     self.commentTextView.contentInset = UIEdgeInsetsMake(-65.0f, 0.0f, 0.0f, 0.0f);
@@ -214,6 +216,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 
 - (void)postButtonAction:(id)sender {
     [self.view endEditing:YES];
+    [SVProgressHUD show];
     [self shouldUploadImage:self.imageView.image block:^(BOOL completed) {
         
         if(completed){
@@ -311,17 +314,19 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 }
 
 - (void)nextButtonAction:(id)sender {
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:110] endEditing:YES];
+    [[[[UIApplication sharedApplication] delegate] window] viewWithTag:110].hidden = YES;
+    [[[[UIApplication sharedApplication] delegate] window] viewWithTag:111].hidden = YES;
+    
     if (self.linkPostView) {
         [self.linkPostView removeFromSuperview];
     }
-    [[[[UIApplication sharedApplication] delegate] window] viewWithTag:110].hidden = YES;
-    [[[[UIApplication sharedApplication] delegate] window] viewWithTag:111].hidden = YES;
-    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:110] endEditing:YES];
+     
     [self.commentTextView becomeFirstResponder];
     
     if ([self.titleLabel.text length] > 0 ) {
-        
         float heightOffset;
+        heightOffset = 0;
         if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
             heightOffset = 160.0f;
             self.commentTextView.frame = CGRectMake(5.0f, 71.0f, 310.0f, 85.0f);
@@ -363,7 +368,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
             self.urlLabel.frame = CGRectMake(10.0f, 55.0f, self.linkPostView.bounds.size.width - 20.0f, 17.5f);
         } else {
             self.linkPostViewLabel_title.frame = CGRectMake(100.0f, 10.0f, self.linkPostView.bounds.size.width - 110.0f, 55.0f);
-            self.urlLabel.frame = CGRectMake(100.0f, 55.0f, self.linkPostView.bounds.size.width - 10.0f, 17.5f);
+            self.urlLabel.frame = CGRectMake(100.0f, 55.0f, self.linkPostView.bounds.size.width - 110.0f, 17.5f);
         }
     }
     
@@ -377,6 +382,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 }
 
 - (void)exitPost{
+    [SVProgressHUD dismiss];
     // hide custom grey bar and pop to home
     [[self navigationController] setNavigationBarHidden:YES animated:YES];
     
@@ -398,6 +404,9 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     [m objectAtIndex:0];
     
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:110] removeFromSuperview];
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:111] removeFromSuperview];
+    
     // push tab bar with home controller now selected
     [self.navigationController popToViewController:tabBarController animated:YES];
 }
@@ -415,33 +424,50 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 }
 
 - (void)embedlySuccess:(NSString *)callUrl withResponse:(id)response endpoint:(NSString *)endpoint operation:(AFHTTPRequestOperation *)operation {
-    [SVProgressHUD dismiss];
-    self.nextButton.enabled = YES;
-    self.nextButton.alpha = 1.0f;
-    
-    self.titleLabel.textColor = [UIColor blackColor];
-    self.titleLabel.text = [response objectForKey:@"title"];
-    self.popUpBoxurlLabel.text = [response objectForKey:@"url"];
-    self.imageView.image = [self getImageFromURL:[response objectForKey:@"thumbnail_url"]];
-    self.urlString = [response objectForKey:@"url"];
-    self.linkPostDescription = [response objectForKey:@"description"];
-    [self.placeholderLabel removeFromSuperview];
-    
     if ([[response objectForKey:@"thumbnail_url"] length] <= 0) {
+        [SVProgressHUD dismiss];
+        
         self.imageView.image = nil;
         self.titleLabel.frame = CGRectMake(10.0f, 85.0f, 260.0f, 55.0f);
         self.popUpBoxurlLabel.frame = CGRectMake(10.0f, 110.0f, 260.0f, 60.0f);
+        
+        self.titleLabel.textColor = [UIColor blackColor];
+        self.titleLabel.text = [response objectForKey:@"title"];
+        self.popUpBoxurlLabel.text = [response objectForKey:@"url"];
+        self.urlString = [response objectForKey:@"url"];
+        self.linkPostDescription = [response objectForKey:@"description"];
+        [self.placeholderLabel removeFromSuperview];
+        
+        self.nextButton.enabled = YES;
+        self.nextButton.alpha = 1.0f;
     } else {
         self.titleLabel.frame = CGRectMake(100.0f, 85.0f, 170.0f, 55.0f);
         self.popUpBoxurlLabel.frame = CGRectMake(100.0f, 110.0f, 170.0f, 60.0f);
+        
+        self.imageView.image = [self getImageFromURL:[response objectForKey:@"thumbnail_url"] block:^(BOOL completed){
+            self.titleLabel.textColor = [UIColor blackColor];
+            self.titleLabel.text = [response objectForKey:@"title"];
+            self.popUpBoxurlLabel.text = [response objectForKey:@"url"];
+            self.urlString = [response objectForKey:@"url"];
+            self.linkPostDescription = [response objectForKey:@"description"];
+            [self.placeholderLabel removeFromSuperview];
+            
+            if(completed) {
+                [SVProgressHUD dismiss];
+                self.nextButton.enabled = YES;
+                self.nextButton.alpha = 1.0f;
+            }
+
+        }];
     }
 }
 
--(UIImage *) getImageFromURL:(NSString *)fileURL {
+-(UIImage *) getImageFromURL:(NSString *)fileURL block:(void (^)(BOOL))completed{
     UIImage * result;
     
     NSData * data = [NSData dataWithContentsOfURL:[NSURL URLWithString:fileURL]];
     result = [UIImage imageWithData:data];
+    completed(YES);
     return result;
 }
 
