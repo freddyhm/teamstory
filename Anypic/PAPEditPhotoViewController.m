@@ -5,6 +5,9 @@
 //
 
 #import "PAPEditPhotoViewController.h"
+
+#import "ALAssetsLibrary+CustomPhotoAlbum.h"
+#import <MobileCoreServices/MobileCoreServices.h>
 #import "PAPPhotoDetailsFooterView.h"
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
@@ -14,12 +17,14 @@
 #import "PAPLoadMoreCell.h"
 #import "PAPConstants.h"
 
+
 @interface PAPEditPhotoViewController () {
     NSInteger text_location;
     NSRange atmentionRange;
     NSInteger text_offset;
 }
 @property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) ALAssetsLibrary *assetsLibrary;
 @property (nonatomic, strong) UIImage *image;
 @property (nonatomic, strong) UITextView *commentTextView;
 @property (nonatomic, strong) PFFile *photoFile;
@@ -617,6 +622,30 @@
     self.photoPostBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
         [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
     }];
+    
+    // The completion block to be executed after image taking action process done
+    void (^completion)(NSURL *, NSError *) = ^(NSURL *assetURL, NSError *error) {
+        
+        [SVProgressHUD dismiss];
+        [self exitPhoto];
+    };
+    
+    void (^failure)(NSError *) = ^(NSError *error) {
+        if (error == nil) return;
+    
+        [SVProgressHUD dismiss];
+        
+        
+        NSLog(@"Photo failed to post: %@", error);
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo :( Check your internet connection or contact us at info@teamstoryapp.com" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+        [alert show];
+        
+        
+        [self exitPhoto];
+    };
+    
+    // show hud while saving pic in background
+    [SVProgressHUD show];
 
     // save
     [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -625,15 +654,27 @@
             
             [[PAPCache sharedCache] setAttributesForPhoto:photo likers:[NSArray array] commenters:[NSArray array] likedByCurrentUser:NO];
             [[NSNotificationCenter defaultCenter] postNotificationName:PAPTabBarControllerDidFinishEditingPhotoNotification object:photo];
+            
+            // Save image to custom photo album
+            // The lifetimes of objects you get back from a library instance are tied to
+            //   the lifetime of the library instance.
+            
+            self.assetsLibrary = [[ALAssetsLibrary alloc] init];
+            
+            [self.assetsLibrary saveImage:self.image
+                                  toAlbum:@"Teamstory"
+                               completion:completion
+                                  failure:failure];
+            
         } else {
             NSLog(@"Photo failed to save: %@", error);
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo :( Check your internet connection or contact us at info@teamstoryapp.com" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
             [alert show];
         }
         [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
     }];
     
-    [self exitPhoto];
+
 }
 
 

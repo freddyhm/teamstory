@@ -403,18 +403,18 @@ static NSString *const freddy_account = @"rblDQcdZcY";
             
                 [self.headerView addSubview: self.locationSiteSeparator];
                 
+                websiteLink = [UIButton buttonWithType:UIButtonTypeCustom];
+                [websiteLink setFrame:CGRectMake(self.locationSiteSeparator.frame.origin.x + self.locationSiteSeparator.frame.size.width + 10.0f, self.locationLabel.frame.origin.y, website_expectedSize.width, website_expectedSize.height)];
+                [websiteLink setTitleColor:[UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
+                websiteLink.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+                websiteLink.titleLabel.font = [UIFont systemFontOfSize:13.0f];
+                [websiteLink addTarget:self action:@selector(websiteLinkAction:) forControlEvents:UIControlEventTouchUpInside];
+                
                 if ([websiteInfo length] > 0) {
-                    websiteLink = [UIButton buttonWithType:UIButtonTypeCustom];
-                    [websiteLink setFrame:CGRectMake(self.locationSiteSeparator.frame.origin.x + self.locationSiteSeparator.frame.size.width + 10.0f, self.locationLabel.frame.origin.y, website_expectedSize.width, website_expectedSize.height)];
                     [websiteLink setTitle:websiteInfo forState:UIControlStateNormal];
-                    [websiteLink setTitleColor:[UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
-                    websiteLink.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-                    websiteLink.titleLabel.font = [UIFont systemFontOfSize:13.0f];
-                    [websiteLink addTarget:self action:@selector(websiteLinkAction:) forControlEvents:UIControlEventTouchUpInside];
-                    [self.headerView addSubview:websiteLink];
-                }else{
-                    website_expectedSize = CGSizeMake(132.01f, 15.50f);
                 }
+                
+                [self.headerView addSubview:websiteLink];
                 
                 linkedIn_button = [[UIButton alloc] init];
                 [linkedIn_button setFrame:CGRectMake(10.0f, 97.0f + expectedSize.height + website_expectedSize.height, 22.0f, 22.0f)];
@@ -457,6 +457,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 // filter out zombie pointers (manually deleted users)
                 PFQuery *noZombieQuery = [PFUser query];
                 [noZombieQuery whereKeyExists:@"objectId"];
+                [noZombieQuery setLimit:1000];
                 
                 PFQuery *queryFollowerCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
                 [queryFollowerCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
@@ -563,7 +564,6 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         self.navigationItem.title  = [self.user objectForKey:@"displayName"];
         self.locationLabel.text = [self.user objectForKey:@"location"];
         self.descriptionLabel.text = [self.user objectForKey:@"description"];
-        [self.websiteLink setTitle:[self.user objectForKey:@"website"] forState:UIControlStateNormal];
         self.websiteInfo = [self.user objectForKey:@"website"];
         self.industryLabel.text = [self.user objectForKey:@"industry"];
         self.angellist_url = [self.user objectForKey:@"angellist_url"];
@@ -650,10 +650,10 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         [self.locationLabel setFrame:CGRectMake(self.locationLabel.frame.origin.x, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, self.locationLabel.frame.size.height)];
         self.locationSiteSeparator.frame = CGRectMake(locationLabelWidth + self.locationLabel.frame.origin.x + 10.0f, 91.5f + expectedSize.height, 10.0f, 10.0f);
         [self.locationIconImageView setFrame:CGRectMake(6.0f, 88.0f + expectedSize.height, 15.0f, 15.0f)];
-        
-        
-        
+    
         [websiteLink setFrame:CGRectMake(self.locationSiteSeparator.frame.origin.x + self.locationSiteSeparator.frame.size.width, 89.0f + expectedSize.height, website_expectedSize.width, website_expectedSize.height)];
+        [websiteLink setTitle:self.websiteInfo forState:UIControlStateNormal];
+        
         [self.industryLabel setFrame:CGRectMake(320.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + website_expectedSize.height, industry_expectedSize.width + 10.0f, 22.0f)];
         [whiteBackground setFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, self.headerView.bounds.size.height - 10.0f)];
         
@@ -842,6 +842,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     // filter out zombie pointers (manually deleted users)
     PFQuery *noZombieQuery = [PFUser query];
     [noZombieQuery whereKeyExists:@"objectId"];
+    [noZombieQuery setLimit:1000];
     
     // return completed when both queries have finished
     self.userStatUpdateCount = 0;

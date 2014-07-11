@@ -39,15 +39,6 @@
     return self;
 }
 
--(void)viewWillDisappear:(BOOL)animated{
-    
-    if(self.didCancel){
-        // if view disappearing because of cancel button
-        [self.navigationController popViewControllerAnimated:NO];
-    }
-}
-
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -66,7 +57,7 @@
     
     self.navigationItem.title = @"Scale & Crop";
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(cancelEdit:)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_cancel.png"] style:UIBarButtonItemStylePlain target:self action:@selector(cancelEdit:)];
     
     self.navigationItem.RightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_done.png"] style:UIBarButtonItemStylePlain target:self action:@selector(cropPressed:)];
     
@@ -169,13 +160,9 @@
 }
 
 - (IBAction)cancelEdit:(UIBarButtonItem *)sender {
-    
-    // get tab bar from root nav stack and return to camera
-    PAPTabBarController *tabBarController = [[self.navigationController viewControllers] objectAtIndex:1];
-    [tabBarController shouldPresentController:self.imageSource];
-    
-    // return to camera flag
-    self.didCancel = YES;
+    // hide custom grey bar and pop to home
+    [[self navigationController] setNavigationBarHidden:YES animated:YES];
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 - (void)updateOverlay {

@@ -32,6 +32,10 @@ NSString *const PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification   
 NSString *const PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotificationUserInfoLikedKey = @"liked";
 NSString *const kPAPEditPhotoViewControllerUserInfoCommentKey = @"comment";
 
+// Name for the custom photo album
+#pragma mark - Custom Album Name
+NSString *const CustomAlbumName = @"Teamstory";
+
 #pragma mark - Installation Class
 
 // Field keys
