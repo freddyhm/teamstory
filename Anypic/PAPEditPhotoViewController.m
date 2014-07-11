@@ -635,8 +635,10 @@
     
         [SVProgressHUD dismiss];
         NSLog(@"ERROR, failed to add the asset to the custom photo album: %@", [error description]);
+        [self exitPhoto];
     };
     
+    // show hud while saving pic in background
     [SVProgressHUD show];
 
     // save

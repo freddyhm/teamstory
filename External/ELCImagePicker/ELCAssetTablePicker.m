@@ -9,6 +9,7 @@
 #import "ELCAssetCell.h"
 #import "ELCAsset.h"
 #import "PAPTabBarController.h"
+#import "SVProgressHUD.h"
 
 
 @interface ELCAssetTablePicker ()
@@ -177,6 +178,10 @@
     
     // check if there's a pic selected, show pop up if not
     if(isSelected){
+        
+        // analytics
+        [PAPUtility captureEventGA:@"Camera & Album" action:@"Picked Album" label:@"Photo"];
+        
         [self.parent selectedAssets:selectedAssetsImages];
     }else{
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Uh Oh!" message:@"No Picture Selected :(" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
@@ -224,6 +229,8 @@
                 [(NSObject *)self.parent performSelector:@selector(selectedAssets:) withObject:singleAssetArray afterDelay:0];
             }
         }else{
+            
+            [SVProgressHUD show];
             
             // start cam when first cell selected, deselect
             asset.selected = NO;

@@ -9,6 +9,7 @@
 #import "MBProgressHUD.h"
 #import "CropResizeViewController.h"
 #import "ThoughtPostViewController.h"
+#import "SVProgressHUD.h"
 
 
 @interface PAPTabBarController ()
@@ -160,6 +161,10 @@
 
 - (void)cameraButtonAction:(id)sender{
     
+    
+    // analytics
+    [PAPUtility captureEventGA:@"Photo" action:@"Pressed Photo" label:nil];
+    
     self.postMenu.hidden = YES;
     
     // init asset library
@@ -237,6 +242,9 @@
 
 - (UIImagePickerController *)shouldStartCameraController {
     
+    // analytics
+    [PAPUtility captureEventGA:@"Camera & Album" action:@"Picked Camera" label:@"Photo"];
+    
     /* starts camera, sets tabbarcontroller as delegate, and returns image picker */
     
     self.camera = [[UIImagePickerController alloc] init];
@@ -255,12 +263,14 @@
         }
         
     } else {
-        return NO;
+        return nil;
     }
     
     self.camera.allowsEditing = NO;
     self.camera.showsCameraControls = YES;
     self.camera.delegate = self;
+    
+    [SVProgressHUD dismiss];
 
     return self.camera;
 }
