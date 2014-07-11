@@ -17,6 +17,7 @@
 @property (nonatomic, assign) int columns;
 @property (nonatomic, strong) UIBarButtonItem *doneBtn;
 @property (nonatomic, strong) NSString *albumName;
+@property (nonatomic, strong) ELCAsset *prevAsset;
 
 @end
 
@@ -198,6 +199,11 @@
 
 - (BOOL)shouldSelectAsset:(ELCAsset *)asset
 {
+    // remove selected frame from previous asset
+    if(self.prevAsset != nil){
+        self.prevAsset.selected = NO;
+    }
+    
     NSUInteger selectionCount = 0;
     for (ELCAsset *elcAsset in self.elcAssets) {
         if (elcAsset.selected) selectionCount++;
@@ -208,6 +214,11 @@
     if ([self.parent respondsToSelector:@selector(shouldSelectAsset:previousCount:)]) {
         shouldSelect = [self.parent shouldSelectAsset:asset previousCount:selectionCount];
     }
+    
+    // update prev asset
+    self.prevAsset = asset;
+    
+    [self.tableView reloadData];
     
     return shouldSelect;
 }
