@@ -58,6 +58,8 @@ extern NSString *const PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotifica
 extern NSString *const PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotificationUserInfoLikedKey;
 extern NSString *const kPAPEditPhotoViewControllerUserInfoCommentKey;
 
+#pragma mark - Custom Album Name
+extern NSString *const CustomAlbumName;
 
 #pragma mark - Installation Class
 
