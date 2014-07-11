@@ -155,6 +155,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     self.url_textField = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, 50.0f, 200.0f, 30.0f)];
     [self.url_textField setBackgroundColor:[UIColor colorWithWhite:0.9f alpha:1.0f]];
     self.url_textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.url_textField.autocorrectionType = UITextAutocorrectionTypeNo;
     self.url_textField.leftView = paddingView;
     self.url_textField.leftViewMode = UITextFieldViewModeAlways;
     self.url_textField.delegate = self;
