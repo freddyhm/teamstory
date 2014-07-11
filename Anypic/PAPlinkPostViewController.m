@@ -314,9 +314,16 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 }
 
 - (void)nextButtonAction:(id)sender {
+    
+    /*
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:110] endEditing:YES];
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:110].hidden = YES;
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:111].hidden = YES;
+    */
+    
+    [self.popUpBox removeFromSuperview];
+    [self.dimView removeFromSuperview];
+    
     
     if (self.linkPostView) {
         [self.linkPostView removeFromSuperview];
