@@ -243,7 +243,10 @@
     
     // gets camera controller from tabbarcontroller
     UIImagePickerController *camera = [self.parent performSelector:@selector(startCamera)];
-    [self.navigationController presentViewController:camera animated:YES completion:nil];
+    
+    if(camera != nil){
+        [self.navigationController presentViewController:camera animated:YES completion:nil];
+    }
 }
 
 #pragma mark UITableViewDataSource Delegate Methods

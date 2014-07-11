@@ -634,7 +634,13 @@
         if (error == nil) return;
     
         [SVProgressHUD dismiss];
-        NSLog(@"ERROR, failed to add the asset to the custom photo album: %@", [error description]);
+        
+        
+        NSLog(@"Photo failed to post: %@", error);
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo :( Check your internet connection or contact us at info@teamstoryapp.com" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+        [alert show];
+        
+        
         [self exitPhoto];
     };
     
@@ -662,7 +668,7 @@
             
         } else {
             NSLog(@"Photo failed to save: %@", error);
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo :( Check your internet connection or contact us at info@teamstoryapp.com" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
             [alert show];
         }
         [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
