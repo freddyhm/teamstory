@@ -453,7 +453,7 @@ enum ActionSheetTags {
         UITableViewCell *cell = [self tableView:tableView cellForNextPageAtIndexPath:indexPath];
         return cell;
     } else {
-        NSString *CellIdentifier = @"Cell";
+            NSString *CellIdentifier = @"Cell";
         
         if ([[object objectForKey:@"type"] isEqualToString:@"link"]) {
              CellIdentifier = @"LinkCell";

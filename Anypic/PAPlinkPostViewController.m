@@ -223,6 +223,11 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 
 - (void)okayButtonAction:(id)sender {
     [SVProgressHUD show];
+    
+    if ([self.url_textField.text length] > 0 && ([self.url_textField.text rangeOfString:@"http"].location == NSNotFound)) {
+        self.url_textField.text = [NSString stringWithFormat:@"%@%@", @"http://", self.url_textField.text];
+    }
+    
     Embedly *embedlyInit = [[Embedly alloc] initWithKey:EMBEDLY_APP_ID delegate:self];
     [embedlyInit callEmbedlyApi:@"/1/oembed" withUrl:self.url_textField.text params:nil];
 }
@@ -330,7 +335,6 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:110] endEditing:YES];
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:110].hidden = YES;
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:111].hidden = YES;
-     
     
     [self.linkPostView removeFromSuperview];
      
@@ -356,6 +360,8 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
         [self.linkPostView setUserInteractionEnabled:YES];
         [self.linkPostView.layer setBorderWidth:0.5f];
         [self.view addSubview:self.linkPostView];
+        
+        NSLog(@"%f", self.linkPostView.bounds.origin.y);
         
         UIImageView *linkPostImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0f, 10.0f, 80.0f, 80.0f)];
         linkPostImageView.image = self.imageView.image;
