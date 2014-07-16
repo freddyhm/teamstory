@@ -259,13 +259,4 @@
     }
 }
 
-- (void)firstCell:(NSString *)firstCell {
-    if ([firstCell isEqualToString:@"YES"]) {
-        notificationBarOffset = 34.0f;
-    } else {
-        notificationBarOffset = 0.0f;
-    }
-    self.containerView.frame = CGRectMake( 7.5f, 0.0f + notificationBarOffset, self.bounds.size.width - 7.5f * 2.0f, self.bounds.size.height);
-}
-
 @end
