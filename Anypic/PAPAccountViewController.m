@@ -372,27 +372,30 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 [self.locationIconImageView setFrame:CGRectMake(6.0f, 88.0f + expectedSize.height, 15.0f, 15.0f)];
                 [self.headerView addSubview:self.locationIconImageView];
                 
-                if ([self.locationInfo length] > 0) {
-                    
-                    UIFont *locationFont = [UIFont fontWithName:@"Helvetica" size:13.0f];
-                    UIColor *locationColor = [UIColor colorWithRed:158.0f/255.0f green:158.0f/255.0f blue:158.0f/255.0f alpha:1];
-                    
-                    self.locationLabel = [[UILabel alloc]init];
-                    [self.locationLabel setBackgroundColor:[UIColor clearColor]];
-                    [self.locationLabel setTextColor:locationColor];
-                    [self.locationLabel setFont:locationFont];
-                    
-                    CGFloat locationLabelWidth = [self.locationLabel.text sizeWithAttributes:
-                                   @{NSFontAttributeName:
-                                         self.locationLabel.font}].width;
-                    
-                    [self.locationLabel setFrame:CGRectMake(self.locationIconImageView.frame.origin.x + 20.0f, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, 16.0f)];
-                    
-                    [self.headerView addSubview:self.locationLabel];
+                // Location label
+                UIFont *locationFont = [UIFont fontWithName:@"Helvetica" size:13.0f];
+                UIColor *locationColor = [UIColor colorWithRed:158.0f/255.0f green:158.0f/255.0f blue:158.0f/255.0f alpha:1];
                 
-                } else {
-                    NSLog(@"locationInfo Not found");
+                self.locationInfo = nil;
+                
+                // Check length of location
+                if([self.locationInfo length] == 0){
+                    self.locationInfo = @"";
                 }
+                
+                self.locationLabel = [[UILabel alloc]init];
+                [self.locationLabel setBackgroundColor:[UIColor clearColor]];
+                [self.locationLabel setTextColor:locationColor];
+                [self.locationLabel setFont:locationFont];
+                [self.locationLabel setText:self.locationInfo];
+                
+                CGFloat locationLabelWidth = [self.locationLabel.text sizeWithAttributes:
+                               @{NSFontAttributeName:
+                                     self.locationLabel.font}].width;
+                
+                [self.locationLabel setFrame:CGRectMake(self.locationIconImageView.frame.origin.x + 20.0f, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, 16.0f)];
+                
+                [self.headerView addSubview:self.locationLabel];
                 
                 // the bar separating location and website link
                 self.locationSiteSeparator = [[UILabel alloc] init];
