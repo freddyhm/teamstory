@@ -86,6 +86,8 @@
 		462FCB8A188C863E005059F3 /* button_setting_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 462FCB88188C863E005059F3 /* button_setting_selected@2x.png */; };
 		462FCB8D188C8892005059F3 /* button_done_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 462FCB8B188C8892005059F3 /* button_done_selected.png */; };
 		462FCB8E188C8892005059F3 /* button_done_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 462FCB8C188C8892005059F3 /* button_done_selected@2x.png */; };
+		4639EDF51965CE3D00930873 /* link_thumbnail.png in Resources */ = {isa = PBXBuildFile; fileRef = 4639EDF31965CE3D00930873 /* link_thumbnail.png */; };
+		4639EDF61965CE3D00930873 /* link_thumbnail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4639EDF41965CE3D00930873 /* link_thumbnail@2x.png */; };
 		465A4ED918A8222A00E43DC6 /* iconlocation.png in Resources */ = {isa = PBXBuildFile; fileRef = 465A4ED718A8222A00E43DC6 /* iconlocation.png */; };
 		465A4EDA18A8222A00E43DC6 /* iconlocation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465A4ED818A8222A00E43DC6 /* iconlocation@2x.png */; };
 		465A4EDD18A8382900E43DC6 /* comingsoon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465A4EDB18A8382900E43DC6 /* comingsoon@2x.png */; };
@@ -162,6 +164,23 @@
 		4691B52418C56AAF00B7DF6A /* tnz-popup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B52218C56AAF00B7DF6A /* tnz-popup@2x.png */; };
 		4691B52518C56AAF00B7DF6A /* tnz-popup.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B52318C56AAF00B7DF6A /* tnz-popup.png */; };
 		4691B52E18CCE81600B7DF6A /* PAPLoginSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4691B52D18CCE81600B7DF6A /* PAPLoginSelectionViewController.m */; };
+		4699F0B119605915002AAACB /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4699F0B019605915002AAACB /* StoreKit.framework */; };
+		46A0C25D194E4A2D00811CBC /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 092354B213A1D7EB00DA740F /* CFNetwork.framework */; };
+		46A1DCAD195BB6F100729FD0 /* PAPlinkPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46A1DCAC195BB6F100729FD0 /* PAPlinkPostViewController.m */; };
+		46A2FE441963562100D8ED12 /* Moment Popup.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE3E1963562100D8ED12 /* Moment Popup.png */; };
+		46A2FE451963562100D8ED12 /* Moment Popup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE3F1963562100D8ED12 /* Moment Popup@2x.png */; };
+		46A2FE461963562100D8ED12 /* Thought Popup.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE401963562100D8ED12 /* Thought Popup.png */; };
+		46A2FE471963562100D8ED12 /* Thought Popup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE411963562100D8ED12 /* Thought Popup@2x.png */; };
+		46A2FE481963562100D8ED12 /* Link Popup.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE421963562100D8ED12 /* Link Popup.png */; };
+		46A2FE491963562100D8ED12 /* Link Popup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE431963562100D8ED12 /* Link Popup@2x.png */; };
+		46A2FE501963572E00D8ED12 /* Moment Popup_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE4A1963572E00D8ED12 /* Moment Popup_selected.png */; };
+		46A2FE511963572E00D8ED12 /* Moment Popup_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE4B1963572E00D8ED12 /* Moment Popup_selected@2x.png */; };
+		46A2FE521963572E00D8ED12 /* Thought Popup_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE4C1963572E00D8ED12 /* Thought Popup_selected.png */; };
+		46A2FE531963572E00D8ED12 /* Thought Popup_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE4D1963572E00D8ED12 /* Thought Popup_selected@2x.png */; };
+		46A2FE541963572E00D8ED12 /* Link Popup_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE4E1963572E00D8ED12 /* Link Popup_selected.png */; };
+		46A2FE551963572E00D8ED12 /* Link Popup_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE4F1963572E00D8ED12 /* Link Popup_selected@2x.png */; };
+		46A2FE5819635A7000D8ED12 /* btn_close_timeline@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE5619635A7000D8ED12 /* btn_close_timeline@2x.png */; };
+		46A2FE5919635A7000D8ED12 /* btn_close_timeline.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE5719635A7000D8ED12 /* btn_close_timeline.png */; };
 		46ABD72F18AADFFB008F5AAB /* default-pic.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD72D18AADFFB008F5AAB /* default-pic.png */; };
 		46ABD73018AADFFB008F5AAB /* default-pic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */; };
 		46ABD73318B12E01008F5AAB /* PAPperksoverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 46ABD73218B12E01008F5AAB /* PAPperksoverlay.m */; };
@@ -448,7 +467,6 @@
 		D5D571161947F8E900354340 /* btn_following_user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571121947F8E900354340 /* btn_following_user@2x.png */; };
 		D5D571171947F8E900354340 /* btn_no_follow_user.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571131947F8E900354340 /* btn_no_follow_user.png */; };
 		D5D571181947F8E900354340 /* btn_no_follow_user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571141947F8E900354340 /* btn_no_follow_user@2x.png */; };
-		D5E37D66196F9DBF00D27049 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 092354B213A1D7EB00DA740F /* CFNetwork.framework */; };
 		D5F45AFF196CE6A9001C2875 /* btn_camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5F45AFD196CE6A9001C2875 /* btn_camera@2x.png */; };
 		D5F45B00196CE6A9001C2875 /* btn_camera.png in Resources */ = {isa = PBXBuildFile; fileRef = D5F45AFE196CE6A9001C2875 /* btn_camera.png */; };
 		D5F45B03196CE6DE001C2875 /* select_overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = D5F45B01196CE6DE001C2875 /* select_overlay.png */; };
@@ -462,6 +480,7 @@
 		D5FC09C818A9C272000D85F1 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FC09C718A9C272000D85F1 /* CoreData.framework */; };
 		D5FC09CA18A9C2C2000D85F1 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FC09C918A9C2C2000D85F1 /* CoreImage.framework */; };
 		D5FC09CC18A9C2FF000D85F1 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FC09CB18A9C2FF000D85F1 /* OpenGLES.framework */; };
+		FEBE53499B0C4F878DB97BDF /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A01DAF9EA97E406EB3C591D1 /* libPods.a */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -477,6 +496,7 @@
 		09ABC07513A1D52D009C3FCF /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		09BEF34B13D51C3F001BBCDB /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		2FCDD6AF14A573F500295AAC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		45FF90152F5E49D089B6BDAE /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		4602FCE618BA9F390097DBEC /* update.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = update.png; sourceTree = "<group>"; };
 		4602FCE718BA9F390097DBEC /* update@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "update@2x.png"; sourceTree = "<group>"; };
 		4602FCEA18BAA7760097DBEC /* teamstorycrew@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "teamstorycrew@2x.png"; sourceTree = "<group>"; };
@@ -549,6 +569,8 @@
 		462FCB88188C863E005059F3 /* button_setting_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_setting_selected@2x.png"; sourceTree = "<group>"; };
 		462FCB8B188C8892005059F3 /* button_done_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_done_selected.png; sourceTree = "<group>"; };
 		462FCB8C188C8892005059F3 /* button_done_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_done_selected@2x.png"; sourceTree = "<group>"; };
+		4639EDF31965CE3D00930873 /* link_thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = link_thumbnail.png; sourceTree = "<group>"; };
+		4639EDF41965CE3D00930873 /* link_thumbnail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "link_thumbnail@2x.png"; sourceTree = "<group>"; };
 		465A4ED718A8222A00E43DC6 /* iconlocation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = iconlocation.png; path = Resources/Assets/iconlocation.png; sourceTree = SOURCE_ROOT; };
 		465A4ED818A8222A00E43DC6 /* iconlocation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "iconlocation@2x.png"; path = "Resources/Assets/iconlocation@2x.png"; sourceTree = SOURCE_ROOT; };
 		465A4EDB18A8382900E43DC6 /* comingsoon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "comingsoon@2x.png"; sourceTree = "<group>"; };
@@ -629,6 +651,23 @@
 		4691B52318C56AAF00B7DF6A /* tnz-popup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tnz-popup.png"; sourceTree = "<group>"; };
 		4691B52C18CCE81600B7DF6A /* PAPLoginSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPLoginSelectionViewController.h; path = Anypic/PAPLoginSelectionViewController.h; sourceTree = SOURCE_ROOT; };
 		4691B52D18CCE81600B7DF6A /* PAPLoginSelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPLoginSelectionViewController.m; path = Anypic/PAPLoginSelectionViewController.m; sourceTree = SOURCE_ROOT; };
+		4699F0B019605915002AAACB /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		46A1DCAB195BB6F100729FD0 /* PAPlinkPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPlinkPostViewController.h; path = Anypic/PAPlinkPostViewController.h; sourceTree = SOURCE_ROOT; };
+		46A1DCAC195BB6F100729FD0 /* PAPlinkPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPlinkPostViewController.m; path = Anypic/PAPlinkPostViewController.m; sourceTree = SOURCE_ROOT; };
+		46A2FE3E1963562100D8ED12 /* Moment Popup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Moment Popup.png"; sourceTree = "<group>"; };
+		46A2FE3F1963562100D8ED12 /* Moment Popup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Moment Popup@2x.png"; sourceTree = "<group>"; };
+		46A2FE401963562100D8ED12 /* Thought Popup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Thought Popup.png"; sourceTree = "<group>"; };
+		46A2FE411963562100D8ED12 /* Thought Popup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Thought Popup@2x.png"; sourceTree = "<group>"; };
+		46A2FE421963562100D8ED12 /* Link Popup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Link Popup.png"; sourceTree = "<group>"; };
+		46A2FE431963562100D8ED12 /* Link Popup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Link Popup@2x.png"; sourceTree = "<group>"; };
+		46A2FE4A1963572E00D8ED12 /* Moment Popup_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Moment Popup_selected.png"; sourceTree = "<group>"; };
+		46A2FE4B1963572E00D8ED12 /* Moment Popup_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Moment Popup_selected@2x.png"; sourceTree = "<group>"; };
+		46A2FE4C1963572E00D8ED12 /* Thought Popup_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Thought Popup_selected.png"; sourceTree = "<group>"; };
+		46A2FE4D1963572E00D8ED12 /* Thought Popup_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Thought Popup_selected@2x.png"; sourceTree = "<group>"; };
+		46A2FE4E1963572E00D8ED12 /* Link Popup_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Link Popup_selected.png"; sourceTree = "<group>"; };
+		46A2FE4F1963572E00D8ED12 /* Link Popup_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Link Popup_selected@2x.png"; sourceTree = "<group>"; };
+		46A2FE5619635A7000D8ED12 /* btn_close_timeline@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_close_timeline@2x.png"; sourceTree = "<group>"; };
+		46A2FE5719635A7000D8ED12 /* btn_close_timeline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_close_timeline.png; sourceTree = "<group>"; };
 		46ABD72D18AADFFB008F5AAB /* default-pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-pic.png"; sourceTree = "<group>"; };
 		46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-pic@2x.png"; sourceTree = "<group>"; };
 		46ABD73118B12E01008F5AAB /* PAPperksoverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPperksoverlay.h; path = Anypic/PAPperksoverlay.h; sourceTree = SOURCE_ROOT; };
@@ -692,6 +731,7 @@
 		74B108A6156D7509005B421C /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		74B108A8156D7510005B421C /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		74B108AA156D7CC2005B421C /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		A01DAF9EA97E406EB3C591D1 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C402FEC51602AE3100273778 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		C4217BBF1552230500CD3A47 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C4217BC11552234E00CD3A47 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
@@ -1026,7 +1066,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D5E37D66196F9DBF00D27049 /* CFNetwork.framework in Frameworks */,
+				4699F0B119605915002AAACB /* StoreKit.framework in Frameworks */,
+				46A0C25D194E4A2D00811CBC /* CFNetwork.framework in Frameworks */,
 				D542D8C9196A721B00A0384F /* AssetsLibrary.framework in Frameworks */,
 				09ABC07413A1D52D009C3FCF /* Foundation.framework in Frameworks */,
 				D51C98A218E28D16001230DA /* libGoogleAnalyticsServices.a in Frameworks */,
@@ -1055,6 +1096,7 @@
 				D5FB8E6C18F79E2D0034CAE6 /* Crashlytics.framework in Frameworks */,
 				09ABC07213A1D52D009C3FCF /* UIKit.framework in Frameworks */,
 				D52C1E4B18D9515D00625887 /* libKonotorCombined.a in Frameworks */,
+				FEBE53499B0C4F878DB97BDF /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1068,6 +1110,7 @@
 				C4A0B4FF156C5B9F00E48554 /* External */,
 				09ABC07013A1D52D009C3FCF /* Frameworks */,
 				09ABC06E13A1D52D009C3FCF /* Products */,
+				45FF90152F5E49D089B6BDAE /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1082,6 +1125,7 @@
 		09ABC07013A1D52D009C3FCF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4699F0B019605915002AAACB /* StoreKit.framework */,
 				D542D8C8196A721B00A0384F /* AssetsLibrary.framework */,
 				D5A5F51F18D2C3CD000BB243 /* Parse.framework */,
 				D5A5F51D18D2C3C1000BB243 /* FacebookSDK.framework */,
@@ -1111,6 +1155,7 @@
 				09ABC07113A1D52D009C3FCF /* UIKit.framework */,
 				09ABC07313A1D52D009C3FCF /* Foundation.framework */,
 				09ABC07513A1D52D009C3FCF /* CoreGraphics.framework */,
+				A01DAF9EA97E406EB3C591D1 /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1196,6 +1241,22 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				4639EDF31965CE3D00930873 /* link_thumbnail.png */,
+				4639EDF41965CE3D00930873 /* link_thumbnail@2x.png */,
+				46A2FE5619635A7000D8ED12 /* btn_close_timeline@2x.png */,
+				46A2FE5719635A7000D8ED12 /* btn_close_timeline.png */,
+				46A2FE4A1963572E00D8ED12 /* Moment Popup_selected.png */,
+				46A2FE4B1963572E00D8ED12 /* Moment Popup_selected@2x.png */,
+				46A2FE4C1963572E00D8ED12 /* Thought Popup_selected.png */,
+				46A2FE4D1963572E00D8ED12 /* Thought Popup_selected@2x.png */,
+				46A2FE4E1963572E00D8ED12 /* Link Popup_selected.png */,
+				46A2FE4F1963572E00D8ED12 /* Link Popup_selected@2x.png */,
+				46A2FE3E1963562100D8ED12 /* Moment Popup.png */,
+				46A2FE3F1963562100D8ED12 /* Moment Popup@2x.png */,
+				46A2FE401963562100D8ED12 /* Thought Popup.png */,
+				46A2FE411963562100D8ED12 /* Thought Popup@2x.png */,
+				46A2FE421963562100D8ED12 /* Link Popup.png */,
+				46A2FE431963562100D8ED12 /* Link Popup@2x.png */,
 				D5F45B01196CE6DE001C2875 /* select_overlay.png */,
 				D5F45B02196CE6DE001C2875 /* select_overlay@2x.png */,
 				D5F45AFD196CE6A9001C2875 /* btn_camera@2x.png */,
@@ -1677,6 +1738,8 @@
 				D5FC095718A9B552000D85F1 /* FilterCell.m */,
 				D5903C72192EBBF900DC9896 /* ThoughtPostViewController.h */,
 				D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */,
+				46A1DCAB195BB6F100729FD0 /* PAPlinkPostViewController.h */,
+				46A1DCAC195BB6F100729FD0 /* PAPlinkPostViewController.m */,
 			);
 			name = "Photo & Post";
 			sourceTree = "<group>";
@@ -1997,10 +2060,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 09ABC08E13A1D52E009C3FCF /* Build configuration list for PBXNativeTarget "Teamstory" */;
 			buildPhases = (
+				F50D72C740BC4A25A4D688E6 /* Check Pods Manifest.lock */,
 				09ABC06913A1D52D009C3FCF /* Sources */,
 				09ABC06A13A1D52D009C3FCF /* Frameworks */,
 				09ABC06B13A1D52D009C3FCF /* Resources */,
 				D51925D518F6390300221D82 /* ShellScript */,
+				A76D6C04A28A4AA9893740E1 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2059,6 +2124,7 @@
 				C4F101F4156C2D800061BC3E /* ActivityFeedBlank.png in Resources */,
 				C4F101F5156C2D800061BC3E /* ActivityFeedBlank@2x.png in Resources */,
 				462FCB7B188C806C005059F3 /* button_done.png in Resources */,
+				46A2FE461963562100D8ED12 /* Thought Popup.png in Resources */,
 				C4F102E2156C58440061BC3E /* Entitlements.plist in Resources */,
 				4691B4F418BEF61C00B7DF6A /* follow.png in Resources */,
 				46839EA318E1E8C100BD60DB /* tut2@2x.png in Resources */,
@@ -2068,6 +2134,7 @@
 				D576841B19341DDA008BAA2C /* arrow_left@2x.png in Resources */,
 				C4F102E7156C58570061BC3E /* InfoPlist.strings in Resources */,
 				465B19AF18B81FE500EDBCFC /* browser-button-forward-normal.png in Resources */,
+				46A2FE5819635A7000D8ED12 /* btn_close_timeline@2x.png in Resources */,
 				D5144B1C195951D100650061 /* button-feedback-notify.png in Resources */,
 				465DE34E1895A56200C37EF8 /* bg_dropdown.png in Resources */,
 				46B31EF0184E35150028D11C /* companyName.png in Resources */,
@@ -2079,6 +2146,7 @@
 				4602FD1D18BD553B0097DBEC /* clarity-logo@2x.png in Resources */,
 				D52C1E3718D9515D00625887 /* konotor_progress_black.png in Resources */,
 				D57684031933EBA3008BAA2C /* nav_profile@2x.png in Resources */,
+				46A2FE521963572E00D8ED12 /* Thought Popup_selected.png in Resources */,
 				4602FD1818BD553B0097DBEC /* positionly-logo.png in Resources */,
 				4602FCF718BAB2CA0097DBEC /* partner.png in Resources */,
 				D576840F1933F910008BAA2C /* IconDiscoverSelected@2x.png in Resources */,
@@ -2090,6 +2158,7 @@
 				D5F45B00196CE6A9001C2875 /* btn_camera.png in Resources */,
 				465DE3561895AA9600C37EF8 /* dropdown_arrow.png in Resources */,
 				D51072D11937F33F00B1FF0E /* share_thought_grey.png in Resources */,
+				46A2FE551963572E00D8ED12 /* Link Popup_selected@2x.png in Resources */,
 				4602FCF618BAB2CA0097DBEC /* partner@2x.png in Resources */,
 				D5C0312319391749000C98B7 /* bubble_right_selected@2x.png in Resources */,
 				D528C380191034DE00CEEA35 /* ButtonLikeCommentSelected.png in Resources */,
@@ -2108,6 +2177,7 @@
 				46B31EEE184E35150028D11C /* profileLocation.png in Resources */,
 				C4BE670D157FC7D000A291C2 /* Icon-72.png in Resources */,
 				C4BE670E157FC7D000A291C2 /* Icon-72@2x.png in Resources */,
+				46A2FE441963562100D8ED12 /* Moment Popup.png in Resources */,
 				46FB0A7C1888989800E978CD /* tab-product-unselected.png in Resources */,
 				46FB0A961888BBF400E978CD /* news3.png in Resources */,
 				462FCB7E188C806C005059F3 /* button_setting@2x.png in Resources */,
@@ -2116,6 +2186,7 @@
 				4602FD1F18BD553B0097DBEC /* slingbot-popup@2x.png in Resources */,
 				C4BE6710157FC7D000A291C2 /* Icon-Small.png in Resources */,
 				46076EEC193FE3EF00A7B317 /* notif_close@2x.png in Resources */,
+				46A2FE481963562100D8ED12 /* Link Popup.png in Resources */,
 				4602FD2418BD553B0097DBEC /* konotor-logo.png in Resources */,
 				C4BE6711157FC7D000A291C2 /* Icon-Small@2x.png in Resources */,
 				D52C1E2618D9515D00625887 /* KonotorFeedbackScreenViewController.xib in Resources */,
@@ -2197,14 +2268,17 @@
 				46B31EF4184E3D340028D11C /* profileCollaborator.png in Resources */,
 				46D1E717186FA398009CC230 /* dropDownMenu.png in Resources */,
 				46ABD74F18B147FC008F5AAB /* button_cancel_selected@2x.png in Resources */,
+				46A2FE451963562100D8ED12 /* Moment Popup@2x.png in Resources */,
 				D51072CB1937EF7300B1FF0E /* arrow_right_white.png in Resources */,
 				D57683F61933EA96008BAA2C /* nav_discover.png in Resources */,
 				D52C1E3318D9515D00625887 /* konotor_play.png in Resources */,
 				465A4ED918A8222A00E43DC6 /* iconlocation.png in Resources */,
+				46A2FE511963572E00D8ED12 /* Moment Popup_selected@2x.png in Resources */,
 				465A4EDD18A8382900E43DC6 /* comingsoon@2x.png in Resources */,
 				46ABD74418B143A4008F5AAB /* news4.png in Resources */,
 				D5BFDED618CC84A5004FEC42 /* la@2x.png in Resources */,
 				4691B50618BFD9B200B7DF6A /* button-more@2x.png in Resources */,
+				46A2FE471963562100D8ED12 /* Thought Popup@2x.png in Resources */,
 				46FB0A9A1888E4C200E978CD /* bg.png in Resources */,
 				465B19B618B81FE500EDBCFC /* browser-refresh@2x.png in Resources */,
 				465DE3461895983A00C37EF8 /* profileType.png in Resources */,
@@ -2234,6 +2308,7 @@
 				D57683F71933EA96008BAA2C /* nav_discover@2x.png in Resources */,
 				C4BE6799157FC7F700A291C2 /* ButtonLikeSelected.png in Resources */,
 				462FCB84188C8533005059F3 /* button_back_selected@2x.png in Resources */,
+				4639EDF61965CE3D00930873 /* link_thumbnail@2x.png in Resources */,
 				4691B51618C0314600B7DF6A /* discover@2x.png in Resources */,
 				C4BE679A157FC7F700A291C2 /* ButtonLikeSelected@2x.png in Resources */,
 				D575A0741947834C00C6BCC2 /* btn_following@2x.png in Resources */,
@@ -2260,6 +2335,7 @@
 				C4BE67A1157FC7F700A291C2 /* IconAddComment.png in Resources */,
 				C4BE67A2157FC7F700A291C2 /* IconAddComment@2x.png in Resources */,
 				D5C0312419391749000C98B7 /* bubble_right.png in Resources */,
+				46A2FE501963572E00D8ED12 /* Moment Popup_selected.png in Resources */,
 				465DE34F1895A56200C37EF8 /* bg_dropdown@2x.png in Resources */,
 				D542D8C4196A6F4700A0384F /* ELCAssetPicker.xib in Resources */,
 				46B31EED184E35150028D11C /* profileDescription@2x.png in Resources */,
@@ -2271,6 +2347,7 @@
 				D575A0711947834C00C6BCC2 /* btn_follow.png in Resources */,
 				D57683EA1933E6DD008BAA2C /* post_bubble.png in Resources */,
 				C4BE67A5157FC7F700A291C2 /* IconComment.png in Resources */,
+				46A2FE5919635A7000D8ED12 /* btn_close_timeline.png in Resources */,
 				C4BE67A6157FC7F700A291C2 /* IconComment@2x.png in Resources */,
 				465A4EDA18A8222A00E43DC6 /* iconlocation@2x.png in Resources */,
 				D5D571161947F8E900354340 /* btn_following_user@2x.png in Resources */,
@@ -2284,6 +2361,7 @@
 				465A4EE618A83D5100E43DC6 /* share@2x.png in Resources */,
 				4691B51B18C1477100B7DF6A /* intro2-iphone4@2x.png in Resources */,
 				4691B4F018BEF61200B7DF6A /* unfollow.png in Resources */,
+				46A2FE531963572E00D8ED12 /* Thought Popup_selected@2x.png in Resources */,
 				4609975C1938119A00C5AD96 /* icon-linkedin@2x.png in Resources */,
 				D5BFDEDA18CC84A5004FEC42 /* newyork@2x.png in Resources */,
 				D57683EB1933E6DD008BAA2C /* post_bubble@2x.png in Resources */,
@@ -2301,6 +2379,7 @@
 				D5C0312519391749000C98B7 /* bubble_right@2x.png in Resources */,
 				C4BE67AF157FC7F700A291C2 /* IconTick.png in Resources */,
 				4609975F1938119A00C5AD96 /* icon-twitter.png in Resources */,
+				46A2FE541963572E00D8ED12 /* Link Popup_selected.png in Resources */,
 				46FB0A851888989800E978CD /* tab-people-unselected@2x.png in Resources */,
 				46839E9718E1E8C100BD60DB /* btn-back@2x.png in Resources */,
 				D59AE7B718CD501D007F882B /* valley@2x.png in Resources */,
@@ -2313,6 +2392,7 @@
 				D51072D31937F33F00B1FF0E /* share_thought_white.png in Resources */,
 				C4BE67B1157FC7F700A291C2 /* IconTickSelected.png in Resources */,
 				D57683FB1933EB90008BAA2C /* nav_activity@2x.png in Resources */,
+				46A2FE491963562100D8ED12 /* Link Popup@2x.png in Resources */,
 				C4BE67B2157FC7F700A291C2 /* IconTickSelected@2x.png in Resources */,
 				4602FCF818BAB2CA0097DBEC /* hipchat@2x.png in Resources */,
 				4602FD2018BD553B0097DBEC /* slingbot-logo.png in Resources */,
@@ -2396,6 +2476,7 @@
 				D5BFDED518CC84A5004FEC42 /* la.png in Resources */,
 				4602FCF118BAAA630097DBEC /* jolt@2x.png in Resources */,
 				C499A3041725E6DD0089D40A /* FacebookSDKResources.bundle in Resources */,
+				4639EDF51965CE3D00930873 /* link_thumbnail.png in Resources */,
 				D542D8C3196A6F4700A0384F /* ELCAlbumPickerController.xib in Resources */,
 				D52C1E2E18D9515D00625887 /* konotor_chatbubble_ios7_you@2x.png in Resources */,
 				D576840B1933F908008BAA2C /* IconProfileSelected@2x.png in Resources */,
@@ -2411,6 +2492,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		A76D6C04A28A4AA9893740E1 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		D51925D518F6390300221D82 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2423,6 +2519,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "./External/Crashlytics.framework/run 9075de9af4f252529090970cd8c2f7e426771d92 b65a067085879699667823a2059d609d2b04476fc3804d3a5a6f9ab5896ca5d4";
+		};
+		F50D72C740BC4A25A4D688E6 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2476,6 +2587,7 @@
 				D52C1E2418D9515D00625887 /* KonotorFeedbackScreen.m in Sources */,
 				462B363E1880AB5D008C28AE /* discoverPageViewController.m in Sources */,
 				C4F102CB156C57EE0061BC3E /* PAPActivityFeedViewController.m in Sources */,
+				46A1DCAD195BB6F100729FD0 /* PAPlinkPostViewController.m in Sources */,
 				C4F102CC156C57EE0061BC3E /* PAPHomeViewController.m in Sources */,
 				C4F102CD156C57EE0061BC3E /* PAPPhotoTimelineViewController.m in Sources */,
 				C4F102D2156C57FD0061BC3E /* PAPAccountViewController.m in Sources */,
@@ -2576,6 +2688,7 @@
 		};
 		09ABC08F13A1D52E009C3FCF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 45FF90152F5E49D089B6BDAE /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_DISPLAY_NAME_SUFFIX = "∆";
@@ -2618,6 +2731,7 @@
 		};
 		09ABC09013A1D52E009C3FCF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 45FF90152F5E49D089B6BDAE /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_DISPLAY_NAME_SUFFIX = "";
@@ -2685,6 +2799,7 @@
 		};
 		C42500E11599424D0087C4F4 /* Distribution */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 45FF90152F5E49D089B6BDAE /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_DISPLAY_NAME_SUFFIX = "";
@@ -2752,6 +2867,7 @@
 		};
 		C4F10201156C54D40061BC3E /* Ad Hoc */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 45FF90152F5E49D089B6BDAE /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUNDLE_DISPLAY_NAME_SUFFIX = "";
