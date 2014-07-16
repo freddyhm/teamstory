@@ -21,6 +21,5 @@
 
 
 -(void)setObject:(PFObject*)object;
--(void)firstCell:(NSString *)firstCell;
 
 @end
