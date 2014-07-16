@@ -161,6 +161,10 @@
 }
 
 - (void)postButtonAction:(id)sender {
+    
+    // analytics
+    [PAPUtility captureEventGA:@"Testing" action:@"Pressed Post" label:nil];
+    
     self.postButton.selected = self.postButton.selected ? NO : YES;
     
     // hide/show post menu toggle
@@ -169,11 +173,11 @@
 }
 
 - (void)cameraButtonAction:(id)sender{
-    postButton.selected = self.postButton.selected ? NO : YES;
-    
     
     // analytics
-    [PAPUtility captureEventGA:@"Photo" action:@"Pressed Photo" label:nil];
+    [PAPUtility captureEventGA:@"Testing" action:@"Pressed Camera" label:nil];
+    
+    postButton.selected = self.postButton.selected ? NO : YES;
     
     self.postMenu.hidden = YES;
     
@@ -215,6 +219,10 @@
 
 
 - (void)linkPostButtonAction:(id)sender {
+    
+    // analytics
+    [PAPUtility captureEventGA:@"Testing" action:@"Pressed Link" label:nil];
+    
     self.postMenu.hidden = YES;
     postButton.selected = self.postButton.selected ? NO : YES;
     

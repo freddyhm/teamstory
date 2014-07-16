@@ -232,6 +232,10 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 }
 
 - (void)postButtonAction:(id)sender {
+    
+    // analytics
+    [PAPUtility captureEventGA:@"Engagement" action:@"Upload Link" label:@"Photo"];
+    
     [self.view endEditing:YES];
     [SVProgressHUD show];
     [self shouldUploadImage:self.imageView.image block:^(BOOL completed) {
@@ -278,7 +282,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
                     [[NSNotificationCenter defaultCenter] postNotificationName:PAPTabBarControllerDidFinishEditingPhotoNotification object:photo];
                 } else {
                     NSLog(@"Photo failed to save: %@", error);
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your link" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
                     [alert show];
                 }
                 [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
