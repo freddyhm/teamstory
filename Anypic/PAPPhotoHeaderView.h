@@ -23,6 +23,7 @@ typedef enum {
  @param buttons A bitmask specifying the interaction elements which are enabled in the view
  */
 - (id)initWithFrame:(CGRect)frame buttons:(PAPPhotoHeaderButtons)otherButtons;
+- (void)firstCell:(NSString *)firstCell;
 
 /// The photo associated with this view
 @property (nonatomic,strong) PFObject *photo;
