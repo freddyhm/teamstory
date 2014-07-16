@@ -213,6 +213,8 @@
             [self.contentView bringSubviewToFront:self.photoButton];
         }
     }
+    
+    [self.contentView bringSubviewToFront:self.imageView];
 }
 
 #pragma mark - ()

@@ -448,13 +448,19 @@ enum ActionSheetTags {
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
-    static NSString *CellIdentifier = @"Cell";
-    
     if (indexPath.section == self.objects.count) {
         // this behavior is normally handled by PFQueryTableViewController, but we are using sections for each object and we must handle this ourselves
         UITableViewCell *cell = [self tableView:tableView cellForNextPageAtIndexPath:indexPath];
         return cell;
     } else {
+        NSString *CellIdentifier = @"Cell";
+        
+        if ([[object objectForKey:@"type"] isEqualToString:@"link"]) {
+             CellIdentifier = @"LinkCell";
+        } else {
+            CellIdentifier = @"Cell";
+        }
+        
         PAPPhotoCell *cell = (PAPPhotoCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 
         if (cell == nil) {
