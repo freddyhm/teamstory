@@ -9,8 +9,8 @@
 #import "MBProgressHUD.h"
 #import "CropResizeViewController.h"
 #import "ThoughtPostViewController.h"
+#import "PAPlinkPostViewController.h"
 #import "SVProgressHUD.h"
-
 
 @interface PAPTabBarController ()
 @property (nonatomic,strong) NSString *imageSource;
@@ -53,7 +53,7 @@
     //[[self tabBar] setSelectionIndicatorImage:[UIImage imageNamed:@"BackgroundTabBarItemSelected.png"]];
     
     self.navController = [[UINavigationController alloc] init];
-   
+    
     
     // create post menu
     self.postMenu = [[UIView alloc]initWithFrame:[UIScreen mainScreen].bounds];
@@ -108,7 +108,7 @@
     [postButton setImage:[UIImage imageNamed:@"btn_close_timeline.png"] forState:UIControlStateSelected];
     postButton.frame = CGRectMake( (self.tabBar.bounds.size.width / 5) * 2, 0.0f, 63.0f, 50.0f);
     postButton.backgroundColor = [UIColor colorWithRed:88.0f/255.0f green:186.0f/255.0f blue:159.0f/255.0f alpha:1.0f];
-
+    
     [postButton addTarget:self action:@selector(postButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.tabBar addSubview:postButton];
     
@@ -147,16 +147,23 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-
 #pragma mark - ()
 
-- (void)postButtonAction:(id)sender {
-    
-    // hide/show post menu toggle
+- (void)postMenuOutsideAction:(id)sender {
+    self.postButton.selected = self.postButton.selected ? NO : YES;
     self.postMenu.hidden = self.postMenu.hidden ? NO : YES;
 }
 
+- (void)postButtonAction:(id)sender {
+    self.postButton.selected = self.postButton.selected ? NO : YES;
+    
+    // hide/show post menu toggle
+    self.postMenu.hidden = self.postMenu.hidden ? NO : YES;
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+}
+
 - (void)cameraButtonAction:(id)sender{
+    postButton.selected = self.postButton.selected ? NO : YES;
     
     
     // analytics
@@ -200,10 +207,18 @@
     }];
 }
 
+
+- (void)linkPostButtonAction:(id)sender {
+    self.postMenu.hidden = YES;
+    postButton.selected = self.postButton.selected ? NO : YES;
+    
+    PAPlinkPostViewController *linkPostViewController = [[PAPlinkPostViewController alloc] init];
+    [self.navigationController pushViewController:linkPostViewController animated:YES];
+}
+
 - (void)displayPickerForGroup:(ALAssetsGroup *)group
 {
-    
-	ELCAssetTablePicker *tablePicker = [[ELCAssetTablePicker alloc] initWithStyle:UITableViewStylePlain];
+    ELCAssetTablePicker *tablePicker = [[ELCAssetTablePicker alloc] initWithStyle:UITableViewStylePlain];
     
     // set title with arrow
     NSString *albumName = [group valueForProperty:ALAssetsGroupPropertyName];
@@ -212,12 +227,12 @@
     tablePicker.singleSelection = YES;
     tablePicker.immediateReturn = NO;
     
-	ELCImagePickerController *elcPicker = [[ELCImagePickerController alloc] initWithRootViewController:tablePicker];
+    ELCImagePickerController *elcPicker = [[ELCImagePickerController alloc] initWithRootViewController:tablePicker];
     elcPicker.maximumImagesCount = 1;
     elcPicker.imagePickerDelegate = self;
     elcPicker.defaultImagePickerDelegate = self;
     elcPicker.returnsOriginalImage = NO; //Only return the fullScreenImage, not the fullResolutionImage
-	tablePicker.parent = elcPicker;
+    tablePicker.parent = elcPicker;
     
     // Move me
     tablePicker.assetGroup = group;
@@ -226,14 +241,7 @@
     [tablePicker.assetGroup setAssetsFilter:[ALAssetsFilter allAssets]];
     
     [self presentViewController:elcPicker animated:YES completion:nil];
-}
-
-- (void)linkPostButtonAction:(id)sender {
-    self.postMenu.hidden = YES;
-    postButton.selected = self.postButton.selected ? NO : YES;
     
-    PAPlinkPostViewController *linkPostViewController = [[PAPlinkPostViewController alloc] init];
-    [self.navigationController pushViewController:linkPostViewController animated:YES];
 }
 
 - (void)thoughtButtonAction:(id)sender{
@@ -276,7 +284,7 @@
     self.camera.delegate = self;
     
     [SVProgressHUD dismiss];
-
+    
     return self.camera;
 }
 
@@ -284,7 +292,7 @@
 
 
 - (void)handleGesture:(UIGestureRecognizer *)gestureRecognizer {
- //   [self shouldPresentPhotoCaptureController];
+    //   [self shouldPresentPhotoCaptureController];
 }
 
 #pragma mark - Custom

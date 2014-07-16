@@ -89,7 +89,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         self.paginationEnabled = YES;
         
         // The number of comments to show per page
-        self.objectsPerPage = 30;
+        self.objectsPerPage = 60;
         
         self.photo = aPhoto;
         
