@@ -189,12 +189,11 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     self.nextButton.enabled = NO;
     [self.popUpBox addSubview:self.nextButton];
     
-    self.commentTextView = [[UITextView alloc] initWithFrame:CGRectMake(5.0f, 71.0f, 310.0f, 110.0f)];
+    self.commentTextView = [[UITextView alloc] initWithFrame:CGRectMake(5.0f, 5.0f, 310.0f, 171.0f)];
     self.commentTextView.delegate = self;
     self.commentTextView.autocorrectionType = UITextAutocorrectionTypeNo;
     self.commentTextView.text = @"Add a link comment";
     self.commentTextView.font = [UIFont systemFontOfSize:17.0f];
-    self.commentTextView.contentInset = UIEdgeInsetsMake(-65.0f, 0.0f, 0.0f, 0.0f);
     [self.view addSubview:self.commentTextView];
 }
 
@@ -344,11 +343,11 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
         float heightOffset;
         heightOffset = 0;
         if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
-            heightOffset = 160.0f;
-            self.commentTextView.frame = CGRectMake(5.0f, 71.0f, 310.0f, 85.0f);
+            heightOffset = 95.0f;
+            self.commentTextView.frame = CGRectMake(5.0f, 5.0f, 310.0f, 85.0f);
         } else {
-            heightOffset = 245.0f;
-            self.commentTextView.frame = CGRectMake(5.0f, 71.0f, 310.0f, 110.0f);
+            heightOffset = 180.0f;
+            self.commentTextView.frame = CGRectMake(5.0f, 5.0f, 310.0f, 171.0f);
         }
         
         UITapGestureRecognizer *popUpTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(popUpTapAction:)];
@@ -360,8 +359,6 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
         [self.linkPostView setUserInteractionEnabled:YES];
         [self.linkPostView.layer setBorderWidth:0.5f];
         [self.view addSubview:self.linkPostView];
-        
-        NSLog(@"%f", self.linkPostView.bounds.origin.y);
         
         UIImageView *linkPostImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0f, 10.0f, 80.0f, 80.0f)];
         linkPostImageView.image = self.imageView.image;
