@@ -205,8 +205,12 @@
     
     cell.tag = indexPath.row;
     
-    // remove follow button for current user
+    // toggle follow button based on cache, current user, and selected user
     if(![[followUser objectId] isEqualToString:[[PFUser currentUser] objectId]]){
+        
+        // make sure follow button is visible
+        cell.followButton.hidden = NO;
+        
         if (attributes) {
             [cell.followButton setSelected:[[PAPCache sharedCache] followStatusForUser:followUser]];
         }else if(self.isSelectedUser && [self.type isEqualToString:@"following"]){
@@ -216,6 +220,7 @@
         }
         
     }else{
+        // hide follow button for current user
         cell.followButton.hidden = YES;
     }
     
