@@ -95,13 +95,6 @@
     [self.view addSubview:self.postMenu];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    
-    // set nav bar to teal (camera flow changes it to grey)
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
-    self.navigationController.navigationBar.translucent = NO;
-    
-}
 
 
 #pragma mark - UITabBarController
