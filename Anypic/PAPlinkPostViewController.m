@@ -189,12 +189,11 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     self.nextButton.enabled = NO;
     [self.popUpBox addSubview:self.nextButton];
     
-    self.commentTextView = [[UITextView alloc] initWithFrame:CGRectMake(5.0f, 71.0f, 310.0f, 110.0f)];
+    self.commentTextView = [[UITextView alloc] initWithFrame:CGRectMake(5.0f, 5.0f, 310.0f, 171.0f)];
     self.commentTextView.delegate = self;
     self.commentTextView.autocorrectionType = UITextAutocorrectionTypeNo;
     self.commentTextView.text = @"Add a link comment";
     self.commentTextView.font = [UIFont systemFontOfSize:17.0f];
-    self.commentTextView.contentInset = UIEdgeInsetsMake(-65.0f, 0.0f, 0.0f, 0.0f);
     [self.view addSubview:self.commentTextView];
 }
 
@@ -223,11 +222,20 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 
 - (void)okayButtonAction:(id)sender {
     [SVProgressHUD show];
+    
+    if ([self.url_textField.text length] > 0 && ([self.url_textField.text rangeOfString:@"http"].location == NSNotFound)) {
+        self.url_textField.text = [NSString stringWithFormat:@"%@%@", @"http://", self.url_textField.text];
+    }
+    
     Embedly *embedlyInit = [[Embedly alloc] initWithKey:EMBEDLY_APP_ID delegate:self];
     [embedlyInit callEmbedlyApi:@"/1/oembed" withUrl:self.url_textField.text params:nil];
 }
 
 - (void)postButtonAction:(id)sender {
+    
+    // analytics
+    [PAPUtility captureEventGA:@"Engagement" action:@"Upload Link" label:@"Photo"];
+    
     [self.view endEditing:YES];
     [SVProgressHUD show];
     [self shouldUploadImage:self.imageView.image block:^(BOOL completed) {
@@ -274,7 +282,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
                     [[NSNotificationCenter defaultCenter] postNotificationName:PAPTabBarControllerDidFinishEditingPhotoNotification object:photo];
                 } else {
                     NSLog(@"Photo failed to save: %@", error);
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your link" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
                     [alert show];
                 }
                 [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
@@ -330,7 +338,6 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:110] endEditing:YES];
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:110].hidden = YES;
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:111].hidden = YES;
-     
     
     [self.linkPostView removeFromSuperview];
      
@@ -340,11 +347,11 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
         float heightOffset;
         heightOffset = 0;
         if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
-            heightOffset = 160.0f;
-            self.commentTextView.frame = CGRectMake(5.0f, 71.0f, 310.0f, 85.0f);
+            heightOffset = 95.0f;
+            self.commentTextView.frame = CGRectMake(5.0f, 5.0f, 310.0f, 85.0f);
         } else {
-            heightOffset = 245.0f;
-            self.commentTextView.frame = CGRectMake(5.0f, 71.0f, 310.0f, 110.0f);
+            heightOffset = 180.0f;
+            self.commentTextView.frame = CGRectMake(5.0f, 5.0f, 310.0f, 171.0f);
         }
         
         UITapGestureRecognizer *popUpTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(popUpTapAction:)];

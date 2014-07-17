@@ -50,10 +50,8 @@
     
     [[self tabBar] setBackgroundImage:[UIImage imageNamed:@"BackgroundTabBar.png"]];
     [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
-    //[[self tabBar] setSelectionIndicatorImage:[UIImage imageNamed:@"BackgroundTabBarItemSelected.png"]];
     
     self.navController = [[UINavigationController alloc] init];
-    
     
     // create post menu
     self.postMenu = [[UIView alloc]initWithFrame:[UIScreen mainScreen].bounds];
@@ -96,6 +94,7 @@
     [self.postMenu setUserInteractionEnabled:YES];
     [self.view addSubview:self.postMenu];
 }
+
 
 
 #pragma mark - UITabBarController
@@ -155,6 +154,10 @@
 }
 
 - (void)postButtonAction:(id)sender {
+    
+    // analytics
+    [PAPUtility captureEventGA:@"Testing" action:@"Pressed Post" label:nil];
+    
     self.postButton.selected = self.postButton.selected ? NO : YES;
     
     // hide/show post menu toggle
@@ -163,11 +166,11 @@
 }
 
 - (void)cameraButtonAction:(id)sender{
-    postButton.selected = self.postButton.selected ? NO : YES;
-    
     
     // analytics
-    [PAPUtility captureEventGA:@"Photo" action:@"Pressed Photo" label:nil];
+    [PAPUtility captureEventGA:@"Testing" action:@"Pressed Camera" label:nil];
+    
+    postButton.selected = self.postButton.selected ? NO : YES;
     
     self.postMenu.hidden = YES;
     
@@ -209,6 +212,10 @@
 
 
 - (void)linkPostButtonAction:(id)sender {
+    
+    // analytics
+    [PAPUtility captureEventGA:@"Testing" action:@"Pressed Link" label:nil];
+    
     self.postMenu.hidden = YES;
     postButton.selected = self.postButton.selected ? NO : YES;
     

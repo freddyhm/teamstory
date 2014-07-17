@@ -54,7 +54,6 @@
     
      self.navigationController.navigationBar.translucent = NO;
 
-    
     self.navigationItem.title = @"Scale & Crop";
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_cancel.png"] style:UIBarButtonItemStylePlain target:self action:@selector(cancelEdit:)];
@@ -160,6 +159,12 @@
 }
 
 - (IBAction)cancelEdit:(UIBarButtonItem *)sender {
+    
+    // set color of nav bar back to teal
+    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
+    self.navigationController.navigationBar.translucent = NO;
+    
     // hide custom grey bar and pop to home
     [[self navigationController] setNavigationBarHidden:YES animated:YES];
     [self.navigationController popViewControllerAnimated:NO];

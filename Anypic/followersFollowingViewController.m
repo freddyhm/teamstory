@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSMutableArray *results;
 @property (nonatomic, strong) PFUser *selectedUser;
 @property (nonatomic, strong) UILabel *emptyPlaceholder;
+@property BOOL isSelectedUser;
 
 @end
 
@@ -30,6 +31,7 @@
         
         self.type = type;
         self.selectedUser = user;
+        self.isSelectedUser = [[self.selectedUser objectId] isEqualToString:[[PFUser currentUser] objectId]];
 
         // The number of objects to show per page
         self.objectsPerPage = 1000;
@@ -162,7 +164,7 @@
         [SVProgressHUD dismiss];
     }else{
         
-        // check and set following status for user list
+        // check if current user is following the selected user's lists
         PFQuery *isFollowingQuery = [PFQuery queryWithClassName:kPAPActivityClassKey];
         [isFollowingQuery whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
         [isFollowingQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
@@ -178,6 +180,7 @@
                     [[PAPCache sharedCache] setFollowStatus:YES user:followUser];
                 }
                 
+                [self.tableView reloadData];
                 [SVProgressHUD dismiss];
             }
         }];
@@ -202,18 +205,38 @@
     
     cell.tag = indexPath.row;
     
-    // remove follow button for current user
+    // toggle follow button based on cache, current user, and selected user
     if(![[followUser objectId] isEqualToString:[[PFUser currentUser] objectId]]){
-        if([self.type isEqualToString:@"following"]){
-            cell.followButton.selected = YES;
-        }else if (attributes) {
+        
+        // make sure follow button is visible
+        cell.followButton.hidden = NO;
+        
+        if (attributes) {
             [cell.followButton setSelected:[[PAPCache sharedCache] followStatusForUser:followUser]];
+        }else if(self.isSelectedUser && [self.type isEqualToString:@"following"]){
+            cell.followButton.selected = YES;
         }else{
             cell.followButton.selected = NO;
         }
+        
     }else{
+        // hide follow button for current user
         cell.followButton.hidden = YES;
     }
+    
+    /* // remove follow button for current user
+     if(![[followUser objectId] isEqualToString:[[PFUser currentUser] objectId]]){
+     if([self.type isEqualToString:@"following"]){
+     cell.followButton.selected = YES;
+     }else if (attributes) {
+     [cell.followButton setSelected:[[PAPCache sharedCache] followStatusForUser:followUser]];
+     }else{
+     cell.followButton.selected = NO;
+     }
+     }else{
+     cell.followButton.hidden = YES;
+     }
+*/
 
     return cell;
 }
