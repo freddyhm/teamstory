@@ -314,7 +314,7 @@
 
 - (void)exitPost{
     
-    // hide bar and pop to home
+    // hide bar and pop to home 
     [[self navigationController] setNavigationBarHidden:YES animated:YES];
     
     // get tab bar and home controller from stack
