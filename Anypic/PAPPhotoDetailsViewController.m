@@ -352,17 +352,18 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         // get comment info from cache
         NSDictionary *attributesForComment = [[PAPCache sharedCache] attributesForComment:[self.objects objectAtIndex:indexPath.row]];
         
+        // reset default attributes for cell comments -- need to refactor this into own method
+        cell.likeCommentHeart.hidden = YES;
+        cell.likeCommentCount.hidden = YES;
+        cell.likeCommentButton.selected = NO;
+        cell.likeCommentHeart.selected = NO;
+        
         if(attributesForComment){
            
             NSNumber *likeCount = [attributesForComment objectForKey:kPAPCommentAttributesLikeCountKey];
-            
+                        
             // take out heart and count if like count is 0
-            if([likeCount intValue] == 0){
-                cell.likeCommentHeart.hidden = YES;
-                cell.likeCommentCount.hidden = YES;
-                cell.likeCommentButton.selected = NO;
-            }else{
-                
+            if([likeCount intValue] != 0){
                 // set properties
                 BOOL likedByCurrentUser = [[PAPCache sharedCache] isCommentLikedByCurrentUser:[self.objects objectAtIndex:indexPath.row]];
                 
@@ -370,12 +371,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 [cell.likeCommentCount setText:[likeCount stringValue]];
             }
         }
-        else{
-            cell.likeCommentHeart.hidden = YES;
-            cell.likeCommentCount.hidden = YES;
-            cell.likeCommentButton.selected = NO;
-        }
-
+        
         return cell;
         
     } else {
