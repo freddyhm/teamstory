@@ -417,6 +417,12 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                     [websiteLink setTitle:websiteInfo forState:UIControlStateNormal];
                 }
                 
+                // edge case when size of website link goes over screen bounds, reduce font to fit
+                if(website_expectedSize.width > 250){
+                    website_expectedSize.width = 250;
+                    websiteLink.titleLabel.adjustsFontSizeToFitWidth = YES;
+                }
+                
                 [self.headerView addSubview:websiteLink];
                 
                 linkedIn_button = [[UIButton alloc] init];
@@ -653,10 +659,16 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         [self.locationLabel setFrame:CGRectMake(self.locationLabel.frame.origin.x, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, self.locationLabel.frame.size.height)];
         self.locationSiteSeparator.frame = CGRectMake(locationLabelWidth + self.locationLabel.frame.origin.x + 10.0f, 91.5f + expectedSize.height, 10.0f, 10.0f);
         [self.locationIconImageView setFrame:CGRectMake(6.0f, 88.0f + expectedSize.height, 15.0f, 15.0f)];
-    
-        [websiteLink setFrame:CGRectMake(self.locationSiteSeparator.frame.origin.x + self.locationSiteSeparator.frame.size.width, 89.0f + expectedSize.height, website_expectedSize.width, website_expectedSize.height)];
-        [websiteLink setTitle:self.websiteInfo forState:UIControlStateNormal];
         
+        // edge case when size of website link goes over screen bounds, reduce font to fit
+        if(website_expectedSize.width > 250){
+            website_expectedSize.width = 250;
+            websiteLink.titleLabel.adjustsFontSizeToFitWidth = YES;
+        }
+        
+        [websiteLink setFrame:CGRectMake(self.locationSiteSeparator.frame.origin.x + self.locationSiteSeparator.frame.size.width, 89.0f + expectedSize.height, website_expectedSize.width, website_expectedSize.height)];
+        
+        [websiteLink setTitle:self.websiteInfo forState:UIControlStateNormal];
         [self.industryLabel setFrame:CGRectMake(320.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + website_expectedSize.height, industry_expectedSize.width + 10.0f, 22.0f)];
         [whiteBackground setFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, self.headerView.bounds.size.height - 10.0f)];
         
