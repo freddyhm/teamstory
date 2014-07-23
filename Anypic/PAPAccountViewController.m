@@ -559,14 +559,20 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 - (void)viewWillAppear:(BOOL)animated{
     // analytics
     [super viewWillAppear:YES];
-    [PAPUtility captureScreenGA:@"Account"];
-    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     
+    [PAPUtility captureScreenGA:@"Account"];
+    
+    // edge case, if multiaction button frozen because of network problems
+    if (self.user == [PFUser currentUser] && !self.multiActionButton.enabled){
+        self.multiActionButton.enabled = YES;
+    }
     
     if(![SVProgressHUD isVisible]){
         [SVProgressHUD show];
     }
-
+    
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+    
     [self.user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         self.user = (PFUser *)object;
     
@@ -795,15 +801,22 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     // analytics
     [PAPUtility captureEventGA:@"Engagement" action:@"Follow" label:@"User"];
     
+    // disable button until finished unfollow
+    self.multiActionButton.enabled = NO;
+    
     [self configureUnfollowButton];
     
     // show hud while numbers are refreshing
     [SVProgressHUD show];
+    
     [PAPUtility followUserEventually:self.user block:^(BOOL succeeded, NSError *error) {
+        
+        self.multiActionButton.enabled = YES;
+        
         if (error) {
             [self configureFollowButton];
         }else if(succeeded){
-            
+        
             // refresh new count
             [self refreshFollowerCount:^(BOOL completed) {
                 if(completed){
@@ -815,12 +828,18 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 }
 
 - (void)unfollowButtonAction:(id)sender {
+   
+    // disable button until finished follow
+    self.multiActionButton.enabled = NO;
 
     [self configureFollowButton];
     
     // show hud while numbers are refreshing
     [SVProgressHUD show];
+    
     [PAPUtility unfollowUserEventually:self.user block:^(BOOL succeeded) {
+        
+        self.multiActionButton.enabled = YES;
         
         if (succeeded) {
             // refresh new count
