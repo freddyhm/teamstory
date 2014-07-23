@@ -413,7 +413,7 @@
 
 + (NSString *)stringForActivityType:(NSString *)activityType object:(PFObject *)object{
     if ([activityType isEqualToString:kPAPActivityTypeLike]) {
-        return NSLocalizedString(@"liked your photo", nil);
+        return NSLocalizedString(@"liked your post", nil);
     } else if ([activityType isEqualToString:kPAPActivityTypeFollow]) {
         return NSLocalizedString(@"started following you", nil);
     } else if ([activityType isEqualToString:kPAPActivityTypeComment]) {
@@ -424,9 +424,9 @@
                     break;
                 }
             }
-            return NSLocalizedString(@"commented on your photo", nil);
+            return NSLocalizedString(@"commented on your post", nil);
         } else {
-            return NSLocalizedString(@"commented on your photo", nil);
+            return NSLocalizedString(@"commented on your post", nil);
         }
     } else if ([activityType isEqualToString:kPAPActivityTypeJoined]) {
         return NSLocalizedString(@"joined Teamstory", nil);

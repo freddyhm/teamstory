@@ -1,80 +1,88 @@
 
-Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
-           
-        // Set up to modify user data
-        Parse.Cloud.useMasterKey();
-        
-        // Query for all users, used only to break down large +1000 plus query into queries for each user with follows
-        var queryUser = new Parse.Query(Parse.User);
-        queryUser.limit("1000");
-                
-        var allFollowingEntries = [];
-        var followingQuery = new Parse.Query('Activity');
-                
-        // get all follow activities and include user field
-        followingQuery.equalTo("type", "follow");
-        followingQuery.include("toUser");
-        followingQuery.include("fromUser");
-                
-         queryUser.find({
-                        
-                success: function(results){
-                   
-                    for(var i = 0; i < results.length; i++){
-                        
-                       // followings for user
-                       followingQuery.equalTo("fromUser", results[i]);
-                       
-                       followingQuery.each(function(following){
-                                           
-                              // get following user display name and follower
-                              var toUser = following.get("toUser");
-                              var fromUser = following.get("fromUser");
-                             
-                              // create unique combo to check for duplicates through whole db
-                              var comboUnique = toUser.id + fromUser.id;
-                                
-                              // make sure the user exists
-                              if(typeof toUser !== "undefined"){
-                                           
-                                  var displayName = fromUser.get("displayName");
-                                           
-                                  //console.log(allFollowingEntries);
-                                   
-                                  // if not already in array, push else destroy duplicate
-                                  if(allFollowingEntries.indexOf(comboUnique) == -1){
-                                        allFollowingEntries.push(comboUnique);
-                                  }else{
-                                           
-                                    //console.log("GOING TO DELETE COMBO: " + comboUnique);
-                                    //console.log("FOR USER: " + displayName);
-                                           
-                                    following.destroy({
-                                        success: function(result) {
-                                            //console.log("DELETED FOLLOWING ID: " + following.id);
-                                            //console.log("FOR USER: " + displayName);
-                                                      
-                                         }, error: function(result, error){
-                                              console.log(error);
-                                         }
-                                    });
-                                  }
-                               }else{
-                                    following.destroy({
-                                     success: function(result) {
-                                        //console.log("GOING TO DELETE COMBO: " + comboUnique);
-                                        //console.log("FOR USER: " + displayName);
-                                     }, error: function(result, error){
-                                     console.log(error);
-                                     }
-                                     });
-                               
-                               }
-                       });
-                    }
-                }
-        });
-});
+/*
+ Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
+ 
+ // Set up to modify user data
+ Parse.Cloud.useMasterKey();
+ 
+ // Query for all users, used only to break down large +1000 plus query into queries for each user with follows
+ var queryUser = new Parse.Query(Parse.User);
+ queryUser.limit("1000");
+ 
+ var allFollowingEntries = [];
+ var followingQuery = new Parse.Query('Activity');
+ var count = 0;
+ 
+ // get all follow activities and include user field
+ followingQuery.equalTo("type", "follow");
+ followingQuery.include("toUser");
+ followingQuery.include("fromUser");
+ 
+ queryUser.find({
+ 
+ success: function(results){
+ 
+ for(var i = 0; i < results.length; i++){
+ 
+ // followings for user
+ followingQuery.equalTo("fromUser", results[i]);
+ 
+ followingQuery.each(function(following){
+ 
+ // get following user display name and follower
+ var toUser = following.get("toUser");
+ var fromUser = following.get("fromUser");
+ 
+ 
+ 
+ // make sure the user exists
+ if(typeof toUser !== "undefined"){
+ 
+ // create unique combo to check for duplicates through whole db
+ var comboUnique = toUser.id + fromUser.id;
+ 
+ var displayName = fromUser.get("displayName");
+ 
+ //console.log(allFollowingEntries);
+ 
+ // if not already in array, push else destroy duplicate
+ if(allFollowingEntries.indexOf(comboUnique) == -1){
+ allFollowingEntries.push(comboUnique);
+ }else{
+ 
+ //console.log("GOING TO DELETE COMBO: " + comboUnique);
+ //console.log("FOR USER: " + displayName);
+ 
+ following.destroy({
+ success: function(result) {
+ //console.log("DELETED FOLLOWING ID: " + following.id);
+ //console.log("FOR USER: " + displayName);
+ 
+ }, error: function(result, error){
+ console.log(error);
+ }
+ });
+ }
+ }else{
+ 
+ console.log(count);
+ count++;
+ following.destroy({
+ success: function(result) {
+ //console.log("GOING TO DELETE COMBO: " + comboUnique);
+ //console.log("FOR USER: " + displayName);
+ }, error: function(result, error){
+ console.log(error);
+ }
+ });
+ 
+ }
+ });
+ }
+ }
+ });
+ });
+ */
 
 Parse.Cloud.beforeSave('Activity', function(request, response) {
                        var currentUser = request.user;
@@ -215,29 +223,29 @@ var alertMessage = function(request) {
         if (request.user.get('displayName')) {
             message = request.user.get('displayName') + ': ' + request.object.get('content').trim();
         } else {
-            message = "Someone commented on your photo.";
+            message = "Someone commented on your post";
         }
     } else if (request.object.get("type") === "comment" && atmentionUserArray.length > 0) {
         if (request.user.get('displayName')) {
             message = request.user.get('displayName') + ' mentioned you in a post';
         } else {
-            message = "Someone mentioned you in a post.";
+            message = "Someone mentioned you in a post";
         }
     } else if (request.object.get("type") === "like") {
         if (request.user.get('displayName')) {
-            message = request.user.get('displayName') + ' likes your photo.';
+            message = request.user.get('displayName') + ' likes your post';
         } else {
-            message = 'Someone likes your photo.';
+            message = 'Someone likes your post';
         }
     } else if (request.object.get("type") === "like comment") {
         if (request.user.get('displayName')) {
-            message = request.user.get('displayName') + ' likes your comment.';
+            message = request.user.get('displayName') + ' likes your comment';
         } else {
             message = 'Someone likes your comment.';
         }
     } else if (request.object.get("type") === "follow") {
         if (request.user.get('displayName')) {
-            message = request.user.get('displayName') + ' is now following you.';
+            message = request.user.get('displayName') + ' is now following you';
         }
     } else {
         message = "You have a new follower.";
