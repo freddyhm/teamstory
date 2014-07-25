@@ -55,8 +55,7 @@
         if(number == 0){
             PFObject *newSubscription = [PFObject objectWithClassName:@"Subscription"];
             newSubscription[@"subscriber"] = [PFUser currentUser];
-            newSubscription[@"post"] = @"Sean Plott";
-            newSubscription[@"cheatMode"] = @NO;
+            newSubscription[@"post"] = post;
             [newSubscription saveInBackground];
         }
     }];
