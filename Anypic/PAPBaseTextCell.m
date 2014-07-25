@@ -409,7 +409,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.contentLabel setAttributedText:commentText];
             [self.contentLabel setUserInteractionEnabled:YES];
             
-            if (range.length > 0 && [[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]]) {
+            if (range.length > 0 && [[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]] && [self.cellType isEqualToString:@"CommentCellCurrentUser"]) {
                 [self.editButton addTarget:self action:@selector(commentInflatorActionWithUrl:) forControlEvents:UIControlEventTouchUpInside];
                 
                 UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentInflatorActionWithUrl:)];
