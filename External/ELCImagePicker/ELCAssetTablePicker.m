@@ -56,15 +56,6 @@
     
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     self.elcAssets = tempArray;
-   
-    
-    if([self.albumName isEqualToString:@"Camera Roll"]){
-        
-        ELCAsset *camCell = [[ELCAsset alloc] init];
-        camCell.isCam = YES;
-        [camCell setParent:self];
-        [self.elcAssets addObject:camCell];
-    }
 
     // done button
     self.doneBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_done.png"] style:UIBarButtonItemStylePlain target:self action:@selector(doneAction:)];;
@@ -140,20 +131,19 @@
             
         }];
         
+        self.elcAssets = [NSMutableArray arrayWithArray:[[self.elcAssets reverseObjectEnumerator] allObjects]];
+        
+        // if camera roll, insert special camera tile
+        if([self.albumName isEqualToString:@"Camera Roll"]){
+            ELCAsset *camCell = [[ELCAsset alloc] init];
+            camCell.isCam = YES;
+            [camCell setParent:self];
+            [self.elcAssets insertObject:camCell atIndex:0];
+        }
+        
+        
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
-            
-            // scroll to bottom
-            long section = [self numberOfSectionsInTableView:self.tableView] - 1;
-            long row = [self tableView:self.tableView numberOfRowsInSection:section] - 1;
-            if (section >= 0 && row >= 0) {
-                NSIndexPath *ip = [NSIndexPath indexPathForRow:row
-                                                     inSection:section];
-                [self.tableView scrollToRowAtIndexPath:ip
-                                      atScrollPosition:UITableViewScrollPositionBottom
-                                              animated:NO];
-            }
-
         });
     }
 }
