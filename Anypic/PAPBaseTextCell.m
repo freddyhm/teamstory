@@ -101,7 +101,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.nameButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.nameButton setBackgroundColor:[UIColor clearColor]];
         
-        if ([reuseIdentifier isEqualToString:@"CommentCell"]) {
+        if ([reuseIdentifier isEqualToString:@"CommentCell"] || [reuseIdentifier isEqualToString:@"CommentCellCurrentUser"]) {
             self.editButton = [[UIButton alloc] init];
             [self.editButton setBackgroundColor:[UIColor clearColor]];
         }
@@ -130,7 +130,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         [mainView addSubview:self.editButton];
         
-        if ([reuseIdentifier isEqualToString:@"CommentCell"]) {
+        if ([reuseIdentifier isEqualToString:@"CommentCell"] || [reuseIdentifier isEqualToString:@"CommentCellCurrentUser"]) {
             
             // Create the like button
             self.likeCommentButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -237,7 +237,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     
     [self.timeLabel setFrame:CGRectMake(timeX, contentLabel.frame.origin.y + contentLabel.frame.size.height + vertElemSpacing, timeSize.width, timeSize.height)];
     
-    if ([self.cellType isEqualToString:@"CommentCell"]) {
+    if ([self.cellType isEqualToString:@"CommentCell"] || [self.cellType isEqualToString:@"CommentCellCurrentUser"]) {
         // Layout the like button (default)
         self.likeCommentButton.frame = CGRectMake((self.timeLabel.frame.origin.x + self.timeLabel.frame.size.width), self.timeLabel.frame.origin.y, unlikeButtonDimWidth, unlikeButtonDimHeight);
         
@@ -416,7 +416,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
                 gestureRec.numberOfTouchesRequired = 1;
                 gestureRec.numberOfTapsRequired = 1;
                 [self.contentLabel addGestureRecognizer:gestureRec];
-            } else if ([[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]]){
+            } else if ([[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]]&& [self.cellType isEqualToString:@"CommentCellCurrentUser"]){
                 [self.editButton addTarget:self action:@selector(commentInflatorAction:) forControlEvents:UIControlEventTouchUpInside];
                 
                 UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentInflatorAction:)];
