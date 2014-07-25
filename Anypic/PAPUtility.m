@@ -42,18 +42,23 @@
                                                            value:nil] build]];    // Event value
 }
 
-+(void)updateSubscriptionToPost:(NSString *)postId forState:(NSString *)state{
-
-    NSString *postChannelName = [@"ch" stringByAppendingString:postId];
-    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
++(void)updateSubscriptionToPost:(PFObject *)post forState:(NSString *)state{
     
-    if([state isEqualToString:@"Subscribe"]){
-        [currentInstallation addUniqueObject:postChannelName forKey:@"channels"];
-    }else if([state isEqualToString:@"Unsubscribe"]){
-        [currentInstallation removeObject:postChannelName forKey:@"channels"];
-    }
+    // get all subscriptions for this post and current user
+    PFQuery *subscriptionQuery = [PFQuery queryWithClassName:@"Subscription"];
+    [subscriptionQuery whereKey:@"subscriber" equalTo:[PFUser currentUser]];
+    [subscriptionQuery whereKey:@"post" equalTo:post];
     
-    [currentInstallation saveInBackground];
+    [subscriptionQuery countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
+        
+        // only add new subscription if there isn't one already
+        if(number == 0){
+            PFObject *newSubscription = [PFObject objectWithClassName:@"Subscription"];
+            newSubscription[@"subscriber"] = [PFUser currentUser];
+            newSubscription[@"post"] = post;
+            [newSubscription saveInBackground];
+        }
+    }];
 }
 
 #pragma mark Like Comments

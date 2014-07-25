@@ -95,6 +95,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         
         self.likersQueryInProgress = NO;
         
+        // disable default loading symbol
+        self.loadingViewEnabled = NO;
+        
         self.source = source;
     }
     return self;
@@ -331,7 +334,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (tableView != self.autocompleteTableView) {
-        static NSString *cellID = @"CommentCell";
+        NSString *cellID = @"CommentCell";
+        
+        if ([[[PFUser currentUser] objectId] isEqualToString:[self.objects objectAtIndexedSubscript:indexPath.row]]) {
+            cellID = @"CommentCellCurrentUser";
+        }
         // Try to dequeue a cell and create one if necessary
         PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         
@@ -646,7 +653,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 
                 // suscribe to post if commenter is not photo owner
                 if(![[[self.photo objectForKey:kPAPPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]){
-                    [PAPUtility updateSubscriptionToPost:self.photo.objectId forState:@"Subscribe"];
+                    [PAPUtility updateSubscriptionToPost:self.photo forState:@"Subscribe"];
                 }
                 
             }];

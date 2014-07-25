@@ -84,6 +84,7 @@ Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
                 });
  */
 
+
 Parse.Cloud.beforeSave('Activity', function(request, response) {
                        var currentUser = request.user;
                        var objectUser = request.object.get('fromUser');
@@ -223,29 +224,29 @@ var alertMessage = function(request) {
         if (request.user.get('displayName')) {
             message = request.user.get('displayName') + ': ' + request.object.get('content').trim();
         } else {
-            message = "Someone commented on your photo.";
+            message = "Someone commented on your post";
         }
     } else if (request.object.get("type") === "comment" && atmentionUserArray.length > 0) {
         if (request.user.get('displayName')) {
             message = request.user.get('displayName') + ' mentioned you in a post';
         } else {
-            message = "Someone mentioned you in a post.";
+            message = "Someone mentioned you in a post";
         }
     } else if (request.object.get("type") === "like") {
         if (request.user.get('displayName')) {
-            message = request.user.get('displayName') + ' likes your photo.';
+            message = request.user.get('displayName') + ' likes your post';
         } else {
-            message = 'Someone likes your photo.';
+            message = 'Someone likes your post';
         }
     } else if (request.object.get("type") === "like comment") {
         if (request.user.get('displayName')) {
-            message = request.user.get('displayName') + ' likes your comment.';
+            message = request.user.get('displayName') + ' likes your comment';
         } else {
             message = 'Someone likes your comment.';
         }
     } else if (request.object.get("type") === "follow") {
         if (request.user.get('displayName')) {
-            message = request.user.get('displayName') + ' is now following you.';
+            message = request.user.get('displayName') + ' is now following you';
         }
     } else {
         message = "You have a new follower.";

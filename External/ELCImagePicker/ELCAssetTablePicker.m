@@ -142,6 +142,17 @@
         
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
+            
+            // scroll to bottom
+            long section = [self numberOfSectionsInTableView:self.tableView] - 1;
+            long row = [self tableView:self.tableView numberOfRowsInSection:section] - 1;
+            if (section >= 0 && row >= 0) {
+                NSIndexPath *ip = [NSIndexPath indexPathForRow:row
+                                                     inSection:section];
+                [self.tableView scrollToRowAtIndexPath:ip
+                                      atScrollPosition:UITableViewScrollPositionBottom
+                                              animated:NO];
+            }
 
         });
     }
