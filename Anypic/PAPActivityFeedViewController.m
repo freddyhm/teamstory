@@ -202,27 +202,25 @@
         return query;
     }
     
-    // select all activities from activity where type is comment and photo id IN [user channel array]
-    NSArray *subscribedChannels = [PFInstallation currentInstallation].channels;
-    NSMutableArray *photos = [[NSMutableArray alloc] init];
+    // pull all subscriptions from current user
+    PFQuery *getSubsQuery = [PFQuery queryWithClassName:@"Subscription"];
+    [getSubsQuery whereKey:@"subscriber" equalTo:[PFUser currentUser]];
     
-    for (NSString *channel in subscribedChannels) {
-        if(![channel isEqualToString:@""]){
-            NSString *photoId = [channel substringFromIndex:2];
-            PFObject *pic = [PFObject objectWithoutDataWithClassName:@"Photo" objectId:photoId];
-            [photos addObject:pic];
-        }
-    }
+    // pull all activties from user's subscriptions
+    PFQuery *activitiesFromSubs = [PFQuery queryWithClassName:self.parseClassName];
+    [activitiesFromSubs whereKey:@"subscribers" matchesQuery:getSubsQuery];
     
     // pull all activities to user
     PFQuery *personalQuery = [PFQuery queryWithClassName:self.parseClassName];
     [personalQuery whereKey:kPAPActivityToUserKey equalTo:[PFUser currentUser]];
     
-    // pull all activties from user's subscriptions
+    /*
+    // pull all activties from user's subscriptions (old query)
     PFQuery *subscriptionQuery = [PFQuery queryWithClassName:self.parseClassName];
     [subscriptionQuery whereKey:kPAPActivityToUserKey notEqualTo:[PFUser currentUser]];
     [subscriptionQuery whereKey:kPAPActivityPhotoKey containedIn:photos];
     [subscriptionQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeComment];
+     */
     
     NSMutableArray *array = [[NSMutableArray alloc] init];
     [array addObject:[PFUser currentUser]];
@@ -230,7 +228,7 @@
     PFQuery *atmentionQuery = [PFQuery queryWithClassName:self.parseClassName];
     [atmentionQuery whereKey:@"atmention" containsAllObjectsInArray:array];
     
-    PFQuery *finalQuery = [PFQuery orQueryWithSubqueries:@[personalQuery, subscriptionQuery, atmentionQuery]];
+    PFQuery *finalQuery = [PFQuery orQueryWithSubqueries:@[personalQuery, atmentionQuery, activitiesFromSubs]];
     [finalQuery whereKey:kPAPActivityFromUserKey notEqualTo:[PFUser currentUser]];
     [finalQuery whereKeyExists:kPAPActivityFromUserKey];
     
