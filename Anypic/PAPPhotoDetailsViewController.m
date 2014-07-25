@@ -334,7 +334,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (tableView != self.autocompleteTableView) {
-        static NSString *cellID = @"CommentCell";
+        NSString *cellID = @"CommentCell";
+        
+        if ([[[PFUser currentUser] objectId] isEqualToString:[self.objects objectAtIndexedSubscript:indexPath.row]]) {
+            cellID = @"CommentCellCurrentUser";
+        }
         // Try to dequeue a cell and create one if necessary
         PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         
