@@ -95,6 +95,7 @@ Parse.Cloud.beforeSave('Activity', function(request, response) {
                        } else {
                        response.error('Cannot set fromUser on Activity to a user other than the current user.');
                        }
+                       
                        });
 
 Parse.Cloud.afterSave('Activity', function(request) {
@@ -164,38 +165,68 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       // notify all users except fromUser who are subscribed to post when new comment is sent
                       if(request.object.get("type") === "comment" && atmentionUserArray.length == 0){
                       
-                      var toSubscribersQuery = new Parse.Query(Parse.Installation);
-                      var channelName = "ch" + photoId;
+                    
+                          var subscriptionQuery = new Parse.Query("Subscription");
+                          var Photo = Parse.Object.extend("Photo");
+                          var photoPointer = new Photo();
+                          photoPointer.id = photoId;
                       
-                      toSubscribersQuery.equalTo("channels", channelName);
-                      toSubscribersQuery.notEqualTo("user", fromUser);
-                      
-                      Parse.Push.send({
-                                      where: toSubscribersQuery,
-                                      data: alertPayload(request)
-                                      }).then(function() {
-                                              // Push was successful
-                                              console.log('Sent subscribers push.');
-                                              }, function(error) {
-                                              throw "Push Error " + error.code + " : " + error.message;
-                                              });
+                          // find all the subscriptions with this post
+                          subscriptionQuery.equalTo("post", photoPointer);
+                    
+                          subscriptionQuery.find({
+                                 success: function(results) {
+                                    
+                                     for (var i = 0; i < results.length; i++) {
+                                         
+                                        // make sure to skip when from user is the subscriber
+                                        if(fromUser.id != results[i].get("subscriber").id){
+                                     
+                                            // add subscriber to new comment and save
+                                            request.object.add("subscribers", results[i]);
+                                            request.object.save();
+                                            
+                                            // notify subscriber
+                                            var query = new Parse.Query(Parse.Installation);
+                                            query.equalTo("user", results[i].get("subscriber"));
+                                         
+                                            Parse.Push.send({
+                                                         where: query,
+                                                         data: alertPayload(request)
+                                                         }).then(function() {
+                                                                 // Push was successful
+                                                                 console.log('Sent subscribers push.');
+                                                                 }, function(error) {
+                                                                 throw "Push Error " + error.code + " : " + error.message;
+                                                                 });
+                                        }
+                                     
+
+                                    }
+                                    
+                                  },
+                                  error: function(error) {
+                                        alert("Error: " + error.code + " " + error.message);
+                                  }
+                            });
                       }
                       
                       // send activity/post owner notification if someone else creates activity
                       if(!isSelfie && atmentionUserArray.length == 0){
                       
-                      var toOwnerQuery = new Parse.Query(Parse.Installation);
-                      toOwnerQuery.equalTo('user', toUser);
+                          var toOwnerQuery = new Parse.Query(Parse.Installation);
+                          toOwnerQuery.equalTo('user', toUser);
+
+                          Parse.Push.send({
+                                          where: toOwnerQuery, // Set our Installation query.
+                                          data: alertPayload(request)
+                                          }).then(function() {
+                                                  // Push was successful
+                                                  console.log('Sent owner push.');
+                                                  }, function(error) {
+                                                  throw "Push Error " + error.code + " : " + error.message;
+                                                  });
                       
-                      Parse.Push.send({
-                                      where: toOwnerQuery, // Set our Installation query.
-                                      data: alertPayload(request)
-                                      }).then(function() {
-                                              // Push was successful
-                                              console.log('Sent owner push.');
-                                              }, function(error) {
-                                              throw "Push Error " + error.code + " : " + error.message;
-                                              });
                       }
                       
                       // Only send push notifications for new activities
