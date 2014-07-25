@@ -61,6 +61,8 @@
     
     self.webview = [[UIWebView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, mainView.bounds.size.width, mainView.bounds.size.height - 45.0f)];
     [self.webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:currentWebsite]]];
+    self.webview.scalesPageToFit = YES;
+    self.webview.userInteractionEnabled = YES;
     [self.webview setDelegate:self];
     [mainView addSubview:self.webview];
     
