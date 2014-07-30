@@ -24,6 +24,7 @@
 #import "PAPLoginSelectionViewController.h"
 #import "PAPLoginTutorialViewController.h"
 #import "PAPprofileApprovalViewController.h"
+#import "PhotoTimelineViewController.h"
 #import <Crashlytics/Crashlytics.h>
 #import "iRate.h"
 
@@ -42,6 +43,7 @@
 @property (nonatomic, strong) PAPAccountViewController *accountViewController_tabBar;
 @property (nonatomic, strong) PAPLogInViewController *loginviewcontroller;
 @property (nonatomic, strong) discoverPageViewController *discoverViewController;
+@property (nonatomic, strong) PhotoTimelineViewController *photoTimelineViewController;
 
 
 @property (nonatomic, strong) MBProgressHUD *hud;
@@ -418,11 +420,13 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     self.activityViewController = [[PAPActivityFeedViewController alloc] initWithStyle:UITableViewStylePlain];
     self.accountViewController_tabBar = [[PAPAccountViewController alloc] initWithStyle:UITableViewStylePlain];
     self.discoverViewController = [[discoverPageViewController alloc] initWithStyle:UITableViewStylePlain];
+    self.photoTimelineViewController = [[PhotoTimelineViewController alloc]initWithNibName:nil bundle:nil];
+    
     
     // special user setting function for accountviewcontroller.
     [accountViewController_tabBar setUser:[PFUser currentUser]];
     
-    UINavigationController *homeNavigationController = [[UINavigationController alloc] initWithRootViewController:self.homeViewController];
+    UINavigationController *homeNavigationController = [[UINavigationController alloc] initWithRootViewController:self.photoTimelineViewController];
     UINavigationController *emptyNavigationController = [[UINavigationController alloc] init];
     UINavigationController *activityFeedNavigationController = [[UINavigationController alloc] initWithRootViewController:self.activityViewController];
     UINavigationController *perksNavigationController = [[UINavigationController alloc] initWithRootViewController:self.discoverViewController];
