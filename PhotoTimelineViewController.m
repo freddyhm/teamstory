@@ -52,7 +52,8 @@
     self.feed.backgroundView = texturedBackgroundView;
     self.feed.showsVerticalScrollIndicator = YES;
     
-    [self queryForTable];
+    
+    [self loadObjects];
 }
 
 - (void)didReceiveMemoryWarning
@@ -60,9 +61,24 @@
     [super didReceiveMemoryWarning];
 }
 
+#pragma mark - Custom
+
+- (void)didTapOnPhotoAction:(UIButton *)sender {
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+    
+    PFObject *photo = [self.objects objectAtIndex:sender.tag];
+    if (photo) {
+        PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
+        [self.navigationController pushViewController:photoDetailsVC animated:YES];
+    }
+}
+
+
+
+
 #pragma mark - UITableViewDataSource
 
-- (void)queryForTable {
+- (void)loadObjects {
     
     [SVProgressHUD show];
     
@@ -84,7 +100,7 @@
 
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         self.objects = [NSMutableArray arrayWithArray:objects];
-        [self objectsWillLoad];
+        [self objectsDidLoad:error];
     }];
     
     
@@ -95,27 +111,16 @@
    //SEL isParseReachableSelector = sel_registerName("isParseReachable");
 }
 
-- (void)didTapOnPhotoAction:(UIButton *)sender {
-    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+- (void)objectsDidLoad:(NSError *)error {
     
-    PFObject *photo = [self.objects objectAtIndex:sender.tag];
-    if (photo) {
-        PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
-        [self.navigationController pushViewController:photoDetailsVC animated:YES];
-    }
-}
-
-- (void)objectsWillLoad{
+    /* set delegate & source here so we can manually refresh the table
+       after the data has been loaded */
     
     self.feed.delegate = self;
     self.feed.dataSource = self;
     
+    // reload table
     [self.feed reloadData];
-    
-    [self objectsDidLoad:nil];
-}
-
-- (void)objectsDidLoad:(NSError *)error {
     
     // add images to cache if not already present
     for (PFObject *object in self.objects) {
@@ -137,6 +142,8 @@
         [SVProgressHUD dismiss];
     }
 }
+
+#pragma mark - TableView Delegate & Related Methods
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == self.objects.count) {
@@ -396,6 +403,8 @@
     return nil;
 }
 
+#pragma mark - ScrollView Delegate
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
  //   BOOL isHome = [[self.navigationController.viewControllers lastObject] isKindOfClass:PAPHomeViewController.class];
     
@@ -415,6 +424,63 @@
             }
         }
     //}
+}
+
+- (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapLikePhotoButton:(UIButton *)button photo:(PFObject *)photo {
+    [photoHeaderView shouldEnableLikeButton:NO];
+    
+    BOOL liked = !button.selected;
+    [photoHeaderView setLikeStatus:liked];
+    
+    NSString *originalButtonTitle = button.titleLabel.text;
+    
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+    
+    NSNumber *likeCount = [numberFormatter numberFromString:button.titleLabel.text];
+    if (liked) {
+        
+        // analytics
+        [PAPUtility captureEventGA:@"Engagement" action:@"Like" label:@"Photo"];
+        
+        likeCount = [NSNumber numberWithInt:[likeCount intValue] + 1];
+        [[PAPCache sharedCache] incrementLikerCountForPhoto:photo];
+    } else {
+        if ([likeCount intValue] > 0) {
+            likeCount = [NSNumber numberWithInt:[likeCount intValue] - 1];
+        }
+        [[PAPCache sharedCache] decrementLikerCountForPhoto:photo];
+    }
+    
+    [[PAPCache sharedCache] setPhotoIsLikedByCurrentUser:photo liked:liked];
+    
+    if (liked == YES) {
+        [button setTitle:[numberFormatter stringFromNumber:likeCount] forState:UIControlStateSelected];
+    } else if (liked == NO) {
+        [button setTitle:[numberFormatter stringFromNumber:likeCount] forState:UIControlStateNormal];
+    }
+    
+    if (liked) {
+        [PAPUtility likePhotoInBackground:photo block:^(BOOL succeeded, NSError *error) {
+            PAPPhotoHeaderView *actualHeaderView = (PAPPhotoHeaderView *)[self tableView:self.feed viewForHeaderInSection:button.tag];
+            [actualHeaderView shouldEnableLikeButton:YES];
+            [actualHeaderView setLikeStatus:succeeded];
+            
+            if (!succeeded) {
+                [actualHeaderView.likeButton setTitle:originalButtonTitle forState:UIControlStateNormal];
+            }
+        }];
+    } else {
+        [PAPUtility unlikePhotoInBackground:photo block:^(BOOL succeeded, NSError *error) {
+            PAPPhotoHeaderView *actualHeaderView = (PAPPhotoHeaderView *)[self tableView:self.feed viewForHeaderInSection:button.tag];
+            [actualHeaderView shouldEnableLikeButton:YES];
+            [actualHeaderView setLikeStatus:!succeeded];
+            
+            if (!succeeded) {
+                [actualHeaderView.likeButton setTitle:originalButtonTitle forState:UIControlStateNormal];
+            }
+        }];
+    }
 }
 
 
