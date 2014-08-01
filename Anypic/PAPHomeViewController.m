@@ -179,10 +179,11 @@
      */
 }
 
-#pragma mark - PFQueryTableViewController
+#pragma mark - Datasource
 
 - (BOOL)objectsDidLoad:(NSError *)error {
-    [super objectsDidLoad:error];
+    
+    BOOL didLoad = [super objectsDidLoad:error];
     
     if (self.objects.count == 0 && ![self.loadQuery hasCachedResult] & !self.firstLaunch) {
         self.feed.scrollEnabled = NO;
@@ -201,7 +202,7 @@
         [self.feed setShowsVerticalScrollIndicator:NO];
     }
     
-    return YES;
+    return didLoad;
 }
 
 

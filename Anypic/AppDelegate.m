@@ -418,8 +418,11 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     self.homeViewController = [[PAPHomeViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
     [self.homeViewController setFirstLaunch:firstLaunch];
     self.activityViewController = [[PAPActivityFeedViewController alloc] initWithStyle:UITableViewStylePlain];
-    self.accountViewController_tabBar = [[PAPAccountViewController alloc] initWithStyle:UITableViewStylePlain];
+    self.accountViewController_tabBar = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
+
     self.discoverViewController = [[discoverPageViewController alloc] initWithStyle:UITableViewStylePlain];
+   
+
     
     // special user setting function for accountviewcontroller.
     [accountViewController_tabBar setUser:[PFUser currentUser]];
@@ -631,7 +634,8 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
                     UINavigationController *homeNavigationController = self.tabBarController.viewControllers[PAPHomeTabBarItemIndex];
                     self.tabBarController.selectedViewController = homeNavigationController;
                     
-                    PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithStyle:UITableViewStylePlain];
+                    PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
+
                     accountViewController.user = (PFUser *)user;
                     [homeNavigationController pushViewController:accountViewController animated:YES];
                 }

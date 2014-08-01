@@ -1046,7 +1046,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 - (void)shouldPresentAccountViewForUser:(PFUser *)user {
-    PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithStyle:UITableViewStylePlain];
+    PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
     [accountViewController setUser:user];
     [self.navigationController pushViewController:accountViewController animated:YES];
 }
