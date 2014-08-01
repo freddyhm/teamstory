@@ -415,18 +415,16 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     NSInteger imageOffset = 6.0f;
     
     self.tabBarController = [[PAPTabBarController alloc] init];
-    self.homeViewController = [[PAPHomeViewController alloc] initWithStyle:UITableViewStylePlain];
+    self.homeViewController = [[PAPHomeViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
     [self.homeViewController setFirstLaunch:firstLaunch];
     self.activityViewController = [[PAPActivityFeedViewController alloc] initWithStyle:UITableViewStylePlain];
     self.accountViewController_tabBar = [[PAPAccountViewController alloc] initWithStyle:UITableViewStylePlain];
     self.discoverViewController = [[discoverPageViewController alloc] initWithStyle:UITableViewStylePlain];
-    self.photoTimelineViewController = [[PhotoTimelineViewController alloc]initWithNibName:nil bundle:nil];
-    
     
     // special user setting function for accountviewcontroller.
     [accountViewController_tabBar setUser:[PFUser currentUser]];
     
-    UINavigationController *homeNavigationController = [[UINavigationController alloc] initWithRootViewController:self.photoTimelineViewController];
+    UINavigationController *homeNavigationController = [[UINavigationController alloc] initWithRootViewController:self.homeViewController];
     UINavigationController *emptyNavigationController = [[UINavigationController alloc] init];
     UINavigationController *activityFeedNavigationController = [[UINavigationController alloc] initWithRootViewController:self.activityViewController];
     UINavigationController *perksNavigationController = [[UINavigationController alloc] initWithRootViewController:self.discoverViewController];
@@ -646,7 +644,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 - (void)autoFollowTimerFired:(NSTimer *)aTimer {
     [MBProgressHUD hideHUDForView:self.navController.presentedViewController.view animated:YES];
     [MBProgressHUD hideHUDForView:self.homeViewController.view animated:YES];
-    [self.homeViewController loadObjects];
+    [self.homeViewController loadObjects:nil isRefresh:NO];
 }
 
 - (BOOL)shouldProceedToMainInterface:(PFUser *)user {
@@ -705,7 +703,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     if ([self isParseReachable] && [PFUser currentUser] && self.homeViewController.objects.count == 0) {
         // Refresh home timeline on network restoration. Takes care of a freshly installed app that failed to load the main timeline under bad network conditions.
         // In this case, they'd see the empty timeline placeholder and have no way of refreshing the timeline unless they followed someone.
-        [self.homeViewController loadObjects];
+        [self.homeViewController loadObjects:nil isRefresh:NO];
     }
 }
 
@@ -820,7 +818,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
                         self.hud.dimBackground = YES;
                         self.hud.labelText = NSLocalizedString(@"Following Friends", nil);
                     } else {
-                        [self.homeViewController loadObjects];
+                        [self.homeViewController loadObjects:nil isRefresh:NO];
                     }
                 }
             }

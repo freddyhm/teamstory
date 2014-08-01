@@ -86,7 +86,7 @@
     
     self.navigationItem.rightBarButtonItem = promptTrigger;
 
-    self.blankTimelineView = [[UIView alloc] initWithFrame:self.tableView.bounds];
+    self.blankTimelineView = [[UIView alloc] initWithFrame:self.feed.bounds];
     
     // diabling notification bar for now.
     /*
@@ -120,8 +120,8 @@
 }
 
 -(void)userRefreshControl{
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-    [self loadObjects];
+    [self.feed scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    [self loadObjects:nil isRefresh:NO];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -181,25 +181,27 @@
 
 #pragma mark - PFQueryTableViewController
 
-- (void)objectsDidLoad:(NSError *)error {
+- (BOOL)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
     
-    if (self.objects.count == 0 && ![[self queryForTable] hasCachedResult] & !self.firstLaunch) {
-        self.tableView.scrollEnabled = NO;
+    if (self.objects.count == 0 && ![self.loadQuery hasCachedResult] & !self.firstLaunch) {
+        self.feed.scrollEnabled = NO;
         
         if (!self.blankTimelineView.superview) {
             self.blankTimelineView.alpha = 0.0f;
-            self.tableView.tableHeaderView = self.blankTimelineView;
+            self.feed.tableHeaderView = self.blankTimelineView;
             
             [UIView animateWithDuration:0.200f animations:^{
                 self.blankTimelineView.alpha = 1.0f;
             }];
         }
     } else {
-        self.tableView.tableHeaderView = nil;
-        self.tableView.scrollEnabled = YES;
-        [self.tableView setShowsVerticalScrollIndicator:NO];
+        self.feed.tableHeaderView = nil;
+        self.feed.scrollEnabled = YES;
+        [self.feed setShowsVerticalScrollIndicator:NO];
     }
+    
+    return YES;
 }
 
 
@@ -211,7 +213,7 @@
     float bottomEdge = scrollView.contentOffset.y + scrollView.frame.size.height;
     
     if (bottomEdge >= (scrollView.contentSize.height * 0.78)) {
-        [self loadNextPage];
+        [self loadObjects:nil isRefresh:NO];
     }
 }
 

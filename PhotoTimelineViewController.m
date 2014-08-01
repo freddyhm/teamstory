@@ -29,8 +29,10 @@
 @property (nonatomic, strong) PFObject *current_photo;
 @property (nonatomic, strong) MBProgressHUD *hud;
 @property (nonatomic, strong) NSCache *imgCache;
+
 @property int loadPostCount;
 @property int count;
+
 @end
 
 enum ActionSheetTags {
@@ -202,25 +204,24 @@ enum ActionSheetTags {
 #pragma mark - Refresh
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    //   BOOL isHome = [[self.navigationController.viewControllers lastObject] isKindOfClass:PAPHomeViewController.class];
+       BOOL isHome = [[self.navigationController.viewControllers lastObject] isKindOfClass:PAPHomeViewController.class];
     
-    // make sure pull-to-refresh set only for home
-    // if(isHome){
-    
-    if(scrollView.contentOffset.y <= -100){
-        if(![SVProgressHUD isVisible]){
-            CGFloat hudOffset = IS_WIDESCREEN ? -170.0f : -130.0f;
-            [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, hudOffset)];
-            [SVProgressHUD show];
-            [self loadObjects:nil isRefresh:YES];
-        }
-    }else{
-        if([SVProgressHUD isVisible]){
-            [SVProgressHUD dismiss];
-            [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, 0.0f)];
+     // make sure pull-to-refresh set only for home
+     if(isHome){
+        if(scrollView.contentOffset.y <= -100){
+            if(![SVProgressHUD isVisible]){
+                CGFloat hudOffset = IS_WIDESCREEN ? -170.0f : -130.0f;
+                [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, hudOffset)];
+                [SVProgressHUD show];
+                [self loadObjects:nil isRefresh:YES];
+            }
+        }else{
+            if([SVProgressHUD isVisible]){
+                [SVProgressHUD dismiss];
+                [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, 0.0f)];
+            }
         }
     }
-    //}
 }
 
 // see if scrolling near end, refresh when decelerating if so
@@ -250,20 +251,20 @@ enum ActionSheetTags {
     }
     
     if (![PFUser currentUser]) {
-        PFQuery *query = [PFQuery queryWithClassName:@"Photo"];
-        [query setLimit:0];
+        self.loadQuery = [PFQuery queryWithClassName:@"Photo"];
+        [self.loadQuery setLimit:0];
     }
   
     // Standard query to load everything
-    PFQuery *query = [PFQuery queryWithClassName:kPAPPhotoClassKey];
-    [query includeKey:kPAPPhotoUserKey];
-    [query orderByDescending:@"createdAt"];
+    self.loadQuery = [PFQuery queryWithClassName:kPAPPhotoClassKey];
+    [self.loadQuery includeKey:kPAPPhotoUserKey];
+    [self.loadQuery orderByDescending:@"createdAt"];
     
     // A pull-to-refresh should always trigger a network request.
-    [query setCachePolicy:kPFCachePolicyNetworkOnly];
+    [self.loadQuery setCachePolicy:kPFCachePolicyNetworkOnly];
     
     // Set limit of posts for query
-    [query setLimit:self.loadPostCount];
+    [self.loadQuery setLimit:self.loadPostCount];
     
     // If no objects are loaded in memory, we look to the cache first to fill the table
     // and then subsequently do a query against the network.
@@ -275,11 +276,11 @@ enum ActionSheetTags {
     SEL isParseReachableSelector = sel_registerName("isParseReachable");
     
     if (self.objects.count == 0 || ![[UIApplication sharedApplication].delegate performSelector:isParseReachableSelector]) {
-        [query setCachePolicy:kPFCachePolicyCacheThenNetwork];
+        [self.loadQuery setCachePolicy:kPFCachePolicyCacheThenNetwork];
     }
     
     // Set datasource from parse
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+    [self.loadQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         self.objects = [NSMutableArray arrayWithArray:objects];
         
         if(completionBlock){
@@ -522,7 +523,6 @@ enum ActionSheetTags {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSLog(@"%d", indexPath.section);
     PFObject *object = [self.objects objectAtIndex:indexPath.section];
     
     if (indexPath.section == self.objects.count) {
