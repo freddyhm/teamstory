@@ -45,8 +45,21 @@ enum ActionSheetTags {
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        
+        self.outstandingSectionHeaderQueries = [NSMutableDictionary dictionary];
+        
+        // Improve scrolling performance by reusing UITableView section headers
+        self.reusableSectionHeaderViews = [NSMutableSet setWithCapacity:3];
+        
         // Custom initialization
         [self.feed setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+        
+        // init our image cache
+        self.imgCache = [[NSCache alloc]init];
+    
+        self.shouldReloadOnAppear = NO;
+        
+        self.count = 0;
     }
     return self;
 }
@@ -68,7 +81,7 @@ enum ActionSheetTags {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidCommentOnPhoto:) name:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:nil];
     
     
-    [self loadObjects];
+    [self loadObjects:NO block:^(BOOL succeeded) {}];
 }
 
 - (void)didReceiveMemoryWarning
@@ -110,7 +123,7 @@ enum ActionSheetTags {
     // refresh timeline after a delay
     dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC);
     dispatch_after(time, dispatch_get_main_queue(), ^(void){
-        [self loadObjects];
+        [self loadObjects:YES block:^(BOOL succeeded) {}];
     });
 }
 
@@ -125,7 +138,7 @@ enum ActionSheetTags {
         [self.feed scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
     
-    [self loadObjects];
+    [self loadObjects:YES block:^(BOOL succeeded) {}];
 }
 
 - (void)userFollowingChanged:(NSNotification *)note {
@@ -188,21 +201,24 @@ enum ActionSheetTags {
 
 #pragma mark - Refresh
 
-- (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl {
-    [self loadObjects];
-}
-
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     //   BOOL isHome = [[self.navigationController.viewControllers lastObject] isKindOfClass:PAPHomeViewController.class];
     
     // make sure pull-to-refresh set only for home
     // if(isHome){
+    
+    NSLog(@"%f", scrollView.contentOffset.y);
     if(scrollView.contentOffset.y <= -100){
-        
+    
         if(![SVProgressHUD isVisible]){
-            CGFloat hudOffset = IS_WIDESCREEN ? -160.0f : -120.0f;
+            CGFloat hudOffset = IS_WIDESCREEN ? -170.0f : -130.0f;
             [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, hudOffset)];
             [SVProgressHUD show];
+            [self loadObjects:YES block:^(BOOL succeeded){
+                [scrollView setContentOffset:CGPointMake(scrollView.contentOffset.x, -68) animated:YES];
+            }];
+        }else{
+            [scrollView setContentOffset:scrollView.contentOffset animated:NO];
         }
     }else{
         if([SVProgressHUD isVisible]){
@@ -219,7 +235,7 @@ enum ActionSheetTags {
     float bottomEdge = scrollView.contentOffset.y + scrollView.frame.size.height;
     
     if (bottomEdge >= (scrollView.contentSize.height * 0.78)) {
-        [self loadObjects];
+        [self loadObjects:NO block:^(BOOL succeeded) {}];
     }
 }
 
@@ -228,13 +244,13 @@ enum ActionSheetTags {
 
 #pragma mark - UITableViewDataSource
 
-- (void)loadObjects{
+- (void)loadObjects:(BOOL)isRefresh block:(void (^)(BOOL succeeded))completionBlock{
 
     // Show hud and set default post load at first load
-    if(self.loadPostCount == 0){
+    if(self.loadPostCount == 0 && !isRefresh){
         [SVProgressHUD show];
         self.loadPostCount = 10;
-    }else{
+    }else if(!isRefresh){
         // Keep adding 10 posts to current table section count - each post is one section
         self.loadPostCount = (int)[self.feed numberOfSections] + 10;
     }
@@ -271,13 +287,13 @@ enum ActionSheetTags {
     // Set datasource from parse
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         self.objects = [NSMutableArray arrayWithArray:objects];
-        [self objectsDidLoad:error];
+        completionBlock([self objectsDidLoad:error]);
     }];
     
 
 }
 
-- (void)objectsDidLoad:(NSError *)error {
+- (BOOL)objectsDidLoad:(NSError *)error {
     
     /* set delegate & source here so we can manually refresh the table
        after the data has been loaded */
@@ -308,6 +324,8 @@ enum ActionSheetTags {
     if([SVProgressHUD isVisible]){
         [SVProgressHUD dismiss];
     }
+    
+    return YES;
 }
 
 #pragma mark - TableView Delegate & Related Methods
@@ -505,10 +523,10 @@ enum ActionSheetTags {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    NSLog(@"%d", indexPath.section);
     PFObject *object = [self.objects objectAtIndex:indexPath.section];
     
     if (indexPath.section == self.objects.count) {
-        // this behavior is normally handled by PFQueryTableViewController, but we are using sections for each object and we must handle this ourselves
         UITableViewCell *cell = [self tableView:tableView cellForNextPageAtIndexPath:indexPath];
         return cell;
     } else {
@@ -544,14 +562,10 @@ enum ActionSheetTags {
             if(cachedImg){
                 cell.imageView.image = cachedImg;
             }else{
-                if ([cell.imageView.file isDataAvailable]) {
-                    [cell.imageView loadInBackground:^(UIImage *image, NSError *error) {
-                        cell.imageView.image = image;
-                        if(!error && image){
-                            [self.imgCache setObject:cell.imageView.image forKey:[object objectId]];
-                        }
-                    }];
-                }
+                
+                [cell.imageView loadInBackground];
+                cell.imageView.image = cell.imageView.image;
+                [self.imgCache setObject:cell.imageView.image forKey:[object objectId]];
             }
         }
         
