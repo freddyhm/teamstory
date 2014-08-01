@@ -232,6 +232,7 @@ enum ActionSheetTags {
     if (bottomEdge >= (scrollView.contentSize.height * 0.78)) {
         [self loadObjects:nil isRefresh:NO];
     }
+    
 }
 
 

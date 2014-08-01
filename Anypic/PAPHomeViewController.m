@@ -207,35 +207,9 @@
 
 #pragma mark - UIScrollViewDelegate
 
-// see if scrolling near end, refresh when decelerating if so
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    
-    float bottomEdge = scrollView.contentOffset.y + scrollView.frame.size.height;
-    
-    if (bottomEdge >= (scrollView.contentSize.height * 0.78)) {
-        [self loadObjects:nil isRefresh:NO];
-    }
-}
-
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    BOOL isHome = [[self.navigationController.viewControllers lastObject] isKindOfClass:PAPHomeViewController.class];
     
-    // make sure pull-to-refresh set only for home
-    if(isHome){
-        if(scrollView.contentOffset.y <= -100){
-            
-            if(![SVProgressHUD isVisible]){
-                CGFloat hudOffset = IS_WIDESCREEN ? -160.0f : -120.0f;
-                [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, hudOffset)];
-                [SVProgressHUD show];
-            }
-        }else{
-            if([SVProgressHUD isVisible]){
-                [SVProgressHUD dismiss];
-                [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, 0.0f)];
-            }
-        }
-    }
+    [super scrollViewDidScroll:scrollView];
     
     // disabling notification bar for now.
     /*
