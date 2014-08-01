@@ -81,7 +81,7 @@ enum ActionSheetTags {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidCommentOnPhoto:) name:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:nil];
     
     
-    [self loadObjects:NO block:^(BOOL succeeded) {}];
+    [self loadObjects:nil isRefresh:NO];
 }
 
 - (void)didReceiveMemoryWarning
@@ -123,7 +123,7 @@ enum ActionSheetTags {
     // refresh timeline after a delay
     dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC);
     dispatch_after(time, dispatch_get_main_queue(), ^(void){
-        [self loadObjects:YES block:^(BOOL succeeded) {}];
+        [self loadObjects:nil isRefresh:YES];
     });
 }
 
@@ -138,7 +138,7 @@ enum ActionSheetTags {
         [self.feed scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
     
-    [self loadObjects:YES block:^(BOOL succeeded) {}];
+    [self loadObjects:nil isRefresh:YES];
 }
 
 - (void)userFollowingChanged:(NSNotification *)note {
@@ -207,18 +207,12 @@ enum ActionSheetTags {
     // make sure pull-to-refresh set only for home
     // if(isHome){
     
-    NSLog(@"%f", scrollView.contentOffset.y);
     if(scrollView.contentOffset.y <= -100){
-    
         if(![SVProgressHUD isVisible]){
             CGFloat hudOffset = IS_WIDESCREEN ? -170.0f : -130.0f;
             [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, hudOffset)];
             [SVProgressHUD show];
-            [self loadObjects:YES block:^(BOOL succeeded){
-                [scrollView setContentOffset:CGPointMake(scrollView.contentOffset.x, -68) animated:YES];
-            }];
-        }else{
-            [scrollView setContentOffset:scrollView.contentOffset animated:NO];
+            [self loadObjects:nil isRefresh:YES];
         }
     }else{
         if([SVProgressHUD isVisible]){
@@ -231,11 +225,11 @@ enum ActionSheetTags {
 
 // see if scrolling near end, refresh when decelerating if so
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    
+
     float bottomEdge = scrollView.contentOffset.y + scrollView.frame.size.height;
     
     if (bottomEdge >= (scrollView.contentSize.height * 0.78)) {
-        [self loadObjects:NO block:^(BOOL succeeded) {}];
+        [self loadObjects:nil isRefresh:NO];
     }
 }
 
@@ -244,7 +238,7 @@ enum ActionSheetTags {
 
 #pragma mark - UITableViewDataSource
 
-- (void)loadObjects:(BOOL)isRefresh block:(void (^)(BOOL succeeded))completionBlock{
+- (void)loadObjects:(void (^)(BOOL succeeded))completionBlock isRefresh:(BOOL)isRefresh{
 
     // Show hud and set default post load at first load
     if(self.loadPostCount == 0 && !isRefresh){
