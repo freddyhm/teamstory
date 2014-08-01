@@ -281,7 +281,12 @@ enum ActionSheetTags {
     // Set datasource from parse
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         self.objects = [NSMutableArray arrayWithArray:objects];
-        completionBlock([self objectsDidLoad:error]);
+        
+        if(completionBlock){
+            completionBlock([self objectsDidLoad:error]);
+        }else{
+            [self objectsDidLoad:error];
+        }
     }];
     
 
