@@ -29,9 +29,7 @@
 @property (nonatomic, strong) PFObject *current_photo;
 @property (nonatomic, strong) MBProgressHUD *hud;
 @property (nonatomic, strong) NSCache *imgCache;
-
 @property int loadPostCount;
-@property int count;
 
 @end
 
@@ -53,15 +51,10 @@ enum ActionSheetTags {
         // Improve scrolling performance by reusing UITableView section headers
         self.reusableSectionHeaderViews = [NSMutableSet setWithCapacity:3];
         
-        // Custom initialization
-        [self.feed setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-        
         // init our image cache
         self.imgCache = [[NSCache alloc]init];
     
         self.shouldReloadOnAppear = NO;
-        
-        self.count = 0;
     }
     return self;
 }
@@ -69,6 +62,9 @@ enum ActionSheetTags {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // Remove cell separator
+    [self.feed setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
     UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
     texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
@@ -206,8 +202,10 @@ enum ActionSheetTags {
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
        BOOL isHome = [[self.navigationController.viewControllers lastObject] isKindOfClass:PAPHomeViewController.class];
     
-     // make sure pull-to-refresh set only for home
+     // Make sure pull-to-refresh set only for home
      if(isHome){
+         
+         // Enough space to show the hud
         if(scrollView.contentOffset.y <= -100){
             if(![SVProgressHUD isVisible]){
                 CGFloat hudOffset = IS_WIDESCREEN ? -170.0f : -130.0f;
@@ -241,9 +239,12 @@ enum ActionSheetTags {
 #pragma mark - UITableViewDataSource
 
 - (void)loadObjects:(void (^)(BOOL succeeded))completionBlock isRefresh:(BOOL)isRefresh{
+    
+    /* Added completion block, pass nil to use without. We need to know if we're refreshing the table or loading another 10 posts because it'll affect the query's limit. When refreshing, we use the current self.loadPostCount, if it's instead a load, we use the number of current posts + 10. When loadPostCount is 0, load 10 to start. 
+     */
 
     // Show hud and set default post load at first load
-    if(self.loadPostCount == 0 && !isRefresh){
+    if(self.loadPostCount == 0){
         [SVProgressHUD show];
         self.loadPostCount = 10;
     }else if(!isRefresh){
@@ -251,73 +252,66 @@ enum ActionSheetTags {
         self.loadPostCount = (int)[self.feed numberOfSections] + 10;
     }
     
-    if (![PFUser currentUser]) {
-        self.loadQuery = [PFQuery queryWithClassName:@"Photo"];
-        [self.loadQuery setLimit:0];
-    }else{
-      
-        // Standard query to load everything
-        self.loadQuery = [PFQuery queryWithClassName:kPAPPhotoClassKey];
-        [self.loadQuery includeKey:kPAPPhotoUserKey];
-        [self.loadQuery orderByDescending:@"createdAt"];
-        
-        // A pull-to-refresh should always trigger a network request.
-        [self.loadQuery setCachePolicy:kPFCachePolicyNetworkOnly];
-        
-        // Set limit of posts for query
-        [self.loadQuery setLimit:self.loadPostCount];
-        
-        // If no objects are loaded in memory, we look to the cache first to fill the table
-        // and then subsequently do a query against the network.
-        //
-        // If there is no network connection, we will hit the cache first.
-        
-        // Removes warning as part of ios6 & 7 default
-        #pragma GCC diagnostic ignored "-Warc-performSelector-leaks"
-        SEL isParseReachableSelector = sel_registerName("isParseReachable");
-        
-        if (self.objects.count == 0 || ![[UIApplication sharedApplication].delegate performSelector:isParseReachableSelector]) {
-            [self.loadQuery setCachePolicy:kPFCachePolicyCacheThenNetwork];
-        }
-    }
+    // Standard query to load everything
+    self.loadQuery = [PFQuery queryWithClassName:kPAPPhotoClassKey];
+    [self.loadQuery includeKey:kPAPPhotoUserKey];
+    [self.loadQuery orderByDescending:@"createdAt"];
     
+    // A pull-to-refresh should always trigger a network request.
+    [self.loadQuery setCachePolicy:kPFCachePolicyNetworkOnly];
+    
+    // Set limit of posts for query
+    [self.loadQuery setLimit:self.loadPostCount];
+    
+    // If no objects are loaded in memory, we look to the cache first to fill the table
+    // and then subsequently do a query against the network.
+    //
+    // If there is no network connection, we will hit the cache first.
+    
+    // Removes warning as part of ios6 & 7 default
+    #pragma GCC diagnostic ignored "-Warc-performSelector-leaks"
+    SEL isParseReachableSelector = sel_registerName("isParseReachable");
+    
+    // Check if parse is reachable, pull from cache
+    if (self.objects.count == 0 || ![[UIApplication sharedApplication].delegate performSelector:isParseReachableSelector]) {
+        [self.loadQuery setCachePolicy:kPFCachePolicyCacheThenNetwork];
+    }
+
     // Set datasource from parse
     [self.loadQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         self.objects = [NSMutableArray arrayWithArray:objects];
         
+        // Return completion if block is present
         if(completionBlock){
             completionBlock([self objectsDidLoad:error]);
         }else{
             [self objectsDidLoad:error];
         }
     }];
-    
-
 }
 
 - (BOOL)objectsDidLoad:(NSError *)error {
     
-    /* set delegate & source here so we can manually refresh the table
-       after the data has been loaded */
-    
-    
+    // Check for errors, also used to indicate method completion
     BOOL didLoad = !error ? YES : NO;
-
+    
+    /* set delegate & source here so we can manually refresh the table
+     after the data has been loaded */
     self.feed.delegate = self;
     self.feed.dataSource = self;
     
-    // reload table
+    // Reload table
     [self.feed reloadData];
     
-    // add images to cache if not already present
+    // Add images to cache if not already present
     for (PFObject *object in self.objects) {
         if(![self.imgCache objectForKey:[object objectId]]){
             PFImageView *photoImgView = [[PFImageView alloc] init];
             photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
-            // load images from remote server
+            // Load images from remote server
             [photoImgView loadInBackground:^(UIImage *image, NSError *error) {
                 
-                // check there's no error and image is present before setting
+                // Check there's no error and image is present before setting
                 if(!error && image){
                     [self.imgCache setObject:image forKey:[object objectId]];
                 }
@@ -568,6 +562,7 @@ enum ActionSheetTags {
                 cell.imageView.image = cachedImg;
             }else{
                 
+                // Load image right away, display in cell & set cache
                 [cell.imageView loadInBackground];
                 cell.imageView.image = cell.imageView.image;
                 [self.imgCache setObject:cell.imageView.image forKey:[object objectId]];

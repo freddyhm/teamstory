@@ -752,23 +752,21 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 
 
 
-#pragma mark - PFQueryTableViewController
+#pragma mark - Datasource 
 
 - (void)loadObjects:(void (^)(BOOL succeeded))completionBlock isRefresh:(BOOL)isRefresh{
     
     PFQuery *query = [PFQuery queryWithClassName:@"Photo"];
     
-    if (!self.user) {
-        [query setLimit:0];
-    }else{
-        query.cachePolicy = kPFCachePolicyNetworkOnly;
-        if (self.objects.count == 0) {
-            query.cachePolicy = kPFCachePolicyCacheThenNetwork;
-        }
-        [query whereKey:kPAPPhotoUserKey equalTo:self.user];
-        [query orderByDescending:@"createdAt"];
-        [query includeKey:kPAPPhotoUserKey];
+    query.cachePolicy = kPFCachePolicyNetworkOnly;
+    
+    if (self.objects.count == 0) {
+        query.cachePolicy = kPFCachePolicyCacheThenNetwork;
     }
+    
+    [query whereKey:kPAPPhotoUserKey equalTo:self.user];
+    [query orderByDescending:@"createdAt"];
+    [query includeKey:kPAPPhotoUserKey];
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         
