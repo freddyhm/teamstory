@@ -41,7 +41,7 @@
     [super viewDidLoad];
     
     // There is no documentation on how to handle assets with the taller iPhone 5 screen as of 9/13/2012
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-intro.png"]];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"intro_bg.png"]];
     
     UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];
     UIView *paddingView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];
@@ -92,20 +92,16 @@
             user_email.frame = CGRectMake(35.0f, 245.0f, 250.0f, 45.0f);
         }
     } else {
-        UIButton *emailSignIn = [[UIButton alloc] initWithFrame:CGRectMake(187.0f, [UIScreen mainScreen].bounds.size.height - 220.0f, 50.0f, 20.0f)];
-        [emailSignIn setTitle:@"email." forState:UIControlStateNormal];
+        UIButton *emailSignIn = [[UIButton alloc] initWithFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - 65.0f, 290.0f, 50.0f)];
+        [emailSignIn setTitle:@"Sign Up with Email" forState:UIControlStateNormal];
+        emailSignIn.layer.cornerRadius = 3.0f;
+        emailSignIn.backgroundColor = [UIColor colorWithRed:91.0f/255.0f green:194.0f/255.0f blue:165.0f/255.0f alpha:1.0f];
         [[emailSignIn titleLabel] setFont:[UIFont fontWithName:@"HelveticaNeue" size:15.0f]];
         [emailSignIn addTarget:self action:@selector(emailSignIn_button:) forControlEvents:UIControlEventTouchUpInside];
         [self.logInView addSubview:emailSignIn];
-        
-        UILabel *emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(80.0f, [UIScreen mainScreen].bounds.size.height - 220.0f, 125.0f, 20.0f)];
-        [emailLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:15.0f]];
-        [emailLabel setText:@"or join using your"];
-        [emailLabel setTextColor:[UIColor colorWithWhite:1.0f alpha:1.0f]];
-        [self.logInView addSubview:emailLabel];
     }
     
-    UIButton *back_button = [[UIButton alloc] initWithFrame:CGRectMake(35.0f, [UIScreen mainScreen].bounds.size.height - 50.0f, 50.0f, 15.0f)];
+    UIButton *back_button = [[UIButton alloc] initWithFrame:CGRectMake(35.0f, 50.0f, 50.0f, 15.0f)];
     [back_button setBackgroundImage:[UIImage imageNamed:@"btn-back.png"] forState:UIControlStateNormal];
     [back_button addTarget:self action:@selector(back_button_action:) forControlEvents:UIControlEventTouchUpInside];
     [self.logInView addSubview:back_button];
@@ -129,13 +125,14 @@
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
+    
     if ([UIScreen mainScreen].bounds.size.height > 480.0f) {
         // for the iPhone 5
-        [self.logInView.facebookButton setFrame:CGRectMake(35.0f, 157.0f, 110.0f, 110.0f)];
-        [self.logInView.twitterButton setFrame:CGRectMake(175.5, 157.0f, 110.0f, 110.0f)];
+        [self.logInView.facebookButton setFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - 125.0f, 140.0f, 50.0f)];
+        [self.logInView.twitterButton setFrame:CGRectMake(165.5, [UIScreen mainScreen].bounds.size.height - 125.0f, 140.0f, 50.0f)];
     } else {
-        [self.logInView.facebookButton setFrame:CGRectMake(35.5f, 100.0f, 110.0f, 110.0f)];
-        [self.logInView.twitterButton setFrame:CGRectMake(175.5, 100.0f, 110.0f, 110.0f)];
+        [self.logInView.facebookButton setFrame:CGRectMake(15.5f, [UIScreen mainScreen].bounds.size.height - 125.0f, 140.0f, 50.0f)];
+        [self.logInView.twitterButton setFrame:CGRectMake(165.5, [UIScreen mainScreen].bounds.size.height - 125.0f, 140.0f, 50.0f)];
     }
     
     [self.logInView.facebookButton setTitle:nil forState:UIControlStateNormal];

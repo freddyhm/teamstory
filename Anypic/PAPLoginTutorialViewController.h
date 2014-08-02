@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PAPLoginTutorialViewController : UIViewController <UIScrollViewDelegate>
+@interface PAPLoginTutorialViewController : UIViewController <UIScrollViewDelegate, PFLogInViewControllerDelegate>
 
 @property (strong, nonatomic) UIPageControl *pageControl;
 @property (strong, nonatomic) UILabel *text;

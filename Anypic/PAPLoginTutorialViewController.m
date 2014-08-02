@@ -7,7 +7,7 @@
 //
 
 #import "PAPLoginTutorialViewController.h"
-#import "PAPLoginSelectionViewController.h"
+#import "PAPLogInViewController.h"
 
 @interface PAPLoginTutorialViewController () {
     float screenOffset;
@@ -75,21 +75,50 @@
     [self.text setFont:[UIFont fontWithName:@"HelveticaNeue" size:13.0f]];
     self.text.numberOfLines = 0;
     [self.view addSubview:self.text];
-    /*
-    UIButton *continue_button = [[UIButton alloc] initWithFrame:CGRectMake(35.0f, [UIScreen mainScreen].bounds.size.height - 70.0f, 250.0f, 45.0f)];
-    [continue_button setBackgroundColor:[UIColor colorWithRed:91.0f/255.0f green:194.0f/255.0f blue:165.0f/255.0f alpha:1.0f]];
-    [continue_button setTitle:@"Continue" forState:UIControlStateNormal];
-    continue_button.titleLabel.font = [UIFont systemFontOfSize:15.0f];
-    [continue_button addTarget:self action:@selector(continue_button_Action:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:continue_button];
-     */
+    
+    UIButton *joinButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0f, [UIScreen mainScreen].bounds.size.height - 60.0f, 145.0f, 50.0f)];
+    [joinButton setBackgroundColor:[UIColor colorWithRed:91.0f/255.0f green:194.0f/255.0f blue:165.0f/255.0f alpha:1.0f]];
+    joinButton.layer.cornerRadius = 2.0f;
+    [joinButton setTitle:@"Join now" forState:UIControlStateNormal];
+    joinButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
+    [joinButton addTarget:self action:@selector(joinButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:joinButton];
+    
+    UIButton *signInButton = [[UIButton alloc] initWithFrame:CGRectMake(165.0f, [UIScreen mainScreen].bounds.size.height - 60.0f, 145.0f, 50.0f)];
+    [signInButton setBackgroundColor:[UIColor clearColor]];
+    signInButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    signInButton.layer.borderWidth = 2.0f;
+    signInButton.layer.cornerRadius = 2.0f;
+    [signInButton setTitle:@"Sign in" forState:UIControlStateNormal];
+    signInButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
+    [signInButton addTarget:self action:@selector(signInButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:signInButton];
+    
 }
 
 
-- (void)continue_button_Action:(id)sender{
-    PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] init];
-    [self.navigationController pushViewController:loginSelectionViewController animated:YES];
+- (void)joinButtonAction:(id)sender{
+    NSString *userType = @"join";
     
+    PAPLogInViewController *loginViewController = [[PAPLogInViewController alloc] initWithLoginType:userType];
+    [loginViewController setDelegate:self];
+    loginViewController.fields = PFLogInFieldsFacebook | PFLogInFieldsTwitter;
+    loginViewController.facebookPermissions = @[ @"user_about_me" ];
+    
+    [self.navigationController pushViewController:loginViewController animated:YES];
+  
+    
+}
+
+- (void)signInButtonAction:(id)sender {
+    NSString *userType = @"signIn";
+    
+    PAPLogInViewController *loginViewController = [[PAPLogInViewController alloc] initWithLoginType:userType];
+    [loginViewController setDelegate:self];
+    loginViewController.fields = PFLogInFieldsFacebook | PFLogInFieldsTwitter;
+    loginViewController.facebookPermissions = @[ @"user_about_me" ];
+    
+    [self.navigationController pushViewController:loginViewController animated:YES];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -100,17 +129,15 @@
     if (page == 0) {
         [self.text setText:@"A Community for Startup & Entrepreneurs"];
         [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"intro_bg.png"]]];
-        [self.text setFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - 300.0f + screenOffset, 320.0f, 50.0f)];
+        [self.text setFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - 300.0f - screenOffset, 320.0f, 50.0f)];
     } else if (page == 1) {
         [self.text setText:@"Share and discover startup moments"];
         [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"intro_bg_blur.png"]]];
-        [self.text setFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - 180.0f + screenOffset, 320.0f, 50.0f)];
+        [self.text setFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - 180.0f - screenOffset, 320.0f, 50.0f)];
     } else if (page == 2){
         [self.text setText:@"Share thoughts and questions"];
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"intro_bg_blur.png"]]];
     } else {
         [self.text setText:@"Connect with entrepreneurs around the world"];
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"intro_bg_blur.png"]]];
     }
 }
 

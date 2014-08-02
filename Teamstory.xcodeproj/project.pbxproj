@@ -210,6 +210,7 @@
 		46B31EF5184E3D340028D11C /* profileCollaborator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B31EF3184E3D340028D11C /* profileCollaborator@2x.png */; };
 		46B31EF8184E3DCB0028D11C /* profileAddNew.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B31EF6184E3DCB0028D11C /* profileAddNew.png */; };
 		46B31EF9184E3DCB0028D11C /* profileAddNew@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B31EF7184E3DCB0028D11C /* profileAddNew@2x.png */; };
+		46C6FC0E198AA62900BC99D5 /* PAPprofileSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C6FC0D198AA62900BC99D5 /* PAPprofileSetupViewController.m */; };
 		46D1E717186FA398009CC230 /* dropDownMenu.png in Resources */ = {isa = PBXBuildFile; fileRef = 46D1E716186FA398009CC230 /* dropDownMenu.png */; };
 		46E1EB6F183BCA6300F64274 /* PAPProfileSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E1EB6E183BCA6300F64274 /* PAPProfileSettingViewController.m */; };
 		46FB0A42188876C400E978CD /* PAPperksView.m in Sources */ = {isa = PBXBuildFile; fileRef = 46FB0A41188876C400E978CD /* PAPperksView.m */; };
@@ -702,6 +703,8 @@
 		46B31EF3184E3D340028D11C /* profileCollaborator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "profileCollaborator@2x.png"; path = "Resources/Assets/profileCollaborator@2x.png"; sourceTree = SOURCE_ROOT; };
 		46B31EF6184E3DCB0028D11C /* profileAddNew.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = profileAddNew.png; path = Resources/Assets/profileAddNew.png; sourceTree = SOURCE_ROOT; };
 		46B31EF7184E3DCB0028D11C /* profileAddNew@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "profileAddNew@2x.png"; path = "Resources/Assets/profileAddNew@2x.png"; sourceTree = SOURCE_ROOT; };
+		46C6FC0C198AA62900BC99D5 /* PAPprofileSetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPprofileSetupViewController.h; sourceTree = SOURCE_ROOT; };
+		46C6FC0D198AA62900BC99D5 /* PAPprofileSetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPprofileSetupViewController.m; sourceTree = SOURCE_ROOT; };
 		46D1E716186FA398009CC230 /* dropDownMenu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dropDownMenu.png; path = Resources/Assets/dropDownMenu.png; sourceTree = SOURCE_ROOT; };
 		46E1EB6D183BCA6300F64274 /* PAPProfileSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPProfileSettingViewController.h; sourceTree = SOURCE_ROOT; };
 		46E1EB6E183BCA6300F64274 /* PAPProfileSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPProfileSettingViewController.m; sourceTree = SOURCE_ROOT; };
@@ -1615,6 +1618,8 @@
 				C4F102C0156C57DA0061BC3E /* PAPWelcomeViewController.m */,
 				C4F102BD156C57DA0061BC3E /* PAPLogInViewController.h */,
 				C4F102BE156C57DA0061BC3E /* PAPLogInViewController.m */,
+				46C6FC0C198AA62900BC99D5 /* PAPprofileSetupViewController.h */,
+				46C6FC0D198AA62900BC99D5 /* PAPprofileSetupViewController.m */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -2621,6 +2626,7 @@
 				46E1EB6F183BCA6300F64274 /* PAPProfileSettingViewController.m in Sources */,
 				D542D8C0196A6F4700A0384F /* ELCAssetCell.m in Sources */,
 				D5903C75192EBBF900DC9896 /* ThoughtPostViewController.m in Sources */,
+				46C6FC0E198AA62900BC99D5 /* PAPprofileSetupViewController.m in Sources */,
 				C47DDDE61592761F002114F6 /* Reachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

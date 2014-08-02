@@ -10,6 +10,7 @@
 #import "PAPwebviewViewController.h"
 #import "AppDelegate.h"
 #import "PAPProfileSettingViewController.h"
+#import "PAPprofileSetupViewController.h"
 
 #define SUCCESSFUL 1
 
@@ -37,7 +38,7 @@
     signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];
     policy = [UIButton buttonWithType:UIButtonTypeCustom];
     
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-intro.png"]];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"intro_bg.png"]];
 
     
     UILabel *mainLabel = [[UILabel alloc] init];
@@ -224,15 +225,15 @@
             user.password = userPW;
             
             [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                [SVProgressHUD dismiss];
+                
                 if (!error) {
-                    [SVProgressHUD dismiss];
                     // Hooray! Let them use the app now.
                     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Signed Up Successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                     alert.tag = SUCCESSFUL;
                     alert.alertViewStyle = UIAlertViewStyleDefault;
                     [alert show];
                 } else {
-                    [SVProgressHUD dismiss];
                     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your Information could not be saved. Reach us at info@teamstoryapp.com" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                     alert.alertViewStyle = UIAlertViewStyleDefault;
                     [alert show];
@@ -269,8 +270,8 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (alertView.tag == SUCCESSFUL) {
         if (buttonIndex == 0) {
-            PAPProfileSettingViewController *profileSettingsViewController = [[PAPProfileSettingViewController alloc] init];
-            [self.navigationController pushViewController:profileSettingsViewController animated:YES];
+            PAPprofileSetupViewController *profileSetupViewController = [[PAPprofileSetupViewController alloc] init];
+            [self.navigationController pushViewController:profileSetupViewController animated:YES];
         }
     }
 }

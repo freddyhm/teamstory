@@ -12,6 +12,7 @@
 #import "PAPLoginTutorialViewController.h"
 #import "PAPprofileApprovalViewController.h"
 #import "PAPHomeViewController.h"
+#import "PAPprofileSetupViewController.h"
 
 @implementation PAPWelcomeViewController
 
@@ -60,9 +61,9 @@
                     // analytics
                     [PAPUtility captureScreenGA:@"New Profile"];
                     
-                    PAPProfileSettingViewController *profileViewController = [[PAPProfileSettingViewController alloc] init];
+                    PAPprofileSetupViewController *profileSetupViewController = [[PAPprofileSetupViewController alloc] init];
                     self.navigationController.navigationBarHidden = YES;
-                    [self.navigationController pushViewController:profileViewController animated:NO];
+                    [self.navigationController pushViewController:profileSetupViewController animated:NO];
                 } else if (user && access_grant != YES){
                     PAPprofileApprovalViewController *profileApprovalViewController = [[PAPprofileApprovalViewController alloc] init];
                     [self.navigationController pushViewController:profileApprovalViewController animated:YES];
