@@ -9,6 +9,8 @@
 #import "PAPprofileSetupViewController.h"
 #import <CoreLocation/CoreLocation.h>
 #import "SVProgressHUD.h"
+#import "AppDelegate.h"
+#import "UIImage+ResizeAdditions.h"
 
 @interface PAPprofileSetupViewController () {
     int industry_pickerRow;
@@ -25,6 +27,18 @@
 @property (nonatomic, strong) NSArray *industry_datasource;
 @property (nonatomic, strong) UIPickerView *industry_pickerView;
 @property (nonatomic, strong) UIButton *industry_chooseButton;
+@property (nonatomic, strong) UITextField *emailTF;
+@property (nonatomic, strong) PFUser *user;
+@property (nonatomic, strong) NSString *userEmail;
+@property (nonatomic, strong) UITextField *twitterTF;
+@property (nonatomic, strong) UITextField *angellistTF;
+@property (nonatomic, strong) UITextField *linkedInTF;
+@property (nonatomic, strong) UIButton *navDone;
+
+@property (nonatomic, strong) NSData *imageData_picker;
+@property (nonatomic, strong) NSData *imageData_picker_small;
+@property (nonatomic, strong) PFImageView* profilePictureImageView;
+@property (nonatomic, strong) PFFile *imageProfileFile;
 
 @property (nonatomic, strong) UILabel *wordCountLabel;
 @property (nonatomic, strong) CLLocationManager *locationManager;
@@ -85,12 +99,6 @@
     [self.pageControl setNumberOfPages:3];
     [self.view addSubview:pageControl_bar];
     
-    UIImage *buttonCancelImage = [UIImage imageNamed:@"button_cancel.png"];
-    UIButton *navExit = [[UIButton alloc] initWithFrame:CGRectMake(10.0f, 30.0f - buttonCancelImage.size.width / 2, buttonCancelImage.size.width, buttonCancelImage.size.height)];
-    [navExit setImage:buttonCancelImage forState:UIControlStateNormal];
-    [navExit addTarget:self action:@selector(navExitAction:) forControlEvents:UIControlEventTouchUpInside];
-    [navBar addSubview:navExit];
-    
     UIImage *navNextImage = [UIImage imageNamed:@"arrow_right_white.png"];
     UIButton *navNext_1 = [[UIButton alloc] initWithFrame:CGRectMake(310.0f - navNextImage.size.width, 30.0f - navNextImage.size.width / 2, navNextImage.size.width, navNextImage.size.height)];
     [navNext_1 setImage:navNextImage forState:UIControlStateNormal];
@@ -112,18 +120,28 @@
     [navBack_3 setImage:navBackImage forState:UIControlStateNormal];
     [navBack_3 addTarget:self action:@selector(navBack_3Action:) forControlEvents:UIControlEventTouchUpInside];
     [navBar addSubview:navBack_3];
+    
+    UIImage *navDoneImage = [UIImage imageNamed:@"button_done.png"];
+    self.navDone = [[UIButton alloc] initWithFrame:CGRectMake(960.0f - 10.0f - navDoneImage.size.width, 30.0f - navDoneImage.size.width / 2, navDoneImage.size.width,  navDoneImage.size.height)];
+    [self.navDone setImage:navDoneImage forState:UIControlStateNormal];
+    [self.navDone addTarget:self action:@selector(navDonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [navBar addSubview:self.navDone];
 
     
-    UIView *middleImageView_1 = [[UIView alloc] initWithFrame:CGRectMake(0.0f, navBar.bounds.size.height, 320.0f, 105.0f)];
-    middleImageView_1.backgroundColor = [UIColor greenColor];
+    UIImage *middleImageViewImage_1 = [UIImage imageNamed:@"profile_header_1.png"];
+    UIImageView *middleImageView_1 = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, navBar.bounds.size.height, middleImageViewImage_1.size.width, middleImageViewImage_1.size.height)];
+    middleImageView_1.image = middleImageViewImage_1;
+    middleImageView_1.userInteractionEnabled = YES;
     [self.mainSV addSubview:middleImageView_1];
     
-    UIView *middleImageView_2 = [[UIView alloc] initWithFrame:CGRectMake(320.0f, navBar.bounds.size.height, 320.0f, 105.0f)];
-    middleImageView_2.backgroundColor = [UIColor redColor];
+    UIImage *middleImageViewImage_2 = [UIImage imageNamed:@"profile_header_2.png"];
+    UIImageView *middleImageView_2 = [[UIImageView alloc] initWithFrame:CGRectMake(320.0f, navBar.bounds.size.height, middleImageViewImage_2.size.width, middleImageViewImage_2.size.height)];
+    middleImageView_2.image = middleImageViewImage_2;
     [self.mainSV addSubview:middleImageView_2];
     
-    UIView *middleImageView_3 = [[UIView alloc] initWithFrame:CGRectMake(640.0f, navBar.bounds.size.height, 320.0f, 105.0f)];
-    middleImageView_3.backgroundColor = [UIColor blueColor];
+    UIImage *middleImageVIewImage_3 = [UIImage imageNamed:@"profile_header_3.png"];
+    UIImageView *middleImageView_3 = [[UIImageView alloc] initWithFrame:CGRectMake(640.0f, navBar.bounds.size.height, middleImageVIewImage_3.size.width, middleImageVIewImage_3.size.height)];
+    middleImageView_3.image = middleImageVIewImage_3;
     [self.mainSV addSubview:middleImageView_3];
     
     UILabel *middleImageViewText_2 = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 105.0f)];
@@ -136,10 +154,18 @@
     middleImageViewText_3.textAlignment = NSTextAlignmentCenter;
     [middleImageView_3 addSubview:middleImageViewText_3];
     
+    UIImage *imagePickerImage = [UIImage imageNamed:@"btn_image_upload.png"];
+    
+    UIButton *imagePicker = [[UIButton alloc] initWithFrame:CGRectMake(160.0f - imagePickerImage.size.width / 2, middleImageView_1.bounds.size.height / 2 - imagePickerImage.size.height / 2, imagePickerImage.size.width, imagePickerImage.size.height)];
+    [imagePicker setImage:imagePickerImage forState:UIControlStateNormal];
+    [imagePicker addTarget:self action:@selector(imagePickerAction:) forControlEvents:UIControlEventTouchUpInside];
+    [middleImageView_1 addSubview:imagePicker];
+    
     
     // Textfields in first page
     self.displayNameTF = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, middleImageView_1.bounds.size.height + navBar.bounds.size.height, 300.0f, 55.0f)];
     self.displayNameTF.placeholder = @"Startup Name or Individual Name";
+    self.displayNameTF.delegate = self;
     //displayNameTF.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0f];
     [self.displayNameTF becomeFirstResponder];
     [self.mainSV addSubview:self.displayNameTF];
@@ -159,17 +185,27 @@
     [line_2 setBackgroundColor:lineColor];
     [self.mainSV addSubview:line_2];
     
-    self.websiteTF = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height + self.locationTF.bounds.size.height + navBar.bounds.size.height, 300.0f, 55.0f)];
-    self.websiteTF.placeholder = @"Website";
+    self.user = [PFUser currentUser];
+    self.userEmail = [self.user objectForKey:@"email"];
+    
+    self.emailTF = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height + self.locationTF.bounds.size.height + navBar.bounds.size.height, 300.0f, 55.0f)];
+    if ([self.userEmail length] == 0) {
+        self.emailTF.placeholder = @"Email";
+        self.emailTF.userInteractionEnabled = YES;
+    } else {
+        self.emailTF.text = self.userEmail;
+        self.emailTF.userInteractionEnabled = NO;
+    }
     //websiteTF.backgroundColor = [UIColor colorWithWhite:0.4 alpha:1.0f];
-    [self.mainSV addSubview:self.websiteTF];
+    [self.mainSV addSubview:self.emailTF];
     
-    UIButton *locationDetectButton = [[UIButton alloc] initWithFrame:CGRectMake(self.locationTF.bounds.size.width - 60.0f, 0.0f, 50.0f, self.locationTF.bounds.size.height)];
-    [locationDetectButton setBackgroundColor:[UIColor redColor]];
+    UIImage *locationDetectionButtionImage = [UIImage imageNamed:@"btn_auto_detect.png"];
+    UIButton *locationDetectButton = [[UIButton alloc] initWithFrame:CGRectMake(320.0f - locationDetectionButtionImage.size.width, self.locationTF.frame.origin.y, locationDetectionButtionImage.size.width, 55.0f)];
+    [locationDetectButton setImage:locationDetectionButtionImage forState:UIControlStateNormal];
     [locationDetectButton addTarget:self action:@selector(locationDetectButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.locationTF addSubview:locationDetectButton];
+    [self.mainSV addSubview:locationDetectButton];
     
-    self.descriptionTV = [[UITextView alloc] initWithFrame:CGRectMake(320.0f, middleImageView_2.bounds.size.height + navBar.bounds.size.height, 320.0f, 110.0f)];
+    self.descriptionTV = [[UITextView alloc] initWithFrame:CGRectMake(320.0f, middleImageView_2.bounds.size.height + navBar.bounds.size.height, 320.0f, 55.0f)];
     self.descriptionTV.delegate = self;
     self.descriptionTV.contentInset = UIEdgeInsetsMake(10.0f, 10.0f, 0.0f, 0.0f);
     self.descriptionTV.text = @"Bio";
@@ -177,17 +213,11 @@
     self.descriptionTV.font = [UIFont systemFontOfSize:17.0f];
     [self.mainSV addSubview:self.descriptionTV];
     
-    self.wordCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(320.0f + 320.0f - 60.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height + self.locationTF.bounds.size.height + navBar.bounds.size.height - 30.0f, 50.0f, 30.0f)];
+    self.wordCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(320.0f + 320.0f - 60.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height + navBar.bounds.size.height - 30.0f, 50.0f, 30.0f)];
     self.wordCountLabel.text = @"0/150";
     self.wordCountLabel.textAlignment = NSTextAlignmentCenter;
     self.wordCountLabel.font = [UIFont systemFontOfSize:12.0f];
     [self.mainSV addSubview:self.wordCountLabel];
-    
-    self.dimView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, [UIScreen mainScreen].bounds.size.height)];
-    self.dimView.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.8f];
-    self.dimView.hidden = YES;
-    [self.view addSubview:self.dimView];
-    
     
     self.industry_datasource = [NSArray arrayWithObjects:@"Information Technology", @"Consumers", @"Enterprises", @"Media", @"Education", @"Health Care", @"Finance", @"Sales and Marketing", @"Fashion", @"Health and Wellness", @"Retail", @"Sports", @"UI/UX Design", @"Travel", @"Web Development", @"Real Estate", @"Recruiting", @"Entertainment", @"Clean Technology", @"Events", @"B2B", @"Restaurants", @"Lifestyle", @"Big Data Analytics", @"Music Services", @"Event Management", @"Non Profits", @"Discovery", @"Incubators", @"Other", nil];
     
@@ -201,15 +231,103 @@
     [self.industry_button addTarget:self action:@selector(industry_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.mainSV addSubview:self.industry_button];
     
+    self.websiteTF = [[UITextField alloc] initWithFrame:CGRectMake(330.0f, middleImageView_2.bounds.size.height + self.descriptionTV.bounds.size.height + self.industry_button.bounds.size.height + navBar.bounds.size.height, 300.0f, 55.0f)];
+    self.websiteTF.placeholder = @"Website";
+    self.websiteTF.delegate = self;
+    //websiteTF.backgroundColor = [UIColor colorWithWhite:0.4 alpha:1.0f];
+    [self.mainSV addSubview:self.websiteTF];
+    
+    UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
+                                          initWithTarget:self
+                                          action:@selector(dismissIndustryPicker)];
+    
+    self.dimView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, [UIScreen mainScreen].bounds.size.height)];
+    self.dimView.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.8f];
+    self.dimView.hidden = YES;
+    [self.dimView addGestureRecognizer:tapOutside];
+    [self.view addSubview:self.dimView];
+    
+    
+    // third screen
+    
+    self.twitterTF = [[UITextField alloc] initWithFrame:CGRectMake(650.0f, middleImageView_3.bounds.size.height + navBar.bounds.size.height, 300.0f, 55.0f)];
+    self.twitterTF.delegate = self;
+    self.twitterTF.placeholder = @"Twitter";
+    [self.mainSV addSubview:self.twitterTF];
+    
+    self.angellistTF = [[UITextField alloc] initWithFrame:CGRectMake(650.0f, middleImageView_3.bounds.size.height + navBar.bounds.size.height + self.twitterTF.bounds.size.height, 300.0f, 55.0f)];
+    self.angellistTF.delegate = self;
+    self.angellistTF.placeholder = @"AngelList";
+    [self.mainSV addSubview:self.angellistTF];
+    
+    self.linkedInTF = [[UITextField alloc] initWithFrame:CGRectMake(650.0f, middleImageView_3.bounds.size.height + navBar.bounds.size.height + self.twitterTF.bounds.size.height + self.angellistTF.bounds.size.height, 300.0f, 55.0f)];
+    self.linkedInTF.delegate = self;
+    self.linkedInTF.placeholder = @"LinkedIn";
+    [self.mainSV addSubview:self.linkedInTF];
 
 }
 
 # pragma - ()
--(void)navExitAction:(id)sender {
-}
-
 -(void)navNext_1Action:(id)sender {
-    [self.mainSV setContentOffset:CGPointMake(320.0f, 0.0f) animated:YES];
+    [self.locationTF becomeFirstResponder];
+    if ([self.displayNameTF.text length] > 0 && [self.locationTF.text length] > 0 && ([self.emailTF.text length] > 0 || [self.userEmail length] > 0)) {
+        if ([self.displayNameTF.text length] > 0 && [(AppDelegate*)[[UIApplication sharedApplication] delegate] isParseReachable]) {
+            [SVProgressHUD showWithStatus:@"Validating User Name"];
+            self.displayNameTF.enabled = NO;
+            PFQuery *query = [PFUser query];
+            [query whereKey:@"displayName" equalTo:self.displayNameTF.text];
+            [query countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
+                [SVProgressHUD dismiss];
+                
+                self.displayNameTF.enabled = YES;
+                
+                if (!error) {
+                    if ((number > 0 || [self.displayNameTF.text length] == 0) && (![[[PFUser currentUser] objectForKey:@"displayName"] isEqualToString:self.displayNameTF.text])) {
+                        self.dimView.hidden = YES;
+                        [self.view endEditing:YES];
+                        self.displayNameTF.text = @"";
+                        [self.displayNameTF becomeFirstResponder];
+                        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Display name is already in use. Please choose another name." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                        alert.alertViewStyle = UIAlertViewStyleDefault;
+                        [alert show];
+                    } else {
+                        if (([self.userEmail length] == 0) && [(AppDelegate*)[[UIApplication sharedApplication] delegate] isParseReachable]) {
+                            [SVProgressHUD showWithStatus:@"Validating Email"];
+                            
+                            PFQuery *userQuery = [PFUser query];
+                            [userQuery whereKey:@"email" equalTo :self.emailTF.text];
+                            [userQuery countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
+                                [SVProgressHUD dismiss];
+                                
+                                if (!error) {
+                                    if (number > 0) {
+                                        self.emailTF.text = @"";
+                                        [self.mainSV setContentOffset:CGPointMake(320.0f, 0.0f) animated:YES];
+                                        [self.emailTF becomeFirstResponder];
+                                        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"The email address is already in use. Please use another email address." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                                        alert.alertViewStyle = UIAlertViewStyleDefault;
+                                        [alert show];
+                                    }
+                                } else {
+                                    NSLog(@"%@", error);
+                                }
+                            }];
+                        } else {
+                            [self.mainSV setContentOffset:CGPointMake(320.0f, 0.0f) animated:YES];
+                        }
+                    }
+                } else {
+                    NSLog(@"%@", error);
+                }
+                
+            }];
+        }
+    } else {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please check your fields" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        alert.alertViewStyle = UIAlertViewStyleDefault;
+        [alert show];
+    }
+
 }
 
 -(void)navNext_2Action:(id)sender {
@@ -225,6 +343,89 @@
     [self.mainSV setContentOffset:CGPointMake(320.0f, 0.0f) animated:YES];
 }
 
+-(BOOL)NSStringIsValidEmail:(NSString *)checkString {
+    BOOL stricterFilter = YES;
+    NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";
+    NSString *laxString = @".+@([A-Za-z0-9]+\\.)+[A-Za-z]{2}[A-Za-z]*";
+    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:checkString];
+}
+
+-(void)dismissIndustryPicker {
+    self.dimView.hidden = YES;
+    [self.industry_pickerView removeFromSuperview];
+    [self.industry_chooseButton removeFromSuperview];
+    [self.locationTF becomeFirstResponder];
+    
+}
+
+-(void)navDonAction:(id)sender {
+    [SVProgressHUD show];
+    
+    NSString* companyName_input = self.displayNameTF.text;
+    NSString* location_input = self.locationTF.text;
+    NSString* description_input = self.descriptionTV.text;
+    NSString* website_input = [self.websiteTF.text lowercaseString];
+    NSString* twitter_input = self.twitterTF.text;
+    NSString* industry_input = self.industry_button.titleLabel.text;
+    NSString* linkedin_input = self.linkedInTF.text;
+    NSString* angellist_input = self.angellistTF.text;
+    NSString* email_input = self.emailTF.text;
+    NSString* email_current_input = self.user[@"email"];
+    
+    self.navDone.userInteractionEnabled = NO;
+    
+    if ([companyName_input length] > 0 && [location_input length] > 0 && (([email_input length] > 0 && [self NSStringIsValidEmail:email_input]) || email_current_input )) {
+            if ([companyName_input length] > 0) {
+                self.user[@"displayName"] = companyName_input;
+            }
+            if ([location_input length] > 0) {
+                self.user[@"location"] = location_input;
+            }
+            if ([description_input length] > 0) {
+                self.user[@"description"] = description_input;
+            }
+            if ([website_input length] > 0 && ![website_input isEqualToString:@"http://"]) {
+                self.user[@"website"] = website_input;
+            }
+            if ([industry_input length] > 0 && ![industry_input isEqualToString:@"Industry / Market"]) {
+                self.user[@"industry"] = industry_input;
+            }
+            if ([twitter_input length] > 0 && ![twitter_input isEqualToString:@"https://twitter.com/"]) {
+                self.user[@"twitter_url"] = twitter_input;
+            }
+            if ([linkedin_input length] > 0 && ![linkedin_input isEqualToString:@"https://www.linkedin.com/in/"]) {
+                self.user[@"linkedin_url"] = linkedin_input;
+            }
+            if ([angellist_input length] > 0 && ![angellist_input isEqualToString:@"https://angel.co/"]) {
+                self.user[@"angellist_url"] = angellist_input;
+            }
+            if ([email_current_input length] == 0) {
+                self.user[@"email"] = email_input;
+            }
+
+            
+            [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                [SVProgressHUD dismiss];
+                
+                if(succeeded){
+                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    alert.alertViewStyle = UIAlertViewStyleDefault;
+                    [alert show];
+                }else{
+                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your Information could not be saved. Please try again or Reach us at info@teamstoryapp.com" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    alert.alertViewStyle = UIAlertViewStyleDefault;
+                    [alert show];
+                    self.navDone.userInteractionEnabled = YES;
+                }
+            }];
+    }
+    
+    
+
+}
+
 -(void)locationDetectButtonAction:(id)sender{
     [SVProgressHUD show];
     
@@ -236,7 +437,6 @@
                        if (error){
                            NSLog(@"Geocode failed with error: %@", error);
                            return;
-                           
                        }
                        
                        CLPlacemark *placemark = [placemarks objectAtIndex:0];
@@ -249,7 +449,7 @@
                        NSLog(@"placemark.subLocality %@",placemark.subLocality);
                        NSLog(@"placemark.subThoroughfare %@",placemark.subThoroughfare);
                        
-                       self.locationTF.text = [NSString stringWithFormat:@"%@, %@", placemark.locality, placemark.country];
+                       self.locationTF.text = [NSString stringWithFormat:@"%@, %@", placemark.locality, placemark.administrativeArea];
                        
                    }];
 }
@@ -284,6 +484,156 @@
     [self.descriptionTV becomeFirstResponder];
 }
 
+-(void)imagePickerAction:(id)sender {
+    [self photo_picker_init];
+}
+
+- (void) photo_picker_init {
+    BOOL cameraDeviceAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
+    BOOL photoLibraryAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
+    
+    if (cameraDeviceAvailable && photoLibraryAvailable) {
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take Photo", @"Choose Photo", nil];
+        [actionSheet showInView:self.view];
+    } else {
+        // if we don't have at least two options, we automatically show whichever is available (camera or roll)
+        [self shouldPresentPhotoCaptureController];
+    }
+}
+
+- (BOOL)shouldPresentPhotoCaptureController {
+    BOOL presentedPhotoCaptureController = [self shouldStartCameraController];
+    
+    if (!presentedPhotoCaptureController) {
+        presentedPhotoCaptureController = [self shouldStartPhotoLibraryPickerController];
+    }
+    
+    return presentedPhotoCaptureController;
+}
+
+- (BOOL)shouldStartCameraController {
+    
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
+        return NO;
+    }
+    
+    UIImagePickerController *cameraUI = [[UIImagePickerController alloc] init];
+    
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]
+        && [[UIImagePickerController availableMediaTypesForSourceType:
+             UIImagePickerControllerSourceTypeCamera] containsObject:(NSString *)kUTTypeImage]) {
+        
+        cameraUI.mediaTypes = [NSArray arrayWithObject:(NSString *) kUTTypeImage];
+        cameraUI.sourceType = UIImagePickerControllerSourceTypeCamera;
+        
+        if ([UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceRear]) {
+            cameraUI.cameraDevice = UIImagePickerControllerCameraDeviceRear;
+        } else if ([UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceFront]) {
+            cameraUI.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+        }
+        
+    } else {
+        return NO;
+    }
+    
+    cameraUI.allowsEditing = YES;
+    cameraUI.showsCameraControls = YES;
+    cameraUI.delegate = self;
+    
+    [self presentViewController:cameraUI animated:YES completion:nil];
+    
+    return YES;
+}
+
+- (BOOL)shouldStartPhotoLibraryPickerController {
+    if (([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary] == NO
+         && [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum] == NO)) {
+        return NO;
+    }
+    
+    UIImagePickerController *cameraUI = [[UIImagePickerController alloc] init];
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]
+        && [[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary] containsObject:(NSString *)kUTTypeImage]) {
+        
+        cameraUI.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        cameraUI.mediaTypes = [NSArray arrayWithObject:(NSString *) kUTTypeImage];
+        
+    } else if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum]
+               && [[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum] containsObject:(NSString *)kUTTypeImage]) {
+        
+        cameraUI.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+        cameraUI.mediaTypes = [NSArray arrayWithObject:(NSString *) kUTTypeImage];
+        
+    } else {
+        return NO;
+    }
+    
+    cameraUI.allowsEditing = YES;
+    cameraUI.delegate = self;
+    
+    [self presentViewController:cameraUI animated:YES completion:nil];
+    
+    return YES;
+}
+
+#pragma mark - UIActionSheetDelegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        [self shouldStartCameraController];
+    } else if (buttonIndex == 1) {
+        [self shouldStartPhotoLibraryPickerController];
+    }
+}
+
+#pragma mark - UIImagePickerDelegate
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.locationTF becomeFirstResponder];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    [self.profilePictureImageView removeFromSuperview];
+    
+    UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
+    
+    // Dismiss controller
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    
+    UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:0.0f interpolationQuality:kCGInterpolationHigh];
+    UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(200.0f, 200.0f) interpolationQuality:kCGInterpolationHigh];
+    
+    // Upload image
+    self.imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
+    self.imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
+}
+
+-(void)uploadImage_small:(NSData *)imageData {
+    PFFile *imageFile = [PFFile fileWithName:nil data:imageData];
+    
+    //HUD creation here (see example for code)
+    
+    [SVProgressHUD show];
+    
+    self.user = [PFUser currentUser];
+    self.user[@"profilePictureSmall"] = imageFile;
+    
+    [self.user saveInBackground];
+    [SVProgressHUD dismiss];
+}
+
+-(void)uploadImage_medium:(NSData *)imageData {
+    PFFile *imageFile = [PFFile fileWithName:nil data:imageData];
+    
+    [SVProgressHUD show];
+    self.user = [PFUser currentUser];
+    self.user[@"profilePictureMedium"] = imageFile;
+    
+    [self.user saveInBackground];
+    [SVProgressHUD dismiss];
+}
+
 
 # pragma - UITextViewDelegate
 
@@ -307,6 +657,33 @@
     if (textLength >= 150) {
         self.descriptionTV.text = [self.descriptionTV.text substringToIndex:149];
     }
+}
+
+# pragma - UITextFieldDelegate
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField {
+    if (textField == self.twitterTF && [textField.text length] == 0) {
+        self.twitterTF.text = @"https://twitter.com/";
+    } else if (textField == self.linkedInTF && [textField.text length] == 0) {
+        self.linkedInTF.text = @"https://www.linkedin.com/in/";
+    } else if (textField == self.angellistTF && [textField.text length] == 0) {
+        self.angellistTF.text = @"https://angel.co/";
+    } else if (textField == self.websiteTF && [textField.text length] == 0) {
+        self.websiteTF.text = @"http://";
+    }
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    if (textField == self.twitterTF && [textField.text isEqualToString:@"https://twitter.com/"]) {
+        self.twitterTF.text = nil;
+    } else if (textField == self.linkedInTF && [textField.text isEqualToString:@"https://www.linkedin.com/in/"]) {
+        self.linkedInTF.text = nil;
+    } else if (textField == self.angellistTF && [textField.text isEqualToString:@"https://angel.co/"]) {
+        self.angellistTF.text = nil;
+    } else if (textField == self.websiteTF && [textField.text isEqualToString:@"http://"]) {
+        self.websiteTF.text = nil;
+    }
+    
 }
 
 #pragma mark - UIPickerViewDelegate
