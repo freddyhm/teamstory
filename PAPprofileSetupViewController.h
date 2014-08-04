@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PAPprofileSetupViewController : UIViewController
+@interface PAPprofileSetupViewController : UIViewController <UIScrollViewDelegate,CLLocationManagerDelegate,UITextViewDelegate,UIPickerViewDelegate>
 
 @end

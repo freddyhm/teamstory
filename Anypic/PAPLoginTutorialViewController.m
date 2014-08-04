@@ -69,7 +69,7 @@
     [self.view addSubview:pageControl_bar];
     
     self.text = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - 300.0f + screenOffset, 320.0f, 50.0f)];
-    [self.text setText:@"Teamstory is an Invitation-only community\nfor startups and entrepreneurs to capture\nand share their unique startup moments."];
+    [self.text setText:@"A Community for Startup & Entrepreneurs"];
     [self.text setTextAlignment:NSTextAlignmentCenter];
     [self.text setTextColor:[UIColor whiteColor]];
     [self.text setFont:[UIFont fontWithName:@"HelveticaNeue" size:13.0f]];
