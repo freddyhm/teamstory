@@ -376,8 +376,6 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 UIFont *locationFont = [UIFont fontWithName:@"Helvetica" size:13.0f];
                 UIColor *locationColor = [UIColor colorWithRed:158.0f/255.0f green:158.0f/255.0f blue:158.0f/255.0f alpha:1];
                 
-                self.locationInfo = nil;
-                
                 // Check length of location
                 if([self.locationInfo length] == 0){
                     self.locationInfo = @"";
