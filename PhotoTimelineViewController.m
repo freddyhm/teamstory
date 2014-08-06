@@ -30,6 +30,8 @@
 @property (nonatomic, strong) MBProgressHUD *hud;
 @property (nonatomic, strong) NSCache *imgCache;
 @property int loadPostCount;
+@property int refreshCount;
+@property float refreshStopPosition;
 
 @end
 
@@ -55,6 +57,10 @@ enum ActionSheetTags {
         self.imgCache = [[NSCache alloc]init];
     
         self.shouldReloadOnAppear = NO;
+        
+        self.refreshCount = 0;
+        
+        self.refreshStopPosition = 0.0f;
     }
     return self;
 }
@@ -78,8 +84,21 @@ enum ActionSheetTags {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLikeOrUnlikePhoto:) name:PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidCommentOnPhoto:) name:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hudFinished:) name:SVProgressHUDDidDisappearNotification object:nil];
+    
     
     [self loadObjects:nil isRefresh:NO];
+}
+
+- (void)hudFinished:(id)notification{
+    
+    NSLog(@"%f feed", self.feed.contentOffset.y);
+    
+    NSLog(@"%f refresh", self.refreshStopPosition);
+    
+    if(self.feed.contentOffset.y == self.refreshStopPosition){
+        [self.feed setContentOffset:CGPointMake(0, -64) animated:YES];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -199,28 +218,55 @@ enum ActionSheetTags {
 
 #pragma mark - Refresh
 
+
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
        BOOL isHome = [[self.navigationController.viewControllers lastObject] isKindOfClass:PAPHomeViewController.class];
+    
+    
     
      // Make sure pull-to-refresh set only for home
      if(isHome){
          
+         if(scrollView.contentOffset.y == -64){
+             self.refreshCount = 0;
+         }
+         
+
          // Enough space to show the hud
         if(scrollView.contentOffset.y <= -100){
+        
             if(![SVProgressHUD isVisible]){
-                CGFloat hudOffset = IS_WIDESCREEN ? -170.0f : -130.0f;
-                [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, hudOffset)];
-                [SVProgressHUD show];
-                [self loadObjects:nil isRefresh:YES];
+                if(self.refreshCount == 0){
+                    CGFloat hudOffset = IS_WIDESCREEN ? -170.0f : -130.0f;
+                    [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, hudOffset)];
+                    [SVProgressHUD show];
+                    self.refreshCount = 5;
+                    [self loadObjects:nil isRefresh:YES];
+                }
+            }else{
+            
+                if(scrollView.contentOffset.y <= -110 && self.refreshCount == 5){
+                    
+                    if(self.refreshStopPosition != -1){
+                        self.refreshStopPosition = scrollView.contentOffset.y;
+                    }
+                    
+                    [scrollView setContentOffset:CGPointMake(0, scrollView.contentOffset.y) animated:YES];
+                }
             }
+   
         }else{
+        
             if([SVProgressHUD isVisible]){
                 [SVProgressHUD dismiss];
                 [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, 0.0f)];
             }
         }
+         
     }
 }
+
 
 // see if scrolling near end, refresh when decelerating if so
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
@@ -232,6 +278,17 @@ enum ActionSheetTags {
     }
     
 }
+
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    
+    NSLog(@"HERE");
+    self.refreshStopPosition = 0;
+}
+ 
+ 
+
+
 
 
 
