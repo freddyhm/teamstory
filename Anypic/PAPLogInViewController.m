@@ -8,8 +8,8 @@
 #import "AppDelegate.h"
 #import "emailSignUpViewController.h"
 #import "SVProgressHUD.h"
-#import "PAPprofileApprovalViewController.h"
 #import "PAPProfileSettingViewController.h"
+#import "PAPprofileSetupViewController.h"
 
 @interface PAPLogInViewController()
 @property (nonatomic, strong) UITextField *user_email;
@@ -210,20 +210,14 @@
                                                     NSNumber *profileBoolNum = [user objectForKey: @"profileExist"];
                                                     bool profileExist = [profileBoolNum boolValue];
                                                     
-                                                    NSNumber *accessGrantNum = [user objectForKey: @"accessGrant"];
-                                                    bool accessGrant = [accessGrantNum boolValue];
-                                                    
-                                                    if (profileExist == true && accessGrant == true) {
+                                                    if (profileExist == true) {
                                                         NSLog(@"Logged In Sucessfully");
                                                         [SVProgressHUD dismiss];
                                                         [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
                                                         return;
                                                         
-                                                    } else if (profileExist == true && accessGrant != true){
-                                                        PAPprofileApprovalViewController *approvalViewController = [[PAPprofileApprovalViewController alloc] init];
-                                                        [self.navigationController pushViewController:approvalViewController animated:YES];
                                                     } else if (profileExist != true) {
-                                                        PAPProfileSettingViewController *profileSettingsViewController = [[PAPProfileSettingViewController alloc] init];
+                                                        PAPprofileSetupViewController *profileSettingsViewController = [[PAPprofileSetupViewController alloc] init];
                                                         [self.navigationController pushViewController:profileSettingsViewController animated:YES];
                                                     }
                                                     

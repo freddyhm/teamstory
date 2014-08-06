@@ -69,9 +69,5 @@
     [self.navigationController pushViewController:loginViewController animated:YES];
 }
 
-- (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
-    [(AppDelegate*)[[UIApplication sharedApplication] delegate] logInViewController:logInController didLogInUser:user];
-}
-
 
 @end

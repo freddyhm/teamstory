@@ -12,6 +12,8 @@
 #import "AppDelegate.h"
 #import "UIImage+ResizeAdditions.h"
 
+#define SUCCESSFUL 1
+
 @interface PAPprofileSetupViewController () {
     int industry_pickerRow;
 }
@@ -35,6 +37,7 @@
 @property (nonatomic, strong) UITextField *linkedInTF;
 @property (nonatomic, strong) UIButton *navDone;
 
+@property (nonatomic, strong) UIButton *imagePicker;
 @property (nonatomic, strong) NSData *imageData_picker;
 @property (nonatomic, strong) NSData *imageData_picker_small;
 @property (nonatomic, strong) PFImageView* profilePictureImageView;
@@ -78,45 +81,48 @@
     [profileSetupLabel setText:@"Profile Setup"];
     profileSetupLabel.textAlignment = NSTextAlignmentCenter;
     profileSetupLabel.textColor = [UIColor whiteColor];
+    profileSetupLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:17.0f];
     [navBar addSubview:profileSetupLabel];
     
     UILabel *aboutLabel = [[UILabel alloc] initWithFrame:CGRectMake(320.0f, 0.0f, 320.0f, navBar.bounds.size.height)];
     [aboutLabel setText:@"About"];
     aboutLabel.textAlignment = NSTextAlignmentCenter;
     aboutLabel.textColor = [UIColor whiteColor];
+    aboutLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:17.0f];
     [navBar addSubview:aboutLabel];
     
     UILabel *linkLabel = [[UILabel alloc] initWithFrame:CGRectMake(640.0f, 0.0f, 320.0f, navBar.bounds.size.height)];
     [linkLabel setText:@"Links"];
     linkLabel.textAlignment = NSTextAlignmentCenter;
     linkLabel.textColor = [UIColor whiteColor];
+    linkLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:17.0f];
     [navBar addSubview:linkLabel];
     
-    UIPageControl *pageControl_bar = [[UIPageControl alloc] initWithFrame:CGRectMake(0.0f, 60.0f, 320.0f, 20.0f)];
+    UIPageControl *pageControl_bar = [[UIPageControl alloc] initWithFrame:CGRectMake(160.0f - 25.0f, 60.0f, 50.0f, 20.0f)];
+    [pageControl_bar setPageIndicatorTintColor:[UIColor colorWithWhite:1.0f alpha:0.5f]];
+    [pageControl_bar setCurrentPageIndicatorTintColor:[UIColor colorWithWhite:1.0f alpha:1.0f]];
     [self setPageControl:pageControl_bar];
-    [pageControl_bar setPageIndicatorTintColor:[UIColor colorWithRed:79.0f/255.0f green:91.0f/255.0f blue:100.0f/255.0f alpha:1.0f]];
-    [pageControl_bar setCurrentPageIndicatorTintColor:[UIColor colorWithRed:205.0f/255.0f green:208.0f/255.0f blue:210.0f/255.0f alpha:1.0f]];
     [self.pageControl setNumberOfPages:3];
     [self.view addSubview:pageControl_bar];
     
-    UIImage *navNextImage = [UIImage imageNamed:@"arrow_right_white.png"];
-    UIButton *navNext_1 = [[UIButton alloc] initWithFrame:CGRectMake(310.0f - navNextImage.size.width, 30.0f - navNextImage.size.width / 2, navNextImage.size.width, navNextImage.size.height)];
+    UIImage *navNextImage = [UIImage imageNamed:@"button_next.png"];
+    UIButton *navNext_1 = [[UIButton alloc] initWithFrame:CGRectMake(300.0f - navNextImage.size.width, 30.0f - navNextImage.size.width / 2, navNextImage.size.width, navNextImage.size.height)];
     [navNext_1 setImage:navNextImage forState:UIControlStateNormal];
     [navNext_1 addTarget:self action:@selector(navNext_1Action:) forControlEvents:UIControlEventTouchUpInside];
     [navBar addSubview:navNext_1];
     
-    UIButton *navNext_2 = [[UIButton alloc] initWithFrame:CGRectMake(630.0f - navNextImage.size.width, 30.0f - navNextImage.size.width / 2, navNextImage.size.width, navNextImage.size.height)];
+    UIButton *navNext_2 = [[UIButton alloc] initWithFrame:CGRectMake(620.0f - navNextImage.size.width, 30.0f - navNextImage.size.width / 2, navNextImage.size.width, navNextImage.size.height)];
     [navNext_2 setImage:navNextImage forState:UIControlStateNormal];
     [navNext_2 addTarget:self action:@selector(navNext_2Action:) forControlEvents:UIControlEventTouchUpInside];
     [navBar addSubview:navNext_2];
     
-    UIImage *navBackImage = [UIImage imageNamed:@"arrow_left_white.png"];
-    UIButton *navBack_2 = [[UIButton alloc] initWithFrame:CGRectMake(330.0f, 30.0f - navBackImage.size.width / 2, navBackImage.size.width, navBackImage.size.height)];
+    UIImage *navBackImage = [UIImage imageNamed:@"button_back_profile.png"];
+    UIButton *navBack_2 = [[UIButton alloc] initWithFrame:CGRectMake(340.0f, 30.0f - navBackImage.size.width / 2, navBackImage.size.width, navBackImage.size.height)];
     [navBack_2 setImage:navBackImage forState:UIControlStateNormal];
     [navBack_2 addTarget:self action:@selector(navBack_2Action:) forControlEvents:UIControlEventTouchUpInside];
     [navBar addSubview:navBack_2];
     
-    UIButton *navBack_3 = [[UIButton alloc] initWithFrame:CGRectMake(650.0f, 30.0f - navBackImage.size.width / 2, navBackImage.size.width, navBackImage.size.height)];
+    UIButton *navBack_3 = [[UIButton alloc] initWithFrame:CGRectMake(660.0f, 30.0f - navBackImage.size.width / 2, navBackImage.size.width, navBackImage.size.height)];
     [navBack_3 setImage:navBackImage forState:UIControlStateNormal];
     [navBack_3 addTarget:self action:@selector(navBack_3Action:) forControlEvents:UIControlEventTouchUpInside];
     [navBar addSubview:navBack_3];
@@ -142,24 +148,35 @@
     UIImage *middleImageVIewImage_3 = [UIImage imageNamed:@"profile_header_3.png"];
     UIImageView *middleImageView_3 = [[UIImageView alloc] initWithFrame:CGRectMake(640.0f, navBar.bounds.size.height, middleImageVIewImage_3.size.width, middleImageVIewImage_3.size.height)];
     middleImageView_3.image = middleImageVIewImage_3;
+    middleImageView_3.userInteractionEnabled = YES;
     [self.mainSV addSubview:middleImageView_3];
     
     UILabel *middleImageViewText_2 = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 105.0f)];
     [middleImageViewText_2 setText:@"What's your startup about?"];
+    middleImageViewText_2.textColor = [UIColor whiteColor];
     middleImageViewText_2.textAlignment = NSTextAlignmentCenter;
     [middleImageView_2 addSubview:middleImageViewText_2];
     
     UILabel *middleImageViewText_3 = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 105.0f)];
     [middleImageViewText_3 setText:@"Add your social links"];
     middleImageViewText_3.textAlignment = NSTextAlignmentCenter;
+    middleImageViewText_3.textColor = [UIColor whiteColor];
     [middleImageView_3 addSubview:middleImageViewText_3];
+    
+    UIButton *skipForNow = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 60.0f, middleImageView_3.bounds.size.width, 30.0f)];
+    [skipForNow setTitle:@"Skip for now" forState:UIControlStateNormal];
+    [skipForNow setTitleColor:[UIColor colorWithRed:41.0f/255.0f green:160.0f/255.0f blue:240.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
+    skipForNow.titleLabel.font = [UIFont systemFontOfSize:11.0f];
+    [skipForNow addTarget:self action:@selector(navDonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [middleImageView_3 addSubview:skipForNow];
+    
     
     UIImage *imagePickerImage = [UIImage imageNamed:@"btn_image_upload.png"];
     
-    UIButton *imagePicker = [[UIButton alloc] initWithFrame:CGRectMake(160.0f - imagePickerImage.size.width / 2, middleImageView_1.bounds.size.height / 2 - imagePickerImage.size.height / 2, imagePickerImage.size.width, imagePickerImage.size.height)];
-    [imagePicker setImage:imagePickerImage forState:UIControlStateNormal];
-    [imagePicker addTarget:self action:@selector(imagePickerAction:) forControlEvents:UIControlEventTouchUpInside];
-    [middleImageView_1 addSubview:imagePicker];
+    self.imagePicker = [[UIButton alloc] initWithFrame:CGRectMake(160.0f - imagePickerImage.size.width / 2, middleImageView_1.bounds.size.height / 2 - imagePickerImage.size.height / 2, imagePickerImage.size.width, imagePickerImage.size.height)];
+    [self.imagePicker setImage:imagePickerImage forState:UIControlStateNormal];
+    [self.imagePicker addTarget:self action:@selector(imagePickerAction:) forControlEvents:UIControlEventTouchUpInside];
+    [middleImageView_1 addSubview:self.imagePicker];
     
     
     // Textfields in first page
@@ -207,16 +224,18 @@
     
     self.descriptionTV = [[UITextView alloc] initWithFrame:CGRectMake(320.0f, middleImageView_2.bounds.size.height + navBar.bounds.size.height, 320.0f, 55.0f)];
     self.descriptionTV.delegate = self;
-    self.descriptionTV.contentInset = UIEdgeInsetsMake(10.0f, 10.0f, 0.0f, 0.0f);
+    //self.descriptionTV.contentInset = UIEdgeInsetsMake(10.0f, 10.0f, 0.0f, 0.0f);
+    self.descriptionTV.contentInset = UIEdgeInsetsMake(10.0f, 5.0f, 0.0f, -5.0f);
     self.descriptionTV.text = @"Bio";
-    self.descriptionTV.textColor = [UIColor colorWithWhite:0.7f alpha:1.0f];
+    self.descriptionTV.textColor = [UIColor colorWithWhite:0.8f alpha:1.0f];
     self.descriptionTV.font = [UIFont systemFontOfSize:17.0f];
     [self.mainSV addSubview:self.descriptionTV];
     
-    self.wordCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(320.0f + 320.0f - 60.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height + navBar.bounds.size.height - 30.0f, 50.0f, 30.0f)];
+    self.wordCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(320.0f + 320.0f - 50.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height + navBar.bounds.size.height - 25.0f, 50.0f, 30.0f)];
     self.wordCountLabel.text = @"0/150";
     self.wordCountLabel.textAlignment = NSTextAlignmentCenter;
-    self.wordCountLabel.font = [UIFont systemFontOfSize:12.0f];
+    self.wordCountLabel.font = [UIFont systemFontOfSize:10.0f];
+    self.wordCountLabel.textColor = [UIColor colorWithWhite:0.8f alpha:1.0f];
     [self.mainSV addSubview:self.wordCountLabel];
     
     self.industry_datasource = [NSArray arrayWithObjects:@"Information Technology", @"Consumers", @"Enterprises", @"Media", @"Education", @"Health Care", @"Finance", @"Sales and Marketing", @"Fashion", @"Health and Wellness", @"Retail", @"Sports", @"UI/UX Design", @"Travel", @"Web Development", @"Real Estate", @"Recruiting", @"Entertainment", @"Clean Technology", @"Events", @"B2B", @"Restaurants", @"Lifestyle", @"Big Data Analytics", @"Music Services", @"Event Management", @"Non Profits", @"Discovery", @"Incubators", @"Other", nil];
@@ -225,11 +244,16 @@
     [self.industry_button setTitle:@"Industry / Market" forState:UIControlStateNormal];
     [self.industry_button setBackgroundColor:[UIColor clearColor]];
     //         [self.industry_button.titleLabel setTextColor:[UIColor colorWithWhite:0.7f alpha:1.0f]];
-    [self.industry_button setTitleColor:[UIColor colorWithWhite:0.7f alpha:1.0f] forState:UIControlStateNormal];
+    [self.industry_button setTitleColor:[UIColor colorWithWhite:0.8f alpha:1.0f] forState:UIControlStateNormal];
     [self.industry_button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
     [self.industry_button.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:17.0]];
     [self.industry_button addTarget:self action:@selector(industry_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.mainSV addSubview:self.industry_button];
+    
+    UIImage *industry_buttonDropDownImage = [UIImage imageNamed:@"btn_dropdown.png"];
+    UIImageView *industry_buttonDropDown = [[UIImageView alloc] initWithFrame:CGRectMake(self.industry_button.bounds.size.width - 5.0f - industry_buttonDropDownImage.size.width, self.industry_button.bounds.size.height / 2 - industry_buttonDropDownImage.size.height / 2, industry_buttonDropDownImage.size.width, industry_buttonDropDownImage.size.height)];
+    [industry_buttonDropDown setImage:industry_buttonDropDownImage];
+    [self.industry_button addSubview:industry_buttonDropDown];
     
     self.websiteTF = [[UITextField alloc] initWithFrame:CGRectMake(330.0f, middleImageView_2.bounds.size.height + self.descriptionTV.bounds.size.height + self.industry_button.bounds.size.height + navBar.bounds.size.height, 300.0f, 55.0f)];
     self.websiteTF.placeholder = @"Website";
@@ -356,7 +380,7 @@
     self.dimView.hidden = YES;
     [self.industry_pickerView removeFromSuperview];
     [self.industry_chooseButton removeFromSuperview];
-    [self.locationTF becomeFirstResponder];
+    [self.descriptionTV becomeFirstResponder];
     
 }
 
@@ -404,13 +428,18 @@
             if ([email_current_input length] == 0) {
                 self.user[@"email"] = email_input;
             }
+        
+        bool profileExist = YES;
+        NSNumber *profileExist_num = [NSNumber numberWithBool: profileExist ];
+        [self.user setObject: profileExist_num forKey: @"profileExist"];
 
-            
+        
             [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 [SVProgressHUD dismiss];
                 
                 if(succeeded){
-                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Profile Created!" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    alert.tag = SUCCESSFUL;
                     alert.alertViewStyle = UIAlertViewStyleDefault;
                     [alert show];
                 }else{
@@ -607,6 +636,11 @@
     // Upload image
     self.imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
     self.imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
+    
+    [self.imagePicker setImage:image forState:UIControlStateNormal];
+    self.imagePicker.layer.cornerRadius = self.imagePicker.frame.size.width / 2;
+    self.imagePicker.clipsToBounds = YES;
+    [self.locationTF becomeFirstResponder];
 }
 
 -(void)uploadImage_small:(NSData *)imageData {
@@ -638,9 +672,11 @@
 # pragma - UITextViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    CGFloat pageWidth = scrollView.frame.size.width;
-    int page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
-	[self.pageControl setCurrentPage:page];
+    if (scrollView == self.mainSV) {
+        CGFloat pageWidth = scrollView.frame.size.width;
+        int page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+        [self.pageControl setCurrentPage:page];
+    }
 }
 
 -(void)textViewDidBeginEditing:(UITextView *)textView {
@@ -713,5 +749,13 @@
     return [self.industry_datasource objectAtIndex:row];
 }
 
+# pragma - UIAlertViewDelegate
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (alertView.tag == SUCCESSFUL) {
+        NSLog(@"login Sucessful");
+        [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
+    }
+}
 
 @end
