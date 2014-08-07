@@ -8,6 +8,7 @@
 
 #import "PAPLoginTutorialViewController.h"
 #import "PAPLogInViewController.h"
+#import "AppDelegate.h"
 
 @interface PAPLoginTutorialViewController () {
     float screenOffset;
@@ -108,6 +109,10 @@
     [self.navigationController pushViewController:loginViewController animated:YES];
   
     
+}
+
+- (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] logInViewController:logInController didLogInUser:user];
 }
 
 - (void)signInButtonAction:(id)sender {

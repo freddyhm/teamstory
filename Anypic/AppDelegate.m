@@ -21,7 +21,6 @@
 #import "PAPProfileSettingViewController.h"
 #import "discoverPageViewController.h"
 #import "PAPwebviewViewController.h"
-#import "PAPLoginSelectionViewController.h"
 #import "PAPLoginTutorialViewController.h"
 #import <Crashlytics/Crashlytics.h>
 #import "iRate.h"

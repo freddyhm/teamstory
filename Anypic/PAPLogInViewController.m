@@ -92,13 +92,14 @@
             user_email.frame = CGRectMake(35.0f, 245.0f, 250.0f, 45.0f);
         }
     } else {
-        UIButton *emailSignIn = [[UIButton alloc] initWithFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - 65.0f, 290.0f, 50.0f)];
-        [emailSignIn setTitle:@"Sign Up with Email" forState:UIControlStateNormal];
-        emailSignIn.layer.cornerRadius = 3.0f;
-        emailSignIn.backgroundColor = [UIColor colorWithRed:91.0f/255.0f green:194.0f/255.0f blue:165.0f/255.0f alpha:1.0f];
-        [[emailSignIn titleLabel] setFont:[UIFont fontWithName:@"HelveticaNeue" size:15.0f]];
+        UIImage *emailButton = [UIImage imageNamed:@"btn_email.png"];
+        UIButton *emailSignIn = [[UIButton alloc] initWithFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - (emailButton.size.height + 15.0f), emailButton.size.width, emailButton.size.height)];
+        [emailSignIn setBackgroundImage:[UIImage imageNamed:@"btn_email.png"] forState:UIControlStateNormal];
         [emailSignIn addTarget:self action:@selector(emailSignIn_button:) forControlEvents:UIControlEventTouchUpInside];
         [self.logInView addSubview:emailSignIn];
+        
+        UIImage *logoViewImage = [UIImage imageNamed:@"join_teamstory.png"];
+        UIImageView *logoView = [UIImageView alloc] initWithFrame:CGRectMake(160.0f / 2 - logoViewImage, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)
     }
     
     UIButton *back_button = [[UIButton alloc] initWithFrame:CGRectMake(35.0f, 50.0f, 50.0f, 15.0f)];
@@ -126,24 +127,23 @@
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     
-    if ([UIScreen mainScreen].bounds.size.height > 480.0f) {
-        // for the iPhone 5
-        [self.logInView.facebookButton setFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - 125.0f, 140.0f, 50.0f)];
-        [self.logInView.twitterButton setFrame:CGRectMake(165.5, [UIScreen mainScreen].bounds.size.height - 125.0f, 140.0f, 50.0f)];
-    } else {
-        [self.logInView.facebookButton setFrame:CGRectMake(15.5f, [UIScreen mainScreen].bounds.size.height - 125.0f, 140.0f, 50.0f)];
-        [self.logInView.twitterButton setFrame:CGRectMake(165.5, [UIScreen mainScreen].bounds.size.height - 125.0f, 140.0f, 50.0f)];
-    }
+    UIImage *facebookButton = [UIImage imageNamed:@"btn_facebook.png"];
+    UIImage *twitterButton = [UIImage imageNamed:@"btn_twitter.png"];
+    UIImage *emailButton = [UIImage imageNamed:@"btn_email.png"];
+    
+    [self.logInView.facebookButton setFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - (facebookButton.size.height + 25.0f + emailButton.size.height), facebookButton.size.width, facebookButton.size.height)];
+    [self.logInView.twitterButton setFrame:CGRectMake(165.5, [UIScreen mainScreen].bounds.size.height - (twitterButton.size.height + 25.0f + emailButton.size.height), facebookButton.size.width, facebookButton.size.height)];
+
     
     [self.logInView.facebookButton setTitle:nil forState:UIControlStateNormal];
     [self.logInView.facebookButton setImage:nil forState:UIControlStateNormal];
-    [self.logInView.facebookButton setBackgroundImage:[UIImage imageNamed:@"icon-fblogin.png"] forState:UIControlStateNormal];
-    [self.logInView.facebookButton setBackgroundImage:[UIImage imageNamed:@"icon-fblogin.png"] forState:UIControlStateHighlighted];
+    [self.logInView.facebookButton setBackgroundImage:facebookButton forState:UIControlStateNormal];
+    [self.logInView.facebookButton setBackgroundImage:facebookButton forState:UIControlStateHighlighted];
     
     [self.logInView.twitterButton setTitle:nil forState:UIControlStateNormal];
     [self.logInView.twitterButton setImage:nil forState:UIControlStateNormal];
-    [self.logInView.twitterButton setBackgroundImage:[UIImage imageNamed:@"icon-twitterlogin.png"] forState:UIControlStateNormal];
-    [self.logInView.twitterButton setBackgroundImage:[UIImage imageNamed:@"icon-twitterlogin.png"] forState:UIControlStateHighlighted];
+    [self.logInView.twitterButton setBackgroundImage:twitterButton forState:UIControlStateNormal];
+    [self.logInView.twitterButton setBackgroundImage:twitterButton forState:UIControlStateHighlighted];
     
 }
 
