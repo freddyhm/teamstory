@@ -140,12 +140,12 @@
         
         //handling cases of link post
         if ([[self.ih_object objectForKey:@"type"] isEqualToString:@"link"]) {
-            [self.linkBackgroundView setFrame:CGRectMake(7.5f, expectedSize.height + 25.0f, 305.0f, 100.0f)];
+            [self.linkBackgroundView setFrame:CGRectMake(0.0f, expectedSize.height + 25.0f, 320.0f, 100.0f)];
             [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
             [self.contentView addSubview:self.linkBackgroundView];
             [self.contentView sendSubviewToBack:self.linkBackgroundView];
             
-            [self.linkBackgroundView_gray setFrame:CGRectMake(12.5f, expectedSize.height + 25.0f + 5.0f , 295.0f, 90.0f)];
+            [self.linkBackgroundView_gray setFrame:CGRectMake(5.0f, expectedSize.height + 25.0f + 5.0f , 311.0f, 90.0f)];
             [self.linkBackgroundView_gray setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
             [self.contentView addSubview:self.linkBackgroundView_gray];
             
@@ -181,12 +181,12 @@
         self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 305.0f, 305.0f);
 
         if ([[self.ih_object objectForKey:@"type"] isEqualToString:@"link"]) {
-            [self.linkBackgroundView setFrame:CGRectMake(7.5f, 0.0f, 305.0f, 100.0f)];
+            [self.linkBackgroundView setFrame:CGRectMake(0.0f, 0.0f, 320.0f, 100.0f)];
             [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
             [self.contentView addSubview:self.linkBackgroundView];
             [self.contentView sendSubviewToBack:self.linkBackgroundView];
             
-            [self.linkBackgroundView_gray setFrame:CGRectMake(12.5f, 5.0f , 295.0f, 90.0f)];
+            [self.linkBackgroundView_gray setFrame:CGRectMake(5.0f, 5.0f , 311.0f, 90.0f)];
             [self.linkBackgroundView_gray setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
             self.linkBackgroundView_gray.layer.borderColor = [UIColor colorWithWhite:0.9f alpha:1.0f].CGColor;
             self.linkBackgroundView_gray.layer.borderWidth = 0.5f;
