@@ -49,6 +49,11 @@
     
     if ([self.login_type isEqualToString:@"signIn"]) {
         
+        UIImage *dividerImage = [UIImage imageNamed:@"intro_divider.png"];
+        UIImageView *divider = [[UIImageView alloc] initWithFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - 190.0f, dividerImage.size.width, dividerImage.size.height)];
+        divider.image = dividerImage;
+        [self.logInView addSubview:divider];
+        
         UIFont *defaultFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:15.0f];
         user_email = [[UITextField alloc] init];
         user_email.layer.cornerRadius = 1.5f;
@@ -57,14 +62,14 @@
         user_email.leftViewMode = UITextFieldViewModeAlways;
         user_email.delegate = self;
         user_email.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        [user_email setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.6f]];
+        [user_email setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.9f]];
         user_email.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email" attributes:@{NSForegroundColorAttributeName: color, NSFontAttributeName:defaultFont}];
         [self.logInView addSubview:user_email];
         
         user_pw = [[UITextField alloc] init];
         user_pw.layer.cornerRadius = 1.5f;
         user_pw.placeholder = @"Password";
-        [user_pw setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.6f]];
+        [user_pw setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.9f]];
         [user_pw setFont:[UIFont systemFontOfSize:15]];
         user_pw.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{NSForegroundColorAttributeName: color, NSFontAttributeName:defaultFont}];
         user_pw.userInteractionEnabled = YES;
@@ -77,21 +82,47 @@
         [self.logInView addSubview:user_pw];
         
         UIButton *forgotSomething = [[UIButton alloc] init];
-        [forgotSomething setTitle:@"Forgot Something?" forState:UIControlStateNormal];
-        [[forgotSomething titleLabel] setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:15.0f]];
+        NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
+                               [UIFont boldSystemFontOfSize:14.0f], NSFontAttributeName,
+                               [UIColor whiteColor], NSForegroundColorAttributeName, nil];
+        NSDictionary *subAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [UIFont systemFontOfSize:13.0f], NSFontAttributeName,
+                                  [UIColor whiteColor], NSForegroundColorAttributeName,nil];
+        const NSRange range = NSMakeRange(0, 17);
+        
+        NSMutableAttributedString *attributedText =
+        [[NSMutableAttributedString alloc] initWithString:@"Forgot Something? Reset your password"
+                                               attributes:attrs];
+        [attributedText setAttributes:subAttrs range:range];
+        
+        [forgotSomething setAttributedTitle:attributedText forState:UIControlStateNormal];
         [forgotSomething addTarget:self action:@selector(forgotSomethingAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.logInView addSubview:forgotSomething];
         
-        if ([UIScreen mainScreen].bounds.size.height > 480.0f) {
-            forgotSomething.frame = CGRectMake(85.0f, [UIScreen mainScreen].bounds.size.height - 140.0f, 150.0f, 15.0f);
-            user_pw.frame = CGRectMake(35.0f, 365.0f, 250.0f, 45.0f);
-            user_email.frame = CGRectMake(35.0f, 310.0f, 250.0f, 45.0f);
+        float screenOffset;
+        if ([UIScreen mainScreen].bounds.size.height == 480) {
+            screenOffset = 0.0f;
         } else {
-            forgotSomething.frame = CGRectMake(85.0f, [UIScreen mainScreen].bounds.size.height - 120.0f, 150.0f, 15.0f);
-            user_pw.frame = CGRectMake(35.0f, 300.0f, 250.0f, 45.0f);
-            user_email.frame = CGRectMake(35.0f, 245.0f, 250.0f, 45.0f);
+            screenOffset = 50.0f;
         }
+        
+        UIImage *logoViewImage = [UIImage imageNamed:@"welcome_back.png"];
+        UIImageView *logoView = [[UIImageView alloc] initWithFrame:CGRectMake(160.0f - logoViewImage.size.width / 2, 100.0f + screenOffset, logoViewImage.size.width, logoViewImage.size.height)];
+        logoView.image = logoViewImage;
+        [self.logInView addSubview:logoView];
+        
+        forgotSomething.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - 45.0f, 320.0f, 15.0f);
+        user_pw.frame = CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - 110.0f, 290.0f, 50.0f);
+        user_email.frame = CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - 170.0f, 290.0f, 50.0f);
     } else {
+        
+        float screenOffset;
+        if ([UIScreen mainScreen].bounds.size.height == 480) {
+            screenOffset = 0.0f;
+        } else {
+            screenOffset = 30.0f;
+        }
+        
         UIImage *emailButton = [UIImage imageNamed:@"btn_email.png"];
         UIButton *emailSignIn = [[UIButton alloc] initWithFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - (emailButton.size.height + 15.0f), emailButton.size.width, emailButton.size.height)];
         [emailSignIn setBackgroundImage:[UIImage imageNamed:@"btn_email.png"] forState:UIControlStateNormal];
@@ -99,11 +130,13 @@
         [self.logInView addSubview:emailSignIn];
         
         UIImage *logoViewImage = [UIImage imageNamed:@"join_teamstory.png"];
-        UIImageView *logoView = [UIImageView alloc] initWithFrame:CGRectMake(160.0f / 2 - logoViewImage, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)
+        UIImageView *logoView = [[UIImageView alloc] initWithFrame:CGRectMake(160.0f - logoViewImage.size.width / 2, 170.0f + screenOffset, logoViewImage.size.width, logoViewImage.size.height)];
+        logoView.image = logoViewImage;
+        [self.logInView addSubview:logoView];
     }
     
-    UIButton *back_button = [[UIButton alloc] initWithFrame:CGRectMake(35.0f, 50.0f, 50.0f, 15.0f)];
-    [back_button setBackgroundImage:[UIImage imageNamed:@"btn-back.png"] forState:UIControlStateNormal];
+    UIButton *back_button = [[UIButton alloc] initWithFrame:CGRectMake(15.0f, 30.0f, 50.0f, 15.0f)];
+    [back_button setTitle:@"Back" forState:UIControlStateNormal];
     [back_button addTarget:self action:@selector(back_button_action:) forControlEvents:UIControlEventTouchUpInside];
     [self.logInView addSubview:back_button];
 
@@ -131,9 +164,13 @@
     UIImage *twitterButton = [UIImage imageNamed:@"btn_twitter.png"];
     UIImage *emailButton = [UIImage imageNamed:@"btn_email.png"];
     
-    [self.logInView.facebookButton setFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - (facebookButton.size.height + 25.0f + emailButton.size.height), facebookButton.size.width, facebookButton.size.height)];
-    [self.logInView.twitterButton setFrame:CGRectMake(165.5, [UIScreen mainScreen].bounds.size.height - (twitterButton.size.height + 25.0f + emailButton.size.height), facebookButton.size.width, facebookButton.size.height)];
-
+    if ([self.login_type isEqualToString:@"signIn"]) {
+        [self.logInView.facebookButton setFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - (facebookButton.size.height + 205.0f), facebookButton.size.width, facebookButton.size.height)];
+        [self.logInView.twitterButton setFrame:CGRectMake(165.5, [UIScreen mainScreen].bounds.size.height - (twitterButton.size.height + 205.0f), facebookButton.size.width, facebookButton.size.height)];
+    } else {
+        [self.logInView.facebookButton setFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - (facebookButton.size.height + 25.0f + emailButton.size.height), facebookButton.size.width, facebookButton.size.height)];
+        [self.logInView.twitterButton setFrame:CGRectMake(165.5, [UIScreen mainScreen].bounds.size.height - (twitterButton.size.height + 25.0f + emailButton.size.height), facebookButton.size.width, facebookButton.size.height)];
+    }
     
     [self.logInView.facebookButton setTitle:nil forState:UIControlStateNormal];
     [self.logInView.facebookButton setImage:nil forState:UIControlStateNormal];
