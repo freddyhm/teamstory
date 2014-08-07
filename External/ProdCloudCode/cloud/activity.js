@@ -1,89 +1,88 @@
 
 /*
-Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
-                
-                // Set up to modify user data
-                Parse.Cloud.useMasterKey();
-                
-                // Query for all users, used only to break down large +1000 plus query into queries for each user with follows
-                var queryUser = new Parse.Query(Parse.User);
-                queryUser.limit("1000");
-                
-                var allFollowingEntries = [];
-                var followingQuery = new Parse.Query('Activity');
-                var count = 0;
-                
-                // get all follow activities and include user field
-                followingQuery.equalTo("type", "follow");
-                followingQuery.include("toUser");
-                followingQuery.include("fromUser");
-                
-                queryUser.find({
-                               
-                               success: function(results){
-                               
-                               for(var i = 0; i < results.length; i++){
-                               
-                               // followings for user
-                               followingQuery.equalTo("fromUser", results[i]);
-                               
-                               followingQuery.each(function(following){
-                                                   
-                                                   // get following user display name and follower
-                                                   var toUser = following.get("toUser");
-                                                   var fromUser = following.get("fromUser");
-                                                   
-                                                   
-                                                   
-                                                   // make sure the user exists
-                                                   if(typeof toUser !== "undefined"){
-                                                   
-                                                   // create unique combo to check for duplicates through whole db
-                                                   var comboUnique = toUser.id + fromUser.id;
-                                                   
-                                                   var displayName = fromUser.get("displayName");
-                                                   
-                                                   //console.log(allFollowingEntries);
-                                                   
-                                                   // if not already in array, push else destroy duplicate
-                                                   if(allFollowingEntries.indexOf(comboUnique) == -1){
-                                                   allFollowingEntries.push(comboUnique);
-                                                   }else{
-                                                   
-                                                   //console.log("GOING TO DELETE COMBO: " + comboUnique);
-                                                   //console.log("FOR USER: " + displayName);
-                                                   
-                                                   following.destroy({
-                                                                     success: function(result) {
-                                                                     //console.log("DELETED FOLLOWING ID: " + following.id);
-                                                                     //console.log("FOR USER: " + displayName);
-                                                                     
-                                                                     }, error: function(result, error){
-                                                                     console.log(error);
-                                                                     }
-                                                                     });
-                                                   }
-                                                   }else{
-                                                   
-                                                   console.log(count);
-                                                   count++;
-                                                   following.destroy({
-                                                                     success: function(result) {
-                                                                     //console.log("GOING TO DELETE COMBO: " + comboUnique);
-                                                                     //console.log("FOR USER: " + displayName);
-                                                                     }, error: function(result, error){
-                                                                     console.log(error);
-                                                                     }
-                                                                     });
-                                                   
-                                                   }
-                                                   });
-                               }
-                               }
-                               });
-                });
+ Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
+ 
+ // Set up to modify user data
+ Parse.Cloud.useMasterKey();
+ 
+ // Query for all users, used only to break down large +1000 plus query into queries for each user with follows
+ var queryUser = new Parse.Query(Parse.User);
+ queryUser.limit("1000");
+ 
+ var allFollowingEntries = [];
+ var followingQuery = new Parse.Query('Activity');
+ var count = 0;
+ 
+ // get all follow activities and include user field
+ followingQuery.equalTo("type", "follow");
+ followingQuery.include("toUser");
+ followingQuery.include("fromUser");
+ 
+ queryUser.find({
+ 
+ success: function(results){
+ 
+ for(var i = 0; i < results.length; i++){
+ 
+ // followings for user
+ followingQuery.equalTo("fromUser", results[i]);
+ 
+ followingQuery.each(function(following){
+ 
+ // get following user display name and follower
+ var toUser = following.get("toUser");
+ var fromUser = following.get("fromUser");
+ 
+ 
+ 
+ // make sure the user exists
+ if(typeof toUser !== "undefined"){
+ 
+ // create unique combo to check for duplicates through whole db
+ var comboUnique = toUser.id + fromUser.id;
+ 
+ var displayName = fromUser.get("displayName");
+ 
+ //console.log(allFollowingEntries);
+ 
+ // if not already in array, push else destroy duplicate
+ if(allFollowingEntries.indexOf(comboUnique) == -1){
+ allFollowingEntries.push(comboUnique);
+ }else{
+ 
+ //console.log("GOING TO DELETE COMBO: " + comboUnique);
+ //console.log("FOR USER: " + displayName);
+ 
+ following.destroy({
+ success: function(result) {
+ //console.log("DELETED FOLLOWING ID: " + following.id);
+ //console.log("FOR USER: " + displayName);
+ 
+ }, error: function(result, error){
+ console.log(error);
+ }
+ });
+ }
+ }else{
+ 
+ console.log(count);
+ count++;
+ following.destroy({
+ success: function(result) {
+ //console.log("GOING TO DELETE COMBO: " + comboUnique);
+ //console.log("FOR USER: " + displayName);
+ }, error: function(result, error){
+ console.log(error);
+ }
+ });
+ 
+ }
+ });
+ }
+ }
+ });
+ });
  */
-
 
 Parse.Cloud.beforeSave('Activity', function(request, response) {
                        var currentUser = request.user;
@@ -96,6 +95,7 @@ Parse.Cloud.beforeSave('Activity', function(request, response) {
                        } else {
                        response.error('Cannot set fromUser on Activity to a user other than the current user.');
                        }
+                       
                        });
 
 Parse.Cloud.afterSave('Activity', function(request) {
@@ -165,21 +165,50 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       // notify all users except fromUser who are subscribed to post when new comment is sent
                       if(request.object.get("type") === "comment" && atmentionUserArray.length == 0){
                       
-                      var toSubscribersQuery = new Parse.Query(Parse.Installation);
-                      var channelName = "ch" + photoId;
                       
-                      toSubscribersQuery.equalTo("channels", channelName);
-                      toSubscribersQuery.notEqualTo("user", fromUser);
+                      var subscriptionQuery = new Parse.Query("Subscription");
+                      var Photo = Parse.Object.extend("Photo");
+                      var photoPointer = new Photo();
+                      photoPointer.id = photoId;
                       
-                      Parse.Push.send({
-                                      where: toSubscribersQuery,
-                                      data: alertPayload(request)
-                                      }).then(function() {
-                                              // Push was successful
-                                              console.log('Sent subscribers push.');
-                                              }, function(error) {
-                                              throw "Push Error " + error.code + " : " + error.message;
-                                              });
+                      // find all the subscriptions with this post
+                      subscriptionQuery.equalTo("post", photoPointer);
+                      
+                      subscriptionQuery.find({
+                                             success: function(results) {
+                                             
+                                             for (var i = 0; i < results.length; i++) {
+                                             
+                                             // make sure to skip when from user is the subscriber
+                                             if(fromUser.id != results[i].get("subscriber").id){
+                                             
+                                             // add subscriber to new comment and save
+                                             request.object.add("subscribers", results[i]);
+                                             request.object.save();
+                                             
+                                             // notify subscriber
+                                             var query = new Parse.Query(Parse.Installation);
+                                             query.equalTo("user", results[i].get("subscriber"));
+                                             
+                                             Parse.Push.send({
+                                                             where: query,
+                                                             data: alertPayload(request)
+                                                             }).then(function() {
+                                                                     // Push was successful
+                                                                     console.log('Sent subscribers push.');
+                                                                     }, function(error) {
+                                                                     throw "Push Error " + error.code + " : " + error.message;
+                                                                     });
+                                             }
+                                             
+                                             
+                                             }
+                                             
+                                             },
+                                             error: function(error) {
+                                             alert("Error: " + error.code + " " + error.message);
+                                             }
+                                             });
                       }
                       
                       // send activity/post owner notification if someone else creates activity
@@ -197,6 +226,7 @@ Parse.Cloud.afterSave('Activity', function(request) {
                                               }, function(error) {
                                               throw "Push Error " + error.code + " : " + error.message;
                                               });
+                      
                       }
                       
                       // Only send push notifications for new activities

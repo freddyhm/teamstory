@@ -171,12 +171,12 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 
                 self.headerView = [[UIView alloc] init];
                 
-                self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + website_expectedSize.height + 43.0f);
+                self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.feed.bounds.size.width, 97.0f + expectedSize.height + website_expectedSize.height + 43.0f);
                 [self.headerView setBackgroundColor:[UIColor clearColor]]; // should be clear, this will be the container for our avatar, photo count, follower count, following count, and so on
                 [self.view addSubview:self.headerView];
                 
                 whiteBackground = [[UIView alloc] init];
-                [whiteBackground setFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, self.headerView.bounds.size.height - 10.0f)];
+                [whiteBackground setFrame:CGRectMake( 0.0f, 0.0f, self.feed.bounds.size.width, self.headerView.bounds.size.height - 10.0f)];
                 [whiteBackground setBackgroundColor:[UIColor whiteColor]];
                 [self.headerView addSubview:whiteBackground];
                 
@@ -265,7 +265,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                  
                 UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
                 [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]]];
-                self.tableView.backgroundView = texturedBackgroundView;
+                self.feed.backgroundView = texturedBackgroundView;
                 
                 // taps for followers/following section, all point to same method
                 
@@ -526,7 +526,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
             }
             
             // load header
-            self.tableView.tableHeaderView = headerView;
+            self.feed.tableHeaderView = headerView;
             
         }else{
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Account info failed to load. Try again later" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -644,7 +644,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
             website_expectedSize = CGSizeMake(132.01f, 15.50f);
         }
         
-        self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 97.0f + expectedSize.height + website_expectedSize.height + 43.0f);
+        self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.feed.bounds.size.width, 97.0f + expectedSize.height + website_expectedSize.height + 43.0f);
         
         if ([self.industryLabel.text length] > 0) {
             industryLabel.hidden = NO;
@@ -674,7 +674,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         
         [websiteLink setTitle:self.websiteInfo forState:UIControlStateNormal];
         [self.industryLabel setFrame:CGRectMake(320.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + website_expectedSize.height, industry_expectedSize.width + 10.0f, 22.0f)];
-        [whiteBackground setFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, self.headerView.bounds.size.height - 10.0f)];
+        [whiteBackground setFrame:CGRectMake( 0.0f, 0.0f, self.feed.bounds.size.width, self.headerView.bounds.size.height - 10.0f)];
         
         linkedIn_button.frame = CGRectMake(10.0f, 97.0f + expectedSize.height + website_expectedSize.height, 22.0f, 22.0f);
         angellist_button.frame = CGRectMake(74.0f, 97.0f + expectedSize.height + website_expectedSize.height, 22.0f, 22.0f);
@@ -750,31 +750,32 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 
 
 
-#pragma mark - PFQueryTableViewController
+#pragma mark - Datasource 
 
-
-
-- (void)objectsDidLoad:(NSError *)error {
-    [super objectsDidLoad:error];
-}
-
-- (PFQuery *)queryForTable {
-    if (!self.user) {
-        PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
-        [query setLimit:0];
-        return query;
-    }
+- (void)loadObjects:(void (^)(BOOL succeeded))completionBlock isRefresh:(BOOL)isRefresh{
     
-    PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
+    PFQuery *query = [PFQuery queryWithClassName:@"Photo"];
+    
     query.cachePolicy = kPFCachePolicyNetworkOnly;
+    
     if (self.objects.count == 0) {
         query.cachePolicy = kPFCachePolicyCacheThenNetwork;
     }
+    
     [query whereKey:kPAPPhotoUserKey equalTo:self.user];
     [query orderByDescending:@"createdAt"];
     [query includeKey:kPAPPhotoUserKey];
     
-    return query;
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        
+        self.objects = [NSMutableArray arrayWithArray:objects];
+        
+        if(completionBlock){
+            completionBlock([super objectsDidLoad:error]);
+        }else{
+            [super objectsDidLoad:error];
+        }
+    }];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForNextPageAtIndexPath:(NSIndexPath *)indexPath {
