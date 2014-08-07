@@ -86,7 +86,7 @@
         [self.captionLabel setTextColor:[UIColor colorWithWhite:0.6f alpha:1.0f]];
         [self.contentView addSubview:self.captionLabel];
         
-        self.imageView.frame = CGRectMake( 7.5f, 0.0f, 305.0f, 305.0f);
+        self.imageView.frame = CGRectMake( 0.0f, 0.0f, 320.0f, 320.0f);
         self.imageView.backgroundColor = [UIColor blackColor];
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
         
@@ -116,7 +116,7 @@
         
         self.backgroundView.frame = CGRectMake(7.5f, notificationBarOffSet, 305.0f, expectedSize.height + 25.0f);
         self.captionLabel.frame = CGRectMake(12.5f, 10.0f , 295.0f, expectedSize.height);
-        self.imageView.frame = CGRectMake( 7.5f, expectedSize.height + 25.0f , 305.0f, 305.0f);
+        self.imageView.frame = CGRectMake( 0.0f, expectedSize.height + 25.0f , 320.0f, 320.0f);
         self.photoButton.frame = CGRectMake( 7.5f, notificationBarOffSet, 305.0f, 330.0f + expectedSize.height);
         
         NSRange range = [self.caption rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
@@ -177,7 +177,7 @@
     } else {
         self.captionLabel.text = @"";
         self.captionLabel.frame = CGRectMake(7.5f, 0.0f, 305.0f, 44.0f);
-        self.imageView.frame = CGRectMake( 7.5f, 0.0f, 305.0f, 305.0f);
+        self.imageView.frame = CGRectMake( 0.0f, 0.0f, 320.0f, 320.0f);
         self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 305.0f, 305.0f);
 
         if ([[self.ih_object objectForKey:@"type"] isEqualToString:@"link"]) {
