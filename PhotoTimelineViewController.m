@@ -31,7 +31,6 @@
 @property (nonatomic, strong) NSCache *imgCache;
 @property int loadPostCount;
 @property int refreshCount;
-@property float refreshStopPosition;
 
 @end
 
@@ -53,14 +52,13 @@ enum ActionSheetTags {
         // Improve scrolling performance by reusing UITableView section headers
         self.reusableSectionHeaderViews = [NSMutableSet setWithCapacity:3];
         
-        // init our image cache
+        // Init our image cache
         self.imgCache = [[NSCache alloc]init];
     
         self.shouldReloadOnAppear = NO;
         
+        // To make sure we only show hud/load objects once per pull
         self.refreshCount = 0;
-        
-        self.refreshStopPosition = 0.0f;
     }
     return self;
 }
@@ -88,17 +86,6 @@ enum ActionSheetTags {
     
     
     [self loadObjects:nil isRefresh:NO];
-}
-
-- (void)hudFinished:(id)notification{
-    
-    NSLog(@"%f feed", self.feed.contentOffset.y);
-    
-    NSLog(@"%f refresh", self.refreshStopPosition);
-    
-    if(self.feed.contentOffset.y == self.refreshStopPosition){
-        [self.feed setContentOffset:CGPointMake(0, -64) animated:YES];
-    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -218,59 +205,56 @@ enum ActionSheetTags {
 
 #pragma mark - Refresh
 
-
+- (void)hudFinished:(id)notification{
+   
+        [self.feed setContentOffset:CGPointMake(0, -64) animated:YES];
+   
+}
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
        BOOL isHome = [[self.navigationController.viewControllers lastObject] isKindOfClass:PAPHomeViewController.class];
     
-    
-    
      // Make sure pull-to-refresh set only for home
      if(isHome){
          
+         // Reset refresh count when back to initial position
          if(scrollView.contentOffset.y == -64){
              self.refreshCount = 0;
          }
          
-
          // Enough space to show the hud
         if(scrollView.contentOffset.y <= -100){
-        
+            
+            // Show hud if not visible, update refresh count
             if(![SVProgressHUD isVisible]){
+                
+                // Make sure first time refreshing (this will get called multiple times during bounce)
                 if(self.refreshCount == 0){
+                    
                     CGFloat hudOffset = IS_WIDESCREEN ? -170.0f : -130.0f;
                     [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, hudOffset)];
                     [SVProgressHUD show];
-                    self.refreshCount = 5;
+                    
+                    self.refreshCount = 1;
+                    
                     [self loadObjects:nil isRefresh:YES];
                 }
             }else{
-            
-                if(scrollView.contentOffset.y <= -110 && self.refreshCount == 5){
-                    
-                    if(self.refreshStopPosition != -1){
-                        self.refreshStopPosition = scrollView.contentOffset.y;
-                    }
-                    
+                
+                // Stop scrollview where pulled when hud is shown
+                if(scrollView.contentOffset.y <= -110 && self.refreshCount == 1){
                     [scrollView setContentOffset:CGPointMake(0, scrollView.contentOffset.y) animated:YES];
                 }
             }
-   
-        }else{
-        
-            if([SVProgressHUD isVisible]){
-                [SVProgressHUD dismiss];
-                [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, 0.0f)];
-            }
         }
-         
     }
 }
 
 
-// see if scrolling near end, refresh when decelerating if so
+
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
 
+    // See if scrolling near end, refresh when decelerating
     float bottomEdge = scrollView.contentOffset.y + scrollView.frame.size.height;
     
     if (bottomEdge >= (scrollView.contentSize.height * 0.78)) {
@@ -278,20 +262,6 @@ enum ActionSheetTags {
     }
     
 }
-
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    
-    NSLog(@"HERE");
-    self.refreshStopPosition = 0;
-}
- 
- 
-
-
-
-
-
 
 #pragma mark - UITableViewDataSource
 
@@ -349,6 +319,12 @@ enum ActionSheetTags {
 
 - (BOOL)objectsDidLoad:(NSError *)error {
     
+    // Remove hud if shown
+    if([SVProgressHUD isVisible]){
+        [SVProgressHUD dismiss];
+        [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, 0.0f)];
+    }
+   
     // Check for errors, also used to indicate method completion
     BOOL didLoad = !error ? YES : NO;
     
@@ -376,12 +352,6 @@ enum ActionSheetTags {
         }
     }
     
-    // Remove hud if shown
-    if([SVProgressHUD isVisible]){
-        [SVProgressHUD dismiss];
-    }
-    
-
     return didLoad;
 }
 
