@@ -23,6 +23,7 @@
 @interface PhotoTimelineViewController ()
 @property (nonatomic, assign) BOOL shouldReloadOnAppear;
 @property (nonatomic, strong) NSMutableSet *reusableSectionHeaderViews;
+@property (nonatomic, strong) NSMutableSet *reusableSectionHeaderViews2;
 @property (nonatomic, strong) NSMutableDictionary *outstandingSectionHeaderQueries;
 @property (nonatomic, strong) NSString *reported_user;
 @property (nonatomic, strong) NSString *photoID;
@@ -480,9 +481,119 @@ enum ActionSheetTags {
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.feed.bounds.size.width, 16.0f)];
     
-    return footerView;
+    if (section == self.objects.count) {
+        // Load More section
+        return nil;
+    }
+    
+    PAPPhotoHeaderView2 *headerView = [self dequeueReusableSectionHeaderView2];
+    
+    if (!headerView) {
+        headerView = [[PAPPhotoHeaderView2 alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.view.bounds.size.width, 44.0f) buttons:PAPPhotoHeaderButtonsDefault2];
+        headerView.delegate = self;
+        [self.reusableSectionHeaderViews2 addObject:headerView];
+    }
+    
+    PFObject *photo = [self.objects objectAtIndex:section];
+    [headerView setPhoto:photo];
+    headerView.tag = section;
+    [headerView.likeButton setTag:section];
+    
+    NSDictionary *attributesForPhoto = [[PAPCache sharedCache] attributesForPhoto:photo];
+    
+    if (attributesForPhoto) {
+        [headerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:photo]];
+        
+        NSString *likeCount =[[[PAPCache sharedCache] likeCountForPhoto:photo] description];
+        BOOL likeStatus = [[PAPCache sharedCache] isPhotoLikedByCurrentUser:photo];
+        [headerView setLikeStatus:likeStatus];
+        
+        
+        if (likeStatus == YES) {
+            [headerView.likeButton setTitle:likeCount forState:UIControlStateSelected];
+        } else {
+            [headerView.likeButton setTitle:likeCount forState:UIControlStateNormal];
+        }
+        
+        
+        [headerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:photo] description] forState:UIControlStateNormal];
+        
+        if (headerView.likeButton.alpha < 1.0f || headerView.commentButton.alpha < 1.0f) {
+            [UIView animateWithDuration:0.200f animations:^{
+                headerView.likeButton.alpha = 1.0f;
+                headerView.commentButton.alpha = 1.0f;
+            }];
+        }
+    } else {
+        
+        headerView.likeButton.alpha = 0.0f;
+        headerView.commentButton.alpha = 0.0f;
+        
+        @synchronized(self) {
+            // check if we can update the cache
+            NSNumber *outstandingSectionHeaderQueryStatus = [self.outstandingSectionHeaderQueries objectForKey:[NSNumber numberWithInt:(int)section]];
+            if (!outstandingSectionHeaderQueryStatus) {
+                PFQuery *query = [PAPUtility queryForActivitiesOnPhoto:photo cachePolicy:kPFCachePolicyNetworkOnly];
+                [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                    @synchronized(self) {
+                        //[self.outstandingSectionHeaderQueries removeObjectForKey:[NSNumber numberWithInt:(int)section]];
+                        
+                        if (error) {
+                            return;
+                        }
+                        
+                        NSMutableArray *likers = [NSMutableArray array];
+                        NSMutableArray *commenters = [NSMutableArray array];
+                        
+                        BOOL isLikedByCurrentUser = NO;
+                        
+                        for (PFObject *activity in objects) {
+                            if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeLike] && [activity objectForKey:kPAPActivityFromUserKey]) {
+                                [likers addObject:[activity objectForKey:kPAPActivityFromUserKey]];
+                            } else if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeComment] && [activity objectForKey:kPAPActivityFromUserKey]) {
+                                [commenters addObject:[activity objectForKey:kPAPActivityFromUserKey]];
+                            }
+                            
+                            if ([[[activity objectForKey:kPAPActivityFromUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+                                if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeLike]) {
+                                    isLikedByCurrentUser = YES;
+                                    
+                                }
+                            }
+                        }
+                        
+                        [[PAPCache sharedCache] setAttributesForPhoto:photo likers:likers commenters:commenters likedByCurrentUser:isLikedByCurrentUser];
+                        
+                        if (headerView.tag != section) {
+                            return;
+                        }
+                        NSString *likeCount = [[[PAPCache sharedCache] likeCountForPhoto:photo] description];
+                        
+                        [headerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:photo]];
+                        
+                        if (isLikedByCurrentUser == YES) {
+                            [headerView.likeButton setTitle:likeCount forState:UIControlStateSelected];
+                        } else {
+                            [headerView.likeButton setTitle:likeCount forState:UIControlStateNormal];
+                        }
+                        
+                        [headerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:photo] description] forState:UIControlStateNormal];
+                        
+                        if (headerView.likeButton.alpha < 1.0f || headerView.commentButton.alpha < 1.0f) {
+                            [UIView animateWithDuration:0.200f animations:^{
+                                headerView.likeButton.alpha = 1.0f;
+                                headerView.commentButton.alpha = 1.0f;
+                            }];
+                        }
+                    }
+                }];
+            }
+        }
+    }
+
+    
+    return headerView;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -490,7 +601,7 @@ enum ActionSheetTags {
         return 0.0f;
     }
     
-    return 16.0f;
+    return 44.0f;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -602,6 +713,17 @@ enum ActionSheetTags {
 
 - (PAPPhotoHeaderView *)dequeueReusableSectionHeaderView {
     for (PAPPhotoHeaderView *sectionHeaderView in self.reusableSectionHeaderViews) {
+        if (!sectionHeaderView.superview) {
+            // we found a section header that is no longer visible
+            return sectionHeaderView;
+        }
+    }
+    
+    return nil;
+}
+
+- (PAPPhotoHeaderView2 *)dequeueReusableSectionHeaderView2 {
+    for (PAPPhotoHeaderView2 *sectionHeaderView in self.reusableSectionHeaderViews) {
         if (!sectionHeaderView.superview) {
             // we found a section header that is no longer visible
             return sectionHeaderView;

@@ -440,6 +440,7 @@
 		D59B998E18C5A902002D6EFE /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D59B998B18C5A902002D6EFE /* Default-568h@2x.png */; };
 		D5A5F51E18D2C3C1000BB243 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A5F51D18D2C3C1000BB243 /* FacebookSDK.framework */; };
 		D5A5F52018D2C3CD000BB243 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A5F51F18D2C3CD000BB243 /* Parse.framework */; };
+		D5B5D0E31995316400916108 /* PAPPhotoHeaderView2.m in Sources */ = {isa = PBXBuildFile; fileRef = D5B5D0E11995316400916108 /* PAPPhotoHeaderView2.m */; };
 		D5BFDED518CC84A5004FEC42 /* la.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDEC718CC84A4004FEC42 /* la.png */; };
 		D5BFDED618CC84A5004FEC42 /* la@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDEC818CC84A4004FEC42 /* la@2x.png */; };
 		D5BFDED718CC84A5004FEC42 /* london.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDEC918CC84A4004FEC42 /* london.png */; };
@@ -1005,6 +1006,8 @@
 		D59B998B18C5A902002D6EFE /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		D5A5F51D18D2C3C1000BB243 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = External/FacebookSDK.framework; sourceTree = "<group>"; };
 		D5A5F51F18D2C3CD000BB243 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = External/Parse.framework; sourceTree = "<group>"; };
+		D5B5D0E11995316400916108 /* PAPPhotoHeaderView2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPPhotoHeaderView2.m; sourceTree = SOURCE_ROOT; };
+		D5B5D0E21995316400916108 /* PAPPhotoHeaderView2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPPhotoHeaderView2.h; sourceTree = SOURCE_ROOT; };
 		D5BFDEC718CC84A4004FEC42 /* la.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = la.png; sourceTree = "<group>"; };
 		D5BFDEC818CC84A4004FEC42 /* la@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "la@2x.png"; sourceTree = "<group>"; };
 		D5BFDEC918CC84A4004FEC42 /* london.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = london.png; sourceTree = "<group>"; };
@@ -1583,8 +1586,11 @@
 		74A504E31565F0E400CFA4E3 /* TimelineViews */ = {
 			isa = PBXGroup;
 			children = (
+				D5B5D0E11995316400916108 /* PAPPhotoHeaderView2.m */,
+				D5B5D0E21995316400916108 /* PAPPhotoHeaderView2.h */,
 				C4F102A2156C57560061BC3E /* PAPPhotoHeaderView.h */,
 				C4F102A3156C57560061BC3E /* PAPPhotoHeaderView.m */,
+				D56D466419884C33001FAA76 /* PhotoTimelineViewController.xib */,
 			);
 			name = TimelineViews;
 			sourceTree = "<group>";
@@ -1717,7 +1723,6 @@
 				D5743807194629280040C96A /* followersFollowingViewController.m */,
 				D56D466219884C33001FAA76 /* PhotoTimelineViewController.h */,
 				D56D466319884C33001FAA76 /* PhotoTimelineViewController.m */,
-				D56D466419884C33001FAA76 /* PhotoTimelineViewController.xib */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -2600,6 +2605,7 @@
 				46A1DCAD195BB6F100729FD0 /* PAPlinkPostViewController.m in Sources */,
 				C4F102CC156C57EE0061BC3E /* PAPHomeViewController.m in Sources */,
 				C4F102CD156C57EE0061BC3E /* PAPPhotoTimelineViewController.m in Sources */,
+				D5B5D0E31995316400916108 /* PAPPhotoHeaderView2.m in Sources */,
 				C4F102D2156C57FD0061BC3E /* PAPAccountViewController.m in Sources */,
 				C4F102D3156C57FD0061BC3E /* PAPPhotoDetailsViewController.m in Sources */,
 				C4F102D9156C580C0061BC3E /* PAPSettingsActionSheetDelegate.m in Sources */,
