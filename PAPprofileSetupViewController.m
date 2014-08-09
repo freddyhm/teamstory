@@ -719,7 +719,7 @@
 }
 
 -(void)textViewDidChange:(UITextView *)textView {
-    int textLength = [textView.text length];
+    int textLength = (int)[textView.text length];
     self.wordCountLabel.text = [NSString stringWithFormat:@"%i/150", textLength];
     
     if (textLength >= 150) {
