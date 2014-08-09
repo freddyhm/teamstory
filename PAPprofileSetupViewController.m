@@ -106,23 +106,26 @@
     [self.view addSubview:pageControl_bar];
     
     UIButton *navNext_1 = [[UIButton alloc] initWithFrame:CGRectMake(310.0f - 50.0f, 30.0f - 10.0f, 50.0f, 20.0f)];
-    //[navNext_1 setImage:navNextImage forState:UIControlStateNormal];
     [navNext_1 setTitle:@"Next" forState:UIControlStateNormal];
+    [navNext_1.titleLabel setFont:[UIFont systemFontOfSize:17.0f]];
     [navNext_1 addTarget:self action:@selector(navNext_1Action:) forControlEvents:UIControlEventTouchUpInside];
     [navBar addSubview:navNext_1];
     
     UIButton *navNext_2 = [[UIButton alloc] initWithFrame:CGRectMake(630.0f - 50.0f, 30.0f - 10.0f, 50.0f, 20.0f)];
     [navNext_2 setTitle:@"Next" forState:UIControlStateNormal];
+    [navNext_2.titleLabel setFont:[UIFont systemFontOfSize:17.0f]];
     [navNext_2 addTarget:self action:@selector(navNext_2Action:) forControlEvents:UIControlEventTouchUpInside];
     [navBar addSubview:navNext_2];
     
     UIButton *navBack_2 = [[UIButton alloc] initWithFrame:CGRectMake(330.0f, 30.0f - 10.0f, 50.0f, 20.0f)];
     [navBack_2 setTitle:@"Back" forState:UIControlStateNormal];
+    [navBack_2.titleLabel setFont:[UIFont systemFontOfSize:17.0f]];
     [navBack_2 addTarget:self action:@selector(navBack_2Action:) forControlEvents:UIControlEventTouchUpInside];
     [navBar addSubview:navBack_2];
     
     UIButton *navBack_3 = [[UIButton alloc] initWithFrame:CGRectMake(650.0f, 30.0f - 10.0f, 50.0f, 20.0f)];
     [navBack_3 setTitle:@"Back" forState:UIControlStateNormal];
+    [navBack_3.titleLabel setFont:[UIFont systemFontOfSize:17.0f]];
     [navBack_3 addTarget:self action:@selector(navBack_3Action:) forControlEvents:UIControlEventTouchUpInside];
     [navBar addSubview:navBack_3];
     
