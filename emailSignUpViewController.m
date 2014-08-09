@@ -61,9 +61,12 @@
     [policy addTarget:self action:@selector(policyButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:policy];
     
-    [signUpEmailTextField setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.6f]];
-    [signUpEmailTextField setFont:[UIFont systemFontOfSize:13]];
-    signUpEmailTextField.placeholder = @"Email";
+    UIFont *defaultFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:15.0f];
+    UIColor *color = [UIColor colorWithRed:134.0f/255.0f green:134.0f/255.0f blue:134.0f/255.0f alpha:1.0f];
+    
+    [signUpEmailTextField setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.9f]];
+    [signUpEmailTextField setFont:[UIFont systemFontOfSize:15]];
+    signUpEmailTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email" attributes:@{NSForegroundColorAttributeName: color, NSFontAttributeName:defaultFont}];
     signUpEmailTextField.layer.cornerRadius = 1.5f;
     signUpEmailTextField.leftView = paddingView;
     signUpEmailTextField.leftViewMode = UITextFieldViewModeAlways;
@@ -74,10 +77,10 @@
     [signUpEmailTextField resignFirstResponder];
     [self.view addSubview:signUpEmailTextField];
     
-    [signUpPWTextField setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.6f]];
-    [signUpPWTextField setFont:[UIFont systemFontOfSize:13]];
+    [signUpPWTextField setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.9f]];
+    [signUpPWTextField setFont:[UIFont systemFontOfSize:15]];
     //pwTextField.borderStyle = UITextBorderStyleRoundedRect;
-    signUpPWTextField.placeholder = @"Password";
+    signUpPWTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{NSForegroundColorAttributeName: color, NSFontAttributeName:defaultFont}];
     signUpPWTextField.userInteractionEnabled = YES;
     signUpPWTextField.layer.cornerRadius = 1.5f;
     signUpPWTextField.leftView = paddingView2;
@@ -89,10 +92,10 @@
     [signUpPWTextField resignFirstResponder];
     [self.view addSubview:signUpPWTextField];
     
-    [signUpPWTextField_confirm setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.6f]];
-    [signUpPWTextField_confirm setFont:[UIFont systemFontOfSize:13]];
+    [signUpPWTextField_confirm setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.9f]];
+    [signUpPWTextField_confirm setFont:[UIFont systemFontOfSize:15]];
     //pwTextField.borderStyle = UITextBorderStyleRoundedRect;
-    signUpPWTextField_confirm.placeholder = @"Confirm Password";
+    signUpPWTextField_confirm.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password Confirm" attributes:@{NSForegroundColorAttributeName: color, NSFontAttributeName:defaultFont}];
     signUpPWTextField_confirm.userInteractionEnabled = YES;
     signUpPWTextField_confirm.layer.cornerRadius = 1.5f;
     signUpPWTextField_confirm.delegate = self;
@@ -120,11 +123,11 @@
     [self.view addSubview:back_button];
     
     if ([UIScreen mainScreen].bounds.size.height > 480.0f) {
-        signUpEmailTextField.frame = CGRectMake( 35.0f, self.view.bounds.size.height - 385.0f, 250.0f, 45.0f);
-        signUpPWTextField.frame = CGRectMake( 35.0f, self.view.bounds.size.height - 330.0f, 250.0f, 45.0f);
-        signUpPWTextField_confirm.frame = CGRectMake( 35.0f, self.view.bounds.size.height - 275.0f, 250.0f, 45.0f);
-        [signUpButton setFrame:CGRectMake( 35.0f, self.view.bounds.size.height - 220.0f, 250.0f, 45.0f)];
-        [policy setFrame:CGRectMake(35.0f, self.view.bounds.size.height - 130.0f, 252.0f, 23.0f)];
+        signUpEmailTextField.frame = CGRectMake( 15.0f, self.view.bounds.size.height - 375.0f, 290.0f, 50.0f);
+        signUpPWTextField.frame = CGRectMake( 15.0f, self.view.bounds.size.height - 315.0f, 290.0f, 50.0f);
+        signUpPWTextField_confirm.frame = CGRectMake( 15.0f, self.view.bounds.size.height - 255.0f, 290.0f, 50.0f);
+        [signUpButton setFrame:CGRectMake( 15.0f, self.view.bounds.size.height - 195.0f, 290.0f, 50.0f)];
+        [policy setFrame:CGRectMake(35.0f, self.view.bounds.size.height - 100.0f, 252.0f, 23.0f)];
         mainLabel.frame = CGRectMake(0.0f, 100.0f, 320.0f, 30.0f);
     } else {
         signUpEmailTextField.frame = CGRectMake( 35.0f, self.view.bounds.size.height - 355.0f, 250.0f, 45.0f);
@@ -141,20 +144,6 @@
     
     [self.view addGestureRecognizer:tapOutside];
     
-}
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-{
-    // If there is text in the text field
-    if (textField.text.length + (string.length - range.length) > 0) {
-        // Set textfield font
-        textField.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:15];
-    } else {
-        // Set textfield placeholder font (or so it appears)
-        textField.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:15];
-    }
-    
-    return YES;
 }
 
 
