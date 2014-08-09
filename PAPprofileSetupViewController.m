@@ -347,7 +347,17 @@
             }];
         }
     } else {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please check your fields" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        NSString *replacementString;
+
+        if ([self.displayNameTF.text length] == 0) {
+            replacementString = @"Please enter Display Name";
+        } else if ([self.locationTF.text length] == 0) {
+            replacementString = @"Please enter Location";
+        } else {
+            replacementString = @"Please enter Email";
+        }
+            
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:replacementString delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         alert.alertViewStyle = UIAlertViewStyleDefault;
         [alert show];
     }
@@ -401,6 +411,25 @@
     self.navDone.userInteractionEnabled = NO;
     
     if ([companyName_input length] > 0 && [location_input length] > 0 && (([email_input length] > 0 && [self NSStringIsValidEmail:email_input]) || email_current_input )) {
+        
+        UIImage *image = [UIImage imageNamed:@"default-pic.png"];
+        
+        UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:0.0f interpolationQuality:kCGInterpolationHigh];
+        UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(200.0f, 200.0f) interpolationQuality:kCGInterpolationHigh];
+        
+        if (self.imageData_picker) {
+            [self uploadImage_medium:self.imageData_picker];
+        } else {
+            self.imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
+            [self uploadImage_medium:self.imageData_picker];
+        }
+        if (self.imageData_picker_small) {
+            [self uploadImage_small:self.imageData_picker_small];
+        } else {
+            self.imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
+            [self uploadImage_small:self.imageData_picker_small];
+        }
+        
             if ([companyName_input length] > 0) {
                 self.user[@"displayName"] = companyName_input;
             }
@@ -465,6 +494,9 @@
                        [SVProgressHUD dismiss];
                        if (error){
                            NSLog(@"Geocode failed with error: %@", error);
+                           UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Failed" message:@"Please try again or enter location manually" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                           alert.alertViewStyle = UIAlertViewStyleDefault;
+                           [alert show];
                            return;
                        }
                        
