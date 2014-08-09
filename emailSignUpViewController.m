@@ -113,8 +113,9 @@
     [signUpButton addTarget:self action:@selector(signUpButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:signUpButton];
     
-    UIButton *back_button = [[UIButton alloc] initWithFrame:CGRectMake(15.0f, 30.0f, 50.0f, 15.0f)];
-    [back_button setTitle:@"Back" forState:UIControlStateNormal];
+    UIImage *back_buttonImage = [UIImage imageNamed:@"btn-back.png"];
+    UIButton *back_button = [[UIButton alloc] initWithFrame:CGRectMake(15.0f, 30.0f, back_buttonImage.size.width, back_buttonImage.size.height)];
+    [back_button setBackgroundImage:back_buttonImage forState:UIControlStateNormal];
     [back_button addTarget:self action:@selector(back_button_action:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:back_button];
     
