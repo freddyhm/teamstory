@@ -105,25 +105,24 @@
     [self.pageControl setNumberOfPages:3];
     [self.view addSubview:pageControl_bar];
     
-    UIImage *navNextImage = [UIImage imageNamed:@"button_next.png"];
-    UIButton *navNext_1 = [[UIButton alloc] initWithFrame:CGRectMake(300.0f - navNextImage.size.width, 30.0f - navNextImage.size.width / 2, navNextImage.size.width, navNextImage.size.height)];
-    [navNext_1 setImage:navNextImage forState:UIControlStateNormal];
+    UIButton *navNext_1 = [[UIButton alloc] initWithFrame:CGRectMake(310.0f - 50.0f, 30.0f - 10.0f, 50.0f, 20.0f)];
+    //[navNext_1 setImage:navNextImage forState:UIControlStateNormal];
+    [navNext_1 setTitle:@"Next" forState:UIControlStateNormal];
     [navNext_1 addTarget:self action:@selector(navNext_1Action:) forControlEvents:UIControlEventTouchUpInside];
     [navBar addSubview:navNext_1];
     
-    UIButton *navNext_2 = [[UIButton alloc] initWithFrame:CGRectMake(620.0f - navNextImage.size.width, 30.0f - navNextImage.size.width / 2, navNextImage.size.width, navNextImage.size.height)];
-    [navNext_2 setImage:navNextImage forState:UIControlStateNormal];
+    UIButton *navNext_2 = [[UIButton alloc] initWithFrame:CGRectMake(630.0f - 50.0f, 30.0f - 10.0f, 50.0f, 20.0f)];
+    [navNext_2 setTitle:@"Next" forState:UIControlStateNormal];
     [navNext_2 addTarget:self action:@selector(navNext_2Action:) forControlEvents:UIControlEventTouchUpInside];
     [navBar addSubview:navNext_2];
     
-    UIImage *navBackImage = [UIImage imageNamed:@"button_back_profile.png"];
-    UIButton *navBack_2 = [[UIButton alloc] initWithFrame:CGRectMake(340.0f, 30.0f - navBackImage.size.width / 2, navBackImage.size.width, navBackImage.size.height)];
-    [navBack_2 setImage:navBackImage forState:UIControlStateNormal];
+    UIButton *navBack_2 = [[UIButton alloc] initWithFrame:CGRectMake(330.0f, 30.0f - 10.0f, 50.0f, 20.0f)];
+    [navBack_2 setTitle:@"Back" forState:UIControlStateNormal];
     [navBack_2 addTarget:self action:@selector(navBack_2Action:) forControlEvents:UIControlEventTouchUpInside];
     [navBar addSubview:navBack_2];
     
-    UIButton *navBack_3 = [[UIButton alloc] initWithFrame:CGRectMake(660.0f, 30.0f - navBackImage.size.width / 2, navBackImage.size.width, navBackImage.size.height)];
-    [navBack_3 setImage:navBackImage forState:UIControlStateNormal];
+    UIButton *navBack_3 = [[UIButton alloc] initWithFrame:CGRectMake(650.0f, 30.0f - 10.0f, 50.0f, 20.0f)];
+    [navBack_3 setTitle:@"Back" forState:UIControlStateNormal];
     [navBack_3 addTarget:self action:@selector(navBack_3Action:) forControlEvents:UIControlEventTouchUpInside];
     [navBar addSubview:navBack_3];
     
