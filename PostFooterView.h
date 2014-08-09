@@ -15,7 +15,7 @@ typedef enum {
 
 @protocol PAPPhotoHeaderView2Delegate;
 
-@interface PAPPhotoHeaderView2 : UIView
+@interface PostFooterView : UIView
 
 /*! @name Creating Photo Header View */
 /*!
@@ -69,19 +69,19 @@ typedef enum {
  Sent to the delegate when the user button is tapped
  @param user the PFUser associated with this button
  */
-- (void)photoHeaderView:(PAPPhotoHeaderView2 *)photoHeaderView didTapUserButton:(UIButton *)button user:(PFUser *)user;
+- (void)photoHeaderView:(PostFooterView *)photoHeaderView didTapUserButton:(UIButton *)button user:(PFUser *)user;
 
 /*!
  Sent to the delegate when the like photo button is tapped
  @param photo the PFObject for the photo that is being liked or disliked
  */
-- (void)photoHeaderView:(PAPPhotoHeaderView2 *)photoHeaderView didTapLikePhotoButton:(UIButton *)button photo:(PFObject *)photo;
+- (void)photoHeaderView:(PostFooterView *)photoHeaderView didTapLikePhotoButton:(UIButton *)button photo:(PFObject *)photo;
 
 /*!
  Sent to the delegate when the comment on photo button is tapped
  @param photo the PFObject for the photo that will be commented on
  */
-- (void)photoHeaderView:(PAPPhotoHeaderView2 *)photoHeaderView didTapCommentOnPhotoButton:(UIButton *)button photo:(PFObject *)photo;
+- (void)photoHeaderView:(PostFooterView *)photoHeaderView didTapCommentOnPhotoButton:(UIButton *)button photo:(PFObject *)photo;
 
 - (void) moreActionButton_inflator:(PFUser *)user photo:(PFObject *)photo;
 @end

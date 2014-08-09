@@ -53,6 +53,8 @@ enum ActionSheetTags {
         // Improve scrolling performance by reusing UITableView section headers
         self.reusableSectionHeaderViews = [NSMutableSet setWithCapacity:3];
         
+        self.reusableSectionHeaderViews2 = [NSMutableSet setWithCapacity:3];
+        
         // Init our image cache
         self.imgCache = [[NSCache alloc]init];
     
@@ -487,16 +489,15 @@ enum ActionSheetTags {
         return nil;
     }
     
-    PAPPhotoHeaderView2 *headerView = [self dequeueReusableSectionHeaderView2];
+    PostFooterView *headerView = [self dequeueReusableSectionHeaderView2];
     
     if (!headerView) {
-        headerView = [[PAPPhotoHeaderView2 alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.view.bounds.size.width, 44.0f) buttons:PAPPhotoHeaderButtonsDefault2];
+        headerView = [[PostFooterView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.view.bounds.size.width, 44.0f) buttons:PAPPhotoHeaderButtonsDefault2];
         headerView.delegate = self;
         [self.reusableSectionHeaderViews2 addObject:headerView];
     }
     
     PFObject *photo = [self.objects objectAtIndex:section];
-    [headerView setPhoto:photo];
     headerView.tag = section;
     [headerView.likeButton setTag:section];
     
@@ -722,8 +723,8 @@ enum ActionSheetTags {
     return nil;
 }
 
-- (PAPPhotoHeaderView2 *)dequeueReusableSectionHeaderView2 {
-    for (PAPPhotoHeaderView2 *sectionHeaderView in self.reusableSectionHeaderViews) {
+- (PostFooterView *)dequeueReusableSectionHeaderView2 {
+    for (PostFooterView *sectionHeaderView in self.reusableSectionHeaderViews2) {
         if (!sectionHeaderView.superview) {
             // we found a section header that is no longer visible
             return sectionHeaderView;

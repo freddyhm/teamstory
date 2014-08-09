@@ -4,12 +4,12 @@
 //
 //
 
-#import "PAPPhotoHeaderView2.h"
+#import "PostFooterView.h"
 #import "PAPProfileImageView.h"
 #import "TTTTimeIntervalFormatter.h"
 #import "PAPUtility.h"
 
-@interface PAPPhotoHeaderView2 () {
+@interface PostFooterView () {
     float notificationBarOffset;
 }
 
@@ -23,7 +23,7 @@
 @end
 
 
-@implementation PAPPhotoHeaderView2
+@implementation PostFooterView
 @synthesize containerView;
 @synthesize avatarImageView;
 @synthesize userButton;
@@ -42,7 +42,7 @@
 - (id)initWithFrame:(CGRect)frame buttons:(PAPPhotoHeaderButtons2)otherButtons {
     self = [super initWithFrame:frame];
     if (self) {
-        [PAPPhotoHeaderView2 validateButtons:otherButtons];
+        [PostFooterView validateButtons:otherButtons];
         buttons = otherButtons;
 
         self.clipsToBounds = NO;
@@ -55,18 +55,11 @@
         [self.containerView setBackgroundColor:[UIColor whiteColor]];
         [self addSubview:self.containerView];
         
-        
-        self.avatarImageView = [[PAPProfileImageView alloc] init];
-        self.avatarImageView.frame = CGRectMake( 4.0f, 4.0f, 35.0f, 35.0f);
-        [self.avatarImageView.profileButton addTarget:self action:@selector(didTapUserButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-        [self.containerView addSubview:self.avatarImageView];
-        
-        
         if (self.buttons & PAPPhotoHeaderButtonsComment2) {
             // comments button
             commentButton = [UIButton buttonWithType:UIButtonTypeCustom];
             [containerView addSubview:self.commentButton];
-            [self.commentButton setFrame:CGRectMake( 235.0f, 8.0f, 30.0f, 30.0f)];
+            [self.commentButton setFrame:CGRectMake(39.0f, 8.0f, 30.0f, 30.0f)];
             [self.commentButton setBackgroundColor:[UIColor clearColor]];
             [self.commentButton setTitle:@"" forState:UIControlStateNormal];
             [self.commentButton setTitleColor:[UIColor colorWithRed:113.0f/255.0f green:189.0f/255.0f blue:168.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
@@ -84,7 +77,7 @@
             // like button
             likeButton = [UIButton buttonWithType:UIButtonTypeCustom];
             [containerView addSubview:self.likeButton];
-            [self.likeButton setFrame:CGRectMake(200.0f, 8.0f, 30.0f, 30.0f)];
+            [self.likeButton setFrame:CGRectMake(4.0f, 8.0f, 30.0f, 30.0f)];
             [self.likeButton setBackgroundColor:[UIColor clearColor]];
             [self.likeButton setTitle:@"" forState:UIControlStateNormal];
             [self.likeButton setTitleColor:[UIColor colorWithRed:245.0f/255.0f green:137.0f/255.0f blue:137.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
@@ -102,20 +95,7 @@
             [self.likeButton setBackgroundImage:[UIImage imageNamed:@"ButtonLikeSelected.png"] forState:UIControlStateSelected];
             [self.likeButton setSelected:NO];
         }
-        
-        if (self.buttons & PAPPhotoHeaderButtonsUser2) {
-            // This is the user's display name, on a button so that we can tap on it
-            self.userButton = [UIButton buttonWithType:UIButtonTypeCustom];
-            [containerView addSubview:self.userButton];
-            [self.userButton setBackgroundColor:[UIColor clearColor]];
-            [[self.userButton titleLabel] setFont:[UIFont boldSystemFontOfSize:15]];
-            [self.userButton setTitleColor:[UIColor colorWithRed:79.0f/255.0f green:182.0f/255.0f blue:154.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
-            //[self.userButton setTitleColor:[UIColor colorWithRed:134.0f/255.0f green:100.0f/255.0f blue:65.0f/255.0f alpha:1.0f] forState:UIControlStateHighlighted];
-            [[self.userButton titleLabel] setLineBreakMode:NSLineBreakByTruncatingTail];
-            //[[self.userButton titleLabel] setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
-            //[self.userButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
-        }
-        
+                
         self.moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(270.0f, 8.0f, 30.0f, 30.0f)];
         [self.moreActionButton setImage:[UIImage imageNamed:@"button-more.png"] forState:UIControlStateNormal];
         [self.moreActionButton addTarget:self action:@selector(moreActionButton_action:) forControlEvents:UIControlEventTouchUpInside];
@@ -154,21 +134,9 @@
 
 - (void)setPhoto:(PFObject *)aPhoto {
     photo = aPhoto;
-
-    // user's avatar
-    PFUser *user = [self.photo objectForKey:kPAPPhotoUserKey];
-    PFFile *profilePictureSmall = [user objectForKey:kPAPUserProfilePicSmallKey];
-    [self.avatarImageView setFile:profilePictureSmall];
-
-    NSString *authorName = [user objectForKey:kPAPUserDisplayNameKey];
-    [self.userButton setTitle:authorName forState:UIControlStateNormal];
     
     CGFloat constrainWidth = containerView.bounds.size.width;
 
-    if (self.buttons & PAPPhotoHeaderButtonsUser2) {
-        [self.userButton addTarget:self action:@selector(didTapUserButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    }
-    
     if (self.buttons & PAPPhotoHeaderButtonsComment2) {
         constrainWidth = self.commentButton.frame.origin.x;
         [self.commentButton addTarget:self action:@selector(didTapCommentOnPhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -178,26 +146,6 @@
         constrainWidth = self.likeButton.frame.origin.x;
         [self.likeButton addTarget:self action:@selector(didTapLikePhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     }
-    
-    // we resize the button to fit the user's name to avoid having a huge touch area
-    CGPoint userButtonPoint = CGPointMake(50.0f, 6.0f);
-    constrainWidth -= userButtonPoint.x;
-    CGSize constrainSize = CGSizeMake(constrainWidth, containerView.bounds.size.height - userButtonPoint.y*2.0f);
-    
-    
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
-        
-    CGSize userButtonSize = ([self.userButton.titleLabel.text boundingRectWithSize:constrainSize
-                                         options:NSStringDrawingUsesLineFragmentOrigin
-                                      attributes:@{NSFontAttributeName:self.userButton.titleLabel.font, NSParagraphStyleAttributeName: paragraphStyle.copy}
-                                         context:nil]).size;
-
-    
-    
-    
-    CGRect userButtonFrame = CGRectMake(userButtonPoint.x, userButtonPoint.y, userButtonSize.width, userButtonSize.height);
-    [self.userButton setFrame:userButtonFrame];
     
     NSTimeInterval timeInterval = [[self.photo createdAt] timeIntervalSinceNow];
     NSString *timestamp = [self.timeIntervalFormatter stringForTimeInterval:timeInterval];

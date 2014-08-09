@@ -7,7 +7,7 @@
 //
 
 #import "PAPPhotoHeaderView.h"
-#import "PAPPhotoHeaderView2.h"
+#import "PostFooterView.h"
 #import "PAPPhotoDetailsViewController.h"
 #import <UIKit/UIKit.h>
 
