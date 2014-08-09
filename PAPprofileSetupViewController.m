@@ -294,16 +294,23 @@
 }
 
 # pragma - ()
+-(void)hideSVProgressHUDWithDelay {
+    [SVProgressHUD dismiss];
+}
 -(void)navNext_1Action:(id)sender {
     [self.locationTF becomeFirstResponder];
     if ([self.displayNameTF.text length] > 0 && [self.locationTF.text length] > 0 && ([self.emailTF.text length] > 0 || [self.userEmail length] > 0)) {
         if ([self.displayNameTF.text length] > 0 && [(AppDelegate*)[[UIApplication sharedApplication] delegate] isParseReachable]) {
-            [SVProgressHUD showWithStatus:@"Validating User Name"];
+            
+            [SVProgressHUD showWithStatus:@"Validating User Name" maskType:SVProgressHUDMaskTypeBlack];
+            
+//[SVProgressHUD setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.95f]];
             self.displayNameTF.enabled = NO;
             PFQuery *query = [PFUser query];
             [query whereKey:@"displayName" equalTo:self.displayNameTF.text];
             [query countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
-                [SVProgressHUD dismiss];
+                
+                [self performSelector:@selector(hideSVProgressHUDWithDelay) withObject:nil afterDelay:1.0];
                 
                 self.displayNameTF.enabled = YES;
                 
