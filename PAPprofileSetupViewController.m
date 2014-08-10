@@ -36,6 +36,7 @@
 @property (nonatomic, strong) UITextField *angellistTF;
 @property (nonatomic, strong) UITextField *linkedInTF;
 @property (nonatomic, strong) UIButton *navDone;
+@property (nonatomic, strong) UIScrollView* contentSV;
 
 @property (nonatomic, strong) UIButton *imagePicker;
 @property (nonatomic, strong) NSData *imageData_picker;
@@ -75,6 +76,13 @@
     UIView *backgroudView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 60.0f, self.mainSV.contentSize.width, self.mainSV.bounds.size.height - 216.0f - navBar.bounds.size.height)];
     [backgroudView setBackgroundColor:[UIColor whiteColor]];
     [self.mainSV addSubview:backgroudView];
+    
+    self.contentSV = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0f, navBar.bounds.size.height, 960.0f, [UIScreen mainScreen].bounds.size.height - navBar.bounds.size.height - 216.0f)];
+    self.contentSV.contentSize = CGSizeMake(960.0f, 290.0f);
+    self.contentSV.delegate = self;
+    [self.mainSV addSubview:self.contentSV];
+    
+
     
     // Nav Labels.
     UILabel *profileSetupLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, navBar.bounds.size.height)];
@@ -137,21 +145,21 @@
 
     
     UIImage *middleImageViewImage_1 = [UIImage imageNamed:@"profile_header_1.png"];
-    UIImageView *middleImageView_1 = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, navBar.bounds.size.height, middleImageViewImage_1.size.width, middleImageViewImage_1.size.height)];
+    UIImageView *middleImageView_1 = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, middleImageViewImage_1.size.width, middleImageViewImage_1.size.height)];
     middleImageView_1.image = middleImageViewImage_1;
     middleImageView_1.userInteractionEnabled = YES;
-    [self.mainSV addSubview:middleImageView_1];
+    [self.contentSV addSubview:middleImageView_1];
     
     UIImage *middleImageViewImage_2 = [UIImage imageNamed:@"profile_header_2.png"];
-    UIImageView *middleImageView_2 = [[UIImageView alloc] initWithFrame:CGRectMake(320.0f, navBar.bounds.size.height, middleImageViewImage_2.size.width, middleImageViewImage_2.size.height)];
+    UIImageView *middleImageView_2 = [[UIImageView alloc] initWithFrame:CGRectMake(320.0f, 0.0f, middleImageViewImage_2.size.width, middleImageViewImage_2.size.height)];
     middleImageView_2.image = middleImageViewImage_2;
-    [self.mainSV addSubview:middleImageView_2];
+    [self.contentSV addSubview:middleImageView_2];
     
     UIImage *middleImageVIewImage_3 = [UIImage imageNamed:@"profile_header_3.png"];
-    UIImageView *middleImageView_3 = [[UIImageView alloc] initWithFrame:CGRectMake(640.0f, navBar.bounds.size.height, middleImageVIewImage_3.size.width, middleImageVIewImage_3.size.height)];
+    UIImageView *middleImageView_3 = [[UIImageView alloc] initWithFrame:CGRectMake(640.0f, 0.0f, middleImageVIewImage_3.size.width, middleImageVIewImage_3.size.height)];
     middleImageView_3.image = middleImageVIewImage_3;
     middleImageView_3.userInteractionEnabled = YES;
-    [self.mainSV addSubview:middleImageView_3];
+    [self.contentSV addSubview:middleImageView_3];
     
     UILabel *middleImageViewText_2 = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 105.0f)];
     [middleImageViewText_2 setText:@"What's your startup about?"];
@@ -182,32 +190,32 @@
     
     
     // Textfields in first page
-    self.displayNameTF = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, middleImageView_1.bounds.size.height + navBar.bounds.size.height, 300.0f, 55.0f)];
+    self.displayNameTF = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, middleImageView_1.bounds.size.height, 300.0f, 55.0f)];
     self.displayNameTF.placeholder = @"Startup Name or Individual Name";
     self.displayNameTF.delegate = self;
     //displayNameTF.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0f];
     [self.displayNameTF becomeFirstResponder];
-    [self.mainSV addSubview:self.displayNameTF];
+    [self.contentSV addSubview:self.displayNameTF];
     
     UIColor *lineColor = [UIColor colorWithWhite:0.9f alpha:0.7f];
     
-    UIView *line_1 = [[UIView alloc] initWithFrame:CGRectMake(0.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height + navBar.bounds.size.height, self.mainSV.contentSize.width, 1.0f)];
+    UIView *line_1 = [[UIView alloc] initWithFrame:CGRectMake(0.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height, self.mainSV.contentSize.width, 1.0f)];
     [line_1 setBackgroundColor:lineColor];
-    [self.mainSV addSubview:line_1];
+    [self.contentSV addSubview:line_1];
     
-    self.locationTF = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height + navBar.bounds.size.height, 300.0f, 55.0f)];
+    self.locationTF = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height, 300.0f, 55.0f)];
     self.locationTF.placeholder = @"Location";
     //locationTF.backgroundColor = [UIColor colorWithWhite:0.6 alpha:1.0f];
-    [self.mainSV addSubview:self.locationTF];
+    [self.contentSV addSubview:self.locationTF];
     
-    UIView *line_2 = [[UIView alloc] initWithFrame:CGRectMake(0.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height + self.locationTF.bounds.size.height + navBar.bounds.size.height, self.mainSV.contentSize.width, 1.0f)];
+    UIView *line_2 = [[UIView alloc] initWithFrame:CGRectMake(0.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height + self.locationTF.bounds.size.height, self.mainSV.contentSize.width, 1.0f)];
     [line_2 setBackgroundColor:lineColor];
-    [self.mainSV addSubview:line_2];
+    [self.contentSV addSubview:line_2];
     
     self.user = [PFUser currentUser];
     self.userEmail = [self.user objectForKey:@"email"];
     
-    self.emailTF = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height + self.locationTF.bounds.size.height + navBar.bounds.size.height, 300.0f, 55.0f)];
+    self.emailTF = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height + self.locationTF.bounds.size.height, 300.0f, 55.0f)];
     if ([self.userEmail length] == 0) {
         self.emailTF.placeholder = @"Email";
         self.emailTF.userInteractionEnabled = YES;
@@ -216,33 +224,33 @@
         self.emailTF.userInteractionEnabled = NO;
     }
     //websiteTF.backgroundColor = [UIColor colorWithWhite:0.4 alpha:1.0f];
-    [self.mainSV addSubview:self.emailTF];
+    [self.contentSV addSubview:self.emailTF];
     
     UIImage *locationDetectionButtionImage = [UIImage imageNamed:@"btn_auto_detect.png"];
     UIButton *locationDetectButton = [[UIButton alloc] initWithFrame:CGRectMake(320.0f - locationDetectionButtionImage.size.width, self.locationTF.frame.origin.y, locationDetectionButtionImage.size.width, 55.0f)];
     [locationDetectButton setImage:locationDetectionButtionImage forState:UIControlStateNormal];
     [locationDetectButton addTarget:self action:@selector(locationDetectButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.mainSV addSubview:locationDetectButton];
+    [self.contentSV addSubview:locationDetectButton];
     
-    self.descriptionTV = [[UITextView alloc] initWithFrame:CGRectMake(320.0f, middleImageView_2.bounds.size.height + navBar.bounds.size.height, 320.0f, 55.0f)];
+    self.descriptionTV = [[UITextView alloc] initWithFrame:CGRectMake(320.0f, middleImageView_2.bounds.size.height, 320.0f, 55.0f)];
     self.descriptionTV.delegate = self;
     //self.descriptionTV.contentInset = UIEdgeInsetsMake(10.0f, 10.0f, 0.0f, 0.0f);
     self.descriptionTV.contentInset = UIEdgeInsetsMake(10.0f, 5.0f, 0.0f, -5.0f);
     self.descriptionTV.text = @"Bio";
     self.descriptionTV.textColor = [UIColor colorWithWhite:0.8f alpha:1.0f];
     self.descriptionTV.font = [UIFont systemFontOfSize:17.0f];
-    [self.mainSV addSubview:self.descriptionTV];
+    [self.contentSV addSubview:self.descriptionTV];
     
-    self.wordCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(320.0f + 320.0f - 50.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height + navBar.bounds.size.height - 25.0f, 50.0f, 30.0f)];
+    self.wordCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(320.0f + 320.0f - 50.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height - 25.0f, 50.0f, 30.0f)];
     self.wordCountLabel.text = @"0/150";
     self.wordCountLabel.textAlignment = NSTextAlignmentCenter;
     self.wordCountLabel.font = [UIFont systemFontOfSize:10.0f];
     self.wordCountLabel.textColor = [UIColor colorWithWhite:0.8f alpha:1.0f];
-    [self.mainSV addSubview:self.wordCountLabel];
+    [self.contentSV addSubview:self.wordCountLabel];
     
     self.industry_datasource = [NSArray arrayWithObjects:@"Information Technology", @"Consumers", @"Enterprises", @"Media", @"Education", @"Health Care", @"Finance", @"Sales and Marketing", @"Fashion", @"Health and Wellness", @"Retail", @"Sports", @"UI/UX Design", @"Travel", @"Web Development", @"Real Estate", @"Recruiting", @"Entertainment", @"Clean Technology", @"Events", @"B2B", @"Restaurants", @"Lifestyle", @"Big Data Analytics", @"Music Services", @"Event Management", @"Non Profits", @"Discovery", @"Incubators", @"Other", nil];
     
-    self.industry_button = [[UIButton alloc] initWithFrame:CGRectMake(330.0f, middleImageView_2.bounds.size.height + navBar.bounds.size.height + self.descriptionTV.bounds.size.height, 300.0f, 55.0f)];
+    self.industry_button = [[UIButton alloc] initWithFrame:CGRectMake(330.0f, middleImageView_2.bounds.size.height + self.descriptionTV.bounds.size.height, 300.0f, 55.0f)];
     [self.industry_button setTitle:@"Industry / Market" forState:UIControlStateNormal];
     [self.industry_button setBackgroundColor:[UIColor clearColor]];
     //         [self.industry_button.titleLabel setTextColor:[UIColor colorWithWhite:0.7f alpha:1.0f]];
@@ -250,18 +258,18 @@
     [self.industry_button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
     [self.industry_button.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:17.0]];
     [self.industry_button addTarget:self action:@selector(industry_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.mainSV addSubview:self.industry_button];
+    [self.contentSV addSubview:self.industry_button];
     
     UIImage *industry_buttonDropDownImage = [UIImage imageNamed:@"btn_dropdown.png"];
     UIImageView *industry_buttonDropDown = [[UIImageView alloc] initWithFrame:CGRectMake(self.industry_button.bounds.size.width - 5.0f - industry_buttonDropDownImage.size.width, self.industry_button.bounds.size.height / 2 - industry_buttonDropDownImage.size.height / 2, industry_buttonDropDownImage.size.width, industry_buttonDropDownImage.size.height)];
     [industry_buttonDropDown setImage:industry_buttonDropDownImage];
     [self.industry_button addSubview:industry_buttonDropDown];
     
-    self.websiteTF = [[UITextField alloc] initWithFrame:CGRectMake(330.0f, middleImageView_2.bounds.size.height + self.descriptionTV.bounds.size.height + self.industry_button.bounds.size.height + navBar.bounds.size.height, 300.0f, 55.0f)];
+    self.websiteTF = [[UITextField alloc] initWithFrame:CGRectMake(330.0f, middleImageView_2.bounds.size.height + self.descriptionTV.bounds.size.height + self.industry_button.bounds.size.height, 300.0f, 55.0f)];
     self.websiteTF.placeholder = @"Website";
     self.websiteTF.delegate = self;
     //websiteTF.backgroundColor = [UIColor colorWithWhite:0.4 alpha:1.0f];
-    [self.mainSV addSubview:self.websiteTF];
+    [self.contentSV addSubview:self.websiteTF];
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
@@ -276,20 +284,20 @@
     
     // third screen
     
-    self.twitterTF = [[UITextField alloc] initWithFrame:CGRectMake(650.0f, middleImageView_3.bounds.size.height + navBar.bounds.size.height, 300.0f, 55.0f)];
+    self.twitterTF = [[UITextField alloc] initWithFrame:CGRectMake(650.0f, middleImageView_3.bounds.size.height, 300.0f, 55.0f)];
     self.twitterTF.delegate = self;
     self.twitterTF.placeholder = @"Twitter";
-    [self.mainSV addSubview:self.twitterTF];
+    [self.contentSV addSubview:self.twitterTF];
     
-    self.angellistTF = [[UITextField alloc] initWithFrame:CGRectMake(650.0f, middleImageView_3.bounds.size.height + navBar.bounds.size.height + self.twitterTF.bounds.size.height, 300.0f, 55.0f)];
+    self.angellistTF = [[UITextField alloc] initWithFrame:CGRectMake(650.0f, middleImageView_3.bounds.size.height + self.twitterTF.bounds.size.height, 300.0f, 55.0f)];
     self.angellistTF.delegate = self;
     self.angellistTF.placeholder = @"AngelList";
-    [self.mainSV addSubview:self.angellistTF];
+    [self.contentSV addSubview:self.angellistTF];
     
-    self.linkedInTF = [[UITextField alloc] initWithFrame:CGRectMake(650.0f, middleImageView_3.bounds.size.height + navBar.bounds.size.height + self.twitterTF.bounds.size.height + self.angellistTF.bounds.size.height, 300.0f, 55.0f)];
+    self.linkedInTF = [[UITextField alloc] initWithFrame:CGRectMake(650.0f, middleImageView_3.bounds.size.height + self.twitterTF.bounds.size.height + self.angellistTF.bounds.size.height, 300.0f, 55.0f)];
     self.linkedInTF.delegate = self;
     self.linkedInTF.placeholder = @"LinkedIn";
-    [self.mainSV addSubview:self.linkedInTF];
+    [self.contentSV addSubview:self.linkedInTF];
 
 }
 
@@ -350,6 +358,9 @@
                                         [alert show];
                                     } else {
                                         [self.mainSV setContentOffset:CGPointMake(320.0f, 0.0f) animated:YES];
+                                        
+                                        if ([UIScreen mainScreen].bounds.size.height == 480)
+                                        [self.contentSV setContentOffset:CGPointMake(320.0f, 0.0f) animated:YES];
                                     }
                                 } else {
                                     NSLog(@"%@", error);
@@ -357,6 +368,8 @@
                             }];
                         } else {
                             [self.mainSV setContentOffset:CGPointMake(320.0f, 0.0f) animated:YES];
+                            if ([UIScreen mainScreen].bounds.size.height == 480)
+                                [self.contentSV setContentOffset:CGPointMake(320.0f, 0.0f) animated:YES];
                         }
                     }
                 } else {
@@ -386,14 +399,23 @@
 -(void)navNext_2Action:(id)sender {
     [self.mainSV setContentOffset:CGPointMake(640.0f, 0.0f) animated:YES];
     
+    if ([UIScreen mainScreen].bounds.size.height == 480)
+        [self.contentSV setContentOffset:CGPointMake(640.0f, 0.0f) animated:YES];
+    
 }
 
 -(void)navBack_2Action:(id)sender {
     [self.mainSV setContentOffset:CGPointMake(0.0f, 0.0f) animated:YES];
+    
+    if ([UIScreen mainScreen].bounds.size.height == 480)
+        [self.contentSV setContentOffset:CGPointMake(0.0f, 0.0f) animated:YES];
 }
 
 -(void)navBack_3Action:(id)sender {
     [self.mainSV setContentOffset:CGPointMake(320.0f, 0.0f) animated:YES];
+    
+    if ([UIScreen mainScreen].bounds.size.height == 480)
+        [self.contentSV setContentOffset:CGPointMake(320.0f, 0.0f) animated:YES];
 }
 
 -(BOOL)NSStringIsValidEmail:(NSString *)checkString {
@@ -714,6 +736,19 @@
         int page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
         [self.pageControl setCurrentPage:page];
     }
+    
+    if ([UIScreen mainScreen].bounds.size.height == 480) {
+        if (scrollView == self.contentSV) {
+            if (scrollView.contentOffset.x != 0) {
+                CGPoint offset = scrollView.contentOffset;
+                offset.x = 0;
+                scrollView.contentOffset = offset;
+            }
+        }
+    } else {
+        
+    }
+    
 }
 
 -(void)textViewDidBeginEditing:(UITextView *)textView {

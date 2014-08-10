@@ -111,6 +111,7 @@
     signUpButton.layer.cornerRadius = 1.5f;
     [[signUpButton titleLabel] setFont:[UIFont fontWithName:@"HelveticaNeue" size:15.0]];
     [signUpButton setTitle:@"Sign Up" forState:UIControlStateNormal];
+    [signUpButton addTarget:self action:@selector(chagneBGcolor:) forControlEvents:UIControlEventTouchDown];
     [signUpButton addTarget:self action:@selector(signUpButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:signUpButton];
     
@@ -150,23 +151,33 @@
 
 }
 
+-(void)chagneBGcolor:(id) sender {
+    signUpButton.backgroundColor = [UIColor colorWithRed:60.0f/255.0f green:164.0f/255.0f blue:135.0f/255.0f alpha:1.0f];
+}
+
 
 - (void)back_button_action:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void) animateTextField: (UITextField*) textField up: (BOOL) up {
+    float offset;
+    if ([UIScreen mainScreen].bounds.size.height == 480) {
+        offset  = 50.0f;
+    } else {
+        offset = 0.0f;
+    }
     int movementDistance = 0; // tweak as needed
     float movementDuration = 0.3f; // tweak as needed
     
     if (textField == signUpEmailTextField) {
-        movementDistance = 180; // tweak as needed
+        movementDistance = 180 - offset; // tweak as needed
     }
     else if (textField == signUpPWTextField) {
-        movementDistance = 180; // tweak as needed
+        movementDistance = 180 - offset; // tweak as needed
     }
     else if (textField == signUpPWTextField_confirm) {
-        movementDistance = 180; // tweak as needed
+        movementDistance = 180 - offset; // tweak as needed
     }
     
     int movement = (up ? -movementDistance : movementDistance);
@@ -195,6 +206,7 @@
 
 -(void)signUpButtonAction:(id)sender {
     [SVProgressHUD show];
+    [signUpButton setBackgroundColor:[UIColor colorWithRed:91.0f/255.0f green:194.0f/255.0f blue:165.0f/255.0f alpha:1.0f]];
     NSString *userNewEmail = self.signUpEmailTextField.text;
     NSString *userPW = self.signUpPWTextField.text;
     NSString *userPW_confirm = self.signUpPWTextField_confirm.text;

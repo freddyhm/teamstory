@@ -13,6 +13,8 @@
 @interface PAPLoginTutorialViewController () {
     float screenOffset;
 }
+@property (nonatomic, strong) UIButton *signInButton;
+@property (nonatomic, strong) UIButton *joinButton;
 
 @end
 
@@ -20,6 +22,8 @@
 
 @synthesize pageControl;
 @synthesize text;
+@synthesize signInButton;
+@synthesize joinButton;
 
 
 - (void)viewDidLoad
@@ -39,7 +43,7 @@
     if ([UIScreen mainScreen].bounds.size.height == 480) {
         screenOffset = 0.0f;
     } else {
-        screenOffset = 75.0f;
+        screenOffset = 45.0f;
     }
     
     UIImage *logoViewImage = [UIImage imageNamed:@"intro_logo.png"];
@@ -69,66 +73,69 @@
     [self.pageControl setNumberOfPages:4];
     [self.view addSubview:pageControl_bar];
     
-    UILabel *firstPageText = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - 420.0f + screenOffset, 320.0f, 50.0f)];
+    UILabel *firstPageText = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - 330.0f - screenOffset, 320.0f, 50.0f)];
     firstPageText.text = @"A Community for Startup & Entrepreneurs";
     [firstPageText setFont:[UIFont fontWithName:@"HelveticaNeue" size:13.0f]];
     [firstPageText setTextColor:[UIColor whiteColor]];
     [firstPageText setTextAlignment:NSTextAlignmentCenter];
     [mainSV addSubview:firstPageText];
     
-    UILabel *secondPageText = [[UILabel alloc] initWithFrame:CGRectMake(320.0f, [UIScreen mainScreen].bounds.size.height - 150.0f - screenOffset, 320.0f, 50.0f)];
+    UILabel *secondPageText = [[UILabel alloc] initWithFrame:CGRectMake(320.0f, [UIScreen mainScreen].bounds.size.height - 200.0f - screenOffset, 320.0f, 50.0f)];
     secondPageText.text = @"Share and discover startup moments";
     [secondPageText setFont:[UIFont fontWithName:@"HelveticaNeue" size:13.0f]];
     [secondPageText setTextColor:[UIColor whiteColor]];
     [secondPageText setTextAlignment:NSTextAlignmentCenter];
     [mainSV addSubview:secondPageText];
     
-    UILabel *thirdPageText = [[UILabel alloc] initWithFrame:CGRectMake(640.0f, [UIScreen mainScreen].bounds.size.height - 150.0f - screenOffset, 320.0f, 50.0f)];
+    UILabel *thirdPageText = [[UILabel alloc] initWithFrame:CGRectMake(640.0f, [UIScreen mainScreen].bounds.size.height - 200.0f - screenOffset, 320.0f, 50.0f)];
     thirdPageText.text = @"Share thoughts and questions";
     [thirdPageText setFont:[UIFont fontWithName:@"HelveticaNeue" size:13.0f]];
     [thirdPageText setTextColor:[UIColor whiteColor]];
     [thirdPageText setTextAlignment:NSTextAlignmentCenter];
     [mainSV addSubview:thirdPageText];
     
-    UILabel *fourthPageText = [[UILabel alloc] initWithFrame:CGRectMake(960.0f, [UIScreen mainScreen].bounds.size.height - 150.0f - screenOffset, 320.0f, 50.0f)];
+    UILabel *fourthPageText = [[UILabel alloc] initWithFrame:CGRectMake(960.0f, [UIScreen mainScreen].bounds.size.height - 200.0f - screenOffset, 320.0f, 50.0f)];
     fourthPageText.text = @"Connect with entrepreneurs around the world";
     [fourthPageText setFont:[UIFont fontWithName:@"HelveticaNeue" size:13.0f]];
     [fourthPageText setTextColor:[UIColor whiteColor]];
     [fourthPageText setTextAlignment:NSTextAlignmentCenter];
     [mainSV addSubview:fourthPageText];
     
-    
-    
-    self.text = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - 300.0f + screenOffset, 320.0f, 50.0f)];
-    [self.text setTextAlignment:NSTextAlignmentCenter];
-    [self.text setTextColor:[UIColor whiteColor]];
-    [self.text setFont:[UIFont fontWithName:@"HelveticaNeue" size:13.0f]];
-    self.text.numberOfLines = 0;
-    [self.view addSubview:self.text];
-    
-    UIButton *joinButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0f, [UIScreen mainScreen].bounds.size.height - 60.0f, 145.0f, 50.0f)];
+    joinButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0f, [UIScreen mainScreen].bounds.size.height - 60.0f, 145.0f, 50.0f)];
     [joinButton setBackgroundColor:[UIColor colorWithRed:91.0f/255.0f green:194.0f/255.0f blue:165.0f/255.0f alpha:1.0f]];
     joinButton.layer.cornerRadius = 2.0f;
     [joinButton setTitle:@"Join now" forState:UIControlStateNormal];
     joinButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
     [joinButton addTarget:self action:@selector(joinButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [joinButton addTarget:self action:@selector(joinButtonActionChangeColor:) forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:joinButton];
     
-    UIButton *signInButton = [[UIButton alloc] initWithFrame:CGRectMake(165.0f, [UIScreen mainScreen].bounds.size.height - 60.0f, 145.0f, 50.0f)];
+    signInButton = [[UIButton alloc] initWithFrame:CGRectMake(165.0f, [UIScreen mainScreen].bounds.size.height - 60.0f, 145.0f, 50.0f)];
     [signInButton setBackgroundColor:[UIColor clearColor]];
     signInButton.layer.borderColor = [UIColor whiteColor].CGColor;
     signInButton.layer.borderWidth = 2.0f;
     signInButton.layer.cornerRadius = 2.0f;
     [signInButton setTitle:@"Sign in" forState:UIControlStateNormal];
+    [signInButton setTitleColor:[UIColor colorWithWhite:1.0f alpha:0.7] forState:UIControlStateHighlighted];
     signInButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
+    [signInButton addTarget:self action:@selector(signInButtonActionChangeColor:) forControlEvents:UIControlEventTouchDown];
     [signInButton addTarget:self action:@selector(signInButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:signInButton];
     
 }
 
+- (void)joinButtonActionChangeColor:(id)sender {
+    [joinButton setBackgroundColor:[UIColor colorWithRed:60.0f/255.0f green:164.0f/255.0f blue:135.0f/255.0f alpha:1.0f]];
+}
+
+- (void)signInButtonActionChangeColor:(id)sender {
+    signInButton.layer.borderColor = [UIColor colorWithWhite:1.0f alpha:0.7f].CGColor;
+}
+
 
 - (void)joinButtonAction:(id)sender{
     NSString *userType = @"join";
+    [joinButton setBackgroundColor:[UIColor colorWithRed:91.0f/255.0f green:194.0f/255.0f blue:165.0f/255.0f alpha:1.0f]];
     
     PAPLogInViewController *loginViewController = [[PAPLogInViewController alloc] initWithLoginType:userType];
     [loginViewController setDelegate:self];
@@ -146,6 +153,7 @@
 
 - (void)signInButtonAction:(id)sender {
     NSString *userType = @"signIn";
+    signInButton.layer.borderColor = [UIColor whiteColor].CGColor;
     
     PAPLogInViewController *loginViewController = [[PAPLogInViewController alloc] initWithLoginType:userType];
     [loginViewController setDelegate:self];
