@@ -73,11 +73,9 @@
             //[self.userButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
         }
     
-        
         self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
-        
         // timestamp
-        self.timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50.0f, 20.0f, containerView.bounds.size.width - 50.0f - 72.0f, 18.0f)];
+        self.timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(270.0f, 10.0f, containerView.bounds.size.width - 50.0f - 72.0f, 18.0f)];
         [containerView addSubview:self.timestampLabel];
         [self.timestampLabel setTextColor:[UIColor colorWithRed:157.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
         //[self.timestampLabel setShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f]];
@@ -142,6 +140,7 @@
     [self.userButton setFrame:userButtonFrame];
     
     NSTimeInterval timeInterval = [[self.photo createdAt] timeIntervalSinceNow];
+    [self.timeIntervalFormatter setUsesAbbreviatedCalendarUnits:YES];
     NSString *timestamp = [self.timeIntervalFormatter stringForTimeInterval:timeInterval];
     [self.timestampLabel setText:timestamp];
 

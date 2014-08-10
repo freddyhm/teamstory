@@ -25,6 +25,7 @@
 @property (nonatomic, strong) NSMutableSet *reusableSectionHeaderViews;
 @property (nonatomic, strong) NSMutableSet *reusableSectionHeaderViews2;
 @property (nonatomic, strong) NSMutableDictionary *outstandingSectionHeaderQueries;
+@property (nonatomic, strong) NSMutableDictionary *outstandingSectionHeaderQueries2;
 @property (nonatomic, strong) NSString *reported_user;
 @property (nonatomic, strong) NSString *photoID;
 @property (nonatomic, strong) PFObject *current_photo;
@@ -49,6 +50,7 @@ enum ActionSheetTags {
     if (self) {
         
         self.outstandingSectionHeaderQueries = [NSMutableDictionary dictionary];
+        self.outstandingSectionHeaderQueries2 = [NSMutableDictionary dictionary];
         
         // Improve scrolling performance by reusing UITableView section headers
         self.reusableSectionHeaderViews = [NSMutableSet setWithCapacity:3];
@@ -453,6 +455,7 @@ enum ActionSheetTags {
         [self.reusableSectionHeaderViews2 addObject:headerView];
     }
     
+    
     PFObject *photo = [self.objects objectAtIndex:section];
     headerView.tag = section;
     [headerView.likeButton setTag:section];
@@ -489,7 +492,7 @@ enum ActionSheetTags {
         
         @synchronized(self) {
             // check if we can update the cache
-            NSNumber *outstandingSectionHeaderQueryStatus = [self.outstandingSectionHeaderQueries objectForKey:[NSNumber numberWithInt:(int)section]];
+            NSNumber *outstandingSectionHeaderQueryStatus = [self.outstandingSectionHeaderQueries2 objectForKey:[NSNumber numberWithInt:(int)section]];
             if (!outstandingSectionHeaderQueryStatus) {
                 PFQuery *query = [PAPUtility queryForActivitiesOnPhoto:photo cachePolicy:kPFCachePolicyNetworkOnly];
                 [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -679,6 +682,7 @@ enum ActionSheetTags {
     return nil;
 }
 
+
 - (PostFooterView *)dequeueReusableSectionHeaderView2 {
     for (PostFooterView *sectionHeaderView in self.reusableSectionHeaderViews2) {
         if (!sectionHeaderView.superview) {
@@ -689,6 +693,7 @@ enum ActionSheetTags {
     
     return nil;
 }
+
 
 #pragma mark - PhotoHeaderView Delegate
 

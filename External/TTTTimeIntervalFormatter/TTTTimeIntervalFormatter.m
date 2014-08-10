@@ -138,7 +138,7 @@ static inline NSCalendarUnit NSCalendarUnitFromString(NSString *string) {
     
     if (string) {
         if (seconds > 0) {
-            string = [NSString stringWithFormat:self.deicticExpressionFormat, string, self.pastDeicticExpression];
+            //string = [NSString stringWithFormat:self.deicticExpressionFormat, string, self.pastDeicticExpression];
         } else {
             string = [NSString stringWithFormat:self.deicticExpressionFormat, string, self.futureDeicticExpression];
         }
@@ -163,7 +163,7 @@ static inline NSCalendarUnit NSCalendarUnitFromString(NSString *string) {
             case NSWeekCalendarUnit:
                 return singular ? NSLocalizedString(@"wk.", @"Week Unit (Singular, Abbreviated)") : NSLocalizedString(@"wks.", @"Week Unit (Plural, Abbreviated)");
             case NSDayCalendarUnit:
-                return singular ? NSLocalizedString(@"day", @"Day Unit (Singular, Abbreviated)") : NSLocalizedString(@"days", @"Day Unit (Plural, Abbreviated)");
+                return singular ? NSLocalizedString(@"d", @"Day Unit (Singular, Abbreviated)") : NSLocalizedString(@"d", @"Day Unit (Plural, Abbreviated)");
             case NSHourCalendarUnit:
                 return singular ? NSLocalizedString(@"hr", @"Hour Unit (Singular, Abbreviated)") : NSLocalizedString(@"hrs.", @"Hour Unit (Plural, Abbreviated)");
             case NSMinuteCalendarUnit:
