@@ -414,7 +414,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     // get home and phototimeline, if there are children pop 'em to get back to timeline
     PAPHomeViewController *homeViewController = [tabBarViewControllers objectAtIndex:0];
-    PAPPhotoTimelineViewController *photoViewController = [homeViewController.childViewControllers objectAtIndex:0];
+    PhotoTimelineViewController *photoViewController = [homeViewController.childViewControllers objectAtIndex:0];
     
     if([homeViewController.childViewControllers count] > 1){
         [photoViewController.navigationController popViewControllerAnimated:NO];

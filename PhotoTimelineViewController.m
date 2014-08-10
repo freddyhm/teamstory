@@ -377,38 +377,12 @@ enum ActionSheetTags {
     PFObject *photo = [self.objects objectAtIndex:section];
     [headerView setPhoto:photo];
     headerView.tag = section;
-    [headerView.likeButton setTag:section];
     
-    NSDictionary *attributesForPhoto = [[PAPCache sharedCache] attributesForPhoto:photo];
     
-    if (attributesForPhoto) {
-        [headerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:photo]];
-        
-        NSString *likeCount =[[[PAPCache sharedCache] likeCountForPhoto:photo] description];
-        BOOL likeStatus = [[PAPCache sharedCache] isPhotoLikedByCurrentUser:photo];
-        [headerView setLikeStatus:likeStatus];
-        
-        
-        if (likeStatus == YES) {
-            [headerView.likeButton setTitle:likeCount forState:UIControlStateSelected];
-        } else {
-            [headerView.likeButton setTitle:likeCount forState:UIControlStateNormal];
-        }
-        
-        
-        [headerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:photo] description] forState:UIControlStateNormal];
-        
-        if (headerView.likeButton.alpha < 1.0f || headerView.commentButton.alpha < 1.0f) {
-            [UIView animateWithDuration:0.200f animations:^{
-                headerView.likeButton.alpha = 1.0f;
-                headerView.commentButton.alpha = 1.0f;
-            }];
-        }
-    } else {
-        
-        headerView.likeButton.alpha = 0.0f;
-        headerView.commentButton.alpha = 0.0f;
-        
+    
+    
+
+    
         @synchronized(self) {
             // check if we can update the cache
             NSNumber *outstandingSectionHeaderQueryStatus = [self.outstandingSectionHeaderQueries objectForKey:[NSNumber numberWithInt:(int)section]];
@@ -447,28 +421,10 @@ enum ActionSheetTags {
                         if (headerView.tag != section) {
                             return;
                         }
-                        NSString *likeCount = [[[PAPCache sharedCache] likeCountForPhoto:photo] description];
-                        
-                        [headerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:photo]];
-                        
-                        if (isLikedByCurrentUser == YES) {
-                            [headerView.likeButton setTitle:likeCount forState:UIControlStateSelected];
-                        } else {
-                            [headerView.likeButton setTitle:likeCount forState:UIControlStateNormal];
-                        }
-                        
-                        [headerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:photo] description] forState:UIControlStateNormal];
-                        
-                        if (headerView.likeButton.alpha < 1.0f || headerView.commentButton.alpha < 1.0f) {
-                            [UIView animateWithDuration:0.200f animations:^{
-                                headerView.likeButton.alpha = 1.0f;
-                                headerView.commentButton.alpha = 1.0f;
-                            }];
-                        }
                     }
                 }];
             }            
-        }
+        
     }
     return headerView;
 }
@@ -736,75 +692,8 @@ enum ActionSheetTags {
 
 #pragma mark - PhotoHeaderView Delegate
 
-- (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapUserButton:(UIButton *)button user:(PFUser *)user {
-    //[[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
-    PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
-    [accountViewController setUser:user];
-    [self.navigationController pushViewController:accountViewController animated:YES];
-}
 
-- (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapLikePhotoButton:(UIButton *)button photo:(PFObject *)photo {
-    [photoHeaderView shouldEnableLikeButton:NO];
-    
-    BOOL liked = !button.selected;
-    [photoHeaderView setLikeStatus:liked];
-    
-    NSString *originalButtonTitle = button.titleLabel.text;
-    
-    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-    [numberFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-    
-    NSNumber *likeCount = [numberFormatter numberFromString:button.titleLabel.text];
-    if (liked) {
-        
-        // analytics
-        [PAPUtility captureEventGA:@"Engagement" action:@"Like" label:@"Photo"];
-        
-        likeCount = [NSNumber numberWithInt:[likeCount intValue] + 1];
-        [[PAPCache sharedCache] incrementLikerCountForPhoto:photo];
-    } else {
-        if ([likeCount intValue] > 0) {
-            likeCount = [NSNumber numberWithInt:[likeCount intValue] - 1];
-        }
-        [[PAPCache sharedCache] decrementLikerCountForPhoto:photo];
-    }
-    
-    [[PAPCache sharedCache] setPhotoIsLikedByCurrentUser:photo liked:liked];
-    
-    if (liked == YES) {
-        [button setTitle:[numberFormatter stringFromNumber:likeCount] forState:UIControlStateSelected];
-    } else if (liked == NO) {
-        [button setTitle:[numberFormatter stringFromNumber:likeCount] forState:UIControlStateNormal];
-    }
-    
-    if (liked) {
-        [PAPUtility likePhotoInBackground:photo block:^(BOOL succeeded, NSError *error) {
-            PAPPhotoHeaderView *actualHeaderView = (PAPPhotoHeaderView *)[self tableView:self.feed viewForHeaderInSection:button.tag];
-            [actualHeaderView shouldEnableLikeButton:YES];
-            [actualHeaderView setLikeStatus:succeeded];
-            
-            if (!succeeded) {
-                [actualHeaderView.likeButton setTitle:originalButtonTitle forState:UIControlStateNormal];
-            }
-        }];
-    } else {
-        [PAPUtility unlikePhotoInBackground:photo block:^(BOOL succeeded, NSError *error) {
-            PAPPhotoHeaderView *actualHeaderView = (PAPPhotoHeaderView *)[self tableView:self.feed viewForHeaderInSection:button.tag];
-            [actualHeaderView shouldEnableLikeButton:YES];
-            [actualHeaderView setLikeStatus:!succeeded];
-            
-            if (!succeeded) {
-                [actualHeaderView.likeButton setTitle:originalButtonTitle forState:UIControlStateNormal];
-            }
-        }];
-    }
-}
 
-- (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapCommentOnPhotoButton:(UIButton *)button  photo:(PFObject *)photo {
-    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
-    PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"commentButton"];
-    [self.navigationController pushViewController:photoDetailsVC animated:YES];
-}
 
 #pragma mark - UIActionSheetDelegate
 
