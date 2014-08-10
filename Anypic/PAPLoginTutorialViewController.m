@@ -39,7 +39,7 @@
     if ([UIScreen mainScreen].bounds.size.height == 480) {
         screenOffset = 0.0f;
     } else {
-        screenOffset = 50.0f;
+        screenOffset = 75.0f;
     }
     
     UIImage *logoViewImage = [UIImage imageNamed:@"intro_logo.png"];
@@ -62,15 +62,44 @@
     [content3 setImage:content3Image];
     [mainSV addSubview:content3];
     
-    UIPageControl *pageControl_bar = [[UIPageControl alloc] initWithFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - 95.0f, mainSV.bounds.size.width, 20.0f)];
+    UIPageControl *pageControl_bar = [[UIPageControl alloc] initWithFrame:CGRectMake(135.0f, [UIScreen mainScreen].bounds.size.height - 95.0f, 50.0f, 20.0f)];
     [self setPageControl:pageControl_bar];
-    [pageControl_bar setPageIndicatorTintColor:[UIColor colorWithRed:79.0f/255.0f green:91.0f/255.0f blue:100.0f/255.0f alpha:1.0f]];
-    [pageControl_bar setCurrentPageIndicatorTintColor:[UIColor colorWithRed:205.0f/255.0f green:208.0f/255.0f blue:210.0f/255.0f alpha:1.0f]];
+    [pageControl_bar setPageIndicatorTintColor:[UIColor colorWithWhite:1.0f alpha:0.5f]];
+    [pageControl_bar setCurrentPageIndicatorTintColor:[UIColor colorWithWhite:1.0f alpha:1.0f]];
     [self.pageControl setNumberOfPages:4];
     [self.view addSubview:pageControl_bar];
     
+    UILabel *firstPageText = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - 420.0f + screenOffset, 320.0f, 50.0f)];
+    firstPageText.text = @"A Community for Startup & Entrepreneurs";
+    [firstPageText setFont:[UIFont fontWithName:@"HelveticaNeue" size:13.0f]];
+    [firstPageText setTextColor:[UIColor whiteColor]];
+    [firstPageText setTextAlignment:NSTextAlignmentCenter];
+    [mainSV addSubview:firstPageText];
+    
+    UILabel *secondPageText = [[UILabel alloc] initWithFrame:CGRectMake(320.0f, [UIScreen mainScreen].bounds.size.height - 150.0f - screenOffset, 320.0f, 50.0f)];
+    secondPageText.text = @"Share and discover startup moments";
+    [secondPageText setFont:[UIFont fontWithName:@"HelveticaNeue" size:13.0f]];
+    [secondPageText setTextColor:[UIColor whiteColor]];
+    [secondPageText setTextAlignment:NSTextAlignmentCenter];
+    [mainSV addSubview:secondPageText];
+    
+    UILabel *thirdPageText = [[UILabel alloc] initWithFrame:CGRectMake(640.0f, [UIScreen mainScreen].bounds.size.height - 150.0f - screenOffset, 320.0f, 50.0f)];
+    thirdPageText.text = @"Share thoughts and questions";
+    [thirdPageText setFont:[UIFont fontWithName:@"HelveticaNeue" size:13.0f]];
+    [thirdPageText setTextColor:[UIColor whiteColor]];
+    [thirdPageText setTextAlignment:NSTextAlignmentCenter];
+    [mainSV addSubview:thirdPageText];
+    
+    UILabel *fourthPageText = [[UILabel alloc] initWithFrame:CGRectMake(960.0f, [UIScreen mainScreen].bounds.size.height - 150.0f - screenOffset, 320.0f, 50.0f)];
+    fourthPageText.text = @"Connect with entrepreneurs around the world";
+    [fourthPageText setFont:[UIFont fontWithName:@"HelveticaNeue" size:13.0f]];
+    [fourthPageText setTextColor:[UIColor whiteColor]];
+    [fourthPageText setTextAlignment:NSTextAlignmentCenter];
+    [mainSV addSubview:fourthPageText];
+    
+    
+    
     self.text = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - 300.0f + screenOffset, 320.0f, 50.0f)];
-    [self.text setText:@"A Community for Startup & Entrepreneurs"];
     [self.text setTextAlignment:NSTextAlignmentCenter];
     [self.text setTextColor:[UIColor whiteColor]];
     [self.text setFont:[UIFont fontWithName:@"HelveticaNeue" size:13.0f]];
@@ -130,20 +159,6 @@
     CGFloat pageWidth = scrollView.frame.size.width;
     int page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
 	[self.pageControl setCurrentPage:page];
-    
-    if (page == 0) {
-        [self.text setText:@"A Community for Startup & Entrepreneurs"];
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"intro_bg.png"]]];
-        [self.text setFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - 300.0f - screenOffset, 320.0f, 50.0f)];
-    } else if (page == 1) {
-        [self.text setText:@"Share and discover startup moments"];
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"intro_bg_blur.png"]]];
-        [self.text setFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - 180.0f - screenOffset, 320.0f, 50.0f)];
-    } else if (page == 2){
-        [self.text setText:@"Share thoughts and questions"];
-    } else {
-        [self.text setText:@"Connect with entrepreneurs around the world"];
-    }
 }
 
 

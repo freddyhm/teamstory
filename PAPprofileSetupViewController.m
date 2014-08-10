@@ -297,20 +297,29 @@
 -(void)hideSVProgressHUDWithDelay {
     [SVProgressHUD dismiss];
 }
+
+-(void)hideSVProgressHUDWithDelayCreateProfile {
+    [SVProgressHUD dismiss];
+    
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Profile Created!" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    alert.tag = SUCCESSFUL;
+    alert.alertViewStyle = UIAlertViewStyleDefault;
+    [alert show];
+    
+}
 -(void)navNext_1Action:(id)sender {
     [self.locationTF becomeFirstResponder];
+    
     if ([self.displayNameTF.text length] > 0 && [self.locationTF.text length] > 0 && ([self.emailTF.text length] > 0 || [self.userEmail length] > 0)) {
         if ([self.displayNameTF.text length] > 0 && [(AppDelegate*)[[UIApplication sharedApplication] delegate] isParseReachable]) {
-            
             [SVProgressHUD showWithStatus:@"Validating User Name" maskType:SVProgressHUDMaskTypeBlack];
             
-//[SVProgressHUD setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.95f]];
             self.displayNameTF.enabled = NO;
             PFQuery *query = [PFUser query];
             [query whereKey:@"displayName" equalTo:self.displayNameTF.text];
             [query countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
                 
-                [self performSelector:@selector(hideSVProgressHUDWithDelay) withObject:nil afterDelay:1.0];
+                [self performSelector:@selector(hideSVProgressHUDWithDelay) withObject:nil afterDelay:1.5];
                 
                 self.displayNameTF.enabled = YES;
                 
@@ -325,21 +334,22 @@
                         [alert show];
                     } else {
                         if (([self.userEmail length] == 0) && [(AppDelegate*)[[UIApplication sharedApplication] delegate] isParseReachable]) {
-                            [SVProgressHUD showWithStatus:@"Validating Email"];
+                            [SVProgressHUD showWithStatus:@"Validating Email" maskType:SVProgressHUDMaskTypeBlack];
                             
                             PFQuery *userQuery = [PFUser query];
                             [userQuery whereKey:@"email" equalTo :self.emailTF.text];
                             [userQuery countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
-                                [SVProgressHUD dismiss];
+                                [self performSelector:@selector(hideSVProgressHUDWithDelay) withObject:nil afterDelay:1.5];
                                 
                                 if (!error) {
                                     if (number > 0) {
                                         self.emailTF.text = @"";
-                                        [self.mainSV setContentOffset:CGPointMake(320.0f, 0.0f) animated:YES];
                                         [self.emailTF becomeFirstResponder];
                                         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"The email address is already in use. Please use another email address." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                                         alert.alertViewStyle = UIAlertViewStyleDefault;
                                         [alert show];
+                                    } else {
+                                        [self.mainSV setContentOffset:CGPointMake(320.0f, 0.0f) animated:YES];
                                     }
                                 } else {
                                     NSLog(@"%@", error);
@@ -404,7 +414,7 @@
 }
 
 -(void)navDonAction:(id)sender {
-    [SVProgressHUD show];
+    [SVProgressHUD showWithStatus:@"Creating Profile..." maskType:SVProgressHUDMaskTypeBlack];
     
     NSString* companyName_input = self.displayNameTF.text;
     NSString* location_input = self.locationTF.text;
@@ -421,23 +431,23 @@
     
     if ([companyName_input length] > 0 && [location_input length] > 0 && (([email_input length] > 0 && [self NSStringIsValidEmail:email_input]) || email_current_input )) {
         
-        UIImage *image = [UIImage imageNamed:@"default-pic.png"];
-        
-        UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:0.0f interpolationQuality:kCGInterpolationHigh];
-        UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(200.0f, 200.0f) interpolationQuality:kCGInterpolationHigh];
-        
-        if (self.imageData_picker) {
-            [self uploadImage_medium:self.imageData_picker];
-        } else {
-            self.imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
-            [self uploadImage_medium:self.imageData_picker];
-        }
-        if (self.imageData_picker_small) {
-            [self uploadImage_small:self.imageData_picker_small];
-        } else {
-            self.imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
-            [self uploadImage_small:self.imageData_picker_small];
-        }
+            UIImage *image = [UIImage imageNamed:@"default-pic.png"];
+            
+            UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:0.0f interpolationQuality:kCGInterpolationHigh];
+            UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(200.0f, 200.0f) interpolationQuality:kCGInterpolationHigh];
+            
+            if (self.imageData_picker) {
+                [self uploadImage_medium:self.imageData_picker];
+            } else {
+                self.imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
+                [self uploadImage_medium:self.imageData_picker];
+            }
+            if (self.imageData_picker_small) {
+                [self uploadImage_small:self.imageData_picker_small];
+            } else {
+                self.imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
+                [self uploadImage_small:self.imageData_picker_small];
+            }
         
             if ([companyName_input length] > 0) {
                 self.user[@"displayName"] = companyName_input;
@@ -445,7 +455,7 @@
             if ([location_input length] > 0) {
                 self.user[@"location"] = location_input;
             }
-            if ([description_input length] > 0) {
+            if ([description_input length] > 0 && ![description_input isEqualToString:@"Bio"]) {
                 self.user[@"description"] = description_input;
             }
             if ([website_input length] > 0 && ![website_input isEqualToString:@"http://"]) {
@@ -470,16 +480,10 @@
         bool profileExist = YES;
         NSNumber *profileExist_num = [NSNumber numberWithBool: profileExist ];
         [self.user setObject: profileExist_num forKey: @"profileExist"];
-
         
             [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                [SVProgressHUD dismiss];
-                
+                [self performSelector:@selector(hideSVProgressHUDWithDelayCreateProfile) withObject:nil afterDelay:1.5];
                 if(succeeded){
-                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Profile Created!" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                    alert.tag = SUCCESSFUL;
-                    alert.alertViewStyle = UIAlertViewStyleDefault;
-                    [alert show];
                 }else{
                     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your Information could not be saved. Please try again or Reach us at info@teamstoryapp.com" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                     alert.alertViewStyle = UIAlertViewStyleDefault;
@@ -487,9 +491,8 @@
                     self.navDone.userInteractionEnabled = YES;
                 }
             }];
+
     }
-    
-    
 
 }
 
@@ -687,26 +690,19 @@
 -(void)uploadImage_small:(NSData *)imageData {
     PFFile *imageFile = [PFFile fileWithName:nil data:imageData];
     
-    //HUD creation here (see example for code)
-    
-    [SVProgressHUD show];
-    
     self.user = [PFUser currentUser];
     self.user[@"profilePictureSmall"] = imageFile;
     
     [self.user saveInBackground];
-    [SVProgressHUD dismiss];
 }
 
 -(void)uploadImage_medium:(NSData *)imageData {
     PFFile *imageFile = [PFFile fileWithName:nil data:imageData];
     
-    [SVProgressHUD show];
     self.user = [PFUser currentUser];
     self.user[@"profilePictureMedium"] = imageFile;
     
     [self.user saveInBackground];
-    [SVProgressHUD dismiss];
 }
 
 

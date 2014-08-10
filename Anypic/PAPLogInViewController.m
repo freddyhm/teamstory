@@ -83,10 +83,10 @@
         
         UIButton *forgotSomething = [[UIButton alloc] init];
         NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
-                               [UIFont boldSystemFontOfSize:14.0f], NSFontAttributeName,
+                               [UIFont boldSystemFontOfSize:12.0f], NSFontAttributeName,
                                [UIColor whiteColor], NSForegroundColorAttributeName, nil];
         NSDictionary *subAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [UIFont systemFontOfSize:13.0f], NSFontAttributeName,
+                                  [UIFont systemFontOfSize:12.0f], NSFontAttributeName,
                                   [UIColor whiteColor], NSForegroundColorAttributeName,nil];
         const NSRange range = NSMakeRange(0, 17);
         
@@ -126,6 +126,7 @@
         UIImage *emailButton = [UIImage imageNamed:@"btn_email.png"];
         UIButton *emailSignIn = [[UIButton alloc] initWithFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - (emailButton.size.height + 15.0f), emailButton.size.width, emailButton.size.height)];
         [emailSignIn setBackgroundImage:[UIImage imageNamed:@"btn_email.png"] forState:UIControlStateNormal];
+        [emailSignIn setBackgroundImage:[UIImage imageNamed:@"btn_email_select.png"] forState:UIControlStateSelected];
         [emailSignIn addTarget:self action:@selector(emailSignIn_button:) forControlEvents:UIControlEventTouchUpInside];
         [self.logInView addSubview:emailSignIn];
         
@@ -176,12 +177,12 @@
     [self.logInView.facebookButton setTitle:nil forState:UIControlStateNormal];
     [self.logInView.facebookButton setImage:nil forState:UIControlStateNormal];
     [self.logInView.facebookButton setBackgroundImage:facebookButton forState:UIControlStateNormal];
-    [self.logInView.facebookButton setBackgroundImage:facebookButton forState:UIControlStateHighlighted];
+    [self.logInView.facebookButton setBackgroundImage:[UIImage imageNamed:@"btn_facebook_select.png"] forState:UIControlStateHighlighted];
     
     [self.logInView.twitterButton setTitle:nil forState:UIControlStateNormal];
     [self.logInView.twitterButton setImage:nil forState:UIControlStateNormal];
     [self.logInView.twitterButton setBackgroundImage:twitterButton forState:UIControlStateNormal];
-    [self.logInView.twitterButton setBackgroundImage:twitterButton forState:UIControlStateHighlighted];
+    [self.logInView.twitterButton setBackgroundImage:[UIImage imageNamed:@"btn_twitter_select.png"] forState:UIControlStateHighlighted];
     
 }
 
@@ -207,7 +208,7 @@
 }
 
 - (void) animateTextField: (UITextField*) textField up: (BOOL) up {
-    int movementDistance = 130; // tweak as needed
+    int movementDistance = 200; // tweak as needed
     float movementDuration = 0.2f; // tweak as needed
     
     int movement = (up ? -movementDistance : movementDistance);

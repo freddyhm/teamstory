@@ -41,12 +41,10 @@
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"intro_bg.png"]];
 
     
-    UILabel *mainLabel = [[UILabel alloc] init];
-    [mainLabel setText:@"Sign up with email"];
-    [mainLabel setTextAlignment:NSTextAlignmentCenter];
-    [mainLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:25.0f]];
-    [mainLabel setTextColor:[UIColor colorWithWhite:1.0f alpha:1.0f]];
-    [self.view addSubview:mainLabel];
+    UIImage *signUpImage = [UIImage imageNamed:@"signup.png"];
+    UIImageView *signUpIV = [[UIImageView alloc] initWithFrame:CGRectMake(160.0f - signUpImage.size.width / 2, 100.0f, signUpImage.size.width, signUpImage.size.height)];
+    [signUpIV setImage:signUpImage];
+    [self.view addSubview:signUpIV];
     
     signUpEmailTextField = [[UITextField alloc] init];
     signUpPWTextField = [[UITextField alloc] init];
@@ -123,19 +121,17 @@
     [self.view addSubview:back_button];
     
     if ([UIScreen mainScreen].bounds.size.height > 480.0f) {
-        signUpEmailTextField.frame = CGRectMake( 15.0f, self.view.bounds.size.height - 375.0f, 290.0f, 50.0f);
-        signUpPWTextField.frame = CGRectMake( 15.0f, self.view.bounds.size.height - 315.0f, 290.0f, 50.0f);
-        signUpPWTextField_confirm.frame = CGRectMake( 15.0f, self.view.bounds.size.height - 255.0f, 290.0f, 50.0f);
-        [signUpButton setFrame:CGRectMake( 15.0f, self.view.bounds.size.height - 195.0f, 290.0f, 50.0f)];
-        [policy setFrame:CGRectMake(35.0f, self.view.bounds.size.height - 100.0f, 252.0f, 23.0f)];
-        mainLabel.frame = CGRectMake(0.0f, 100.0f, 320.0f, 30.0f);
+        signUpEmailTextField.frame = CGRectMake( 15.0f, self.view.bounds.size.height - 350.0f, 290.0f, 50.0f);
+        signUpPWTextField.frame = CGRectMake( 15.0f, self.view.bounds.size.height - 290.0f, 290.0f, 50.0f);
+        signUpPWTextField_confirm.frame = CGRectMake( 15.0f, self.view.bounds.size.height - 230.0f, 290.0f, 50.0f);
+        [signUpButton setFrame:CGRectMake( 15.0f, self.view.bounds.size.height - 170.0f, 290.0f, 50.0f)];
+        [policy setFrame:CGRectMake(35.0f, self.view.bounds.size.height - 75.0f, 252.0f, 23.0f)];
     } else {
-        signUpEmailTextField.frame = CGRectMake( 35.0f, self.view.bounds.size.height - 355.0f, 250.0f, 45.0f);
-        signUpPWTextField.frame = CGRectMake( 35.0f, self.view.bounds.size.height - 300.0f, 250.0f, 45.0f);
-        signUpPWTextField_confirm.frame = CGRectMake( 35.0f, self.view.bounds.size.height - 245.0f, 250.0f, 45.0f);
-        [signUpButton setFrame:CGRectMake( 35.0f, self.view.bounds.size.height - 190.0f, 250.0f, 45.0f)];
-        [policy setFrame:CGRectMake(35.0f, self.view.bounds.size.height - 105.0f, 252.0f, 23.0f)];
-        mainLabel.frame = CGRectMake(0.0f, 60.0f, 320.0f, 30.0f);
+        signUpEmailTextField.frame = CGRectMake( 35.0f, self.view.bounds.size.height - 330.0f, 250.0f, 45.0f);
+        signUpPWTextField.frame = CGRectMake( 35.0f, self.view.bounds.size.height - 275.0f, 250.0f, 45.0f);
+        signUpPWTextField_confirm.frame = CGRectMake( 35.0f, self.view.bounds.size.height - 220.0f, 250.0f, 45.0f);
+        [signUpButton setFrame:CGRectMake( 35.0f, self.view.bounds.size.height - 165.0f, 250.0f, 45.0f)];
+        [policy setFrame:CGRectMake(35.0f, self.view.bounds.size.height - 80.0f, 252.0f, 23.0f)];
     }
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
@@ -164,13 +160,13 @@
     float movementDuration = 0.3f; // tweak as needed
     
     if (textField == signUpEmailTextField) {
-        movementDistance = 100; // tweak as needed
+        movementDistance = 180; // tweak as needed
     }
     else if (textField == signUpPWTextField) {
-        movementDistance = 100; // tweak as needed
+        movementDistance = 180; // tweak as needed
     }
     else if (textField == signUpPWTextField_confirm) {
-        movementDistance = 100; // tweak as needed
+        movementDistance = 180; // tweak as needed
     }
     
     int movement = (up ? -movementDistance : movementDistance);
@@ -219,7 +215,7 @@
                 
                 if (!error) {
                     // Hooray! Let them use the app now.
-                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Signed Up Successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Sign Up Successful" message:@"Your email has been registered" delegate:self cancelButtonTitle:@"Next" otherButtonTitles:nil, nil];
                     alert.tag = SUCCESSFUL;
                     alert.alertViewStyle = UIAlertViewStyleDefault;
                     [alert show];
