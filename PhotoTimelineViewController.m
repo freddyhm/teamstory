@@ -558,7 +558,7 @@ enum ActionSheetTags {
         return 0.0f;
     }
     
-    return 44.0f;
+    return 84.0f;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

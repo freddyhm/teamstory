@@ -51,7 +51,7 @@
         [self setBackgroundColor:[UIColor clearColor]];
         
         // translucent portion
-        self.containerView = [[UIView alloc] initWithFrame:CGRectMake( 7.5f, 0.0f, self.bounds.size.width - 7.5f * 2.0f, self.bounds.size.height)];
+        self.containerView = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.bounds.size.width, self.bounds.size.height)];
         [self.containerView setBackgroundColor:[UIColor whiteColor]];
         [self addSubview:self.containerView];
         
