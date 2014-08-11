@@ -8,7 +8,6 @@
 #import "AppDelegate.h"
 #import "emailSignUpViewController.h"
 #import "SVProgressHUD.h"
-#import "PAPProfileSettingViewController.h"
 #import "PAPprofileSetupViewController.h"
 
 @interface PAPLogInViewController()
