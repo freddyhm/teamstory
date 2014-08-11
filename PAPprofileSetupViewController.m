@@ -496,6 +496,7 @@
             }
             if ([email_current_input length] == 0) {
                 self.user[@"email"] = email_input;
+                self.user[@"username"] = email_input;
             }
         
         bool profileExist = YES;
