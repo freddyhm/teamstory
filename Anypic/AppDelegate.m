@@ -18,7 +18,6 @@
 #import "PAPWelcomeViewController.h"
 #import "PAPActivityFeedViewController.h"
 #import "PAPPhotoDetailsViewController.h"
-#import "PAPProfileSettingViewController.h"
 #import "discoverPageViewController.h"
 #import "PAPwebviewViewController.h"
 #import "PAPLoginTutorialViewController.h"
@@ -37,7 +36,6 @@
 @property (nonatomic, strong) PAPHomeViewController *homeViewController;
 @property (nonatomic, strong) PAPActivityFeedViewController *activityViewController;
 @property (nonatomic, strong) PAPWelcomeViewController *welcomeViewController;
-@property (nonatomic, strong) PAPProfileSettingViewController *profileSettingViewController;
 @property (nonatomic, strong) PAPAccountViewController *accountViewController_tabBar;
 @property (nonatomic, strong) PAPLogInViewController *loginviewcontroller;
 @property (nonatomic, strong) discoverPageViewController *discoverViewController;
@@ -68,7 +66,6 @@
 @synthesize homeViewController;
 @synthesize activityViewController;
 @synthesize welcomeViewController;
-@synthesize profileSettingViewController;
 @synthesize accountViewController_tabBar;
 @synthesize loginviewcontroller;
 @synthesize discoverViewController;
@@ -340,7 +337,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
                     
                     [user saveInBackground];
                     
-                    PAPProfileSettingViewController *profileSettingView = [[PAPProfileSettingViewController alloc] init];
+                    PAPprofileSetupViewController *profileSettingView = [[PAPprofileSetupViewController alloc] init];
                     self.navController.navigationBarHidden = YES;
                     [self.navController pushViewController:profileSettingView animated:NO];
                     return;

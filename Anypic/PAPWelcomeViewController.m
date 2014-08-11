@@ -8,7 +8,6 @@
 #import "SVProgressHUD.h"
 #import "MBProgressHUD.h"
 #import "AppDelegate.h"
-#import "PAPProfileSettingViewController.h"
 #import "PAPLoginTutorialViewController.h"
 #import "PAPHomeViewController.h"
 #import "PAPprofileSetupViewController.h"
