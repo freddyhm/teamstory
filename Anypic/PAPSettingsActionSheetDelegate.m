@@ -101,7 +101,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         }
         case kPAPAboutThisVersion:
         {
-            PAPwebviewViewController *webviewController = [[PAPwebviewViewController alloc] initWithWebsite:@"http://teamstoryapp.com/version"];
+            PAPwebviewViewController *webviewController = [[PAPwebviewViewController alloc] initWithWebsite:@"https://medium.com/@teamstory/teamstory-versions-cfcff69bcffc"];
             webviewController.hidesBottomBarWhenPushed = YES;
             [navController pushViewController:webviewController animated:YES];
             break;
