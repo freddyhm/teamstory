@@ -292,19 +292,8 @@
             
             // check if email is properly formatted
             if([self NSStringIsValidEmail:input]){
-                
-                [PFUser requestPasswordResetForEmailInBackground:input block:^(BOOL succeeded, NSError *error) {
-                    if (succeeded == TRUE){
-                        UIAlertView *successAlert = [[UIAlertView alloc] initWithTitle:@"Reset Password" message:@"You will receive an email with a link to reset your password" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                        [successAlert show];
-                        
-                    }else{
-                        UIAlertView *failureAlert = [[UIAlertView alloc] initWithTitle:@"Missing User" message:@"No user account is linked to this email" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                        [failureAlert show];
-                    }
-                }];
-            }else{
-                
+                [PFUser requestPasswordResetForEmailInBackground:input];
+            } else {
                 UIAlertView *notEmailFormat = [[UIAlertView alloc] initWithTitle:@"Invalid Email" message:@"Make sure you enter a valid email address" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [notEmailFormat show];
             }
