@@ -276,7 +276,7 @@
 }
 
 #pragma mark - UIAlertView Delegate
-
+/*
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     
     NSString *alertTitle = [alertView title];
@@ -301,7 +301,7 @@
         [self dismissKeyboard];
     }
 }
-
+*/
 
 -(BOOL)NSStringIsValidEmail:(NSString *)checkString
 {
