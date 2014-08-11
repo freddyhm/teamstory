@@ -8,10 +8,9 @@
 #import "SVProgressHUD.h"
 #import "MBProgressHUD.h"
 #import "AppDelegate.h"
-#import "PAPProfileSettingViewController.h"
 #import "PAPLoginTutorialViewController.h"
-#import "PAPprofileApprovalViewController.h"
 #import "PAPHomeViewController.h"
+#import "PAPprofileSetupViewController.h"
 
 @implementation PAPWelcomeViewController
 
@@ -47,10 +46,7 @@
             NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
             bool profileExist = [profilExist_num boolValue];
             
-            NSNumber *accessGrant_num = [[PFUser currentUser] objectForKey: @"accessGrant"];
-            bool access_grant = [accessGrant_num boolValue];
-            
-            if (user && profileExist == YES &&  access_grant == YES) {
+            if (user && profileExist == YES) {
                 [[PFUser currentUser] refreshInBackgroundWithTarget:self selector:@selector(refreshCurrentUserCallbackWithResult:error:)];
                 // Present Teamstory UI
                 [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBarController];
@@ -60,12 +56,9 @@
                     // analytics
                     [PAPUtility captureScreenGA:@"New Profile"];
                     
-                    PAPProfileSettingViewController *profileViewController = [[PAPProfileSettingViewController alloc] init];
+                    PAPprofileSetupViewController *profileSetupViewController = [[PAPprofileSetupViewController alloc] init];
                     self.navigationController.navigationBarHidden = YES;
-                    [self.navigationController pushViewController:profileViewController animated:NO];
-                } else if (user && access_grant != YES){
-                    PAPprofileApprovalViewController *profileApprovalViewController = [[PAPprofileApprovalViewController alloc] init];
-                    [self.navigationController pushViewController:profileApprovalViewController animated:YES];
+                    [self.navigationController pushViewController:profileSetupViewController animated:NO];
                 } else {
                     NSLog(@"User does not exist");
                 }
