@@ -232,7 +232,9 @@
                     alert.alertViewStyle = UIAlertViewStyleDefault;
                     [alert show];
                 } else {
-                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your Information could not be saved. Reach us at info@teamstoryapp.com" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    NSDictionary *userInfo = [error userInfo];
+                    
+                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[userInfo objectForKey:@"error"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                     alert.alertViewStyle = UIAlertViewStyleDefault;
                     [alert show];
                 }

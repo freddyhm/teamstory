@@ -83,7 +83,6 @@
     [self.mainSV addSubview:self.contentSV];
     
 
-    
     // Nav Labels.
     UILabel *profileSetupLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, navBar.bounds.size.height)];
     [profileSetupLabel setText:@"Profile Setup"];
@@ -665,6 +664,7 @@
     
     cameraUI.allowsEditing = YES;
     cameraUI.delegate = self;
+    cameraUI.navigationBar.tintColor = [UIColor clearColor];
     
     [self presentViewController:cameraUI animated:YES completion:nil];
     

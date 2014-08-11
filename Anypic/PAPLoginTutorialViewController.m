@@ -47,7 +47,7 @@
     }
     
     UIImage *logoViewImage = [UIImage imageNamed:@"intro_logo.png"];
-    UIImageView *logoView = [[UIImageView alloc] initWithFrame:CGRectMake((320.0f - logoViewImage.size.width) / 2, 100.0f + screenOffset, logoViewImage.size.width, logoViewImage.size.height)];
+    UIImageView *logoView = [[UIImageView alloc] initWithFrame:CGRectMake((320.0f - logoViewImage.size.width) / 2, 125.0f + screenOffset, logoViewImage.size.width, logoViewImage.size.height)];
     [logoView setImage:logoViewImage];
     [mainSV addSubview:logoView];
     
@@ -73,7 +73,7 @@
     [self.pageControl setNumberOfPages:4];
     [self.view addSubview:pageControl_bar];
     
-    UILabel *firstPageText = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - 330.0f - screenOffset, 320.0f, 50.0f)];
+    UILabel *firstPageText = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - 305.0f - screenOffset, 320.0f, 50.0f)];
     firstPageText.text = @"A Community for Startup & Entrepreneurs";
     [firstPageText setFont:[UIFont fontWithName:@"HelveticaNeue" size:13.0f]];
     [firstPageText setTextColor:[UIColor whiteColor]];
