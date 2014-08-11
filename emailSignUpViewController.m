@@ -18,7 +18,7 @@
 
 @property (nonatomic, strong) UIButton *cancelButton;
 @property (nonatomic, strong) UIButton *signUpButton;
-@property (nonatomic, strong) UIButton *policy;
+@property (nonatomic, strong) UIImageView *policy;
 
 @end
 
@@ -36,7 +36,6 @@
     
     cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
     signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    policy = [UIButton buttonWithType:UIButtonTypeCustom];
     
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"intro_bg.png"]];
 
@@ -54,9 +53,10 @@
     UIView *paddingView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];
     UIView *paddingView3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];
     
-    [policy setTitleEdgeInsets:UIEdgeInsetsMake( 0.0f, 5.0f, 0.0f, 0.0f)];
-    [policy setBackgroundImage:[UIImage imageNamed:@"privacy.png"] forState:UIControlStateNormal];
-    [policy addTarget:self action:@selector(policyButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    //[policy setBackgroundImage:[UIImage imageNamed:@"privacy.png"] forState:UIControlStateNormal];
+    //[policy addTarget:self action:@selector(policyButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    policy = [[UIImageView alloc] init];
+    [policy setImage:[UIImage imageNamed:@"privacy.png"]];
     [self.view addSubview:policy];
     
     UIFont *defaultFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:15.0f];
@@ -121,18 +121,30 @@
     [back_button addTarget:self action:@selector(back_button_action:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:back_button];
     
+    UIButton *privacyButton = [[UIButton alloc] initWithFrame:CGRectMake(55.0f, self.view.bounds.size.height - 62.0f, 62.0f, 10.0f)];
+    [privacyButton addTarget:self action:@selector(policyButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:privacyButton];
+    
+    UIButton *termsButton = [[UIButton alloc] initWithFrame:CGRectMake(190.0f, self.view.bounds.size.height - 62.0f, 77.0f, 10.0f)];
+    [termsButton addTarget:self action:@selector(termsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:termsButton];
+    
     if ([UIScreen mainScreen].bounds.size.height > 480.0f) {
         signUpEmailTextField.frame = CGRectMake( 15.0f, self.view.bounds.size.height - 350.0f, 290.0f, 50.0f);
         signUpPWTextField.frame = CGRectMake( 15.0f, self.view.bounds.size.height - 290.0f, 290.0f, 50.0f);
         signUpPWTextField_confirm.frame = CGRectMake( 15.0f, self.view.bounds.size.height - 230.0f, 290.0f, 50.0f);
         [signUpButton setFrame:CGRectMake( 15.0f, self.view.bounds.size.height - 170.0f, 290.0f, 50.0f)];
         [policy setFrame:CGRectMake(35.0f, self.view.bounds.size.height - 75.0f, 252.0f, 23.0f)];
+        termsButton.frame = CGRectMake(190.0f, self.view.bounds.size.height - 62.0f, 77.0f, 10.0f);
+        privacyButton.frame = CGRectMake(55.0f, self.view.bounds.size.height - 62.0f, 62.0f, 10.0f);
     } else {
         signUpEmailTextField.frame = CGRectMake( 35.0f, self.view.bounds.size.height - 330.0f, 250.0f, 45.0f);
         signUpPWTextField.frame = CGRectMake( 35.0f, self.view.bounds.size.height - 275.0f, 250.0f, 45.0f);
         signUpPWTextField_confirm.frame = CGRectMake( 35.0f, self.view.bounds.size.height - 220.0f, 250.0f, 45.0f);
         [signUpButton setFrame:CGRectMake( 35.0f, self.view.bounds.size.height - 165.0f, 250.0f, 45.0f)];
         [policy setFrame:CGRectMake(35.0f, self.view.bounds.size.height - 80.0f, 252.0f, 23.0f)];
+        termsButton.frame = CGRectMake(190.0f, self.view.bounds.size.height - 68.0f, 77.0f, 10.0f);
+        privacyButton.frame = CGRectMake(55.0f, self.view.bounds.size.height - 68.0f, 62.0f, 10.0f);
     }
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
@@ -199,7 +211,13 @@
 }
 
 - (void)policyButtonAction:(id)sender {
-    PAPwebviewViewController *webViewController = [[PAPwebviewViewController alloc] initWithWebsite:@"http://teamstoryapp.com/privacy"];
+    PAPwebviewViewController *webViewController = [[PAPwebviewViewController alloc] initWithWebsite:@"http://teamstoryapp.com/privacy.html"];
+    self.navigationController.navigationBarHidden = NO;
+    [self.navigationController pushViewController:webViewController animated:YES];
+}
+
+- (void)termsButtonAction:(id)sender {
+    PAPwebviewViewController *webViewController = [[PAPwebviewViewController alloc] initWithWebsite:@"http://teamstoryapp.com/terms.html"];
     self.navigationController.navigationBarHidden = NO;
     [self.navigationController pushViewController:webViewController animated:YES];
 }
