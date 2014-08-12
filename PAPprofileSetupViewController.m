@@ -448,6 +448,8 @@
     NSString* email_input = self.emailTF.text;
     NSString* email_current_input = self.user[@"email"];
     
+    self.user[@"username"] = email_input;
+    
     self.navDone.userInteractionEnabled = NO;
     
     if ([companyName_input length] > 0 && [location_input length] > 0 && (([email_input length] > 0 && [self NSStringIsValidEmail:email_input]) || email_current_input )) {
@@ -496,7 +498,6 @@
             }
             if ([email_current_input length] == 0) {
                 self.user[@"email"] = email_input;
-                self.user[@"username"] = email_input;
             }
         
         bool profileExist = YES;
