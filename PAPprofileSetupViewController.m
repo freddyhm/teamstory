@@ -11,6 +11,7 @@
 #import "SVProgressHUD.h"
 #import "AppDelegate.h"
 #import "UIImage+ResizeAdditions.h"
+#import "PAPUtility.h"
 
 #define SUCCESSFUL 1
 
@@ -53,6 +54,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [PAPUtility captureEventGA:@"Testing" action:@"Started profile setup" label:nil];
     
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
@@ -435,6 +438,9 @@
 }
 
 -(void)navDonAction:(id)sender {
+    
+    [PAPUtility captureEventGA:@"Testing" action:@"Pressed done in profile setup" label:nil];
+    
     [SVProgressHUD showWithStatus:@"Creating Profile..." maskType:SVProgressHUDMaskTypeBlack];
     
     NSString* companyName_input = self.displayNameTF.text;

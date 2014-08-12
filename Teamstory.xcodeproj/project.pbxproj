@@ -2421,7 +2421,6 @@
 				D576841A19341DDA008BAA2C /* arrow_left.png in Resources */,
 				4602FCFD18BAB9570097DBEC /* deezer-popup.png in Resources */,
 				D56D466619884C33001FAA76 /* PhotoTimelineViewController.xib in Resources */,
-				46839EA518E1E8C100BD60DB /* tut3@2x.png in Resources */,
 				D57683FA1933EB90008BAA2C /* nav_activity.png in Resources */,
 				4602FD1518BD553B0097DBEC /* foundersuite-logo@2x.png in Resources */,
 				4602FCFC18BAB9570097DBEC /* deezer-popup@2x.png in Resources */,
