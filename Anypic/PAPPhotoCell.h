@@ -3,6 +3,7 @@
 //  Teamstory
 //
 //
+#import "PostFooterView.h"
 
 @class PFImageView;
 @interface PAPPhotoCell : PFTableViewCell
@@ -18,6 +19,7 @@
 @property (nonatomic, strong) UILabel *linkTitleLabel;
 @property (nonatomic, strong) UILabel *linkUrlLabel;
 @property (nonatomic, strong) UILabel *linkDescription;
+@property (nonatomic, strong) PostFooterView *footerView;
 
 
 -(void)setObject:(PFObject*)object;

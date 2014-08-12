@@ -45,7 +45,7 @@
         [PostFooterView validateButtons:otherButtons];
         buttons = otherButtons;
 
-        self.clipsToBounds = NO;
+        self.clipsToBounds =YES;
         self.containerView.clipsToBounds = NO;
         self.superview.clipsToBounds = NO;
         [self setBackgroundColor:[UIColor clearColor]];
@@ -205,6 +205,10 @@
     if (delegate && [delegate respondsToSelector:@selector(photoHeaderView:didTapCommentOnPhotoButton:photo:)]) {
         [delegate photoHeaderView:self didTapCommentOnPhotoButton:sender photo:self.photo];
     }
+}
+
+-(void)setFrame:(CGRect)frame{
+    self.layer.frame = frame;
 }
 
 @end

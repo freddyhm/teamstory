@@ -71,14 +71,10 @@ enum ActionSheetTags {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Remove cell separator
-    [self.feed setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    
+
     UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
     texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     self.feed.backgroundView = texturedBackgroundView;
-    self.feed.showsVerticalScrollIndicator = YES;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidPublishPhoto:) name:PAPTabBarControllerDidFinishEditingPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userFollowingChanged:) name:PAPUtilityUserFollowingChangedNotification object:nil];
@@ -440,7 +436,10 @@ enum ActionSheetTags {
     return 44.0f;
 }
 
+
+/*
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    
     
     if (section == self.objects.count) {
         // Load More section
@@ -555,14 +554,8 @@ enum ActionSheetTags {
     
     return headerView;
 }
+ */
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    if (section == self.objects.count) {
-        return 0.0f;
-    }
-    
-    return 84.0f;
-}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section >= self.objects.count) {
@@ -582,15 +575,15 @@ enum ActionSheetTags {
         }
         
         if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
-            return 100.0f + expectedSize.height + 25.0f;
+            return 100.0f + expectedSize.height + 25.0f + 54.0f;
         } else {
-            return 305.0f + expectedSize.height + 25.0f;
+            return 305.0f + expectedSize.height + 25.0f + 54.0f;
         }
     } else {
         if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
-            return 100.0f;
+            return 100.0f + 54.0f;
         } else {
-            return 305.0f;
+            return 305.0f + 54.0f;
         }
     }
 }
