@@ -336,7 +336,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     if (tableView != self.autocompleteTableView) {
         NSString *cellID = @"CommentCell";
         
-        if ([[[PFUser currentUser] objectId] isEqualToString:[self.objects objectAtIndexedSubscript:indexPath.row]]) {
+        if ([[[PFUser currentUser] objectId] isEqualToString:[[[self.objects objectAtIndex:indexPath.row] objectForKey:@"fromUser"] objectId]]) {
             cellID = @"CommentCellCurrentUser";
         }
         // Try to dequeue a cell and create one if necessary
@@ -1046,7 +1046,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 - (void)shouldPresentAccountViewForUser:(PFUser *)user {
-    PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithStyle:UITableViewStylePlain];
+    PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
     [accountViewController setUser:user];
     [self.navigationController pushViewController:accountViewController animated:YES];
 }

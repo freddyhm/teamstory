@@ -182,7 +182,8 @@
             
             [self.navigationController pushViewController:detailViewController animated:YES];
         } else if ([activity objectForKey:kPAPActivityFromUserKey]) {
-            PAPAccountViewController *detailViewController = [[PAPAccountViewController alloc] initWithStyle:UITableViewStylePlain];
+            PAPAccountViewController *detailViewController = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
+
             [detailViewController setUser:[activity objectForKey:kPAPActivityFromUserKey]];
             [self.navigationController pushViewController:detailViewController animated:YES];
         }
@@ -401,7 +402,7 @@
 
 - (void)cell:(PAPBaseTextCell *)cellView didTapUserButton:(PFUser *)user {    
     // Push account view controller
-    PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithStyle:UITableViewStylePlain];
+    PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
     [accountViewController setUser:user];
     [self.navigationController pushViewController:accountViewController animated:YES];
 }

@@ -4,9 +4,9 @@
 //
 //
 
-#import "PAPPhotoTimelineViewController.h"
+#import "PhotoTimelineViewController.h"
 
-@interface PAPAccountViewController : PAPPhotoTimelineViewController
+@interface PAPAccountViewController : PhotoTimelineViewController
 
 @property (nonatomic, strong) PFUser *user;
 @property (nonatomic, strong) UITextField *textField;

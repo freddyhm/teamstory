@@ -6,8 +6,9 @@
 
 #import "GAITrackedViewController.h"
 #import "PAPPhotoTimelineViewController.h"
+#import "PhotoTimelineViewController.h"
 
-@interface PAPHomeViewController : PAPPhotoTimelineViewController <UIScrollViewDelegate>
+@interface PAPHomeViewController : PhotoTimelineViewController <UIScrollViewDelegate>
 
 @property (nonatomic, assign, getter = isFirstLaunch) BOOL firstLaunch;
 

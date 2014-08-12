@@ -7,7 +7,6 @@
 #import "PAPAccountViewController.h"
 #import "AppDelegate.h"
 #import "UIImage+ResizeAdditions.h"
-#import "PAPprofileApprovalViewController.h"
 #import "SVProgressHUD.h"
 
 #define SUCCESSFUL 1
@@ -949,31 +948,7 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (alertView.tag == SUCCESSFUL) {
-        if (buttonIndex == 0) {
-            NSLog(@"Logged In Sucessfully");
-            [self.view endEditing:YES];
-            
-            NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
-            bool profileExist_user = [profilExist_num boolValue];
-            
-            if (profileExist_user != true) {
-                //Checking profile existence.
-                profileExist = YES; // either YES or NO
-                NSNumber *profileBoolNum = [NSNumber numberWithBool: profileExist];
-                [[PFUser currentUser] setObject: profileBoolNum forKey: @"profileExist"];
-                
-                [SVProgressHUD show];
-                [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                    [SVProgressHUD dismiss];
-                    PAPprofileApprovalViewController *approvalViewController = [[PAPprofileApprovalViewController alloc] init];
-                    [self.navigationController pushViewController:approvalViewController animated:YES];
-                }];
-            } else {
-                [self.navigationController popViewControllerAnimated:YES];
-            }
-        }
-    } else if (alertView.tag == IMAGE_NIL) {
+    if (alertView.tag == IMAGE_NIL) {
         if (buttonIndex == 1) {
             [self.view endEditing:YES];
             NSLog(@"image_nil tag");
