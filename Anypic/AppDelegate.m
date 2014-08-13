@@ -335,6 +335,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
                     NSString *email = result[@"email"];
                     if (email && [email length] != 0) {
                         [user setObject:email forKey:@"email"];
+                        [user setObject:email forKey:@"username"];
                     }
                     
                     [user saveInBackground];
@@ -832,6 +833,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
             NSString *email = result[@"email"];
             if (email && [email length] != 0) {
                 [user setObject:email forKey:@"email"];
+                [user setObject:email forKey:@"username"];
             }
             
             NSString *facebookId = result[@"id"];
