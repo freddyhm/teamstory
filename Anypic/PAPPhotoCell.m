@@ -79,17 +79,23 @@
         self.linkUrlLabel.font = [UIFont systemFontOfSize:11.0f];
         [self.linkUrlLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
         [self.contentView addSubview:self.linkUrlLabel];
-        
-        self.imageView.frame = CGRectMake( 0.0f, 0.0f, 320.0f, 320.0f);
-        self.imageView.backgroundColor = [UIColor blackColor];
-        self.imageView.contentMode = UIViewContentModeScaleAspectFit;
-        
+    
         self.captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(7.5f, 0.0f, 305.0f, 44.0f)];
         [self.captionLabel setBackgroundColor:[UIColor clearColor]];
         [self.captionLabel setText:self.caption];
         [self.captionLabel setFont:[UIFont systemFontOfSize:13.0f]];
         [self.captionLabel setTextColor:[UIColor colorWithWhite:0.6f alpha:1.0f]];
         [self.contentView addSubview:self.captionLabel];
+        
+        self.imageView.frame = CGRectMake( 0.0f, 0.0f, 320.0f, 320.0f);
+        self.imageView.backgroundColor = [UIColor blackColor];
+        self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+        
+        self.photoButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 320.0f, 320.0f);
+        self.photoButton.backgroundColor = [UIColor clearColor];
+        [self.contentView addSubview:self.photoButton];
+
         
         self.footerView = [[PostFooterView alloc] initWithFrame:CGRectMake(0.0f, self.imageView.frame.origin.y + self.imageView.frame.size.height, self.bounds.size.width, 44.0f) buttons:PAPPhotoHeaderButtonsDefault2];
         [self.contentView addSubview:self.footerView];
@@ -115,9 +121,9 @@
         
         
         self.imageView.frame = CGRectMake( 0.0f, 0.0f , 320.0f, 320.0f);
-;
         self.captionLabel.frame = CGRectMake(12.5f, self.imageView.frame.size.height + 10.0f, 295.0f, expectedSize.height);
-        self.photoButton.frame = CGRectMake( 7.5f, notificationBarOffSet, 305.0f, 330.0f + expectedSize.height);
+        self.photoButton.frame = CGRectMake( 7.5f, notificationBarOffSet, 320.0f, 330.0f + expectedSize.height);
+        
         
         self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.imageView.frame.size.height + self.captionLabel.frame.size.height + 10.0f);
         
@@ -159,7 +165,7 @@
             
             self.imageView.frame = CGRectMake( 17.5f, 0.0f, 80.0f, 80.0f);
             self.captionLabel.frame = CGRectMake(12.5f, self.imageView.frame.size.height + 20.0f, 295.0f, expectedSize.height);
-            self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 305.0f, 25.0f + expectedSize.height + 100.0f);
+            self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 320.0f, 25.0f + expectedSize.height + 100.0f);
             self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.imageView.frame.size.height + self.captionLabel.frame.size.height + 45.0f);
     
             [self.linkTitleLabel setFrame:CGRectMake(105.0f, 10.0f, 190.0f, 30.0f)];
@@ -186,7 +192,7 @@
         self.captionLabel.text = @"";
         self.captionLabel.frame = CGRectMake(7.5f, 0.0f, 305.0f, 44.0f);
         self.imageView.frame = CGRectMake( 0.0f, 0.0f, 320.0f, 320.0f);
-        self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 305.0f, 305.0f);
+        self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 320.0f, 320.0f);
         
         [self.footerView setFrame:CGRectMake(0.0f, self.imageView.frame.origin.y + self.imageView.frame.size.height, self.bounds.size.width, 44.0f)];
 
@@ -213,7 +219,7 @@
             self.linkUrlLabel.text = [self.ih_object objectForKey:@"link"];
             
         
-            self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 305.0f, 100.0f);
+            self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 320.0f, 100.0f);
             self.imageView.frame = CGRectMake( 17.5f, 10.0f , 80.0f, 80.0f);
             
             [self.footerView setFrame:CGRectMake(0.0f, self.linkBackgroundView_gray.frame.origin.y + self.linkBackgroundView_gray.frame.size.height, self.bounds.size.width, 44.0f)];
