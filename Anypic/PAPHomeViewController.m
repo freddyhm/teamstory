@@ -207,13 +207,13 @@
 
 
 #pragma mark - UIScrollViewDelegate
-
+/*
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
     [super scrollViewDidScroll:scrollView];
     
     // disabling notification bar for now.
-    /*
+
     [self scrollViewWillBeginDragging:scrollView];
     self.notificationExitButton.hidden = YES;
     self.notificationStar.hidden = YES;
@@ -271,10 +271,9 @@
         scrollPosition = scrollView.contentOffset.y;
         self.notificationBar.frame = CGRectMake(0.0f, 64.0f, 320.0f, currentScrollPosition);
     }
-    */
+ 
 }
-
-/*
+ 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     
     if (currentScrollDirectionDown == NO){
