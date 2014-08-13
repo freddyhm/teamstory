@@ -10,8 +10,8 @@
 #import "MBProgressHUD.h"
 #import "PAPwebviewViewController.h"
 
-#define baseHorizontalOffset 7.5f
-#define baseWidth 305.0f
+#define baseHorizontalOffset 0.0f
+#define baseWidth 320.0f
 
 #define horiBorderSpacing 6.0f
 #define horiMediumSpacing 8.0f
@@ -39,7 +39,7 @@
 #define mainImageX baseHorizontalOffset
 #define mainImageY nameHeaderHeight
 #define mainImageWidth baseWidth
-#define mainImageHeight 305.0f
+#define mainImageHeight 320.0f
 
 #define likeBarX baseHorizontalOffset
 #define likeBarY nameHeaderHeight + mainImageHeight
@@ -282,8 +282,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [backgroundView setBackgroundColor:[UIColor whiteColor]];
         [self addSubview:backgroundView];
         viewOffset = 20;
-        self.photoDescriptionLabel.frame = CGRectMake(baseHorizontalOffset * 2, nameHeaderHeight + 5.0f, 292.0f, expectedSize.height + 5.0f);
-                
+        
+        self.photoImageView = [[PFImageView alloc]init];
+        
         [self addSubview:self.photoDescriptionLabel];
         
         if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
@@ -328,6 +329,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
         } else {
             self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height + 15.0f, mainImageWidth, mainImageHeight)];
         }
+        
+        self.photoDescriptionLabel.frame = CGRectMake(baseHorizontalOffset * 2, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 5.0f, 292.0f, expectedSize.height + 5.0f);
+
+        
         self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
         self.photoImageView.backgroundColor = [UIColor blackColor];
         self.photoImageView.contentMode = UIViewContentModeScaleAspectFit;
