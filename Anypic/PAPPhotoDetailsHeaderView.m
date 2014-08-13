@@ -278,9 +278,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         expectedSize = [self.photoDescriptionLabel sizeThatFits:maximumLabelSize];
         
-        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(baseHorizontalOffset, nameHeaderHeight, mainImageWidth, expectedSize.height + 20.0f)];
-        [backgroundView setBackgroundColor:[UIColor whiteColor]];
-        [self addSubview:backgroundView];
+        
         viewOffset = 20;
         
         self.photoImageView = [[PFImageView alloc]init];
@@ -345,6 +343,12 @@ static TTTTimeIntervalFormatter *timeFormatter;
         }
         
         [self addSubview:self.photoImageView];
+        
+        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(baseHorizontalOffset, nameHeaderHeight, mainImageWidth, self.photoImageView.frame.size.height + self.photoDescriptionLabel.frame.size.height + 50.0f)];
+        [backgroundView setBackgroundColor:[UIColor whiteColor]];
+        [self addSubview:backgroundView];
+        [self sendSubviewToBack:backgroundView];
+        
     } else {
         viewOffset = 0;
         
