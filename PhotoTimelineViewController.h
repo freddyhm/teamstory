@@ -19,4 +19,5 @@
 - (BOOL)objectsDidLoad:(NSError *)error;
 - (void)loadObjects:(void (^)(BOOL succeeded))completionBlock isRefresh:(BOOL)isRefresh;
 
+
 @end

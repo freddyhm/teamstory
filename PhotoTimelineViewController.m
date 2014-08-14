@@ -16,6 +16,8 @@
 #import "PAPLoadMoreCell.h"
 #import "MBProgressHUD.h"
 #import "SVProgressHUD.h"
+#import <SDWebImage/UIImageView+WebCache.h>
+
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
@@ -30,7 +32,6 @@
 @property (nonatomic, strong) NSString *photoID;
 @property (nonatomic, strong) PFObject *current_photo;
 @property (nonatomic, strong) MBProgressHUD *hud;
-@property (nonatomic, strong) NSCache *imgCache;
 @property int loadPostCount;
 @property int refreshCount;
 
@@ -64,6 +65,7 @@ enum ActionSheetTags {
         
         // To make sure we only show hud/load objects once per pull
         self.refreshCount = 0;
+        
     }
     return self;
 }
@@ -76,15 +78,18 @@ enum ActionSheetTags {
     texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     self.feed.backgroundView = texturedBackgroundView;
     
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    refreshControl.tintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:0.5f];
+    [refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
+    [self.feed addSubview:refreshControl];
+     
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidPublishPhoto:) name:PAPTabBarControllerDidFinishEditingPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userFollowingChanged:) name:PAPUtilityUserFollowingChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidDeletePhoto:) name:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLikeOrUnlikePhoto:) name:PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLikeOrUnlikePhoto:) name:PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidCommentOnPhoto:) name:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hudFinished:) name:SVProgressHUDDidDisappearNotification object:nil];
-    
     
     [self loadObjects:nil isRefresh:NO];
 }
@@ -201,57 +206,16 @@ enum ActionSheetTags {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-
-
-
 #pragma mark - Refresh
 
-- (void)hudFinished:(id)notification{
-   
-        [self.feed setContentOffset:CGPointMake(0, -64) animated:YES];
-   
-}
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-       BOOL isHome = [[self.navigationController.viewControllers lastObject] isKindOfClass:PAPHomeViewController.class];
+- (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl{
     
-     // Make sure pull-to-refresh set only for home
-     if(isHome){
-         
-         // Reset refresh count when back to initial position
-         if(scrollView.contentOffset.y == -64){
-             self.refreshCount = 0;
-         }
-         
-         // Enough space to show the hud
-        if(scrollView.contentOffset.y <= -100){
-            
-            // Show hud if not visible, update refresh count
-            if(![SVProgressHUD isVisible]){
-                
-                // Make sure first time refreshing (this will get called multiple times during bounce)
-                if(self.refreshCount == 0){
-                    
-                    CGFloat hudOffset = IS_WIDESCREEN ? -170.0f : -130.0f;
-                    [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, hudOffset)];
-                    [SVProgressHUD show];
-                    
-                    self.refreshCount = 1;
-                    
-                    [self loadObjects:nil isRefresh:YES];
-                }
-            }else{
-                
-                // Stop scrollview where pulled when hud is shown
-                if(scrollView.contentOffset.y <= -110 && self.refreshCount == 1){
-                    [scrollView setContentOffset:CGPointMake(0, scrollView.contentOffset.y) animated:YES];
-                }
-            }
-        }
-    }
+    [refreshControl endRefreshing];
+    
+    [self loadObjects:nil isRefresh:YES];
+    
 }
-
-
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
 
@@ -334,24 +298,28 @@ enum ActionSheetTags {
     self.feed.delegate = self;
     self.feed.dataSource = self;
     
-    // Reload table
-    [self.feed reloadData];
-    
     // Add images to cache if not already present
     for (PFObject *object in self.objects) {
-        if(![self.imgCache objectForKey:[object objectId]]){
-            PFImageView *photoImgView = [[PFImageView alloc] init];
-            photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
-            // Load images from remote server
-            [photoImgView loadInBackground:^(UIImage *image, NSError *error) {
-                
-                // Check there's no error and image is present before setting
-                if(!error && image){
-                    [self.imgCache setObject:image forKey:[object objectId]];
-                }
-            }];
-        }
+        
+        // Check if image in cache
+        [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *image, SDImageCacheType cacheType) {
+            if(!image){
+                PFImageView *photoImgView = [[PFImageView alloc] init];
+                photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
+                // Load images from remote server
+                [photoImgView loadInBackground:^(UIImage *image, NSError *error) {
+                    // Check if there's no error and image is present before setting
+                    if(!error && image){
+                        [[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
+                    }
+                }];
+            }
+        }];
+         
     }
+    
+    // Reload table
+    [self.feed reloadData];
     
     return didLoad;
 }
@@ -642,18 +610,17 @@ enum ActionSheetTags {
             cell.imageView.file = [object objectForKey:kPAPPhotoPictureKey];
             
             // try getting img from cache
-            UIImage *cachedImg = [self.imgCache objectForKey:[object objectId]];
-            
-            // set img from cache or grab from remote server & add to cache
-            if(cachedImg){
-                cell.imageView.image = cachedImg;
-            }else{
-                
-                // Load image right away, display in cell & set cache
-                [cell.imageView loadInBackground];
-                cell.imageView.image = cell.imageView.image;
-                [self.imgCache setObject:cell.imageView.image forKey:[object objectId]];
-            }
+            [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *image, SDImageCacheType cacheType){
+                if(!image){
+                    // grab from remote server & add to cache
+                    [cell.imageView loadInBackground:^(UIImage *image, NSError *error) {
+                        [[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
+                    }];
+                }else{
+                    // set image from cache
+                    cell.imageView.image = image;
+                }
+            }];
         }
         
         return cell;

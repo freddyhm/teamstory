@@ -8,8 +8,7 @@
 #import "AppDelegate.h"
 #import "emailSignUpViewController.h"
 #import "SVProgressHUD.h"
-#import "PAPprofileApprovalViewController.h"
-#import "PAPProfileSettingViewController.h"
+#import "PAPprofileSetupViewController.h"
 
 @interface PAPLogInViewController()
 @property (nonatomic, strong) UITextField *user_email;
@@ -41,13 +40,18 @@
     [super viewDidLoad];
     
     // There is no documentation on how to handle assets with the taller iPhone 5 screen as of 9/13/2012
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-intro.png"]];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"intro_bg.png"]];
     
     UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];
     UIView *paddingView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 20)];
     UIColor *color = [UIColor colorWithRed:134.0f/255.0f green:134.0f/255.0f blue:134.0f/255.0f alpha:1.0f];
     
     if ([self.login_type isEqualToString:@"signIn"]) {
+        
+        UIImage *dividerImage = [UIImage imageNamed:@"intro_divider.png"];
+        UIImageView *divider = [[UIImageView alloc] initWithFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - 190.0f, dividerImage.size.width, dividerImage.size.height)];
+        divider.image = dividerImage;
+        [self.logInView addSubview:divider];
         
         UIFont *defaultFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:15.0f];
         user_email = [[UITextField alloc] init];
@@ -57,14 +61,14 @@
         user_email.leftViewMode = UITextFieldViewModeAlways;
         user_email.delegate = self;
         user_email.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        [user_email setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.6f]];
+        [user_email setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.9f]];
         user_email.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email" attributes:@{NSForegroundColorAttributeName: color, NSFontAttributeName:defaultFont}];
         [self.logInView addSubview:user_email];
         
         user_pw = [[UITextField alloc] init];
         user_pw.layer.cornerRadius = 1.5f;
         user_pw.placeholder = @"Password";
-        [user_pw setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.6f]];
+        [user_pw setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:0.9f]];
         [user_pw setFont:[UIFont systemFontOfSize:15]];
         user_pw.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{NSForegroundColorAttributeName: color, NSFontAttributeName:defaultFont}];
         user_pw.userInteractionEnabled = YES;
@@ -77,36 +81,63 @@
         [self.logInView addSubview:user_pw];
         
         UIButton *forgotSomething = [[UIButton alloc] init];
-        [forgotSomething setTitle:@"Forgot Something?" forState:UIControlStateNormal];
-        [[forgotSomething titleLabel] setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:15.0f]];
+        NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
+                               [UIFont boldSystemFontOfSize:12.0f], NSFontAttributeName,
+                               [UIColor whiteColor], NSForegroundColorAttributeName, nil];
+        NSDictionary *subAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  [UIFont systemFontOfSize:12.0f], NSFontAttributeName,
+                                  [UIColor whiteColor], NSForegroundColorAttributeName,nil];
+        const NSRange range = NSMakeRange(0, 17);
+        
+        NSMutableAttributedString *attributedText =
+        [[NSMutableAttributedString alloc] initWithString:@"Forgot Something? Reset your password"
+                                               attributes:attrs];
+        [attributedText setAttributes:subAttrs range:range];
+        
+        [forgotSomething setAttributedTitle:attributedText forState:UIControlStateNormal];
         [forgotSomething addTarget:self action:@selector(forgotSomethingAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.logInView addSubview:forgotSomething];
         
-        if ([UIScreen mainScreen].bounds.size.height > 480.0f) {
-            forgotSomething.frame = CGRectMake(85.0f, [UIScreen mainScreen].bounds.size.height - 140.0f, 150.0f, 15.0f);
-            user_pw.frame = CGRectMake(35.0f, 365.0f, 250.0f, 45.0f);
-            user_email.frame = CGRectMake(35.0f, 310.0f, 250.0f, 45.0f);
+        float screenOffset;
+        if ([UIScreen mainScreen].bounds.size.height == 480) {
+            screenOffset = 0.0f;
         } else {
-            forgotSomething.frame = CGRectMake(85.0f, [UIScreen mainScreen].bounds.size.height - 120.0f, 150.0f, 15.0f);
-            user_pw.frame = CGRectMake(35.0f, 300.0f, 250.0f, 45.0f);
-            user_email.frame = CGRectMake(35.0f, 245.0f, 250.0f, 45.0f);
+            screenOffset = 50.0f;
         }
+        
+        UIImage *logoViewImage = [UIImage imageNamed:@"welcome_back.png"];
+        UIImageView *logoView = [[UIImageView alloc] initWithFrame:CGRectMake(160.0f - logoViewImage.size.width / 2, 100.0f + screenOffset, logoViewImage.size.width, logoViewImage.size.height)];
+        logoView.image = logoViewImage;
+        [self.logInView addSubview:logoView];
+        
+        forgotSomething.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - 45.0f, 320.0f, 15.0f);
+        user_pw.frame = CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - 110.0f, 290.0f, 50.0f);
+        user_email.frame = CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - 170.0f, 290.0f, 50.0f);
     } else {
-        UIButton *emailSignIn = [[UIButton alloc] initWithFrame:CGRectMake(187.0f, [UIScreen mainScreen].bounds.size.height - 220.0f, 50.0f, 20.0f)];
-        [emailSignIn setTitle:@"email." forState:UIControlStateNormal];
-        [[emailSignIn titleLabel] setFont:[UIFont fontWithName:@"HelveticaNeue" size:15.0f]];
+        
+        float screenOffset;
+        if ([UIScreen mainScreen].bounds.size.height == 480) {
+            screenOffset = 0.0f;
+        } else {
+            screenOffset = 30.0f;
+        }
+        
+        UIImage *emailButton = [UIImage imageNamed:@"btn_email.png"];
+        UIButton *emailSignIn = [[UIButton alloc] initWithFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - (emailButton.size.height + 15.0f), emailButton.size.width, emailButton.size.height)];
+        [emailSignIn setBackgroundImage:[UIImage imageNamed:@"btn_email.png"] forState:UIControlStateNormal];
+        [emailSignIn setBackgroundImage:[UIImage imageNamed:@"btn_email_select.png"] forState:UIControlStateSelected];
         [emailSignIn addTarget:self action:@selector(emailSignIn_button:) forControlEvents:UIControlEventTouchUpInside];
         [self.logInView addSubview:emailSignIn];
         
-        UILabel *emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(80.0f, [UIScreen mainScreen].bounds.size.height - 220.0f, 125.0f, 20.0f)];
-        [emailLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:15.0f]];
-        [emailLabel setText:@"or join using your"];
-        [emailLabel setTextColor:[UIColor colorWithWhite:1.0f alpha:1.0f]];
-        [self.logInView addSubview:emailLabel];
+        UIImage *logoViewImage = [UIImage imageNamed:@"join_teamstory.png"];
+        UIImageView *logoView = [[UIImageView alloc] initWithFrame:CGRectMake(160.0f - logoViewImage.size.width / 2, 170.0f + screenOffset, logoViewImage.size.width, logoViewImage.size.height)];
+        logoView.image = logoViewImage;
+        [self.logInView addSubview:logoView];
     }
     
-    UIButton *back_button = [[UIButton alloc] initWithFrame:CGRectMake(35.0f, [UIScreen mainScreen].bounds.size.height - 50.0f, 50.0f, 15.0f)];
-    [back_button setBackgroundImage:[UIImage imageNamed:@"btn-back.png"] forState:UIControlStateNormal];
+    UIImage *back_buttonImage = [UIImage imageNamed:@"btn-back.png"];
+    UIButton *back_button = [[UIButton alloc] initWithFrame:CGRectMake(15.0f, 30.0f, back_buttonImage.size.width, back_buttonImage.size.height)];
+    [back_button setImage:back_buttonImage forState:UIControlStateNormal];
     [back_button addTarget:self action:@selector(back_button_action:) forControlEvents:UIControlEventTouchUpInside];
     [self.logInView addSubview:back_button];
 
@@ -129,24 +160,28 @@
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    if ([UIScreen mainScreen].bounds.size.height > 480.0f) {
-        // for the iPhone 5
-        [self.logInView.facebookButton setFrame:CGRectMake(35.0f, 157.0f, 110.0f, 110.0f)];
-        [self.logInView.twitterButton setFrame:CGRectMake(175.5, 157.0f, 110.0f, 110.0f)];
+    
+    UIImage *facebookButton = [UIImage imageNamed:@"btn_facebook.png"];
+    UIImage *twitterButton = [UIImage imageNamed:@"btn_twitter.png"];
+    UIImage *emailButton = [UIImage imageNamed:@"btn_email.png"];
+    
+    if ([self.login_type isEqualToString:@"signIn"]) {
+        [self.logInView.facebookButton setFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - (facebookButton.size.height + 205.0f), facebookButton.size.width, facebookButton.size.height)];
+        [self.logInView.twitterButton setFrame:CGRectMake(165.5, [UIScreen mainScreen].bounds.size.height - (twitterButton.size.height + 205.0f), facebookButton.size.width, facebookButton.size.height)];
     } else {
-        [self.logInView.facebookButton setFrame:CGRectMake(35.5f, 100.0f, 110.0f, 110.0f)];
-        [self.logInView.twitterButton setFrame:CGRectMake(175.5, 100.0f, 110.0f, 110.0f)];
+        [self.logInView.facebookButton setFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - (facebookButton.size.height + 25.0f + emailButton.size.height), facebookButton.size.width, facebookButton.size.height)];
+        [self.logInView.twitterButton setFrame:CGRectMake(165.5, [UIScreen mainScreen].bounds.size.height - (twitterButton.size.height + 25.0f + emailButton.size.height), facebookButton.size.width, facebookButton.size.height)];
     }
     
     [self.logInView.facebookButton setTitle:nil forState:UIControlStateNormal];
     [self.logInView.facebookButton setImage:nil forState:UIControlStateNormal];
-    [self.logInView.facebookButton setBackgroundImage:[UIImage imageNamed:@"icon-fblogin.png"] forState:UIControlStateNormal];
-    [self.logInView.facebookButton setBackgroundImage:[UIImage imageNamed:@"icon-fblogin.png"] forState:UIControlStateHighlighted];
+    [self.logInView.facebookButton setBackgroundImage:facebookButton forState:UIControlStateNormal];
+    [self.logInView.facebookButton setBackgroundImage:[UIImage imageNamed:@"btn_facebook_select.png"] forState:UIControlStateHighlighted];
     
     [self.logInView.twitterButton setTitle:nil forState:UIControlStateNormal];
     [self.logInView.twitterButton setImage:nil forState:UIControlStateNormal];
-    [self.logInView.twitterButton setBackgroundImage:[UIImage imageNamed:@"icon-twitterlogin.png"] forState:UIControlStateNormal];
-    [self.logInView.twitterButton setBackgroundImage:[UIImage imageNamed:@"icon-twitterlogin.png"] forState:UIControlStateHighlighted];
+    [self.logInView.twitterButton setBackgroundImage:twitterButton forState:UIControlStateNormal];
+    [self.logInView.twitterButton setBackgroundImage:[UIImage imageNamed:@"btn_twitter_select.png"] forState:UIControlStateHighlighted];
     
 }
 
@@ -172,7 +207,7 @@
 }
 
 - (void) animateTextField: (UITextField*) textField up: (BOOL) up {
-    int movementDistance = 130; // tweak as needed
+    int movementDistance = 200; // tweak as needed
     float movementDuration = 0.2f; // tweak as needed
     
     int movement = (up ? -movementDistance : movementDistance);
@@ -213,20 +248,14 @@
                                                     NSNumber *profileBoolNum = [user objectForKey: @"profileExist"];
                                                     bool profileExist = [profileBoolNum boolValue];
                                                     
-                                                    NSNumber *accessGrantNum = [user objectForKey: @"accessGrant"];
-                                                    bool accessGrant = [accessGrantNum boolValue];
-                                                    
-                                                    if (profileExist == true && accessGrant == true) {
+                                                    if (profileExist == true) {
                                                         NSLog(@"Logged In Sucessfully");
                                                         [SVProgressHUD dismiss];
                                                         [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
                                                         return;
                                                         
-                                                    } else if (profileExist == true && accessGrant != true){
-                                                        PAPprofileApprovalViewController *approvalViewController = [[PAPprofileApprovalViewController alloc] init];
-                                                        [self.navigationController pushViewController:approvalViewController animated:YES];
                                                     } else if (profileExist != true) {
-                                                        PAPProfileSettingViewController *profileSettingsViewController = [[PAPProfileSettingViewController alloc] init];
+                                                        PAPprofileSetupViewController *profileSettingsViewController = [[PAPprofileSetupViewController alloc] init];
                                                         [self.navigationController pushViewController:profileSettingsViewController animated:YES];
                                                     }
                                                     
@@ -247,7 +276,7 @@
 }
 
 #pragma mark - UIAlertView Delegate
-
+/*
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     
     NSString *alertTitle = [alertView title];
@@ -262,19 +291,8 @@
             
             // check if email is properly formatted
             if([self NSStringIsValidEmail:input]){
-                
-                [PFUser requestPasswordResetForEmailInBackground:input block:^(BOOL succeeded, NSError *error) {
-                    if (succeeded == TRUE){
-                        UIAlertView *successAlert = [[UIAlertView alloc] initWithTitle:@"Reset Password" message:@"You will receive an email with a link to reset your password" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                        [successAlert show];
-                        
-                    }else{
-                        UIAlertView *failureAlert = [[UIAlertView alloc] initWithTitle:@"Missing User" message:@"No user account is linked to this email" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                        [failureAlert show];
-                    }
-                }];
-            }else{
-                
+                [PFUser requestPasswordResetForEmailInBackground:input];
+            } else {
                 UIAlertView *notEmailFormat = [[UIAlertView alloc] initWithTitle:@"Invalid Email" message:@"Make sure you enter a valid email address" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [notEmailFormat show];
             }
@@ -283,7 +301,7 @@
         [self dismissKeyboard];
     }
 }
-
+*/
 
 -(BOOL)NSStringIsValidEmail:(NSString *)checkString
 {

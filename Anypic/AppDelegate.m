@@ -18,15 +18,13 @@
 #import "PAPWelcomeViewController.h"
 #import "PAPActivityFeedViewController.h"
 #import "PAPPhotoDetailsViewController.h"
-#import "PAPProfileSettingViewController.h"
 #import "discoverPageViewController.h"
 #import "PAPwebviewViewController.h"
-#import "PAPLoginSelectionViewController.h"
 #import "PAPLoginTutorialViewController.h"
-#import "PAPprofileApprovalViewController.h"
 #import "PhotoTimelineViewController.h"
 #import <Crashlytics/Crashlytics.h>
 #import "iRate.h"
+#import "PAPprofileSetupViewController.h"
 
 
 
@@ -39,7 +37,6 @@
 @property (nonatomic, strong) PAPHomeViewController *homeViewController;
 @property (nonatomic, strong) PAPActivityFeedViewController *activityViewController;
 @property (nonatomic, strong) PAPWelcomeViewController *welcomeViewController;
-@property (nonatomic, strong) PAPProfileSettingViewController *profileSettingViewController;
 @property (nonatomic, strong) PAPAccountViewController *accountViewController_tabBar;
 @property (nonatomic, strong) PAPLogInViewController *loginviewcontroller;
 @property (nonatomic, strong) discoverPageViewController *discoverViewController;
@@ -71,7 +68,6 @@
 @synthesize homeViewController;
 @synthesize activityViewController;
 @synthesize welcomeViewController;
-@synthesize profileSettingViewController;
 @synthesize accountViewController_tabBar;
 @synthesize loginviewcontroller;
 @synthesize discoverViewController;
@@ -318,45 +314,36 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
     bool profileExist = [profilExist_num boolValue];
     
-    NSNumber *accessGrant_num = [[PFUser currentUser] objectForKey: @"accessGrant"];
-    bool access_grant = [accessGrant_num boolValue];
-    
     
     if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]){
         [[PFUser currentUser] setObject:[PFTwitterUtils twitter].userId forKey:@"twitterID"];
         
-        if (profileExist != true || access_grant != true) {
-            if (profileExist != true) {
-                PAPProfileSettingViewController *profileSettingView = [[PAPProfileSettingViewController alloc] init];
-                self.navController.navigationBarHidden = YES;
-                [self.navController pushViewController:profileSettingView animated:NO];
-                return;
-            }
-            
-            PAPprofileApprovalViewController *profileApprovalViewController = [[PAPprofileApprovalViewController alloc] init];
-            [self.navController pushViewController:profileApprovalViewController animated:YES];
+        if (profileExist != true) {
+            PAPprofileSetupViewController *profileSetupViewController = [[PAPprofileSetupViewController alloc] init];
+            self.navController.navigationBarHidden = YES;
+            [self.navController pushViewController:profileSetupViewController animated:NO];
+            return;
         }
+            
+        [self settingRootViewAsTabBarController];
+        
     } else if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
         [FBRequestConnection startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
             if (!error) {
             
-                if (profileExist != true || access_grant != true) {
-                    if (profileExist != true) {
-                        NSString *email = result[@"email"];
-                        if (email && [email length] != 0) {
-                            [user setObject:email forKey:@"email"];
-                        }
-                        
-                        [user saveInBackground];
-                        
-                        PAPProfileSettingViewController *profileSettingView = [[PAPProfileSettingViewController alloc] init];
-                        self.navController.navigationBarHidden = YES;
-                        [self.navController pushViewController:profileSettingView animated:NO];
-                        return;
+                if (profileExist != true) {
+                    NSString *email = result[@"email"];
+                    if (email && [email length] != 0) {
+                        [user setObject:email forKey:@"email"];
+                        [user setObject:email forKey:@"username"];
                     }
                     
-                    PAPprofileApprovalViewController *profileApprovalViewController = [[PAPprofileApprovalViewController alloc] init];
-                    [self.navController pushViewController:profileApprovalViewController animated:YES];
+                    [user saveInBackground];
+                    
+                    PAPprofileSetupViewController *profileSettingView = [[PAPprofileSetupViewController alloc] init];
+                    self.navController.navigationBarHidden = YES;
+                    [self.navController pushViewController:profileSettingView animated:NO];
+                    return;
                 } else {
                     [self facebookRequestDidLoad:result];
                 }
@@ -390,12 +377,11 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 }
 
 - (void)presentLoginSelectionController {
-    PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] init];
+    PAPLoginTutorialViewController *loginSelectionViewController = [[PAPLoginTutorialViewController alloc] init];
     [self.navController pushViewController:loginSelectionViewController animated:YES];
 }
 
 - (void)presentTutorialViewController {
-    
     PAPLoginTutorialViewController *loginTutorialViewController = [[PAPLoginTutorialViewController alloc] init];
     [self.navController pushViewController:loginTutorialViewController animated:YES];
 }
@@ -551,9 +537,9 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     
     [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"BackgroundNavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
     
-    NSDictionary *barButtonItemAttributes = @{NSForegroundColorAttributeName:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0f]};
+    NSDictionary *barButtonItemAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
     
-    [[UIButton appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
+    [[UIButton appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
     [[UIBarButtonItem appearance] setTitleTextAttributes:barButtonItemAttributes forState:UIControlStateNormal];
     
@@ -847,6 +833,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
             NSString *email = result[@"email"];
             if (email && [email length] != 0) {
                 [user setObject:email forKey:@"email"];
+                [user setObject:email forKey:@"username"];
             }
             
             NSString *facebookId = result[@"id"];

@@ -341,8 +341,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "82"
             endingLineNumber = "82"
-            landmarkName = "-refreshCurrentUserCallbackWithResult:error:"
-            landmarkType = "5">
+            landmarkName = "@implementation PAPWelcomeViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
