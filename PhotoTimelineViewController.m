@@ -30,7 +30,6 @@
 @property (nonatomic, strong) NSString *photoID;
 @property (nonatomic, strong) PFObject *current_photo;
 @property (nonatomic, strong) MBProgressHUD *hud;
-@property (nonatomic, strong) NSCache *imgCache;
 @property int loadPostCount;
 @property int refreshCount;
 
@@ -54,9 +53,6 @@ enum ActionSheetTags {
         // Improve scrolling performance by reusing UITableView section headers
         self.reusableSectionHeaderViews = [NSMutableSet setWithCapacity:3];
         
-        // Init our image cache
-        self.imgCache = [[NSCache alloc]init];
-    
         self.shouldReloadOnAppear = NO;
         
         // To make sure we only show hud/load objects once per pull
@@ -210,8 +206,11 @@ enum ActionSheetTags {
 
 
 - (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl{
+    
     [refreshControl endRefreshing];
+    
     [self loadObjects:nil isRefresh:YES];
+    
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
@@ -297,15 +296,16 @@ enum ActionSheetTags {
     
     // Add images to cache if not already present
     for (PFObject *object in self.objects) {
+        
+        // Check if image in cache
         [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *image, SDImageCacheType cacheType) {
             if(!image){
                 PFImageView *photoImgView = [[PFImageView alloc] init];
                 photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
                 // Load images from remote server
                 [photoImgView loadInBackground:^(UIImage *image, NSError *error) {
-                    // Check there's no error and image is present before setting
+                    // Check if there's no error and image is present before setting
                     if(!error && image){
-                        // [self.imgCache setObject:image forKey:[object objectId]];
                         [[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
                     }
                 }];
@@ -549,19 +549,15 @@ enum ActionSheetTags {
             // try getting img from cache
             [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *image, SDImageCacheType cacheType){
                 if(!image){
-                     // grab from remote server & add to cache
+                    // grab from remote server & add to cache
                     [cell.imageView loadInBackground:^(UIImage *image, NSError *error) {
                         [[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
                     }];
                 }else{
-                    
                     // set image from cache
                     cell.imageView.image = image;
                 }
             }];
-            
-           
-
         }
         
         return cell;
