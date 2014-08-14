@@ -476,6 +476,7 @@
 		D59B998E18C5A902002D6EFE /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D59B998B18C5A902002D6EFE /* Default-568h@2x.png */; };
 		D5A5F51E18D2C3C1000BB243 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A5F51D18D2C3C1000BB243 /* FacebookSDK.framework */; };
 		D5A5F52018D2C3CD000BB243 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A5F51F18D2C3CD000BB243 /* Parse.framework */; };
+		D5A9EE2F199C5F8F003513C3 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4217BC11552234E00CD3A47 /* ImageIO.framework */; };
 		D5BFDED518CC84A5004FEC42 /* la.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDEC718CC84A4004FEC42 /* la.png */; };
 		D5BFDED618CC84A5004FEC42 /* la@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDEC818CC84A4004FEC42 /* la@2x.png */; };
 		D5BFDED718CC84A5004FEC42 /* london.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDEC918CC84A4004FEC42 /* london.png */; };
@@ -1142,6 +1143,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5A9EE2F199C5F8F003513C3 /* ImageIO.framework in Frameworks */,
 				4699F0B119605915002AAACB /* StoreKit.framework in Frameworks */,
 				46A0C25D194E4A2D00811CBC /* CFNetwork.framework in Frameworks */,
 				D542D8C9196A721B00A0384F /* AssetsLibrary.framework in Frameworks */,

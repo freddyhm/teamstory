@@ -16,6 +16,7 @@
 #import "PAPLoadMoreCell.h"
 #import "MBProgressHUD.h"
 #import "SVProgressHUD.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
@@ -68,7 +69,6 @@ enum ActionSheetTags {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
     
     // Remove cell separator
     [self.feed setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -299,18 +299,21 @@ enum ActionSheetTags {
     
     // Add images to cache if not already present
     for (PFObject *object in self.objects) {
-        if(![self.imgCache objectForKey:[object objectId]]){
-            PFImageView *photoImgView = [[PFImageView alloc] init];
-            photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
-            // Load images from remote server
-            [photoImgView loadInBackground:^(UIImage *image, NSError *error) {
-        
-                // Check there's no error and image is present before setting
-                if(!error && image){
-                    [self.imgCache setObject:image forKey:[object objectId]];
-                }
-            }];
-        }
+        [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *image, SDImageCacheType cacheType) {
+            if(!image){
+                PFImageView *photoImgView = [[PFImageView alloc] init];
+                photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
+                // Load images from remote server
+                [photoImgView loadInBackground:^(UIImage *image, NSError *error) {
+                    // Check there's no error and image is present before setting
+                    if(!error && image){
+                        // [self.imgCache setObject:image forKey:[object objectId]];
+                        [[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
+                    }
+                }];
+            }
+        }];
+         
     }
     
     // Reload table
@@ -546,24 +549,21 @@ enum ActionSheetTags {
             cell.imageView.file = [object objectForKey:kPAPPhotoPictureKey];
             
             // try getting img from cache
-            UIImage *cachedImg = [self.imgCache objectForKey:[object objectId]];
+            [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *image, SDImageCacheType cacheType){
+                if(!image){
+                     // grab from remote server & add to cache
+                    [cell.imageView loadInBackground:^(UIImage *image, NSError *error) {
+                        [[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
+                    }];
+                }else{
+                    
+                    // set image from cache
+                    cell.imageView.image = image;
+                }
+            }];
             
-            // set img from cache or grab from remote server & add to cache
-            if(cachedImg){
-                cell.imageView.image = cachedImg;
-            }else{
-                
-                /* objectDidLoad starts the pull of new images but since it's async sometimes the cell is loaded before
-                   the image is done loading. We make another server call and set the cache here.
-                   Note: loadInBackground automatically fetches and sets the image in the imageview. */
-                
-                [cell.imageView loadInBackground:^(UIImage *image, NSError *error) {
-                    // Make sure image is not in cache, no errors, and image is present before adding to cache
-                    if(![self.imgCache objectForKey:[object objectId]] && !error && image){
-                        [self.imgCache setObject:image forKey:[object objectId]];
-                    }
-                }];
-            }
+           
+
         }
         
         return cell;
