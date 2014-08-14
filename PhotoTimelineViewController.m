@@ -17,6 +17,7 @@
 #import "MBProgressHUD.h"
 #import "SVProgressHUD.h"
 
+
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
 
@@ -59,6 +60,7 @@ enum ActionSheetTags {
         
         // To make sure we only show hud/load objects once per pull
         self.refreshCount = 0;
+        
     }
     return self;
 }
@@ -66,6 +68,7 @@ enum ActionSheetTags {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     
     // Remove cell separator
     [self.feed setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -79,7 +82,8 @@ enum ActionSheetTags {
     refreshControl.tintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:0.5f];
     [refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
     [self.feed addSubview:refreshControl];
-    
+     
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidPublishPhoto:) name:PAPTabBarControllerDidFinishEditingPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userFollowingChanged:) name:PAPUtilityUserFollowingChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidDeletePhoto:) name:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:nil];
@@ -202,10 +206,8 @@ enum ActionSheetTags {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-
-
-
 #pragma mark - Refresh
+
 
 - (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl{
     [self loadObjects:^(BOOL succeeded) {
@@ -213,7 +215,6 @@ enum ActionSheetTags {
     } isRefresh:YES];
     
 }
-
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
 
@@ -296,9 +297,6 @@ enum ActionSheetTags {
     self.feed.delegate = self;
     self.feed.dataSource = self;
     
-    // Reload table
-    [self.feed reloadData];
-    
     // Add images to cache if not already present
     for (PFObject *object in self.objects) {
         if(![self.imgCache objectForKey:[object objectId]]){
@@ -306,7 +304,7 @@ enum ActionSheetTags {
             photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
             // Load images from remote server
             [photoImgView loadInBackground:^(UIImage *image, NSError *error) {
-                
+        
                 // Check there's no error and image is present before setting
                 if(!error && image){
                     [self.imgCache setObject:image forKey:[object objectId]];
@@ -314,6 +312,9 @@ enum ActionSheetTags {
             }];
         }
     }
+    
+    // Reload table
+    [self.feed reloadData];
     
     return didLoad;
 }
@@ -552,10 +553,16 @@ enum ActionSheetTags {
                 cell.imageView.image = cachedImg;
             }else{
                 
-                // Load image right away, display in cell & set cache
-                [cell.imageView loadInBackground];
-                cell.imageView.image = cell.imageView.image;
-                [self.imgCache setObject:cell.imageView.image forKey:[object objectId]];
+                /* objectDidLoad starts the pull of new images but since it's async sometimes the cell is loaded before
+                   the image is done loading. We make another server call and set the cache here.
+                   Note: loadInBackground automatically fetches and sets the image in the imageview. */
+                
+                [cell.imageView loadInBackground:^(UIImage *image, NSError *error) {
+                    // Make sure image is not in cache, no errors, and image is present before adding to cache
+                    if(![self.imgCache objectForKey:[object objectId]] && !error && image){
+                        [self.imgCache setObject:image forKey:[object objectId]];
+                    }
+                }];
             }
         }
         
