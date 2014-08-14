@@ -210,10 +210,8 @@ enum ActionSheetTags {
 
 
 - (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl{
-    [self loadObjects:^(BOOL succeeded) {
-        [refreshControl endRefreshing];
-    } isRefresh:YES];
-    
+    [refreshControl endRefreshing];
+    [self loadObjects:nil isRefresh:YES];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
