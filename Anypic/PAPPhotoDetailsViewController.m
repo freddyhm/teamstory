@@ -147,7 +147,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         self.tableView.tableHeaderView = self.headerView;
     } else {
         if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
-            self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 199.0f) photo:self.photo description:nil navigationController:self.navigationController];
+            self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 203.0f) photo:self.photo description:nil navigationController:self.navigationController];
         } else {
             self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:[PAPPhotoDetailsHeaderView rectForView] photo:self.photo description:nil navigationController:self.navigationController];
         }
