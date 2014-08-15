@@ -126,6 +126,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     self.tableView.backgroundView = texturedBackgroundView;
     
+    
+    
     NSString *caption_local = [self.photo objectForKey:@"caption"];
     
     if ([caption_local length] > 0) {
@@ -161,7 +163,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     // Set table footer
     self.footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:[PAPPhotoDetailsFooterView rectForView]];
-    commentTextView = footerView.commentView;
+    
+    commentTextView = self.footerView.commentView;
     self.defaultFooterViewFrame = self.footerView.mainView.frame;
     self.defaultCommentTextViewFrame = self.commentTextView.frame;
     commentTextView.delegate = self;

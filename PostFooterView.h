@@ -1,5 +1,5 @@
 //
-//  PAPPhotoHeaderView2.h
+//  PAPpostFooterView2.h
 //  Teamstory
 //
 //
@@ -13,7 +13,7 @@ typedef enum {
     PAPPhotoHeaderButtonsDefault2 = PAPPhotoHeaderButtonsLike2 | PAPPhotoHeaderButtonsComment2 | PAPPhotoHeaderButtonsUser2
 } PAPPhotoHeaderButtons2;
 
-@protocol PAPPhotoHeaderView2Delegate;
+@protocol PostFooterViewDelegate;
 
 @interface PostFooterView : UIView
 
@@ -39,7 +39,7 @@ typedef enum {
 @property (nonatomic,readonly) UIButton *commentButton;
 
 /*! @name Delegate */
-@property (nonatomic,weak) id <PAPPhotoHeaderView2Delegate> delegate;
+@property (nonatomic,weak) id <PostFooterViewDelegate> delegate;
 
 /*! @name Modifying Interaction Elements Status */
 
@@ -59,29 +59,24 @@ typedef enum {
 
 
 /*!
- The protocol defines methods a delegate of a PAPPhotoHeaderView2 should implement.
+ The protocol defines methods a delegate of a PostFooterViewDelegate should implement.
  All methods of the protocol are optional.
  */
-@protocol PAPPhotoHeaderView2Delegate <NSObject>
+@protocol PostFooterViewDelegate <NSObject>
 @optional
 
-/*!
- Sent to the delegate when the user button is tapped
- @param user the PFUser associated with this button
- */
-- (void)photoHeaderView:(PostFooterView *)photoHeaderView didTapUserButton:(UIButton *)button user:(PFUser *)user;
 
 /*!
  Sent to the delegate when the like photo button is tapped
  @param photo the PFObject for the photo that is being liked or disliked
  */
-- (void)photoHeaderView:(PostFooterView *)photoHeaderView didTapLikePhotoButton:(UIButton *)button photo:(PFObject *)photo;
+- (void)postFooterView:(PostFooterView *)postFooterView didTapLikePhotoButton:(UIButton *)button photo:(PFObject *)photo;
 
 /*!
  Sent to the delegate when the comment on photo button is tapped
  @param photo the PFObject for the photo that will be commented on
  */
-- (void)photoHeaderView:(PostFooterView *)photoHeaderView didTapCommentOnPhotoButton:(UIButton *)button photo:(PFObject *)photo;
+- (void)postFooterView:(PostFooterView *)postFooterView didTapCommentOnPhotoButton:(UIButton *)button photo:(PFObject *)photo;
 
 - (void) moreActionButton_inflator:(PFUser *)user photo:(PFObject *)photo;
 @end

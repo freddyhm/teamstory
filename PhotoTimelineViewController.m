@@ -58,9 +58,6 @@ enum ActionSheetTags {
         
         self.reusableSectionHeaderViews2 = [NSMutableSet setWithCapacity:3];
         
-        // Init our image cache
-        self.imgCache = [[NSCache alloc]init];
-    
         self.shouldReloadOnAppear = NO;
         
         // To make sure we only show hud/load objects once per pull
@@ -73,6 +70,9 @@ enum ActionSheetTags {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // Remove cell separator
+    [self.feed setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 
     UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
     texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
@@ -547,7 +547,7 @@ enum ActionSheetTags {
         if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
             return 100.0f + 54.0f;
         } else {
-            return 305.0f + 54.0f;
+            return 325.0f + 54.0f;
         }
     }
 }
@@ -600,14 +600,17 @@ enum ActionSheetTags {
         }
         
         [cell setObject:object];
-        
         cell.photoButton.tag = indexPath.section;
         cell.imageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
+        
+        [self loadPhotoAttributes:cell object:object indexPath:indexPath];
         
         if(object){
             
             cell.caption = [object objectForKey:@"caption"];
             cell.imageView.file = [object objectForKey:kPAPPhotoPictureKey];
+            
+            [self loadPhotoAttributes:cell object:object indexPath:indexPath];
             
             // try getting img from cache
             [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *image, SDImageCacheType cacheType){
@@ -627,20 +630,88 @@ enum ActionSheetTags {
     }
 }
 
-- (PAPPhotoHeaderView *)dequeueReusableSectionHeaderView {
-    for (PAPPhotoHeaderView *sectionHeaderView in self.reusableSectionHeaderViews) {
-        if (!sectionHeaderView.superview) {
-            // we found a section header that is no longer visible
-            return sectionHeaderView;
+- (void)loadPhotoAttributes:(PAPPhotoCell *)cell object:(PFObject *)object indexPath:(NSIndexPath *)indexPath{
+    
+    [cell.footerView setPhoto:object];
+    cell.footerView.tag = indexPath.section;
+    [cell.footerView.likeButton setTag:indexPath.section];
+    cell.footerView.delegate = self;
+
+    NSDictionary *attributesForPhoto = [[PAPCache sharedCache] attributesForPhoto:object];
+    
+    if (attributesForPhoto) {
+        [cell.footerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:object]];
+        [cell.footerView.likeButton setTitle:[[[PAPCache sharedCache] likeCountForPhoto:object] description] forState:UIControlStateNormal];
+        [cell.footerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:object] description] forState:UIControlStateNormal];
+        
+        if (cell.footerView.likeButton.alpha < 1.0f || cell.footerView.commentButton.alpha < 1.0f) {
+            [UIView animateWithDuration:0.200f animations:^{
+                cell.footerView.likeButton.alpha = 1.0f;
+                cell.footerView.commentButton.alpha = 1.0f;
+            }];
+        }
+    }else {
+        cell.footerView.likeButton.alpha = 0.0f;
+        cell.footerView.commentButton.alpha = 0.0f;
+        
+        @synchronized(self) {
+            // check if we can update the cache
+            NSNumber *outstandingSectionHeaderQueryStatus = [self.outstandingSectionHeaderQueries objectForKey:@(indexPath.section)];
+            if (!outstandingSectionHeaderQueryStatus) {
+                PFQuery *query = [PAPUtility queryForActivitiesOnPhoto:object cachePolicy:kPFCachePolicyNetworkOnly];
+                [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                    @synchronized(self) {
+                        [self.outstandingSectionHeaderQueries removeObjectForKey:@(indexPath.section)];
+                        
+                        if (error) {
+                            return;
+                        }
+                        
+                        NSMutableArray *likers = [NSMutableArray array];
+                        NSMutableArray *commenters = [NSMutableArray array];
+                        
+                        BOOL isLikedByCurrentUser = NO;
+                        
+                        for (PFObject *activity in objects) {
+                            if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeLike] && [activity objectForKey:kPAPActivityFromUserKey]) {
+                                [likers addObject:[activity objectForKey:kPAPActivityFromUserKey]];
+                            } else if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeComment] && [activity objectForKey:kPAPActivityFromUserKey]) {
+                                [commenters addObject:[activity objectForKey:kPAPActivityFromUserKey]];
+                            }
+                            
+                            if ([[[activity objectForKey:kPAPActivityFromUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+                                if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeLike]) {
+                                    isLikedByCurrentUser = YES;
+                                }
+                            }
+                        }
+                        
+                        [[PAPCache sharedCache] setAttributesForPhoto:object likers:likers commenters:commenters likedByCurrentUser:isLikedByCurrentUser];
+                        
+                        if (cell.footerView.tag != indexPath.section) {
+                            return;
+                        }
+                        
+                        [cell.footerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:object]];
+                        [cell.footerView.likeButton setTitle:[[[PAPCache sharedCache] likeCountForPhoto:object] description] forState:UIControlStateNormal];
+                        [cell.footerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:object] description] forState:UIControlStateNormal];
+                        
+                        if (cell.footerView.likeButton.alpha < 1.0f || cell.footerView.commentButton.alpha < 1.0f) {
+                            [UIView animateWithDuration:0.200f animations:^{
+                                cell.footerView.likeButton.alpha = 1.0f;
+                                cell.footerView.commentButton.alpha = 1.0f;
+                            }];
+                        }
+                    }
+                }];
+            }
         }
     }
     
-    return nil;
 }
 
-
-- (PostFooterView *)dequeueReusableSectionHeaderView2 {
-    for (PostFooterView *sectionHeaderView in self.reusableSectionHeaderViews2) {
+- (PAPPhotoHeaderView *)dequeueReusableSectionHeaderView {
+    for (PAPPhotoHeaderView *sectionHeaderView in self.reusableSectionHeaderViews) {
         if (!sectionHeaderView.superview) {
             // we found a section header that is no longer visible
             return sectionHeaderView;
@@ -660,12 +731,84 @@ enum ActionSheetTags {
     [self.navigationController pushViewController:accountViewController animated:YES];
 }
 
+#pragma mark - PostFooterView Delegate
 
-- (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapCommentOnPhotoButton:(UIButton *)button  photo:(PFObject *)photo {
+- (void)postFooterView:(PostFooterView *)postFooterView didTapLikePhotoButton:(UIButton *)button photo:(PFObject *)photo {
+    [postFooterView shouldEnableLikeButton:NO];
+    
+    BOOL liked = !button.selected;
+    [postFooterView setLikeStatus:liked];
+    
+    NSString *originalButtonTitle = button.titleLabel.text;
+    
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+    
+    NSNumber *likeCount = [numberFormatter numberFromString:button.titleLabel.text];
+    if (liked) {
+        
+        // analytics
+        [PAPUtility captureEventGA:@"Engagement" action:@"Like" label:@"Photo"];
+        
+        likeCount = [NSNumber numberWithInt:[likeCount intValue] + 1];
+        [[PAPCache sharedCache] incrementLikerCountForPhoto:photo];
+    } else {
+        if ([likeCount intValue] > 0) {
+            likeCount = [NSNumber numberWithInt:[likeCount intValue] - 1];
+        }
+        [[PAPCache sharedCache] decrementLikerCountForPhoto:photo];
+    }
+    
+    [[PAPCache sharedCache] setPhotoIsLikedByCurrentUser:photo liked:liked];
+    
+    if (liked == YES) {
+        [button setTitle:[numberFormatter stringFromNumber:likeCount] forState:UIControlStateSelected];
+    } else if (liked == NO) {
+        [button setTitle:[numberFormatter stringFromNumber:likeCount] forState:UIControlStateNormal];
+    }
+    
+    
+
+    
+    if (liked) {
+        [PAPUtility likePhotoInBackground:photo block:^(BOOL succeeded, NSError *error) {
+            
+            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:button.tag];
+            PAPPhotoCell *cell = (PAPPhotoCell *)[self.feed cellForRowAtIndexPath:indexPath];
+            PostFooterView *actualFooterView = cell.footerView;
+            
+            [actualFooterView shouldEnableLikeButton:YES];
+            [actualFooterView setLikeStatus:succeeded];
+            
+            if (!succeeded) {
+                [actualFooterView.likeButton setTitle:originalButtonTitle forState:UIControlStateNormal];
+            }
+        }];
+    } else {
+        [PAPUtility unlikePhotoInBackground:photo block:^(BOOL succeeded, NSError *error) {
+            
+            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:button.tag];
+            PAPPhotoCell *cell = (PAPPhotoCell *)[self.feed cellForRowAtIndexPath:indexPath];
+            PostFooterView *actualFooterView = cell.footerView;
+            [actualFooterView shouldEnableLikeButton:YES];
+            [actualFooterView setLikeStatus:!succeeded];
+            
+            if (!succeeded) {
+                [actualFooterView.likeButton setTitle:originalButtonTitle forState:UIControlStateNormal];
+            }
+        }];
+    }
+}
+
+
+
+- (void)postFooterView:(PostFooterView *)postFooterView didTapCommentOnPhotoButton:(UIButton *)button  photo:(PFObject *)photo {
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"commentButton"];
     [self.navigationController pushViewController:photoDetailsVC animated:YES];
 }
+
+
 
 
 

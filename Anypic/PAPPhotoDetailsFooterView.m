@@ -27,7 +27,7 @@
         // Initialization code
         self.backgroundColor = [UIColor clearColor];
         
-        mainView = [[UIView alloc] initWithFrame:CGRectMake( 7.5f, 0.0f, 305.0f, 51.0f)];
+        mainView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 51.0f)];
         mainView.backgroundColor = [UIColor whiteColor];
         [self addSubview:mainView];
         

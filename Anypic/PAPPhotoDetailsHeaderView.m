@@ -328,7 +328,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height + 15.0f, mainImageWidth, mainImageHeight)];
         }
         
-        self.photoDescriptionLabel.frame = CGRectMake(baseHorizontalOffset * 2, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 5.0f, 292.0f, expectedSize.height + 5.0f);
+        self.photoDescriptionLabel.frame = CGRectMake(avatarImageX, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 5.0f, 292.0f, expectedSize.height + 5.0f);
 
         
         self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];

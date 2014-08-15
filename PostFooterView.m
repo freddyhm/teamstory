@@ -1,5 +1,5 @@
 //
-//  PAPPhotoHeaderView2.m
+//  PAPpostFooterView2.m
 //  Teamstory
 //
 //
@@ -101,57 +101,24 @@
         [self.moreActionButton addTarget:self action:@selector(moreActionButton_action:) forControlEvents:UIControlEventTouchUpInside];
         [containerView addSubview:self.moreActionButton];
         
+        if (self.buttons & PAPPhotoHeaderButtonsComment2) {
+            [self.commentButton addTarget:self action:@selector(didTapCommentOnPhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        }
         
-        
-        self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
-        
-        // timestamp
-        self.timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50.0f, 20.0f, containerView.bounds.size.width - 50.0f - 72.0f, 18.0f)];
-        [containerView addSubview:self.timestampLabel];
-        [self.timestampLabel setTextColor:[UIColor colorWithRed:157.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
-        //[self.timestampLabel setShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f]];
-        //[self.timestampLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
-        [self.timestampLabel setFont:[UIFont systemFontOfSize:11.0f]];
-        [self.timestampLabel setBackgroundColor:[UIColor clearColor]];
-        /*
-        CALayer *layer = [containerView layer];
-        layer.backgroundColor = [[UIColor whiteColor] CGColor];
-        layer.masksToBounds = NO;
-        layer.shadowRadius = 0.5f;
-        layer.shadowOffset = CGSizeMake( 0.0f, 1.0f);
-        layer.shadowOpacity = 0.3f;
-        layer.shouldRasterize = YES;
-        layer.shadowPath = [UIBezierPath bezierPathWithRect:CGRectMake( 0.0f, containerView.frame.size.height - 4.0f, containerView.frame.size.width, 4.0f)].CGPath;
-         */
-        
+        if (self.buttons & PAPPhotoHeaderButtonsLike2) {
+            [self.likeButton addTarget:self action:@selector(didTapLikePhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        }
+
     }
 
     return self;
 }
 
 
-#pragma mark - PAPPhotoHeaderView2
+#pragma mark - PostFooterView
 
 - (void)setPhoto:(PFObject *)aPhoto {
-    photo = aPhoto;
-    
-    CGFloat constrainWidth = containerView.bounds.size.width;
-
-    if (self.buttons & PAPPhotoHeaderButtonsComment2) {
-        constrainWidth = self.commentButton.frame.origin.x;
-        [self.commentButton addTarget:self action:@selector(didTapCommentOnPhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    }
-    
-    if (self.buttons & PAPPhotoHeaderButtonsLike2) {
-        constrainWidth = self.likeButton.frame.origin.x;
-        [self.likeButton addTarget:self action:@selector(didTapLikePhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    }
-    
-    NSTimeInterval timeInterval = [[self.photo createdAt] timeIntervalSinceNow];
-    NSString *timestamp = [self.timeIntervalFormatter stringForTimeInterval:timeInterval];
-    [self.timestampLabel setText:timestamp];
-
-    [self setNeedsDisplay];
+    photo = aPhoto;    
 }
 
 - (void)setLikeStatus:(BOOL)liked {
@@ -167,7 +134,7 @@
 }
 
 - (void)shouldEnableLikeButton:(BOOL)enable {
-    if (enable) {
+    if (!enable) {
         [self.likeButton removeTarget:self action:@selector(didTapLikePhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     } else {
         [self.likeButton addTarget:self action:@selector(didTapLikePhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -185,25 +152,19 @@
 
 + (void)validateButtons:(PAPPhotoHeaderButtons2)buttons {
     if (buttons == PAPPhotoHeaderButtonsNone2) {
-        [NSException raise:NSInvalidArgumentException format:@"Buttons must be set before initializing PAPPhotoHeaderView2."];
-    }
-}
-
-- (void)didTapUserButtonAction:(UIButton *)sender {
-    if (delegate && [delegate respondsToSelector:@selector(photoHeaderView:didTapUserButton:user:)]) {
-        [delegate photoHeaderView:self didTapUserButton:sender user:[self.photo objectForKey:kPAPPhotoUserKey]];
+        [NSException raise:NSInvalidArgumentException format:@"Buttons must be set before initializing PAPpostFooterView2."];
     }
 }
 
 - (void)didTapLikePhotoButtonAction:(UIButton *)button {
-    if (delegate && [delegate respondsToSelector:@selector(photoHeaderView:didTapLikePhotoButton:photo:)]) {
-        [delegate photoHeaderView:self didTapLikePhotoButton:button photo:self.photo];
+    if (delegate && [delegate respondsToSelector:@selector(postFooterView:didTapLikePhotoButton:photo:)]) {
+        [delegate postFooterView:self didTapLikePhotoButton:button photo:self.photo];
     }
 }
 
 - (void)didTapCommentOnPhotoButtonAction:(UIButton *)sender {
-    if (delegate && [delegate respondsToSelector:@selector(photoHeaderView:didTapCommentOnPhotoButton:photo:)]) {
-        [delegate photoHeaderView:self didTapCommentOnPhotoButton:sender photo:self.photo];
+    if (delegate && [delegate respondsToSelector:@selector(postFooterView:didTapCommentOnPhotoButton:photo:)]) {
+        [delegate postFooterView:self didTapCommentOnPhotoButton:sender photo:self.photo];
     }
 }
 
