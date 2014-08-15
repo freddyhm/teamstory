@@ -193,7 +193,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         }
         
         return [displayName1 compare:displayName2 options:NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch];
-    }];;
+    }];
     
     for (PAPProfileImageView *image in currentLikeAvatars) {
         [image removeFromSuperview];
@@ -286,18 +286,21 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [self addSubview:self.photoDescriptionLabel];
         
         if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
-            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + self.photoDescriptionLabel.bounds.size.height + 15.0f + 10.0f, 80.0f, 80.0f)];
-            viewOffset = -185.0f;
+            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + self.photoDescriptionLabel.bounds.size.height + 10.0f, 80.0f, 80.0f)];
+            
+        
+            viewOffset = -215.0f;
             
             UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(linkPostButtonAction:)];
             [photoTap setNumberOfTapsRequired:1];
             [photoTap setNumberOfTouchesRequired:1];
             
-            self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height + 15.0f, mainImageWidth, 100.0f)];
+            self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height, mainImageWidth, 100.0f)];
+            
             [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
             [self addSubview:self.linkBackgroundView];
             
-            self.linkContentView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX + 5.0f, mainImageY + 5.0f + self.photoDescriptionLabel.bounds.size.height + 15.0f, self.linkBackgroundView.bounds.size.width - 10.0f, self.linkBackgroundView.bounds.size.height - 10.0f)];
+            self.linkContentView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX + 5.0f, mainImageY + 5.0f + self.photoDescriptionLabel.bounds.size.height, self.linkBackgroundView.bounds.size.width - 10.0f, self.linkBackgroundView.bounds.size.height - 10.0f)];
             [self.linkContentView setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
             [self.linkContentView.layer setBorderColor:[UIColor colorWithWhite:0.9f alpha:1.0f].CGColor];
             [self.linkContentView addGestureRecognizer:photoTap];
@@ -324,12 +327,16 @@ static TTTTimeIntervalFormatter *timeFormatter;
             self.linkUrlLabel.font = [UIFont systemFontOfSize:11.0f];
             [self.linkUrlLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
             [self.linkContentView addSubview:self.linkUrlLabel];
+            
+            self.photoDescriptionLabel.frame = CGRectMake(avatarImageX, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 13.0f, 292.0f, expectedSize.height + 5.0f);
+
         } else {
             self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height + 15.0f, mainImageWidth, mainImageHeight)];
+            
+            self.photoDescriptionLabel.frame = CGRectMake(avatarImageX, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 5.0f, 292.0f, expectedSize.height + 5.0f);
         }
         
-        self.photoDescriptionLabel.frame = CGRectMake(avatarImageX, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 5.0f, 292.0f, expectedSize.height + 5.0f);
-
+        
         
         self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
         self.photoImageView.backgroundColor = [UIColor blackColor];
@@ -356,7 +363,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + self.photoDescriptionLabel.bounds.size.height + 10.0f, 80.0f, 80.0f)];
             viewOffset = -205.0f;
             
-            self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height, mainImageWidth, 100.0f)];
+            self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height, mainImageWidth, 115.0f)];
             [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
             [self addSubview:self.linkBackgroundView];
             
