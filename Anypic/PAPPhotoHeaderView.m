@@ -17,6 +17,7 @@
 @property (nonatomic, strong) PAPProfileImageView *avatarImageView;
 @property (nonatomic, strong) UIButton *userButton;
 @property (nonatomic, strong) UILabel *timestampLabel;
+@property (nonatomic, strong) UILabel *userInfoLabel;
 @property (nonatomic, strong) TTTTimeIntervalFormatter *timeIntervalFormatter;
 
 @end
@@ -59,7 +60,6 @@
         [self.avatarImageView.profileButton addTarget:self action:@selector(didTapUserButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.containerView addSubview:self.avatarImageView];
         
-        
         if (self.buttons & PAPPhotoHeaderButtonsUser) {
             // This is the user's display name, on a button so that we can tap on it
             self.userButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -93,6 +93,14 @@
         layer.shadowPath = [UIBezierPath bezierPathWithRect:CGRectMake( 0.0f, containerView.frame.size.height - 4.0f, containerView.frame.size.width, 4.0f)].CGPath;
          */
         
+        
+        self.userInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50.0f, 20.0f, containerView.bounds.size.width - 50.0f - 72.0f, 18.0f)];
+        [self.userInfoLabel setTextColor:[UIColor colorWithRed:157.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
+        [self.userInfoLabel setFont:[UIFont systemFontOfSize:11.0f]];
+        [self.userInfoLabel setBackgroundColor:[UIColor clearColor]];
+        [self.userInfoLabel setAdjustsFontSizeToFitWidth:YES];
+
+        [containerView addSubview:self.userInfoLabel];
     }
 
     return self;
@@ -102,6 +110,8 @@
 #pragma mark - PAPPhotoHeaderView
 
 - (void)setPhoto:(PFObject *)aPhoto {
+    
+    
     photo = aPhoto;
 
     // user's avatar
@@ -145,6 +155,21 @@
     [self.timestampLabel setText:timestamp];
 
     [self setNeedsDisplay];
+    
+    NSString *industry = [user objectForKey:@"industry"];
+    NSString *location = [user objectForKey:@"location"];
+    NSString *separator = @" • ";
+    NSString *allInfo = @"";
+    
+    if(industry && location){
+       allInfo = [[industry stringByAppendingString:separator] stringByAppendingString:location];
+    }else if(!industry && location){
+        allInfo = location;
+    }else if(industry && !location){
+        allInfo = location;
+    }
+    
+    [self.userInfoLabel setText:allInfo];
 }
 
 

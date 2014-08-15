@@ -300,7 +300,6 @@ enum ActionSheetTags {
     
     // Add images to cache if not already present
     for (PFObject *object in self.objects) {
-        
         // Check if image in cache
         [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *image, SDImageCacheType cacheType) {
             if(!image){

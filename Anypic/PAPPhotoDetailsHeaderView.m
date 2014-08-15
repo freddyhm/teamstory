@@ -33,7 +33,7 @@
 #define nameLabelY avatarImageY+vertSmallSpacing
 #define nameLabelMaxWidth 305.0f - (horiBorderSpacing+avatarImageDim+horiMediumSpacing+horiBorderSpacing)
 
-#define timeLabelX nameLabelX
+#define timeLabelX 270.0f
 #define timeLabelMaxWidth nameLabelMaxWidth
 
 #define mainImageX baseHorizontalOffset
@@ -80,6 +80,7 @@ static CGSize expectedSize;
 @property (nonatomic, strong) UILabel *linkTitleLabel;
 @property (nonatomic, strong) UILabel *linkDescription;
 @property (nonatomic, strong) UILabel *linkUrlLabel;
+@property (nonatomic, strong) UILabel *userInfoLabel;
 
 // Redeclare for edit
 @property (nonatomic, strong, readwrite) PFUser *photographer;
@@ -123,6 +124,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         // Initialization code
         if (!timeFormatter) {
             timeFormatter = [[TTTTimeIntervalFormatter alloc] init];
+            [timeFormatter setUsesAbbreviatedCalendarUnits:YES];
         }
         
         self.photo = aPhoto;
@@ -424,11 +426,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.nameHeaderView = [[UIView alloc] initWithFrame:CGRectMake(nameHeaderX, nameHeaderY, nameHeaderWidth, nameHeaderHeight)];
         self.nameHeaderView.backgroundColor = [UIColor whiteColor];
         [self addSubview:self.nameHeaderView];
-        
-        UIButton *moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(270.0f, 8.0f, 30.0f, 30.0f)];
-        [moreActionButton setImage:[UIImage imageNamed:@"button-more.png"] forState:UIControlStateNormal];
-        [moreActionButton addTarget:self action:@selector(moreActionButton_action:) forControlEvents:UIControlEventTouchUpInside];
-        [self.nameHeaderView addSubview:moreActionButton];
+    
+    
+    
         
         // Load data for header
         [self.photographer fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
@@ -481,7 +481,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
                                                                            attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11], NSParagraphStyleAttributeName: paragraphStyle.copy}
                                                                               context:nil]).size;
             
-            UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(timeLabelX, nameLabelY+userButtonSize.height, timeLabelSize.width, timeLabelSize.height)];
+            UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(timeLabelX, 10.0f, timeLabelSize.width, timeLabelSize.height)];
             [timeLabel setText:timeString];
             [timeLabel setFont:[UIFont systemFontOfSize:11.0f]];
             [timeLabel setTextColor:[UIColor colorWithRed:124.0f/255.0f green:124.0f/255.0f blue:124.0f/255.0f alpha:1.0f]];
@@ -491,6 +491,31 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.nameHeaderView addSubview:timeLabel];
             
             [self setNeedsDisplay];
+            
+            
+            self.userInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50.0f, 20.0f, self.bounds.size.width - 50.0f - 72.0f, 18.0f)];
+            [self.userInfoLabel setTextColor:[UIColor colorWithRed:157.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
+            [self.userInfoLabel setFont:[UIFont systemFontOfSize:11.0f]];
+            [self.userInfoLabel setBackgroundColor:[UIColor clearColor]];
+            [self.userInfoLabel setAdjustsFontSizeToFitWidth:YES];
+            
+            NSString *industry = [object objectForKey:@"industry"];
+            NSString *location = [object objectForKey:@"location"];
+            NSString *userInfoSeparator = @" • ";
+            NSString *allInfo = @"";
+            
+            if(industry && location){
+                allInfo = [[industry stringByAppendingString:userInfoSeparator] stringByAppendingString:location];
+            }else if(!industry && location){
+                allInfo = location;
+            }else if(industry && !location){
+                allInfo = location;
+            }
+            
+            [self.userInfoLabel setText:allInfo];
+            
+            
+            [self.nameHeaderView addSubview:self.userInfoLabel];
         }];
     
         /*
@@ -523,8 +548,14 @@ static TTTTimeIntervalFormatter *timeFormatter;
         UIImageView *separator = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"SeparatorComments.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.0f, 1.0f, 0.0f, 1.0f)]];
         [separator setFrame:CGRectMake(0.0f, likeBarView.frame.size.height - 2.0f, likeBarView.frame.size.width, 2.0f)];
         [likeBarView addSubview:separator];
-        
+    
+        UIButton *moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(270.0f, self.likeBarView.frame.origin.y + 5.0f , 30.0f, 30.0f)];
+        [moreActionButton setImage:[UIImage imageNamed:@"button-more.png"] forState:UIControlStateNormal];
+        [moreActionButton addTarget:self action:@selector(moreActionButton_action:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:moreActionButton];
+    
         [self.hud hide:YES];
+    
 }
 
 - (void)moreActionButton_action:(id)sender{
