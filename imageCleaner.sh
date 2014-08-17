@@ -12,7 +12,7 @@ do
 		fi
 	done
 
-	for mfile in `find . -maxdepth 1 -name '*.m'`
+	for mfile in `find . -name '*.m'`
 	do 
 		if grep -qi "$name" "$mfile"; then
 			invocation=1
