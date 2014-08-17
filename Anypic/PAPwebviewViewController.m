@@ -16,6 +16,7 @@
 @property (nonatomic, strong) UIButton *backward_browse;
 @property (nonatomic, strong) UIButton *forward_browse;
 @property (nonatomic, strong) NSString *currentWebsite;
+@property (nonatomic, strong) UIActionSheet *actionSheet;
 
 
 @end
@@ -29,6 +30,7 @@
 @synthesize backward_browse;
 @synthesize forward_browse;
 @synthesize currentWebsite;
+@synthesize actionSheet;
 
 - (id)initWithWebsite:(NSString *)website{
     self = [super init];
@@ -41,7 +43,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     UIView *mainView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 64.0f, 320.0f, [UIScreen mainScreen].bounds.size.height - 64.0f)];
     [mainView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:mainView];
@@ -59,6 +61,13 @@
     [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     
+    UIButton *inflatorButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [inflatorButton setFrame:CGRectMake(0, 0, 19.0f, 25.0f)];
+    [inflatorButton addTarget:self action:@selector(inflatorButotnAction:) forControlEvents:UIControlEventTouchUpInside];
+    [inflatorButton setBackgroundImage:[UIImage imageNamed:@"btn_webview_options.png"] forState:UIControlStateNormal];
+    //[inflatorButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:inflatorButton];
+    
     self.webview = [[UIWebView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, mainView.bounds.size.width, mainView.bounds.size.height - 45.0f)];
     [self.webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:currentWebsite]]];
     self.webview.scalesPageToFit = YES;
@@ -73,7 +82,7 @@
     [backward_browse setImage:[UIImage imageNamed:@"browser-button-no.png"] forState:UIControlStateDisabled];
     backward_browse.enabled = NO;
     [browserBar addSubview:backward_browse];
-
+    
     forward_browse = [UIButton buttonWithType:UIButtonTypeCustom];
     [forward_browse setFrame:CGRectMake(browserBar.bounds.size.width - 42.0f, 11.5f, 22.0f, 22.0f)];
     [forward_browse addTarget:self action:@selector(forward_browseAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -86,6 +95,28 @@
     
     
 }
+
+-(void)inflatorButotnAction:(id)sender {
+    actionSheet = [[UIActionSheet alloc] init];
+    actionSheet.delegate = self;
+    [actionSheet addButtonWithTitle:@"Open in Safari"];
+    [actionSheet addButtonWithTitle:@"Copy Link"];
+    [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
+    [actionSheet showFromTabBar:self.tabBarController.tabBar];
+}
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if(buttonIndex == 0) {
+        //Open in Safari Button.
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:currentWebsite]];
+    } else if (buttonIndex == 1) {
+        //Copy Link Button.
+        UIPasteboard *pasteBoard = [UIPasteboard generalPasteboard];
+        pasteBoard.persistent = YES;
+        [pasteBoard setString:currentWebsite];
+    }
+}
+
 
 
 - (void)createFreshIcon{
