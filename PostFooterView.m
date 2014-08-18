@@ -59,7 +59,8 @@
             // comments button
             commentButton = [UIButton buttonWithType:UIButtonTypeCustom];
             [containerView addSubview:self.commentButton];
-            [self.commentButton setFrame:CGRectMake(39.0f, 8.0f, 30.0f, 30.0f)];
+            
+            [self.commentButton setFrame:CGRectMake(109.0f, 8.0f, 30.0f, 30.0f)];
             [self.commentButton setBackgroundColor:[UIColor clearColor]];
             [self.commentButton setTitle:@"" forState:UIControlStateNormal];
             [self.commentButton setTitleColor:[UIColor colorWithRed:113.0f/255.0f green:189.0f/255.0f blue:168.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
@@ -71,12 +72,25 @@
             [[self.commentButton titleLabel] setAdjustsFontSizeToFitWidth:YES];
             [self.commentButton setBackgroundImage:[UIImage imageNamed:@"IconComment.png"] forState:UIControlStateNormal];
             [self.commentButton setSelected:NO];
+            
+            self.commentCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.commentButton.frame.origin.x + self.commentButton.frame.size.width + 5.0f, self.commentButton.frame.origin.y + 10.0f, 10, 15)];
+            [self.commentCountLabel setFont:[UIFont systemFontOfSize:14.0f]];
+            [self.commentCountLabel setText:@"0"];
+
+            self.commentTitle = [[UILabel alloc] initWithFrame:CGRectMake(self.commentCountLabel.frame.origin.x + self.commentCountLabel.frame.size.width + 5.0, self.commentButton.frame.origin.y + 10.0f, 80, 15)];
+            [self.commentTitle setFont:[UIFont systemFontOfSize:14.0f]];
+            
+            [self.commentTitle setText:@" Comments"];
+            
+            [containerView addSubview:self.commentCountLabel];
+            [containerView addSubview:self.commentTitle];
         }
         
         if (self.buttons & PAPPhotoHeaderButtonsLike2) {
             // like button
             likeButton = [UIButton buttonWithType:UIButtonTypeCustom];
             [containerView addSubview:self.likeButton];
+            
             [self.likeButton setFrame:CGRectMake(4.0f, 8.0f, 30.0f, 30.0f)];
             [self.likeButton setBackgroundColor:[UIColor clearColor]];
             [self.likeButton setTitle:@"" forState:UIControlStateNormal];
@@ -94,6 +108,18 @@
             [self.likeButton setBackgroundImage:[UIImage imageNamed:@"ButtonLike.png"] forState:UIControlStateNormal];
             [self.likeButton setBackgroundImage:[UIImage imageNamed:@"ButtonLikeSelected.png"] forState:UIControlStateSelected];
             [self.likeButton setSelected:NO];
+            
+            self.likeCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.likeButton.frame.origin.x + self.likeButton.frame.size.width + 5.0f, self.likeButton.frame.origin.y + 10.0f, 10, 15)];
+            [self.likeCountLabel setFont:[UIFont systemFontOfSize:14.0f]];
+            [self.likeCountLabel setText:@"0"];
+            
+            self.likeTitle = [[UILabel alloc] initWithFrame:CGRectMake(self.likeCountLabel.frame.origin.x + self.likeCountLabel.frame.size.width + 5.0f, self.likeButton.frame.origin.y + 10.0f, 40, 15)];
+            [self.likeTitle setText:@" Likes"];
+            [self.likeTitle setFont:self.likeCountLabel.font];
+            
+            [containerView addSubview:self.likeCountLabel];
+            [containerView addSubview:self.likeTitle];
+            
         }
                 
         self.moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(270.0f, 8.0f, 30.0f, 30.0f)];
@@ -119,6 +145,14 @@
 
 - (void)setPhoto:(PFObject *)aPhoto {
     photo = aPhoto;    
+}
+
+- (void)setLikeCount:(NSNumber *)count{
+    self.likeCountLabel.text = [count stringValue];
+}
+
+- (void)setCommentCount:(NSNumber *)count{
+    self.commentCountLabel.text = [count stringValue];
 }
 
 - (void)setLikeStatus:(BOOL)liked {

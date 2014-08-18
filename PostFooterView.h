@@ -34,9 +34,13 @@ typedef enum {
 
 /// The Like Photo button
 @property (nonatomic,readonly) UIButton *likeButton;
+@property (nonatomic,strong) UILabel *likeTitle;
+@property (nonatomic,strong) UILabel *likeCountLabel;
 
 /// The Comment On Photo button
 @property (nonatomic,readonly) UIButton *commentButton;
+@property (nonatomic, strong) UILabel *commentTitle;
+@property (nonatomic,strong) UILabel *commentCountLabel;
 
 /*! @name Delegate */
 @property (nonatomic,weak) id <PostFooterViewDelegate> delegate;
@@ -54,6 +58,10 @@ typedef enum {
  @param enable a BOOL indicating if the like button should be enabled.
  */
 - (void)shouldEnableLikeButton:(BOOL)enable;
+
+- (void)setLikeCount:(NSNumber *)count;
+- (void)setCommentCount:(NSNumber *)count;
+
 
 @end
 
@@ -79,4 +87,6 @@ typedef enum {
 - (void)postFooterView:(PostFooterView *)postFooterView didTapCommentOnPhotoButton:(UIButton *)button photo:(PFObject *)photo;
 
 - (void) moreActionButton_inflator:(PFUser *)user photo:(PFObject *)photo;
+
+
 @end

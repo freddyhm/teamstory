@@ -652,7 +652,9 @@ enum ActionSheetTags {
     if (attributesForPhoto) {
         [cell.footerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:object]];
         [cell.footerView.likeButton setTitle:[[[PAPCache sharedCache] likeCountForPhoto:object] description] forState:UIControlStateNormal];
+        [cell.footerView setLikeCount:[[PAPCache sharedCache] likeCountForPhoto:object]];
         [cell.footerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:object] description] forState:UIControlStateNormal];
+        [cell.footerView setCommentCount:[[PAPCache sharedCache] commentCountForPhoto:object]];
         
         if (cell.footerView.likeButton.alpha < 1.0f || cell.footerView.commentButton.alpha < 1.0f) {
             [UIView animateWithDuration:0.200f animations:^{
@@ -706,6 +708,9 @@ enum ActionSheetTags {
                         [cell.footerView.likeButton setTitle:[[[PAPCache sharedCache] likeCountForPhoto:object] description] forState:UIControlStateNormal];
                         [cell.footerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:object] description] forState:UIControlStateNormal];
                         
+                        [cell.footerView setLikeCount:[[PAPCache sharedCache] likeCountForPhoto:object]];
+                        [cell.footerView setCommentCount:[[PAPCache sharedCache] commentCountForPhoto:object]];
+                        
                         if (cell.footerView.likeButton.alpha < 1.0f || cell.footerView.commentButton.alpha < 1.0f) {
                             [UIView animateWithDuration:0.200f animations:^{
                                 cell.footerView.likeButton.alpha = 1.0f;
@@ -753,10 +758,13 @@ enum ActionSheetTags {
     
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-    
     NSNumber *likeCount = [numberFormatter numberFromString:button.titleLabel.text];
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:button.tag];
+    PAPPhotoCell *cell = (PAPPhotoCell *)[self.feed cellForRowAtIndexPath:indexPath];
+    PostFooterView *actualFooterView = cell.footerView;
+    
     if (liked) {
-        
         // analytics
         [PAPUtility captureEventGA:@"Engagement" action:@"Like" label:@"Photo"];
         
@@ -769,6 +777,8 @@ enum ActionSheetTags {
         [[PAPCache sharedCache] decrementLikerCountForPhoto:photo];
     }
     
+    [actualFooterView setLikeCount:likeCount];
+    
     [[PAPCache sharedCache] setPhotoIsLikedByCurrentUser:photo liked:liked];
     
     if (liked == YES) {
@@ -776,33 +786,21 @@ enum ActionSheetTags {
     } else if (liked == NO) {
         [button setTitle:[numberFormatter stringFromNumber:likeCount] forState:UIControlStateNormal];
     }
-    
-    
 
     
     if (liked) {
         [PAPUtility likePhotoInBackground:photo block:^(BOOL succeeded, NSError *error) {
-            
-            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:button.tag];
-            PAPPhotoCell *cell = (PAPPhotoCell *)[self.feed cellForRowAtIndexPath:indexPath];
-            PostFooterView *actualFooterView = cell.footerView;
-            
             [actualFooterView shouldEnableLikeButton:YES];
             [actualFooterView setLikeStatus:succeeded];
-            
             if (!succeeded) {
                 [actualFooterView.likeButton setTitle:originalButtonTitle forState:UIControlStateNormal];
+                
             }
         }];
     } else {
         [PAPUtility unlikePhotoInBackground:photo block:^(BOOL succeeded, NSError *error) {
-            
-            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:button.tag];
-            PAPPhotoCell *cell = (PAPPhotoCell *)[self.feed cellForRowAtIndexPath:indexPath];
-            PostFooterView *actualFooterView = cell.footerView;
             [actualFooterView shouldEnableLikeButton:YES];
             [actualFooterView setLikeStatus:!succeeded];
-            
             if (!succeeded) {
                 [actualFooterView.likeButton setTitle:originalButtonTitle forState:UIControlStateNormal];
             }
