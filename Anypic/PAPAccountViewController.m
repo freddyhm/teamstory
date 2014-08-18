@@ -770,13 +770,11 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         
         self.objects = [NSMutableArray arrayWithArray:objects];
         
-        /*
         if(completionBlock){
             completionBlock([super objectsDidLoad:error]);
         }else{
             [super objectsDidLoad:error];
         }
-         */
     }];
 }
 
