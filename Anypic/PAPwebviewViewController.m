@@ -7,6 +7,7 @@
 //
 
 #import "PAPwebviewViewController.h"
+#import "OpenInChromeController.h"
 
 @interface PAPwebviewViewController ()
 @property (nonatomic, strong) UIWebView *webview;
@@ -17,6 +18,7 @@
 @property (nonatomic, strong) UIButton *forward_browse;
 @property (nonatomic, strong) NSString *currentWebsite;
 @property (nonatomic, strong) UIActionSheet *actionSheet;
+@property (nonatomic, strong) OpenInChromeController *openInChrome;
 
 
 @end
@@ -68,6 +70,9 @@
     //[inflatorButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:inflatorButton];
     
+    // google class
+    self.openInChrome =  [[OpenInChromeController alloc] init];
+    
     self.webview = [[UIWebView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, mainView.bounds.size.width, mainView.bounds.size.height - 45.0f)];
     [self.webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:currentWebsite]]];
     self.webview.scalesPageToFit = YES;
@@ -99,6 +104,12 @@
 -(void)inflatorButotnAction:(id)sender {
     actionSheet = [[UIActionSheet alloc] init];
     actionSheet.delegate = self;
+    
+    // add chrome option if installed
+    if ([self.openInChrome isChromeInstalled]) {
+        [actionSheet addButtonWithTitle:@"Open in Chrome"];
+    }
+    
     [actionSheet addButtonWithTitle:@"Open in Safari"];
     [actionSheet addButtonWithTitle:@"Copy Link"];
     [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
@@ -106,10 +117,27 @@
 }
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
     if(buttonIndex == 0) {
-        //Open in Safari Button.
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:currentWebsite]];
+        // check if chrome is installed (menu change to 1. chrome 2. safari 3. copy)
+        if (![self.openInChrome isChromeInstalled]) {
+            //Open in Safari Button.
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:currentWebsite]];
+        }else{
+            [self.openInChrome openInChrome:[NSURL URLWithString:currentWebsite]];
+        }
     } else if (buttonIndex == 1) {
+        if (![self.openInChrome isChromeInstalled]) {
+            //Copy Link Button.
+            UIPasteboard *pasteBoard = [UIPasteboard generalPasteboard];
+            pasteBoard.persistent = YES;
+            [pasteBoard setString:currentWebsite];
+        }else{
+            //Open in Safari Button.
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:currentWebsite]];
+        }
+        
+    }else if (buttonIndex == 2){
         //Copy Link Button.
         UIPasteboard *pasteBoard = [UIPasteboard generalPasteboard];
         pasteBoard.persistent = YES;

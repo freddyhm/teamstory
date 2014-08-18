@@ -450,6 +450,9 @@
 		D5D571161947F8E900354340 /* btn_following_user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571121947F8E900354340 /* btn_following_user@2x.png */; };
 		D5D571171947F8E900354340 /* btn_no_follow_user.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571131947F8E900354340 /* btn_no_follow_user.png */; };
 		D5D571181947F8E900354340 /* btn_no_follow_user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571141947F8E900354340 /* btn_no_follow_user@2x.png */; };
+		D5E1E5AC19A1A72800C87A5D /* OpenInChromeController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5E1E5AB19A1A72800C87A5D /* OpenInChromeController.m */; };
+		D5E1E5AF19A1AAFB00C87A5D /* btn_webview_options@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5E1E5AD19A1AAFB00C87A5D /* btn_webview_options@2x.png */; };
+		D5E1E5B019A1AAFB00C87A5D /* btn_webview_options.png in Resources */ = {isa = PBXBuildFile; fileRef = D5E1E5AE19A1AAFB00C87A5D /* btn_webview_options.png */; };
 		D5F45AFF196CE6A9001C2875 /* btn_camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5F45AFD196CE6A9001C2875 /* btn_camera@2x.png */; };
 		D5F45B00196CE6A9001C2875 /* btn_camera.png in Resources */ = {isa = PBXBuildFile; fileRef = D5F45AFE196CE6A9001C2875 /* btn_camera.png */; };
 		D5F45B03196CE6DE001C2875 /* select_overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = D5F45B01196CE6DE001C2875 /* select_overlay.png */; };
@@ -1008,6 +1011,10 @@
 		D5D65A0719155E6F00FAC142 /* photo.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = photo.js; sourceTree = "<group>"; };
 		D5D65A0919155E6F00FAC142 /* global.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = global.json; sourceTree = "<group>"; };
 		D5D65A0B19155E6F00FAC142 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		D5E1E5AA19A1A72800C87A5D /* OpenInChromeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenInChromeController.h; sourceTree = SOURCE_ROOT; };
+		D5E1E5AB19A1A72800C87A5D /* OpenInChromeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenInChromeController.m; sourceTree = SOURCE_ROOT; };
+		D5E1E5AD19A1AAFB00C87A5D /* btn_webview_options@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_webview_options@2x.png"; sourceTree = "<group>"; };
+		D5E1E5AE19A1AAFB00C87A5D /* btn_webview_options.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_webview_options.png; sourceTree = "<group>"; };
 		D5F45AFD196CE6A9001C2875 /* btn_camera@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_camera@2x.png"; sourceTree = "<group>"; };
 		D5F45AFE196CE6A9001C2875 /* btn_camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_camera.png; sourceTree = "<group>"; };
 		D5F45B01196CE6DE001C2875 /* select_overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select_overlay.png; sourceTree = "<group>"; };
@@ -1170,6 +1177,8 @@
 		46ABD75C18B53C1D008F5AAB /* webview */ = {
 			isa = PBXGroup;
 			children = (
+				D5E1E5AA19A1A72800C87A5D /* OpenInChromeController.h */,
+				D5E1E5AB19A1A72800C87A5D /* OpenInChromeController.m */,
 				46ABD75D18B53C46008F5AAB /* PAPwebviewViewController.h */,
 				46ABD75E18B53C46008F5AAB /* PAPwebviewViewController.m */,
 			);
@@ -1205,6 +1214,8 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				D5E1E5AD19A1AAFB00C87A5D /* btn_webview_options@2x.png */,
+				D5E1E5AE19A1AAFB00C87A5D /* btn_webview_options.png */,
 				469CF3681996FB4D0081FCED /* signup.png */,
 				469CF3691996FB4D0081FCED /* signup@2x.png */,
 				469CF36A1996FB4D0081FCED /* btn_email_select.png */,
@@ -2076,6 +2087,7 @@
 				462FCB7B188C806C005059F3 /* button_done.png in Resources */,
 				46A2FE461963562100D8ED12 /* Thought Popup.png in Resources */,
 				C4F102E2156C58440061BC3E /* Entitlements.plist in Resources */,
+				D5E1E5B019A1AAFB00C87A5D /* btn_webview_options.png in Resources */,
 				4691B4F418BEF61C00B7DF6A /* follow.png in Resources */,
 				467A40C81993056C00D4C693 /* btn_email.png in Resources */,
 				D5D1042C18B5CF4E0084C901 /* button-feedback@2x.png in Resources */,
@@ -2299,6 +2311,7 @@
 				467154A718835E470000C0CA /* privacy@2x.png in Resources */,
 				465A4EE618A83D5100E43DC6 /* share@2x.png in Resources */,
 				469CF3721996FB4D0081FCED /* btn_email_select.png in Resources */,
+				D5E1E5AF19A1AAFB00C87A5D /* btn_webview_options@2x.png in Resources */,
 				4691B4F018BEF61200B7DF6A /* unfollow.png in Resources */,
 				467A40C31990227700D4C693 /* btn_dropdown@2x.png in Resources */,
 				46A2FE531963572E00D8ED12 /* Thought Popup_selected@2x.png in Resources */,
@@ -2537,6 +2550,7 @@
 				C4A6A246158FF842003F64A8 /* MBProgressHUD.m in Sources */,
 				46E1EB6F183BCA6300F64274 /* PAPProfileSettingViewController.m in Sources */,
 				D542D8C0196A6F4700A0384F /* ELCAssetCell.m in Sources */,
+				D5E1E5AC19A1A72800C87A5D /* OpenInChromeController.m in Sources */,
 				D5903C75192EBBF900DC9896 /* ThoughtPostViewController.m in Sources */,
 				46C6FC0E198AA62900BC99D5 /* PAPprofileSetupViewController.m in Sources */,
 				C47DDDE61592761F002114F6 /* Reachability.m in Sources */,
