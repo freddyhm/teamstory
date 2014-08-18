@@ -52,7 +52,7 @@ extern NSString *const PAPTabBarControllerDidFinishImageFileUploadNotification;
 extern NSString *const PAPPhotoDetailsViewControllerUserDeletedPhotoNotification;
 extern NSString *const PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotification;
 extern NSString *const PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification;
-
+extern NSString *const PAPProfileSettingViewControllerUserChangedProfile;
 
 #pragma mark - User Info Keys
 extern NSString *const PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotificationUserInfoLikedKey;

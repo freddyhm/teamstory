@@ -73,7 +73,7 @@ enum ActionSheetTags {
     
     // Remove cell separator
     [self.feed setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-
+    
     UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
     texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     self.feed.backgroundView = texturedBackgroundView;
@@ -85,13 +85,24 @@ enum ActionSheetTags {
      
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidPublishPhoto:) name:PAPTabBarControllerDidFinishEditingPhotoNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userFollowingChanged:) name:PAPUtilityUserFollowingChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidDeletePhoto:) name:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLikeOrUnlikePhoto:) name:PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLikeOrUnlikePhoto:) name:PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidCommentOnPhoto:) name:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidChangeProfile:) name:PAPProfileSettingViewControllerUserChangedProfile object:nil];
     
     [self loadObjects:nil isRefresh:NO];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    
+    // Refresh timeline if user has recently updated their profile
+    BOOL isHome = [[self.navigationController.viewControllers lastObject] isKindOfClass:PAPHomeViewController.class];
+    
+    if(self.shouldReloadOnAppear && isHome){
+        [self loadObjects:nil isRefresh:YES];
+        self.shouldReloadOnAppear = NO;
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -110,6 +121,10 @@ enum ActionSheetTags {
     }
     
     return nil;
+}
+
+- (void)userDidChangeProfile:(NSNotification *)note {
+    self.shouldReloadOnAppear = YES;
 }
 
 - (void)userDidLikeOrUnlikePhoto:(NSNotification *)note {
@@ -151,10 +166,6 @@ enum ActionSheetTags {
     [self loadObjects:nil isRefresh:YES];
 }
 
-- (void)userFollowingChanged:(NSNotification *)note {
-    NSLog(@"User following changed.");
-    self.shouldReloadOnAppear = YES;
-}
 
 - (void)didTapOnPhotoAction:(UIButton *)sender {
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];

@@ -166,7 +166,7 @@
     }else if(!industry && location){
         allInfo = location;
     }else if(industry && !location){
-        allInfo = location;
+        allInfo = industry;
     }
     
     [self.userInfoLabel setText:allInfo];
