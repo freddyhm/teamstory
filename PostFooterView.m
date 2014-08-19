@@ -63,7 +63,7 @@
             commentButton = [UIButton buttonWithType:UIButtonTypeCustom];
             [containerView addSubview:self.commentButton];
             
-            [self.commentButton setFrame:CGRectMake(109.0f, 8.0f, 30.0f, 30.0f)];
+            [self.commentButton setFrame:CGRectMake(109.0f, 9.0f, 25.0f, 25.0f)];
             [self.commentButton setBackgroundColor:[UIColor clearColor]];
             [self.commentButton setTitle:@"" forState:UIControlStateNormal];
             [self.commentButton setTitleColor:[UIColor colorWithRed:113.0f/255.0f green:189.0f/255.0f blue:168.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
@@ -77,14 +77,14 @@
             [self.commentButton setSelected:NO];
             
             self.commentCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.commentButton.frame.origin.x + self.commentButton.frame.size.width + 5.0f, self.commentButton.frame.origin.y + 7.0f, 10, 15)];
-            [self.commentCountLabel setFont:[UIFont systemFontOfSize:14.0f]];
+            [self.commentCountLabel setFont:[UIFont systemFontOfSize:12.0f]];
             [self.commentCountLabel setText:@"0"];
             [self.commentCountLabel setTextColor:likeCommentColor];
 
             self.commentTitle = [[UILabel alloc] initWithFrame:CGRectMake(self.commentCountLabel.frame.origin.x + self.commentCountLabel.frame.size.width, self.commentButton.frame.origin.y + 7.0f, 80, 15)];
             
             [self.commentTitle setTextColor:likeCommentColor];
-            [self.commentTitle setFont:[UIFont systemFontOfSize:14.0f]];
+            [self.commentTitle setFont:[UIFont systemFontOfSize:12.0f]];
             [self.commentTitle setText:@" Comments"];
             
             [containerView addSubview:self.commentCountLabel];
@@ -96,7 +96,7 @@
             likeButton = [UIButton buttonWithType:UIButtonTypeCustom];
             [containerView addSubview:self.likeButton];
             
-            [self.likeButton setFrame:CGRectMake(4.0f, 8.0f, 30.0f, 30.0f)];
+            [self.likeButton setFrame:CGRectMake(10.0f, 9.0f, 25.0f, 25.0f)];
             [self.likeButton setBackgroundColor:[UIColor clearColor]];
             [self.likeButton setTitle:@"" forState:UIControlStateNormal];
             [self.likeButton setTitleColor:[UIColor colorWithRed:245.0f/255.0f green:137.0f/255.0f blue:137.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
@@ -115,7 +115,7 @@
             [self.likeButton setSelected:NO];
             
             self.likeCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.likeButton.frame.origin.x + self.likeButton.frame.size.width + 5.0f, self.likeButton.frame.origin.y + 7.0f, 10, 15)];
-            [self.likeCountLabel setFont:[UIFont systemFontOfSize:14.0f]];
+            [self.likeCountLabel setFont:[UIFont systemFontOfSize:12.0f]];
             [self.likeCountLabel setText:@"0"];
             [self.likeCountLabel setTextColor:likeCommentColor];
             
@@ -129,7 +129,7 @@
             
         }
                 
-        self.moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(280.0f, 8.0f, 30.0f, 30.0f)];
+        self.moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(280.0f, 7.0f, 30.0f, 30.0f)];
         [self.moreActionButton setImage:[UIImage imageNamed:@"button-more.png"] forState:UIControlStateNormal];
         [self.moreActionButton addTarget:self action:@selector(moreActionButton_action:) forControlEvents:UIControlEventTouchUpInside];
         [containerView addSubview:self.moreActionButton];
@@ -160,12 +160,12 @@
     CGSize likeExpectedSize = [self.likeCountLabel.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.0f]}];
     
     // Update like count frame to fit new count
-    [self.likeCountLabel setFrame:CGRectMake(self.likeButton.frame.origin.x + self.likeButton.frame.size.width + 5.0f, self.likeButton.frame.origin.y + 7.0f, likeExpectedSize.width, 15)];
+    [self.likeCountLabel setFrame:CGRectMake(self.likeButton.frame.origin.x + self.likeButton.frame.size.width + 5.0f, self.likeButton.frame.origin.y + 5.0f, likeExpectedSize.width, 15)];
     
     //[self.likeCountLabel setBackgroundColor:[UIColor redColor]];
     
     // Update like title
-    [self.likeTitle setFrame:CGRectMake(self.likeCountLabel.frame.origin.x + likeExpectedSize.width + 2.0f, self.likeButton.frame.origin.y + 7.0f, 40, 15)];
+    [self.likeTitle setFrame:CGRectMake(self.likeCountLabel.frame.origin.x + likeExpectedSize.width + 2.0f, self.likeButton.frame.origin.y + 5.0f, 40, 15)];
 }
 
 - (void)setCommentCount:(NSNumber *)count{
@@ -175,12 +175,12 @@
     CGSize commentExpectedSize = [self.commentCountLabel.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14.0f]}];
     
      // Update comment count label frame to fit new count
-     [self.commentCountLabel setFrame:CGRectMake(self.commentButton.frame.origin.x + self.commentButton.frame.size.width + 5.0f, self.commentButton.frame.origin.y + 7.0f, commentExpectedSize.width, 15)];
+     [self.commentCountLabel setFrame:CGRectMake(self.commentButton.frame.origin.x + self.commentButton.frame.size.width + 5.0f, self.commentButton.frame.origin.y + 5.0f, commentExpectedSize.width, 15)];
     
     //[self.commentTitle setBackgroundColor:[UIColor redColor]];
     
     // Update comment title
-    [self.commentTitle setFrame:CGRectMake(self.commentCountLabel.frame.origin.x + commentExpectedSize.width + 2.0f, self.commentButton.frame.origin.y + 7.0f, 80, 15)];
+    [self.commentTitle setFrame:CGRectMake(self.commentCountLabel.frame.origin.x + commentExpectedSize.width + 2.0f, self.commentButton.frame.origin.y + 5.0f, 80, 15)];
 }
 
 - (void)setLikeStatus:(BOOL)liked {
