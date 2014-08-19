@@ -74,18 +74,19 @@
         }
         
         UIImageView *clockImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_clock.png"]];
-        [clockImg setFrame:CGRectMake(277.0f, 15.0f, clockImg.frame.size.width, clockImg.frame.size.height)];
+        [clockImg setFrame:CGRectMake(281.0f, 15.0f, clockImg.frame.size.width, clockImg.frame.size.height)];
         [self.containerView addSubview:clockImg];
     
         self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
         // timestamp
-        self.timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(288.0f, 10.0f, containerView.bounds.size.width - 50.0f - 72.0f, 18.0f)];
+        self.timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(288.0f, 10.0f, 20.0f, 18.0f)];
         [containerView addSubview:self.timestampLabel];
         [self.timestampLabel setTextColor:[UIColor colorWithRed:160.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
         //[self.timestampLabel setShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f]];
         //[self.timestampLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
         [self.timestampLabel setFont:[UIFont systemFontOfSize:9.0f]];
         [self.timestampLabel setBackgroundColor:[UIColor clearColor]];
+        self.timestampLabel.textAlignment = NSTextAlignmentRight;
         /*
         CALayer *layer = [containerView layer];
         layer.backgroundColor = [[UIColor whiteColor] CGColor];
