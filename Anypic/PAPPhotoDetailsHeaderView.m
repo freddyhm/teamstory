@@ -640,7 +640,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 + (CGRect)rectForView {
-    return CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 408.0f);
+    return CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 406.0f);
 }
 
 - (void)openUrl:(id)sender {
