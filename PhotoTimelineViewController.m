@@ -75,7 +75,7 @@ enum ActionSheetTags {
     [self.feed setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
     UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
-    texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
+    texturedBackgroundView.backgroundColor = [UIColor blackColor];
     self.feed.backgroundView = texturedBackgroundView;
     
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];

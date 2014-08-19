@@ -129,7 +129,7 @@ static inline NSCalendarUnit NSCalendarUnitFromString(NSString *string) {
         NSNumber *number = [NSNumber numberWithInteger:abs((int)[[components valueForKey:unitName] integerValue])];
         if ([number integerValue]) {
             if (!string) {
-                string = [NSString stringWithFormat:@"%@ %@", number, [self localizedStringForNumber:[number integerValue] ofCalendarUnit:NSCalendarUnitFromString(unitName)]];
+                string = [NSString stringWithFormat:@"%@%@", number, [self localizedStringForNumber:[number integerValue] ofCalendarUnit:NSCalendarUnitFromString(unitName)]];
             } else {
                 isApproximate = YES;
             }
@@ -157,19 +157,19 @@ static inline NSCalendarUnit NSCalendarUnitFromString(NSString *string) {
     if (self.usesAbbreviatedCalendarUnits) {
         switch (unit) {
             case NSYearCalendarUnit:
-                return singular ? NSLocalizedString(@"yr.", @"Year Unit (Singular, Abbreviated)") : NSLocalizedString(@"yrs.", @"Year Unit (Plural, Abbreviated)");                
+                return singular ? NSLocalizedString(@"y", @"Year Unit (Singular, Abbreviated)") : NSLocalizedString(@"y", @"Year Unit (Plural, Abbreviated)");
             case NSMonthCalendarUnit:
-                return singular ? NSLocalizedString(@"mo.", @"Month Unit (Singular, Abbreviated)") : NSLocalizedString(@"mos.", @"Month Unit (Plural, Abbreviated)");
+                return singular ? NSLocalizedString(@"mo", @"Month Unit (Singular, Abbreviated)") : NSLocalizedString(@"mo", @"Month Unit (Plural, Abbreviated)");
             case NSWeekCalendarUnit:
-                return singular ? NSLocalizedString(@"wk.", @"Week Unit (Singular, Abbreviated)") : NSLocalizedString(@"wks.", @"Week Unit (Plural, Abbreviated)");
+                return singular ? NSLocalizedString(@"w", @"Week Unit (Singular, Abbreviated)") : NSLocalizedString(@"w", @"Week Unit (Plural, Abbreviated)");
             case NSDayCalendarUnit:
                 return singular ? NSLocalizedString(@"d", @"Day Unit (Singular, Abbreviated)") : NSLocalizedString(@"d", @"Day Unit (Plural, Abbreviated)");
             case NSHourCalendarUnit:
-                return singular ? NSLocalizedString(@"hr", @"Hour Unit (Singular, Abbreviated)") : NSLocalizedString(@"hrs.", @"Hour Unit (Plural, Abbreviated)");
+                return singular ? NSLocalizedString(@"h", @"Hour Unit (Singular, Abbreviated)") : NSLocalizedString(@"h", @"Hour Unit (Plural, Abbreviated)");
             case NSMinuteCalendarUnit:
-                return singular ? NSLocalizedString(@"min.", @"Minute Unit (Singular, Abbreviated)") : NSLocalizedString(@"mins.", @"Minute Unit (Plural, Abbreviated)");
+                return singular ? NSLocalizedString(@"m", @"Minute Unit (Singular, Abbreviated)") : NSLocalizedString(@"m", @"Minute Unit (Plural, Abbreviated)");
             case NSSecondCalendarUnit:
-                return singular ? NSLocalizedString(@"s.", @"Second Unit (Singular, Abbreviated)") : NSLocalizedString(@"s.", @"Second Unit (Plural, Abbreviated)");
+                return singular ? NSLocalizedString(@"s", @"Second Unit (Singular, Abbreviated)") : NSLocalizedString(@"s", @"Second Unit (Plural, Abbreviated)");
                 // Parse fork: silence unhandled enum error
             default: NSLog(@"Warning: unexpected unit :%d", (int)unit);
         }

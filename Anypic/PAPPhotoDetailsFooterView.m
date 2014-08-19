@@ -31,10 +31,6 @@
         mainView.backgroundColor = [UIColor whiteColor];
         [self addSubview:mainView];
         
-        UIImageView *messageIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"IconAddComment.png"]];
-        messageIcon.frame = CGRectMake( 4.0f, 10.0f, 30.0f, 30.0f);
-        [mainView addSubview:messageIcon];
-        
         /*
         commentField = [[UITextField alloc] initWithFrame:CGRectMake( 40.0f, 10.0f, 255.0f, 31.0f)];
         commentField.backgroundColor = [UIColor colorWithRed:231.0f/255.0f green:231.0f/255.0f blue:231.0f/255.0f alpha:1.0f];
@@ -51,7 +47,7 @@
          
          
         
-        commentView = [[UITextView alloc] initWithFrame:CGRectMake( 40.0f, 10.0f, 255.0f, 31.0f)];
+        commentView = [[UITextView alloc] initWithFrame:CGRectMake(10.0f, 10.0f, 295.0f, 31.0f)];
         commentView.backgroundColor = [UIColor colorWithRed:231.0f/255.0f green:231.0f/255.0f blue:231.0f/255.0f alpha:1.0f];
         commentView.font = [UIFont systemFontOfSize:12.0f];
         commentView.text = @"Add a comment";

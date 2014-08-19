@@ -427,6 +427,8 @@
 		D542D8C4196A6F4700A0384F /* ELCAssetPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = D542D8BA196A6F4700A0384F /* ELCAssetPicker.xib */; };
 		D542D8C5196A6F4700A0384F /* ELCAssetTablePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = D542D8BB196A6F4700A0384F /* ELCAssetTablePicker.xib */; };
 		D542D8C9196A721B00A0384F /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D542D8C8196A721B00A0384F /* AssetsLibrary.framework */; };
+		D55D2AA019A2DF16009195FA /* icon_clock@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D55D2A9E19A2DF16009195FA /* icon_clock@2x.png */; };
+		D55D2AA119A2DF16009195FA /* icon_clock.png in Resources */ = {isa = PBXBuildFile; fileRef = D55D2A9F19A2DF16009195FA /* icon_clock.png */; };
 		D5654177196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = D5654176196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.m */; };
 		D56D466519884C33001FAA76 /* PhotoTimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D56D466319884C33001FAA76 /* PhotoTimelineViewController.m */; };
 		D56D466619884C33001FAA76 /* PhotoTimelineViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D56D466419884C33001FAA76 /* PhotoTimelineViewController.xib */; };
@@ -1023,6 +1025,8 @@
 		D542D8BA196A6F4700A0384F /* ELCAssetPicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ELCAssetPicker.xib; sourceTree = "<group>"; };
 		D542D8BB196A6F4700A0384F /* ELCAssetTablePicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ELCAssetTablePicker.xib; sourceTree = "<group>"; };
 		D542D8C8196A721B00A0384F /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		D55D2A9E19A2DF16009195FA /* icon_clock@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_clock@2x.png"; sourceTree = "<group>"; };
+		D55D2A9F19A2DF16009195FA /* icon_clock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_clock.png; sourceTree = "<group>"; };
 		D5654175196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALAssetsLibrary+CustomPhotoAlbum.h"; sourceTree = "<group>"; };
 		D5654176196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALAssetsLibrary+CustomPhotoAlbum.m"; sourceTree = "<group>"; };
 		D56D466219884C33001FAA76 /* PhotoTimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoTimelineViewController.h; sourceTree = SOURCE_ROOT; };
@@ -1320,6 +1324,8 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				D55D2A9E19A2DF16009195FA /* icon_clock@2x.png */,
+				D55D2A9F19A2DF16009195FA /* icon_clock.png */,
 				469CF3681996FB4D0081FCED /* signup.png */,
 				469CF3691996FB4D0081FCED /* signup@2x.png */,
 				469CF36A1996FB4D0081FCED /* btn_email_select.png */,
@@ -1732,6 +1738,8 @@
 		74B86B911562DB2600CAFFD2 /* PhotoViews */ = {
 			isa = PBXGroup;
 			children = (
+				D5FC095618A9B552000D85F1 /* FilterCell.h */,
+				D5FC095718A9B552000D85F1 /* FilterCell.m */,
 				C4F102A7156C57620061BC3E /* PAPPhotoDetailsHeaderView.h */,
 				C4F102A8156C57620061BC3E /* PAPPhotoDetailsHeaderView.m */,
 				C4F102A5156C57620061BC3E /* PAPPhotoDetailsFooterView.h */,
@@ -1816,7 +1824,7 @@
 			path = MBProgressHUD;
 			sourceTree = "<group>";
 		};
-		C4A894921558795F00DC57D3 /* Home */ = {
+		C4A894921558795F00DC57D3 /* Home & Timeline */ = {
 			isa = PBXGroup;
 			children = (
 				462B363C1880AB5D008C28AE /* discoverPageViewController.h */,
@@ -1832,7 +1840,7 @@
 				D56D466219884C33001FAA76 /* PhotoTimelineViewController.h */,
 				D56D466319884C33001FAA76 /* PhotoTimelineViewController.m */,
 			);
-			name = Home;
+			name = "Home & Timeline";
 			sourceTree = "<group>";
 		};
 		C4A894931558796400DC57D3 /* Settings */ = {
@@ -1855,8 +1863,6 @@
 				D5FC095418A9B543000D85F1 /* CameraFilterViewController.m */,
 				C4F102DA156C58170061BC3E /* PAPEditPhotoViewController.h */,
 				C4F102DB156C58170061BC3E /* PAPEditPhotoViewController.m */,
-				D5FC095618A9B552000D85F1 /* FilterCell.h */,
-				D5FC095718A9B552000D85F1 /* FilterCell.m */,
 				D5903C72192EBBF900DC9896 /* ThoughtPostViewController.h */,
 				D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */,
 				46A1DCAB195BB6F100729FD0 /* PAPlinkPostViewController.h */,
@@ -1872,7 +1878,7 @@
 				46ABD75C18B53C1D008F5AAB /* webview */,
 				46E1EB6C183BCA4600F64274 /* ProfileSetting */,
 				74A504E51565F17E00CFA4E3 /* Login */,
-				C4A894921558795F00DC57D3 /* Home */,
+				C4A894921558795F00DC57D3 /* Home & Timeline */,
 				C4A894941558796C00DC57D3 /* Photo & Post */,
 				C4BB4B85156D5CB7008B4B56 /* Activity */,
 				74A504E41565F13C00CFA4E3 /* Detail */,
@@ -2330,6 +2336,7 @@
 				C4BE6714157FC7D000A291C2 /* iTunesArtwork in Resources */,
 				D57684061933F8CF008BAA2C /* IconHomeSelected.png in Resources */,
 				D52C1E3018D9515D00625887 /* konotor_cross@2x.png in Resources */,
+				D55D2AA019A2DF16009195FA /* icon_clock@2x.png in Resources */,
 				46FB0A991888E4C200E978CD /* bg@2x.png in Resources */,
 				467A40D71993059300D4C693 /* bg_textfield@2x.png in Resources */,
 				462FCB7A188C806C005059F3 /* button_cancel@2x.png in Resources */,
@@ -2549,6 +2556,7 @@
 				4602FCF818BAB2CA0097DBEC /* hipchat@2x.png in Resources */,
 				4602FD2018BD553B0097DBEC /* slingbot-logo.png in Resources */,
 				46FB0A831888989800E978CD /* tab-startup-selected@2x.png in Resources */,
+				D55D2AA119A2DF16009195FA /* icon_clock.png in Resources */,
 				46FB0A7E1888989800E978CD /* tab-product-selected.png in Resources */,
 				469CF3751996FB4D0081FCED /* btn_facebook_select@2x.png in Resources */,
 				C4BE67B7157FC7F700A291C2 /* LogoNavigationBar.png in Resources */,
