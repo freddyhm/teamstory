@@ -129,7 +129,7 @@
             
         }
                 
-        self.moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(270.0f, 8.0f, 30.0f, 30.0f)];
+        self.moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(280.0f, 8.0f, 30.0f, 30.0f)];
         [self.moreActionButton setImage:[UIImage imageNamed:@"button-more.png"] forState:UIControlStateNormal];
         [self.moreActionButton addTarget:self action:@selector(moreActionButton_action:) forControlEvents:UIControlEventTouchUpInside];
         [containerView addSubview:self.moreActionButton];
