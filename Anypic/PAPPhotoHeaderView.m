@@ -16,6 +16,7 @@
 @property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) PAPProfileImageView *avatarImageView;
 @property (nonatomic, strong) UIButton *userButton;
+@property (nonatomic, strong) UIImageView *clockIcon;
 @property (nonatomic, strong) UILabel *timestampLabel;
 @property (nonatomic, strong) UILabel *userInfoLabel;
 @property (nonatomic, strong) TTTTimeIntervalFormatter *timeIntervalFormatter;
@@ -73,31 +74,20 @@
             //[self.userButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
         }
         
-        UIImageView *clockImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_clock.png"]];
-        [clockImg setFrame:CGRectMake(281.0f, 15.0f, clockImg.frame.size.width, clockImg.frame.size.height)];
-        [self.containerView addSubview:clockImg];
+        
+        // Add clock icon
+        self.clockIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_clock.png"]];
+        [self.clockIcon setFrame:CGRectMake(277.0f, 15.0f, self.clockIcon.frame.size.width, self.clockIcon.frame.size.height)];
+        [self.containerView addSubview:self.clockIcon];
     
+        // Add timestamp
         self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
-        // timestamp
-        self.timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(288.0f, 10.0f, 20.0f, 18.0f)];
-        [containerView addSubview:self.timestampLabel];
+        self.timestampLabel = [[UILabel alloc] init];
         [self.timestampLabel setTextColor:[UIColor colorWithRed:160.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
-        //[self.timestampLabel setShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f]];
-        //[self.timestampLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
         [self.timestampLabel setFont:[UIFont systemFontOfSize:9.0f]];
         [self.timestampLabel setBackgroundColor:[UIColor clearColor]];
         self.timestampLabel.textAlignment = NSTextAlignmentRight;
-        /*
-        CALayer *layer = [containerView layer];
-        layer.backgroundColor = [[UIColor whiteColor] CGColor];
-        layer.masksToBounds = NO;
-        layer.shadowRadius = 0.5f;
-        layer.shadowOffset = CGSizeMake( 0.0f, 1.0f);
-        layer.shadowOpacity = 0.3f;
-        layer.shouldRasterize = YES;
-        layer.shadowPath = [UIBezierPath bezierPathWithRect:CGRectMake( 0.0f, containerView.frame.size.height - 4.0f, containerView.frame.size.width, 4.0f)].CGPath;
-         */
-        
+        [containerView addSubview:self.timestampLabel];
         
         self.userInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50.0f, 20.0f, containerView.bounds.size.width - 50.0f - 72.0f, 18.0f)];
         [self.userInfoLabel setTextColor:[UIColor colorWithRed:157.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
@@ -154,11 +144,18 @@
     CGRect userButtonFrame = CGRectMake(userButtonPoint.x, userButtonPoint.y, userButtonSize.width, userButtonSize.height);
     [self.userButton setFrame:userButtonFrame];
     
+    // Get time interval
     NSTimeInterval timeInterval = [[self.photo createdAt] timeIntervalSinceNow];
     [self.timeIntervalFormatter setUsesAbbreviatedCalendarUnits:YES];
     NSString *timestamp = [self.timeIntervalFormatter stringForTimeInterval:timeInterval];
+    
+    // Set timestamp
     [self.timestampLabel setText:timestamp];
-
+    CGSize expectedSize = [self.timestampLabel.text sizeWithAttributes:@{NSFontAttributeName: [UIFont systemFontOfSize:9.0f]}];
+    
+    // Update timestamp frame
+    [self.timestampLabel setFrame:CGRectMake(self.clockIcon.frame.origin.x + self.clockIcon.frame.size.width + 1.0f, 10.0f, expectedSize.width, 18.0f)];
+    
     [self setNeedsDisplay];
     
     NSString *industry = [user objectForKey:@"industry"];
