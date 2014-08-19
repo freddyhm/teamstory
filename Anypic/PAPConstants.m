@@ -26,6 +26,7 @@ NSString *const PAPTabBarControllerDidFinishImageFileUploadNotification         
 NSString *const PAPPhotoDetailsViewControllerUserDeletedPhotoNotification       = @"com.growple.teamstory.photoDetailsViewController.userDeletedPhoto";
 NSString *const PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotification  = @"com.growple.teamstory.photoDetailsViewController.userLikedUnlikedPhotoInDetailsViewNotification";
 NSString *const PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification   = @"com.growple.teamstory.photoDetailsViewController.userCommentedOnPhotoInDetailsViewNotification";
+NSString *const PAPProfileSettingViewControllerUserChangedProfile = @"com.growple.teamstory.profileSettingViewController.userChangedProfile";
 
 
 #pragma mark - User Info Keys

@@ -651,9 +651,9 @@ enum ActionSheetTags {
     
     if (attributesForPhoto) {
         [cell.footerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:object]];
-        [cell.footerView.likeButton setTitle:[[[PAPCache sharedCache] likeCountForPhoto:object] description] forState:UIControlStateNormal];
+        //[cell.footerView.likeButton setTitle:[[[PAPCache sharedCache] likeCountForPhoto:object] description] forState:UIControlStateNormal];
         [cell.footerView setLikeCount:[[PAPCache sharedCache] likeCountForPhoto:object]];
-        [cell.footerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:object] description] forState:UIControlStateNormal];
+        //[cell.footerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:object] description] forState:UIControlStateNormal];
         [cell.footerView setCommentCount:[[PAPCache sharedCache] commentCountForPhoto:object]];
         
         if (cell.footerView.likeButton.alpha < 1.0f || cell.footerView.commentButton.alpha < 1.0f) {
@@ -705,8 +705,8 @@ enum ActionSheetTags {
                         }
                         
                         [cell.footerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:object]];
-                        [cell.footerView.likeButton setTitle:[[[PAPCache sharedCache] likeCountForPhoto:object] description] forState:UIControlStateNormal];
-                        [cell.footerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:object] description] forState:UIControlStateNormal];
+                        //[cell.footerView.likeButton setTitle:[[[PAPCache sharedCache] likeCountForPhoto:object] description] forState:UIControlStateNormal];
+                        //[cell.footerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:object] description] forState:UIControlStateNormal];
                         
                         [cell.footerView setLikeCount:[[PAPCache sharedCache] likeCountForPhoto:object]];
                         [cell.footerView setCommentCount:[[PAPCache sharedCache] commentCountForPhoto:object]];
@@ -782,9 +782,9 @@ enum ActionSheetTags {
     [[PAPCache sharedCache] setPhotoIsLikedByCurrentUser:photo liked:liked];
     
     if (liked == YES) {
-        [button setTitle:[numberFormatter stringFromNumber:likeCount] forState:UIControlStateSelected];
+        //[button setTitle:[numberFormatter stringFromNumber:likeCount] forState:UIControlStateSelected];
     } else if (liked == NO) {
-        [button setTitle:[numberFormatter stringFromNumber:likeCount] forState:UIControlStateNormal];
+        //[button setTitle:[numberFormatter stringFromNumber:likeCount] forState:UIControlStateNormal];
     }
 
     
@@ -793,8 +793,8 @@ enum ActionSheetTags {
             [actualFooterView shouldEnableLikeButton:YES];
             [actualFooterView setLikeStatus:succeeded];
             if (!succeeded) {
-                [actualFooterView.likeButton setTitle:originalButtonTitle forState:UIControlStateNormal];
-                
+                //[actualFooterView.likeButton setTitle:originalButtonTitle forState:UIControlStateNormal];
+                [actualFooterView setLikeCount:[numberFormatter numberFromString:originalButtonTitle]];
             }
         }];
     } else {
@@ -802,7 +802,8 @@ enum ActionSheetTags {
             [actualFooterView shouldEnableLikeButton:YES];
             [actualFooterView setLikeStatus:!succeeded];
             if (!succeeded) {
-                [actualFooterView.likeButton setTitle:originalButtonTitle forState:UIControlStateNormal];
+                //[actualFooterView.likeButton setTitle:originalButtonTitle forState:UIControlStateNormal];
+                [actualFooterView setLikeCount:[numberFormatter numberFromString:originalButtonTitle]];
             }
         }];
     }
