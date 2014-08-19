@@ -77,11 +77,11 @@
             [self.commentButton setSelected:NO];
             
             self.commentCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.commentButton.frame.origin.x + self.commentButton.frame.size.width + 5.0f, self.commentButton.frame.origin.y + 7.0f, 10, 15)];
-            [self.commentCountLabel setFont:[UIFont systemFontOfSize:14.0f]];
+             [self.commentCountLabel setFont:[UIFont systemFontOfSize:14.0f]];
             [self.commentCountLabel setText:@"0"];
             [self.commentCountLabel setTextColor:likeCommentColor];
 
-            self.commentTitle = [[UILabel alloc] initWithFrame:CGRectMake(self.commentCountLabel.frame.origin.x + self.commentCountLabel.frame.size.width, self.commentButton.frame.origin.y + 7.0f, 80, 15)];
+             self.commentTitle = [[UILabel alloc] initWithFrame:CGRectMake(self.commentCountLabel.frame.origin.x + self.commentCountLabel.frame.size.width, self.commentButton.frame.origin.y + 7.0f, 80, 15)];
             
             [self.commentTitle setTextColor:likeCommentColor];
             [self.commentTitle setFont:[UIFont systemFontOfSize:14.0f]];
