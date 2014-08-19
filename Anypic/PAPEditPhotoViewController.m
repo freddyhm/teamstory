@@ -92,7 +92,7 @@
     [self.scrollView setShowsVerticalScrollIndicator:NO];
     self.view = self.scrollView;
     
-    UIImageView *photoImageView = [[UIImageView alloc] initWithFrame:CGRectMake( 7.5f, 42.0f, 305.0f, 305.0f)];
+    UIImageView *photoImageView = [[UIImageView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, 320.0f, 320.0f)];
     [photoImageView setBackgroundColor:[UIColor blackColor]];
     [photoImageView setImage:self.image];
     [photoImageView setContentMode:UIViewContentModeScaleAspectFit];
