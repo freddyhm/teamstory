@@ -77,7 +77,7 @@
         
         // Add clock icon
         self.clockIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_clock.png"]];
-        [self.clockIcon setFrame:CGRectMake(277.0f, 15.0f, self.clockIcon.frame.size.width, self.clockIcon.frame.size.height)];
+        [self.clockIcon setFrame:CGRectMake(284.0f, 15.0f, self.clockIcon.frame.size.width, self.clockIcon.frame.size.height)];
         [self.containerView addSubview:self.clockIcon];
     
         // Add timestamp
@@ -154,7 +154,7 @@
     CGSize expectedSize = [self.timestampLabel.text sizeWithAttributes:@{NSFontAttributeName: [UIFont systemFontOfSize:9.0f]}];
     
     // Update timestamp frame
-    [self.timestampLabel setFrame:CGRectMake(self.clockIcon.frame.origin.x + self.clockIcon.frame.size.width + 1.0f, 10.0f, expectedSize.width, 18.0f)];
+    [self.timestampLabel setFrame:CGRectMake(self.clockIcon.frame.origin.x + self.clockIcon.frame.size.width + 2.0f, 10.0f, expectedSize.width, 18.0f)];
     
     [self setNeedsDisplay];
     
