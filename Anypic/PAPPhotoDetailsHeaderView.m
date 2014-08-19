@@ -333,7 +333,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
             self.photoDescriptionLabel.frame = CGRectMake(avatarImageX, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 13.0f, 292.0f, expectedSize.height + 5.0f);
 
         } else {
-            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height + 15.0f, mainImageWidth, mainImageHeight)];
+            
+            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height, mainImageWidth, mainImageHeight)];
             
             self.photoDescriptionLabel.frame = CGRectMake(avatarImageX, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 5.0f, 292.0f, expectedSize.height + 5.0f);
         }
@@ -353,7 +354,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         [self addSubview:self.photoImageView];
         
-        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(baseHorizontalOffset, nameHeaderHeight, mainImageWidth, self.photoImageView.frame.size.height + self.photoDescriptionLabel.frame.size.height + 50.0f)];
+        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(baseHorizontalOffset, nameHeaderHeight + 15.0f, mainImageWidth, self.photoImageView.frame.size.height + self.photoDescriptionLabel.frame.size.height + 50.0f)];
         [backgroundView setBackgroundColor:[UIColor whiteColor]];
         [self addSubview:backgroundView];
         [self sendSubviewToBack:backgroundView];
@@ -490,6 +491,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(timeLabelX + 11.0f, 14.0f, timeLabelSize.width, timeLabelSize.height)];
             [timeLabel setText:timeString];
             [timeLabel setFont:[UIFont systemFontOfSize:9.0f]];
+        
             [timeLabel setTextColor:[UIColor colorWithRed:160.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
             //[timeLabel setShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f]];
             //[timeLabel setShadowOffset:CGSizeMake(0.0f, 1.0f)];
