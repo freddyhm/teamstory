@@ -33,7 +33,7 @@
 #define nameLabelY avatarImageY+vertSmallSpacing
 #define nameLabelMaxWidth 305.0f - (horiBorderSpacing+avatarImageDim+horiMediumSpacing+horiBorderSpacing)
 
-#define timeLabelX 277.0f
+#define timeLabelX 289.0f
 #define timeLabelMaxWidth nameLabelMaxWidth
 
 #define mainImageX baseHorizontalOffset
@@ -75,6 +75,7 @@ static CGSize expectedSize;
 @property (nonatomic, strong) MBProgressHUD *hud;
 @property (nonatomic, strong) NSString *website;
 @property (nonatomic, strong) UINavigationController *navController;
+@property (nonatomic, strong) UIImageView *clockIcon;
 @property (nonatomic, strong) UIView *linkBackgroundView;
 @property (nonatomic, strong) UIView *linkContentView;
 @property (nonatomic, strong) UILabel *linkTitleLabel;
@@ -474,9 +475,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [userButton setFrame:userButtonFrame];
             
             // Create clock
-            UIImageView *clockImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_clock.png"]];
-            [clockImg setFrame:CGRectMake(timeLabelX, 15.0f, clockImg.frame.size.width, clockImg.frame.size.height)];
-            [self.nameHeaderView addSubview:clockImg];
+            self.clockIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_clock.png"]];
+            [self.clockIcon setFrame:CGRectMake(timeLabelX, 15.0f, self.clockIcon.frame.size.width, self.clockIcon.frame.size.height)];
+            [self.nameHeaderView addSubview:self.clockIcon];
             
             
             // Create time label
@@ -557,7 +558,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [separator setFrame:CGRectMake(0.0f, likeBarView.frame.size.height - 2.0f, likeBarView.frame.size.width, 2.0f)];
         [likeBarView addSubview:separator];
     
-        UIButton *moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(270.0f, self.likeBarView.frame.origin.y + 5.0f , 30.0f, 30.0f)];
+        UIButton *moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(285.0f, self.likeBarView.frame.origin.y + 5.0f , 30.0f, 30.0f)];
+    
         [moreActionButton setImage:[UIImage imageNamed:@"button-more.png"] forState:UIControlStateNormal];
         [moreActionButton addTarget:self action:@selector(moreActionButton_action:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:moreActionButton];

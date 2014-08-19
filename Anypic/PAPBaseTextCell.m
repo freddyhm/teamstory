@@ -218,8 +218,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
     }else {
         [self.nameButton setFrame:CGRectMake(nameX, name_height_origin, nameSize.width, nameSize.height)];
         
-        // Layour separator
-        [self.separatorImage setFrame:CGRectMake(0, self.frame.size.height-2, self.frame.size.width-cellInsetWidth*2, 2)];
+        // Layout separator
+        [self.separatorImage setFrame:CGRectMake(0, self.frame.size.height-2, self.frame.size.width, 2)];
         [self.separatorImage setHidden:hideSeparator];
     }
     
