@@ -289,7 +289,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [self addSubview:self.photoDescriptionLabel];
         
         if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
-            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + self.photoDescriptionLabel.bounds.size.height + 10.0f, 80.0f, 80.0f)];
+            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + 10.0f, 80.0f, 80.0f)];
             
         
             viewOffset = -215.0f;
@@ -298,12 +298,12 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [photoTap setNumberOfTapsRequired:1];
             [photoTap setNumberOfTouchesRequired:1];
             
-            self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height, mainImageWidth, 100.0f)];
+            self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, 100.0f)];
             
             [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
             [self addSubview:self.linkBackgroundView];
             
-            self.linkContentView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX + 5.0f, mainImageY + 5.0f + self.photoDescriptionLabel.bounds.size.height, self.linkBackgroundView.bounds.size.width - 10.0f, self.linkBackgroundView.bounds.size.height - 10.0f)];
+            self.linkContentView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX + 5.0f, mainImageY + 5.0f, self.linkBackgroundView.bounds.size.width - 10.0f, self.linkBackgroundView.bounds.size.height - 10.0f)];
             [self.linkContentView setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
             [self.linkContentView.layer setBorderColor:[UIColor colorWithWhite:0.9f alpha:1.0f].CGColor];
             [self.linkContentView addGestureRecognizer:photoTap];
@@ -335,9 +335,11 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
         } else {
             
-            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height, mainImageWidth, mainImageHeight)];
+            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
             
             self.photoDescriptionLabel.frame = CGRectMake(avatarImageX, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 5.0f, 292.0f, expectedSize.height + 5.0f);
+            
+            self.photoDescriptionLabel.backgroundColor = [UIColor redColor];
         }
         
         
@@ -364,10 +366,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
         viewOffset = 0;
         
         if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
-            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + self.photoDescriptionLabel.bounds.size.height + 10.0f, 80.0f, 80.0f)];
+            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + 10.0f, 80.0f, 80.0f)];
             viewOffset = -205.0f;
             
-            self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height, mainImageWidth, 115.0f)];
+            self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, 115.0f)];
             [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
             [self addSubview:self.linkBackgroundView];
             
@@ -375,7 +377,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [photoTap setNumberOfTapsRequired:1];
             [photoTap setNumberOfTouchesRequired:1];
             
-            self.linkContentView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX + 5.0f, mainImageY + 5.0f + self.photoDescriptionLabel.bounds.size.height, self.linkBackgroundView.bounds.size.width - 10.0f, self.linkBackgroundView.bounds.size.height - 10.0f)];
+            self.linkContentView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX + 5.0f, mainImageY + 5.0f, self.linkBackgroundView.bounds.size.width - 10.0f, self.linkBackgroundView.bounds.size.height - 10.0f)];
             [self.linkContentView setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
             [self.linkContentView.layer setBorderColor:[UIColor colorWithWhite:0.9f alpha:1.0f].CGColor];
             [self.linkContentView addGestureRecognizer:photoTap];
@@ -403,7 +405,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.linkUrlLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
             [self.linkContentView addSubview:self.linkUrlLabel];
         } else {
-            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height, mainImageWidth, mainImageHeight)];
+            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
         }
         self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
         self.photoImageView.backgroundColor = [UIColor blackColor];
@@ -640,7 +642,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 + (CGRect)rectForView {
-    return CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 406.0f);
+    return CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 407.0f);
 }
 
 - (void)openUrl:(id)sender {
