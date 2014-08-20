@@ -144,13 +144,13 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             
             NSLog(@"%f", expectedSize.height);
             
-            self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 351.0f + expectedSize.height + 43.0f + 35.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
+            self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 351.0f + expectedSize.height + 43.0f + 28.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
         }
         self.headerView.delegate = self;
         self.tableView.tableHeaderView = self.headerView;
     } else {
         if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
-            self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 202.0f) photo:self.photo description:nil navigationController:self.navigationController];
+            self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 187.0f) photo:self.photo description:nil navigationController:self.navigationController];
         } else {
             self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:[PAPPhotoDetailsHeaderView rectForView] photo:self.photo description:nil navigationController:self.navigationController];
         }

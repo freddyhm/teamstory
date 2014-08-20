@@ -248,7 +248,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     [self.hud show:YES];
         
     if ([self.description length] > 0) {
-        CGSize maximumLabelSize = CGSizeMake(320.0f - baseHorizontalOffset * 4, 9999.0f);
+        CGSize maximumLabelSize = CGSizeMake(320.0f - 7.5f * 4, 9999.0f);
         
         NSRange range = [self.description rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
         
@@ -281,17 +281,16 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         expectedSize = [self.photoDescriptionLabel sizeThatFits:maximumLabelSize];
         
-        
-        viewOffset = 20;
+        viewOffset = 14;
         
         self.photoImageView = [[PFImageView alloc]init];
         
         [self addSubview:self.photoDescriptionLabel];
         
         if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
+            
             self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + 10.0f, 80.0f, 80.0f)];
             
-        
             viewOffset = -215.0f;
             
             UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(linkPostButtonAction:)];
@@ -337,12 +336,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
             
             self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
             
-            self.photoDescriptionLabel.frame = CGRectMake(avatarImageX, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 5.0f, 292.0f, expectedSize.height + 5.0f);
-            
-            self.photoDescriptionLabel.backgroundColor = [UIColor redColor];
+            self.photoDescriptionLabel.frame = CGRectMake(avatarImageX, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 13.0f, 292.0f, expectedSize.height);
         }
-        
-        
         
         self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
         self.photoImageView.backgroundColor = [UIColor blackColor];
@@ -367,9 +362,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
             self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + 10.0f, 80.0f, 80.0f)];
-            viewOffset = -205.0f;
+            viewOffset = -220.0f;
             
-            self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, 115.0f)];
+            self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, 100.0f)];
             [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
             [self addSubview:self.linkBackgroundView];
             

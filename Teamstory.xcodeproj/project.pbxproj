@@ -1712,6 +1712,10 @@
 		74A504E41565F13C00CFA4E3 /* Detail */ = {
 			isa = PBXGroup;
 			children = (
+				C4F102A7156C57620061BC3E /* PAPPhotoDetailsHeaderView.h */,
+				C4F102A8156C57620061BC3E /* PAPPhotoDetailsHeaderView.m */,
+				C4F102A5156C57620061BC3E /* PAPPhotoDetailsFooterView.h */,
+				C4F102A6156C57620061BC3E /* PAPPhotoDetailsFooterView.m */,
 				C4F102D0156C57FD0061BC3E /* PAPPhotoDetailsViewController.h */,
 				C4F102D1156C57FD0061BC3E /* PAPPhotoDetailsViewController.m */,
 			);
@@ -1740,10 +1744,6 @@
 			children = (
 				D5FC095618A9B552000D85F1 /* FilterCell.h */,
 				D5FC095718A9B552000D85F1 /* FilterCell.m */,
-				C4F102A7156C57620061BC3E /* PAPPhotoDetailsHeaderView.h */,
-				C4F102A8156C57620061BC3E /* PAPPhotoDetailsHeaderView.m */,
-				C4F102A5156C57620061BC3E /* PAPPhotoDetailsFooterView.h */,
-				C4F102A6156C57620061BC3E /* PAPPhotoDetailsFooterView.m */,
 				D5FC095918A9B586000D85F1 /* CameraFilterViewController.xib */,
 				D5903C74192EBBF900DC9896 /* ThoughtPostViewController.xib */,
 			);
