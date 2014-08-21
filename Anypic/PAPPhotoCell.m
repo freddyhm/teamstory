@@ -190,14 +190,18 @@
         [self.footerView setFrame:CGRectMake(0.0f, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height, self.bounds.size.width, 44.0f)];
 
     } else {
+    
         self.captionLabel.text = @"";
         self.captionLabel.frame = CGRectMake(7.5f, 0.0f, 305.0f, 44.0f);
         self.imageView.frame = CGRectMake( 0.0f, 0.0f, 320.0f, 320.0f);
         self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 320.0f, 320.0f);
         
         [self.footerView setFrame:CGRectMake(0.0f, self.imageView.frame.origin.y + self.imageView.frame.size.height, self.bounds.size.width, 44.0f)];
+        
+        self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.imageView.frame.size.height + 10.0f);
 
         if ([[self.ih_object objectForKey:@"type"] isEqualToString:@"link"]) {
+            
             [self.linkBackgroundView setFrame:CGRectMake(0.0f, 0.0f, 320.0f, 100.0f)];
             [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
             [self.contentView addSubview:self.linkBackgroundView];
@@ -211,7 +215,6 @@
             
             [self.linkTitleLabel setFrame:CGRectMake(99.0f, 10.0f , 190.0f, 30.0f)];
             self.linkTitleLabel.text = [self.ih_object objectForKey:@"linkTitle"];
-            //self.linkTitleLabel.backgroundColor = [UIColor redColor];
             
             [self.linkDescription setFrame:CGRectMake(99.0f, 40.0f , 190.0f, 30.0f)];
             self.linkDescription.text = [self.ih_object objectForKey:@"linkDesc"];
@@ -230,6 +233,8 @@
             [self.contentView bringSubviewToFront:self.linkDescription];
             [self.contentView bringSubviewToFront:self.imageView];
             [self.contentView bringSubviewToFront:self.photoButton];
+            
+            self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.linkBackgroundView.frame.size.height + 10.0f);
         }
     }
     

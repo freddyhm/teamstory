@@ -549,9 +549,9 @@ enum ActionSheetTags {
         }
         
         if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
-            return 100.0f + expectedSize.height + 54.0f;
+            return 100.0f + expectedSize.height + 64.0f;
         } else {
-            return 325.0f + expectedSize.height + 54.0f;
+            return 325.0f + expectedSize.height + 64.0f;
         }
     } else {
         if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
@@ -612,8 +612,6 @@ enum ActionSheetTags {
         [cell setObject:object];
         cell.photoButton.tag = indexPath.section;
         cell.imageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
-        
-        [self loadPhotoAttributes:cell object:object indexPath:indexPath];
         
         if(object){
             
