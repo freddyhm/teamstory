@@ -17,6 +17,7 @@
 #import "MBProgressHUD.h"
 #import "SVProgressHUD.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "TMCache.h"
 
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
@@ -551,6 +552,26 @@ enum ActionSheetTags {
             cell.caption = [object objectForKey:@"caption"];
             cell.imageView.file = [object objectForKey:kPAPPhotoPictureKey];
             
+           // [[TMCache sharedCache] objectForKey:[object objectId]
+                                         // block:^(TMCache *cache, NSString *key, id object) {
+                                         
+                //  UIImage *imageCache = (UIImage *)object;
+                                              
+                 // if(!imageCache){
+                      // grab from remote server & add to cache
+                      [cell.imageView loadInBackground:^(UIImage *imageCell, NSError *error) {
+                          //[[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
+                          [[TMCache sharedCache] setObject:imageCell forKey:[object objectId] block:nil];
+                      }];
+                //  }else{
+                      // set image from cache
+                  //    cell.imageView.image = imageCache;
+                  //}
+                                              
+           // }];
+            
+            /*
+            
             // try getting img from cache
             [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *image, SDImageCacheType cacheType){
                 if(!image){
@@ -563,6 +584,7 @@ enum ActionSheetTags {
                     cell.imageView.image = image;
                 }
             }];
+             */
         }
         
         return cell;
