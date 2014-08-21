@@ -294,6 +294,8 @@ enum ActionSheetTags {
     self.feed.delegate = self;
     self.feed.dataSource = self;
     
+    /*
+    
     // Add images to cache if not already present
     for (PFObject *object in self.objects) {
         
@@ -313,6 +315,7 @@ enum ActionSheetTags {
         }];
          
     }
+     */
     
     // Reload table
     [self.feed reloadData];
