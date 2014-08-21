@@ -552,23 +552,23 @@ enum ActionSheetTags {
             cell.caption = [object objectForKey:@"caption"];
             cell.imageView.file = [object objectForKey:kPAPPhotoPictureKey];
             
-           // [[TMCache sharedCache] objectForKey:[object objectId]
-                                         // block:^(TMCache *cache, NSString *key, id object) {
+            [[TMCache sharedCache] objectForKey:[object objectId]
+                                          block:^(TMCache *cache, NSString *key, id object) {
                                          
-                //  UIImage *imageCache = (UIImage *)object;
+                  UIImage *imageCache = (UIImage *)object;
                                               
-                 // if(!imageCache){
+                  if(!imageCache){
                       // grab from remote server & add to cache
                       [cell.imageView loadInBackground:^(UIImage *imageCell, NSError *error) {
                           //[[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
                           [[TMCache sharedCache] setObject:imageCell forKey:[object objectId] block:nil];
                       }];
-                //  }else{
+                  }else{
                       // set image from cache
-                  //    cell.imageView.image = imageCache;
-                  //}
+                      cell.imageView.image = imageCache;
+                  }
                                               
-           // }];
+            }];
             
             /*
             
