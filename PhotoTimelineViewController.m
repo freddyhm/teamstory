@@ -575,8 +575,21 @@ enum ActionSheetTags {
             }];
              */
             
+            UIImage *image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:[object objectId]];
             
+            if(image){
+                
+                // set image from cache
+                cell.imageView.image = image;
+            }else{
+                
+                // load and set image in cache
+                [cell.imageView loadInBackground:^(UIImage *image, NSError *error) {
+                    [[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
+                }];
+            }
             
+            /*
             // try getting img from cache
             [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *image, SDImageCacheType cacheType){
                 if(!image){
@@ -589,6 +602,7 @@ enum ActionSheetTags {
                     cell.imageView.image = image;
                 }
             }];
+             */
             
         }
         
