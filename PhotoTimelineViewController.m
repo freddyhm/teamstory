@@ -552,6 +552,7 @@ enum ActionSheetTags {
             cell.caption = [object objectForKey:@"caption"];
             cell.imageView.file = [object objectForKey:kPAPPhotoPictureKey];
             
+            /*
             [[TMCache sharedCache] objectForKey:[object objectId]
                                           block:^(TMCache *cache, NSString *key, id object) {
                                          
@@ -569,8 +570,9 @@ enum ActionSheetTags {
                   }
                                               
             }];
+             */
             
-            /*
+            
             
             // try getting img from cache
             [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *image, SDImageCacheType cacheType){
@@ -584,7 +586,7 @@ enum ActionSheetTags {
                     cell.imageView.image = image;
                 }
             }];
-             */
+            
         }
         
         return cell;
