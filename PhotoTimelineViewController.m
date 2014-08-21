@@ -67,8 +67,8 @@ enum ActionSheetTags {
 {
     [super viewDidLoad];
     
-    [[SDImageCache sharedImageCache] clearDisk];
-    [[SDImageCache sharedImageCache] clearMemory];
+//    [[SDImageCache sharedImageCache] clearDisk];
+  //  [[SDImageCache sharedImageCache] clearMemory];
     
     // Remove cell separator
     [self.feed setSeparatorStyle:UITableViewCellSeparatorStyleNone];
