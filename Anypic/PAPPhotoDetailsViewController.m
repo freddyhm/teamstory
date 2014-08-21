@@ -123,7 +123,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     // Set table view properties
     UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
-    texturedBackgroundView.backgroundColor = [UIColor blackColor];
+    texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     self.tableView.backgroundView = texturedBackgroundView;
     
     
@@ -141,8 +141,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
             self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 146.0f + expectedSize.height + 46.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
         } else {
-            
-            NSLog(@"%f", expectedSize.height);
             
             self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 351.0f + expectedSize.height + 43.0f + 28.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
         }

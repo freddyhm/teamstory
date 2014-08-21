@@ -264,7 +264,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 }
                  
                 UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
-                [texturedBackgroundView setBackgroundColor:[UIColor blackColor]];
+                [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]]];
                  self.feed.backgroundView = texturedBackgroundView;
                 
                 // taps for followers/following section, all point to same method

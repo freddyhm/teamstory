@@ -265,8 +265,6 @@
 		46FB0A921888BBF400E978CD /* news1.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A8C1888BBF400E978CD /* news1.png */; };
 		46FB0A951888BBF400E978CD /* news3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A8F1888BBF400E978CD /* news3@2x.png */; };
 		46FB0A961888BBF400E978CD /* news3.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A901888BBF400E978CD /* news3.png */; };
-		46FB0A991888E4C200E978CD /* bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A971888E4C200E978CD /* bg@2x.png */; };
-		46FB0A9A1888E4C200E978CD /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A981888E4C200E978CD /* bg.png */; };
 		74636BF31578281E00B44132 /* PAPFindFriendsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74636BF21578281E00B44132 /* PAPFindFriendsCell.m */; };
 		747FC485156FFF74003349E1 /* PAPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 747FC484156FFF74003349E1 /* PAPConstants.m */; };
 		74B108A7156D7509005B421C /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74B108A6156D7509005B421C /* AddressBookUI.framework */; };
@@ -467,6 +465,8 @@
 		D576841B19341DDA008BAA2C /* arrow_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D576841519341DD9008BAA2C /* arrow_left@2x.png */; };
 		D576841C19341DDA008BAA2C /* arrow_right.png in Resources */ = {isa = PBXBuildFile; fileRef = D576841619341DD9008BAA2C /* arrow_right.png */; };
 		D576841D19341DDA008BAA2C /* arrow_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D576841719341DD9008BAA2C /* arrow_right@2x.png */; };
+		D57E663619A5705100E0E3FF /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = D57E663419A5705100E0E3FF /* bg.png */; };
+		D57E663719A5705100E0E3FF /* bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D57E663519A5705100E0E3FF /* bg@2x.png */; };
 		D5903C75192EBBF900DC9896 /* ThoughtPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */; };
 		D5903C76192EBBF900DC9896 /* ThoughtPostViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5903C74192EBBF900DC9896 /* ThoughtPostViewController.xib */; };
 		D594C20418EFEBAD0008F5DF /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D594C20118EFEBAD0008F5DF /* SVProgressHUD.bundle */; };
@@ -800,8 +800,6 @@
 		46FB0A8C1888BBF400E978CD /* news1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = news1.png; path = Resources/Assets/news1.png; sourceTree = SOURCE_ROOT; };
 		46FB0A8F1888BBF400E978CD /* news3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "news3@2x.png"; path = "Resources/Assets/news3@2x.png"; sourceTree = SOURCE_ROOT; };
 		46FB0A901888BBF400E978CD /* news3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = news3.png; path = Resources/Assets/news3.png; sourceTree = SOURCE_ROOT; };
-		46FB0A971888E4C200E978CD /* bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg@2x.png"; path = "Resources/Assets/bg@2x.png"; sourceTree = SOURCE_ROOT; };
-		46FB0A981888E4C200E978CD /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bg.png; path = Resources/Assets/bg.png; sourceTree = SOURCE_ROOT; };
 		74636BF11578281E00B44132 /* PAPFindFriendsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = PAPFindFriendsCell.h; path = AnyPic/PAPFindFriendsCell.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		74636BF21578281E00B44132 /* PAPFindFriendsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = PAPFindFriendsCell.m; path = AnyPic/PAPFindFriendsCell.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		747FC484156FFF74003349E1 /* PAPConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPConstants.m; path = AnyPic/PAPConstants.m; sourceTree = SOURCE_ROOT; };
@@ -1068,6 +1066,8 @@
 		D576841519341DD9008BAA2C /* arrow_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_left@2x.png"; sourceTree = "<group>"; };
 		D576841619341DD9008BAA2C /* arrow_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_right.png; sourceTree = "<group>"; };
 		D576841719341DD9008BAA2C /* arrow_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_right@2x.png"; sourceTree = "<group>"; };
+		D57E663419A5705100E0E3FF /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
+		D57E663519A5705100E0E3FF /* bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg@2x.png"; sourceTree = "<group>"; };
 		D5903C72192EBBF900DC9896 /* ThoughtPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThoughtPostViewController.h; sourceTree = SOURCE_ROOT; };
 		D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThoughtPostViewController.m; sourceTree = SOURCE_ROOT; };
 		D5903C74192EBBF900DC9896 /* ThoughtPostViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ThoughtPostViewController.xib; sourceTree = SOURCE_ROOT; };
@@ -1602,6 +1602,8 @@
 				462FCB74188C806C005059F3 /* button_cancel@2x.png */,
 				46ABD74C18B147FC008F5AAB /* button_cancel_selected.png */,
 				46ABD74D18B147FC008F5AAB /* button_cancel_selected@2x.png */,
+				D57E663419A5705100E0E3FF /* bg.png */,
+				D57E663519A5705100E0E3FF /* bg@2x.png */,
 				462FCB75188C806C005059F3 /* button_done.png */,
 				462FCB76188C806C005059F3 /* button_done@2x.png */,
 				462FCB77188C806C005059F3 /* button_setting.png */,
@@ -1610,8 +1612,6 @@
 				462FCB5C188C6AE9005059F3 /* ProfileNavigationBar@2x.png */,
 				462FCB5D188C6AE9005059F3 /* DiscoverNavigationBar.png */,
 				462FCB5E188C6AE9005059F3 /* DiscoverNavigationBar@2x.png */,
-				46FB0A971888E4C200E978CD /* bg@2x.png */,
-				46FB0A981888E4C200E978CD /* bg.png */,
 				46FB0A8B1888BBF400E978CD /* news1@2x.png */,
 				46FB0A8C1888BBF400E978CD /* news1.png */,
 				46FB0A8F1888BBF400E978CD /* news3@2x.png */,
@@ -2337,7 +2337,6 @@
 				D57684061933F8CF008BAA2C /* IconHomeSelected.png in Resources */,
 				D52C1E3018D9515D00625887 /* konotor_cross@2x.png in Resources */,
 				D55D2AA019A2DF16009195FA /* icon_clock@2x.png in Resources */,
-				46FB0A991888E4C200E978CD /* bg@2x.png in Resources */,
 				467A40D71993059300D4C693 /* bg_textfield@2x.png in Resources */,
 				462FCB7A188C806C005059F3 /* button_cancel@2x.png in Resources */,
 				460997541938119A00C5AD96 /* icon-angel-profile@2x.png in Resources */,
@@ -2408,6 +2407,7 @@
 				D5BFDEDD18CC84A5004FEC42 /* paris.png in Resources */,
 				469CF3701996FB4D0081FCED /* signup.png in Resources */,
 				D52C1E4A18D9515D00625887 /* KonotorModels.bundle in Resources */,
+				D57E663719A5705100E0E3FF /* bg@2x.png in Resources */,
 				467A40B3199000B100D4C693 /* btn_image_upload@2x.png in Resources */,
 				463B0CEE1985A8C80075E496 /* intro_logo.png in Resources */,
 				4609975B1938119A00C5AD96 /* icon-linkedin.png in Resources */,
@@ -2421,12 +2421,12 @@
 				465A4ED918A8222A00E43DC6 /* iconlocation.png in Resources */,
 				46A2FE511963572E00D8ED12 /* Moment Popup_selected@2x.png in Resources */,
 				465A4EDD18A8382900E43DC6 /* comingsoon@2x.png in Resources */,
+				D57E663619A5705100E0E3FF /* bg.png in Resources */,
 				46ABD74418B143A4008F5AAB /* news4.png in Resources */,
 				463B0CE81985A8C80075E496 /* intro_moment_3.png in Resources */,
 				D5BFDED618CC84A5004FEC42 /* la@2x.png in Resources */,
 				4691B50618BFD9B200B7DF6A /* button-more@2x.png in Resources */,
 				46A2FE471963562100D8ED12 /* Thought Popup@2x.png in Resources */,
-				46FB0A9A1888E4C200E978CD /* bg.png in Resources */,
 				465B19B618B81FE500EDBCFC /* browser-refresh@2x.png in Resources */,
 				465DE3461895983A00C37EF8 /* profileType.png in Resources */,
 				D52C1E2818D9515D00625887 /* konotor_cancel@2x.png in Resources */,
