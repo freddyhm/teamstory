@@ -33,7 +33,7 @@
 #define nameLabelY avatarImageY+vertSmallSpacing
 #define nameLabelMaxWidth 305.0f - (horiBorderSpacing+avatarImageDim+horiMediumSpacing+horiBorderSpacing)
 
-#define timeLabelX 289.0f
+#define timeLabelX 281.0f
 #define timeLabelMaxWidth nameLabelMaxWidth
 
 #define mainImageX baseHorizontalOffset
@@ -555,7 +555,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [separator setFrame:CGRectMake(0.0f, likeBarView.frame.size.height - 2.0f, likeBarView.frame.size.width, 2.0f)];
         [likeBarView addSubview:separator];
     
-        UIButton *moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(285.0f, self.likeBarView.frame.origin.y + 5.0f , 30.0f, 30.0f)];
+        UIButton *moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(281.0f, self.likeBarView.frame.origin.y + 5.0f , 30.0f, 30.0f)];
     
         [moreActionButton setImage:[UIImage imageNamed:@"button-more.png"] forState:UIControlStateNormal];
         [moreActionButton addTarget:self action:@selector(moreActionButton_action:) forControlEvents:UIControlEventTouchUpInside];
