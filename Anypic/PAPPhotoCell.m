@@ -80,7 +80,7 @@
         [self.linkUrlLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
         [self.contentView addSubview:self.linkUrlLabel];
     
-        self.captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(7.5f, 0.0f, 305.0f, 44.0f)];
+        self.captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(7.5f, 0.0f, 315.0f, 44.0f)];
         [self.captionLabel setBackgroundColor:[UIColor clearColor]];
         [self.captionLabel setText:self.caption];
         [self.captionLabel setFont:[UIFont systemFontOfSize:13.0f]];
@@ -121,7 +121,7 @@
         
         
         self.imageView.frame = CGRectMake( 0.0f, 0.0f , 320.0f, 320.0f);
-        self.captionLabel.frame = CGRectMake(7.5f, self.imageView.frame.size.height + 10.0f, 295.0f, expectedSize.height);
+        self.captionLabel.frame = CGRectMake(7.5f, self.imageView.frame.size.height + 10.0f, 310.0f, expectedSize.height);
         self.photoButton.frame = CGRectMake( 7.5f, notificationBarOffSet, 320.0f, 330.0f + expectedSize.height);
         
         
