@@ -525,6 +525,37 @@
 		FEBE53499B0C4F878DB97BDF /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A01DAF9EA97E406EB3C591D1 /* libPods.a */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		D5A30A6119A7AC3F004C3759 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D5A30A5A19A7AC3E004C3759 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B9D96CB67619481A96B9823B;
+			remoteInfo = Pods;
+		};
+		D5A30A6319A7AC3F004C3759 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D5A30A5A19A7AC3E004C3759 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E53E1125F49C46F496474C9E;
+			remoteInfo = "Pods-AFNetworking";
+		};
+		D5A30A6519A7AC3F004C3759 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D5A30A5A19A7AC3E004C3759 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 78572069E1A642BBBFB9464E;
+			remoteInfo = "Pods-SDWebImage";
+		};
+		D5A30A6719A7AC3F004C3759 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D5A30A5A19A7AC3E004C3759 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5CFABA74EC3B427DBFD19BB7;
+			remoteInfo = "Pods-embedly-ios";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		092354AF13A1D7E200DA740F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		092354B213A1D7EB00DA740F /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -1080,6 +1111,7 @@
 		D59B997918C5974C002D6EFE /* AppIcon120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon120x120.png; sourceTree = "<group>"; };
 		D59B997D18C59836002D6EFE /* AppIcon80x80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon80x80.png; sourceTree = "<group>"; };
 		D59B998B18C5A902002D6EFE /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		D5A30A5A19A7AC3E004C3759 /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = Pods/Pods.xcodeproj; sourceTree = "<group>"; };
 		D5A5F51D18D2C3C1000BB243 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = External/FacebookSDK.framework; sourceTree = "<group>"; };
 		D5A5F51F18D2C3CD000BB243 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = External/Parse.framework; sourceTree = "<group>"; };
 		D5B5D0E11995316400916108 /* PostFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostFooterView.m; sourceTree = SOURCE_ROOT; };
@@ -1196,6 +1228,7 @@
 				09ABC07013A1D52D009C3FCF /* Frameworks */,
 				09ABC06E13A1D52D009C3FCF /* Products */,
 				45FF90152F5E49D089B6BDAE /* Pods.xcconfig */,
+				D5A30A5A19A7AC3E004C3759 /* Pods.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2104,6 +2137,17 @@
 			path = SVProgressHUD;
 			sourceTree = "<group>";
 		};
+		D5A30A5B19A7AC3E004C3759 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D5A30A6219A7AC3F004C3759 /* libPods.a */,
+				D5A30A6419A7AC3F004C3759 /* libPods-AFNetworking.a */,
+				D5A30A6619A7AC3F004C3759 /* libPods-SDWebImage.a */,
+				D5A30A6819A7AC3F004C3759 /* libPods-embedly-ios.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		D5D659EF19155A1E00FAC142 /* DevCloudCode */ = {
 			isa = PBXGroup;
 			children = (
@@ -2226,12 +2270,49 @@
 			mainGroup = 09ABC06213A1D52D009C3FCF;
 			productRefGroup = 09ABC06E13A1D52D009C3FCF /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = D5A30A5B19A7AC3E004C3759 /* Products */;
+					ProjectRef = D5A30A5A19A7AC3E004C3759 /* Pods.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				09ABC06C13A1D52D009C3FCF /* Teamstory */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		D5A30A6219A7AC3F004C3759 /* libPods.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libPods.a;
+			remoteRef = D5A30A6119A7AC3F004C3759 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D5A30A6419A7AC3F004C3759 /* libPods-AFNetworking.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libPods-AFNetworking.a";
+			remoteRef = D5A30A6319A7AC3F004C3759 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D5A30A6619A7AC3F004C3759 /* libPods-SDWebImage.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libPods-SDWebImage.a";
+			remoteRef = D5A30A6519A7AC3F004C3759 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D5A30A6819A7AC3F004C3759 /* libPods-embedly-ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libPods-embedly-ios.a";
+			remoteRef = D5A30A6719A7AC3F004C3759 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		09ABC06B13A1D52D009C3FCF /* Resources */ = {
