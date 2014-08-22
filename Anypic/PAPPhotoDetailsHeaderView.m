@@ -33,7 +33,7 @@
 #define nameLabelY avatarImageY+vertSmallSpacing
 #define nameLabelMaxWidth 305.0f - (horiBorderSpacing+avatarImageDim+horiMediumSpacing+horiBorderSpacing)
 
-#define timeLabelX 289.0f
+#define timeLabelX 281.0f
 #define timeLabelMaxWidth nameLabelMaxWidth
 
 #define mainImageX baseHorizontalOffset
@@ -330,13 +330,13 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.linkUrlLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
             [self.linkContentView addSubview:self.linkUrlLabel];
             
-            self.photoDescriptionLabel.frame = CGRectMake(avatarImageX, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 13.0f, 292.0f, expectedSize.height + 5.0f);
+            self.photoDescriptionLabel.frame = CGRectMake(avatarImageX, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 13.0f, 310.0f, expectedSize.height + 5.0f);
 
         } else {
             
             self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
             
-            self.photoDescriptionLabel.frame = CGRectMake(avatarImageX, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 13.0f, 292.0f, expectedSize.height);
+            self.photoDescriptionLabel.frame = CGRectMake(avatarImageX, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 13.0f, 310.0f, expectedSize.height);
         }
         
         self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
@@ -555,7 +555,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [separator setFrame:CGRectMake(0.0f, likeBarView.frame.size.height - 2.0f, likeBarView.frame.size.width, 2.0f)];
         [likeBarView addSubview:separator];
     
-        UIButton *moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(285.0f, self.likeBarView.frame.origin.y + 5.0f , 30.0f, 30.0f)];
+        UIButton *moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(281.0f, self.likeBarView.frame.origin.y + 5.0f , 30.0f, 30.0f)];
     
         [moreActionButton setImage:[UIImage imageNamed:@"button-more.png"] forState:UIControlStateNormal];
         [moreActionButton addTarget:self action:@selector(moreActionButton_action:) forControlEvents:UIControlEventTouchUpInside];
