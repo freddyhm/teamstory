@@ -17,7 +17,6 @@
 #import "MBProgressHUD.h"
 #import "SVProgressHUD.h"
 #import <SDWebImage/UIImageView+WebCache.h>
-#import "TMCache.h"
 
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
@@ -66,9 +65,6 @@ enum ActionSheetTags {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-//    [[SDImageCache sharedImageCache] clearDisk];
-  //  [[SDImageCache sharedImageCache] clearMemory];
     
     // Remove cell separator
     [self.feed setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -297,30 +293,7 @@ enum ActionSheetTags {
      after the data has been loaded */
     self.feed.delegate = self;
     self.feed.dataSource = self;
-    
-    /*
-    
-    // Add images to cache if not already present
-    for (PFObject *object in self.objects) {
         
-        // Check if image in cache
-        [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *image, SDImageCacheType cacheType) {
-            if(!image){
-                PFImageView *photoImgView = [[PFImageView alloc] init];
-                photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
-                // Load images from remote server
-                [photoImgView loadInBackground:^(UIImage *image, NSError *error) {
-                    // Check if there's no error and image is present before setting
-                    if(!error && image){
-                        [[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
-                    }
-                }];
-            }
-        }];
-         
-    }
-     */
-    
     // Reload table
     [self.feed reloadData];
     
@@ -555,55 +528,18 @@ enum ActionSheetTags {
             cell.caption = [object objectForKey:@"caption"];
             cell.imageView.file = [object objectForKey:kPAPPhotoPictureKey];
             
-            /*
-            [[TMCache sharedCache] objectForKey:[object objectId]
-                                          block:^(TMCache *cache, NSString *key, id object) {
-                                         
-                  UIImage *imageCache = (UIImage *)object;
-                                              
-                  if(!imageCache){
-                      // grab from remote server & add to cache
-                      [cell.imageView loadInBackground:^(UIImage *imageCell, NSError *error) {
-                          //[[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
-                          [[TMCache sharedCache] setObject:imageCell forKey:[object objectId] block:nil];
-                      }];
-                  }else{
-                      // set image from cache
-                      cell.imageView.image = imageCache;
-                  }
-                                              
-            }];
-             */
-            
+            // Fetch image from cache
             UIImage *image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:[object objectId]];
             
+            // set image from cache if available
             if(image){
-                
-                // set image from cache
                 cell.imageView.image = image;
             }else{
-                
-                // load and set image in cache
+                // load in background and set image in cache
                 [cell.imageView loadInBackground:^(UIImage *image, NSError *error) {
                     [[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
                 }];
             }
-            
-            /*
-            // try getting img from cache
-            [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *image, SDImageCacheType cacheType){
-                if(!image){
-                    // grab from remote server & add to cache
-                    [cell.imageView loadInBackground:^(UIImage *image, NSError *error) {
-                        [[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
-                    }];
-                }else{
-                    // set image from cache
-                    cell.imageView.image = image;
-                }
-            }];
-             */
-            
         }
         
         return cell;

@@ -60,12 +60,6 @@
 #define COCOAPODS_VERSION_MINOR_SDWebImage_Core 7
 #define COCOAPODS_VERSION_PATCH_SDWebImage_Core 1
 
-// TMCache
-#define COCOAPODS_POD_AVAILABLE_TMCache
-#define COCOAPODS_VERSION_MAJOR_TMCache 1
-#define COCOAPODS_VERSION_MINOR_TMCache 2
-#define COCOAPODS_VERSION_PATCH_TMCache 1
-
 // embedly-ios
 #define COCOAPODS_POD_AVAILABLE_embedly_ios
 #define COCOAPODS_VERSION_MAJOR_embedly_ios 1
