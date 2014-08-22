@@ -80,7 +80,7 @@
         [self.linkUrlLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
         [self.contentView addSubview:self.linkUrlLabel];
     
-        self.captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(7.5f, 0.0f, 315.0f, 44.0f)];
+        self.captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(7.5f, 0.0f, 310.0f, 44.0f)];
         [self.captionLabel setBackgroundColor:[UIColor clearColor]];
         [self.captionLabel setText:self.caption];
         [self.captionLabel setFont:[UIFont systemFontOfSize:13.0f]];
@@ -121,11 +121,12 @@
         
         
         self.imageView.frame = CGRectMake( 0.0f, 0.0f , 320.0f, 320.0f);
-        self.captionLabel.frame = CGRectMake(12.0f, self.imageView.frame.size.height + 20.0f, 310.0f, expectedSize.height);
+        self.captionLabel.frame = CGRectMake(12.0f, self.imageView.frame.size.height + 20.0f, 295.0f, expectedSize.height);
+        
         self.photoButton.frame = CGRectMake( 7.5f, notificationBarOffSet, 320.0f, 330.0f + expectedSize.height);
         
         
-        self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.imageView.frame.size.height + self.captionLabel.frame.size.height + 10.0f);
+        self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.imageView.frame.size.height + self.captionLabel.frame.size.height + 20.0f);
         
         NSRange range = [self.caption rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
         
@@ -138,7 +139,7 @@
         NSMutableAttributedString *captionText = [[NSMutableAttributedString alloc] initWithString:self.caption];
         [captionText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
         
-        [self.captionLabel setBackgroundColor:[UIColor clearColor]];
+        [self.captionLabel setBackgroundColor:[UIColor redColor]];
         [self.captionLabel setFont:[UIFont systemFontOfSize:13.0f]];
         [self.captionLabel setTextColor:[UIColor colorWithWhite:0.6f alpha:1.0f]];
         [self.captionLabel setAttributedText:captionText];
@@ -192,7 +193,7 @@
     } else {
     
         self.captionLabel.text = @"";
-        self.captionLabel.frame = CGRectMake(7.5f, 0.0f, 305.0f, 44.0f);
+        self.captionLabel.frame = CGRectMake(12.5f, 0.0f, 295.0f, 44.0f);
         self.imageView.frame = CGRectMake( 0.0f, 0.0f, 320.0f, 320.0f);
         self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 320.0f, 320.0f);
         
