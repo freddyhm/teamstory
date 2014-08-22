@@ -745,20 +745,21 @@ enum ActionSheetTags {
 #pragma mark - PostFooterView Delegate
 
 - (void)postFooterView:(PostFooterView *)postFooterView didTapLikePhotoButton:(UIButton *)button photo:(PFObject *)photo {
+    
+    // Disable button to avoid multiple likes
     [postFooterView shouldEnableLikeButton:NO];
     
+    // Set like button status right away
     BOOL liked = !button.selected;
     [postFooterView setLikeStatus:liked];
     
-    NSString *originalButtonTitle = button.titleLabel.text;
+    // Keep original count in case of a fail
+    NSString *originalCount = postFooterView.likeCountLabel.text;
     
+    // Change string count to a number
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
-    NSNumber *likeCount = [numberFormatter numberFromString:button.titleLabel.text];
-    
-    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:button.tag];
-    PAPPhotoCell *cell = (PAPPhotoCell *)[self.feed cellForRowAtIndexPath:indexPath];
-    PostFooterView *actualFooterView = cell.footerView;
+    NSNumber *likeCount = [numberFormatter numberFromString:postFooterView.likeCountLabel.text];
     
     if (liked) {
         // analytics
@@ -773,33 +774,26 @@ enum ActionSheetTags {
         [[PAPCache sharedCache] decrementLikerCountForPhoto:photo];
     }
     
-    [actualFooterView setLikeCount:likeCount];
+    // Set new count right away
+    [postFooterView setLikeCount:likeCount];
     
     [[PAPCache sharedCache] setPhotoIsLikedByCurrentUser:photo liked:liked];
     
-    if (liked == YES) {
-        //[button setTitle:[numberFormatter stringFromNumber:likeCount] forState:UIControlStateSelected];
-    } else if (liked == NO) {
-        //[button setTitle:[numberFormatter stringFromNumber:likeCount] forState:UIControlStateNormal];
-    }
-
-    
+    // Send new info to server
     if (liked) {
         [PAPUtility likePhotoInBackground:photo block:^(BOOL succeeded, NSError *error) {
-            [actualFooterView shouldEnableLikeButton:YES];
-            [actualFooterView setLikeStatus:succeeded];
+            [postFooterView shouldEnableLikeButton:YES];
+            [postFooterView setLikeStatus:succeeded];
             if (!succeeded) {
-                //[actualFooterView.likeButton setTitle:originalButtonTitle forState:UIControlStateNormal];
-                [actualFooterView setLikeCount:[numberFormatter numberFromString:originalButtonTitle]];
+                [postFooterView setLikeCount:[numberFormatter numberFromString:originalCount]];
             }
         }];
     } else {
         [PAPUtility unlikePhotoInBackground:photo block:^(BOOL succeeded, NSError *error) {
-            [actualFooterView shouldEnableLikeButton:YES];
-            [actualFooterView setLikeStatus:!succeeded];
+            [postFooterView shouldEnableLikeButton:YES];
+            [postFooterView setLikeStatus:!succeeded];
             if (!succeeded) {
-                //[actualFooterView.likeButton setTitle:originalButtonTitle forState:UIControlStateNormal];
-                [actualFooterView setLikeCount:[numberFormatter numberFromString:originalButtonTitle]];
+                [postFooterView setLikeCount:[numberFormatter numberFromString:originalCount]];
             }
         }];
     }
