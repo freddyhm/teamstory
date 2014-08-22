@@ -548,15 +548,15 @@ enum ActionSheetTags {
         }
         
         if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
-            return 100.0f + expectedSize.height + 64.0f;
+            return 100.0f + expectedSize.height + 74.0f;
         } else {
-            return 325.0f + expectedSize.height + 64.0f;
+            return 325.0f + expectedSize.height + 84.0f;
         }
     } else {
         if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
-            return 100.0f + 54.0f;
+            return 100.0f + 64.0f;
         } else {
-            return 325.0f + 54.0f;
+            return 325.0f + 64.0f;
         }
     }
 }
