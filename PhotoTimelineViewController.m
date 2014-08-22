@@ -309,24 +309,6 @@ enum ActionSheetTags {
     self.feed.delegate = self;
     self.feed.dataSource = self;
     
-    // Add images to cache if not already present
-    for (PFObject *object in self.objects) {
-        // Check if image in cache
-        [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *image, SDImageCacheType cacheType) {
-            if(!image){
-                PFImageView *photoImgView = [[PFImageView alloc] init];
-                photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
-                // Load images from remote server
-                [photoImgView loadInBackground:^(UIImage *image, NSError *error) {
-                    // Check if there's no error and image is present before setting
-                    if(!error && image){
-                        [[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
-                    }
-                }];
-            }
-        }];
-         
-    }
     
     // Reload table
     [self.feed reloadData];
@@ -603,11 +585,13 @@ enum ActionSheetTags {
         }
         
         PAPPhotoCell *cell = (PAPPhotoCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        
+
         if (cell == nil) {
             cell = [[PAPPhotoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             [cell.photoButton addTarget:self action:@selector(didTapOnPhotoAction:) forControlEvents:UIControlEventTouchUpInside];
         }
+        
+        
         
         [cell setObject:object];
         cell.photoButton.tag = indexPath.section;
@@ -618,20 +602,18 @@ enum ActionSheetTags {
             cell.caption = [object objectForKey:@"caption"];
             cell.imageView.file = [object objectForKey:kPAPPhotoPictureKey];
             
-            [self loadPhotoAttributes:cell object:object indexPath:indexPath];
+            // Fetch image from cache
+            UIImage *image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:[object objectId]];
             
-            // try getting img from cache
-            [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *image, SDImageCacheType cacheType){
-                if(!image){
-                    // grab from remote server & add to cache
-                    [cell.imageView loadInBackground:^(UIImage *image, NSError *error) {
-                        [[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
-                    }];
-                }else{
-                    // set image from cache
-                    cell.imageView.image = image;
-                }
-            }];
+            // set image from cache if available
+            if(image){
+                cell.imageView.image = image;
+            }else{
+                // load in background and set image in cache
+                [cell.imageView loadInBackground:^(UIImage *image, NSError *error) {
+                    [[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
+                }];
+            }
         }
         
         return cell;

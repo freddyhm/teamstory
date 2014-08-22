@@ -247,6 +247,11 @@
     self.ih_object = object;
 }
 
-
+- (void)prepareForReuse
+{
+    self.imageView.image = nil;
+    self.ih_image = nil;
+    self.ih_object = nil;
+}
 
 @end
