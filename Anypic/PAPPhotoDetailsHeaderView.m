@@ -265,7 +265,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         }
         
         self.photoDescriptionLabel = [[UILabel alloc] init];
-        self.photoDescriptionLabel.backgroundColor = [UIColor redColor];
+        self.photoDescriptionLabel.backgroundColor = [UIColor clearColor];
         self.photoDescriptionLabel.numberOfLines = 0;
         self.photoDescriptionLabel.font = [UIFont systemFontOfSize:13.0f];
         self.photoDescriptionLabel.textColor = [UIColor colorWithWhite:0.6f alpha:1.0f];

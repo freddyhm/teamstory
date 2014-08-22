@@ -139,7 +139,7 @@
         NSMutableAttributedString *captionText = [[NSMutableAttributedString alloc] initWithString:self.caption];
         [captionText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
         
-        [self.captionLabel setBackgroundColor:[UIColor redColor]];
+        [self.captionLabel setBackgroundColor:[UIColor clearColor]];
         [self.captionLabel setFont:[UIFont systemFontOfSize:13.0f]];
         [self.captionLabel setTextColor:[UIColor colorWithWhite:0.6f alpha:1.0f]];
         [self.captionLabel setAttributedText:captionText];

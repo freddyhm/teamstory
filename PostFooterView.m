@@ -162,8 +162,7 @@
     // Update like count frame to fit new count
     [self.likeCountLabel setFrame:CGRectMake(self.likeButton.frame.origin.x + self.likeButton.frame.size.width + 5.0f, self.likeCountLabel.frame.origin.y, likeExpectedSize.width, 15)];
     
-    //[self.likeCountLabel setBackgroundColor:[UIColor redColor]];
-    
+
     // Update like title
     [self.likeTitle setFrame:CGRectMake(self.likeCountLabel.frame.origin.x + likeExpectedSize.width + 1.0f, self.likeTitle.frame.origin.y, 40, 15)];
 }
@@ -176,9 +175,7 @@
     
      // Update comment count label frame to fit new count
      [self.commentCountLabel setFrame:CGRectMake(self.commentButton.frame.origin.x + self.commentButton.frame.size.width + 5.0f, self.commentCountLabel.frame.origin.y, commentExpectedSize.width, 15)];
-    
-    //[self.commentTitle setBackgroundColor:[UIColor redColor]];
-    
+        
     // Update comment title
     [self.commentTitle setFrame:CGRectMake(self.commentCountLabel.frame.origin.x + commentExpectedSize.width + 1.0f, self.commentTitle.frame.origin.y, 80, 15)];
 }
