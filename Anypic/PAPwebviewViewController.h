@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PAPwebviewViewController : UIViewController <UIWebViewDelegate,UIActionSheetDelegate>
+@interface PAPwebviewViewController : UIViewController <UIWebViewDelegate>
 
 - (id)initWithWebsite:(NSString *)website;
 @end

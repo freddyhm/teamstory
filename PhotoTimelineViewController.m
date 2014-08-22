@@ -309,7 +309,6 @@ enum ActionSheetTags {
     self.feed.delegate = self;
     self.feed.dataSource = self;
     
-    
     // Reload table
     [self.feed reloadData];
     
@@ -585,25 +584,21 @@ enum ActionSheetTags {
         }
         
         PAPPhotoCell *cell = (PAPPhotoCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-
+        
         if (cell == nil) {
             cell = [[PAPPhotoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             [cell.photoButton addTarget:self action:@selector(didTapOnPhotoAction:) forControlEvents:UIControlEventTouchUpInside];
         }
         
-        
-        
         [cell setObject:object];
         cell.photoButton.tag = indexPath.section;
         cell.imageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
-        
-        [self loadPhotoAttributes:cell object:object indexPath:indexPath];
         
         if(object){
             
             cell.caption = [object objectForKey:@"caption"];
             cell.imageView.file = [object objectForKey:kPAPPhotoPictureKey];
-            
+
             // Fetch image from cache
             UIImage *image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:[object objectId]];
             
@@ -616,6 +611,8 @@ enum ActionSheetTags {
                     [[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
                 }];
             }
+            
+            [self loadPhotoAttributes:cell object:object indexPath:indexPath];
         }
         
         return cell;
