@@ -597,6 +597,8 @@ enum ActionSheetTags {
         cell.photoButton.tag = indexPath.section;
         cell.imageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
         
+        [self loadPhotoAttributes:cell object:object indexPath:indexPath];
+        
         if(object){
             
             cell.caption = [object objectForKey:@"caption"];
