@@ -265,7 +265,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         }
         
         self.photoDescriptionLabel = [[UILabel alloc] init];
-        self.photoDescriptionLabel.backgroundColor = [UIColor clearColor];
+        self.photoDescriptionLabel.backgroundColor = [UIColor redColor];
         self.photoDescriptionLabel.numberOfLines = 0;
         self.photoDescriptionLabel.font = [UIFont systemFontOfSize:13.0f];
         self.photoDescriptionLabel.textColor = [UIColor colorWithWhite:0.6f alpha:1.0f];
@@ -281,7 +281,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         expectedSize = [self.photoDescriptionLabel sizeThatFits:maximumLabelSize];
         
-        viewOffset = 14;
+        viewOffset = 24;
         
         self.photoImageView = [[PFImageView alloc]init];
         
@@ -291,7 +291,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             
             self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + 10.0f, 80.0f, 80.0f)];
             
-            viewOffset = -215.0f;
+            viewOffset = -205.0f;
             
             UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(linkPostButtonAction:)];
             [photoTap setNumberOfTapsRequired:1];
@@ -330,13 +330,13 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.linkUrlLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
             [self.linkContentView addSubview:self.linkUrlLabel];
             
-            self.photoDescriptionLabel.frame = CGRectMake(avatarImageX, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 13.0f, 310.0f, expectedSize.height + 5.0f);
+            self.photoDescriptionLabel.frame = CGRectMake(12.0f, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 20.0f, 295.0f, expectedSize.height + 5.0f);
 
         } else {
             
             self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
             
-            self.photoDescriptionLabel.frame = CGRectMake(avatarImageX, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 13.0f, 310.0f, expectedSize.height);
+            self.photoDescriptionLabel.frame = CGRectMake(12.0f, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 20.0f, 295.0f, expectedSize.height);
         }
         
         self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
