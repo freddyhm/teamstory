@@ -330,13 +330,13 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.linkUrlLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
             [self.linkContentView addSubview:self.linkUrlLabel];
             
-            self.photoDescriptionLabel.frame = CGRectMake(avatarImageX, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 13.0f, 292.0f, expectedSize.height + 5.0f);
+            self.photoDescriptionLabel.frame = CGRectMake(avatarImageX, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 13.0f, 310.0f, expectedSize.height + 5.0f);
 
         } else {
             
             self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
             
-            self.photoDescriptionLabel.frame = CGRectMake(avatarImageX, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 13.0f, 292.0f, expectedSize.height);
+            self.photoDescriptionLabel.frame = CGRectMake(avatarImageX, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 13.0f, 310.0f, expectedSize.height);
         }
         
         self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
