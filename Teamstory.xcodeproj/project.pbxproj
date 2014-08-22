@@ -229,7 +229,6 @@
 		46ABD74B18B144D4008F5AAB /* news2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD74918B144D4008F5AAB /* news2@2x.png */; };
 		46ABD74E18B147FC008F5AAB /* button_cancel_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD74C18B147FC008F5AAB /* button_cancel_selected.png */; };
 		46ABD74F18B147FC008F5AAB /* button_cancel_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD74D18B147FC008F5AAB /* button_cancel_selected@2x.png */; };
-		46ABD75F18B53C46008F5AAB /* PAPwebviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46ABD75E18B53C46008F5AAB /* PAPwebviewViewController.m */; };
 		46B31EEA184E35150028D11C /* profileWebsite.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B31EE2184E35150028D11C /* profileWebsite.png */; };
 		46B31EEB184E35150028D11C /* profileWebsite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B31EE3184E35150028D11C /* profileWebsite@2x.png */; };
 		46B31EEC184E35150028D11C /* profileDescription.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B31EE4184E35150028D11C /* profileDescription.png */; };
@@ -425,6 +424,8 @@
 		D542D8C4196A6F4700A0384F /* ELCAssetPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = D542D8BA196A6F4700A0384F /* ELCAssetPicker.xib */; };
 		D542D8C5196A6F4700A0384F /* ELCAssetTablePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = D542D8BB196A6F4700A0384F /* ELCAssetTablePicker.xib */; };
 		D542D8C9196A721B00A0384F /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D542D8C8196A721B00A0384F /* AssetsLibrary.framework */; };
+		D54E0FF819A7B75C000B1F9D /* PAPwebviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D54E0FF719A7B75C000B1F9D /* PAPwebviewViewController.m */; };
+		D54E0FFB19A7B76B000B1F9D /* OpenInChromeController.m in Sources */ = {isa = PBXBuildFile; fileRef = D54E0FF919A7B76B000B1F9D /* OpenInChromeController.m */; };
 		D55D2AA019A2DF16009195FA /* icon_clock@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D55D2A9E19A2DF16009195FA /* icon_clock@2x.png */; };
 		D55D2AA119A2DF16009195FA /* icon_clock.png in Resources */ = {isa = PBXBuildFile; fileRef = D55D2A9F19A2DF16009195FA /* icon_clock.png */; };
 		D5654177196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = D5654176196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.m */; };
@@ -788,8 +789,6 @@
 		46ABD74918B144D4008F5AAB /* news2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "news2@2x.png"; sourceTree = "<group>"; };
 		46ABD74C18B147FC008F5AAB /* button_cancel_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_cancel_selected.png; sourceTree = "<group>"; };
 		46ABD74D18B147FC008F5AAB /* button_cancel_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_cancel_selected@2x.png"; sourceTree = "<group>"; };
-		46ABD75D18B53C46008F5AAB /* PAPwebviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPwebviewViewController.h; path = Anypic/PAPwebviewViewController.h; sourceTree = SOURCE_ROOT; };
-		46ABD75E18B53C46008F5AAB /* PAPwebviewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPwebviewViewController.m; path = Anypic/PAPwebviewViewController.m; sourceTree = SOURCE_ROOT; };
 		46B31EE2184E35150028D11C /* profileWebsite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = profileWebsite.png; path = Resources/Assets/profileWebsite.png; sourceTree = SOURCE_ROOT; };
 		46B31EE3184E35150028D11C /* profileWebsite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "profileWebsite@2x.png"; path = "Resources/Assets/profileWebsite@2x.png"; sourceTree = SOURCE_ROOT; };
 		46B31EE4184E35150028D11C /* profileDescription.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = profileDescription.png; path = Resources/Assets/profileDescription.png; sourceTree = SOURCE_ROOT; };
@@ -1054,6 +1053,10 @@
 		D542D8BA196A6F4700A0384F /* ELCAssetPicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ELCAssetPicker.xib; sourceTree = "<group>"; };
 		D542D8BB196A6F4700A0384F /* ELCAssetTablePicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ELCAssetTablePicker.xib; sourceTree = "<group>"; };
 		D542D8C8196A721B00A0384F /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		D54E0FF719A7B75C000B1F9D /* PAPwebviewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPwebviewViewController.m; sourceTree = SOURCE_ROOT; };
+		D54E0FF919A7B76B000B1F9D /* OpenInChromeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenInChromeController.m; sourceTree = SOURCE_ROOT; };
+		D54E0FFA19A7B76B000B1F9D /* OpenInChromeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenInChromeController.h; sourceTree = SOURCE_ROOT; };
+		D54E0FFC19A7B7AF000B1F9D /* PAPwebviewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PAPwebviewViewController.h; sourceTree = SOURCE_ROOT; };
 		D55D2A9E19A2DF16009195FA /* icon_clock@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_clock@2x.png"; sourceTree = "<group>"; };
 		D55D2A9F19A2DF16009195FA /* icon_clock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_clock.png; sourceTree = "<group>"; };
 		D5654175196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALAssetsLibrary+CustomPhotoAlbum.h"; sourceTree = "<group>"; };
@@ -1322,8 +1325,10 @@
 		46ABD75C18B53C1D008F5AAB /* webview */ = {
 			isa = PBXGroup;
 			children = (
-				46ABD75D18B53C46008F5AAB /* PAPwebviewViewController.h */,
-				46ABD75E18B53C46008F5AAB /* PAPwebviewViewController.m */,
+				D54E0FF919A7B76B000B1F9D /* OpenInChromeController.m */,
+				D54E0FFA19A7B76B000B1F9D /* OpenInChromeController.h */,
+				D54E0FFC19A7B7AF000B1F9D /* PAPwebviewViewController.h */,
+				D54E0FF719A7B75C000B1F9D /* PAPwebviewViewController.m */,
 			);
 			name = webview;
 			sourceTree = "<group>";
@@ -1359,8 +1364,6 @@
 			children = (
 				D55D2A9E19A2DF16009195FA /* icon_clock@2x.png */,
 				D55D2A9F19A2DF16009195FA /* icon_clock.png */,
-				D5E1E5AD19A1AAFB00C87A5D /* btn_webview_options@2x.png */,
-				D5E1E5AE19A1AAFB00C87A5D /* btn_webview_options.png */,
 				469CF3681996FB4D0081FCED /* signup.png */,
 				469CF3691996FB4D0081FCED /* signup@2x.png */,
 				469CF36A1996FB4D0081FCED /* btn_email_select.png */,
@@ -2419,7 +2422,6 @@
 				C4BE6714157FC7D000A291C2 /* iTunesArtwork in Resources */,
 				D57684061933F8CF008BAA2C /* IconHomeSelected.png in Resources */,
 				D52C1E3018D9515D00625887 /* konotor_cross@2x.png in Resources */,
-				46FB0A991888E4C200E978CD /* bg@2x.png in Resources */,
 				D55D2AA019A2DF16009195FA /* icon_clock@2x.png in Resources */,
 				467A40D71993059300D4C693 /* bg_textfield@2x.png in Resources */,
 				462FCB7A188C806C005059F3 /* button_cancel@2x.png in Resources */,
@@ -2816,7 +2818,6 @@
 				C4F102A4156C57560061BC3E /* PAPPhotoHeaderView.m in Sources */,
 				46076EE7193E9A6000A7B317 /* PAPNotificationViewController.m in Sources */,
 				C4F102A9156C57620061BC3E /* PAPPhotoDetailsFooterView.m in Sources */,
-				46ABD75F18B53C46008F5AAB /* PAPwebviewViewController.m in Sources */,
 				C4F102AA156C57620061BC3E /* PAPPhotoDetailsHeaderView.m in Sources */,
 				C4F102B3156C57820061BC3E /* PAPActivityCell.m in Sources */,
 				D5FC095218A9B518000D85F1 /* CropResizeViewController.m in Sources */,
@@ -2856,11 +2857,13 @@
 				46FB0A48188879A200E978CD /* PAPpeopleView.m in Sources */,
 				C4A6D87C157859AA009FE621 /* PAPCache.m in Sources */,
 				D52C1E4918D9515D00625887 /* KonotorVoiceInputOverlay.m in Sources */,
+				D54E0FFB19A7B76B000B1F9D /* OpenInChromeController.m in Sources */,
 				C4A6A246158FF842003F64A8 /* MBProgressHUD.m in Sources */,
 				46E1EB6F183BCA6300F64274 /* PAPProfileSettingViewController.m in Sources */,
 				D542D8C0196A6F4700A0384F /* ELCAssetCell.m in Sources */,
 				D5903C75192EBBF900DC9896 /* ThoughtPostViewController.m in Sources */,
 				46C6FC0E198AA62900BC99D5 /* PAPprofileSetupViewController.m in Sources */,
+				D54E0FF819A7B75C000B1F9D /* PAPwebviewViewController.m in Sources */,
 				C47DDDE61592761F002114F6 /* Reachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
