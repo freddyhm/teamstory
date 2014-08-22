@@ -309,6 +309,24 @@ enum ActionSheetTags {
     self.feed.delegate = self;
     self.feed.dataSource = self;
     
+    // Add images to cache if not already present
+    for (PFObject *object in self.objects) {
+        
+        UIImage *image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:[object objectId]];
+        
+        if(!image){
+            PFImageView *photoImgView = [[PFImageView alloc] init];
+            photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
+            // Load images from remote server
+            [photoImgView loadInBackground:^(UIImage *image, NSError *error) {
+                // Check if there's no error and image is present before setting
+                if(!error && image){
+                    [[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
+                }
+            }];
+        }
+    }
+    
     // Reload table
     [self.feed reloadData];
     
