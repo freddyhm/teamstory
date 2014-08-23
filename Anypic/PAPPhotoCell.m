@@ -147,8 +147,6 @@
         self.captionLabel.numberOfLines = 3;
         self.captionLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         
-        
-        
         //handling cases of link post
         if ([[self.ih_object objectForKey:@"type"] isEqualToString:@"link"]) {
             [self.linkBackgroundView setFrame:CGRectMake(0.0f, 0.0f, 320.0f, 100.0f)];
