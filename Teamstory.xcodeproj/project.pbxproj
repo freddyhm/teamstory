@@ -191,7 +191,6 @@
 		46A2FE5919635A7000D8ED12 /* btn_close_timeline.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE5719635A7000D8ED12 /* btn_close_timeline.png */; };
 		46ABD72F18AADFFB008F5AAB /* default-pic.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD72D18AADFFB008F5AAB /* default-pic.png */; };
 		46ABD73018AADFFB008F5AAB /* default-pic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */; };
-		46ABD73318B12E01008F5AAB /* PAPperksoverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 46ABD73218B12E01008F5AAB /* PAPperksoverlay.m */; };
 		46ABD73818B13671008F5AAB /* deezer-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD73418B13671008F5AAB /* deezer-logo@2x.png */; };
 		46ABD73918B13671008F5AAB /* deezer-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD73518B13671008F5AAB /* deezer-logo.png */; };
 		46ABD73E18B1381D008F5AAB /* discover-content-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 46ABD73C18B1381D008F5AAB /* discover-content-button.png */; };
@@ -211,9 +210,6 @@
 		46B31EF1184E35150028D11C /* companyName@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B31EE9184E35150028D11C /* companyName@2x.png */; };
 		46C6FC0E198AA62900BC99D5 /* PAPprofileSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C6FC0D198AA62900BC99D5 /* PAPprofileSetupViewController.m */; };
 		46E1EB6F183BCA6300F64274 /* PAPProfileSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E1EB6E183BCA6300F64274 /* PAPProfileSettingViewController.m */; };
-		46FB0A42188876C400E978CD /* PAPperksView.m in Sources */ = {isa = PBXBuildFile; fileRef = 46FB0A41188876C400E978CD /* PAPperksView.m */; };
-		46FB0A48188879A200E978CD /* PAPpeopleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 46FB0A47188879A200E978CD /* PAPpeopleView.m */; };
-		46FB0A4B188879C500E978CD /* PAPstartUpsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 46FB0A4A188879C500E978CD /* PAPstartUpsView.m */; };
 		46FB0A7C1888989800E978CD /* tab-product-unselected.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A701888989700E978CD /* tab-product-unselected.png */; };
 		46FB0A7D1888989800E978CD /* tab-product-unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A711888989700E978CD /* tab-product-unselected@2x.png */; };
 		46FB0A7E1888989800E978CD /* tab-product-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A721888989700E978CD /* tab-product-selected.png */; };
@@ -226,7 +222,6 @@
 		46FB0A851888989800E978CD /* tab-people-unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A791888989700E978CD /* tab-people-unselected@2x.png */; };
 		46FB0A861888989800E978CD /* tab-people-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A7A1888989700E978CD /* tab-people-selected.png */; };
 		46FB0A871888989800E978CD /* tab-people-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A7B1888989800E978CD /* tab-people-selected@2x.png */; };
-		46FB0A8A1888BAF700E978CD /* PAPdiscoveryHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 46FB0A891888BAF700E978CD /* PAPdiscoveryHeaderView.m */; };
 		46FB0A911888BBF400E978CD /* news1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A8B1888BBF400E978CD /* news1@2x.png */; };
 		46FB0A921888BBF400E978CD /* news1.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A8C1888BBF400E978CD /* news1.png */; };
 		46FB0A951888BBF400E978CD /* news3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A8F1888BBF400E978CD /* news3@2x.png */; };
@@ -662,8 +657,6 @@
 		46A2FE5719635A7000D8ED12 /* btn_close_timeline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_close_timeline.png; sourceTree = "<group>"; };
 		46ABD72D18AADFFB008F5AAB /* default-pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-pic.png"; sourceTree = "<group>"; };
 		46ABD72E18AADFFB008F5AAB /* default-pic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-pic@2x.png"; sourceTree = "<group>"; };
-		46ABD73118B12E01008F5AAB /* PAPperksoverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPperksoverlay.h; path = Anypic/PAPperksoverlay.h; sourceTree = SOURCE_ROOT; };
-		46ABD73218B12E01008F5AAB /* PAPperksoverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPperksoverlay.m; path = Anypic/PAPperksoverlay.m; sourceTree = SOURCE_ROOT; };
 		46ABD73418B13671008F5AAB /* deezer-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "deezer-logo@2x.png"; sourceTree = "<group>"; };
 		46ABD73518B13671008F5AAB /* deezer-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "deezer-logo.png"; sourceTree = "<group>"; };
 		46ABD73C18B1381D008F5AAB /* discover-content-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "discover-content-button.png"; sourceTree = "<group>"; };
@@ -686,12 +679,6 @@
 		46C6FC0D198AA62900BC99D5 /* PAPprofileSetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPprofileSetupViewController.m; sourceTree = SOURCE_ROOT; };
 		46E1EB6D183BCA6300F64274 /* PAPProfileSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPProfileSettingViewController.h; sourceTree = SOURCE_ROOT; };
 		46E1EB6E183BCA6300F64274 /* PAPProfileSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPProfileSettingViewController.m; sourceTree = SOURCE_ROOT; };
-		46FB0A40188876C400E978CD /* PAPperksView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPperksView.h; path = Anypic/PAPperksView.h; sourceTree = SOURCE_ROOT; };
-		46FB0A41188876C400E978CD /* PAPperksView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPperksView.m; path = Anypic/PAPperksView.m; sourceTree = SOURCE_ROOT; };
-		46FB0A46188879A200E978CD /* PAPpeopleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPpeopleView.h; sourceTree = SOURCE_ROOT; };
-		46FB0A47188879A200E978CD /* PAPpeopleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPpeopleView.m; sourceTree = SOURCE_ROOT; };
-		46FB0A49188879C500E978CD /* PAPstartUpsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPstartUpsView.h; sourceTree = SOURCE_ROOT; };
-		46FB0A4A188879C500E978CD /* PAPstartUpsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPstartUpsView.m; sourceTree = SOURCE_ROOT; };
 		46FB0A701888989700E978CD /* tab-product-unselected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-product-unselected.png"; sourceTree = "<group>"; };
 		46FB0A711888989700E978CD /* tab-product-unselected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-product-unselected@2x.png"; sourceTree = "<group>"; };
 		46FB0A721888989700E978CD /* tab-product-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-product-selected.png"; sourceTree = "<group>"; };
@@ -704,8 +691,6 @@
 		46FB0A791888989700E978CD /* tab-people-unselected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-people-unselected@2x.png"; sourceTree = "<group>"; };
 		46FB0A7A1888989700E978CD /* tab-people-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-people-selected.png"; sourceTree = "<group>"; };
 		46FB0A7B1888989800E978CD /* tab-people-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-people-selected@2x.png"; sourceTree = "<group>"; };
-		46FB0A881888BAF700E978CD /* PAPdiscoveryHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPdiscoveryHeaderView.h; sourceTree = SOURCE_ROOT; };
-		46FB0A891888BAF700E978CD /* PAPdiscoveryHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPdiscoveryHeaderView.m; sourceTree = SOURCE_ROOT; };
 		46FB0A8B1888BBF400E978CD /* news1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "news1@2x.png"; path = "Resources/Assets/news1@2x.png"; sourceTree = SOURCE_ROOT; };
 		46FB0A8C1888BBF400E978CD /* news1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = news1.png; path = Resources/Assets/news1.png; sourceTree = SOURCE_ROOT; };
 		46FB0A8F1888BBF400E978CD /* news3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "news3@2x.png"; path = "Resources/Assets/news3@2x.png"; sourceTree = SOURCE_ROOT; };
@@ -1197,16 +1182,6 @@
 		46FB0A3F1888769000E978CD /* discoverViews */ = {
 			isa = PBXGroup;
 			children = (
-				46ABD73118B12E01008F5AAB /* PAPperksoverlay.h */,
-				46ABD73218B12E01008F5AAB /* PAPperksoverlay.m */,
-				46FB0A49188879C500E978CD /* PAPstartUpsView.h */,
-				46FB0A4A188879C500E978CD /* PAPstartUpsView.m */,
-				46FB0A40188876C400E978CD /* PAPperksView.h */,
-				46FB0A41188876C400E978CD /* PAPperksView.m */,
-				46FB0A46188879A200E978CD /* PAPpeopleView.h */,
-				46FB0A47188879A200E978CD /* PAPpeopleView.m */,
-				46FB0A881888BAF700E978CD /* PAPdiscoveryHeaderView.h */,
-				46FB0A891888BAF700E978CD /* PAPdiscoveryHeaderView.m */,
 			);
 			name = discoverViews;
 			sourceTree = "<group>";
@@ -2491,11 +2466,9 @@
 				C4F10288156C56F20061BC3E /* UIImage+AlphaAdditions.m in Sources */,
 				D5FC095818A9B552000D85F1 /* FilterCell.m in Sources */,
 				D5FC095518A9B543000D85F1 /* CameraFilterViewController.m in Sources */,
-				46FB0A42188876C400E978CD /* PAPperksView.m in Sources */,
 				D594C20518EFEBAD0008F5DF /* SVProgressHUD.m in Sources */,
 				D542D8BE196A6F4700A0384F /* ELCAlbumPickerController.m in Sources */,
 				C4F1028A156C56F20061BC3E /* UIImage+ResizeAdditions.m in Sources */,
-				46FB0A8A1888BAF700E978CD /* PAPdiscoveryHeaderView.m in Sources */,
 				C4F1028B156C56F20061BC3E /* UIImage+RoundedCornerAdditions.m in Sources */,
 				4688686F185F8B78002BA081 /* emailSignUpViewController.m in Sources */,
 				C4F10291156C571C0061BC3E /* AppDelegate.m in Sources */,
@@ -2513,10 +2486,8 @@
 				C4F102B3156C57820061BC3E /* PAPActivityCell.m in Sources */,
 				D5FC095218A9B518000D85F1 /* CropResizeViewController.m in Sources */,
 				C4F102B4156C57820061BC3E /* PAPBaseTextCell.m in Sources */,
-				46FB0A4B188879C500E978CD /* PAPstartUpsView.m in Sources */,
 				D52C1E2518D9515D00625887 /* KonotorFeedbackScreenViewController.m in Sources */,
 				D52C1E4518D9515D00625887 /* KonotorMediaUIButton.m in Sources */,
-				46ABD73318B12E01008F5AAB /* PAPperksoverlay.m in Sources */,
 				C4F102B5156C57820061BC3E /* PAPLoadMoreCell.m in Sources */,
 				C4F102B6156C57820061BC3E /* PAPPhotoCell.m in Sources */,
 				C4F102B9156C57B90061BC3E /* PAPSettingsButtonItem.m in Sources */,
@@ -2544,7 +2515,6 @@
 				C4A0B505156C5B9F00E48554 /* TTTTimeIntervalFormatter.m in Sources */,
 				747FC485156FFF74003349E1 /* PAPConstants.m in Sources */,
 				74636BF31578281E00B44132 /* PAPFindFriendsCell.m in Sources */,
-				46FB0A48188879A200E978CD /* PAPpeopleView.m in Sources */,
 				C4A6D87C157859AA009FE621 /* PAPCache.m in Sources */,
 				D52C1E4918D9515D00625887 /* KonotorVoiceInputOverlay.m in Sources */,
 				C4A6A246158FF842003F64A8 /* MBProgressHUD.m in Sources */,

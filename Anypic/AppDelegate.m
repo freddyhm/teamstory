@@ -406,7 +406,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     self.activityViewController = [[PAPActivityFeedViewController alloc] initWithStyle:UITableViewStylePlain];
     self.accountViewController_tabBar = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
 
-    self.discoverViewController = [[discoverPageViewController alloc] initWithStyle:UITableViewStylePlain];
+    self.discoverViewController = [[discoverPageViewController alloc] init];
    
 
     

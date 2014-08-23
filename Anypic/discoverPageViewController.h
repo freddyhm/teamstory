@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 extern NSInteger selection;
 
-@interface discoverPageViewController : UITableViewController <UITabBarControllerDelegate, UINavigationBarDelegate>
+@interface discoverPageViewController : UIViewController <UITabBarControllerDelegate, UINavigationBarDelegate, UISearchBarDelegate,UISearchDisplayDelegate,UITableViewDataSource,UITableViewDelegate>
 
 
 @end

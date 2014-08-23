@@ -587,7 +587,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         
         if ([self.userArray count] < 1) {
             userQuery = [PFUser query];
-            userQuery.limit = 10000;
+            userQuery.limit = MAXFLOAT;
             [userQuery whereKeyExists:@"displayName"];
             [userQuery orderByAscending:@"displayName"];
             [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {

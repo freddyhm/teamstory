@@ -7,204 +7,237 @@
 //
 
 #import "discoverPageViewController.h"
-#import "PAPperksView.h"
-#import "PAPstartUpsView.h"
-#import "PAPpeopleView.h"
-#import "PAPdiscoveryHeaderView.h"
 
+#define screenWidth 320.0f
 
 NSInteger selection = 1;
 
 @interface discoverPageViewController()
 
-@property (nonatomic, strong) UITabBarController *tabBarController;
-@property (nonatomic, strong) UIImageView *tabBarBackground;
-@property (nonatomic, strong) UIButton *productButton;
-@property (nonatomic, strong) UIButton *startUpsButton;
-@property (nonatomic, strong) UIButton *peopleButton;
-@property (nonatomic, strong) PAPperksView *perksView;
-@property (nonatomic, strong) PAPpeopleView *peopleView;
-@property (nonatomic, strong) PAPstartUpsView *startUpsView;
-@property (nonatomic, strong) PAPdiscoveryHeaderView *discoveryHeaderView;
-@property (nonatomic, strong) UINavigationController *navController;
-
-
+@property (nonatomic, strong) UISearchBar *searchBar;
+@property (nonatomic, strong) UIView *searchOptionBgView;
+@property (nonatomic, strong) UIView *searchMovementBar;
+@property (nonatomic, strong) UIButton *usersLabel;
+@property (nonatomic, strong) UIButton *industryLabel;
+@property (nonatomic, strong) UIView *searchOptionView;
+@property (nonatomic, strong) UITableView *searchTV;
+@property (nonatomic, strong) NSArray *industry_datasource;
+@property (nonatomic, strong) NSString *searchSelection;
+@property (nonatomic, strong) NSArray *userList;
 
 @end
 
 @implementation discoverPageViewController
 
-@synthesize tabBarController;
-@synthesize tabBarBackground;
-@synthesize productButton;
-@synthesize startUpsButton;
-@synthesize peopleButton;
-@synthesize perksView;
-@synthesize peopleView;
-@synthesize startUpsView;
-@synthesize discoveryHeaderView;
-@synthesize navController;
-
 - (void)viewDidLoad
 {
+    //[self setSearchIconTo];
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
+    UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
     
-	self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"DiscoverNavigationBar.png"]];
+    self.navigationController.navigationBar.hidden = YES;
     
-    UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
-    [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]]];
-    self.tableView.backgroundView = texturedBackgroundView;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    UIView *navBackground = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, screenWidth, 20.0f)];
+    [navBackground setBackgroundColor:teamStoryColor];
+    [self.view addSubview:navBackground];
     
-    discoveryHeaderView = [[PAPdiscoveryHeaderView alloc] initWithNavigationController:self.navigationController];
-    [discoveryHeaderView setFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 100.0f)];
-    [self.view addSubview:discoveryHeaderView];
     
-    UIImageView *product_imageView = [[UIImageView alloc] initWithFrame:CGRectMake( 0.0f, 102.0f ,[UIScreen mainScreen].bounds.size.width, 44.0f)];
-    [product_imageView setImage:[UIImage imageNamed:@"discover.png"]];
-    [self.view addSubview:product_imageView];
+    // --------------- Search option menu
     
-    /*
-    [self create_productButton];
-    [self create_peopleButton];
-    [self create_startUpsButton];
-     */
+    self.searchOptionBgView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 20.0f, screenWidth, 44.0f)];
+    [self.searchOptionBgView setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
+    [self.view addSubview:self.searchOptionBgView];
     
-    [self displayPerksView];
+    self.searchOptionView = [[UIView alloc] initWithFrame:CGRectMake(5.0f, 5.0f, screenWidth - 10.0f, 34.0f)];
+    [self.searchOptionView setBackgroundColor:[UIColor colorWithWhite:0.8f alpha:1.0f]];
+    self.searchOptionView.layer.cornerRadius = 5.0f;
+    [self.searchOptionBgView addSubview:self.searchOptionView];
     
+    self.searchMovementBar = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.searchOptionView.bounds.size.width / 2, self.searchOptionView.bounds.size.height)];
+    [self.searchMovementBar setBackgroundColor:[UIColor whiteColor]];
+    self.searchMovementBar.layer.cornerRadius = 5.0f;
+    self.searchMovementBar.layer.borderWidth = 1.0f;
+    self.searchMovementBar.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
+    [self.searchOptionView addSubview:self.searchMovementBar];
+    
+    self.searchSelection = @"users";
+    
+    self.usersLabel = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.searchOptionView.bounds.size.width / 2, self.searchOptionView.bounds.size.height)];
+    [self.usersLabel setTitle:@"Users" forState:UIControlStateNormal];
+    self.usersLabel.titleLabel.textAlignment = NSTextAlignmentCenter;
+    [self.usersLabel setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
+    [self.usersLabel setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.usersLabel addTarget:self action:@selector(usersLabelAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.searchOptionView addSubview:self.usersLabel];
+    
+    self.industryLabel = [[UIButton alloc] initWithFrame:CGRectMake(self.searchOptionView.bounds.size.width / 2, 0.0f, self.searchOptionView.bounds.size.width / 2, self.searchOptionView.bounds.size.height)];
+    [self.industryLabel setTitle:@"Industries" forState:UIControlStateNormal];
+    self.industryLabel.titleLabel.textAlignment = NSTextAlignmentCenter;
+    [self.industryLabel setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
+    [self.industryLabel setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.industryLabel addTarget:self action:@selector(industryLabelAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.searchOptionView addSubview:self.industryLabel];
+    
+    // --------------- Searchbar
+    
+    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, 20.0f, screenWidth, 44.0f)];
+    self.searchBar.delegate = self;
+    self.searchBar.placeholder = @"Search users and industry";
+    self.searchBar.barTintColor = teamStoryColor;
+    self.searchBar.backgroundColor = teamStoryColor;
+    self.searchBar.layer.borderColor = teamStoryColor.CGColor;
+    self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
+    //[self.searchBar setImage:<#(UIImage *)#> forSearchBarIcon:<#(UISearchBarIcon)#> state:<#(UIControlState)#>]
+    [self.view addSubview:self.searchBar];
+    
+    
+    UITextField *searchField = [self.searchBar valueForKey:@"_searchField"];
+    [searchField setValue:[UIColor whiteColor] forKeyPath:@"_placeholderLabel.textColor"];
+    
+    
+    // --------------- UITableView
+    self.industry_datasource = [NSArray arrayWithObjects:@"Information Technology", @"Consumers", @"Enterprises", @"Media", @"Education", @"Health Care", @"Finance", @"Sales and Marketing", @"Fashion", @"Health and Wellness", @"Retail", @"Sports", @"UI/UX Design", @"Travel", @"Web Development", @"Real Estate", @"Recruiting", @"Entertainment", @"Clean Technology", @"Events", @"B2B", @"Restaurants", @"Lifestyle", @"Big Data Analytics", @"Music Services", @"Event Management", @"Non Profits", @"Discovery", @"Incubators", @"Other", nil];
+    
+    
+    float tableViewSP = self.searchBar.bounds.size.height + self.searchOptionBgView.bounds.size.height + 20;
+    float tabBarHeight = 30.0f;
+    float tableViewHeight = [UIScreen mainScreen].bounds.size.height - (tabBarHeight + tableViewSP);
+    
+    self.searchTV = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, tableViewSP, screenWidth, tableViewHeight) style:UITableViewStylePlain];
+    self.searchTV.delegate = self;
+    self.searchTV.dataSource = self;
+    self.searchTV.hidden = YES;
+    [self.view addSubview:self.searchTV];
+    
+	   
+}
+
+
+#pragma - ()
+
+-(void)usersLabelAction:(id)sender {
+    [self labelSetting:@"users"];
+    [self.searchTV reloadData];
+    [UIView animateWithDuration:0.2f animations:^{
+        self.searchMovementBar.frame = CGRectMake(0.0f, 0.0f, self.searchOptionView.bounds.size.width / 2, self.searchOptionView.bounds.size.height);
+    }];
+}
+
+-(void)industryLabelAction:(id)sender {
+    [self labelSetting:@"industry"];
+    [self.searchTV reloadData];
+    [UIView animateWithDuration:0.2f animations:^{
+        self.searchMovementBar.frame = CGRectMake(self.searchOptionView.bounds.size.width / 2, 0.0f, self.searchOptionView.bounds.size.width / 2, self.searchOptionView.bounds.size.height);
+    }];
+}
+
+-(void) labelSetting:(NSString *)selected {
+    if ([selected isEqualToString:@"users"]) {
+        self.usersLabel.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
+        self.industryLabel.titleLabel.font = [UIFont systemFontOfSize:15.0f];
+        self.searchSelection = @"users";
+        self.searchBar.placeholder = @"Search users";
+    } else {
+        self.industryLabel.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
+        self.usersLabel.titleLabel.font = [UIFont systemFontOfSize:15.0f];
+        self.searchSelection = @"industry";
+        self.searchBar.placeholder = @"Search industry";
+    }
+    
+}
+
+- (void)setSearchIconTo {
+    // Really a UISearchBarTextField, but the header is private.
+    UITextField *searchField = nil;
+    for (UIView *subview in self.searchBar.subviews) {
+        if ([subview isKindOfClass:[UITextField class]]) {
+            searchField = (UITextField *)subview;
+            break;
+        }
+    }
+    
+    if (searchField) {
+        UIImage *image = [UIImage imageNamed: @"favicon.png"];
+        UIImageView *iView = [[UIImageView alloc] initWithImage:image];
+        searchField.leftView = iView;
+    }  
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     // analytics
     [PAPUtility captureScreenGA:@"Discover"];
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
-}
-
-- (void) displayPerksView {
-    perksView = [[PAPperksView alloc] initWithNavigationController:self.navigationController];
-    [perksView setFrame:CGRectMake(0.0f, 146.0f, self.view.bounds.size.width, self.view.bounds.size.height - 146.0f)];
-    [self.view addSubview:perksView];
-}
-/*
-- (void) displaystartUpsView {
-    startUpsView = [[PAPstartUpsView alloc] initWithFrame:CGRectMake(65.0f, 210.0f, self.view.bounds.size.width, self.view.bounds.size.height - 102.0f)];
-    [self.view addSubview:startUpsView];
-}
-
-- (void) displaypeopleView {
-    peopleView = [[PAPpeopleView alloc] initWithFrame:CGRectMake(65.0f, 210.0f, self.view.bounds.size.width, self.view.bounds.size.height - 102.0f)];
-    [self.view addSubview:peopleView];
-}
-
-
-- (void) productButtonAction:(id) sender {
-    NSLog(@"Tab Bar Button 1 Pressed");
-    [productButton removeFromSuperview];
-    [startUpsButton removeFromSuperview];
-    [peopleButton removeFromSuperview];
     
-    [startUpsView removeFromSuperview];
-    [peopleView removeFromSuperview];
+    PFQuery *userQuery = [PFUser query];
+    userQuery.limit = MAXFLOAT;
+    [userQuery whereKeyExists:@"displayName"];
+    [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            self.userList = objects;
+            [self.searchTV reloadData];
+        } else {
+            NSLog(@"%@", error);
+        }
+    }];
     
-    selection = 1;
-
-    [self create_productButton];
-    [self create_startUpsButton];
-    [self create_peopleButton];
-    
-    [self displayPerksView];
     
 }
 
-- (void) startUpsButtonAction:(id) sender {
-    NSLog(@"Tab Bar Button 2 Pressed");
-    [productButton removeFromSuperview];
-    [startUpsButton removeFromSuperview];
-    [peopleButton removeFromSuperview];
-    
-    [perksView removeFromSuperview];
-    [peopleView removeFromSuperview];
-    
-    selection = 2;
-    
-    [self create_productButton];
-    [self create_startUpsButton];
-    [self create_peopleButton];
-    
-    [self displaystartUpsView];
+
+# pragma UISearchBarDelegate
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    self.searchTV.hidden = NO;
+    self.searchBar.showsCancelButton = YES;
+    self.searchMovementBar.frame = CGRectMake(0.0f, 0.0f, self.searchOptionView.bounds.size.width / 2, self.searchOptionView.bounds.size.height);
+    [self labelSetting:@"users"];
+    self.searchBar.placeholder = @"Search users";
+    [UIView animateWithDuration:0.2f animations:^{
+        self.searchOptionBgView.frame = CGRectMake(0.0f, 64.0f, screenWidth, 44.0f);
+    }];
 }
 
-- (void) peopleButtonAction:(id) sender {
-    NSLog(@"Tab Bar Button 3 Pressed");
-    [productButton removeFromSuperview];
-    [startUpsButton removeFromSuperview];
-    [peopleButton removeFromSuperview];
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    self.searchBar.showsCancelButton = NO;
+    self.searchBar.text = nil;
+    [self.searchBar resignFirstResponder];
     
-    [perksView removeFromSuperview];
-    [startUpsView removeFromSuperview];
-    
-    selection = 3;
-    
-    [self create_productButton];
-    [self create_startUpsButton];
-    [self create_peopleButton];
-    
-    [self displaypeopleView];
+    [UIView animateWithDuration:0.2f animations:^{
+        self.searchOptionBgView.frame = CGRectMake(0.0f, 20.0f, screenWidth, 44.0f);
+    }];
 }
 
-- (void) create_productButton {
-    productButton = [[UIButton alloc] initWithFrame:CGRectMake( 0.0f, 102.0f ,[UIScreen mainScreen].bounds.size.width / 3, 44.0f)];
-    NSLog(@"%ld", (long)selection);
-    
-    if (selection == 1) {
-        [productButton setImage:[UIImage imageNamed:@"tab-product-selected.png"] forState:UIControlStateDisabled];
-        productButton.enabled = NO;
-        startUpsButton.enabled = YES;
-        peopleButton.enabled = YES;
+#pragma UITableViewDelegate
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    // Return the number of rows in the section.
+    if ([self.searchSelection isEqualToString:@"users"]) {
+        return [self.userList count];
     } else {
-        [productButton setImage:[UIImage imageNamed:@"tab-product-unselected.png"] forState:UIControlStateNormal];
+        return [self.industry_datasource count];
+    }
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *CellIdentifier = @"Cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
-    [productButton addTarget:self action:@selector(productButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:productButton];
-        
-}
-
-- (void) create_startUpsButton {
-    NSInteger imagewidth = [UIScreen mainScreen].bounds.size.width / 3;
-    
-    startUpsButton = [[UIButton alloc] initWithFrame:CGRectMake( imagewidth, 102.0f ,imagewidth, 44.0f)];
-    
-    if (selection == 2) {
-        [startUpsButton setImage:[UIImage imageNamed:@"tab-startup-selected.png"] forState:UIControlStateDisabled];
-        startUpsButton.enabled = NO;
-        productButton.enabled = YES;
-        peopleButton.enabled = YES;
-    } else {
-        [startUpsButton setImage:[UIImage imageNamed:@"tab-startup-unselected.png"] forState:UIControlStateNormal];
+    // Configure the cell...
+    if ([self.searchSelection isEqualToString:@"users"]) {
+        cell.textLabel.text = [[self.userList objectAtIndex:indexPath.row] objectForKey:@"displayName"];
+    }
+    else {
+        cell.textLabel.text = [self.industry_datasource objectAtIndex:indexPath.row];
     }
     
-    [startUpsButton addTarget:self action:@selector(startUpsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:startUpsButton];
+    return cell;
+    
 }
 
-- (void) create_peopleButton {
-    NSInteger imagewidth = [UIScreen mainScreen].bounds.size.width / 3;
-    
-    peopleButton = [[UIButton alloc] initWithFrame:CGRectMake( imagewidth * 2, 102.0f, [UIScreen mainScreen].bounds.size.width / 3, 44.0f)];
-
-    if (selection == 3) {
-        [peopleButton setImage:[UIImage imageNamed:@"tab-people-selected.png"] forState:UIControlStateDisabled];
-        peopleButton.enabled = NO;
-        startUpsButton.enabled = YES;
-        productButton.enabled = YES;
-    } else {
-        [peopleButton setImage:[UIImage imageNamed:@"tab-people-unselected.png"] forState:UIControlStateNormal];
-    }
-    
-    [peopleButton addTarget:self action:@selector(peopleButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:peopleButton];
-}
-*/
 
 @end
