@@ -12,7 +12,9 @@
 
 NSInteger selection = 1;
 
-@interface discoverPageViewController()
+@interface discoverPageViewController() {
+    BOOL isSearchString;
+}
 
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, strong) UIView *searchOptionBgView;
@@ -24,6 +26,7 @@ NSInteger selection = 1;
 @property (nonatomic, strong) NSArray *industry_datasource;
 @property (nonatomic, strong) NSString *searchSelection;
 @property (nonatomic, strong) NSArray *userList;
+@property (nonatomic, strong) NSMutableArray *userFilterList;
 
 @end
 
@@ -31,7 +34,6 @@ NSInteger selection = 1;
 
 - (void)viewDidLoad
 {
-    //[self setSearchIconTo];
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
@@ -113,6 +115,25 @@ NSInteger selection = 1;
 	   
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    // analytics
+    [PAPUtility captureScreenGA:@"Discover"];
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+    
+    PFQuery *userQuery = [PFUser query];
+    userQuery.limit = MAXFLOAT;
+    [userQuery whereKeyExists:@"displayName"];
+    [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            self.userList = objects;
+            [self.searchTV reloadData];
+        } else {
+            NSLog(@"%@", error);
+        }
+    }];
+    
+    
+}
 
 #pragma - ()
 
@@ -164,30 +185,35 @@ NSInteger selection = 1;
     }  
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    // analytics
-    [PAPUtility captureScreenGA:@"Discover"];
-    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
-    
-    PFQuery *userQuery = [PFUser query];
-    userQuery.limit = MAXFLOAT;
-    [userQuery whereKeyExists:@"displayName"];
-    [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            self.userList = objects;
-            [self.searchTV reloadData];
-        } else {
-            NSLog(@"%@", error);
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    NSLog(@"Search Clicked");
+    [self searchTableList];
+}
+
+
+- (void)searchTableList {
+    NSString *searchString = self.searchBar.text;
+        /*
+    for (int i = 0; i < [self.userList count]; i++) {
+
+        for (NSString *tempStr in [[self.userList objectAtIndex:i] objectForKey:@"displayName"]) {
+            NSComparisonResult result = [tempStr compare:searchString options:(NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch) range:NSMakeRange(0, [searchString length])];
+            if (result == NSOrderedSame) {
+                [self.userFilterList addObject:tempStr];
+            }
         }
-    }];
-    
-    
+         */
+        [self.userFilterList addObjectsFromArray:[self.userList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", searchString]]];
+    NSLog(@"userfilterlist: %lu", (unsigned long)[self.userFilterList count]);
+    NSLog(@"search string: %@", searchString);
+    //}
 }
 
 
 # pragma UISearchBarDelegate
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    self.userFilterList = [[NSMutableArray alloc] init];
     self.searchTV.hidden = NO;
     self.searchBar.showsCancelButton = YES;
     self.searchMovementBar.frame = CGRectMake(0.0f, 0.0f, self.searchOptionView.bounds.size.width / 2, self.searchOptionView.bounds.size.height);
@@ -208,12 +234,30 @@ NSInteger selection = 1;
     }];
 }
 
+-(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    //Remove all objects first.
+    [self.userFilterList removeAllObjects];
+    
+    if([searchText length] != 0) {
+        isSearchString = YES;
+        [self searchTableList];
+    }
+    else {
+        isSearchString = NO;
+    }
+    [self.searchTV reloadData];
+}
+
 #pragma UITableViewDelegate
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     if ([self.searchSelection isEqualToString:@"users"]) {
-        return [self.userList count];
+        if (isSearchString) {
+            return [self.userFilterList count];
+        } else {
+            return [self.userList count];
+        }
     } else {
         return [self.industry_datasource count];
     }
@@ -229,7 +273,11 @@ NSInteger selection = 1;
     
     // Configure the cell...
     if ([self.searchSelection isEqualToString:@"users"]) {
-        cell.textLabel.text = [[self.userList objectAtIndex:indexPath.row] objectForKey:@"displayName"];
+        if (isSearchString) {
+            cell.textLabel.text = [[self.userFilterList objectAtIndex:indexPath.row] objectForKey:@"displayName"];
+        } else {
+            cell.textLabel.text = [[self.userList objectAtIndex:indexPath.row] objectForKey:@"displayName"];
+        }
     }
     else {
         cell.textLabel.text = [self.industry_datasource objectAtIndex:indexPath.row];
