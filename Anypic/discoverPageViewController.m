@@ -31,6 +31,10 @@ NSInteger selection = 1;
 @property (nonatomic, strong) NSArray *userList;
 @property (nonatomic, strong) NSMutableArray *userFilterList;
 @property (nonatomic, strong) NSArray *follwerList;
+@property (nonatomic, strong) NSArray *postPicQueryResults;
+@property (nonatomic, strong) NSArray *postThoughtQueryResults;
+@property (nonatomic, strong) NSArray *postActivityQueryResults;
+@property (nonatomic, strong) PAPdiscoverTileView *discoverTileView;
 
 @end
 
@@ -120,8 +124,8 @@ NSInteger selection = 1;
     
     
     // -------------- UIMainView
-    PAPdiscoverTileView *discoverTileView = [[PAPdiscoverTileView alloc] initWithFrame:CGRectMake(0.0f, 20 + self.searchBar.bounds.size.height, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.height - (20 + self.searchBar.bounds.size.height + tabBarHeight))];
-    [self.view addSubview:discoverTileView];
+    self.discoverTileView = [[PAPdiscoverTileView alloc] initWithFrame:CGRectMake(0.0f, 20 + self.searchBar.bounds.size.height, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.height - (20 + self.searchBar.bounds.size.height + tabBarHeight))];
+    [self.view addSubview:self.discoverTileView];
     
 	   
 }
@@ -130,6 +134,45 @@ NSInteger selection = 1;
     // analytics
     [PAPUtility captureScreenGA:@"Discover"];
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+    
+    NSDate *currentDate = [NSDate date];
+    NSDate *sevenDaysAgo = [currentDate dateByAddingTimeInterval:-7*24*60*60];
+    
+    PFQuery *postQuery_pic = [PFQuery queryWithClassName:@"Photo"];
+    [postQuery_pic setLimit:21];
+    [postQuery_pic whereKey:@"type" equalTo:@"picture"];
+    [postQuery_pic whereKey:@"createdAt" greaterThanOrEqualTo:sevenDaysAgo];
+    [postQuery_pic findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            self.postPicQueryResults = objects;
+            
+            PFQuery *postQuery_thoughts = [PFQuery queryWithClassName:@"Photo"];
+            [postQuery_thoughts setLimit:21];
+            [postQuery_thoughts whereKey:@"type" equalTo:@"thoughts"];
+            [postQuery_thoughts whereKey:@"createdAt" greaterThanOrEqualTo:sevenDaysAgo];
+            [postQuery_thoughts findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                if (!error) {
+                    self.postThoughtQueryResults = objects;
+                    
+                    PFQuery *postActivity = [PFQuery queryWithClassName:@"Activity"];
+                    [postActivity setLimit:MAXFLOAT];
+                    [postActivity whereKey:@"createdAt" greaterThan:sevenDaysAgo];
+                    [postActivity findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                        if (!error) {
+                            self.postActivityQueryResults = objects;
+                            [self.discoverTileView setPictureQuery:self.postPicQueryResults setThoughtQuery:self.postThoughtQueryResults setActivityQuery:self.postActivityQueryResults];
+                        } else {
+                            NSLog(@"Post Activity Query Error: %@", error);
+                        }
+                    }];
+                } else {
+                    NSLog(@"PostQuery Picture Error: %@", error);
+                }
+            }];
+        } else {
+            NSLog(@"PostQuery Picture Error: %@", error);
+        }
+    }];
     
     if ([self.follwerList count] == 0) {
         PFQuery *activityQuery = [PFQuery queryWithClassName:@"Activity"];

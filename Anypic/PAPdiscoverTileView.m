@@ -7,6 +7,7 @@
 //
 
 #import "PAPdiscoverTileView.h"
+#import "PAPdiscoverCell.h"
 
 @interface PAPdiscoverTileView() {
 
@@ -16,11 +17,15 @@
 @property (nonatomic, strong) UIButton *thoughtsMenu;
 @property (nonatomic, strong) UIView *highlightBar;
 @property (nonatomic, strong) UIColor *teamstoryColor;
+@property (nonatomic, strong) UITableView *mainTileView;
+@property (nonatomic, strong) NSArray *pictureQuery;
+@property (nonatomic, strong) NSArray *thoughtQuery;
+@property (nonatomic, strong) NSArray *activityQuery;
+@property (nonatomic, strong) NSString *menuSelection;
 
 @end
 
 @implementation PAPdiscoverTileView
-
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -49,20 +54,44 @@
         [self.highlightBar setBackgroundColor:self.teamstoryColor];
         [self.mainMenuView addSubview:self.highlightBar];
         
+        self.menuSelection = @"Moments";
         [self labelSetting:@"Moments"];
+        
+        float searchBarHeight = 44.0f;
+        float menuHeight = 44.0f;
+        float tabBarHeight = 30.0f;
+        
+        
+        // ------------- UITableView
+        self.mainTileView = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, menuHeight, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - (searchBarHeight + menuHeight + 39.0f + tabBarHeight)) style:UITableViewStylePlain];
+        self.mainTileView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        self.mainTileView.delegate = self;
+        self.mainTileView.dataSource = self;
+        [self addSubview:self.mainTileView];
         
         
     }
     return self;
 }
 
+-(void)setPictureQuery:(NSArray *)pictureQueryResults setThoughtQuery:(NSArray *)thoughtQueryResults setActivityQuery:(NSArray *)activityQueryResults {
+    self.pictureQuery = pictureQueryResults;
+    self.thoughtQuery = thoughtQueryResults;
+    self.activityQuery = activityQueryResults;
+    [self.mainTileView reloadData];
+}
+
 
 - (void) momentsMenuAction:(id)sender {
+    self.menuSelection = @"Moments";
     [self labelSetting:@"Moments"];
+    [self.mainTileView reloadData];
 }
 
 - (void) thoughtsMenuAction:(id)sender {
+    self.menuSelection = @"Thoughts";
     [self labelSetting:@"Thoughts"];
+    [self.mainTileView reloadData];
 }
 
 -(void) labelSetting:(NSString *)selected {
@@ -85,5 +114,37 @@
     }
     
 }
+
+# pragma UITableViewDelegate
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if ([self.menuSelection isEqualToString:@"Moments"]) {
+        return [self.pictureQuery count] / 3;
+    } else {
+        return [self.thoughtQuery count] / 3;
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 105.0f;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *CellIdentifier = @"Discover Cell";
+    
+    PAPdiscoverCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[PAPdiscoverCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
+    
+    if ([self.menuSelection isEqualToString:@"Moments"]) {
+        [cell setImage1:[[self.pictureQuery objectAtIndex:(indexPath.row * 3)] objectForKey:@"image"] setImage2:[[self.pictureQuery objectAtIndex:(indexPath.row * 3) + 1] objectForKey:@"image"] setImage3:[[self.pictureQuery objectAtIndex:(indexPath.row * 3) + 2] objectForKey:@"image"]];
+    } else {
+        
+    }
+    
+    return cell;
+}
+
 
 @end

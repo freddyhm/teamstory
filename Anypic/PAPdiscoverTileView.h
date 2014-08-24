@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PAPdiscoverTileView : UIView
+@interface PAPdiscoverTileView : UIView <UITableViewDataSource, UITableViewDelegate>
+
+-(void)setPictureQuery:(NSArray *)pictureQueryResults setThoughtQuery:(NSArray *)thoughtQueryResults setActivityQuery:(NSArray *)activityQueryResults;
 
 @end
