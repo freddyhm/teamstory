@@ -209,6 +209,7 @@
 		46B31EF0184E35150028D11C /* companyName.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B31EE8184E35150028D11C /* companyName.png */; };
 		46B31EF1184E35150028D11C /* companyName@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B31EE9184E35150028D11C /* companyName@2x.png */; };
 		46C6FC0E198AA62900BC99D5 /* PAPprofileSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C6FC0D198AA62900BC99D5 /* PAPprofileSetupViewController.m */; };
+		46DC23BF19AA1F0400E8FCDF /* PAPdiscoverTileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 46DC23BE19AA1F0400E8FCDF /* PAPdiscoverTileView.m */; };
 		46E1EB6F183BCA6300F64274 /* PAPProfileSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E1EB6E183BCA6300F64274 /* PAPProfileSettingViewController.m */; };
 		46FB0A7C1888989800E978CD /* tab-product-unselected.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A701888989700E978CD /* tab-product-unselected.png */; };
 		46FB0A7D1888989800E978CD /* tab-product-unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A711888989700E978CD /* tab-product-unselected@2x.png */; };
@@ -677,6 +678,8 @@
 		46B31EE9184E35150028D11C /* companyName@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "companyName@2x.png"; path = "Resources/Assets/companyName@2x.png"; sourceTree = SOURCE_ROOT; };
 		46C6FC0C198AA62900BC99D5 /* PAPprofileSetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPprofileSetupViewController.h; sourceTree = SOURCE_ROOT; };
 		46C6FC0D198AA62900BC99D5 /* PAPprofileSetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPprofileSetupViewController.m; sourceTree = SOURCE_ROOT; };
+		46DC23BD19AA1F0400E8FCDF /* PAPdiscoverTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPdiscoverTileView.h; path = Anypic/PAPdiscoverTileView.h; sourceTree = SOURCE_ROOT; };
+		46DC23BE19AA1F0400E8FCDF /* PAPdiscoverTileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPdiscoverTileView.m; path = Anypic/PAPdiscoverTileView.m; sourceTree = SOURCE_ROOT; };
 		46E1EB6D183BCA6300F64274 /* PAPProfileSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPProfileSettingViewController.h; sourceTree = SOURCE_ROOT; };
 		46E1EB6E183BCA6300F64274 /* PAPProfileSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPProfileSettingViewController.m; sourceTree = SOURCE_ROOT; };
 		46FB0A701888989700E978CD /* tab-product-unselected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-product-unselected.png"; sourceTree = "<group>"; };
@@ -1182,6 +1185,8 @@
 		46FB0A3F1888769000E978CD /* discoverViews */ = {
 			isa = PBXGroup;
 			children = (
+				46DC23BD19AA1F0400E8FCDF /* PAPdiscoverTileView.h */,
+				46DC23BE19AA1F0400E8FCDF /* PAPdiscoverTileView.m */,
 			);
 			name = discoverViews;
 			sourceTree = "<group>";
@@ -2510,6 +2515,7 @@
 				D52C1E2118D9515D00625887 /* KonotorConversationViewController.m in Sources */,
 				D530C3F318FB22FC00739027 /* iRate.m in Sources */,
 				C4F102DC156C58170061BC3E /* PAPEditPhotoViewController.m in Sources */,
+				46DC23BF19AA1F0400E8FCDF /* PAPdiscoverTileView.m in Sources */,
 				D52C1E4718D9515D00625887 /* KonotorUITextView.m in Sources */,
 				C4F102EF156C58E00061BC3E /* main.m in Sources */,
 				C4A0B505156C5B9F00E48554 /* TTTTimeIntervalFormatter.m in Sources */,

@@ -7,6 +7,9 @@
 //
 
 #import "discoverPageViewController.h"
+#import "PAPFindFriendsCell.h"
+#import "PAPAccountViewController.h"
+#import "PAPdiscoverTileView.h"
 
 #define screenWidth 320.0f
 
@@ -27,6 +30,7 @@ NSInteger selection = 1;
 @property (nonatomic, strong) NSString *searchSelection;
 @property (nonatomic, strong) NSArray *userList;
 @property (nonatomic, strong) NSMutableArray *userFilterList;
+@property (nonatomic, strong) NSArray *follwerList;
 
 @end
 
@@ -110,7 +114,14 @@ NSInteger selection = 1;
     self.searchTV.delegate = self;
     self.searchTV.dataSource = self;
     self.searchTV.hidden = YES;
+    self.searchTV.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.searchTV.userInteractionEnabled = YES;
     [self.view addSubview:self.searchTV];
+    
+    
+    // -------------- UIMainView
+    PAPdiscoverTileView *discoverTileView = [[PAPdiscoverTileView alloc] initWithFrame:CGRectMake(0.0f, 20 + self.searchBar.bounds.size.height, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.height - (20 + self.searchBar.bounds.size.height + tabBarHeight))];
+    [self.view addSubview:discoverTileView];
     
 	   
 }
@@ -120,17 +131,32 @@ NSInteger selection = 1;
     [PAPUtility captureScreenGA:@"Discover"];
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     
-    PFQuery *userQuery = [PFUser query];
-    userQuery.limit = MAXFLOAT;
-    [userQuery whereKeyExists:@"displayName"];
-    [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            self.userList = objects;
-            [self.searchTV reloadData];
-        } else {
-            NSLog(@"%@", error);
-        }
-    }];
+    if ([self.follwerList count] == 0) {
+        PFQuery *activityQuery = [PFQuery queryWithClassName:@"Activity"];
+        [activityQuery whereKey:@"fromUser" equalTo:[PFUser currentUser]];
+        [activityQuery whereKey:@"type" equalTo:@"follow"];
+        activityQuery.limit = MAXFLOAT;
+        [activityQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                self.follwerList = objects;
+                
+                PFQuery *userQuery = [PFUser query];
+                userQuery.limit = MAXFLOAT;
+                [userQuery whereKeyExists:@"displayName"];
+                [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                    if (!error) {
+                        NSLog(@"User data Successfully Loaded");
+                        self.userList = objects;
+                        [self.searchTV reloadData];
+                    } else {
+                        NSLog(@"User query error: %@", error);
+                    }
+                }];
+            } else {
+                NSLog(@"Activity Query Error: %@", error);
+            }
+        }];
+    }
     
     
 }
@@ -193,17 +219,7 @@ NSInteger selection = 1;
 
 - (void)searchTableList {
     NSString *searchString = self.searchBar.text;
-        /*
-    for (int i = 0; i < [self.userList count]; i++) {
-
-        for (NSString *tempStr in [[self.userList objectAtIndex:i] objectForKey:@"displayName"]) {
-            NSComparisonResult result = [tempStr compare:searchString options:(NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch) range:NSMakeRange(0, [searchString length])];
-            if (result == NSOrderedSame) {
-                [self.userFilterList addObject:tempStr];
-            }
-        }
-         */
-        [self.userFilterList addObjectsFromArray:[self.userList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", searchString]]];
+    [self.userFilterList addObjectsFromArray:[self.userList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", searchString]]];
     NSLog(@"userfilterlist: %lu", (unsigned long)[self.userFilterList count]);
     NSLog(@"search string: %@", searchString);
     //}
@@ -225,6 +241,7 @@ NSInteger selection = 1;
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    self.searchTV.hidden = YES;
     self.searchBar.showsCancelButton = NO;
     self.searchBar.text = nil;
     [self.searchBar resignFirstResponder];
@@ -250,6 +267,14 @@ NSInteger selection = 1;
 
 #pragma UITableViewDelegate
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([self.searchSelection isEqualToString:@"users"]) {
+        return [PAPFindFriendsCell heightForCell];
+    } else {
+        return 44.0f;
+    }
+}
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     if ([self.searchSelection isEqualToString:@"users"]) {
@@ -264,27 +289,90 @@ NSInteger selection = 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
-    
     // Configure the cell...
     if ([self.searchSelection isEqualToString:@"users"]) {
-        if (isSearchString) {
-            cell.textLabel.text = [[self.userFilterList objectAtIndex:indexPath.row] objectForKey:@"displayName"];
-        } else {
-            cell.textLabel.text = [[self.userList objectAtIndex:indexPath.row] objectForKey:@"displayName"];
+        static NSString *FriendCellIdentifier = @"FriendCell";
+        
+        PAPFindFriendsCell *cell = [tableView dequeueReusableCellWithIdentifier:FriendCellIdentifier];
+        if (cell == nil) {
+            cell = [[PAPFindFriendsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FriendCellIdentifier];
+            cell.delegate = self;
         }
+        
+        
+        
+        if (isSearchString) {
+            //Searching for followers
+            for (int i = 0; i < [self.follwerList count]; i++) {
+                if ([[[[self.follwerList objectAtIndex:i] objectForKey:@"toUser"] objectId] isEqualToString:[[self.userFilterList objectAtIndex:indexPath.row] objectId]]) {
+                    cell.followButton.selected = YES;
+                    break;
+                } else {
+                    cell.followButton.selected = NO;
+                }
+            }
+            [cell setUser:[self.userFilterList objectAtIndex:indexPath.row]];
+        } else {
+            //Searching for followers
+            for (int i = 0; i < [self.follwerList count]; i++) {
+                if ([[[[self.follwerList objectAtIndex:i] objectForKey:@"toUser"] objectId] isEqualToString:[[self.userList objectAtIndex:indexPath.row] objectId]]) {
+                    cell.followButton.selected = YES;
+                    break;
+                } else {
+                    cell.followButton.selected = NO;
+                }
+            }
+            [cell setUser:[self.userList objectAtIndex:indexPath.row]];
+        }
+    
+        return cell;
     }
     else {
+        static NSString *CellIdentifier = @"Cell";
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        }
         cell.textLabel.text = [self.industry_datasource objectAtIndex:indexPath.row];
+        return cell;
     }
     
-    return cell;
-    
+}
+
+#pragma mark - PAPFindFriendsCellDelegate
+
+- (void)cell:(PAPFindFriendsCell *)cellView didTapUserButton:(PFUser *)aUser {
+    // Push account view controller
+    PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
+    ;
+    [accountViewController setUser:aUser];
+    self.navigationController.navigationBar.hidden = NO;
+    [self.navigationController pushViewController:accountViewController animated:YES];
+}
+
+- (void)cell:(PAPFindFriendsCell *)cellView didTapFollowButton:(PFUser *)aUser {
+    [self shouldToggleFollowFriendForCell:cellView];
+}
+
+- (void)shouldToggleFollowFriendForCell:(PAPFindFriendsCell*)cell {
+    PFUser *cellUser = cell.user;
+    if ([cell.followButton isSelected]) {
+        // Unfollow
+        cell.followButton.selected = NO;
+        [PAPUtility unfollowUserEventually:cellUser];
+        [[NSNotificationCenter defaultCenter] postNotificationName:PAPUtilityUserFollowingChangedNotification object:nil];
+    } else {
+        // Follow
+        cell.followButton.selected = YES;
+        [PAPUtility followUserEventually:cellUser block:^(BOOL succeeded, NSError *error) {
+            if (!error) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:PAPUtilityUserFollowingChangedNotification object:nil];
+            } else {
+                cell.followButton.selected = NO;
+            }
+        }];
+    }
 }
 
 
