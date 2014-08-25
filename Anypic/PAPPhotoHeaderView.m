@@ -73,19 +73,11 @@
             //[[self.userButton titleLabel] setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
             //[self.userButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
         }
-        
-        
-        // Add clock icon
-        self.clockIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_clock.png"]];
-        [self.clockIcon setFrame:CGRectMake(270.0f, 15.0f, self.clockIcon.frame.size.width, self.clockIcon.frame.size.height)];
-        
-        [self.clockIcon setBackgroundColor:[UIColor redColor]];
-       // [self.containerView addSubview:self.clockIcon];
     
         // Add timestamp
         self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
         self.timestampLabel = [[UILabel alloc] init];
-        [self.timestampLabel setTextColor:[UIColor colorWithRed:160.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
+        [self.timestampLabel setTextColor:[UIColor colorWithRed:160.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:0.7f]];
         [self.timestampLabel setBackgroundColor:[UIColor clearColor]];
         self.timestampLabel.textAlignment = NSTextAlignmentRight;
         [containerView addSubview:self.timestampLabel];
@@ -157,7 +149,7 @@
    // CGSize expectedSize = [self.timestampLabel.text sizeWithAttributes:@{NSFontAttributeName: [UIFont boldSystemFontOfSize:10.0f]}];
     
     // Update timestamp frame
-    [self.timestampLabel setFrame:CGRectMake(self.clockIcon.frame.origin.x + self.clockIcon.frame.size.width + 2.0f, 10.0f, 23.0f, 18.0f)];
+    [self.timestampLabel setFrame:CGRectMake(282.0f, 10.0f, 23.0f, 18.0f)];
     
     [self.timestampLabel adjustsFontSizeToFitWidth];
     
