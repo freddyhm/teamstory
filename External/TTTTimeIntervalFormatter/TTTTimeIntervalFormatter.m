@@ -103,10 +103,10 @@ static inline NSCalendarUnit NSCalendarUnitFromString(NSString *string) {
 }
 
 - (NSString *)stringForTimeInterval:(NSTimeInterval)seconds {
-    return [self stringForTimeIntervalFromDate:[NSDate date] toDate:[NSDate dateWithTimeIntervalSinceNow:seconds]];
+    return [self stringForTimeIntervalFromDate:[NSDate date] toDate:[NSDate dateWithTimeIntervalSinceNow:seconds] type:@"default"];
 }
 
-- (NSString *)stringForTimeIntervalFromDate:(NSDate *)startingDate toDate:(NSDate *)resultDate {
+- (NSString *)stringForTimeIntervalFromDate:(NSDate *)startingDate toDate:(NSDate *)resultDate type:(NSString *)type {
     NSTimeInterval seconds = [startingDate timeIntervalSinceDate:resultDate];
     if (fabs(seconds) < self.presentTimeIntervalMargin) {
         return self.presentDeicticExpression;
@@ -129,7 +129,15 @@ static inline NSCalendarUnit NSCalendarUnitFromString(NSString *string) {
         NSNumber *number = [NSNumber numberWithInteger:abs((int)[[components valueForKey:unitName] integerValue])];
         if ([number integerValue]) {
             if (!string) {
-                string = [NSString stringWithFormat:@"%@%@", number, [self localizedStringForNumber:[number integerValue] ofCalendarUnit:NSCalendarUnitFromString(unitName)]];
+                
+                // Add space for comment time
+                if([type isEqualToString:@"header"] || [type isEqualToString:@"default"]){
+                    string = [NSString stringWithFormat:@"%@%@", number, [self localizedStringForNumber:[number integerValue] ofCalendarUnit:NSCalendarUnitFromString(unitName)]];
+                }else if([type isEqualToString:@"comment"] || [type isEqualToString:@"activity"] ){
+                    string = [NSString stringWithFormat:@"%@ %@", number, [self localizedStringForNumber:[number integerValue] ofCalendarUnit:NSCalendarUnitFromString(unitName)]];
+                }
+                
+                
             } else {
                 isApproximate = YES;
             }

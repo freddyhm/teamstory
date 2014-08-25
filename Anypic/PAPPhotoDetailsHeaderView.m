@@ -472,7 +472,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [userButton setFrame:userButtonFrame];
             
             // Create time label
-            NSString *timeString = [timeFormatter stringForTimeIntervalFromDate:[NSDate date] toDate:[self.photo createdAt]];
+            NSString *timeString = [timeFormatter stringForTimeIntervalFromDate:[NSDate date] toDate:[self.photo createdAt] type:@"header"];
             
             UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(timeLabelX, 10.0f, 23, 18)];
             [timeLabel setText:timeString];

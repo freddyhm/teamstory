@@ -80,12 +80,14 @@
             [self.commentCountLabel setFont:[UIFont systemFontOfSize:12.0f]];
             [self.commentCountLabel setText:@"0"];
             [self.commentCountLabel setTextColor:likeCommentColor];
+            [self.commentCountLabel setUserInteractionEnabled:YES];
 
              self.commentTitle = [[UILabel alloc] initWithFrame:CGRectMake(self.commentCountLabel.frame.origin.x + self.commentCountLabel.frame.size.width, self.commentButton.frame.origin.y + 5.0f, 80, 15)];
             
             [self.commentTitle setTextColor:likeCommentColor];
             [self.commentTitle setFont:[UIFont systemFontOfSize:12.0f]];
             [self.commentTitle setText:@" Comments"];
+            [self.commentTitle setUserInteractionEnabled:YES];
             
             [containerView addSubview:self.commentCountLabel];
             [containerView addSubview:self.commentTitle];
@@ -136,6 +138,14 @@
         
         if (self.buttons & PAPPhotoHeaderButtonsComment2) {
             [self.commentButton addTarget:self action:@selector(didTapCommentOnPhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+            
+            // Add tap gestures for comment count and title
+            UITapGestureRecognizer* tapGestureCommentCount = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapCommentOnPhotoButtonAction:)];
+            UITapGestureRecognizer* tapGestureCommentTitle = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapCommentOnPhotoButtonAction:)];
+    
+            [self.commentCountLabel addGestureRecognizer:tapGestureCommentCount];
+            [self.commentTitle addGestureRecognizer:tapGestureCommentTitle];
+            
         }
         
         if (self.buttons & PAPPhotoHeaderButtonsLike2) {

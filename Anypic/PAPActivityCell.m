@@ -172,7 +172,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [self.contentLabel setText:activityString];
     }
 
-    [self.timeLabel setText:[timeFormatter stringForTimeIntervalFromDate:[NSDate date] toDate:[activity createdAt]]];
+    [self.timeLabel setText:[timeFormatter stringForTimeIntervalFromDate:[NSDate date] toDate:[activity createdAt] type:@"activity"]];
 
     [self setNeedsDisplay];
 }

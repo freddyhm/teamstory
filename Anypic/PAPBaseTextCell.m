@@ -475,7 +475,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 - (void)setDate:(NSDate *)date {
     // Set the label with a human readable time
-    [self.timeLabel setText:[timeFormatter stringForTimeIntervalFromDate:[NSDate date] toDate:date]];
+    [self.timeLabel setText:[timeFormatter stringForTimeIntervalFromDate:[NSDate date] toDate:date type:@"comment"]];
     [self setNeedsDisplay];
 }
 
