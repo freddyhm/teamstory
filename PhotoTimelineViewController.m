@@ -300,7 +300,7 @@ enum ActionSheetTags {
         [SVProgressHUD dismiss];
         [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, 0.0f)];
     }
-   
+    
     // Check for errors, also used to indicate method completion
     BOOL didLoad = !error ? YES : NO;
     
@@ -308,6 +308,26 @@ enum ActionSheetTags {
      after the data has been loaded */
     self.feed.delegate = self;
     self.feed.dataSource = self;
+    
+    // Add images to cache if not already present
+    for (PFObject *object in self.objects) {
+        
+        // Check if image in cache
+        [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *image, SDImageCacheType cacheType) {
+            if(!image){
+                PFImageView *photoImgView = [[PFImageView alloc] init];
+                photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
+                // Load images from remote server
+                [photoImgView loadInBackground:^(UIImage *image, NSError *error) {
+                    // Check if there's no error and image is present before setting
+                    if(!error && image){
+                        [[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
+                    }
+                }];
+            }
+        }];
+        
+    }
     
     // Reload table
     [self.feed reloadData];
@@ -596,24 +616,23 @@ enum ActionSheetTags {
         
         if(object){
             
+            [self loadPhotoAttributes:cell object:object indexPath:indexPath];
+            
             cell.caption = [object objectForKey:@"caption"];
             cell.imageView.file = [object objectForKey:kPAPPhotoPictureKey];
 
             // Fetch image from cache
-            [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *image, SDImageCacheType cacheType) {
+            [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *imageCache, SDImageCacheType cacheType) {
                 // set image from cache if available
-                if(image){
-                    cell.imageView.image = image;
+                if(imageCache){
+                    cell.imageView.image = imageCache;
                 }else{
                     // load in background and set image in cache
-                    [cell.imageView loadInBackground:^(UIImage *image, NSError *error) {
-                        [[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
+                    [cell.imageView loadInBackground:^(UIImage *imageFromServer, NSError *error) {
+                        [[SDImageCache sharedImageCache] storeImage:imageFromServer forKey:[object objectId]];
                     }];
                 }
             }];
-            
-            
-            [self loadPhotoAttributes:cell object:object indexPath:indexPath];
         }
         
         return cell;
