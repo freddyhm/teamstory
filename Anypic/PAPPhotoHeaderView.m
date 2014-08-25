@@ -151,7 +151,7 @@
     
     // Set timestamp
     [self.timestampLabel setText:timestamp];
-    CGSize expectedSize = [self.timestampLabel.text sizeWithAttributes:@{NSFontAttributeName: [UIFont systemFontOfSize:9.0f]}];
+    CGSize expectedSize = [self.timestampLabel.text sizeWithAttributes:@{NSFontAttributeName: [UIFont boldSystemFontOfSize:10.0f]}];
     
     // Update timestamp frame
     [self.timestampLabel setFrame:CGRectMake(self.clockIcon.frame.origin.x + self.clockIcon.frame.size.width + 2.0f, 10.0f, expectedSize.width, 18.0f)];
