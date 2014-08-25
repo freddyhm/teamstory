@@ -77,7 +77,7 @@
         
         // Add clock icon
         self.clockIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_clock.png"]];
-        [self.clockIcon setFrame:CGRectMake(274.0f, 15.0f, self.clockIcon.frame.size.width, self.clockIcon.frame.size.height)];
+        [self.clockIcon setFrame:CGRectMake(270.0f, 15.0f, self.clockIcon.frame.size.width, self.clockIcon.frame.size.height)];
         
         [self.clockIcon setBackgroundColor:[UIColor redColor]];
         [self.containerView addSubview:self.clockIcon];
@@ -86,7 +86,6 @@
         self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
         self.timestampLabel = [[UILabel alloc] init];
         [self.timestampLabel setTextColor:[UIColor colorWithRed:160.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
-        [self.timestampLabel setFont:[UIFont systemFontOfSize:9.0f]];
         [self.timestampLabel setBackgroundColor:[UIColor blueColor]];
         self.timestampLabel.textAlignment = NSTextAlignmentRight;
         [containerView addSubview:self.timestampLabel];
@@ -153,10 +152,14 @@
     
     // Set timestamp
     [self.timestampLabel setText:timestamp];
-    CGSize expectedSize = [self.timestampLabel.text sizeWithAttributes:@{NSFontAttributeName: [UIFont boldSystemFontOfSize:10.0f]}];
+    [self.timestampLabel setFont:[UIFont boldSystemFontOfSize:10.0f]];
+    self.timestampLabel.textAlignment = NSTextAlignmentRight;
+   // CGSize expectedSize = [self.timestampLabel.text sizeWithAttributes:@{NSFontAttributeName: [UIFont boldSystemFontOfSize:10.0f]}];
     
     // Update timestamp frame
-    [self.timestampLabel setFrame:CGRectMake(self.clockIcon.frame.origin.x + self.clockIcon.frame.size.width + 2.0f, 10.0f, expectedSize.width, 18.0f)];
+    [self.timestampLabel setFrame:CGRectMake(self.clockIcon.frame.origin.x + self.clockIcon.frame.size.width + 2.0f, 10.0f, 23.0f, 18.0f)];
+    
+    [self.timestampLabel adjustsFontSizeToFitWidth];
     
     [self setNeedsDisplay];
     
