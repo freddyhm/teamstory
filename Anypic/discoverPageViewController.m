@@ -252,10 +252,9 @@ NSInteger selection = 1;
 
 - (void)searchTableList {
     NSString *searchString = self.searchBar.text;
-    [self.userFilterList addObjectsFromArray:[self.userList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", searchString]]];
-    NSLog(@"userfilterlist: %lu", (unsigned long)[self.userFilterList count]);
-    NSLog(@"search string: %@", searchString);
-    //}
+    if ([searchString length] > 0) {
+        [self.userFilterList addObjectsFromArray:[self.userList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", searchString]]];
+    }
 }
 
 
@@ -335,7 +334,6 @@ NSInteger selection = 1;
         }
         
         
-        
         if (isSearchString) {
             //Searching for followers
             for (int i = 0; i < [self.follwerList count]; i++) {
@@ -345,6 +343,10 @@ NSInteger selection = 1;
                 } else {
                     cell.followButton.selected = NO;
                 }
+            }
+            
+            if ([[[self.userFilterList objectAtIndex:indexPath.row] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+                cell.followButton.hidden = YES;
             }
             [cell setUser:[self.userFilterList objectAtIndex:indexPath.row]];
         } else {
@@ -356,6 +358,9 @@ NSInteger selection = 1;
                 } else {
                     cell.followButton.selected = NO;
                 }
+            }
+            if ([[[self.userList objectAtIndex:indexPath.row] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+                cell.followButton.hidden = YES;
             }
             [cell setUser:[self.userList objectAtIndex:indexPath.row]];
         }
