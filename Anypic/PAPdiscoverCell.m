@@ -15,15 +15,15 @@
     if (self) {
         
         self.imageViewButton1 = [[UIButton alloc] initWithFrame:CGRectMake(5.0f, 5.0f, 100.0f, 100.0f)];
-        
+        //[self.imageViewButton1 addTarget:self action:@selector(imageViewButton1Action:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.imageViewButton1];
         
         self.imageViewButton2 = [[UIButton alloc] initWithFrame:CGRectMake(110.0f, 5.0f, 100.0f, 100.0f)];
-        
+        //[self.imageViewButton2 addTarget:self action:@selector(imageViewButton2Action:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.imageViewButton2];
         
         self.imageViewButton3 = [[UIButton alloc] initWithFrame:CGRectMake(215.0f, 5.0f, 100.0f, 100.0f)];
-        
+        //[self.imageViewButton3 addTarget:self action:@selector(imageViewButton3Action:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.imageViewButton3];
         
     }
@@ -61,5 +61,25 @@
         
     }];
 }
+
+- (void) imageViewButton1Action:(id)sender{
+    
+}
+
+- (void) imageViewButton2Action:(id)sender{
+    
+}
+
+- (void) imageViewButton3Action:(id)sender{
+    
+}
+
+/*
+- (void)didTapUserButtonAction:(id)sender {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(cell:didTapUserButton:)]) {
+        [self.delegate cell:self didTapUserButton:self.user];
+    }
+}
+ */
 
 @end

@@ -100,7 +100,7 @@ NSInteger selection = 1;
     self.searchBar.backgroundColor = teamStoryColor;
     self.searchBar.layer.borderColor = teamStoryColor.CGColor;
     self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
-    //[self.searchBar setImage:<#(UIImage *)#> forSearchBarIcon:<#(UISearchBarIcon)#> state:<#(UIControlState)#>]
+    [self.searchBar setImage:[UIImage imageNamed:@"icon_search.png"] forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
     [self.view addSubview:self.searchBar];
     
     
@@ -124,11 +124,10 @@ NSInteger selection = 1;
     self.searchTV.userInteractionEnabled = YES;
     [self.view addSubview:self.searchTV];
     
-    [self setSearchIconTo];
-    
     
     // -------------- UIMainView
     self.discoverTileView = [[PAPdiscoverTileView alloc] initWithFrame:CGRectMake(0.0f, 20 + self.searchBar.bounds.size.height, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.height - (20 + self.searchBar.bounds.size.height + tabBarHeight))];
+    [self.discoverTileView setNavigationController:self.navigationController];
     [self.view addSubview:self.discoverTileView];
     
 	   
@@ -138,6 +137,7 @@ NSInteger selection = 1;
     // analytics
     [PAPUtility captureScreenGA:@"Discover"];
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+    self.navigationController.navigationBar.hidden = YES;
     
     NSDate *currentDate = [NSDate date];
     NSDate *sevenDaysAgo = [currentDate dateByAddingTimeInterval:-7*24*60*60];
@@ -152,7 +152,7 @@ NSInteger selection = 1;
             
             PFQuery *postQuery_thoughts = [PFQuery queryWithClassName:@"Photo"];
             [postQuery_thoughts setLimit:21];
-            [postQuery_thoughts whereKey:@"type" equalTo:@"thoughts"];
+            [postQuery_thoughts whereKey:@"type" equalTo:@"thought"];
             [postQuery_thoughts whereKey:@"createdAt" greaterThanOrEqualTo:sevenDaysAgo];
             [postQuery_thoughts findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 if (!error) {
@@ -164,6 +164,9 @@ NSInteger selection = 1;
                     [postActivity findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                         if (!error) {
                             self.postActivityQueryResults = objects;
+                            
+                            
+                            // Do calculations and send the query list from here
                             [self.discoverTileView setPictureQuery:self.postPicQueryResults setThoughtQuery:self.postThoughtQueryResults setActivityQuery:self.postActivityQueryResults];
                         } else {
                             NSLog(@"Post Activity Query Error: %@", error);
@@ -241,23 +244,6 @@ NSInteger selection = 1;
     
 }
 
-- (void)setSearchIconTo {
-    // Really a UISearchBarTextField, but the header is private.
-    UITextField *searchField = nil;
-    for (UIView *subview in self.searchBar.subviews) {
-        if ([subview isKindOfClass:[UITextField class]]) {
-            searchField = (UITextField *)subview;
-            break;
-        }
-    }
-    
-    if (searchField) {
-        UIImage *image = [UIImage imageNamed: @"icon_search.png"];
-        UIImageView *iView = [[UIImageView alloc] initWithImage:image];
-        searchField.leftView = iView;
-    }  
-}
-
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     NSLog(@"Search Clicked");
     [self searchTableList];
@@ -292,6 +278,7 @@ NSInteger selection = 1;
     self.searchTV.hidden = YES;
     self.searchBar.showsCancelButton = NO;
     self.searchBar.text = nil;
+    self.searchBar.placeholder = @"Search users and industry";
     [self.searchBar resignFirstResponder];
     
     [UIView animateWithDuration:0.2f animations:^{

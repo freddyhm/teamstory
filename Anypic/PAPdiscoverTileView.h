@@ -12,4 +12,6 @@
 
 -(void)setPictureQuery:(NSArray *)pictureQueryResults setThoughtQuery:(NSArray *)thoughtQueryResults setActivityQuery:(NSArray *)activityQueryResults;
 
+- (void)setNavigationController:(UINavigationController *)navigationController;
+
 @end

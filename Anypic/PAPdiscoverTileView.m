@@ -8,6 +8,7 @@
 
 #import "PAPdiscoverTileView.h"
 #import "PAPdiscoverCell.h"
+#import "PAPPhotoDetailsViewController.h"
 
 @interface PAPdiscoverTileView() {
 
@@ -22,6 +23,7 @@
 @property (nonatomic, strong) NSArray *thoughtQuery;
 @property (nonatomic, strong) NSArray *activityQuery;
 @property (nonatomic, strong) NSString *menuSelection;
+@property (nonatomic, strong) UINavigationController *navController;
 
 @end
 
@@ -69,7 +71,6 @@
         self.mainTileView.dataSource = self;
         [self addSubview:self.mainTileView];
         
-        
     }
     return self;
 }
@@ -115,6 +116,10 @@
     
 }
 
+- (void)setNavigationController:(UINavigationController *)navigationController {
+    self.navController = navigationController;
+}
+
 # pragma UITableViewDelegate
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -143,7 +148,36 @@
         [cell setImage1:[[self.thoughtQuery objectAtIndex:(indexPath.row * 3)] objectForKey:@"image"] setImage2:[[self.thoughtQuery objectAtIndex:(indexPath.row * 3) + 1] objectForKey:@"image"] setImage3:[[self.thoughtQuery objectAtIndex:(indexPath.row * 3) + 2] objectForKey:@"image"]];
     }
     
+    cell.imageViewButton1.tag = indexPath.row * 3;
+    cell.imageViewButton2.tag = (indexPath.row * 3) + 1;
+    cell.imageViewButton3.tag = (indexPath.row * 3) + 2;
+    
+    [cell.imageViewButton1 addTarget:self action:@selector(photoTapAction:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.imageViewButton2 addTarget:self action:@selector(photoTapAction:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.imageViewButton3 addTarget:self action:@selector(photoTapAction:) forControlEvents:UIControlEventTouchUpInside];
+
+    
     return cell;
+}
+
+# pragma ()
+
+-(void)photoTapAction:(UIButton *)sender {
+    if ([self.menuSelection isEqualToString:@"Moments"]) {
+        PFObject *photo = [self.pictureQuery objectAtIndex:sender.tag];
+        if (photo) {
+            PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapDiscoverPhoto"];
+            self.navController.navigationBar.hidden = NO;
+            [self.navController pushViewController:photoDetailsVC animated:YES];
+        }
+    } else {
+        PFObject *photo = [self.thoughtQuery objectAtIndex:sender.tag];
+        if (photo) {
+            PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapDiscoverPhoto"];
+            self.navController.navigationBar.hidden = NO;
+            [self.navController pushViewController:photoDetailsVC animated:YES];
+        }
+    }
 }
 
 
