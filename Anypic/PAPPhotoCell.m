@@ -177,8 +177,6 @@
             [self.linkUrlLabel setFrame:CGRectMake(99.0f, 70.0f, 190.0f, 15.0f)];
             self.linkUrlLabel.text = [self.ih_object objectForKey:@"link"];
             
-            
-            
             [self.contentView bringSubviewToFront:self.linkUrlLabel];
             [self.contentView bringSubviewToFront:self.linkTitleLabel];
             [self.contentView bringSubviewToFront:self.linkDescription];

@@ -129,7 +129,7 @@ static inline NSCalendarUnit NSCalendarUnitFromString(NSString *string) {
         NSNumber *number = [NSNumber numberWithInteger:abs((int)[[components valueForKey:unitName] integerValue])];
         if ([number integerValue]) {
             if (!string) {
-                string = [NSString stringWithFormat:@"%@ %@", number, [self localizedStringForNumber:[number integerValue] ofCalendarUnit:NSCalendarUnitFromString(unitName)]];
+                string = [NSString stringWithFormat:@"%@%@", number, [self localizedStringForNumber:[number integerValue] ofCalendarUnit:NSCalendarUnitFromString(unitName)]];
             } else {
                 isApproximate = YES;
             }

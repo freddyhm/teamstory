@@ -77,7 +77,7 @@
         
         // Add clock icon
         self.clockIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_clock.png"]];
-        [self.clockIcon setFrame:CGRectMake(284.0f, 15.0f, self.clockIcon.frame.size.width, self.clockIcon.frame.size.height)];
+        [self.clockIcon setFrame:CGRectMake(274.0f, 15.0f, self.clockIcon.frame.size.width, self.clockIcon.frame.size.height)];
         [self.containerView addSubview:self.clockIcon];
     
         // Add timestamp
