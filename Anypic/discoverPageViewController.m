@@ -42,6 +42,8 @@ NSInteger selection = 1;
 
 - (void)viewDidLoad
 {
+    self.userFilterList = [[NSMutableArray alloc] init];
+    
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
@@ -121,6 +123,8 @@ NSInteger selection = 1;
     self.searchTV.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.searchTV.userInteractionEnabled = YES;
     [self.view addSubview:self.searchTV];
+    
+    [self setSearchIconTo];
     
     
     // -------------- UIMainView
@@ -248,7 +252,7 @@ NSInteger selection = 1;
     }
     
     if (searchField) {
-        UIImage *image = [UIImage imageNamed: @"favicon.png"];
+        UIImage *image = [UIImage imageNamed: @"icon_search.png"];
         UIImageView *iView = [[UIImageView alloc] initWithImage:image];
         searchField.leftView = iView;
     }  
@@ -272,7 +276,7 @@ NSInteger selection = 1;
 # pragma UISearchBarDelegate
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
-    self.userFilterList = [[NSMutableArray alloc] init];
+    self.discoverTileView.hidden = YES;
     self.searchTV.hidden = NO;
     self.searchBar.showsCancelButton = YES;
     self.searchMovementBar.frame = CGRectMake(0.0f, 0.0f, self.searchOptionView.bounds.size.width / 2, self.searchOptionView.bounds.size.height);
@@ -284,6 +288,7 @@ NSInteger selection = 1;
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    self.discoverTileView.hidden = NO;
     self.searchTV.hidden = YES;
     self.searchBar.showsCancelButton = NO;
     self.searchBar.text = nil;

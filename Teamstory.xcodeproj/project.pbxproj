@@ -211,6 +211,8 @@
 		46C6FC0E198AA62900BC99D5 /* PAPprofileSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C6FC0D198AA62900BC99D5 /* PAPprofileSetupViewController.m */; };
 		46DC23BF19AA1F0400E8FCDF /* PAPdiscoverTileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 46DC23BE19AA1F0400E8FCDF /* PAPdiscoverTileView.m */; };
 		46DC23C219AA8C2200E8FCDF /* PAPdiscoverCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 46DC23C119AA8C2200E8FCDF /* PAPdiscoverCell.m */; };
+		46DC23C519AAC7F300E8FCDF /* icon_search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46DC23C319AAC7F300E8FCDF /* icon_search@2x.png */; };
+		46DC23C619AAC7F300E8FCDF /* icon_search.png in Resources */ = {isa = PBXBuildFile; fileRef = 46DC23C419AAC7F300E8FCDF /* icon_search.png */; };
 		46E1EB6F183BCA6300F64274 /* PAPProfileSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E1EB6E183BCA6300F64274 /* PAPProfileSettingViewController.m */; };
 		46FB0A7C1888989800E978CD /* tab-product-unselected.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A701888989700E978CD /* tab-product-unselected.png */; };
 		46FB0A7D1888989800E978CD /* tab-product-unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A711888989700E978CD /* tab-product-unselected@2x.png */; };
@@ -683,6 +685,8 @@
 		46DC23BE19AA1F0400E8FCDF /* PAPdiscoverTileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPdiscoverTileView.m; path = Anypic/PAPdiscoverTileView.m; sourceTree = SOURCE_ROOT; };
 		46DC23C019AA8C2200E8FCDF /* PAPdiscoverCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPdiscoverCell.h; path = Anypic/PAPdiscoverCell.h; sourceTree = SOURCE_ROOT; };
 		46DC23C119AA8C2200E8FCDF /* PAPdiscoverCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPdiscoverCell.m; path = Anypic/PAPdiscoverCell.m; sourceTree = SOURCE_ROOT; };
+		46DC23C319AAC7F300E8FCDF /* icon_search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_search@2x.png"; sourceTree = "<group>"; };
+		46DC23C419AAC7F300E8FCDF /* icon_search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_search.png; sourceTree = "<group>"; };
 		46E1EB6D183BCA6300F64274 /* PAPProfileSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPProfileSettingViewController.h; sourceTree = SOURCE_ROOT; };
 		46E1EB6E183BCA6300F64274 /* PAPProfileSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPProfileSettingViewController.m; sourceTree = SOURCE_ROOT; };
 		46FB0A701888989700E978CD /* tab-product-unselected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-product-unselected.png"; sourceTree = "<group>"; };
@@ -1197,6 +1201,8 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				46DC23C319AAC7F300E8FCDF /* icon_search@2x.png */,
+				46DC23C419AAC7F300E8FCDF /* icon_search.png */,
 				D5E1E5AD19A1AAFB00C87A5D /* btn_webview_options@2x.png */,
 				D5E1E5AE19A1AAFB00C87A5D /* btn_webview_options.png */,
 				469CF3681996FB4D0081FCED /* signup.png */,
@@ -2284,6 +2290,7 @@
 				D52C1E3518D9515D00625887 /* konotor_profile.png in Resources */,
 				D575A0711947834C00C6BCC2 /* btn_follow.png in Resources */,
 				463B0CEB1985A8C80075E496 /* intro_moment_2@2x.png in Resources */,
+				46DC23C519AAC7F300E8FCDF /* icon_search@2x.png in Resources */,
 				C4BE67A5157FC7F700A291C2 /* IconComment.png in Resources */,
 				46A2FE5919635A7000D8ED12 /* btn_close_timeline.png in Resources */,
 				C4BE67A6157FC7F700A291C2 /* IconComment@2x.png in Resources */,
@@ -2297,6 +2304,7 @@
 				465A4EE618A83D5100E43DC6 /* share@2x.png in Resources */,
 				469CF3721996FB4D0081FCED /* btn_email_select.png in Resources */,
 				D5E1E5AF19A1AAFB00C87A5D /* btn_webview_options@2x.png in Resources */,
+				46DC23C619AAC7F300E8FCDF /* icon_search.png in Resources */,
 				4691B4F018BEF61200B7DF6A /* unfollow.png in Resources */,
 				467A40C31990227700D4C693 /* btn_dropdown@2x.png in Resources */,
 				46A2FE531963572E00D8ED12 /* Thought Popup_selected@2x.png in Resources */,
