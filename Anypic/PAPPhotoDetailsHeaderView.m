@@ -33,7 +33,7 @@
 #define nameLabelY avatarImageY+vertSmallSpacing
 #define nameLabelMaxWidth 305.0f - (horiBorderSpacing+avatarImageDim+horiMediumSpacing+horiBorderSpacing)
 
-#define timeLabelX 281.0f
+#define timeLabelX 282.0f
 #define timeLabelMaxWidth nameLabelMaxWidth
 
 #define mainImageX baseHorizontalOffset
@@ -471,28 +471,15 @@ static TTTTimeIntervalFormatter *timeFormatter;
             CGRect userButtonFrame = CGRectMake(userButtonPoint.x, userButtonPoint.y, userButtonSize.width, userButtonSize.height);
             [userButton setFrame:userButtonFrame];
             
-            // Create clock
-            self.clockIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_clock.png"]];
-            [self.clockIcon setFrame:CGRectMake(timeLabelX, 15.0f, self.clockIcon.frame.size.width, self.clockIcon.frame.size.height)];
-            [self.nameHeaderView addSubview:self.clockIcon];
-            
-            
             // Create time label
             NSString *timeString = [timeFormatter stringForTimeIntervalFromDate:[NSDate date] toDate:[self.photo createdAt]];
             
-            
-            CGSize timeLabelSize = ([timeString boundingRectWithSize:CGSizeMake(nameLabelMaxWidth, CGFLOAT_MAX)
-                                                                              options:NSStringDrawingUsesLineFragmentOrigin
-                                                                           attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:9.0f], NSParagraphStyleAttributeName: paragraphStyle.copy}
-                                                                              context:nil]).size;
-            
-            UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(timeLabelX + 11.0f, 14.0f, timeLabelSize.width, timeLabelSize.height)];
+            UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(timeLabelX, 10.0f, 23, 18)];
             [timeLabel setText:timeString];
-            [timeLabel setFont:[UIFont systemFontOfSize:9.0f]];
+            [timeLabel setFont:[UIFont boldSystemFontOfSize:10.0f]];
+            [timeLabel adjustsFontSizeToFitWidth];
         
-            [timeLabel setTextColor:[UIColor colorWithRed:160.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
-            //[timeLabel setShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f]];
-            //[timeLabel setShadowOffset:CGSizeMake(0.0f, 1.0f)];
+            [timeLabel setTextColor:[UIColor colorWithRed:160.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:0.7f]];
             [timeLabel setBackgroundColor:[UIColor clearColor]];
             [self.nameHeaderView addSubview:timeLabel];
             
