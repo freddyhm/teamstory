@@ -80,13 +80,13 @@
         [self.clockIcon setFrame:CGRectMake(270.0f, 15.0f, self.clockIcon.frame.size.width, self.clockIcon.frame.size.height)];
         
         [self.clockIcon setBackgroundColor:[UIColor redColor]];
-        [self.containerView addSubview:self.clockIcon];
+       // [self.containerView addSubview:self.clockIcon];
     
         // Add timestamp
         self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
         self.timestampLabel = [[UILabel alloc] init];
         [self.timestampLabel setTextColor:[UIColor colorWithRed:160.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
-        [self.timestampLabel setBackgroundColor:[UIColor blueColor]];
+        [self.timestampLabel setBackgroundColor:[UIColor clearColor]];
         self.timestampLabel.textAlignment = NSTextAlignmentRight;
         [containerView addSubview:self.timestampLabel];
         
