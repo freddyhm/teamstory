@@ -345,6 +345,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         PFFile *imageFile = [self.photo objectForKey:kPAPPhotoPictureKey];
         
+        NSLog(@"TAPPED PHOTO IN DETAILS: %@", self.photo);
+        
         if (imageFile) {
             self.photoImageView.file = imageFile;
             [self.photoImageView loadInBackground];
@@ -407,6 +409,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.photoImageView.contentMode = UIViewContentModeScaleAspectFit;
         
         PFFile *imageFile = [self.photo objectForKey:kPAPPhotoPictureKey];
+        
+        NSLog(@"TAPPED PHOTO IN DETAILS: %@", self.photo);
         
         if (imageFile) {
             self.photoImageView.file = imageFile;

@@ -265,26 +265,9 @@ enum ActionSheetTags {
     [self.loadQuery includeKey:kPAPPhotoUserKey];
     [self.loadQuery orderByDescending:@"createdAt"];
     
-    // A pull-to-refresh should always trigger a network request.
-    [self.loadQuery setCachePolicy:kPFCachePolicyNetworkOnly];
-    
     // Set limit of posts for query
     [self.loadQuery setLimit:self.loadPostCount];
     
-    // If no objects are loaded in memory, we look to the cache first to fill the table
-    // and then subsequently do a query against the network.
-    //
-    // If there is no network connection, we will hit the cache first.
-    
-    // Removes warning as part of ios6 & 7 default
-    #pragma GCC diagnostic ignored "-Warc-performSelector-leaks"
-    SEL isParseReachableSelector = sel_registerName("isParseReachable");
-    
-    // Check if parse is reachable, pull from cache
-    if (self.objects.count == 0 || ![[UIApplication sharedApplication].delegate performSelector:isParseReachableSelector]) {
-        [self.loadQuery setCachePolicy:kPFCachePolicyCacheThenNetwork];
-    }
-
     // Set datasource from parse
     [self.loadQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         self.objects = [NSMutableArray arrayWithArray:objects];
