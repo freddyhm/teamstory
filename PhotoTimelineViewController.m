@@ -313,15 +313,19 @@ enum ActionSheetTags {
     for (PFObject *object in self.objects) {
         
         // Check if image in cache
-        [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *image, SDImageCacheType cacheType) {
-            if(!image){
+        [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *cacheImage, SDImageCacheType cacheType) {
+            
+            NSLog(@"ALL OBJECTS %@", object);
+            
+            if(!cacheImage){
                 PFImageView *photoImgView = [[PFImageView alloc] init];
                 photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
                 // Load images from remote server
-                [photoImgView loadInBackground:^(UIImage *image, NSError *error) {
+                [photoImgView loadInBackground:^(UIImage *imageFromServer, NSError *error) {
                     // Check if there's no error and image is present before setting
-                    if(!error && image){
-                        [[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
+                    if(!error && imageFromServer){
+                        NSLog(@"IN LOADING %@", object);
+                        [[SDImageCache sharedImageCache] storeImage:imageFromServer forKey:[object objectId]];
                     }
                 }];
             }
@@ -625,10 +629,16 @@ enum ActionSheetTags {
             [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *imageCache, SDImageCacheType cacheType) {
                 // set image from cache if available
                 if(imageCache){
+                    
+                    NSLog(@"IN CELL CACHE %@", object);
+                    
                     cell.imageView.image = imageCache;
                 }else{
                     // load in background and set image in cache
                     [cell.imageView loadInBackground:^(UIImage *imageFromServer, NSError *error) {
+                        
+                        NSLog(@"IN CELL LOADING %@", object);
+                        
                         [[SDImageCache sharedImageCache] storeImage:imageFromServer forKey:[object objectId]];
                     }];
                 }
