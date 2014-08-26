@@ -121,7 +121,7 @@
         
         
         self.imageView.frame = CGRectMake( 0.0f, 0.0f , 320.0f, 320.0f);
-        self.captionLabel.frame = CGRectMake(12.0f, self.imageView.frame.size.height + 20.0f, 295.0f, expectedSize.height);
+        self.captionLabel.frame = CGRectMake(12.0f, self.imageView.frame.size.height + 20.0f, 295.0f, expectedSize.height + 23.0f);
         
         self.photoButton.frame = CGRectMake( 7.5f, notificationBarOffSet, 320.0f, 330.0f + expectedSize.height);
         
