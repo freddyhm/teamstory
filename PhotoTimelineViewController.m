@@ -171,10 +171,12 @@ enum ActionSheetTags {
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     
     PFObject *photo = [self.objects objectAtIndex:sender.tag];
+    
+    NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:sender.tag];
+    PAPPhotoCell *cell = (PAPPhotoCell *)[self.feed cellForRowAtIndexPath:index];
+
     if (photo) {
-        
-        NSLog(@"TAPPED PHOTO: %@", photo);
-        
+        NSLog(@"TAPPED PHOTO %@ IMAGE %@", photo, cell.imageView.image);
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
         [self.navigationController pushViewController:photoDetailsVC animated:YES];
     }
