@@ -478,6 +478,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [timeLabel setText:timeString];
             [timeLabel setFont:[UIFont boldSystemFontOfSize:10.0f]];
             [timeLabel adjustsFontSizeToFitWidth];
+            timeLabel.textAlignment = NSTextAlignmentRight;
         
             [timeLabel setTextColor:[UIColor colorWithRed:160.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:0.7f]];
             [timeLabel setBackgroundColor:[UIColor clearColor]];
