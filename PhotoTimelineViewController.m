@@ -172,6 +172,9 @@ enum ActionSheetTags {
     
     PFObject *photo = [self.objects objectAtIndex:sender.tag];
     if (photo) {
+        
+        NSLog(@"TAPPED PHOTO: %@", photo);
+        
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
         [self.navigationController pushViewController:photoDetailsVC animated:YES];
     }
