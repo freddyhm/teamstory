@@ -241,6 +241,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.spinner.hidesWhenStopped = YES;
     self.tableView.showsVerticalScrollIndicator = NO;
     
+    // Enable autocorrect
+    [self.commentTextView setAutocorrectionType:UITextAutocorrectionTypeDefault];
 }
 
 
