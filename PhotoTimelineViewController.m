@@ -315,7 +315,7 @@ enum ActionSheetTags {
         // Check if image in cache
         [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *cacheImage, SDImageCacheType cacheType) {
             
-            NSLog(@"ALL OBJECTS %@", object);
+            NSLog(@"ALL OBJECTS %@ IMAGE %@", object, cacheImage);
             
             if(!cacheImage){
                 PFImageView *photoImgView = [[PFImageView alloc] init];
@@ -324,7 +324,7 @@ enum ActionSheetTags {
                 [photoImgView loadInBackground:^(UIImage *imageFromServer, NSError *error) {
                     // Check if there's no error and image is present before setting
                     if(!error && imageFromServer){
-                        NSLog(@"IN LOADING %@", object);
+                        NSLog(@"IN LOADING %@ IMAGE %@", object, imageFromServer);
                         [[SDImageCache sharedImageCache] storeImage:imageFromServer forKey:[object objectId]];
                     }
                 }];
@@ -630,14 +630,14 @@ enum ActionSheetTags {
                 // set image from cache if available
                 if(imageCache){
                     
-                    NSLog(@"IN CELL CACHE %@", object);
+                    NSLog(@"IN CELL CACHE %@, IMAGE %@", object, imageCache);
                     
                     cell.imageView.image = imageCache;
                 }else{
                     // load in background and set image in cache
                     [cell.imageView loadInBackground:^(UIImage *imageFromServer, NSError *error) {
                         
-                        NSLog(@"IN CELL LOADING %@", object);
+                        NSLog(@"IN CELL LOADING %@, IMAGE %@ ", object, imageFromServer);
                         
                         [[SDImageCache sharedImageCache] storeImage:imageFromServer forKey:[object objectId]];
                     }];
