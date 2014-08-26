@@ -33,7 +33,7 @@
 #define nameLabelY avatarImageY+vertSmallSpacing
 #define nameLabelMaxWidth 305.0f - (horiBorderSpacing+avatarImageDim+horiMediumSpacing+horiBorderSpacing)
 
-#define timeLabelX 282.0f
+#define timeLabelX 291.0f
 #define timeLabelMaxWidth nameLabelMaxWidth
 
 #define mainImageX baseHorizontalOffset
@@ -474,7 +474,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             // Create time label
             NSString *timeString = [timeFormatter stringForTimeIntervalFromDate:[NSDate date] toDate:[self.photo createdAt] type:@"header"];
             
-            UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(timeLabelX, 10.0f, 23, 18)];
+            UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(timeLabelX, 12.0f, 23, 18)];
             [timeLabel setText:timeString];
             [timeLabel setFont:[UIFont boldSystemFontOfSize:10.0f]];
             [timeLabel adjustsFontSizeToFitWidth];

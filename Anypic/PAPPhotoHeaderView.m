@@ -149,7 +149,7 @@
    // CGSize expectedSize = [self.timestampLabel.text sizeWithAttributes:@{NSFontAttributeName: [UIFont boldSystemFontOfSize:10.0f]}];
     
     // Update timestamp frame
-    [self.timestampLabel setFrame:CGRectMake(282.0f, 10.0f, 23.0f, 18.0f)];
+    [self.timestampLabel setFrame:CGRectMake(282.0f, 12.0f, 23.0f, 18.0f)];
     
     [self.timestampLabel adjustsFontSizeToFitWidth];
     
