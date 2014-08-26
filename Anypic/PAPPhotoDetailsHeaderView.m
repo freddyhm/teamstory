@@ -345,7 +345,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         PFFile *imageFile = [self.photo objectForKey:kPAPPhotoPictureKey];
         
-        NSLog(@"TAPPED PHOTO IN DETAILS: %@", self.photo);
+        NSLog(@"TAPPED PHOTO IN DETAILS: %@", imageFile.url);
         
         if (imageFile) {
             self.photoImageView.file = imageFile;
@@ -410,7 +410,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         PFFile *imageFile = [self.photo objectForKey:kPAPPhotoPictureKey];
         
-        NSLog(@"TAPPED PHOTO IN DETAILS: %@", self.photo);
+        NSLog(@"TAPPED PHOTO IN DETAILS: %@", imageFile.url);
         
         if (imageFile) {
             self.photoImageView.file = imageFile;

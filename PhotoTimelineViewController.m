@@ -176,7 +176,7 @@ enum ActionSheetTags {
     PAPPhotoCell *cell = (PAPPhotoCell *)[self.feed cellForRowAtIndexPath:index];
 
     if (photo) {
-        NSLog(@"TAPPED PHOTO %@ IMAGE %@", photo, cell.imageView.image);
+        NSLog(@"TAPPED PHOTO %@ IMAGE %@", photo, cell.imageView.file.url);
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
         [self.navigationController pushViewController:photoDetailsVC animated:YES];
     }
@@ -303,7 +303,9 @@ enum ActionSheetTags {
         // Check if image in cache
         [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *cacheImage, SDImageCacheType cacheType) {
             
-            NSLog(@"ALL OBJECTS %@ IMAGE %@", object, cacheImage);
+            PFFile *fileAll = [object objectForKey:@"image"];
+            
+            NSLog(@"ALL OBJECTS %@ IMAGE %@", object, fileAll.url);
             
             if(!cacheImage){
                 PFImageView *photoImgView = [[PFImageView alloc] init];
@@ -312,7 +314,7 @@ enum ActionSheetTags {
                 [photoImgView loadInBackground:^(UIImage *imageFromServer, NSError *error) {
                     // Check if there's no error and image is present before setting
                     if(!error && imageFromServer){
-                        NSLog(@"IN LOADING %@ IMAGE %@", object, imageFromServer);
+                        NSLog(@"IN LOADING %@ IMAGE %@", object, photoImgView.file.url);
                         [[SDImageCache sharedImageCache] storeImage:imageFromServer forKey:[object objectId]];
                     }
                 }];
@@ -618,14 +620,14 @@ enum ActionSheetTags {
                 // set image from cache if available
                 if(imageCache){
                     
-                    NSLog(@"IN CELL CACHE %@, IMAGE %@", object, imageCache);
+                    NSLog(@"IN CELL CACHE %@, IMAGE %@", object, cell.imageView.file.url);
                     
                     cell.imageView.image = imageCache;
                 }else{
                     // load in background and set image in cache
                     [cell.imageView loadInBackground:^(UIImage *imageFromServer, NSError *error) {
                         
-                        NSLog(@"IN CELL LOADING %@, IMAGE %@ ", object, imageFromServer);
+                        NSLog(@"IN CELL LOADING %@, IMAGE %@ ", object, cell.imageView.file.url);
                         
                         [[SDImageCache sharedImageCache] storeImage:imageFromServer forKey:[object objectId]];
                     }];
