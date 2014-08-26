@@ -71,8 +71,8 @@ enum ActionSheetTags {
 {
     [super viewDidLoad];
     
-    [[SDImageCache sharedImageCache] clearMemory];
-    [[SDImageCache sharedImageCache] clearDisk];
+  //  [[SDImageCache sharedImageCache] clearMemory];
+  //  [[SDImageCache sharedImageCache] clearDisk];
     
     
     // Remove cell separator
@@ -284,7 +284,7 @@ enum ActionSheetTags {
         }
     }];
     
-    [self.loadQuery clearCachedResult];
+  //  [self.loadQuery clearCachedResult];
 }
 
 - (BOOL)objectsDidLoad:(NSError *)error {
