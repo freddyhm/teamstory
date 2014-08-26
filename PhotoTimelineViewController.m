@@ -71,6 +71,10 @@ enum ActionSheetTags {
 {
     [super viewDidLoad];
     
+    [[SDImageCache sharedImageCache] clearMemory];
+    [[SDImageCache sharedImageCache] clearDisk];
+    
+    
     // Remove cell separator
     [self.feed setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
@@ -279,6 +283,8 @@ enum ActionSheetTags {
             [self objectsDidLoad:error];
         }
     }];
+    
+    [self.loadQuery clearCachedResult];
 }
 
 - (BOOL)objectsDidLoad:(NSError *)error {
