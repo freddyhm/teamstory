@@ -281,7 +281,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         expectedSize = [self.photoDescriptionLabel sizeThatFits:maximumLabelSize];
         
-        viewOffset = 24;
+        viewOffset = 39;
         
         self.photoImageView = [[PFImageView alloc]init];
         
@@ -291,7 +291,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             
             self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + 10.0f, 80.0f, 80.0f)];
             
-            viewOffset = -205.0f;
+            viewOffset = -190.0f;
             
             UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(linkPostButtonAction:)];
             [photoTap setNumberOfTapsRequired:1];
