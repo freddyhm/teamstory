@@ -163,15 +163,27 @@ NSInteger selection = 1;
                     PFQuery *postActivity = [PFQuery queryWithClassName:@"Activity"];
                     [postActivity setLimit:MAXFLOAT];
                     [postActivity whereKey:@"createdAt" greaterThan:sevenDaysAgo];
+                    [postActivity whereKeyExists:@"photo"];
                     [postActivity findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                         if (!error) {
                             self.postActivityQueryResults = objects;
+                            
+                            NSLog(@"%lu", (unsigned long)[self.postActivityQueryResults count]);
                             
                             [self.tallyForPictureQuery removeAllObjects];
                             [self.tallyForThoughtQuery removeAllObjects];
                             
                             self.tallyForPictureQuery = [[NSMutableDictionary alloc] init];
                             self.tallyForThoughtQuery = [[NSMutableDictionary alloc] init];
+                            
+                            for (int i = 0; i < [self.postPicQueryResults count]; i++) {
+                                [self.tallyForPictureQuery setObject:[NSNumber numberWithInteger:0] forKey:[[self.postPicQueryResults objectAtIndex:i] objectId]];
+                            }
+                            
+                            for (int i = 0; i < [self.postThoughtQueryResults count]; i++) {
+                                [self.tallyForThoughtQuery setObject:[NSNumber numberWithInteger:0] forKey:[[self.postThoughtQueryResults objectAtIndex:i] objectId]];
+                            }
+                            
                             
                             for (int i = 0; i < [self.postActivityQueryResults count]; i++) {
                                 if ([[self.postActivityQueryResults objectAtIndex:i] objectForKey:@"photo"] != nil) {
@@ -185,7 +197,9 @@ NSInteger selection = 1;
                                         points = 1;
                                     }
                                     
-                                    [self.tallyForPictureQuery setObject:[NSNumber numberWithInteger:[currentValue intValue] + points] forKey:ObjectId];
+                                    if ([self.tallyForPictureQuery objectForKey:ObjectId] != nil) {
+                                        [self.tallyForPictureQuery setObject:[NSNumber numberWithInteger:[currentValue intValue] + points] forKey:ObjectId];
+                                    }
                                 }
                             }
                             
@@ -202,9 +216,12 @@ NSInteger selection = 1;
                                         points = 1;
                                     }
                                     
-                                    [self.tallyForThoughtQuery setObject:[NSNumber numberWithInteger:[currentValue intValue] + points] forKey:ObjectId];
+                                    if ([self.tallyForThoughtQuery objectForKey:ObjectId] != nil) {
+                                        [self.tallyForThoughtQuery setObject:[NSNumber numberWithInteger:[currentValue intValue] + points] forKey:ObjectId];
+                                    }
                                 }
                             }
+                            
                             
                             // --------------- Sorting
                             NSArray *tallyPictureResultArray = [self.tallyForPictureQuery keysSortedByValueUsingComparator: ^(id obj1, id obj2) {
@@ -214,6 +231,10 @@ NSInteger selection = 1;
                             NSArray *tallyThoughtResultArray = [self.tallyForThoughtQuery keysSortedByValueUsingComparator: ^(id obj1, id obj2) {
                                 return (NSComparisonResult)NSOrderedAscending;
                             }];
+                            
+                            
+                            NSLog(@"%lu", (unsigned long)[tallyPictureResultArray count]);
+                            NSLog(@"%lu", (unsigned long)[tallyThoughtResultArray count]);
                             
                             
                             // ---------------- only take first 21 results
