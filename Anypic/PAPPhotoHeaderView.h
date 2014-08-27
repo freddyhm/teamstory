@@ -43,17 +43,7 @@ typedef enum {
 
 /*! @name Modifying Interaction Elements Status */
 
-/*!
- Configures the Like Button to match the given like status.
- @param liked a BOOL indicating if the associated photo is liked by the user
- */
-- (void)setLikeStatus:(BOOL)liked;
 
-/*!
- Enable the like button to start receiving actions.
- @param enable a BOOL indicating if the like button should be enabled.
- */
-- (void)shouldEnableLikeButton:(BOOL)enable;
 
 @end
 

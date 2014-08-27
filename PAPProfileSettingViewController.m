@@ -842,6 +842,7 @@
                 alert.alertViewStyle = UIAlertViewStyleDefault;
                 alert.tag = SUCCESSFUL;
                 [alert show];
+            
             }else{
                 UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your Information could not be saved. Reach us at info@teamstoryapp.com" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                 alert.alertViewStyle = UIAlertViewStyleDefault;
@@ -1033,6 +1034,10 @@
                     alert.alertViewStyle = UIAlertViewStyleDefault;
                     alert.tag = SUCCESSFUL;
                     [alert show];
+                    
+                    // Notify timeline so a refresh is triggered
+                    [[NSNotificationCenter defaultCenter] postNotificationName:PAPProfileSettingViewControllerUserChangedProfile object:nil userInfo:nil];
+                    
                 }else{
                     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your Information could not be saved. Reach us at info@teamstoryapp.com" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                     alert.alertViewStyle = UIAlertViewStyleDefault;

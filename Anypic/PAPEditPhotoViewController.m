@@ -92,7 +92,7 @@
     [self.scrollView setShowsVerticalScrollIndicator:NO];
     self.view = self.scrollView;
     
-    UIImageView *photoImageView = [[UIImageView alloc] initWithFrame:CGRectMake( 7.5f, 42.0f, 305.0f, 305.0f)];
+    UIImageView *photoImageView = [[UIImageView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, 320.0f, 320.0f)];
     [photoImageView setBackgroundColor:[UIColor blackColor]];
     [photoImageView setImage:self.image];
     [photoImageView setContentMode:UIViewContentModeScaleAspectFit];
@@ -119,12 +119,16 @@
     self.commentTextView = self.footerView.commentView;
     self.commentTextView.text = @"Add a caption";
     self.commentTextView.delegate = self;
+    [self.commentTextView setAutocorrectionType:UITextAutocorrectionTypeDefault];
+    
     [self.scrollView addSubview:self.footerView];
     
 
     [self.scrollView setContentSize:CGSizeMake(self.scrollView.bounds.size.width, photoImageView.frame.origin.y + photoImageView.frame.size.height + self.footerView.frame.size.height)];
     
     self.scrollView.scrollEnabled = YES;
+    
+    
   }
 
 - (void)viewDidLoad {
@@ -201,7 +205,7 @@
     
     // get home and phototimeline, if there are children pop 'em to get back to timeline
     PAPHomeViewController *homeViewController = [tabBarViewControllers objectAtIndex:0];
-    PAPPhotoTimelineViewController *photoViewController = [homeViewController.childViewControllers objectAtIndex:0];
+    PhotoTimelineViewController *photoViewController = [homeViewController.childViewControllers objectAtIndex:0];
     
     if([homeViewController.childViewControllers count] > 1){
         [photoViewController.navigationController popViewControllerAnimated:NO];

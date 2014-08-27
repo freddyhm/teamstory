@@ -252,6 +252,10 @@
 }
 
 - (void)thoughtButtonAction:(id)sender{
+    
+    // analytics
+    [PAPUtility captureEventGA:@"Testing" action:@"Pressed Thought" label:nil];
+    
     postButton.selected = self.postButton.selected ? NO : YES;
     self.postMenu.hidden = YES;
     

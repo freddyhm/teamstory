@@ -7,10 +7,11 @@
 //
 
 #import "PAPPhotoHeaderView.h"
+#import "PostFooterView.h"
 #import "PAPPhotoDetailsViewController.h"
 #import <UIKit/UIKit.h>
 
-@interface PhotoTimelineViewController : UIViewController <PAPPhotoHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate>
+@interface PhotoTimelineViewController : UIViewController <PAPPhotoHeaderViewDelegate, PostFooterViewDelegate, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *feed;
 @property (strong, nonatomic) IBOutlet NSMutableArray *objects;
 @property (nonatomic, strong) PFQuery *loadQuery;

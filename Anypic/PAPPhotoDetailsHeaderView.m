@@ -10,8 +10,8 @@
 #import "MBProgressHUD.h"
 #import "PAPwebviewViewController.h"
 
-#define baseHorizontalOffset 7.5f
-#define baseWidth 305.0f
+#define baseHorizontalOffset 0.0f
+#define baseWidth 320.0f
 
 #define horiBorderSpacing 6.0f
 #define horiMediumSpacing 8.0f
@@ -23,7 +23,7 @@
 #define nameHeaderX baseHorizontalOffset
 #define nameHeaderY 0.0f
 #define nameHeaderWidth baseWidth
-#define nameHeaderHeight 46.0f
+#define nameHeaderHeight 44.0f
 
 #define avatarImageX horiBorderSpacing
 #define avatarImageY vertBorderSpacing
@@ -33,13 +33,13 @@
 #define nameLabelY avatarImageY+vertSmallSpacing
 #define nameLabelMaxWidth 305.0f - (horiBorderSpacing+avatarImageDim+horiMediumSpacing+horiBorderSpacing)
 
-#define timeLabelX nameLabelX
+#define timeLabelX 282.0f
 #define timeLabelMaxWidth nameLabelMaxWidth
 
 #define mainImageX baseHorizontalOffset
 #define mainImageY nameHeaderHeight
 #define mainImageWidth baseWidth
-#define mainImageHeight 305.0f
+#define mainImageHeight 320.0f
 
 #define likeBarX baseHorizontalOffset
 #define likeBarY nameHeaderHeight + mainImageHeight
@@ -75,11 +75,13 @@ static CGSize expectedSize;
 @property (nonatomic, strong) MBProgressHUD *hud;
 @property (nonatomic, strong) NSString *website;
 @property (nonatomic, strong) UINavigationController *navController;
+@property (nonatomic, strong) UIImageView *clockIcon;
 @property (nonatomic, strong) UIView *linkBackgroundView;
 @property (nonatomic, strong) UIView *linkContentView;
 @property (nonatomic, strong) UILabel *linkTitleLabel;
 @property (nonatomic, strong) UILabel *linkDescription;
 @property (nonatomic, strong) UILabel *linkUrlLabel;
+@property (nonatomic, strong) UILabel *userInfoLabel;
 
 // Redeclare for edit
 @property (nonatomic, strong, readwrite) PFUser *photographer;
@@ -123,6 +125,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         // Initialization code
         if (!timeFormatter) {
             timeFormatter = [[TTTTimeIntervalFormatter alloc] init];
+            [timeFormatter setUsesAbbreviatedCalendarUnits:YES];
         }
         
         self.photo = aPhoto;
@@ -193,7 +196,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         }
         
         return [displayName1 compare:displayName2 options:NSCaseInsensitiveSearch|NSDiacriticInsensitiveSearch];
-    }];;
+    }];
     
     for (PAPProfileImageView *image in currentLikeAvatars) {
         [image removeFromSuperview];
@@ -245,7 +248,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     [self.hud show:YES];
         
     if ([self.description length] > 0) {
-        CGSize maximumLabelSize = CGSizeMake(320.0f - baseHorizontalOffset * 4, 9999.0f);
+        CGSize maximumLabelSize = CGSizeMake(320.0f - 7.5f * 4, 9999.0f);
         
         NSRange range = [self.description rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
         
@@ -278,27 +281,28 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         expectedSize = [self.photoDescriptionLabel sizeThatFits:maximumLabelSize];
         
-        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(baseHorizontalOffset, nameHeaderHeight, mainImageWidth, expectedSize.height + 20.0f)];
-        [backgroundView setBackgroundColor:[UIColor whiteColor]];
-        [self addSubview:backgroundView];
-        viewOffset = 20;
-        self.photoDescriptionLabel.frame = CGRectMake(baseHorizontalOffset * 2, nameHeaderHeight + 5.0f, 292.0f, expectedSize.height + 5.0f);
-                
+        viewOffset = 39;
+        
+        self.photoImageView = [[PFImageView alloc]init];
+        
         [self addSubview:self.photoDescriptionLabel];
         
         if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
-            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + self.photoDescriptionLabel.bounds.size.height + 15.0f + 10.0f, 80.0f, 80.0f)];
-            viewOffset = -185.0f;
+            
+            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + 10.0f, 80.0f, 80.0f)];
+            
+            viewOffset = -190.0f;
             
             UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(linkPostButtonAction:)];
             [photoTap setNumberOfTapsRequired:1];
             [photoTap setNumberOfTouchesRequired:1];
             
-            self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height + 15.0f, mainImageWidth, 100.0f)];
+            self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, 100.0f)];
+            
             [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
             [self addSubview:self.linkBackgroundView];
             
-            self.linkContentView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX + 5.0f, mainImageY + 5.0f + self.photoDescriptionLabel.bounds.size.height + 15.0f, self.linkBackgroundView.bounds.size.width - 10.0f, self.linkBackgroundView.bounds.size.height - 10.0f)];
+            self.linkContentView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX + 5.0f, mainImageY + 5.0f, self.linkBackgroundView.bounds.size.width - 10.0f, self.linkBackgroundView.bounds.size.height - 10.0f)];
             [self.linkContentView setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
             [self.linkContentView.layer setBorderColor:[UIColor colorWithWhite:0.9f alpha:1.0f].CGColor];
             [self.linkContentView addGestureRecognizer:photoTap];
@@ -325,14 +329,23 @@ static TTTTimeIntervalFormatter *timeFormatter;
             self.linkUrlLabel.font = [UIFont systemFontOfSize:11.0f];
             [self.linkUrlLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
             [self.linkContentView addSubview:self.linkUrlLabel];
+            
+            self.photoDescriptionLabel.frame = CGRectMake(12.0f, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 20.0f, 295.0f, expectedSize.height + 5.0f);
+
         } else {
-            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height + 15.0f, mainImageWidth, mainImageHeight)];
+            
+            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
+            
+            self.photoDescriptionLabel.frame = CGRectMake(12.0f, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 20.0f, 295.0f, expectedSize.height);
         }
+        
         self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
         self.photoImageView.backgroundColor = [UIColor blackColor];
         self.photoImageView.contentMode = UIViewContentModeScaleAspectFit;
         
         PFFile *imageFile = [self.photo objectForKey:kPAPPhotoPictureKey];
+        
+       // NSLog(@"TAPPED PHOTO IN DETAILS: %@", imageFile.url);
         
         if (imageFile) {
             self.photoImageView.file = imageFile;
@@ -340,14 +353,20 @@ static TTTTimeIntervalFormatter *timeFormatter;
         }
         
         [self addSubview:self.photoImageView];
+        
+        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(baseHorizontalOffset, nameHeaderHeight + 15.0f, mainImageWidth, self.photoImageView.frame.size.height + self.photoDescriptionLabel.frame.size.height + 50.0f)];
+        [backgroundView setBackgroundColor:[UIColor whiteColor]];
+        [self addSubview:backgroundView];
+        [self sendSubviewToBack:backgroundView];
+        
     } else {
         viewOffset = 0;
         
         if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
-            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + self.photoDescriptionLabel.bounds.size.height + 10.0f, 80.0f, 80.0f)];
-            viewOffset = -205.0f;
+            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + 10.0f, 80.0f, 80.0f)];
+            viewOffset = -220.0f;
             
-            self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height, mainImageWidth, 100.0f)];
+            self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, 100.0f)];
             [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
             [self addSubview:self.linkBackgroundView];
             
@@ -355,7 +374,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [photoTap setNumberOfTapsRequired:1];
             [photoTap setNumberOfTouchesRequired:1];
             
-            self.linkContentView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX + 5.0f, mainImageY + 5.0f + self.photoDescriptionLabel.bounds.size.height, self.linkBackgroundView.bounds.size.width - 10.0f, self.linkBackgroundView.bounds.size.height - 10.0f)];
+            self.linkContentView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX + 5.0f, mainImageY + 5.0f, self.linkBackgroundView.bounds.size.width - 10.0f, self.linkBackgroundView.bounds.size.height - 10.0f)];
             [self.linkContentView setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
             [self.linkContentView.layer setBorderColor:[UIColor colorWithWhite:0.9f alpha:1.0f].CGColor];
             [self.linkContentView addGestureRecognizer:photoTap];
@@ -383,13 +402,15 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.linkUrlLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
             [self.linkContentView addSubview:self.linkUrlLabel];
         } else {
-            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY + self.photoDescriptionLabel.bounds.size.height, mainImageWidth, mainImageHeight)];
+            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
         }
         self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
         self.photoImageView.backgroundColor = [UIColor blackColor];
         self.photoImageView.contentMode = UIViewContentModeScaleAspectFit;
         
         PFFile *imageFile = [self.photo objectForKey:kPAPPhotoPictureKey];
+        
+       // NSLog(@"TAPPED PHOTO IN DETAILS: %@", imageFile.url);
         
         if (imageFile) {
             self.photoImageView.file = imageFile;
@@ -408,11 +429,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.nameHeaderView = [[UIView alloc] initWithFrame:CGRectMake(nameHeaderX, nameHeaderY, nameHeaderWidth, nameHeaderHeight)];
         self.nameHeaderView.backgroundColor = [UIColor whiteColor];
         [self addSubview:self.nameHeaderView];
-        
-        UIButton *moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(270.0f, 8.0f, 30.0f, 30.0f)];
-        [moreActionButton setImage:[UIImage imageNamed:@"button-more.png"] forState:UIControlStateNormal];
-        [moreActionButton addTarget:self action:@selector(moreActionButton_action:) forControlEvents:UIControlEventTouchUpInside];
-        [self.nameHeaderView addSubview:moreActionButton];
+    
+    
+    
         
         // Load data for header
         [self.photographer fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
@@ -457,24 +476,44 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [userButton setFrame:userButtonFrame];
             
             // Create time label
-            NSString *timeString = [timeFormatter stringForTimeIntervalFromDate:[NSDate date] toDate:[self.photo createdAt]];
+            NSString *timeString = [timeFormatter stringForTimeIntervalFromDate:[NSDate date] toDate:[self.photo createdAt] type:@"header"];
             
-            
-            CGSize timeLabelSize = ([timeString boundingRectWithSize:CGSizeMake(nameLabelMaxWidth, CGFLOAT_MAX)
-                                                                              options:NSStringDrawingUsesLineFragmentOrigin
-                                                                           attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:11], NSParagraphStyleAttributeName: paragraphStyle.copy}
-                                                                              context:nil]).size;
-            
-            UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(timeLabelX, nameLabelY+userButtonSize.height, timeLabelSize.width, timeLabelSize.height)];
+            UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(timeLabelX, 12.0f, 23, 18)];
             [timeLabel setText:timeString];
-            [timeLabel setFont:[UIFont systemFontOfSize:11.0f]];
-            [timeLabel setTextColor:[UIColor colorWithRed:124.0f/255.0f green:124.0f/255.0f blue:124.0f/255.0f alpha:1.0f]];
-            //[timeLabel setShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f]];
-            //[timeLabel setShadowOffset:CGSizeMake(0.0f, 1.0f)];
+            [timeLabel setFont:[UIFont boldSystemFontOfSize:10.0f]];
+            [timeLabel adjustsFontSizeToFitWidth];
+            timeLabel.textAlignment = NSTextAlignmentRight;
+        
+            [timeLabel setTextColor:[UIColor colorWithRed:160.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:0.7f]];
             [timeLabel setBackgroundColor:[UIColor clearColor]];
             [self.nameHeaderView addSubview:timeLabel];
             
             [self setNeedsDisplay];
+            
+            
+            self.userInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50.0f, 20.0f, self.bounds.size.width - 50.0f - 72.0f, 18.0f)];
+            [self.userInfoLabel setTextColor:[UIColor colorWithRed:157.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
+            [self.userInfoLabel setFont:[UIFont systemFontOfSize:11.0f]];
+            [self.userInfoLabel setBackgroundColor:[UIColor clearColor]];
+            [self.userInfoLabel setAdjustsFontSizeToFitWidth:YES];
+            
+            NSString *industry = [object objectForKey:@"industry"];
+            NSString *location = [object objectForKey:@"location"];
+            NSString *userInfoSeparator = @" • ";
+            NSString *allInfo = @"";
+            
+            if(industry && location){
+                allInfo = [[industry stringByAppendingString:userInfoSeparator] stringByAppendingString:location];
+            }else if(!industry && location){
+                allInfo = location;
+            }else if(industry && !location){
+                allInfo = location;
+            }
+            
+            [self.userInfoLabel setText:allInfo];
+            
+            
+            [self.nameHeaderView addSubview:self.userInfoLabel];
         }];
     
         /*
@@ -507,8 +546,15 @@ static TTTTimeIntervalFormatter *timeFormatter;
         UIImageView *separator = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"SeparatorComments.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.0f, 1.0f, 0.0f, 1.0f)]];
         [separator setFrame:CGRectMake(0.0f, likeBarView.frame.size.height - 2.0f, likeBarView.frame.size.width, 2.0f)];
         [likeBarView addSubview:separator];
-        
+    
+        UIButton *moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(281.0f, self.likeBarView.frame.origin.y + 5.0f , 30.0f, 30.0f)];
+    
+        [moreActionButton setImage:[UIImage imageNamed:@"button-more.png"] forState:UIControlStateNormal];
+        [moreActionButton addTarget:self action:@selector(moreActionButton_action:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:moreActionButton];
+    
         [self.hud hide:YES];
+    
 }
 
 - (void)moreActionButton_action:(id)sender{
@@ -583,7 +629,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 + (CGRect)rectForView {
-    return CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 394.0f);
+    return CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 407.0f);
 }
 
 - (void)openUrl:(id)sender {

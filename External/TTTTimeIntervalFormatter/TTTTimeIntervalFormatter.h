@@ -37,7 +37,7 @@
 }
 
 - (NSString *)stringForTimeInterval:(NSTimeInterval)seconds;
-- (NSString *)stringForTimeIntervalFromDate:(NSDate *)startingDate toDate:(NSDate *)resultDate;
+- (NSString *)stringForTimeIntervalFromDate:(NSDate *)startingDate toDate:(NSDate *)resultDate type:(NSString *)type;
 
 - (NSLocale *)locale;
 - (void)setLocale:(NSLocale *)locale;

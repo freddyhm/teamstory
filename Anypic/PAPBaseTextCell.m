@@ -189,7 +189,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     [super layoutSubviews];
     
     //[mainView setFrame:CGRectMake(cellInsetWidth, self.contentView.frame.origin.y, 305.0f, self.contentView.frame.size.height)];
-    [mainView setFrame:CGRectMake(cellInsetWidth, self.contentView.frame.origin.y, self.contentView.frame.size.width-2*cellInsetWidth, self.contentView.frame.size.height)];
+    [mainView setFrame:CGRectMake(0.0f, self.contentView.frame.origin.y, 320, self.contentView.frame.size.height)];
     
     // Layout avatar image
     [self.avatarImageView setFrame:CGRectMake(avatarX, avatarY, avatarDim, avatarDim)];
@@ -218,8 +218,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
     }else {
         [self.nameButton setFrame:CGRectMake(nameX, name_height_origin, nameSize.width, nameSize.height)];
         
-        // Layour separator
-        [self.separatorImage setFrame:CGRectMake(0, self.frame.size.height-2, self.frame.size.width-cellInsetWidth*2, 2)];
+        // Layout separator
+        [self.separatorImage setFrame:CGRectMake(0, self.frame.size.height-2, self.frame.size.width, 2)];
         [self.separatorImage setHidden:hideSeparator];
     }
     
@@ -475,7 +475,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 - (void)setDate:(NSDate *)date {
     // Set the label with a human readable time
-    [self.timeLabel setText:[timeFormatter stringForTimeIntervalFromDate:[NSDate date] toDate:date]];
+    [self.timeLabel setText:[timeFormatter stringForTimeIntervalFromDate:[NSDate date] toDate:date type:@"comment"]];
     [self setNeedsDisplay];
 }
 

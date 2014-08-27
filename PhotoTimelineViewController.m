@@ -25,7 +25,9 @@
 @interface PhotoTimelineViewController ()
 @property (nonatomic, assign) BOOL shouldReloadOnAppear;
 @property (nonatomic, strong) NSMutableSet *reusableSectionHeaderViews;
+@property (nonatomic, strong) NSMutableSet *reusableSectionHeaderViews2;
 @property (nonatomic, strong) NSMutableDictionary *outstandingSectionHeaderQueries;
+@property (nonatomic, strong) NSMutableDictionary *outstandingSectionHeaderQueries2;
 @property (nonatomic, strong) NSString *reported_user;
 @property (nonatomic, strong) NSString *photoID;
 @property (nonatomic, strong) PFObject *current_photo;
@@ -49,9 +51,12 @@ enum ActionSheetTags {
     if (self) {
         
         self.outstandingSectionHeaderQueries = [NSMutableDictionary dictionary];
+        self.outstandingSectionHeaderQueries2 = [NSMutableDictionary dictionary];
         
         // Improve scrolling performance by reusing UITableView section headers
         self.reusableSectionHeaderViews = [NSMutableSet setWithCapacity:3];
+        
+        self.reusableSectionHeaderViews2 = [NSMutableSet setWithCapacity:3];
         
         self.shouldReloadOnAppear = NO;
         
@@ -66,13 +71,16 @@ enum ActionSheetTags {
 {
     [super viewDidLoad];
     
+  //  [[SDImageCache sharedImageCache] clearMemory];
+  //  [[SDImageCache sharedImageCache] clearDisk];
+    
+    
     // Remove cell separator
     [self.feed setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
     UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
     texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     self.feed.backgroundView = texturedBackgroundView;
-    self.feed.showsVerticalScrollIndicator = YES;
     
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     refreshControl.tintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:0.5f];
@@ -81,13 +89,24 @@ enum ActionSheetTags {
      
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidPublishPhoto:) name:PAPTabBarControllerDidFinishEditingPhotoNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userFollowingChanged:) name:PAPUtilityUserFollowingChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidDeletePhoto:) name:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLikeOrUnlikePhoto:) name:PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLikeOrUnlikePhoto:) name:PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidCommentOnPhoto:) name:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidChangeProfile:) name:PAPProfileSettingViewControllerUserChangedProfile object:nil];
     
     [self loadObjects:nil isRefresh:NO];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    
+    // Refresh timeline if user has recently updated their profile
+    BOOL isHome = [[self.navigationController.viewControllers lastObject] isKindOfClass:PAPHomeViewController.class];
+    
+    if(self.shouldReloadOnAppear && isHome){
+        [self loadObjects:nil isRefresh:YES];
+        self.shouldReloadOnAppear = NO;
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -106,6 +125,10 @@ enum ActionSheetTags {
     }
     
     return nil;
+}
+
+- (void)userDidChangeProfile:(NSNotification *)note {
+    self.shouldReloadOnAppear = YES;
 }
 
 - (void)userDidLikeOrUnlikePhoto:(NSNotification *)note {
@@ -147,16 +170,17 @@ enum ActionSheetTags {
     [self loadObjects:nil isRefresh:YES];
 }
 
-- (void)userFollowingChanged:(NSNotification *)note {
-    NSLog(@"User following changed.");
-    self.shouldReloadOnAppear = YES;
-}
 
 - (void)didTapOnPhotoAction:(UIButton *)sender {
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     
     PFObject *photo = [self.objects objectAtIndex:sender.tag];
+    
+    //NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:sender.tag];
+   // PAPPhotoCell *cell = (PAPPhotoCell *)[self.feed cellForRowAtIndexPath:index];
+
     if (photo) {
+       // NSLog(@"TAPPED PHOTO %@ IMAGE %@", photo, cell.imageView.file.url);
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
         [self.navigationController pushViewController:photoDetailsVC animated:YES];
     }
@@ -245,26 +269,9 @@ enum ActionSheetTags {
     [self.loadQuery includeKey:kPAPPhotoUserKey];
     [self.loadQuery orderByDescending:@"createdAt"];
     
-    // A pull-to-refresh should always trigger a network request.
-    [self.loadQuery setCachePolicy:kPFCachePolicyNetworkOnly];
-    
     // Set limit of posts for query
     [self.loadQuery setLimit:self.loadPostCount];
     
-    // If no objects are loaded in memory, we look to the cache first to fill the table
-    // and then subsequently do a query against the network.
-    //
-    // If there is no network connection, we will hit the cache first.
-    
-    // Removes warning as part of ios6 & 7 default
-    #pragma GCC diagnostic ignored "-Warc-performSelector-leaks"
-    SEL isParseReachableSelector = sel_registerName("isParseReachable");
-    
-    // Check if parse is reachable, pull from cache
-    if (self.objects.count == 0 || ![[UIApplication sharedApplication].delegate performSelector:isParseReachableSelector]) {
-        [self.loadQuery setCachePolicy:kPFCachePolicyCacheThenNetwork];
-    }
-
     // Set datasource from parse
     [self.loadQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         self.objects = [NSMutableArray arrayWithArray:objects];
@@ -276,6 +283,8 @@ enum ActionSheetTags {
             [self objectsDidLoad:error];
         }
     }];
+    
+  //  [self.loadQuery clearCachedResult];
 }
 
 - (BOOL)objectsDidLoad:(NSError *)error {
@@ -285,7 +294,7 @@ enum ActionSheetTags {
         [SVProgressHUD dismiss];
         [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, 0.0f)];
     }
-   
+    
     // Check for errors, also used to indicate method completion
     BOOL didLoad = !error ? YES : NO;
     
@@ -293,7 +302,33 @@ enum ActionSheetTags {
      after the data has been loaded */
     self.feed.delegate = self;
     self.feed.dataSource = self;
+    
+    // Add images to cache if not already present
+    for (PFObject *object in self.objects) {
         
+        // Check if image in cache
+        [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *cacheImage, SDImageCacheType cacheType) {
+            
+          //  PFFile *fileAll = [object objectForKey:@"image"];
+            
+            //NSLog(@"ALL OBJECTS %@ IMAGE %@", object, fileAll.url);
+            
+            if(!cacheImage){
+                PFImageView *photoImgView = [[PFImageView alloc] init];
+                photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
+                // Load images from remote server
+                [photoImgView loadInBackground:^(UIImage *imageFromServer, NSError *error) {
+                    // Check if there's no error and image is present before setting
+                    if(!error && imageFromServer){
+                        //NSLog(@"IN LOADING %@ IMAGE %@", object, photoImgView.file.url);
+                        [[SDImageCache sharedImageCache] storeImage:imageFromServer forKey:[object objectId]];
+                    }
+                }];
+            }
+        }];
+        
+    }
+    
     // Reload table
     [self.feed reloadData];
     
@@ -318,6 +353,84 @@ enum ActionSheetTags {
     
     PFObject *photo = [self.objects objectAtIndex:section];
     [headerView setPhoto:photo];
+    headerView.tag = section;
+    
+    
+        @synchronized(self) {
+            // check if we can update the cache
+            NSNumber *outstandingSectionHeaderQueryStatus = [self.outstandingSectionHeaderQueries objectForKey:[NSNumber numberWithInt:(int)section]];
+            if (!outstandingSectionHeaderQueryStatus) {
+                PFQuery *query = [PAPUtility queryForActivitiesOnPhoto:photo cachePolicy:kPFCachePolicyNetworkOnly];
+                [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                    @synchronized(self) {
+                        //[self.outstandingSectionHeaderQueries removeObjectForKey:[NSNumber numberWithInt:(int)section]];
+                        
+                        if (error) {
+                            return;
+                        }
+                        
+                        NSMutableArray *likers = [NSMutableArray array];
+                        NSMutableArray *commenters = [NSMutableArray array];
+                        
+                        BOOL isLikedByCurrentUser = NO;
+                        
+                        for (PFObject *activity in objects) {
+                            if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeLike] && [activity objectForKey:kPAPActivityFromUserKey]) {
+                                [likers addObject:[activity objectForKey:kPAPActivityFromUserKey]];
+                            } else if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeComment] && [activity objectForKey:kPAPActivityFromUserKey]) {
+                                [commenters addObject:[activity objectForKey:kPAPActivityFromUserKey]];
+                            }
+                            
+                            if ([[[activity objectForKey:kPAPActivityFromUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+                                if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeLike]) {
+                                    isLikedByCurrentUser = YES;
+                                    
+                                }
+                            }
+                        }
+                        
+                        [[PAPCache sharedCache] setAttributesForPhoto:photo likers:likers commenters:commenters likedByCurrentUser:isLikedByCurrentUser];
+                        
+                        if (headerView.tag != section) {
+                            return;
+                        }
+                    }
+                }];
+            }            
+        
+    }
+    return headerView;
+}
+
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == self.objects.count) {
+        return 0.0f;
+    }
+    
+    return 44.0f;
+}
+
+
+/*
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    
+    
+    if (section == self.objects.count) {
+        // Load More section
+        return nil;
+    }
+    
+    PostFooterView *headerView = [self dequeueReusableSectionHeaderView2];
+    
+    if (!headerView) {
+        headerView = [[PostFooterView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.view.bounds.size.width, 44.0f) buttons:PAPPhotoHeaderButtonsDefault2];
+        headerView.delegate = self;
+        [self.reusableSectionHeaderViews2 addObject:headerView];
+    }
+    
+    
+    PFObject *photo = [self.objects objectAtIndex:section];
     headerView.tag = section;
     [headerView.likeButton setTag:section];
     
@@ -353,7 +466,7 @@ enum ActionSheetTags {
         
         @synchronized(self) {
             // check if we can update the cache
-            NSNumber *outstandingSectionHeaderQueryStatus = [self.outstandingSectionHeaderQueries objectForKey:[NSNumber numberWithInt:(int)section]];
+            NSNumber *outstandingSectionHeaderQueryStatus = [self.outstandingSectionHeaderQueries2 objectForKey:[NSNumber numberWithInt:(int)section]];
             if (!outstandingSectionHeaderQueryStatus) {
                 PFQuery *query = [PAPUtility queryForActivitiesOnPhoto:photo cachePolicy:kPFCachePolicyNetworkOnly];
                 [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -409,34 +522,15 @@ enum ActionSheetTags {
                         }
                     }
                 }];
-            }            
+            }
         }
     }
+
+    
     return headerView;
 }
+ */
 
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section == self.objects.count) {
-        return 0.0f;
-    }
-    
-    return 44.0f;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.feed.bounds.size.width, 16.0f)];
-    
-    return footerView;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    if (section == self.objects.count) {
-        return 0.0f;
-    }
-    
-    return 16.0f;
-}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section >= self.objects.count) {
@@ -456,15 +550,15 @@ enum ActionSheetTags {
         }
         
         if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
-            return 100.0f + expectedSize.height + 25.0f;
+            return 100.0f + expectedSize.height + 75.0f;
         } else {
-            return 305.0f + expectedSize.height + 25.0f;
+            return 325.0f + expectedSize.height + 94.0f;
         }
     } else {
         if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
-            return 100.0f;
+            return 100.0f + 64.0f;
         } else {
-            return 305.0f;
+            return 325.0f + 64.0f;
         }
     }
 }
@@ -510,40 +604,130 @@ enum ActionSheetTags {
         }
         
         PAPPhotoCell *cell = (PAPPhotoCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-
+        
         if (cell == nil) {
             cell = [[PAPPhotoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             [cell.photoButton addTarget:self action:@selector(didTapOnPhotoAction:) forControlEvents:UIControlEventTouchUpInside];
         }
         
-        
-        
         [cell setObject:object];
-        
         cell.photoButton.tag = indexPath.section;
         cell.imageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
         
         if(object){
             
+            [self loadPhotoAttributes:cell object:object indexPath:indexPath];
+            
             cell.caption = [object objectForKey:@"caption"];
             cell.imageView.file = [object objectForKey:kPAPPhotoPictureKey];
-            
+
             // Fetch image from cache
-            UIImage *image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:[object objectId]];
-            
-            // set image from cache if available
-            if(image){
-                cell.imageView.image = image;
-            }else{
-                // load in background and set image in cache
-                [cell.imageView loadInBackground:^(UIImage *image, NSError *error) {
-                    [[SDImageCache sharedImageCache] storeImage:image forKey:[object objectId]];
-                }];
-            }
+            [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *imageCache, SDImageCacheType cacheType) {
+                // set image from cache if available
+                if(imageCache){
+                    
+                  //  NSLog(@"IN CELL CACHE %@, IMAGE %@", object, cell.imageView.file.url);
+                    
+                    cell.imageView.image = imageCache;
+                }else{
+                    // load in background and set image in cache
+                    [cell.imageView loadInBackground:^(UIImage *imageFromServer, NSError *error) {
+                        
+                    //    NSLog(@"IN CELL LOADING %@, IMAGE %@ ", object, cell.imageView.file.url);
+                        
+                        [[SDImageCache sharedImageCache] storeImage:imageFromServer forKey:[object objectId]];
+                    }];
+                }
+            }];
         }
         
         return cell;
     }
+}
+
+- (void)loadPhotoAttributes:(PAPPhotoCell *)cell object:(PFObject *)object indexPath:(NSIndexPath *)indexPath{
+    
+    [cell.footerView setPhoto:object];
+    cell.footerView.tag = indexPath.section;
+    [cell.footerView.likeButton setTag:indexPath.section];
+    cell.footerView.delegate = self;
+
+    NSDictionary *attributesForPhoto = [[PAPCache sharedCache] attributesForPhoto:object];
+    
+    if (attributesForPhoto) {
+        [cell.footerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:object]];
+        //[cell.footerView.likeButton setTitle:[[[PAPCache sharedCache] likeCountForPhoto:object] description] forState:UIControlStateNormal];
+        [cell.footerView setLikeCount:[[PAPCache sharedCache] likeCountForPhoto:object]];
+        //[cell.footerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:object] description] forState:UIControlStateNormal];
+        [cell.footerView setCommentCount:[[PAPCache sharedCache] commentCountForPhoto:object]];
+        
+        if (cell.footerView.likeButton.alpha < 1.0f || cell.footerView.commentButton.alpha < 1.0f) {
+            [UIView animateWithDuration:0.200f animations:^{
+                cell.footerView.likeButton.alpha = 1.0f;
+                cell.footerView.commentButton.alpha = 1.0f;
+            }];
+        }
+    }else {
+        cell.footerView.likeButton.alpha = 0.0f;
+        cell.footerView.commentButton.alpha = 0.0f;
+        
+        @synchronized(self) {
+            // check if we can update the cache
+            NSNumber *outstandingSectionHeaderQueryStatus = [self.outstandingSectionHeaderQueries objectForKey:@(indexPath.section)];
+            if (!outstandingSectionHeaderQueryStatus) {
+                PFQuery *query = [PAPUtility queryForActivitiesOnPhoto:object cachePolicy:kPFCachePolicyNetworkOnly];
+                [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                    @synchronized(self) {
+                        [self.outstandingSectionHeaderQueries removeObjectForKey:@(indexPath.section)];
+                        
+                        if (error) {
+                            return;
+                        }
+                        
+                        NSMutableArray *likers = [NSMutableArray array];
+                        NSMutableArray *commenters = [NSMutableArray array];
+                        
+                        BOOL isLikedByCurrentUser = NO;
+                        
+                        for (PFObject *activity in objects) {
+                            if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeLike] && [activity objectForKey:kPAPActivityFromUserKey]) {
+                                [likers addObject:[activity objectForKey:kPAPActivityFromUserKey]];
+                            } else if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeComment] && [activity objectForKey:kPAPActivityFromUserKey]) {
+                                [commenters addObject:[activity objectForKey:kPAPActivityFromUserKey]];
+                            }
+                            
+                            if ([[[activity objectForKey:kPAPActivityFromUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+                                if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeLike]) {
+                                    isLikedByCurrentUser = YES;
+                                }
+                            }
+                        }
+                        
+                        [[PAPCache sharedCache] setAttributesForPhoto:object likers:likers commenters:commenters likedByCurrentUser:isLikedByCurrentUser];
+                        
+                        if (cell.footerView.tag != indexPath.section) {
+                            return;
+                        }
+                        
+                        [cell.footerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:object]];
+                        //[cell.footerView.likeButton setTitle:[[[PAPCache sharedCache] likeCountForPhoto:object] description] forState:UIControlStateNormal];
+                        //[cell.footerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:object] description] forState:UIControlStateNormal];
+                        
+                        [cell.footerView setLikeCount:[[PAPCache sharedCache] likeCountForPhoto:object]];
+                        [cell.footerView setCommentCount:[[PAPCache sharedCache] commentCountForPhoto:object]];
+                        
+                        if (cell.footerView.likeButton.alpha < 1.0f || cell.footerView.commentButton.alpha < 1.0f) {
+                            [UIView animateWithDuration:0.200f animations:^{
+                                cell.footerView.likeButton.alpha = 1.0f;
+                                cell.footerView.commentButton.alpha = 1.0f;
+                            }];
+                        }
+                    }
+                }];
+            }
+        }
+    }
+    
 }
 
 - (PAPPhotoHeaderView *)dequeueReusableSectionHeaderView {
@@ -553,9 +737,9 @@ enum ActionSheetTags {
             return sectionHeaderView;
         }
     }
-    
     return nil;
 }
+
 
 #pragma mark - PhotoHeaderView Delegate
 
@@ -566,20 +750,26 @@ enum ActionSheetTags {
     [self.navigationController pushViewController:accountViewController animated:YES];
 }
 
-- (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapLikePhotoButton:(UIButton *)button photo:(PFObject *)photo {
-    [photoHeaderView shouldEnableLikeButton:NO];
+#pragma mark - PostFooterView Delegate
+
+- (void)postFooterView:(PostFooterView *)postFooterView didTapLikePhotoButton:(UIButton *)button photo:(PFObject *)photo {
     
+    // Disable button to avoid multiple likes
+    [postFooterView shouldEnableLikeButton:NO];
+    
+    // Set like button status right away
     BOOL liked = !button.selected;
-    [photoHeaderView setLikeStatus:liked];
+    [postFooterView setLikeStatus:liked];
     
-    NSString *originalButtonTitle = button.titleLabel.text;
+    // Keep original count in case of a fail
+    NSString *originalCount = postFooterView.likeCountLabel.text;
     
+    // Change string count to a number
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+    NSNumber *likeCount = [numberFormatter numberFromString:postFooterView.likeCountLabel.text];
     
-    NSNumber *likeCount = [numberFormatter numberFromString:button.titleLabel.text];
     if (liked) {
-        
         // analytics
         [PAPUtility captureEventGA:@"Engagement" action:@"Like" label:@"Photo"];
         
@@ -592,42 +782,44 @@ enum ActionSheetTags {
         [[PAPCache sharedCache] decrementLikerCountForPhoto:photo];
     }
     
+    // Set new count right away
+    [postFooterView setLikeCount:likeCount];
+    
     [[PAPCache sharedCache] setPhotoIsLikedByCurrentUser:photo liked:liked];
     
-    if (liked == YES) {
-        [button setTitle:[numberFormatter stringFromNumber:likeCount] forState:UIControlStateSelected];
-    } else if (liked == NO) {
-        [button setTitle:[numberFormatter stringFromNumber:likeCount] forState:UIControlStateNormal];
-    }
-    
+    // Send new info to server
     if (liked) {
         [PAPUtility likePhotoInBackground:photo block:^(BOOL succeeded, NSError *error) {
-            PAPPhotoHeaderView *actualHeaderView = (PAPPhotoHeaderView *)[self tableView:self.feed viewForHeaderInSection:button.tag];
-            [actualHeaderView shouldEnableLikeButton:YES];
-            [actualHeaderView setLikeStatus:succeeded];
-            
+            [postFooterView shouldEnableLikeButton:YES];
+            [postFooterView setLikeStatus:succeeded];
             if (!succeeded) {
-                [actualHeaderView.likeButton setTitle:originalButtonTitle forState:UIControlStateNormal];
+                [postFooterView setLikeCount:[numberFormatter numberFromString:originalCount]];
             }
         }];
     } else {
         [PAPUtility unlikePhotoInBackground:photo block:^(BOOL succeeded, NSError *error) {
-            PAPPhotoHeaderView *actualHeaderView = (PAPPhotoHeaderView *)[self tableView:self.feed viewForHeaderInSection:button.tag];
-            [actualHeaderView shouldEnableLikeButton:YES];
-            [actualHeaderView setLikeStatus:!succeeded];
-            
+            [postFooterView shouldEnableLikeButton:YES];
+            [postFooterView setLikeStatus:!succeeded];
             if (!succeeded) {
-                [actualHeaderView.likeButton setTitle:originalButtonTitle forState:UIControlStateNormal];
+                [postFooterView setLikeCount:[numberFormatter numberFromString:originalCount]];
             }
         }];
     }
 }
 
-- (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapCommentOnPhotoButton:(UIButton *)button  photo:(PFObject *)photo {
+
+
+- (void)postFooterView:(PostFooterView *)postFooterView didTapCommentOnPhotoButton:(UIButton *)button  photo:(PFObject *)photo {
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"commentButton"];
     [self.navigationController pushViewController:photoDetailsVC animated:YES];
 }
+
+
+
+
+
+
 
 #pragma mark - UIActionSheetDelegate
 
