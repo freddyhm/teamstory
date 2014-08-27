@@ -461,6 +461,7 @@
         [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
         [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
         [photo setObject:@"picture" forKey:kPAPPhotoType];
+        [photo setObject:[NSNumber numberWithInt:0] forKey:@"discoverCount"];
         
         // storing atmention user list to the array (only filtered cases).
         if ([self.atmentionUserArray count] > 0) {
@@ -607,6 +608,7 @@
     [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
     [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
     [photo setObject:@"picture" forKey:kPAPPhotoType];
+    [photo setObject:[NSNumber numberWithInt:0] forKey:@"discoverCount"];
     
     // storing atmention user list to the array (only filtered cases).
     if ([self.atmentionUserArray count] > 0) {
