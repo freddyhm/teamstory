@@ -35,6 +35,8 @@ NSInteger selection = 1;
 @property (nonatomic, strong) NSArray *postThoughtQueryResults;
 @property (nonatomic, strong) NSArray *postActivityQueryResults;
 @property (nonatomic, strong) PAPdiscoverTileView *discoverTileView;
+@property (nonatomic, strong) NSMutableDictionary *tallyForPictureQuery;
+@property (nonatomic, strong) NSMutableDictionary *tallyForThoughtQuery;
 
 @end
 
@@ -143,7 +145,7 @@ NSInteger selection = 1;
     NSDate *sevenDaysAgo = [currentDate dateByAddingTimeInterval:-7*24*60*60];
     
     PFQuery *postQuery_pic = [PFQuery queryWithClassName:@"Photo"];
-    [postQuery_pic setLimit:21];
+    [postQuery_pic setLimit:MAXFLOAT];
     [postQuery_pic whereKey:@"type" equalTo:@"picture"];
     [postQuery_pic whereKey:@"createdAt" greaterThanOrEqualTo:sevenDaysAgo];
     [postQuery_pic findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -151,7 +153,7 @@ NSInteger selection = 1;
             self.postPicQueryResults = objects;
             
             PFQuery *postQuery_thoughts = [PFQuery queryWithClassName:@"Photo"];
-            [postQuery_thoughts setLimit:21];
+            [postQuery_thoughts setLimit:MAXFLOAT];
             [postQuery_thoughts whereKey:@"type" equalTo:@"thought"];
             [postQuery_thoughts whereKey:@"createdAt" greaterThanOrEqualTo:sevenDaysAgo];
             [postQuery_thoughts findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -165,9 +167,85 @@ NSInteger selection = 1;
                         if (!error) {
                             self.postActivityQueryResults = objects;
                             
+                            [self.tallyForPictureQuery removeAllObjects];
+                            [self.tallyForThoughtQuery removeAllObjects];
                             
-                            // Do calculations and send the query list from here
-                            [self.discoverTileView setPictureQuery:self.postPicQueryResults setThoughtQuery:self.postThoughtQueryResults setActivityQuery:self.postActivityQueryResults];
+                            self.tallyForPictureQuery = [[NSMutableDictionary alloc] init];
+                            self.tallyForThoughtQuery = [[NSMutableDictionary alloc] init];
+                            
+                            for (int i = 0; i < [self.postActivityQueryResults count]; i++) {
+                                if ([[self.postActivityQueryResults objectAtIndex:i] objectForKey:@"photo"] != nil) {
+                                    NSString *ObjectId = [[[self.postActivityQueryResults objectAtIndex:i] objectForKey:@"photo"] objectId];
+                                    NSNumber *currentValue = [self.tallyForPictureQuery objectForKey:ObjectId];
+                                    int points;
+                                    
+                                    if ([[[self.postActivityQueryResults objectAtIndex:i] objectForKey:@"type"] isEqualToString:@"comment"]) {
+                                        points = 2;
+                                    } else {
+                                        points = 1;
+                                    }
+                                    
+                                    [self.tallyForPictureQuery setObject:[NSNumber numberWithInteger:[currentValue intValue] + points] forKey:ObjectId];
+                                }
+                            }
+                            
+                            
+                            for (int i = 0; i < [self.postActivityQueryResults count]; i++) {
+                                if ([[self.postActivityQueryResults objectAtIndex:i] objectForKey:@"photo"] != nil) {
+                                    NSString *ObjectId = [[[self.postActivityQueryResults objectAtIndex:i] objectForKey:@"photo"] objectId];
+                                    NSNumber *currentValue = [self.tallyForThoughtQuery objectForKey:ObjectId];
+                                    int points;
+                                    
+                                    if ([[[self.postActivityQueryResults objectAtIndex:i] objectForKey:@"type"] isEqualToString:@"comment"]) {
+                                        points = 2;
+                                    } else {
+                                        points = 1;
+                                    }
+                                    
+                                    [self.tallyForThoughtQuery setObject:[NSNumber numberWithInteger:[currentValue intValue] + points] forKey:ObjectId];
+                                }
+                            }
+                            
+                            // --------------- Sorting
+                            NSArray *tallyPictureResultArray = [self.tallyForPictureQuery keysSortedByValueUsingComparator: ^(id obj1, id obj2) {
+                                return (NSComparisonResult)NSOrderedAscending;
+                            }];
+                            
+                            NSArray *tallyThoughtResultArray = [self.tallyForThoughtQuery keysSortedByValueUsingComparator: ^(id obj1, id obj2) {
+                                return (NSComparisonResult)NSOrderedAscending;
+                            }];
+                            
+                            
+                            // ---------------- only take first 21 results
+                            tallyPictureResultArray = [tallyPictureResultArray subarrayWithRange:NSMakeRange(0, 21)];
+                            tallyThoughtResultArray = [tallyThoughtResultArray subarrayWithRange:NSMakeRange(0, 21)];
+                            
+                            NSMutableArray *finalPictureArray = [[NSMutableArray alloc] init];
+                            NSMutableArray *finalThoughtArray = [[NSMutableArray alloc] init];
+                            
+                            for (int i = 0; i < [tallyPictureResultArray count]; i++) {
+                                for (int j = 0; j < [self.postPicQueryResults count]; j++) {
+                                    if ([[[self.postPicQueryResults objectAtIndex:j] objectId] isEqualToString:[tallyPictureResultArray objectAtIndex:i]]) {
+                                        [finalPictureArray addObject:[self.postPicQueryResults objectAtIndex:j]];
+                                        break;
+                                    }
+                                }
+                            }
+                            
+                            for (int i = 0; i < [tallyThoughtResultArray count]; i++) {
+                                for (int j = 0; j < [self.postThoughtQueryResults count]; j++) {
+                                    if ([[[self.postThoughtQueryResults objectAtIndex:j] objectId] isEqualToString:[tallyPictureResultArray objectAtIndex:i]]) {
+                                        [finalThoughtArray addObject:[self.postThoughtQueryResults objectAtIndex:j]];
+                                        break;
+                                    }
+                                }
+                            }
+                            
+                            NSLog(@"%lu", (unsigned long)[finalThoughtArray count]);
+                            NSLog(@"%lu", (unsigned long)[finalPictureArray count]);
+                            
+                            
+                            //[self.discoverTileView setPictureQuery:self.postPicQueryResults setThoughtQuery:self.postThoughtQueryResults setActivityQuery:self.postActivityQueryResults];
                         } else {
                             NSLog(@"Post Activity Query Error: %@", error);
                         }
