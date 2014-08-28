@@ -604,7 +604,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                     self.atmentionUserArray = [[NSMutableArray alloc] init];
                     self.filteredArray = objects;
                     self.autocompleteTableView.backgroundColor = [UIColor clearColor];
-                    NSLog(@"%lu", (unsigned long)[self.userArray count]);
                 } else {
                     NSLog(@"%@", error);
                 }
@@ -658,6 +657,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 [SVProgressHUD dismiss];
                 [self loadObjects];
                 
+                // set discover count.
+                [self.photo incrementKey:@"discoverCount" byAmount:[NSNumber numberWithInt:2]];
+                [self.photo saveInBackground];
                 // suscribe to post if commenter is not photo owner
                 if(![[[self.photo objectForKey:kPAPPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]){
                     [PAPUtility updateSubscriptionToPost:self.photo forState:@"Subscribe"];
