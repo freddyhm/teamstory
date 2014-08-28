@@ -21,7 +21,6 @@
 @property (nonatomic, strong) UITableView *mainTileView;
 @property (nonatomic, strong) NSArray *pictureQuery;
 @property (nonatomic, strong) NSArray *thoughtQuery;
-@property (nonatomic, strong) NSArray *activityQuery;
 @property (nonatomic, strong) NSString *menuSelection;
 @property (nonatomic, strong) UINavigationController *navController;
 
@@ -75,10 +74,9 @@
     return self;
 }
 
--(void)setPictureQuery:(NSArray *)pictureQueryResults setThoughtQuery:(NSArray *)thoughtQueryResults setActivityQuery:(NSArray *)activityQueryResults {
+-(void)setPictureQuery:(NSArray *)pictureQueryResults setThoughtQuery:(NSArray *)thoughtQueryResults {
     self.pictureQuery = pictureQueryResults;
     self.thoughtQuery = thoughtQueryResults;
-    self.activityQuery = activityQueryResults;
     [self.mainTileView reloadData];
 }
 
