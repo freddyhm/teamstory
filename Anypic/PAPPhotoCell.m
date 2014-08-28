@@ -90,7 +90,8 @@
         self.imageView.frame = CGRectMake( 0.0f, 0.0f, 320.0f, 320.0f);
         self.imageView.backgroundColor = [UIColor blackColor];
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
-        
+        self.imageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"]; //first pic
+    
         self.photoButton = [UIButton buttonWithType:UIButtonTypeCustom];
         self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 320.0f, 320.0f);
         self.photoButton.backgroundColor = [UIColor clearColor];
@@ -246,9 +247,13 @@
 
 - (void)prepareForReuse
 {
-    self.imageView.image = nil;
+    
+    [super prepareForReuse];
+    
     self.ih_image = nil;
     self.ih_object = nil;
+    self.imageView.file = nil;
+    self.imageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"]; //initial state for all except first
 }
 
 
