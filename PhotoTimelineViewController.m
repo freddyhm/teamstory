@@ -71,8 +71,8 @@ enum ActionSheetTags {
 {
     [super viewDidLoad];
     
-  //  [[SDImageCache sharedImageCache] clearMemory];
-  //  [[SDImageCache sharedImageCache] clearDisk];
+   // [[SDImageCache sharedImageCache] clearMemory];
+   // [[SDImageCache sharedImageCache] clearDisk];
     
     
     // Remove cell separator
@@ -176,11 +176,11 @@ enum ActionSheetTags {
     
     PFObject *photo = [self.objects objectAtIndex:sender.tag];
     
-    //NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:sender.tag];
-   // PAPPhotoCell *cell = (PAPPhotoCell *)[self.feed cellForRowAtIndexPath:index];
+    NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:sender.tag];
+    PAPPhotoCell *cell = (PAPPhotoCell *)[self.feed cellForRowAtIndexPath:index];
 
     if (photo) {
-       // NSLog(@"TAPPED PHOTO %@ IMAGE %@", photo, cell.imageView.file.url);
+        NSLog(@"TAPPED PHOTO %@ IMAGE %@", photo, cell.imageView.file.url);
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
         [self.navigationController pushViewController:photoDetailsVC animated:YES];
     }
@@ -303,31 +303,53 @@ enum ActionSheetTags {
     self.feed.delegate = self;
     self.feed.dataSource = self;
     
+    PFImageView *photoImgView = [[PFImageView alloc] init];
+    
     // Add images to cache if not already present
     for (PFObject *object in self.objects) {
         
+        photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
+        
+        if (![photoImgView.file isDataAvailable]) {
+            [photoImgView loadInBackground];
+        }
+        
+        /*
         // Check if image in cache
         [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *cacheImage, SDImageCacheType cacheType) {
             
-          //  PFFile *fileAll = [object objectForKey:@"image"];
+            PFFile *fileAll = [object objectForKey:@"image"];
             
-            //NSLog(@"ALL OBJECTS %@ IMAGE %@", object, fileAll.url);
+            NSLog(@"ALL OBJECTS %@ IMAGE URL %@", object, fileAll.url);
             
             if(!cacheImage){
                 PFImageView *photoImgView = [[PFImageView alloc] init];
                 photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
-                // Load images from remote server
-                [photoImgView loadInBackground:^(UIImage *imageFromServer, NSError *error) {
-                    // Check if there's no error and image is present before setting
-                    if(!error && imageFromServer){
-                        //NSLog(@"IN LOADING %@ IMAGE %@", object, photoImgView.file.url);
-                        [[SDImageCache sharedImageCache] storeImage:imageFromServer forKey:[object objectId]];
-                    }
-                }];
+                
+                if(![photoImgView.file isDataAvailable])
+                {
+                    // Load images from remote server
+                    [photoImgView loadInBackground:^(UIImage *imageFromServer, NSError *error) {
+                        // Check if there's no error and image is present before setting
+                        if(!error && imageFromServer){
+                            NSLog(@"IN LOADING %@ IMAGE URL %@ IMAGE FROM SERVER %@", object, photoImgView.file.url, imageFromServer);
+                            [[SDImageCache sharedImageCache] storeImage:imageFromServer forKey:[object objectId]];
+                        }
+                    }];
+                }else{
+                    [photoImgView loadInBackground];
+                    NSLog(@"IN READY %@ IMAGE URL %@ LOADED IMAGE %@", object, photoImgView.file.url, photoImgView.image);
+                    [[SDImageCache sharedImageCache] storeImage:photoImgView.image forKey:[object objectId]];
+                }
+                
+                
             }
         }];
+         */
+     
         
     }
+    
     
     // Reload table
     [self.feed reloadData];
@@ -612,7 +634,6 @@ enum ActionSheetTags {
         
         [cell setObject:object];
         cell.photoButton.tag = indexPath.section;
-        cell.imageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
         
         if(object){
             
@@ -620,25 +641,41 @@ enum ActionSheetTags {
             
             cell.caption = [object objectForKey:@"caption"];
             cell.imageView.file = [object objectForKey:kPAPPhotoPictureKey];
+            
+            [cell.imageView loadInBackground];
+            
+            /*
 
             // Fetch image from cache
             [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *imageCache, SDImageCacheType cacheType) {
                 // set image from cache if available
                 if(imageCache){
                     
-                  //  NSLog(@"IN CELL CACHE %@, IMAGE %@", object, cell.imageView.file.url);
+                    NSLog(@"IN CELL CACHE %@, IMAGE URL %@, IMAGE CACHE %@", object, cell.imageView.file.url, imageCache);
                     
-                    cell.imageView.image = imageCache;
+                    [cell.imageView loadInBackground];
+                    //cell.imageView.image = imageCache;
                 }else{
-                    // load in background and set image in cache
-                    [cell.imageView loadInBackground:^(UIImage *imageFromServer, NSError *error) {
+                    
+                    if(![cell.imageView.file isDataAvailable]){
+                        // load in background and set image in cache
+                        [cell.imageView loadInBackground:^(UIImage *imageFromServer, NSError *error) {
+                            
+                            NSLog(@"IN CELL LOADING %@, IMAGE URL %@ IMAGE FROM SERVER %@", object, cell.imageView.file.url, imageFromServer);
+                            
+                            [[SDImageCache sharedImageCache] storeImage:imageFromServer forKey:[object objectId]];
+                        }];
+                    }else{
                         
-                    //    NSLog(@"IN CELL LOADING %@, IMAGE %@ ", object, cell.imageView.file.url);
+                        [cell.imageView loadInBackground];
                         
-                        [[SDImageCache sharedImageCache] storeImage:imageFromServer forKey:[object objectId]];
-                    }];
+                        NSLog(@"IN CELL READY %@, IMAGE URL %@ IMAGE FROM SERVER %@", object, cell.imageView.file.url, cell.imageView.image);
+                        
+                        [[SDImageCache sharedImageCache] storeImage:cell.imageView.image forKey:[object objectId]];
+                    }
                 }
             }];
+             */
         }
         
         return cell;

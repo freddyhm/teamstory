@@ -243,6 +243,7 @@
                 [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
                 [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
                 [photo setObject:@"thought" forKey:kPAPPhotoType];
+                [photo setObject:[NSNumber numberWithInt:0] forKey:@"discoverCount"];
                 
                 // photos are public, but may only be modified by the user who uploaded them
                 PFACL *photoACL = [PFACL ACLWithUser:[PFUser currentUser]];

@@ -111,6 +111,16 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     [SVProgressHUD show];
     
+    // Location label
+    UIFont *locationFont = [UIFont fontWithName:@"Helvetica" size:13.0f];
+    UIColor *locationColor = [UIColor colorWithRed:158.0f/255.0f green:158.0f/255.0f blue:158.0f/255.0f alpha:1];
+    
+    self.locationLabel = [[UILabel alloc]init];
+    [self.locationLabel setBackgroundColor:[UIColor clearColor]];
+    [self.locationLabel setTextColor:locationColor];
+    [self.locationLabel setFont:locationFont];
+    [self.locationLabel setText:self.locationInfo];
+    
     [self.user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         
         if(!error){
@@ -159,6 +169,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 
                 if ([self.websiteInfo length] > 0) {
                     website_expectedSize = [self.websiteInfo sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}];
+                    
                 } else {
                     website_expectedSize = CGSizeMake(132.01f, 15.50f);
                 }
@@ -372,26 +383,29 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 [self.locationIconImageView setFrame:CGRectMake(6.0f, 88.0f + expectedSize.height, 15.0f, 15.0f)];
                 [self.headerView addSubview:self.locationIconImageView];
                 
-                // Location label
-                UIFont *locationFont = [UIFont fontWithName:@"Helvetica" size:13.0f];
-                UIColor *locationColor = [UIColor colorWithRed:158.0f/255.0f green:158.0f/255.0f blue:158.0f/255.0f alpha:1];
-                
                 // Check length of location
                 if([self.locationInfo length] == 0){
                     self.locationInfo = @"";
                 }
                 
-                self.locationLabel = [[UILabel alloc]init];
-                [self.locationLabel setBackgroundColor:[UIColor clearColor]];
-                [self.locationLabel setTextColor:locationColor];
-                [self.locationLabel setFont:locationFont];
-                [self.locationLabel setText:self.locationInfo];
+                
+                
+                /*
+                // re-calculate width size for location label, image, and separator
+                CGFloat locationLabelWidth = [self.locationLabel.text sizeWithAttributes:
+                                              @{NSFontAttributeName:
+                                                    self.locationLabel.font}].width;
+                
+                [self.locationLabel setFrame:CGRectMake(self.locationLabel.frame.origin.x, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, self.locationLabel.frame.size.height)];
+                self.locationSiteSeparator.frame = CGRectMake(locationLabelWidth + self.locationLabel.frame.origin.x + 10.0f, 91.5f + expectedSize.height, 10.0f, 10.0f);
+                 */
                 
                 CGFloat locationLabelWidth = [self.locationLabel.text sizeWithAttributes:
                                @{NSFontAttributeName:
                                      self.locationLabel.font}].width;
                 
                 [self.locationLabel setFrame:CGRectMake(self.locationIconImageView.frame.origin.x + 20.0f, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, 16.0f)];
+                //[self.locationLabel setBackgroundColor:[UIColor redColor]];
                 
                 [self.headerView addSubview:self.locationLabel];
                 
@@ -400,20 +414,14 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 self.locationSiteSeparator.font = [UIFont fontWithName:@"Helvetica" size:13.0f];
                 self.locationSiteSeparator.textColor = textColor;
                 self.locationSiteSeparator.text = @"|";
-                self.locationSiteSeparator.frame = CGRectMake(self.locationLabel.frame.origin.x + self.locationLabel.frame.size.width + 10.0f, 91.0f + expectedSize.height, 10.0f, 10.0f);
+                self.locationSiteSeparator.frame = CGRectMake(locationLabelWidth + self.locationLabel.frame.origin.x + 5.0f, 91.5f + expectedSize.height, 10.0f, 10.0f);
+                
+               // [self.locationSiteSeparator setBackgroundColor:[UIColor redColor]];
             
                 [self.headerView addSubview: self.locationSiteSeparator];
                 
                 websiteLink = [UIButton buttonWithType:UIButtonTypeCustom];
-                [websiteLink setFrame:CGRectMake(self.locationSiteSeparator.frame.origin.x + self.locationSiteSeparator.frame.size.width + 10.0f, self.locationLabel.frame.origin.y, website_expectedSize.width, website_expectedSize.height)];
-                [websiteLink setTitleColor:[UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
-                websiteLink.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-                websiteLink.titleLabel.font = [UIFont systemFontOfSize:13.0f];
-                [websiteLink addTarget:self action:@selector(websiteLinkAction:) forControlEvents:UIControlEventTouchUpInside];
                 
-                if ([websiteInfo length] > 0) {
-                    [websiteLink setTitle:websiteInfo forState:UIControlStateNormal];
-                }
                 
                 // calculate space left for website link
                 CGFloat spaceLeft = [[UIScreen mainScreen] bounds].size.width - self.locationSiteSeparator.frame.size.width - self.locationLabel.frame.size.width - self.locationIconImageView.frame.size.width - 20;
@@ -422,6 +430,18 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 if(website_expectedSize.width > spaceLeft){
                     website_expectedSize.width = spaceLeft;
                     websiteLink.titleLabel.adjustsFontSizeToFitWidth = YES;
+                }
+                
+                
+                [websiteLink setFrame:CGRectMake(self.locationSiteSeparator.frame.origin.x + self.locationSiteSeparator.frame.size.width, 89.0f + expectedSize.height, website_expectedSize.width, website_expectedSize.height)];
+                [websiteLink setTitleColor:[UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
+                websiteLink.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+                websiteLink.titleLabel.font = [UIFont systemFontOfSize:13.0f];
+                [websiteLink addTarget:self action:@selector(websiteLinkAction:) forControlEvents:UIControlEventTouchUpInside];
+               // [websiteLink setBackgroundColor:[UIColor redColor]];
+                
+                if ([websiteInfo length] > 0) {
+                    [websiteLink setTitle:websiteInfo forState:UIControlStateNormal];
                 }
                 
                 [self.headerView addSubview:websiteLink];
@@ -643,6 +663,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         
         if ([self.websiteInfo length] > 0) {
             website_expectedSize = [self.websiteInfo sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}];
+            
         } else {
             website_expectedSize = CGSizeMake(132.01f, 15.50f);
         }
@@ -664,7 +685,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                              self.locationLabel.font}].width;
         
         [self.locationLabel setFrame:CGRectMake(self.locationLabel.frame.origin.x, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, self.locationLabel.frame.size.height)];
-        self.locationSiteSeparator.frame = CGRectMake(locationLabelWidth + self.locationLabel.frame.origin.x + 10.0f, 91.5f + expectedSize.height, 10.0f, 10.0f);
+        self.locationSiteSeparator.frame = CGRectMake(locationLabelWidth + self.locationLabel.frame.origin.x + 5.0f, 91.5f + expectedSize.height, 10.0f, 10.0f);
         [self.locationIconImageView setFrame:CGRectMake(6.0f, 88.0f + expectedSize.height, 15.0f, 15.0f)];
         
         // calculate space left for website link
@@ -675,13 +696,13 @@ static NSString *const freddy_account = @"rblDQcdZcY";
             website_expectedSize.width = spaceLeft;
             websiteLink.titleLabel.adjustsFontSizeToFitWidth = YES;
         }
-        
+
         [websiteLink setFrame:CGRectMake(self.locationSiteSeparator.frame.origin.x + self.locationSiteSeparator.frame.size.width, 89.0f + expectedSize.height, website_expectedSize.width, website_expectedSize.height)];
+      //  [websiteLink setBackgroundColor:[UIColor redColor]];
 
         [websiteLink setTitle:self.websiteInfo forState:UIControlStateNormal];
         
-        
-        
+
         [self.industryLabel setFrame:CGRectMake(320.0f - (industry_expectedSize.width + 20.0f), 97.0f + expectedSize.height + website_expectedSize.height, industry_expectedSize.width + 10.0f, 22.0f)];
         [whiteBackground setFrame:CGRectMake( 0.0f, 0.0f, self.feed.bounds.size.width, self.headerView.bounds.size.height - 10.0f)];
         
