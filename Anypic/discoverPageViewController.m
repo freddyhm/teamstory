@@ -148,7 +148,7 @@ NSInteger selection = 1;
     self.postPicQueryResults = nil;
     
     PFQuery *postQuery_pic = [PFQuery queryWithClassName:@"Photo"];
-    [postQuery_pic setLimit:21];
+    [postQuery_pic setLimit:1000];
     [postQuery_pic whereKey:@"type" equalTo:@"picture"];
     [postQuery_pic whereKey:@"createdAt" greaterThanOrEqualTo:sevenDaysAgo];
     [postQuery_pic findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -161,7 +161,7 @@ NSInteger selection = 1;
     }];
     
     PFQuery *postQuery_thoughts = [PFQuery queryWithClassName:@"Photo"];
-    [postQuery_thoughts setLimit:21];
+    [postQuery_thoughts setLimit:1000];
     [postQuery_thoughts whereKey:@"type" equalTo:@"thought"];
     [postQuery_thoughts whereKey:@"createdAt" greaterThanOrEqualTo:sevenDaysAgo];
     [postQuery_thoughts findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -221,7 +221,34 @@ NSInteger selection = 1;
 
 -(void)loadContents {
     if ([self.postPicQueryResults count] > 0 && [self.postThoughtQueryResults count] > 0) {
-    [self.discoverTileView setPictureQuery:self.postPicQueryResults setThoughtQuery:self.postThoughtQueryResults];
+        NSMutableArray *filterEmptyPicResult = [[NSMutableArray alloc] init];
+        NSMutableArray *filterEmptyThoughtResult = [[NSMutableArray alloc] init];
+        
+        NSNumber *zero = [NSNumber numberWithInt:0];
+        [filterEmptyPicResult addObjectsFromArray:[self.postPicQueryResults filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"discoverCount >= %@", zero]]];
+        [filterEmptyThoughtResult addObjectsFromArray:[self.postThoughtQueryResults filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"discoverCount >= %@", zero]]];
+        
+        NSLog(@"%lu", (unsigned long)[filterEmptyThoughtResult count]);
+        NSLog(@"%lu", (unsigned long)[filterEmptyPicResult count]);
+        /*
+        NSArray *finalPictureArray = [filterEmptyPicResult sortedArrayUsingComparator:^(id obj1, id obj2) {
+            NSNumber *rating1 = [(NSDictionary *)obj1 objectForKey:@"discoverCount"];
+            NSNumber *rating2 = [(NSDictionary *)obj2 objectForKey:@"discoverCount"];
+            
+            return [rating1 compare:rating2];
+        }];
+        
+        NSArray *finalThoughtArray = [filterEmptyThoughtResult sortedArrayUsingComparator:^(id obj1, id obj2) {
+            NSNumber *rating1 = [(NSDictionary *)obj1 objectForKey:@"discoverCount"];
+            NSNumber *rating2 = [(NSDictionary *)obj2 objectForKey:@"discoverCount"];
+            return [rating1 compare:rating2];
+        }];
+        
+        NSLog(@"%@", finalPictureArray);
+        NSLog(@"%@", finalThoughtArray);
+        */
+        //[self.discoverTileView setPictureQuery:self.postPicQueryResults setThoughtQuery:self.postThoughtQueryResults];
+        
     }
 }
 
