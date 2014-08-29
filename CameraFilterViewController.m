@@ -11,9 +11,7 @@
 #import "CameraFilterViewController.h"
 #import "PAPEditPhotoViewController.h"
 #import "FilterCell.h"
-#import "LocalyticsSession.h"
 #import "Mixpanel.h"
-#import "Heap.h"
 
 @interface CameraFilterViewController ()
 

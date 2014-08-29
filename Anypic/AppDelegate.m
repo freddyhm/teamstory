@@ -25,8 +25,6 @@
 #import <Crashlytics/Crashlytics.h>
 #import "iRate.h"
 #import "PAPprofileSetupViewController.h"
-#import "LocalyticsSession.h"
-#import "Heap.h"
 #import "Mixpanel.h"
 
 
@@ -90,7 +88,6 @@ static NSString *const PARSE_APP_ID = @"0tEtPoPtsvPu1lCPzBeU032Cz3Byemcp5lr25gIU
 static NSString *const PARSE_CLIENT_KEY = @"ZRnM7JXOlbSyOQuosXWG6SlrDNCY22C84hpqyi0l";
 static NSString *const TWITTER_KEY = @"VGiCnk6P01PjqV13rm34Bw";
 static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0z9Q";
-static NSString *const HEAP_ID = @"403139890";
 static NSString *const MIXPANEL_TOKEN = @"3749c3259ee3386d611868be23586b8c";
 #else
 static NSString *const GOOGLE_TRACKING_ID = @"UA-49381420-1";
@@ -100,7 +97,6 @@ static NSString *const PARSE_APP_ID = @"SPQlkxDYPDcVhbICHFzjwSsREHaSqKQIKwkijDaJ
 static NSString *const PARSE_CLIENT_KEY = @"WtgkZLYZ1UOlsbGMnfYtKCD6dQLMfy3tBsN2UKxA";
 static NSString *const TWITTER_KEY = @"VGiCnk6P01PjqV13rm34Bw";
 static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0z9Q";
-static NSString *const HEAP_ID = @"511492141";
 static NSString *const MIXPANEL_TOKEN = @"3749c3259ee3386d611868be23586b8c";
 #endif
 
@@ -118,14 +114,8 @@ static NSString *const MIXPANEL_TOKEN = @"3749c3259ee3386d611868be23586b8c";
     // Initialize tracker. Replace with your tracking ID.
     [[GAI sharedInstance] trackerWithTrackingId:GOOGLE_TRACKING_ID];
     
-    // Heap analytics
-    [Heap setAppId:HEAP_ID];
-    
     // Mixpanel analytics
     [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
-    
-    // Localytics analytics
-    [[LocalyticsSession shared] integrateLocalytics:@"f871fc5d66cea37e3f9632b-ad105518-2ee2-11e4-a36b-009c5fda0a25" launchOptions:launchOptions];
     
     // Konotor setup
     [Konotor InitWithAppID:KONOTOR_APP_ID AppKey:KONOTOR_APP_KEY withDelegate:[KonotorEventHandler sharedInstance]];
