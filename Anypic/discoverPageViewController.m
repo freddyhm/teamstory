@@ -11,6 +11,7 @@
 #import "PAPstartUpsView.h"
 #import "PAPpeopleView.h"
 #import "PAPdiscoveryHeaderView.h"
+#import "Mixpanel.h"
 
 
 NSInteger selection = 1;
@@ -77,6 +78,9 @@ NSInteger selection = 1;
 - (void)viewWillAppear:(BOOL)animated{
     // analytics
     [PAPUtility captureScreenGA:@"Discover"];
+    
+    [[Mixpanel sharedInstance] track:@"Viewed Discover Screen" properties:@{}];
+    
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
 }
 

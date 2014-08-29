@@ -11,6 +11,7 @@
 #import "PAPLoginTutorialViewController.h"
 #import "PAPHomeViewController.h"
 #import "PAPprofileSetupViewController.h"
+#import "Mixpanel.h"
 
 @implementation PAPWelcomeViewController
 
@@ -55,7 +56,7 @@
                     
                     // analytics
                     [PAPUtility captureScreenGA:@"New Profile"];
-                    
+                
                     PAPprofileSetupViewController *profileSetupViewController = [[PAPprofileSetupViewController alloc] init];
                     self.navigationController.navigationBarHidden = YES;
                     [self.navigationController pushViewController:profileSetupViewController animated:NO];

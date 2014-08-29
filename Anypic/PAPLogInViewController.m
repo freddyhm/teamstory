@@ -9,6 +9,7 @@
 #import "emailSignUpViewController.h"
 #import "SVProgressHUD.h"
 #import "PAPprofileSetupViewController.h"
+#import "Mixpanel.h"
 
 @interface PAPLogInViewController()
 @property (nonatomic, strong) UITextField *user_email;
@@ -47,6 +48,8 @@
     UIColor *color = [UIColor colorWithRed:134.0f/255.0f green:134.0f/255.0f blue:134.0f/255.0f alpha:1.0f];
     
     if ([self.login_type isEqualToString:@"signIn"]) {
+        
+        [[Mixpanel sharedInstance] track:@"Viewed Sign In Screen" properties:@{}];
         
         UIImage *dividerImage = [UIImage imageNamed:@"intro_divider.png"];
         UIImageView *divider = [[UIImageView alloc] initWithFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - 190.0f, dividerImage.size.width, dividerImage.size.height)];
@@ -114,6 +117,8 @@
         user_pw.frame = CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - 110.0f, 290.0f, 50.0f);
         user_email.frame = CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - 170.0f, 290.0f, 50.0f);
     } else {
+        
+        [[Mixpanel sharedInstance] track:@"Viewed Register Screen" properties:@{}];
         
         float screenOffset;
         if ([UIScreen mainScreen].bounds.size.height == 480) {
@@ -186,6 +191,7 @@
 }
 
 - (void)emailSignIn_button:(id)sender{
+
     emailSignUpViewController *emailSignUpViewCtrl = [[emailSignUpViewController alloc] init];
     [self.navigationController pushViewController:emailSignUpViewCtrl animated:YES];
 }

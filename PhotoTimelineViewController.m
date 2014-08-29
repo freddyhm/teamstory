@@ -17,6 +17,7 @@
 #import "MBProgressHUD.h"
 #import "SVProgressHUD.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "Mixpanel.h"
 
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
@@ -142,6 +143,8 @@ enum ActionSheetTags {
     
     // analytics
     [PAPUtility captureEventGA:@"Engagement" action:@"Comment" label:@"Photo"];
+    
+    [[Mixpanel sharedInstance] track:@"Commented" properties:@{}];
     
     [self.feed beginUpdates];
     [self.feed endUpdates];
@@ -809,6 +812,8 @@ enum ActionSheetTags {
     if (liked) {
         // analytics
         [PAPUtility captureEventGA:@"Engagement" action:@"Like" label:@"Photo"];
+        
+        [[Mixpanel sharedInstance] track:@"Liked" properties:@{@"Source":@"Timeline"}];
         
         likeCount = [NSNumber numberWithInt:[likeCount intValue] + 1];
         [[PAPCache sharedCache] incrementLikerCountForPhoto:photo];

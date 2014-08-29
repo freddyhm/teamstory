@@ -16,6 +16,7 @@
 #import "SVProgressHUD.h"
 #import "PAPLoadMoreCell.h"
 #import "PAPConstants.h"
+#import "Mixpanel.h"
 
 
 @interface PAPEditPhotoViewController () {
@@ -176,6 +177,8 @@
 -(void)viewWillAppear:(BOOL)animated{
     // analytics
     [PAPUtility captureScreenGA:@"Edit Photo"];
+    
+    [[Mixpanel sharedInstance] track:@"Viewed Edit Photo Screen" properties:@{}];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -580,6 +583,8 @@
     
     // analytics
     [PAPUtility captureEventGA:@"Engagement" action:@"Upload Picture" label:@"Photo"];
+    
+    [[Mixpanel sharedInstance] track:@"Uploaded Photo" properties:@{}];
     
     // make sure placeholder gets erased
     if([[self.commentTextView text] isEqualToString:@"Add a caption"]){

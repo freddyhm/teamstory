@@ -13,6 +13,7 @@
 #import "PAPSettingsButtonItem.h"
 #import "FollowersFollowingViewController.h"
 #import "SVProgressHUD.h"
+#import "Mixpanel.h"
 
 @interface PAPActivityFeedViewController ()
 
@@ -100,6 +101,9 @@
     
     // analytics
     [PAPUtility captureScreenGA:@"Activity"];
+    
+    [[Mixpanel sharedInstance] track:@"Viewed Activity Screen" properties:@{}];
+    
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     
     // reset badge number on server and activity bar when user checks activity feed and badge value is present

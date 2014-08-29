@@ -9,6 +9,7 @@
 #import "PAPLoginTutorialViewController.h"
 #import "PAPLogInViewController.h"
 #import "AppDelegate.h"
+#import "Mixpanel.h"
 
 @interface PAPLoginTutorialViewController () {
     float screenOffset;
@@ -29,6 +30,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [[Mixpanel sharedInstance] track:@"Viewed Intro Screen" properties:@{}];
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"intro_bg.png"]]];
     

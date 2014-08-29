@@ -13,6 +13,8 @@
 #import <Crashlytics/Crashlytics.h>
 #import "PAPCache.h"
 #import "PAPTabBarController.h"
+#import "Mixpanel.h"
+#import "Heap.h"
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
@@ -52,18 +54,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // register name and email in case of crashes
-    NSString *displayName = [[PFUser currentUser] objectForKey:@"displayName"];
-    NSString *email = [[PFUser currentUser] objectForKey:@"email"];
-    
-    if(displayName != nil){
-        [Crashlytics setUserName:displayName];
-    }
-    
-    if(email != nil){
-        [Crashlytics setUserEmail:email];
-    }
-        
     //self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
 
     // button image for feedback
@@ -131,6 +121,10 @@
 
     // analytics
     [PAPUtility captureScreenGA:@"Home"];
+    
+    [[Mixpanel sharedInstance] track:@"Viewed Home Screen" properties:@{}];
+    
+    [self setUserInfoAnalytics];
     
     // fetch unread messages, show feedback screen
     self.konotorCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
@@ -297,6 +291,51 @@
 }
 */
 #pragma mark - ()
+
+-(void)setUserInfoAnalytics{
+    
+    // register name and email in case of crashes
+    NSString *displayName = [[PFUser currentUser] objectForKey:@"displayName"];
+    NSString *email = [[PFUser currentUser] objectForKey:@"email"];
+    NSString *currentUserId = [[PFUser currentUser] objectId];
+    NSString *industry = [[PFUser currentUser] objectForKey:@"industry"];
+    
+    // Mxpanel analytics identify: must be called before
+    // people properties can be set
+    [[Mixpanel sharedInstance] identify:currentUserId];
+
+    if(displayName != nil){
+        [Crashlytics setUserName:displayName];
+        
+        // mixpanel analytics - Sets user
+        [[Mixpanel sharedInstance].people set:@{@"name": displayName}];
+        
+        // super property
+        [[Mixpanel sharedInstance] registerSuperProperties:@{@"Name": displayName}];
+    }
+    
+    if(email != nil){
+        [Crashlytics setUserEmail:email];
+        
+        // Mixpanel analytics - Sets more user info
+        [[Mixpanel sharedInstance].people set:@{@"email": email}];
+    }
+    
+    if(industry != nil){
+        // Mixpanel analytics - Sets more user info
+        [[Mixpanel sharedInstance].people set:@{@"industry": industry}];
+            
+        // super property
+        [[Mixpanel sharedInstance] registerSuperProperties:@{@"Industry": industry}];
+    }
+  /*
+    if(createdAt != nil){
+        // Mixpanel analytics - Sets more user info
+        //[[Mixpanel sharedInstance].people set:@{@"created": createdAt}];
+    }
+   */
+}
+
 /*
 - (void)settingsButtonAction:(id)sender {
     self.settingsActionSheetDelegate = [[PAPSettingsActionSheetDelegate alloc] initWithNavigationController:self.navigationController];

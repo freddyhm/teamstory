@@ -14,6 +14,7 @@
 #import "PAPUtility.h"
 #import "SVProgressHUD.h"
 #import "MBProgressHUD.h"
+#import "Mixpanel.h"
 
 enum ActionSheetTags {
     MainActionSheetTag = 0,
@@ -774,6 +775,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         
         // analytics
         [PAPUtility captureEventGA:@"Engagement" action:@"Like Comment" label:@"Photo"];
+        
+         [[Mixpanel sharedInstance] track:@"Liked Comment" properties:@{}];
+        
         likeCommentCount = [NSNumber numberWithInt:[likeCommentCount intValue] + 1];
         
         // increment in cache

@@ -11,6 +11,9 @@
 #import "CameraFilterViewController.h"
 #import "PAPEditPhotoViewController.h"
 #import "FilterCell.h"
+#import "LocalyticsSession.h"
+#import "Mixpanel.h"
+#import "Heap.h"
 
 @interface CameraFilterViewController ()
 
@@ -132,6 +135,8 @@
 -(void)viewWillAppear:(BOOL)animated{
     // analytics
     [PAPUtility captureScreenGA:@"Filter Photo"];
+    
+    [[Mixpanel sharedInstance] track:@"Viewed Filter Screen" properties:@{}];
 }
 
 #pragma mark - Custom
@@ -166,6 +171,11 @@
     // analytics
     [PAPUtility captureEventGA:@"Filter" action:self.currentFilterName label:nil];
     
+
+    // Mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Selected filter" properties:@{
+                                                  @"Filter": self.currentFilterName
+                                                  }];
     // send selected image to edit controller
     PAPEditPhotoViewController *editController = [[PAPEditPhotoViewController alloc] initWithImage:[self.croppedImageView image]];
     

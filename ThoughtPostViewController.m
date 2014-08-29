@@ -13,6 +13,7 @@
 #import "UIImage+ResizeAdditions.h"
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
+#import "Mixpanel.h"
 
 @interface ThoughtPostViewController ()
 
@@ -90,6 +91,9 @@
     
     // analytics
     [PAPUtility captureScreenGA:@"Thought Post"];
+    
+    // analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Thought Screen" properties:@{}];
     
     // set color of nav bar to teal
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
@@ -213,6 +217,8 @@
         // analytics for upload and background
         [PAPUtility captureEventGA:@"Engagement" action:@"Upload Thought" label:@"Photo"];
         [PAPUtility captureEventGA:@"Thought Bkgd" action:[[NSNumber numberWithInt:self.prevBkgdIndex] stringValue] label:@"Photo"];
+        
+        [[Mixpanel sharedInstance] track:@"Uploaded Thought" properties:@{}];
        
         // add label to background image for picture
         [self.backgroundImg addSubview:self.thoughtTextView];

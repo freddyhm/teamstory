@@ -12,6 +12,7 @@
 #import "SVProgressHUD.h"
 #import "PAPwebviewViewController.h"
 #import "FollowersFollowingViewController.h"
+#import "Mixpanel.h"
 
 @interface PAPAccountViewController() {
     float alphaValue_twitter;
@@ -583,6 +584,8 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     [PAPUtility captureScreenGA:@"Account"];
     
+    [[Mixpanel sharedInstance] track:@"Viewed Account Screen" properties:@{}];
+    
     // edge case, if multiaction button frozen because of network problems
     if (self.user == [PFUser currentUser] && !self.multiActionButton.enabled){
         self.multiActionButton.enabled = YES;
@@ -829,6 +832,8 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     // analytics
     [PAPUtility captureEventGA:@"Engagement" action:@"Follow" label:@"User"];
+    
+    [[Mixpanel sharedInstance] track:@"Followed" properties:@{}];
     
     // disable button until finished unfollow
     self.multiActionButton.enabled = NO;

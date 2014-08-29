@@ -10,6 +10,7 @@
 #import "ELCAsset.h"
 #import "PAPTabBarController.h"
 #import "SVProgressHUD.h"
+#import "Mixpanel.h"
 
 
 @interface ELCAssetTablePicker ()
@@ -40,6 +41,9 @@
 {
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 	[self.tableView setAllowsSelection:NO];
+    
+    // analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Camera Album Screen" properties:@{}];
     
     // set color of nav bar to custom grey
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
@@ -183,6 +187,8 @@
         
         // analytics
         [PAPUtility captureEventGA:@"Camera & Album" action:@"Picked Album" label:@"Photo"];
+        
+        [[Mixpanel sharedInstance] track:@"Selected Album Picture" properties:@{}];
         
         [self.parent selectedAssets:selectedAssetsImages];
     }else{

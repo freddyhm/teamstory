@@ -12,6 +12,7 @@
 #import "AppDelegate.h"
 #import "UIImage+ResizeAdditions.h"
 #import "PAPUtility.h"
+#import "Mixpanel.h"
 
 #define SUCCESSFUL 1
 
@@ -56,6 +57,8 @@
     [super viewDidLoad];
     
     [PAPUtility captureEventGA:@"Testing" action:@"Started profile setup" label:nil];
+    
+    [[Mixpanel sharedInstance] track:@"Viewed New Profile Screen 1" properties:@{}];
     
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
@@ -369,6 +372,9 @@
                                 }
                             }];
                         } else {
+                            
+                            [[Mixpanel sharedInstance] track:@"Viewed New Profile Screen 2" properties:@{}];
+                            
                             [self.mainSV setContentOffset:CGPointMake(320.0f, 0.0f) animated:YES];
                             if ([UIScreen mainScreen].bounds.size.height == 480)
                                 [self.contentSV setContentOffset:CGPointMake(320.0f, 0.0f) animated:YES];
@@ -378,8 +384,11 @@
                     NSLog(@"%@", error);
                 }
                 
+                
             }];
         }
+        
+        
     } else {
         NSString *replacementString;
 
@@ -399,6 +408,9 @@
 }
 
 -(void)navNext_2Action:(id)sender {
+    
+    [[Mixpanel sharedInstance] track:@"Viewed New Profile Screen 3" properties:@{}];
+    
     [self.mainSV setContentOffset:CGPointMake(640.0f, 0.0f) animated:YES];
     
     if ([UIScreen mainScreen].bounds.size.height == 480)
@@ -440,7 +452,7 @@
 -(void)navDonAction:(id)sender {
     
     [PAPUtility captureEventGA:@"Testing" action:@"Pressed done in profile setup" label:nil];
-    
+
     [SVProgressHUD showWithStatus:@"Creating Profile..." maskType:SVProgressHUDMaskTypeBlack];
     
     NSString* companyName_input = self.displayNameTF.text;
@@ -453,6 +465,8 @@
     NSString* angellist_input = self.angellistTF.text;
     NSString* email_input = self.emailTF.text;
     NSString* email_current_input = self.user[@"email"];
+    
+    [[Mixpanel sharedInstance] track:@"Pressed Done In Profile Screen" properties:@{@"New user email":email_input}];
     
     self.user[@"username"] = email_input;
     
@@ -527,6 +541,8 @@
 
 -(void)locationDetectButtonAction:(id)sender{
     [SVProgressHUD show];
+    
+    [[Mixpanel sharedInstance] track:@"Pressed Auto Detect Location In Profile Screen" properties:@{}];
     
     CLGeocoder *geocoder = [[CLGeocoder alloc] init] ;
     [geocoder reverseGeocodeLocation:self.locationManager.location
