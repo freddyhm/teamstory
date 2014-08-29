@@ -16,7 +16,6 @@
 #import "PAPLoadMoreCell.h"
 #import "MBProgressHUD.h"
 #import "SVProgressHUD.h"
-#import <SDWebImage/UIImageView+WebCache.h>
 #import "Mixpanel.h"
 
 
@@ -33,6 +32,7 @@
 @property (nonatomic, strong) NSString *photoID;
 @property (nonatomic, strong) PFObject *current_photo;
 @property (nonatomic, strong) MBProgressHUD *hud;
+@property (nonatomic, strong) NSString *feedSourceType;
 @property int loadPostCount;
 @property int refreshCount;
 
@@ -64,6 +64,8 @@ enum ActionSheetTags {
         // To make sure we only show hud/load objects once per pull
         self.refreshCount = 0;
         
+        // set default source type
+        self.feedSourceType = @"explore";
     }
     return self;
 }
@@ -71,10 +73,6 @@ enum ActionSheetTags {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-   // [[SDImageCache sharedImageCache] clearMemory];
-   // [[SDImageCache sharedImageCache] clearDisk];
-    
     
     // Remove cell separator
     [self.feed setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -96,7 +94,7 @@ enum ActionSheetTags {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidCommentOnPhoto:) name:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidChangeProfile:) name:PAPProfileSettingViewControllerUserChangedProfile object:nil];
     
-    [self loadObjects:nil isRefresh:NO];
+    [self loadObjects:nil isRefresh:NO fromSource:self.feedSourceType];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -105,7 +103,7 @@ enum ActionSheetTags {
     BOOL isHome = [[self.navigationController.viewControllers lastObject] isKindOfClass:PAPHomeViewController.class];
     
     if(self.shouldReloadOnAppear && isHome){
-        [self loadObjects:nil isRefresh:YES];
+        [self loadObjects:nil isRefresh:YES fromSource:self.feedSourceType];
         self.shouldReloadOnAppear = NO;
     }
 }
@@ -155,7 +153,7 @@ enum ActionSheetTags {
     // refresh timeline after a delay
     dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC);
     dispatch_after(time, dispatch_get_main_queue(), ^(void){
-        [self loadObjects:nil isRefresh:YES];
+        [self loadObjects:nil isRefresh:YES fromSource:self.feedSourceType];
     });
 }
 
@@ -170,7 +168,7 @@ enum ActionSheetTags {
         [self.feed scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
     
-    [self loadObjects:nil isRefresh:YES];
+    [self loadObjects:nil isRefresh:YES fromSource:self.feedSourceType];
 }
 
 
@@ -236,7 +234,7 @@ enum ActionSheetTags {
     
     [refreshControl endRefreshing];
     
-    [self loadObjects:nil isRefresh:YES];
+    [self loadObjects:nil isRefresh:YES fromSource:self.feedSourceType];
     
 }
 
@@ -246,14 +244,14 @@ enum ActionSheetTags {
     float bottomEdge = scrollView.contentOffset.y + scrollView.frame.size.height;
     
     if (bottomEdge >= (scrollView.contentSize.height * 0.78)) {
-        [self loadObjects:nil isRefresh:NO];
+        [self loadObjects:nil isRefresh:NO fromSource:self.feedSourceType];
     }
     
 }
 
 #pragma mark - UITableViewDataSource
 
-- (void)loadObjects:(void (^)(BOOL succeeded))completionBlock isRefresh:(BOOL)isRefresh{
+- (void)loadObjects:(void (^)(BOOL succeeded))completionBlock isRefresh:(BOOL)isRefresh fromSource:(NSString *)fromSource{
     
     /* Added completion block, pass nil to use without. We need to know if we're refreshing the table or loading another 10 posts because it'll affect the query's limit. When refreshing, we use the current self.loadPostCount, if it's instead a load, we use the number of current posts + 10. When loadPostCount is 0, load 10 to start. 
      */
@@ -272,6 +270,18 @@ enum ActionSheetTags {
     [self.loadQuery includeKey:kPAPPhotoUserKey];
     [self.loadQuery orderByDescending:@"createdAt"];
     
+    if([fromSource isEqualToString:@"following"]){
+        
+        PFQuery *getFollowingQuery = [PFQuery queryWithClassName:kPAPActivityClassKey];
+        [getFollowingQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
+        
+        // get following for current user
+        [getFollowingQuery whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
+        [getFollowingQuery includeKey:kPAPActivityToUserKey];
+        
+        [self.loadQuery whereKey:@"user" matchesKey:@"toUser" inQuery:getFollowingQuery];
+    }
+    
     // Set limit of posts for query
     [self.loadQuery setLimit:self.loadPostCount];
     
@@ -286,8 +296,6 @@ enum ActionSheetTags {
             [self objectsDidLoad:error];
         }
     }];
-    
-  //  [self.loadQuery clearCachedResult];
 }
 
 - (BOOL)objectsDidLoad:(NSError *)error {
@@ -316,41 +324,6 @@ enum ActionSheetTags {
         if (![photoImgView.file isDataAvailable]) {
             [photoImgView loadInBackground];
         }
-        
-        /*
-        // Check if image in cache
-        [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *cacheImage, SDImageCacheType cacheType) {
-            
-            PFFile *fileAll = [object objectForKey:@"image"];
-            
-            NSLog(@"ALL OBJECTS %@ IMAGE URL %@", object, fileAll.url);
-            
-            if(!cacheImage){
-                PFImageView *photoImgView = [[PFImageView alloc] init];
-                photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
-                
-                if(![photoImgView.file isDataAvailable])
-                {
-                    // Load images from remote server
-                    [photoImgView loadInBackground:^(UIImage *imageFromServer, NSError *error) {
-                        // Check if there's no error and image is present before setting
-                        if(!error && imageFromServer){
-                            NSLog(@"IN LOADING %@ IMAGE URL %@ IMAGE FROM SERVER %@", object, photoImgView.file.url, imageFromServer);
-                            [[SDImageCache sharedImageCache] storeImage:imageFromServer forKey:[object objectId]];
-                        }
-                    }];
-                }else{
-                    [photoImgView loadInBackground];
-                    NSLog(@"IN READY %@ IMAGE URL %@ LOADED IMAGE %@", object, photoImgView.file.url, photoImgView.image);
-                    [[SDImageCache sharedImageCache] storeImage:photoImgView.image forKey:[object objectId]];
-                }
-                
-                
-            }
-        }];
-         */
-     
-        
     }
     
     
@@ -435,126 +408,6 @@ enum ActionSheetTags {
     
     return 44.0f;
 }
-
-
-/*
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    
-    
-    if (section == self.objects.count) {
-        // Load More section
-        return nil;
-    }
-    
-    PostFooterView *headerView = [self dequeueReusableSectionHeaderView2];
-    
-    if (!headerView) {
-        headerView = [[PostFooterView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.view.bounds.size.width, 44.0f) buttons:PAPPhotoHeaderButtonsDefault2];
-        headerView.delegate = self;
-        [self.reusableSectionHeaderViews2 addObject:headerView];
-    }
-    
-    
-    PFObject *photo = [self.objects objectAtIndex:section];
-    headerView.tag = section;
-    [headerView.likeButton setTag:section];
-    
-    NSDictionary *attributesForPhoto = [[PAPCache sharedCache] attributesForPhoto:photo];
-    
-    if (attributesForPhoto) {
-        [headerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:photo]];
-        
-        NSString *likeCount =[[[PAPCache sharedCache] likeCountForPhoto:photo] description];
-        BOOL likeStatus = [[PAPCache sharedCache] isPhotoLikedByCurrentUser:photo];
-        [headerView setLikeStatus:likeStatus];
-        
-        
-        if (likeStatus == YES) {
-            [headerView.likeButton setTitle:likeCount forState:UIControlStateSelected];
-        } else {
-            [headerView.likeButton setTitle:likeCount forState:UIControlStateNormal];
-        }
-        
-        
-        [headerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:photo] description] forState:UIControlStateNormal];
-        
-        if (headerView.likeButton.alpha < 1.0f || headerView.commentButton.alpha < 1.0f) {
-            [UIView animateWithDuration:0.200f animations:^{
-                headerView.likeButton.alpha = 1.0f;
-                headerView.commentButton.alpha = 1.0f;
-            }];
-        }
-    } else {
-        
-        headerView.likeButton.alpha = 0.0f;
-        headerView.commentButton.alpha = 0.0f;
-        
-        @synchronized(self) {
-            // check if we can update the cache
-            NSNumber *outstandingSectionHeaderQueryStatus = [self.outstandingSectionHeaderQueries2 objectForKey:[NSNumber numberWithInt:(int)section]];
-            if (!outstandingSectionHeaderQueryStatus) {
-                PFQuery *query = [PAPUtility queryForActivitiesOnPhoto:photo cachePolicy:kPFCachePolicyNetworkOnly];
-                [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                    @synchronized(self) {
-                        //[self.outstandingSectionHeaderQueries removeObjectForKey:[NSNumber numberWithInt:(int)section]];
-                        
-                        if (error) {
-                            return;
-                        }
-                        
-                        NSMutableArray *likers = [NSMutableArray array];
-                        NSMutableArray *commenters = [NSMutableArray array];
-                        
-                        BOOL isLikedByCurrentUser = NO;
-                        
-                        for (PFObject *activity in objects) {
-                            if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeLike] && [activity objectForKey:kPAPActivityFromUserKey]) {
-                                [likers addObject:[activity objectForKey:kPAPActivityFromUserKey]];
-                            } else if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeComment] && [activity objectForKey:kPAPActivityFromUserKey]) {
-                                [commenters addObject:[activity objectForKey:kPAPActivityFromUserKey]];
-                            }
-                            
-                            if ([[[activity objectForKey:kPAPActivityFromUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
-                                if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeLike]) {
-                                    isLikedByCurrentUser = YES;
-                                    
-                                }
-                            }
-                        }
-                        
-                        [[PAPCache sharedCache] setAttributesForPhoto:photo likers:likers commenters:commenters likedByCurrentUser:isLikedByCurrentUser];
-                        
-                        if (headerView.tag != section) {
-                            return;
-                        }
-                        NSString *likeCount = [[[PAPCache sharedCache] likeCountForPhoto:photo] description];
-                        
-                        [headerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:photo]];
-                        
-                        if (isLikedByCurrentUser == YES) {
-                            [headerView.likeButton setTitle:likeCount forState:UIControlStateSelected];
-                        } else {
-                            [headerView.likeButton setTitle:likeCount forState:UIControlStateNormal];
-                        }
-                        
-                        [headerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:photo] description] forState:UIControlStateNormal];
-                        
-                        if (headerView.likeButton.alpha < 1.0f || headerView.commentButton.alpha < 1.0f) {
-                            [UIView animateWithDuration:0.200f animations:^{
-                                headerView.likeButton.alpha = 1.0f;
-                                headerView.commentButton.alpha = 1.0f;
-                            }];
-                        }
-                    }
-                }];
-            }
-        }
-    }
-
-    
-    return headerView;
-}
- */
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -696,9 +549,7 @@ enum ActionSheetTags {
     
     if (attributesForPhoto) {
         [cell.footerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:object]];
-        //[cell.footerView.likeButton setTitle:[[[PAPCache sharedCache] likeCountForPhoto:object] description] forState:UIControlStateNormal];
         [cell.footerView setLikeCount:[[PAPCache sharedCache] likeCountForPhoto:object]];
-        //[cell.footerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:object] description] forState:UIControlStateNormal];
         [cell.footerView setCommentCount:[[PAPCache sharedCache] commentCountForPhoto:object]];
         
         if (cell.footerView.likeButton.alpha < 1.0f || cell.footerView.commentButton.alpha < 1.0f) {
@@ -750,9 +601,6 @@ enum ActionSheetTags {
                         }
                         
                         [cell.footerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:object]];
-                        //[cell.footerView.likeButton setTitle:[[[PAPCache sharedCache] likeCountForPhoto:object] description] forState:UIControlStateNormal];
-                        //[cell.footerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:object] description] forState:UIControlStateNormal];
-                        
                         [cell.footerView setLikeCount:[[PAPCache sharedCache] likeCountForPhoto:object]];
                         [cell.footerView setCommentCount:[[PAPCache sharedCache] commentCountForPhoto:object]];
                         

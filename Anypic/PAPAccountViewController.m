@@ -785,7 +785,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 
 #pragma mark - Datasource 
 
-- (void)loadObjects:(void (^)(BOOL succeeded))completionBlock isRefresh:(BOOL)isRefresh{
+- (void)loadObjects:(void (^)(BOOL succeeded))completionBlock isRefresh:(BOOL)isRefresh fromSource:(NSString *)fromSource{
     
     PFQuery *query = [PFQuery queryWithClassName:@"Photo"];
     

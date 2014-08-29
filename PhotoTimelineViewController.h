@@ -17,7 +17,7 @@
 @property (nonatomic, strong) PFQuery *loadQuery;
 
 - (BOOL)objectsDidLoad:(NSError *)error;
-- (void)loadObjects:(void (^)(BOOL succeeded))completionBlock isRefresh:(BOOL)isRefresh;
+- (void)loadObjects:(void (^)(BOOL succeeded))completionBlock isRefresh:(BOOL)isRefresh fromSource:(NSString *)fromSource;
 
 
 @end

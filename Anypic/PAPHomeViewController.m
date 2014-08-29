@@ -64,10 +64,6 @@
     UIView *navBarTitleView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 94.0f, 30.0f)];
     [navBarTitleView setBackgroundColor:[UIColor clearColor]];
     
-    UIButton *refresh_button = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 94.0f, 30.0f)];
-    [refresh_button addTarget:self action:@selector(userRefreshControl) forControlEvents:UIControlEventTouchUpInside];
-    [navBarTitleView addSubview:refresh_button];
-    
     UIImageView *logoView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     [navBarTitleView addSubview:logoView];
 
@@ -106,11 +102,6 @@
     [button addTarget:self action:@selector(inviteFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.blankTimelineView addSubview:button];
      */
-}
-
--(void)userRefreshControl{
-    [self.feed scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-    [self loadObjects:nil isRefresh:NO];
 }
 
 -(void)viewWillAppear:(BOOL)animated{

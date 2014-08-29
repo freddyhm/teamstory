@@ -636,7 +636,7 @@ static NSString *const MIXPANEL_TOKEN = @"3749c3259ee3386d611868be23586b8c";
 - (void)autoFollowTimerFired:(NSTimer *)aTimer {
     [MBProgressHUD hideHUDForView:self.navController.presentedViewController.view animated:YES];
     [MBProgressHUD hideHUDForView:self.homeViewController.view animated:YES];
-    [self.homeViewController loadObjects:nil isRefresh:NO];
+    [self.homeViewController loadObjects:nil isRefresh:NO fromSource:@"explore"];
 }
 
 - (BOOL)shouldProceedToMainInterface:(PFUser *)user {
@@ -695,7 +695,7 @@ static NSString *const MIXPANEL_TOKEN = @"3749c3259ee3386d611868be23586b8c";
     if ([self isParseReachable] && [PFUser currentUser] && self.homeViewController.objects.count == 0) {
         // Refresh home timeline on network restoration. Takes care of a freshly installed app that failed to load the main timeline under bad network conditions.
         // In this case, they'd see the empty timeline placeholder and have no way of refreshing the timeline unless they followed someone.
-        [self.homeViewController loadObjects:nil isRefresh:NO];
+        [self.homeViewController loadObjects:nil isRefresh:NO fromSource:@"explore"];
     }
 }
 
@@ -810,7 +810,7 @@ static NSString *const MIXPANEL_TOKEN = @"3749c3259ee3386d611868be23586b8c";
                         self.hud.dimBackground = YES;
                         self.hud.labelText = NSLocalizedString(@"Following Friends", nil);
                     } else {
-                        [self.homeViewController loadObjects:nil isRefresh:NO];
+                        [self.homeViewController loadObjects:nil isRefresh:NO fromSource:@"explore"];
                     }
                 }
             }
