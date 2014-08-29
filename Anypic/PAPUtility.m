@@ -78,9 +78,6 @@
             }
         }
         
-        [photo incrementKey:@"discoverCount" byAmount:[NSNumber numberWithInt:1]];
-        [photo saveInBackground];
-        
         // proceed to creating new like comment
         PFObject *likeCommentActivity = [PFObject objectWithClassName:kPAPActivityClassKey];
         [likeCommentActivity setObject:kPAPActivityTypeLikeComment forKey:kPAPActivityTypeKey];
@@ -160,9 +157,6 @@
             if (completionBlock) {
                 completionBlock(succeeded,error);
             }
-            
-            [photo incrementKey:@"discoverCount" byAmount:[NSNumber numberWithInt:1]];
-            [photo saveInBackground];
 
             // refresh cache
             PFQuery *query = [PAPUtility queryForActivitiesOnPhoto:photo cachePolicy:kPFCachePolicyNetworkOnly];
