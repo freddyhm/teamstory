@@ -25,6 +25,4 @@
 @protocol PAPdiscoverCellDelegate <NSObject>
 @optional
 
-- (void)cell:(PAPdiscoverCell *)cellView didTapImageButton:(PFUser *)aUser;
-
 @end

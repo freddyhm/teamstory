@@ -213,6 +213,7 @@
 		46DC23C219AA8C2200E8FCDF /* PAPdiscoverCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 46DC23C119AA8C2200E8FCDF /* PAPdiscoverCell.m */; };
 		46DC23C519AAC7F300E8FCDF /* icon_search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46DC23C319AAC7F300E8FCDF /* icon_search@2x.png */; };
 		46DC23C619AAC7F300E8FCDF /* icon_search.png in Resources */ = {isa = PBXBuildFile; fileRef = 46DC23C419AAC7F300E8FCDF /* icon_search.png */; };
+		46DC23CD19B01CBF00E8FCDF /* PAPdiscoverIndustryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 46DC23CC19B01CBF00E8FCDF /* PAPdiscoverIndustryCell.m */; };
 		46E1EB6F183BCA6300F64274 /* PAPProfileSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E1EB6E183BCA6300F64274 /* PAPProfileSettingViewController.m */; };
 		46FB0A7C1888989800E978CD /* tab-product-unselected.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A701888989700E978CD /* tab-product-unselected.png */; };
 		46FB0A7D1888989800E978CD /* tab-product-unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46FB0A711888989700E978CD /* tab-product-unselected@2x.png */; };
@@ -687,6 +688,8 @@
 		46DC23C119AA8C2200E8FCDF /* PAPdiscoverCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPdiscoverCell.m; path = Anypic/PAPdiscoverCell.m; sourceTree = SOURCE_ROOT; };
 		46DC23C319AAC7F300E8FCDF /* icon_search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_search@2x.png"; sourceTree = "<group>"; };
 		46DC23C419AAC7F300E8FCDF /* icon_search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_search.png; sourceTree = "<group>"; };
+		46DC23CB19B01CBF00E8FCDF /* PAPdiscoverIndustryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPdiscoverIndustryCell.h; path = Anypic/PAPdiscoverIndustryCell.h; sourceTree = SOURCE_ROOT; };
+		46DC23CC19B01CBF00E8FCDF /* PAPdiscoverIndustryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPdiscoverIndustryCell.m; path = Anypic/PAPdiscoverIndustryCell.m; sourceTree = SOURCE_ROOT; };
 		46E1EB6D183BCA6300F64274 /* PAPProfileSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPProfileSettingViewController.h; sourceTree = SOURCE_ROOT; };
 		46E1EB6E183BCA6300F64274 /* PAPProfileSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPProfileSettingViewController.m; sourceTree = SOURCE_ROOT; };
 		46FB0A701888989700E978CD /* tab-product-unselected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab-product-unselected.png"; sourceTree = "<group>"; };
@@ -1518,6 +1521,8 @@
 				C4F102B2156C57820061BC3E /* PAPPhotoCell.m */,
 				46DC23C019AA8C2200E8FCDF /* PAPdiscoverCell.h */,
 				46DC23C119AA8C2200E8FCDF /* PAPdiscoverCell.m */,
+				46DC23CB19B01CBF00E8FCDF /* PAPdiscoverIndustryCell.h */,
+				46DC23CC19B01CBF00E8FCDF /* PAPdiscoverIndustryCell.m */,
 			);
 			name = UITableViewCells;
 			sourceTree = "<group>";
@@ -2484,6 +2489,7 @@
 				C4F10288156C56F20061BC3E /* UIImage+AlphaAdditions.m in Sources */,
 				D5FC095818A9B552000D85F1 /* FilterCell.m in Sources */,
 				D5FC095518A9B543000D85F1 /* CameraFilterViewController.m in Sources */,
+				46DC23CD19B01CBF00E8FCDF /* PAPdiscoverIndustryCell.m in Sources */,
 				D594C20518EFEBAD0008F5DF /* SVProgressHUD.m in Sources */,
 				D542D8BE196A6F4700A0384F /* ELCAlbumPickerController.m in Sources */,
 				C4F1028A156C56F20061BC3E /* UIImage+ResizeAdditions.m in Sources */,

@@ -30,15 +30,6 @@
     return self;
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
-
 - (void)setImage1:(PFFile *)image1 setImage2:(PFFile *)image2 setImage3:(PFFile *)image3 {
     [image1 getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -61,25 +52,5 @@
         
     }];
 }
-
-- (void) imageViewButton1Action:(id)sender{
-    
-}
-
-- (void) imageViewButton2Action:(id)sender{
-    
-}
-
-- (void) imageViewButton3Action:(id)sender{
-    
-}
-
-/*
-- (void)didTapUserButtonAction:(id)sender {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(cell:didTapUserButton:)]) {
-        [self.delegate cell:self didTapUserButton:self.user];
-    }
-}
- */
 
 @end
