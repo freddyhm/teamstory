@@ -104,6 +104,10 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // remove refresh control for home that is set by default in inherited timeline
+    [super.refreshControl removeFromSuperview];
+    
+    // hide back button
     [self.navigationItem setHidesBackButton:YES];
     
     if (!self.user) {

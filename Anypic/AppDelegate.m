@@ -279,9 +279,10 @@ static NSString *const MIXPANEL_TOKEN = @"3749c3259ee3386d611868be23586b8c";
               //  [self.activityViewController notificationSetup:(int)application.applicationIconBadgeNumber source:@"background"];
                 
                 // current view is activity, clear the badge
-                if(selectedtabIndex == PAPActivityTabBarItemIndex){
+               if(selectedtabIndex == PAPActivityTabBarItemIndex){
                     [self.activityViewController setActivityBadge:nil];
-            }
+                    [self.activityViewController loadObjects];
+               }
         }
     }
     
