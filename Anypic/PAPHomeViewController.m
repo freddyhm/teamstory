@@ -64,7 +64,15 @@
     UIView *navBarTitleView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 94.0f, 30.0f)];
     [navBarTitleView setBackgroundColor:[UIColor clearColor]];
     
+    
+    UITapGestureRecognizer *tapLogo = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(userRefreshControl:)];
+    
     UIImageView *logoView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
+    [logoView addGestureRecognizer:tapLogo];
+    logoView.userInteractionEnabled = YES;
+    
+    
+    
     [navBarTitleView addSubview:logoView];
 
     self.navigationItem.titleView = navBarTitleView;
@@ -102,6 +110,11 @@
     [button addTarget:self action:@selector(inviteFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.blankTimelineView addSubview:button];
      */
+}
+
+-(void)userRefreshControl:(id)sender{
+    [self.feed scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    [self loadObjects:nil isRefresh:YES fromSource:@"explore"];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -165,9 +178,17 @@
 
 #pragma mark - Datasource
 
+- (void)loadObjects:(void (^)(BOOL succeeded))completionBlock isRefresh:(BOOL)isRefresh fromSource:(NSString *)fromSource{
+
+    [super loadObjects:completionBlock
+             isRefresh:isRefresh fromSource:fromSource];
+
+}
+
+
+
 
 - (BOOL)objectsDidLoad:(NSError *)error {
-    
     
     BOOL didLoad = [super objectsDidLoad:error];
     
@@ -342,7 +363,9 @@
 
 - (void)promptFeedback:(id)sender{
     //[[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
-    [KonotorFeedbackScreen showFeedbackScreen];
+    //[KonotorFeedbackScreen showFeedbackScreen];
+    
+    [self loadObjects:nil isRefresh:YES fromSource:@"following"];
 }
 
 -(void)notificationBarButton:(id)sender {
