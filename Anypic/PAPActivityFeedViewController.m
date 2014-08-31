@@ -207,9 +207,10 @@
         return query;
     }
     
-    // pull all subscriptions from current user
+    // pull all subscriptions from current user, fetch most recent
     PFQuery *getSubsQuery = [PFQuery queryWithClassName:@"Subscription"];
     [getSubsQuery whereKey:@"subscriber" equalTo:[PFUser currentUser]];
+    [getSubsQuery orderByDescending:@"createdAt"];
     
     // pull all activties from user's subscriptions
     PFQuery *activitiesFromSubs = [PFQuery queryWithClassName:self.parseClassName];
@@ -218,14 +219,6 @@
     // pull all activities to user
     PFQuery *personalQuery = [PFQuery queryWithClassName:self.parseClassName];
     [personalQuery whereKey:kPAPActivityToUserKey equalTo:[PFUser currentUser]];
-    
-    /*
-    // pull all activties from user's subscriptions (old query)
-    PFQuery *subscriptionQuery = [PFQuery queryWithClassName:self.parseClassName];
-    [subscriptionQuery whereKey:kPAPActivityToUserKey notEqualTo:[PFUser currentUser]];
-    [subscriptionQuery whereKey:kPAPActivityPhotoKey containedIn:photos];
-    [subscriptionQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeComment];
-     */
     
     NSMutableArray *array = [[NSMutableArray alloc] init];
     [array addObject:[PFUser currentUser]];
@@ -243,20 +236,7 @@
     
     [finalQuery setCachePolicy:kPFCachePolicyNetworkOnly];
     
-    // If no objects are loaded in memory, we look to the cache first to fill the table
-    // and then subsequently do a query against the network.
-    //
-    // If there is no network connection, we will hit the cache first.
-    /*
-     SEL isParseReachableSelector = NSSelectorFromString(@"isParseReachable");
-     if (self.objects.count == 0 || ![[UIApplication sharedApplication].delegate performSelector:isParseReachableSelector]) {
-     NSLog(@"??");
-     [query setCachePolicy:kPFCachePolicyCacheThenNetwork];
-     }
-     */
-    
     return finalQuery;
-    
 }
 
 - (void)objectsWillLoad{
