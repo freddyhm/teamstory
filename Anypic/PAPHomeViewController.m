@@ -32,6 +32,7 @@
 @property (nonatomic, strong) UIButton *notificationExitButton;
 @property (nonatomic, strong) UIImageView *notificationStar;
 @property (nonatomic, strong) UIImageView *feedbackImgView;
+@property (nonatomic, strong) UIImageView *feedIndicator;
 
 @property NSNumber *konotorCount;
 @end
@@ -62,6 +63,11 @@
     // refresh feed buttons
     UIFont *feedFont = [UIFont systemFontOfSize:17.0f];
     
+    
+    UIImage *logoImg = [UIImage imageNamed:@"logoNavigationBar.png"];
+    UIButton *logoBtn = [[UIButton alloc]initWithFrame:CGRectMake(10.0f, 10.0f, logoImg.size.width, logoImg.size.height)];
+    [logoBtn setBackgroundImage:logoImg forState:UIControlStateNormal];
+    
     UIButton *exploreBtn = [[UIButton alloc]initWithFrame:CGRectMake(80.0f, 10.0f, 70.0f, 20.0f)];
     [exploreBtn setTitle:@"Explore" forState:UIControlStateNormal];
     [exploreBtn.titleLabel setFont:feedFont];
@@ -71,9 +77,15 @@
     [followingBtn setTitle:@"Following" forState:UIControlStateNormal];
     [followingBtn.titleLabel setFont:feedFont];
     [followingBtn addTarget:self action:@selector(refreshFollowingFeed) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIImage *indicatorImg = [UIImage imageNamed:@"triangle.png"];
+    self.feedIndicator = [[UIImageView alloc]initWithImage:indicatorImg];
+    [self.feedIndicator setFrame:CGRectMake(115.0f, 37.0f, indicatorImg.size.width, indicatorImg.size.height)];
 
+    [self.navigationController.navigationBar addSubview:logoBtn];
     [self.navigationController.navigationBar addSubview:exploreBtn];
     [self.navigationController.navigationBar addSubview:followingBtn];
+    [self.navigationController.navigationBar addSubview:self.feedIndicator];
     
     
    // UITapGestureRecognizer *tapLogo = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(userRefreshControl:)];
@@ -351,7 +363,18 @@
 */
 
 - (void)refreshExploreFeed{
+    
     [SVProgressHUD show];
+    
+    [UIView animateWithDuration:0.2
+                          delay:0.0
+                        options: UIViewAnimationOptionCurveLinear
+                     animations:^{
+                         [self.feedIndicator setFrame:CGRectMake(self.feedIndicator.frame.origin.x - 70.0f, self.feedIndicator.frame.origin.y, self.feedIndicator.frame.size.width, self.feedIndicator.frame.size.height)];
+                     }
+                     completion:nil];
+    
+    
     [super loadObjects:^(BOOL succeeded) {
         [SVProgressHUD dismiss];
     } isRefresh:YES fromSource:@"explore"];
@@ -359,7 +382,19 @@
 
 - (void)refreshFollowingFeed{
     
+    
+    
     [SVProgressHUD show];
+    
+    [UIView animateWithDuration:0.2
+                          delay:0.0
+                        options: UIViewAnimationOptionCurveLinear
+                     animations:^{
+                         [self.feedIndicator setFrame:CGRectMake(self.feedIndicator.frame.origin.x + 70.0f, self.feedIndicator.frame.origin.y, self.feedIndicator.frame.size.width, self.feedIndicator.frame.size.height)];
+                     }
+                     completion:nil];
+
+    
     [super loadObjects:^(BOOL succeeded) {
         [SVProgressHUD dismiss];
     } isRefresh:YES fromSource:@"following"];

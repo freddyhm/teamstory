@@ -426,6 +426,10 @@
 		D542D8C9196A721B00A0384F /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D542D8C8196A721B00A0384F /* AssetsLibrary.framework */; };
 		D54E0FF819A7B75C000B1F9D /* PAPwebviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D54E0FF719A7B75C000B1F9D /* PAPwebviewViewController.m */; };
 		D54E0FFB19A7B76B000B1F9D /* OpenInChromeController.m in Sources */ = {isa = PBXBuildFile; fileRef = D54E0FF919A7B76B000B1F9D /* OpenInChromeController.m */; };
+		D55A17F019B52E5000B9C48A /* triangle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D55A17EF19B52E5000B9C48A /* triangle@2x.png */; };
+		D55A17F919B52E5500B9C48A /* triangle.png in Resources */ = {isa = PBXBuildFile; fileRef = D55A17F819B52E5500B9C48A /* triangle.png */; };
+		D55A180019B5342200B9C48A /* logoNavigationBar.png in Resources */ = {isa = PBXBuildFile; fileRef = D55A17FE19B5342200B9C48A /* logoNavigationBar.png */; };
+		D55A180119B5342200B9C48A /* logoNavigationBar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D55A17FF19B5342200B9C48A /* logoNavigationBar@2x.png */; };
 		D55D2AA019A2DF16009195FA /* icon_clock@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D55D2A9E19A2DF16009195FA /* icon_clock@2x.png */; };
 		D55D2AA119A2DF16009195FA /* icon_clock.png in Resources */ = {isa = PBXBuildFile; fileRef = D55D2A9F19A2DF16009195FA /* icon_clock.png */; };
 		D5654177196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = D5654176196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.m */; };
@@ -527,6 +531,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		D55A17F619B52E5000B9C48A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D5A30A6C19A7AD23004C3759 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AB30EAB08DE04A7EBF33E604;
+			remoteInfo = "Pods-Mixpanel";
+		};
 		D5A30A7319A7AD23004C3759 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D5A30A6C19A7AD23004C3759 /* Pods.xcodeproj */;
@@ -1057,6 +1068,10 @@
 		D54E0FF919A7B76B000B1F9D /* OpenInChromeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenInChromeController.m; sourceTree = SOURCE_ROOT; };
 		D54E0FFA19A7B76B000B1F9D /* OpenInChromeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenInChromeController.h; sourceTree = SOURCE_ROOT; };
 		D54E0FFC19A7B7AF000B1F9D /* PAPwebviewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PAPwebviewViewController.h; sourceTree = SOURCE_ROOT; };
+		D55A17EF19B52E5000B9C48A /* triangle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "triangle@2x.png"; sourceTree = "<group>"; };
+		D55A17F819B52E5500B9C48A /* triangle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = triangle.png; sourceTree = "<group>"; };
+		D55A17FE19B5342200B9C48A /* logoNavigationBar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logoNavigationBar.png; sourceTree = "<group>"; };
+		D55A17FF19B5342200B9C48A /* logoNavigationBar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logoNavigationBar@2x.png"; sourceTree = "<group>"; };
 		D55D2A9E19A2DF16009195FA /* icon_clock@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_clock@2x.png"; sourceTree = "<group>"; };
 		D55D2A9F19A2DF16009195FA /* icon_clock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_clock.png; sourceTree = "<group>"; };
 		D5654175196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALAssetsLibrary+CustomPhotoAlbum.h"; sourceTree = "<group>"; };
@@ -1362,6 +1377,10 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				D55A17FE19B5342200B9C48A /* logoNavigationBar.png */,
+				D55A17FF19B5342200B9C48A /* logoNavigationBar@2x.png */,
+				D55A17F819B52E5500B9C48A /* triangle.png */,
+				D55A17EF19B52E5000B9C48A /* triangle@2x.png */,
 				D55D2A9E19A2DF16009195FA /* icon_clock@2x.png */,
 				D55D2A9F19A2DF16009195FA /* icon_clock.png */,
 				469CF3681996FB4D0081FCED /* signup.png */,
@@ -2147,6 +2166,7 @@
 			children = (
 				D5A30A7419A7AD23004C3759 /* libPods.a */,
 				D5A30A7619A7AD23004C3759 /* libPods-AFNetworking.a */,
+				D55A17F719B52E5000B9C48A /* libPods-Mixpanel.a */,
 				D5A30A7819A7AD23004C3759 /* libPods-SDWebImage.a */,
 				D5A30A7A19A7AD23004C3759 /* libPods-embedly-ios.a */,
 			);
@@ -2289,6 +2309,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		D55A17F719B52E5000B9C48A /* libPods-Mixpanel.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libPods-Mixpanel.a";
+			remoteRef = D55A17F619B52E5000B9C48A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		D5A30A7419A7AD23004C3759 /* libPods.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -2618,6 +2645,7 @@
 				4691B51118C02F7800B7DF6A /* icon-followers.png in Resources */,
 				46B31EEB184E35150028D11C /* profileWebsite@2x.png in Resources */,
 				46B31EF5184E3D340028D11C /* profileCollaborator@2x.png in Resources */,
+				D55A180019B5342200B9C48A /* logoNavigationBar.png in Resources */,
 				465B19AE18B81FE500EDBCFC /* browser-button-forward-no@2x.png in Resources */,
 				46ABD73918B13671008F5AAB /* deezer-logo.png in Resources */,
 				D5C0312519391749000C98B7 /* bubble_right@2x.png in Resources */,
@@ -2670,6 +2698,7 @@
 				4691B52018C5691A00B7DF6A /* news5@2x.png in Resources */,
 				4602FD2218BD553B0097DBEC /* konotor-popup.png in Resources */,
 				D52C1E4018D9515D00625887 /* konotor_stop@2x.png in Resources */,
+				D55A17F919B52E5500B9C48A /* triangle.png in Resources */,
 				4691B4E418BE994800B7DF6A /* asana-popup@2x.png in Resources */,
 				C4BE67BD157FC7F700A291C2 /* SeparatorTimeline.png in Resources */,
 				467A40AF198FF1B200D4C693 /* profile_header_3@2x.png in Resources */,
@@ -2678,6 +2707,7 @@
 				465DE3571895AA9600C37EF8 /* dropdown_arrow@2x.png in Resources */,
 				C4BE67BE157FC7F700A291C2 /* SeparatorTimeline@2x.png in Resources */,
 				D530C3F218FB22FC00739027 /* iRate.bundle in Resources */,
+				D55A17F019B52E5000B9C48A /* triangle@2x.png in Resources */,
 				462FCB62188C6AE9005059F3 /* DiscoverNavigationBar@2x.png in Resources */,
 				D576841C19341DDA008BAA2C /* arrow_right.png in Resources */,
 				C4BE67BF157FC7F700A291C2 /* SeparatorTimelineDark.png in Resources */,
@@ -2734,6 +2764,7 @@
 				D52C1E2E18D9515D00625887 /* konotor_chatbubble_ios7_you@2x.png in Resources */,
 				D576840B1933F908008BAA2C /* IconProfileSelected@2x.png in Resources */,
 				D576840A1933F908008BAA2C /* IconProfileSelected.png in Resources */,
+				D55A180119B5342200B9C48A /* logoNavigationBar@2x.png in Resources */,
 				4602FD2118BD553B0097DBEC /* slingbot-logo@2x.png in Resources */,
 				46839E9518E1E8C100BD60DB /* bg-login@2x.png in Resources */,
 				D57683EE1933E6DD008BAA2C /* post_thought.png in Resources */,
