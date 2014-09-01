@@ -527,6 +527,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		D57B3C9419B411D40018953B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D5A30A6C19A7AD23004C3759 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D22A0C98DFBB4D5DA1949C1B;
+			remoteInfo = "Pods-Mixpanel";
+		};
 		D5A30A7319A7AD23004C3759 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D5A30A6C19A7AD23004C3759 /* Pods.xcodeproj */;
@@ -2147,6 +2154,7 @@
 			children = (
 				D5A30A7419A7AD23004C3759 /* libPods.a */,
 				D5A30A7619A7AD23004C3759 /* libPods-AFNetworking.a */,
+				D57B3C9519B411D40018953B /* libPods-Mixpanel.a */,
 				D5A30A7819A7AD23004C3759 /* libPods-SDWebImage.a */,
 				D5A30A7A19A7AD23004C3759 /* libPods-embedly-ios.a */,
 			);
@@ -2289,6 +2297,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		D57B3C9519B411D40018953B /* libPods-Mixpanel.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libPods-Mixpanel.a";
+			remoteRef = D57B3C9419B411D40018953B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		D5A30A7419A7AD23004C3759 /* libPods.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
