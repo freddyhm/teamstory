@@ -839,6 +839,9 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     [[Mixpanel sharedInstance] track:@"Followed" properties:@{}];
     
+    // increment user follow count by one
+    [[Mixpanel sharedInstance].people increment:@"Follow Count" by:[NSNumber numberWithInt:1]];
+    
     // disable button until finished unfollow
     self.multiActionButton.enabled = NO;
     

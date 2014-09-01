@@ -775,6 +775,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         
          [[Mixpanel sharedInstance] track:@"Liked Comment" properties:@{}];
         
+        // increment user like comment count by one
+        [[Mixpanel sharedInstance].people increment:@"Like Comment Count" by:[NSNumber numberWithInt:1]];
+        
         likeCommentCount = [NSNumber numberWithInt:[likeCommentCount intValue] + 1];
         
         // increment in cache

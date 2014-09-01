@@ -244,6 +244,9 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     [[Mixpanel sharedInstance] track:@"Uploaded Link" properties:@{}];
     
+    // increment user link count by one
+    [[Mixpanel sharedInstance].people increment:@"Link Count" by:[NSNumber numberWithInt:1]];
+    
     [self.view endEditing:YES];
     [SVProgressHUD show];
     [self shouldUploadImage:self.imageView.image block:^(BOOL completed) {

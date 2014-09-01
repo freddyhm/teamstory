@@ -590,6 +590,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         [[Mixpanel sharedInstance] track:@"Liked" properties:@{@"Source":@"Details"}];
         
+        // increment user like count by one
+        [[Mixpanel sharedInstance].people increment:@"Like Count" by:[NSNumber numberWithInt:1]];
+        
+        
         [[PAPCache sharedCache] incrementLikerCountForPhoto:self.photo];
         [newLikeUsersSet addObject:[PFUser currentUser]];
     } else {

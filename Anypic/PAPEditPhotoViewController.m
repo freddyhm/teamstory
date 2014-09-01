@@ -42,6 +42,9 @@
 @property (nonatomic, strong) UITableView *autocompleteTableView;
 @property (nonatomic, strong) NSString *atmentionSearchString;
 @property (nonatomic, strong) UIView *dimView;
+@property (nonatomic, strong) UIBarButtonItem *doneBtn;
+
+
 @property CGRect defaultFooterViewFrame;
 
 @end
@@ -139,8 +142,10 @@
 
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_cancel"] style:UIBarButtonItemStylePlain target:self action:@selector(exitPhoto)];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_done.png"] style:UIBarButtonItemStylePlain target:self action:@selector(doneButtonAction:)];
     
+    
+    self.doneBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_done.png"] style:UIBarButtonItemStylePlain target:self action:@selector(doneButtonAction:)];
+    self.navigationItem.rightBarButtonItem = self.doneBtn;
 
     
     self.autocompleteTableView = [[UITableView alloc] init];
@@ -581,10 +586,19 @@
 
 - (void)doneButtonAction:(id)sender {
     
+    // disable done bar button while pic is uploading
+    [self.doneBtn setEnabled:NO];
+    
+    // show hud while saving pic in background
+    [SVProgressHUD show];
+    
     // analytics
     [PAPUtility captureEventGA:@"Engagement" action:@"Upload Picture" label:@"Photo"];
     
     [[Mixpanel sharedInstance] track:@"Uploaded Photo" properties:@{}];
+    
+    // increment user photo count by one
+    [[Mixpanel sharedInstance].people increment:@"Photo Count" by:[NSNumber numberWithInt:1]];
     
     // make sure placeholder gets erased
     if([[self.commentTextView text] isEqualToString:@"Add a caption"]){
@@ -660,9 +674,6 @@
         [self exitPhoto];
     };
     
-    // show hud while saving pic in background
-    [SVProgressHUD show];
-
     // save
     [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
