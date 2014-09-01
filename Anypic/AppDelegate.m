@@ -725,6 +725,8 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
                 detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notificationComment"];
             }else if([type isEqualToString:kPAPPushPayloadActivityLikeCommentKey]){
                 detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notificationLikeComment"];
+            }else if ([type isEqualToString:kPAPPushPayloadActivityLikeKey]){
+                detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notificationLike"];
             }
            
             [homeNavigationController pushViewController:detailViewController animated:YES];

@@ -99,6 +99,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         // disable default loading symbol
         self.loadingViewEnabled = NO;
         
+        // notification or activity item source
         self.source = source;
     }
     return self;
@@ -1082,6 +1083,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
     
     self.likersQueryInProgress = YES;
+    
     PFQuery *query = [PAPUtility queryForActivitiesOnPhoto:photo cachePolicy:kPFCachePolicyNetworkOnly];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         self.likersQueryInProgress = NO;
