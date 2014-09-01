@@ -52,8 +52,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    //self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
 
     // button image for feedback
     self.feedbackImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"button-feedback.png"]];
@@ -61,21 +59,27 @@
     self.feedbackImgView.userInteractionEnabled = YES;
     [self.feedbackImgView addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(promptFeedback:)]];
     
-    UIView *navBarTitleView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 94.0f, 30.0f)];
-    [navBarTitleView setBackgroundColor:[UIColor clearColor]];
+    // refresh feed buttons
+    UIFont *feedFont = [UIFont systemFontOfSize:17.0f];
     
+    UIButton *exploreBtn = [[UIButton alloc]initWithFrame:CGRectMake(80.0f, 10.0f, 70.0f, 20.0f)];
+    [exploreBtn setTitle:@"Explore" forState:UIControlStateNormal];
+    [exploreBtn.titleLabel setFont:feedFont];
+    [exploreBtn addTarget:self action:@selector(refreshExploreFeed) forControlEvents:UIControlEventTouchUpInside];
     
-    UITapGestureRecognizer *tapLogo = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(userRefreshControl:)];
-    
-    UIImageView *logoView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
-    [logoView addGestureRecognizer:tapLogo];
-    logoView.userInteractionEnabled = YES;
-    
-    
-    
-    [navBarTitleView addSubview:logoView];
+    UIButton *followingBtn = [[UIButton alloc]initWithFrame:CGRectMake(exploreBtn.frame.origin.x + exploreBtn.frame.size.width + 10.0f, exploreBtn.frame.origin.y, 80.0f, 20.0f)];
+    [followingBtn setTitle:@"Following" forState:UIControlStateNormal];
+    [followingBtn.titleLabel setFont:feedFont];
+    [followingBtn addTarget:self action:@selector(refreshFollowingFeed) forControlEvents:UIControlEventTouchUpInside];
 
-    self.navigationItem.titleView = navBarTitleView;
+    [self.navigationController.navigationBar addSubview:exploreBtn];
+    [self.navigationController.navigationBar addSubview:followingBtn];
+    
+    
+   // UITapGestureRecognizer *tapLogo = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(userRefreshControl:)];
+    
+   // [logoView addGestureRecognizer:tapLogo];
+    //logoView.userInteractionEnabled = YES;
     
     self.navigationItem.rightBarButtonItem = promptTrigger;
 
@@ -114,7 +118,7 @@
 
 -(void)userRefreshControl:(id)sender{
     [self.feed scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-    [self loadObjects:nil isRefresh:YES fromSource:@"explore"];
+    [super loadObjects:nil isRefresh:YES fromSource:@"explore"];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -177,16 +181,6 @@
 }
 
 #pragma mark - Datasource
-
-- (void)loadObjects:(void (^)(BOOL succeeded))completionBlock isRefresh:(BOOL)isRefresh fromSource:(NSString *)fromSource{
-
-    [super loadObjects:completionBlock
-             isRefresh:isRefresh fromSource:fromSource];
-
-}
-
-
-
 
 - (BOOL)objectsDidLoad:(NSError *)error {
     
@@ -356,16 +350,30 @@
 }
 */
 
+- (void)refreshExploreFeed{
+    [SVProgressHUD show];
+    [super loadObjects:^(BOOL succeeded) {
+        [SVProgressHUD dismiss];
+    } isRefresh:YES fromSource:@"explore"];
+}
+
+- (void)refreshFollowingFeed{
+    
+    [SVProgressHUD show];
+    [super loadObjects:^(BOOL succeeded) {
+        [SVProgressHUD dismiss];
+    } isRefresh:YES fromSource:@"following"];
+
+}
+
 - (void)inviteFriendsButtonAction:(id)sender {
     FollowersFollowingViewController *detailViewController = [[FollowersFollowingViewController alloc] init];
     [self.navigationController pushViewController:detailViewController animated:YES];
 }
 
 - (void)promptFeedback:(id)sender{
-    //[[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
-    //[KonotorFeedbackScreen showFeedbackScreen];
-    
-    [self loadObjects:nil isRefresh:YES fromSource:@"following"];
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+    [KonotorFeedbackScreen showFeedbackScreen];
 }
 
 -(void)notificationBarButton:(id)sender {
