@@ -24,7 +24,6 @@
     BOOL scrollDirectionDown;
 }
 @property (nonatomic, strong) PAPSettingsActionSheetDelegate *settingsActionSheetDelegate;
-@property (nonatomic, strong) UIView *blankTimelineView;
 @property (nonatomic, strong) UIButton *notificationBar;
 @property (nonatomic, strong) UIScrollView *inheritScrollView;
 @property (nonatomic, strong) NSString *notificationContent;
@@ -33,6 +32,7 @@
 @property (nonatomic, strong) UIImageView *notificationStar;
 @property (nonatomic, strong) UIImageView *feedbackImgView;
 @property (nonatomic, strong) UIImageView *feedIndicator;
+@property (nonatomic, strong) UILabel *emptyPlaceholder;
 
 @property NSNumber *konotorCount;
 @end
@@ -40,7 +40,6 @@
 @implementation PAPHomeViewController
 @synthesize firstLaunch;
 @synthesize settingsActionSheetDelegate;
-@synthesize blankTimelineView;
 @synthesize notificationBar;
 @synthesize inheritScrollView;
 @synthesize notificationContent;
@@ -60,24 +59,32 @@
     self.feedbackImgView.userInteractionEnabled = YES;
     [self.feedbackImgView addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(promptFeedback:)]];
     
-    // refresh feed buttons
+    // refresh feed
     UIFont *feedFont = [UIFont systemFontOfSize:17.0f];
-    
-    
     UIImage *logoImg = [UIImage imageNamed:@"logoNavigationBar.png"];
     UIButton *logoBtn = [[UIButton alloc]initWithFrame:CGRectMake(10.0f, 10.0f, logoImg.size.width, logoImg.size.height)];
     [logoBtn setBackgroundImage:logoImg forState:UIControlStateNormal];
+    [logoBtn addTarget:self action:@selector(refreshCurrentFeed) forControlEvents:UIControlEventTouchUpInside];
     
+    // top nav buttons
     UIButton *exploreBtn = [[UIButton alloc]initWithFrame:CGRectMake(80.0f, 10.0f, 70.0f, 20.0f)];
     [exploreBtn setTitle:@"Explore" forState:UIControlStateNormal];
     [exploreBtn.titleLabel setFont:feedFont];
-    [exploreBtn addTarget:self action:@selector(refreshExploreFeed) forControlEvents:UIControlEventTouchUpInside];
-    
+    [exploreBtn addTarget:self action:@selector(switchFeedSource:) forControlEvents:UIControlEventTouchUpInside];
+  
     UIButton *followingBtn = [[UIButton alloc]initWithFrame:CGRectMake(exploreBtn.frame.origin.x + exploreBtn.frame.size.width + 10.0f, exploreBtn.frame.origin.y, 80.0f, 20.0f)];
     [followingBtn setTitle:@"Following" forState:UIControlStateNormal];
     [followingBtn.titleLabel setFont:feedFont];
-    [followingBtn addTarget:self action:@selector(refreshFollowingFeed) forControlEvents:UIControlEventTouchUpInside];
+    [followingBtn addTarget:self action:@selector(switchFeedSource:) forControlEvents:UIControlEventTouchUpInside];
     
+    // swipe gestures left & right
+    UISwipeGestureRecognizer *leftSwipe = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeLeftFeedSource)];
+    [leftSwipe setDirection:UISwipeGestureRecognizerDirectionLeft];
+    
+    UISwipeGestureRecognizer *rightSwipe = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeRightFeedSource)];
+    [rightSwipe setDirection:UISwipeGestureRecognizerDirectionRight];
+    
+    // triangle indicator image
     UIImage *indicatorImg = [UIImage imageNamed:@"triangle.png"];
     self.feedIndicator = [[UIImageView alloc]initWithImage:indicatorImg];
     [self.feedIndicator setFrame:CGRectMake(115.0f, 37.0f, indicatorImg.size.width, indicatorImg.size.height)];
@@ -87,15 +94,20 @@
     [self.navigationController.navigationBar addSubview:followingBtn];
     [self.navigationController.navigationBar addSubview:self.feedIndicator];
     
+    // Empty case placeholder, hidden by default
+    self.emptyPlaceholder = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/3, self.view.frame.size.width, 40.0f)];
+    self.emptyPlaceholder.font = [UIFont fontWithName:@"Helvetica" size:16.0f];
+    [self.emptyPlaceholder setText:@"Uh Oh! Get to know more startups :)"];
+    self.emptyPlaceholder.textAlignment = NSTextAlignmentCenter;
+    [self.emptyPlaceholder setTextColor:[UIColor colorWithRed:178.0f/255.0f green:184.0f/255.0f blue:189.0f/255.0f alpha:1.0f]];
+    self.emptyPlaceholder.hidden = YES;
     
-   // UITapGestureRecognizer *tapLogo = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(userRefreshControl:)];
-    
-   // [logoView addGestureRecognizer:tapLogo];
-    //logoView.userInteractionEnabled = YES;
+    [super.feed addSubview:self.emptyPlaceholder];
+    [super.feed addGestureRecognizer:leftSwipe];
+    [super.feed addGestureRecognizer:rightSwipe];
+    [super.feed setUserInteractionEnabled:YES];
     
     self.navigationItem.rightBarButtonItem = promptTrigger;
-
-    self.blankTimelineView = [[UIView alloc] initWithFrame:self.feed.bounds];
     
     // diabling notification bar for now.
     /*
@@ -119,18 +131,22 @@
     self.notificationStar.hidden = YES;
     [self.notificationBar addSubview:self.notificationStar];
     
-    
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake( 33.0f, 96.0f, 253.0f, 173.0f);
-    [button setBackgroundImage:[UIImage imageNamed:@"HomeTimelineBlank.png"] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(inviteFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.blankTimelineView addSubview:button];
      */
 }
 
--(void)userRefreshControl:(id)sender{
-    [self.feed scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-    [super loadObjects:nil isRefresh:YES fromSource:@"explore"];
+-(void)refreshCurrentFeed{
+    
+    // get current feed from parent
+    NSString *currentFeed = [super getFeedSourceType];
+    
+    // if empty will crash when trying to scroll
+    if(super.objects.count > 0){
+        // scroll to the top animated and refresh current feed
+        [super.feed scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
+                          atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
+    
+    [super loadObjects:nil isRefresh:YES fromSource:currentFeed];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -198,21 +214,20 @@
     
     BOOL didLoad = [super objectsDidLoad:error];
     
-    if (self.objects.count == 0 && ![self.loadQuery hasCachedResult] & !self.firstLaunch) {
-        self.feed.scrollEnabled = NO;
+    if (super.objects.count == 0 && ![super.loadQuery hasCachedResult] & !self.firstLaunch) {
         
-        if (!self.blankTimelineView.superview) {
-            self.blankTimelineView.alpha = 0.0f;
-            self.feed.tableHeaderView = self.blankTimelineView;
-            
-            [UIView animateWithDuration:0.200f animations:^{
-                self.blankTimelineView.alpha = 1.0f;
-            }];
-        }
+        super.feed.backgroundView = nil;
+        [self.emptyPlaceholder setHidden:NO];
+        
+        super.feed.scrollEnabled = NO;
     } else {
-        self.feed.tableHeaderView = nil;
-        self.feed.scrollEnabled = YES;
-        [self.feed setShowsVerticalScrollIndicator:NO];
+        
+        super.feed.backgroundView = super.texturedBackgroundView;
+        [self.emptyPlaceholder setHidden:YES];
+        
+        super.feed.tableHeaderView = nil;
+        super.feed.scrollEnabled = YES;
+        [super.feed setShowsVerticalScrollIndicator:NO];
     }
     
     return didLoad;
@@ -362,49 +377,67 @@
 }
 */
 
-- (void)refreshExploreFeed{
-    
-    [SVProgressHUD show];
-    
-    [UIView animateWithDuration:0.2
-                          delay:0.0
-                        options: UIViewAnimationOptionCurveLinear
-                     animations:^{
-                         [self.feedIndicator setFrame:CGRectMake(self.feedIndicator.frame.origin.x - 70.0f, self.feedIndicator.frame.origin.y, self.feedIndicator.frame.size.width, self.feedIndicator.frame.size.height)];
-                     }
-                     completion:nil];
-    
-    
-    [super loadObjects:^(BOOL succeeded) {
-        [SVProgressHUD dismiss];
-        [super.feed scrollToRowAtIndexPath:super.lastViewedExploreIndexPath
-                         atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-    } isRefresh:YES fromSource:@"explore"];
-    
+- (void)swipeLeftFeedSource{
+    [self switchFeedSource:@"following"];
+
 }
 
-- (void)refreshFollowingFeed{
+- (void)swipeRightFeedSource{
+    [self switchFeedSource:@"explore"];
+}
+
+- (void)switchFeedSource:(id)sender{
     
+    NSString *selectedFeedSource = @"";
     
+    if([sender isKindOfClass:[NSString class]]){
+        selectedFeedSource = sender;
+    }else{
+        UIButton *tappedBtn = (UIButton *)sender;
+         selectedFeedSource = [tappedBtn.titleLabel.text lowercaseString];
+    }
     
-    [SVProgressHUD show];
-    
-    [UIView animateWithDuration:0.2
-                          delay:0.0
-                        options: UIViewAnimationOptionCurveLinear
-                     animations:^{
-                         [self.feedIndicator setFrame:CGRectMake(self.feedIndicator.frame.origin.x + 70.0f, self.feedIndicator.frame.origin.y, self.feedIndicator.frame.size.width, self.feedIndicator.frame.size.height)];
-                     }
-                     completion:nil];
+    NSString *currentFeedSource = [super getFeedSourceType];
+    NSIndexPath *lastViewdIndexPath = [super getIndexPathForFeed:selectedFeedSource];
 
     
-    [super loadObjects:^(BOOL succeeded) {
-    
-        [SVProgressHUD dismiss];
-        [super.feed scrollToRowAtIndexPath:super.lastViewedFollowingIndexPath
-                         atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-    } isRefresh:YES fromSource:@"following"];
-
+    // make sure selected feed is different than current so we can switch instead of refreshing
+    if(![currentFeedSource isEqualToString:selectedFeedSource]){
+        
+        [SVProgressHUD show];
+        
+        // get direction of triangle
+        float triangleMove = 0;
+        if([selectedFeedSource isEqualToString:@"explore"]){
+            triangleMove = -70.0f;
+        }else if([selectedFeedSource isEqualToString:@"following"]){
+            triangleMove = 70.0f;
+        }
+        
+        [UIView animateWithDuration:0.2
+                              delay:0.0
+                            options: UIViewAnimationOptionCurveLinear
+                         animations:^{
+                             
+                             // update triangle's frame
+                             [self.feedIndicator setFrame:CGRectMake(self.feedIndicator.frame.origin.x + triangleMove, self.feedIndicator.frame.origin.y, self.feedIndicator.frame.size.width, self.feedIndicator.frame.size.height)];
+                         }
+                         completion:nil];
+        
+        [super loadObjects:^(BOOL succeeded) {
+            [SVProgressHUD dismiss];
+            
+            if(super.objects.count != 0){
+                // scroll to last viewed index path
+                [super.feed scrollToRowAtIndexPath:lastViewdIndexPath
+                                  atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+            }
+            
+        } isRefresh:YES fromSource:selectedFeedSource];
+        
+    }else{
+        [self refreshCurrentFeed];
+    }
 }
 
 - (void)inviteFriendsButtonAction:(id)sender {

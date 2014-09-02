@@ -32,7 +32,11 @@
 @property (nonatomic, strong) NSString *photoID;
 @property (nonatomic, strong) PFObject *current_photo;
 @property (nonatomic, strong) MBProgressHUD *hud;
+@property (nonatomic, strong) NSIndexPath *lastViewedExploreIndexPath;
+@property (nonatomic, strong) NSIndexPath *lastViewedFollowingIndexPath;
 @property (nonatomic, strong) NSString *feedSourceType;
+
+
 
 
 @property int loadPostCount;
@@ -69,7 +73,9 @@ enum ActionSheetTags {
         // set default source type
         self.feedSourceType = @"explore";
         
+        // set default location for both feeds
         self.lastViewedExploreIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        self.lastViewedFollowingIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     }
     return self;
 }
@@ -81,9 +87,9 @@ enum ActionSheetTags {
     // Remove cell separator
     [self.feed setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
-    UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
-    texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
-    self.feed.backgroundView = texturedBackgroundView;
+    self.texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
+    self.texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
+    self.feed.backgroundView = self.texturedBackgroundView;
     
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     refreshControl.tintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:0.5f];
@@ -233,6 +239,20 @@ enum ActionSheetTags {
 
 #pragma mark - Refresh
 
+- (NSString *)getFeedSourceType{
+    return self.feedSourceType;
+}
+
+- (NSIndexPath *)getIndexPathForFeed:(NSString *)feed{
+    
+    if([feed isEqualToString:@"explore"]){
+        return self.lastViewedExploreIndexPath;
+    }else if([feed isEqualToString:@"following"]){
+        return self.lastViewedFollowingIndexPath;
+    }else{
+        return [NSIndexPath indexPathForRow:0 inSection:0];
+    }
+}
 
 - (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl{
     
@@ -260,6 +280,7 @@ enum ActionSheetTags {
     /* Added completion block, pass nil to use without. We need to know if we're refreshing the table or loading another 10 posts because it'll affect the query's limit. When refreshing, we use the current self.loadPostCount, if it's instead a load, we use the number of current posts + 10. When loadPostCount is 0, load 10 to start. 
      */
     
+    // set feed source 
     self.feedSourceType = fromSource;
     
     // Show hud and set default post load at first load
