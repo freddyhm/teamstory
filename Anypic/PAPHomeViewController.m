@@ -377,7 +377,10 @@
     
     [super loadObjects:^(BOOL succeeded) {
         [SVProgressHUD dismiss];
+        [super.feed scrollToRowAtIndexPath:super.lastViewedExploreIndexPath
+                         atScrollPosition:UITableViewScrollPositionBottom animated:NO];
     } isRefresh:YES fromSource:@"explore"];
+    
 }
 
 - (void)refreshFollowingFeed{
@@ -396,7 +399,10 @@
 
     
     [super loadObjects:^(BOOL succeeded) {
+    
         [SVProgressHUD dismiss];
+        [super.feed scrollToRowAtIndexPath:super.lastViewedFollowingIndexPath
+                         atScrollPosition:UITableViewScrollPositionBottom animated:NO];
     } isRefresh:YES fromSource:@"following"];
 
 }

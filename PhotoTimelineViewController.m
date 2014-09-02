@@ -33,6 +33,8 @@
 @property (nonatomic, strong) PFObject *current_photo;
 @property (nonatomic, strong) MBProgressHUD *hud;
 @property (nonatomic, strong) NSString *feedSourceType;
+
+
 @property int loadPostCount;
 @property int refreshCount;
 
@@ -66,6 +68,8 @@ enum ActionSheetTags {
         
         // set default source type
         self.feedSourceType = @"explore";
+        
+        self.lastViewedExploreIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     }
     return self;
 }
@@ -255,7 +259,9 @@ enum ActionSheetTags {
     
     /* Added completion block, pass nil to use without. We need to know if we're refreshing the table or loading another 10 posts because it'll affect the query's limit. When refreshing, we use the current self.loadPostCount, if it's instead a load, we use the number of current posts + 10. When loadPostCount is 0, load 10 to start. 
      */
-
+    
+    self.feedSourceType = fromSource;
+    
     // Show hud and set default post load at first load
     if(self.loadPostCount == 0){
         [SVProgressHUD show];
@@ -271,6 +277,8 @@ enum ActionSheetTags {
     [self.loadQuery orderByDescending:@"createdAt"];
     
     if([fromSource isEqualToString:@"following"]){
+        
+
         
         PFQuery *getFollowingQuery = [PFQuery queryWithClassName:kPAPActivityClassKey];
         [getFollowingQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
@@ -326,10 +334,9 @@ enum ActionSheetTags {
         }
     }
     
-    
     // Reload table
     [self.feed reloadData];
-    
+
     return didLoad;
 }
 
@@ -466,6 +473,13 @@ enum ActionSheetTags {
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    
+    if([self.feedSourceType isEqualToString:@"explore"]){
+        self.lastViewedExploreIndexPath = indexPath;
+    }else{
+        self.lastViewedFollowingIndexPath = indexPath;
+    }
     
     PFObject *object = [self.objects objectAtIndex:indexPath.section];
     
