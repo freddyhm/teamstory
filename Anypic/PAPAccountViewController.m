@@ -418,7 +418,11 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 self.locationSiteSeparator = [[UILabel alloc] init];
                 self.locationSiteSeparator.font = [UIFont fontWithName:@"Helvetica" size:13.0f];
                 self.locationSiteSeparator.textColor = textColor;
-                self.locationSiteSeparator.text = @"|";
+            
+                if(websiteInfo.length > 0){
+                    self.locationSiteSeparator.text = @"|";
+                }
+                
                 self.locationSiteSeparator.frame = CGRectMake(locationLabelWidth + self.locationLabel.frame.origin.x + 5.0f, 91.5f + expectedSize.height, 10.0f, 10.0f);
                 
                // [self.locationSiteSeparator setBackgroundColor:[UIColor redColor]];
