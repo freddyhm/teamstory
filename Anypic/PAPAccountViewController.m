@@ -425,8 +425,6 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 
                 self.locationSiteSeparator.frame = CGRectMake(locationLabelWidth + self.locationLabel.frame.origin.x + 5.0f, 91.5f + expectedSize.height, 10.0f, 10.0f);
                 
-               // [self.locationSiteSeparator setBackgroundColor:[UIColor redColor]];
-            
                 [self.headerView addSubview: self.locationSiteSeparator];
                 
                 websiteLink = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -697,6 +695,11 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         
         [self.locationLabel setFrame:CGRectMake(self.locationLabel.frame.origin.x, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, self.locationLabel.frame.size.height)];
         self.locationSiteSeparator.frame = CGRectMake(locationLabelWidth + self.locationLabel.frame.origin.x + 5.0f, 91.5f + expectedSize.height, 10.0f, 10.0f);
+        
+        if(self.websiteInfo.length > 0 && ![self.locationSiteSeparator.text isEqualToString:@"|"]){
+            self.locationSiteSeparator.text = @"|";
+        }
+        
         [self.locationIconImageView setFrame:CGRectMake(6.0f, 88.0f + expectedSize.height, 15.0f, 15.0f)];
         
         // calculate space left for website link

@@ -468,6 +468,16 @@ static TTTTimeIntervalFormatter *timeFormatter;
     //self.website = [self.website stringWithFormat:@"%@/%@/%@", ];
     PAPwebviewViewController *webViewController = [[PAPwebviewViewController alloc] initWithWebsite:self.website];
     webViewController.hidesBottomBarWhenPushed = YES;
+    
+    // get last controller in stack, make sure it's details and dismiss keyboard before pushing webview
+    NSArray *controllers = [self.navController childViewControllers];
+    id lastController = [controllers objectAtIndex:[controllers count] - 1];
+
+    if([lastController isKindOfClass:[PAPPhotoDetailsViewController class]]){
+        PAPPhotoDetailsViewController *detailsController = (PAPPhotoDetailsViewController *)lastController;
+        [detailsController dismissKeyboard];
+    }
+    
     [self.navController pushViewController:webViewController animated:YES];
 
 }

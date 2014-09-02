@@ -262,7 +262,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
 }
 
-
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
