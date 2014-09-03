@@ -590,8 +590,5 @@ static TTTTimeIntervalFormatter *timeFormatter;
     }
 }
 
--(void)editButtonAction:(id)sender {
-    
-}
 
 @end

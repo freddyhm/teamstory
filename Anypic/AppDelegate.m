@@ -409,7 +409,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     self.activityViewController = [[PAPActivityFeedViewController alloc] initWithStyle:UITableViewStylePlain];
     self.accountViewController_tabBar = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
 
-    self.discoverViewController = [[discoverPageViewController alloc] initWithStyle:UITableViewStylePlain];
+    self.discoverViewController = [[discoverPageViewController alloc] init];
    
 
     
