@@ -15,6 +15,7 @@
 @property (strong, nonatomic) IBOutlet UITableView *feed;
 @property (strong, nonatomic) IBOutlet NSMutableArray *objects;
 @property (nonatomic, strong) PFQuery *loadQuery;
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 - (BOOL)objectsDidLoad:(NSError *)error;
 - (void)loadObjects:(void (^)(BOOL succeeded))completionBlock isRefresh:(BOOL)isRefresh;

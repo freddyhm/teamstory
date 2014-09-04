@@ -12,6 +12,7 @@
 #import "UIImage+ResizeAdditions.h"
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
+#import "Mixpanel.h"
 
 
 @interface PAPlinkPostViewController ()
@@ -67,6 +68,9 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    // analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Link Screen" properties:@{}];
     
     // init nav bar
     [[self navigationController] setNavigationBarHidden:NO animated:YES];
@@ -237,6 +241,11 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     // analytics
     [PAPUtility captureEventGA:@"Engagement" action:@"Upload Link" label:@"Photo"];
+    
+    [[Mixpanel sharedInstance] track:@"Uploaded Link" properties:@{}];
+    
+    // increment user link count by one
+    [[Mixpanel sharedInstance].people increment:@"Link Count" by:[NSNumber numberWithInt:1]];
     
     [self.view endEditing:YES];
     [SVProgressHUD show];

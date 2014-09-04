@@ -9,6 +9,7 @@
 #import "TTTTimeIntervalFormatter.h"
 #import "MBProgressHUD.h"
 #import "PAPwebviewViewController.h"
+#import "Mixpanel.h"
 
 #define baseHorizontalOffset 0.0f
 #define baseWidth 320.0f
@@ -586,6 +587,12 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         // analytics
         [PAPUtility captureEventGA:@"Engagement" action:@"Like" label:@"Photo"];
+        
+        [[Mixpanel sharedInstance] track:@"Liked" properties:@{@"Source":@"Details"}];
+        
+        // increment user like count by one
+        [[Mixpanel sharedInstance].people increment:@"Like Count" by:[NSNumber numberWithInt:1]];
+        
         
         [[PAPCache sharedCache] incrementLikerCountForPhoto:self.photo];
         [newLikeUsersSet addObject:[PFUser currentUser]];

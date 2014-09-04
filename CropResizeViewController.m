@@ -11,6 +11,7 @@
 #import "CameraFilterViewController.h"
 #import "UIImage+ResizeAdditions.h"
 #import "SVProgressHUD.h"
+#import "Mixpanel.h"
 
 @interface CropResizeViewController ()
 
@@ -123,6 +124,8 @@
 -(void)viewWillAppear:(BOOL)animated{
     // analytics
     [PAPUtility captureScreenGA:@"Crop Photo"];
+    
+    [[Mixpanel sharedInstance] track:@"Viewed Crop Screen" properties:@{}];
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView

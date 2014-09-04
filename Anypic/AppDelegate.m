@@ -25,7 +25,7 @@
 #import <Crashlytics/Crashlytics.h>
 #import "iRate.h"
 #import "PAPprofileSetupViewController.h"
-
+#import "Mixpanel.h"
 
 
 @interface AppDelegate () {
@@ -88,6 +88,7 @@ static NSString *const PARSE_APP_ID = @"0tEtPoPtsvPu1lCPzBeU032Cz3Byemcp5lr25gIU
 static NSString *const PARSE_CLIENT_KEY = @"ZRnM7JXOlbSyOQuosXWG6SlrDNCY22C84hpqyi0l";
 static NSString *const TWITTER_KEY = @"VGiCnk6P01PjqV13rm34Bw";
 static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0z9Q";
+static NSString *const MIXPANEL_TOKEN = @"093959a404024512d35ec784652d01fc";
 #else
 static NSString *const GOOGLE_TRACKING_ID = @"UA-49381420-1";
 static NSString *const KONOTOR_APP_ID = @"ab785be6-9398-4b6a-8ae6-4d83431edad9";
@@ -96,6 +97,7 @@ static NSString *const PARSE_APP_ID = @"SPQlkxDYPDcVhbICHFzjwSsREHaSqKQIKwkijDaJ
 static NSString *const PARSE_CLIENT_KEY = @"WtgkZLYZ1UOlsbGMnfYtKCD6dQLMfy3tBsN2UKxA";
 static NSString *const TWITTER_KEY = @"VGiCnk6P01PjqV13rm34Bw";
 static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0z9Q";
+static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 #endif
 
 #pragma mark - UIApplicationDelegate
@@ -111,6 +113,9 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     
     // Initialize tracker. Replace with your tracking ID.
     [[GAI sharedInstance] trackerWithTrackingId:GOOGLE_TRACKING_ID];
+    
+    // Mixpanel analytics
+    [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
     
     // Konotor setup
     [Konotor InitWithAppID:KONOTOR_APP_ID AppKey:KONOTOR_APP_KEY withDelegate:[KonotorEventHandler sharedInstance]];
@@ -274,9 +279,10 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
               //  [self.activityViewController notificationSetup:(int)application.applicationIconBadgeNumber source:@"background"];
                 
                 // current view is activity, clear the badge
-                if(selectedtabIndex == PAPActivityTabBarItemIndex){
+               if(selectedtabIndex == PAPActivityTabBarItemIndex){
                     [self.activityViewController setActivityBadge:nil];
-            }
+                    [self.activityViewController loadObjects];
+               }
         }
     }
     
@@ -403,7 +409,7 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
     self.activityViewController = [[PAPActivityFeedViewController alloc] initWithStyle:UITableViewStylePlain];
     self.accountViewController_tabBar = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
 
-    self.discoverViewController = [[discoverPageViewController alloc] initWithStyle:UITableViewStylePlain];
+    self.discoverViewController = [[discoverPageViewController alloc] init];
    
 
     
@@ -719,6 +725,8 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
                 detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notificationComment"];
             }else if([type isEqualToString:kPAPPushPayloadActivityLikeCommentKey]){
                 detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notificationLikeComment"];
+            }else if ([type isEqualToString:kPAPPushPayloadActivityLikeKey]){
+                detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notificationLike"];
             }
            
             [homeNavigationController pushViewController:detailViewController animated:YES];

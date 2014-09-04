@@ -13,6 +13,7 @@
 #import "UIImage+ResizeAdditions.h"
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
+#import "Mixpanel.h"
 
 @interface ThoughtPostViewController ()
 
@@ -90,6 +91,9 @@
     
     // analytics
     [PAPUtility captureScreenGA:@"Thought Post"];
+    
+    // analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Thought Screen" properties:@{}];
     
     // set color of nav bar to teal
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
@@ -206,6 +210,9 @@
     
     
     if(self.thoughtTextView.contentSize.height < self.thoughtTextView.frame.size.height){
+        
+        // disable save button so duplicates are not sent by mistake
+        [self.rightNavButton setEnabled:NO];
     
         // dismiss keyboard before taking picture
         [self dismissKeyboard];
@@ -213,6 +220,11 @@
         // analytics for upload and background
         [PAPUtility captureEventGA:@"Engagement" action:@"Upload Thought" label:@"Photo"];
         [PAPUtility captureEventGA:@"Thought Bkgd" action:[[NSNumber numberWithInt:self.prevBkgdIndex] stringValue] label:@"Photo"];
+        
+        [[Mixpanel sharedInstance] track:@"Uploaded Thought" properties:@{}];
+        
+        // increment user thought count by one
+        [[Mixpanel sharedInstance].people increment:@"Thought Count" by:[NSNumber numberWithInt:1]];
        
         // add label to background image for picture
         [self.backgroundImg addSubview:self.thoughtTextView];
@@ -273,6 +285,7 @@
                 [self exitPost];
             }else{
                 [SVProgressHUD dismiss];
+                [self.rightNavButton setEnabled:YES];
             }
         }];
         

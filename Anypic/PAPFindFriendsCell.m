@@ -32,7 +32,7 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        [self.contentView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundFindFriendsCell.png"]]];
+        [self.contentView setBackgroundColor:[UIColor whiteColor]];
         
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
         

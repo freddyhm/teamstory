@@ -15,5 +15,6 @@
 @property (nonatomic, strong) PFObject *photo;
 
 - (id)initWithPhoto:(PFObject *)aPhoto source:(NSString *)source;
+- (void)dismissKeyboard;
 
 @end

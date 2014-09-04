@@ -11,6 +11,7 @@
 #import "AppDelegate.h"
 #import "PAPProfileSettingViewController.h"
 #import "PAPprofileSetupViewController.h"
+#import "Mixpanel.h"
 
 #define SUCCESSFUL 1
 
@@ -33,6 +34,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [[Mixpanel sharedInstance] track:@"Viewed Email Sign Up Screen" properties:@{}];
     
     cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
     signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -228,6 +231,8 @@
     NSString *userNewEmail = self.signUpEmailTextField.text;
     NSString *userPW = self.signUpPWTextField.text;
     NSString *userPW_confirm = self.signUpPWTextField_confirm.text;
+    
+    [[Mixpanel sharedInstance] track:@"Press Signed Up Email" properties:@{@"New user email":userNewEmail}];
     
     NSLog(@"%@", userNewEmail);
     NSLog(@"%@", userPW);

@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PAPFindFriendsCell.h"
+#import "PAPdiscoverCell.h"
+#import "PAPdiscoverIndustryCell.h"
 extern NSInteger selection;
 
-@interface discoverPageViewController : UITableViewController <UITabBarControllerDelegate, UINavigationBarDelegate>
+@interface discoverPageViewController : UIViewController <UITabBarControllerDelegate, UINavigationBarDelegate, UISearchBarDelegate,UISearchDisplayDelegate,UITableViewDataSource,UITableViewDelegate,PAPFindFriendsCellDelegate,PAPdiscoverCellDelegate,PAPdiscoverIndustryCellDelegate>
 
 
 @end

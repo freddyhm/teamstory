@@ -6,6 +6,7 @@
 //
 //
 
+
 #import "PhotoTimelineViewController.h"
 #import "PAPTabBarController.h"
 #import "PAPPhotoCell.h"
@@ -17,6 +18,7 @@
 #import "MBProgressHUD.h"
 #import "SVProgressHUD.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "Mixpanel.h"
 
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
@@ -71,10 +73,6 @@ enum ActionSheetTags {
 {
     [super viewDidLoad];
     
-   // [[SDImageCache sharedImageCache] clearMemory];
-   // [[SDImageCache sharedImageCache] clearDisk];
-    
-    
     // Remove cell separator
     [self.feed setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
@@ -82,10 +80,10 @@ enum ActionSheetTags {
     texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     self.feed.backgroundView = texturedBackgroundView;
     
-    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-    refreshControl.tintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:0.5f];
-    [refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
-    [self.feed addSubview:refreshControl];
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.tintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:0.5f];
+    [self.refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
+    [self.feed addSubview:self.refreshControl];
      
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidPublishPhoto:) name:PAPTabBarControllerDidFinishEditingPhotoNotification object:nil];
@@ -142,6 +140,11 @@ enum ActionSheetTags {
     
     // analytics
     [PAPUtility captureEventGA:@"Engagement" action:@"Comment" label:@"Photo"];
+    
+    [[Mixpanel sharedInstance] track:@"Commented" properties:@{}];
+    
+    // increment user comment count by one
+    [[Mixpanel sharedInstance].people increment:@"Comment Count" by:[NSNumber numberWithInt:1]];
     
     [self.feed beginUpdates];
     [self.feed endUpdates];
@@ -283,8 +286,6 @@ enum ActionSheetTags {
             [self objectsDidLoad:error];
         }
     }];
-    
-  //  [self.loadQuery clearCachedResult];
 }
 
 - (BOOL)objectsDidLoad:(NSError *)error {
@@ -313,43 +314,7 @@ enum ActionSheetTags {
         if (![photoImgView.file isDataAvailable]) {
             [photoImgView loadInBackground];
         }
-        
-        /*
-        // Check if image in cache
-        [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *cacheImage, SDImageCacheType cacheType) {
-            
-            PFFile *fileAll = [object objectForKey:@"image"];
-            
-            NSLog(@"ALL OBJECTS %@ IMAGE URL %@", object, fileAll.url);
-            
-            if(!cacheImage){
-                PFImageView *photoImgView = [[PFImageView alloc] init];
-                photoImgView.file = [object objectForKey:kPAPPhotoPictureKey];
-                
-                if(![photoImgView.file isDataAvailable])
-                {
-                    // Load images from remote server
-                    [photoImgView loadInBackground:^(UIImage *imageFromServer, NSError *error) {
-                        // Check if there's no error and image is present before setting
-                        if(!error && imageFromServer){
-                            NSLog(@"IN LOADING %@ IMAGE URL %@ IMAGE FROM SERVER %@", object, photoImgView.file.url, imageFromServer);
-                            [[SDImageCache sharedImageCache] storeImage:imageFromServer forKey:[object objectId]];
-                        }
-                    }];
-                }else{
-                    [photoImgView loadInBackground];
-                    NSLog(@"IN READY %@ IMAGE URL %@ LOADED IMAGE %@", object, photoImgView.file.url, photoImgView.image);
-                    [[SDImageCache sharedImageCache] storeImage:photoImgView.image forKey:[object objectId]];
-                }
-                
-                
-            }
-        }];
-         */
-     
-        
     }
-    
     
     // Reload table
     [self.feed reloadData];
@@ -432,126 +397,6 @@ enum ActionSheetTags {
     
     return 44.0f;
 }
-
-
-/*
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    
-    
-    if (section == self.objects.count) {
-        // Load More section
-        return nil;
-    }
-    
-    PostFooterView *headerView = [self dequeueReusableSectionHeaderView2];
-    
-    if (!headerView) {
-        headerView = [[PostFooterView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.view.bounds.size.width, 44.0f) buttons:PAPPhotoHeaderButtonsDefault2];
-        headerView.delegate = self;
-        [self.reusableSectionHeaderViews2 addObject:headerView];
-    }
-    
-    
-    PFObject *photo = [self.objects objectAtIndex:section];
-    headerView.tag = section;
-    [headerView.likeButton setTag:section];
-    
-    NSDictionary *attributesForPhoto = [[PAPCache sharedCache] attributesForPhoto:photo];
-    
-    if (attributesForPhoto) {
-        [headerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:photo]];
-        
-        NSString *likeCount =[[[PAPCache sharedCache] likeCountForPhoto:photo] description];
-        BOOL likeStatus = [[PAPCache sharedCache] isPhotoLikedByCurrentUser:photo];
-        [headerView setLikeStatus:likeStatus];
-        
-        
-        if (likeStatus == YES) {
-            [headerView.likeButton setTitle:likeCount forState:UIControlStateSelected];
-        } else {
-            [headerView.likeButton setTitle:likeCount forState:UIControlStateNormal];
-        }
-        
-        
-        [headerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:photo] description] forState:UIControlStateNormal];
-        
-        if (headerView.likeButton.alpha < 1.0f || headerView.commentButton.alpha < 1.0f) {
-            [UIView animateWithDuration:0.200f animations:^{
-                headerView.likeButton.alpha = 1.0f;
-                headerView.commentButton.alpha = 1.0f;
-            }];
-        }
-    } else {
-        
-        headerView.likeButton.alpha = 0.0f;
-        headerView.commentButton.alpha = 0.0f;
-        
-        @synchronized(self) {
-            // check if we can update the cache
-            NSNumber *outstandingSectionHeaderQueryStatus = [self.outstandingSectionHeaderQueries2 objectForKey:[NSNumber numberWithInt:(int)section]];
-            if (!outstandingSectionHeaderQueryStatus) {
-                PFQuery *query = [PAPUtility queryForActivitiesOnPhoto:photo cachePolicy:kPFCachePolicyNetworkOnly];
-                [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                    @synchronized(self) {
-                        //[self.outstandingSectionHeaderQueries removeObjectForKey:[NSNumber numberWithInt:(int)section]];
-                        
-                        if (error) {
-                            return;
-                        }
-                        
-                        NSMutableArray *likers = [NSMutableArray array];
-                        NSMutableArray *commenters = [NSMutableArray array];
-                        
-                        BOOL isLikedByCurrentUser = NO;
-                        
-                        for (PFObject *activity in objects) {
-                            if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeLike] && [activity objectForKey:kPAPActivityFromUserKey]) {
-                                [likers addObject:[activity objectForKey:kPAPActivityFromUserKey]];
-                            } else if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeComment] && [activity objectForKey:kPAPActivityFromUserKey]) {
-                                [commenters addObject:[activity objectForKey:kPAPActivityFromUserKey]];
-                            }
-                            
-                            if ([[[activity objectForKey:kPAPActivityFromUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
-                                if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeLike]) {
-                                    isLikedByCurrentUser = YES;
-                                    
-                                }
-                            }
-                        }
-                        
-                        [[PAPCache sharedCache] setAttributesForPhoto:photo likers:likers commenters:commenters likedByCurrentUser:isLikedByCurrentUser];
-                        
-                        if (headerView.tag != section) {
-                            return;
-                        }
-                        NSString *likeCount = [[[PAPCache sharedCache] likeCountForPhoto:photo] description];
-                        
-                        [headerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:photo]];
-                        
-                        if (isLikedByCurrentUser == YES) {
-                            [headerView.likeButton setTitle:likeCount forState:UIControlStateSelected];
-                        } else {
-                            [headerView.likeButton setTitle:likeCount forState:UIControlStateNormal];
-                        }
-                        
-                        [headerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:photo] description] forState:UIControlStateNormal];
-                        
-                        if (headerView.likeButton.alpha < 1.0f || headerView.commentButton.alpha < 1.0f) {
-                            [UIView animateWithDuration:0.200f animations:^{
-                                headerView.likeButton.alpha = 1.0f;
-                                headerView.commentButton.alpha = 1.0f;
-                            }];
-                        }
-                    }
-                }];
-            }
-        }
-    }
-
-    
-    return headerView;
-}
- */
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -643,39 +488,6 @@ enum ActionSheetTags {
             cell.imageView.file = [object objectForKey:kPAPPhotoPictureKey];
             
             [cell.imageView loadInBackground];
-            
-            /*
-
-            // Fetch image from cache
-            [[SDImageCache sharedImageCache] queryDiskCacheForKey:[object objectId] done:^(UIImage *imageCache, SDImageCacheType cacheType) {
-                // set image from cache if available
-                if(imageCache){
-                    
-                    NSLog(@"IN CELL CACHE %@, IMAGE URL %@, IMAGE CACHE %@", object, cell.imageView.file.url, imageCache);
-                    
-                    [cell.imageView loadInBackground];
-                    //cell.imageView.image = imageCache;
-                }else{
-                    
-                    if(![cell.imageView.file isDataAvailable]){
-                        // load in background and set image in cache
-                        [cell.imageView loadInBackground:^(UIImage *imageFromServer, NSError *error) {
-                            
-                            NSLog(@"IN CELL LOADING %@, IMAGE URL %@ IMAGE FROM SERVER %@", object, cell.imageView.file.url, imageFromServer);
-                            
-                            [[SDImageCache sharedImageCache] storeImage:imageFromServer forKey:[object objectId]];
-                        }];
-                    }else{
-                        
-                        [cell.imageView loadInBackground];
-                        
-                        NSLog(@"IN CELL READY %@, IMAGE URL %@ IMAGE FROM SERVER %@", object, cell.imageView.file.url, cell.imageView.image);
-                        
-                        [[SDImageCache sharedImageCache] storeImage:cell.imageView.image forKey:[object objectId]];
-                    }
-                }
-            }];
-             */
         }
         
         return cell;
@@ -809,6 +621,11 @@ enum ActionSheetTags {
     if (liked) {
         // analytics
         [PAPUtility captureEventGA:@"Engagement" action:@"Like" label:@"Photo"];
+        
+        [[Mixpanel sharedInstance] track:@"Liked" properties:@{@"Source":@"Timeline"}];
+        
+        // increment user like count by one
+        [[Mixpanel sharedInstance].people increment:@"Like Count" by:[NSNumber numberWithInt:1]];
         
         likeCount = [NSNumber numberWithInt:[likeCount intValue] + 1];
         [[PAPCache sharedCache] incrementLikerCountForPhoto:photo];

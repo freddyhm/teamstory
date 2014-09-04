@@ -14,6 +14,7 @@
 #import "PAPUtility.h"
 #import "SVProgressHUD.h"
 #import "MBProgressHUD.h"
+#import "Mixpanel.h"
 
 enum ActionSheetTags {
     MainActionSheetTag = 0,
@@ -98,6 +99,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         // disable default loading symbol
         self.loadingViewEnabled = NO;
         
+        // notification or activity item source
         self.source = source;
     }
     return self;
@@ -259,7 +261,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [self loadLikers];
     }
 }
-
 
 #pragma mark - UITableViewDelegate
 
@@ -594,7 +595,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         
         if ([self.userArray count] < 1) {
             userQuery = [PFUser query];
-            userQuery.limit = 10000;
+            userQuery.limit = MAXFLOAT;
             [userQuery whereKeyExists:@"displayName"];
             [userQuery orderByAscending:@"displayName"];
             [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -657,9 +658,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 [SVProgressHUD dismiss];
                 [self loadObjects];
                 
-                // set discover count.
-                [self.photo incrementKey:@"discoverCount" byAmount:[NSNumber numberWithInt:2]];
-                [self.photo saveInBackground];
                 // suscribe to post if commenter is not photo owner
                 if(![[[self.photo objectForKey:kPAPPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]){
                     [PAPUtility updateSubscriptionToPost:self.photo forState:@"Subscribe"];
@@ -774,6 +772,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         
         // analytics
         [PAPUtility captureEventGA:@"Engagement" action:@"Like Comment" label:@"Photo"];
+        
+         [[Mixpanel sharedInstance] track:@"Liked Comment" properties:@{}];
+        
+        // increment user like comment count by one
+        [[Mixpanel sharedInstance].people increment:@"Like Comment Count" by:[NSNumber numberWithInt:1]];
+        
         likeCommentCount = [NSNumber numberWithInt:[likeCommentCount intValue] + 1];
         
         // increment in cache
@@ -1078,6 +1082,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
     
     self.likersQueryInProgress = YES;
+    
     PFQuery *query = [PAPUtility queryForActivitiesOnPhoto:photo cachePolicy:kPFCachePolicyNetworkOnly];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         self.likersQueryInProgress = NO;

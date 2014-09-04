@@ -11,6 +11,7 @@
 #import "ThoughtPostViewController.h"
 #import "PAPlinkPostViewController.h"
 #import "SVProgressHUD.h"
+#import "Mixpanel.h"
 
 @interface PAPTabBarController ()
 @property (nonatomic,strong) NSString *imageSource;
@@ -158,6 +159,8 @@
     // analytics
     [PAPUtility captureEventGA:@"Testing" action:@"Pressed Post" label:nil];
     
+    [[Mixpanel sharedInstance] track:@"Pressed Post Menu" properties:@{}];
+    
     self.postButton.selected = self.postButton.selected ? NO : YES;
     
     // hide/show post menu toggle
@@ -169,6 +172,8 @@
     
     // analytics
     [PAPUtility captureEventGA:@"Testing" action:@"Pressed Camera" label:nil];
+    
+    [[Mixpanel sharedInstance] track:@"Pressed Camera" properties:@{}];
     
     postButton.selected = self.postButton.selected ? NO : YES;
     
@@ -216,6 +221,8 @@
     // analytics
     [PAPUtility captureEventGA:@"Testing" action:@"Pressed Link" label:nil];
     
+    [[Mixpanel sharedInstance] track:@"Pressed Link" properties:@{}];
+    
     self.postMenu.hidden = YES;
     postButton.selected = self.postButton.selected ? NO : YES;
     
@@ -256,6 +263,8 @@
     // analytics
     [PAPUtility captureEventGA:@"Testing" action:@"Pressed Thought" label:nil];
     
+    [[Mixpanel sharedInstance] track:@"Pressed Thought" properties:@{}];
+    
     postButton.selected = self.postButton.selected ? NO : YES;
     self.postMenu.hidden = YES;
     
@@ -268,6 +277,8 @@
     
     // analytics
     [PAPUtility captureEventGA:@"Camera & Album" action:@"Picked Camera" label:@"Photo"];
+
+    [[Mixpanel sharedInstance] track:@"Took Camera Picture" properties:@{}];
     
     /* starts camera, sets tabbarcontroller as delegate, and returns image picker */
     

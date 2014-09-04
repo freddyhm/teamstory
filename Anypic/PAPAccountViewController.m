@@ -12,6 +12,7 @@
 #import "SVProgressHUD.h"
 #import "PAPwebviewViewController.h"
 #import "FollowersFollowingViewController.h"
+#import "Mixpanel.h"
 
 @interface PAPAccountViewController() {
     float alphaValue_twitter;
@@ -103,6 +104,10 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // remove refresh control for home that is set by default in inherited timeline
+    [super.refreshControl removeFromSuperview];
+    
+    // hide back button
     [self.navigationItem setHidesBackButton:YES];
     
     if (!self.user) {
@@ -413,11 +418,13 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 self.locationSiteSeparator = [[UILabel alloc] init];
                 self.locationSiteSeparator.font = [UIFont fontWithName:@"Helvetica" size:13.0f];
                 self.locationSiteSeparator.textColor = textColor;
-                self.locationSiteSeparator.text = @"|";
+            
+                if(websiteInfo.length > 0){
+                    self.locationSiteSeparator.text = @"|";
+                }
+                
                 self.locationSiteSeparator.frame = CGRectMake(locationLabelWidth + self.locationLabel.frame.origin.x + 5.0f, 91.5f + expectedSize.height, 10.0f, 10.0f);
                 
-               // [self.locationSiteSeparator setBackgroundColor:[UIColor redColor]];
-            
                 [self.headerView addSubview: self.locationSiteSeparator];
                 
                 websiteLink = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -583,6 +590,8 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     [PAPUtility captureScreenGA:@"Account"];
     
+    [[Mixpanel sharedInstance] track:@"Viewed Account Screen" properties:@{}];
+    
     // edge case, if multiaction button frozen because of network problems
     if (self.user == [PFUser currentUser] && !self.multiActionButton.enabled){
         self.multiActionButton.enabled = YES;
@@ -686,6 +695,11 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         
         [self.locationLabel setFrame:CGRectMake(self.locationLabel.frame.origin.x, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, self.locationLabel.frame.size.height)];
         self.locationSiteSeparator.frame = CGRectMake(locationLabelWidth + self.locationLabel.frame.origin.x + 5.0f, 91.5f + expectedSize.height, 10.0f, 10.0f);
+        
+        if(self.websiteInfo.length > 0 && ![self.locationSiteSeparator.text isEqualToString:@"|"]){
+            self.locationSiteSeparator.text = @"|";
+        }
+        
         [self.locationIconImageView setFrame:CGRectMake(6.0f, 88.0f + expectedSize.height, 15.0f, 15.0f)];
         
         // calculate space left for website link
@@ -829,6 +843,11 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     // analytics
     [PAPUtility captureEventGA:@"Engagement" action:@"Follow" label:@"User"];
+    
+    [[Mixpanel sharedInstance] track:@"Followed" properties:@{}];
+    
+    // increment user follow count by one
+    [[Mixpanel sharedInstance].people increment:@"Follow Count" by:[NSNumber numberWithInt:1]];
     
     // disable button until finished unfollow
     self.multiActionButton.enabled = NO;
