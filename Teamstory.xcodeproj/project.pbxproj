@@ -432,6 +432,8 @@
 		D55A180119B5342200B9C48A /* timelineLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D55A17FF19B5342200B9C48A /* timelineLogo@2x.png */; };
 		D55D2AA019A2DF16009195FA /* icon_clock@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D55D2A9E19A2DF16009195FA /* icon_clock@2x.png */; };
 		D55D2AA119A2DF16009195FA /* icon_clock.png in Resources */ = {isa = PBXBuildFile; fileRef = D55D2A9F19A2DF16009195FA /* icon_clock.png */; };
+		D560FADC19B916F100D14D16 /* LogoNavigationBar.png in Resources */ = {isa = PBXBuildFile; fileRef = D560FADA19B916F100D14D16 /* LogoNavigationBar.png */; };
+		D560FADD19B916F100D14D16 /* LogoNavigationBar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D560FADB19B916F100D14D16 /* LogoNavigationBar@2x.png */; };
 		D5654177196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = D5654176196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.m */; };
 		D56D466519884C33001FAA76 /* PhotoTimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D56D466319884C33001FAA76 /* PhotoTimelineViewController.m */; };
 		D56D466619884C33001FAA76 /* PhotoTimelineViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D56D466419884C33001FAA76 /* PhotoTimelineViewController.xib */; };
@@ -472,8 +474,6 @@
 		D576841D19341DDA008BAA2C /* arrow_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D576841719341DD9008BAA2C /* arrow_right@2x.png */; };
 		D57E663619A5705100E0E3FF /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = D57E663419A5705100E0E3FF /* bg.png */; };
 		D57E663719A5705100E0E3FF /* bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D57E663519A5705100E0E3FF /* bg@2x.png */; };
-		D587FF5119B7E25300E7FC1D /* logoNavigationBar.png in Resources */ = {isa = PBXBuildFile; fileRef = D587FF4F19B7E25300E7FC1D /* logoNavigationBar.png */; };
-		D587FF5219B7E25300E7FC1D /* logoNavigationBar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D587FF5019B7E25300E7FC1D /* logoNavigationBar@2x.png */; };
 		D5903C75192EBBF900DC9896 /* ThoughtPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */; };
 		D5903C76192EBBF900DC9896 /* ThoughtPostViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5903C74192EBBF900DC9896 /* ThoughtPostViewController.xib */; };
 		D594C20418EFEBAD0008F5DF /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D594C20118EFEBAD0008F5DF /* SVProgressHUD.bundle */; };
@@ -1076,6 +1076,8 @@
 		D55A17FF19B5342200B9C48A /* timelineLogo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timelineLogo@2x.png"; sourceTree = "<group>"; };
 		D55D2A9E19A2DF16009195FA /* icon_clock@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_clock@2x.png"; sourceTree = "<group>"; };
 		D55D2A9F19A2DF16009195FA /* icon_clock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_clock.png; sourceTree = "<group>"; };
+		D560FADA19B916F100D14D16 /* LogoNavigationBar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LogoNavigationBar.png; sourceTree = "<group>"; };
+		D560FADB19B916F100D14D16 /* LogoNavigationBar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LogoNavigationBar@2x.png"; sourceTree = "<group>"; };
 		D5654175196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALAssetsLibrary+CustomPhotoAlbum.h"; sourceTree = "<group>"; };
 		D5654176196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALAssetsLibrary+CustomPhotoAlbum.m"; sourceTree = "<group>"; };
 		D56D466219884C33001FAA76 /* PhotoTimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoTimelineViewController.h; sourceTree = SOURCE_ROOT; };
@@ -1119,8 +1121,6 @@
 		D576841719341DD9008BAA2C /* arrow_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_right@2x.png"; sourceTree = "<group>"; };
 		D57E663419A5705100E0E3FF /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
 		D57E663519A5705100E0E3FF /* bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg@2x.png"; sourceTree = "<group>"; };
-		D587FF4F19B7E25300E7FC1D /* logoNavigationBar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logoNavigationBar.png; sourceTree = "<group>"; };
-		D587FF5019B7E25300E7FC1D /* logoNavigationBar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logoNavigationBar@2x.png"; sourceTree = "<group>"; };
 		D5903C72192EBBF900DC9896 /* ThoughtPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThoughtPostViewController.h; sourceTree = SOURCE_ROOT; };
 		D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThoughtPostViewController.m; sourceTree = SOURCE_ROOT; };
 		D5903C74192EBBF900DC9896 /* ThoughtPostViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ThoughtPostViewController.xib; sourceTree = SOURCE_ROOT; };
@@ -1381,8 +1381,8 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				D587FF4F19B7E25300E7FC1D /* logoNavigationBar.png */,
-				D587FF5019B7E25300E7FC1D /* logoNavigationBar@2x.png */,
+				D560FADA19B916F100D14D16 /* LogoNavigationBar.png */,
+				D560FADB19B916F100D14D16 /* LogoNavigationBar@2x.png */,
 				D55A17FE19B5342200B9C48A /* timelineLogo.png */,
 				D55A17FF19B5342200B9C48A /* timelineLogo@2x.png */,
 				D55A17F819B52E5500B9C48A /* triangle.png */,
@@ -2400,7 +2400,6 @@
 				D57684031933EBA3008BAA2C /* nav_profile@2x.png in Resources */,
 				46A2FE521963572E00D8ED12 /* Thought Popup_selected.png in Resources */,
 				4602FD1818BD553B0097DBEC /* positionly-logo.png in Resources */,
-				D587FF5219B7E25300E7FC1D /* logoNavigationBar@2x.png in Resources */,
 				4602FCF718BAB2CA0097DBEC /* partner.png in Resources */,
 				D576840F1933F910008BAA2C /* IconDiscoverSelected@2x.png in Resources */,
 				462FCB83188C8533005059F3 /* button_back_selected.png in Resources */,
@@ -2520,7 +2519,6 @@
 				467A40AD198FF1B200D4C693 /* profile_header_2@2x.png in Resources */,
 				465B19B118B81FE500EDBCFC /* browser-button-no.png in Resources */,
 				D5BFDED718CC84A5004FEC42 /* london.png in Resources */,
-				D587FF5119B7E25300E7FC1D /* logoNavigationBar.png in Resources */,
 				46076EEF193FE3EF00A7B317 /* notif_close.png in Resources */,
 				46839E9818E1E8C100BD60DB /* icon-email.png in Resources */,
 				4691B51C18C1477100B7DF6A /* intro2-iphone4.png in Resources */,
@@ -2653,6 +2651,7 @@
 				4691B51118C02F7800B7DF6A /* icon-followers.png in Resources */,
 				46B31EEB184E35150028D11C /* profileWebsite@2x.png in Resources */,
 				46B31EF5184E3D340028D11C /* profileCollaborator@2x.png in Resources */,
+				D560FADC19B916F100D14D16 /* LogoNavigationBar.png in Resources */,
 				D55A180019B5342200B9C48A /* timelineLogo.png in Resources */,
 				465B19AE18B81FE500EDBCFC /* browser-button-forward-no@2x.png in Resources */,
 				46ABD73918B13671008F5AAB /* deezer-logo.png in Resources */,
@@ -2776,6 +2775,7 @@
 				4602FD2118BD553B0097DBEC /* slingbot-logo@2x.png in Resources */,
 				46839E9518E1E8C100BD60DB /* bg-login@2x.png in Resources */,
 				D57683EE1933E6DD008BAA2C /* post_thought.png in Resources */,
+				D560FADD19B916F100D14D16 /* LogoNavigationBar@2x.png in Resources */,
 				460997571938119A00C5AD96 /* icon-industry.png in Resources */,
 				460997581938119A00C5AD96 /* icon-industry@2x.png in Resources */,
 			);

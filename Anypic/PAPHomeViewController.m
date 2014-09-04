@@ -36,6 +36,8 @@
 @property (nonatomic, strong) UIButton *logoBtn;
 @property (nonatomic, strong) UIButton *exploreBtn;
 @property (nonatomic, strong) UIButton *followingBtn;
+@property (nonatomic, strong) UIFont *feedFontDeselected;
+@property (nonatomic, strong) UIFont *feedFontSelected;
 @property BOOL firstRun;
 
 @property NSNumber *konotorCount;
@@ -66,7 +68,9 @@
     [self.feedbackImgView addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(promptFeedback:)]];
     
     // refresh feed
-    UIFont *feedFont = [UIFont systemFontOfSize:17.0f];
+    self.feedFontSelected = [UIFont boldSystemFontOfSize:17.0f];
+    self.feedFontDeselected = [UIFont systemFontOfSize:17.0f];
+    
     UIImage *logoImg = [UIImage imageNamed:@"timelineLogo.png"];
     
     self.logoBtn = [[UIButton alloc]initWithFrame:CGRectMake(10.0f, 10.0f, logoImg.size.width, logoImg.size.height)];
@@ -76,12 +80,13 @@
     // timeline top nav buttons
     self.exploreBtn = [[UIButton alloc]initWithFrame:CGRectMake(80.0f, 10.0f, 70.0f, 20.0f)];
     [self.exploreBtn setTitle:@"Explore" forState:UIControlStateNormal];
-    [self.exploreBtn.titleLabel setFont:feedFont];
+    [self.exploreBtn.titleLabel setFont:self.feedFontSelected];
     [self.exploreBtn addTarget:self action:@selector(switchFeedSource:) forControlEvents:UIControlEventTouchUpInside];
   
     self.followingBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.exploreBtn.frame.origin.x + self.exploreBtn.frame.size.width + 10.0f, self.exploreBtn.frame.origin.y, 80.0f, 20.0f)];
     [self.followingBtn setTitle:@"Following" forState:UIControlStateNormal];
-    [self.followingBtn.titleLabel setFont:feedFont];
+    [self.followingBtn.titleLabel setFont:self.feedFontDeselected];
+    self.followingBtn.layer.opacity = 0.8;
     [self.followingBtn addTarget:self action:@selector(switchFeedSource:) forControlEvents:UIControlEventTouchUpInside];
     
     // triangle indicator image
@@ -129,30 +134,6 @@
     [self.notificationBar addSubview:self.notificationStar];
     
      */
-}
-
-- (void)refreshCurrentFeed{
-    
-    // get current feed from parent
-    NSString *currentFeed = [super getFeedSourceType];
-    
-    // if empty will crash when trying to scroll
-    if(super.objects.count > 0){
-        // scroll to the top animated and refresh current feed
-        [super.feed scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
-                          atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    }
-    
-    [super loadObjects:nil isRefresh:YES fromSource:currentFeed];
-}
-
-- (void)setNavBarButtonsHidden:(BOOL)isHidden{
-    
-    // hides set of timeline nav bar buttons
-    [self.logoBtn setHidden:isHidden];
-    [self.exploreBtn setHidden:isHidden];
-    [self.followingBtn setHidden:isHidden];
-    [self.feedIndicator setHidden:isHidden];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -396,11 +377,79 @@
 }
 */
 
+- (void)inviteFriendsButtonAction:(id)sender {
+    FollowersFollowingViewController *detailViewController = [[FollowersFollowingViewController alloc] init];
+    [self.navigationController pushViewController:detailViewController animated:YES];
+}
+
+- (void)promptFeedback:(id)sender{
+    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+    [KonotorFeedbackScreen showFeedbackScreen];
+}
+
+-(void)notificationBarButton:(id)sender {
+    [[PAPCache sharedCache] notificationCache:notificationContent];
+    //[[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+    
+    if (notificationPhoto) {
+        PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:notificationPhoto source:@"Notification"];
+        [self.navigationController pushViewController:photoDetailsVC animated:YES];
+    }
+    
+}
+
+#pragma mark - Switch Feed
+
+- (void)refreshCurrentFeed{
+    
+    // get current feed from parent
+    NSString *currentFeed = [super getFeedSourceType];
+    
+    // if empty will crash when trying to scroll
+    if(super.objects.count > 0){
+        // scroll to the top animated and refresh current feed
+        [super.feed scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
+                          atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
+    
+    [super loadObjects:nil isRefresh:YES fromSource:currentFeed];
+}
+
+- (void)setNavBarButtonsHidden:(BOOL)isHidden{
+    
+    // hides set of timeline nav bar buttons
+    [self.logoBtn setHidden:isHidden];
+    [self.exploreBtn setHidden:isHidden];
+    [self.followingBtn setHidden:isHidden];
+    [self.feedIndicator setHidden:isHidden];
+}
+
+- (void)switchSelectedButton:(NSString *)source{
+    
+    if([source isEqualToString:@"explore"]){
+        self.exploreBtn.titleLabel.font = self.feedFontSelected;
+        self.followingBtn.titleLabel.font = self.feedFontDeselected;
+        
+        self.exploreBtn.layer.opacity = 1.0;
+        self.followingBtn.layer.opacity = 0.8;
+        
+    }else if([source isEqualToString:@"following"]){
+        self.followingBtn.titleLabel.font = self.feedFontSelected;
+        self.exploreBtn.titleLabel.font = self.feedFontDeselected;
+        
+        self.followingBtn.layer.opacity = 1.0;
+        self.exploreBtn.layer.opacity = 0.8;
+    }
+    
+}
+
 - (void)switchFeedSource:(id)sender{
     
     NSString *selectedFeedSource = @"";
     UIButton *tappedBtn = (UIButton *)sender;
     selectedFeedSource = [tappedBtn.titleLabel.text lowercaseString];
+    
+    [self switchSelectedButton:selectedFeedSource];
     
     NSString *currentFeedSource = [super getFeedSourceType];
     NSIndexPath *lastViewdIndexPath = [super getIndexPathForFeed:selectedFeedSource];
@@ -444,26 +493,7 @@
     }
 }
 
-- (void)inviteFriendsButtonAction:(id)sender {
-    FollowersFollowingViewController *detailViewController = [[FollowersFollowingViewController alloc] init];
-    [self.navigationController pushViewController:detailViewController animated:YES];
-}
 
-- (void)promptFeedback:(id)sender{
-    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
-    [KonotorFeedbackScreen showFeedbackScreen];
-}
-
--(void)notificationBarButton:(id)sender {
-    [[PAPCache sharedCache] notificationCache:notificationContent];
-    //[[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
-    
-    if (notificationPhoto) {
-        PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:notificationPhoto source:@"Notification"];
-        [self.navigationController pushViewController:photoDetailsVC animated:YES];
-    }
-    
-}
 
 -(void)notificationExitButtonAction:(id)sender {
     [[PAPCache sharedCache] notificationCache:notificationContent];
