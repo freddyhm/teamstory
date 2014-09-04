@@ -399,7 +399,7 @@
     if(super.objects.count > 0){
         // scroll to the top animated and refresh current feed
         [super.feed scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
-                          atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+                          atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
     
     [super loadObjects:nil isRefresh:YES fromSource:currentFeed];
