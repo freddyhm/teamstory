@@ -14,11 +14,14 @@
 @interface PhotoTimelineViewController : UIViewController <PAPPhotoHeaderViewDelegate, PostFooterViewDelegate, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *feed;
 @property (strong, nonatomic) IBOutlet NSMutableArray *objects;
+@property (nonatomic, strong) UIView *texturedBackgroundView;
 @property (nonatomic, strong) PFQuery *loadQuery;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 - (BOOL)objectsDidLoad:(NSError *)error;
-- (void)loadObjects:(void (^)(BOOL succeeded))completionBlock isRefresh:(BOOL)isRefresh;
+- (void)loadObjects:(void (^)(BOOL succeeded))completionBlock isRefresh:(BOOL)isRefresh fromSource:(NSString *)fromSource;
+- (NSIndexPath *)getIndexPathForFeed:(NSString *)feed;
+- (NSString *)getFeedSourceType;
 
 
 @end

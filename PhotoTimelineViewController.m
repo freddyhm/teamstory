@@ -17,7 +17,6 @@
 #import "PAPLoadMoreCell.h"
 #import "MBProgressHUD.h"
 #import "SVProgressHUD.h"
-#import <SDWebImage/UIImageView+WebCache.h>
 #import "Mixpanel.h"
 
 
@@ -34,6 +33,13 @@
 @property (nonatomic, strong) NSString *photoID;
 @property (nonatomic, strong) PFObject *current_photo;
 @property (nonatomic, strong) MBProgressHUD *hud;
+@property (nonatomic, strong) NSIndexPath *lastViewedExploreIndexPath;
+@property (nonatomic, strong) NSIndexPath *lastViewedFollowingIndexPath;
+@property (nonatomic, strong) NSString *feedSourceType;
+
+
+
+
 @property int loadPostCount;
 @property int refreshCount;
 
@@ -65,6 +71,12 @@ enum ActionSheetTags {
         // To make sure we only show hud/load objects once per pull
         self.refreshCount = 0;
         
+        // set default source type
+        self.feedSourceType = @"explore";
+        
+        // set default location for both feeds
+        self.lastViewedExploreIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        self.lastViewedFollowingIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     }
     return self;
 }
@@ -76,15 +88,20 @@ enum ActionSheetTags {
     // Remove cell separator
     [self.feed setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
-    UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
-    texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
-    self.feed.backgroundView = texturedBackgroundView;
+    self.texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
+    self.texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
+    self.feed.backgroundView = self.texturedBackgroundView;
     
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.tintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:0.5f];
-    [self.refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
-    [self.feed addSubview:self.refreshControl];
-     
+  //  UIView *whiteBkgdForPull = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 200.0f)];
+  //  whiteBkgdForPull.backgroundColor = [UIColor whiteColor];
+
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    refreshControl.tintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:0.5f];
+    [refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
+    
+    refreshControl.backgroundColor = [UIColor whiteColor];
+    //[self.feed sendSubviewToBack:whiteBkgdForPull];
+    [self.feed addSubview:refreshControl];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidPublishPhoto:) name:PAPTabBarControllerDidFinishEditingPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidDeletePhoto:) name:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:nil];
@@ -93,7 +110,7 @@ enum ActionSheetTags {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidCommentOnPhoto:) name:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidChangeProfile:) name:PAPProfileSettingViewControllerUserChangedProfile object:nil];
     
-    [self loadObjects:nil isRefresh:NO];
+    [self loadObjects:nil isRefresh:NO fromSource:self.feedSourceType];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -102,7 +119,7 @@ enum ActionSheetTags {
     BOOL isHome = [[self.navigationController.viewControllers lastObject] isKindOfClass:PAPHomeViewController.class];
     
     if(self.shouldReloadOnAppear && isHome){
-        [self loadObjects:nil isRefresh:YES];
+        [self loadObjects:nil isRefresh:YES fromSource:self.feedSourceType];
         self.shouldReloadOnAppear = NO;
     }
 }
@@ -155,7 +172,7 @@ enum ActionSheetTags {
     // refresh timeline after a delay
     dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC);
     dispatch_after(time, dispatch_get_main_queue(), ^(void){
-        [self loadObjects:nil isRefresh:YES];
+        [self loadObjects:nil isRefresh:YES fromSource:self.feedSourceType];
     });
 }
 
@@ -170,7 +187,7 @@ enum ActionSheetTags {
         [self.feed scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
     
-    [self loadObjects:nil isRefresh:YES];
+    [self loadObjects:nil isRefresh:YES fromSource:self.feedSourceType];
 }
 
 
@@ -231,12 +248,26 @@ enum ActionSheetTags {
 
 #pragma mark - Refresh
 
+- (NSString *)getFeedSourceType{
+    return self.feedSourceType;
+}
+
+- (NSIndexPath *)getIndexPathForFeed:(NSString *)feed{
+    
+    if([feed isEqualToString:@"explore"]){
+        return self.lastViewedExploreIndexPath;
+    }else if([feed isEqualToString:@"following"]){
+        return self.lastViewedFollowingIndexPath;
+    }else{
+        return [NSIndexPath indexPathForRow:0 inSection:0];
+    }
+}
 
 - (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl{
     
     [refreshControl endRefreshing];
     
-    [self loadObjects:nil isRefresh:YES];
+    [self loadObjects:nil isRefresh:YES fromSource:self.feedSourceType];
     
 }
 
@@ -246,18 +277,21 @@ enum ActionSheetTags {
     float bottomEdge = scrollView.contentOffset.y + scrollView.frame.size.height;
     
     if (bottomEdge >= (scrollView.contentSize.height * 0.78)) {
-        [self loadObjects:nil isRefresh:NO];
+        [self loadObjects:nil isRefresh:NO fromSource:self.feedSourceType];
     }
     
 }
 
 #pragma mark - UITableViewDataSource
 
-- (void)loadObjects:(void (^)(BOOL succeeded))completionBlock isRefresh:(BOOL)isRefresh{
+- (void)loadObjects:(void (^)(BOOL succeeded))completionBlock isRefresh:(BOOL)isRefresh fromSource:(NSString *)fromSource{
     
     /* Added completion block, pass nil to use without. We need to know if we're refreshing the table or loading another 10 posts because it'll affect the query's limit. When refreshing, we use the current self.loadPostCount, if it's instead a load, we use the number of current posts + 10. When loadPostCount is 0, load 10 to start. 
      */
-
+    
+    // set feed source 
+    self.feedSourceType = fromSource;
+    
     // Show hud and set default post load at first load
     if(self.loadPostCount == 0){
         [SVProgressHUD show];
@@ -271,6 +305,20 @@ enum ActionSheetTags {
     self.loadQuery = [PFQuery queryWithClassName:kPAPPhotoClassKey];
     [self.loadQuery includeKey:kPAPPhotoUserKey];
     [self.loadQuery orderByDescending:@"createdAt"];
+    
+    if([fromSource isEqualToString:@"following"]){
+        
+
+        
+        PFQuery *getFollowingQuery = [PFQuery queryWithClassName:kPAPActivityClassKey];
+        [getFollowingQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
+        
+        // get following for current user
+        [getFollowingQuery whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
+        [getFollowingQuery includeKey:kPAPActivityToUserKey];
+        
+        [self.loadQuery whereKey:@"user" matchesKey:@"toUser" inQuery:getFollowingQuery];
+    }
     
     // Set limit of posts for query
     [self.loadQuery setLimit:self.loadPostCount];
@@ -318,7 +366,7 @@ enum ActionSheetTags {
     
     // Reload table
     [self.feed reloadData];
-    
+
     return didLoad;
 }
 
@@ -455,6 +503,13 @@ enum ActionSheetTags {
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    
+    if([self.feedSourceType isEqualToString:@"explore"]){
+        self.lastViewedExploreIndexPath = indexPath;
+    }else{
+        self.lastViewedFollowingIndexPath = indexPath;
+    }
     
     PFObject *object = [self.objects objectAtIndex:indexPath.section];
     
@@ -505,9 +560,7 @@ enum ActionSheetTags {
     
     if (attributesForPhoto) {
         [cell.footerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:object]];
-        //[cell.footerView.likeButton setTitle:[[[PAPCache sharedCache] likeCountForPhoto:object] description] forState:UIControlStateNormal];
         [cell.footerView setLikeCount:[[PAPCache sharedCache] likeCountForPhoto:object]];
-        //[cell.footerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:object] description] forState:UIControlStateNormal];
         [cell.footerView setCommentCount:[[PAPCache sharedCache] commentCountForPhoto:object]];
         
         if (cell.footerView.likeButton.alpha < 1.0f || cell.footerView.commentButton.alpha < 1.0f) {
@@ -559,9 +612,6 @@ enum ActionSheetTags {
                         }
                         
                         [cell.footerView setLikeStatus:[[PAPCache sharedCache] isPhotoLikedByCurrentUser:object]];
-                        //[cell.footerView.likeButton setTitle:[[[PAPCache sharedCache] likeCountForPhoto:object] description] forState:UIControlStateNormal];
-                        //[cell.footerView.commentButton setTitle:[[[PAPCache sharedCache] commentCountForPhoto:object] description] forState:UIControlStateNormal];
-                        
                         [cell.footerView setLikeCount:[[PAPCache sharedCache] likeCountForPhoto:object]];
                         [cell.footerView setCommentCount:[[PAPCache sharedCache] commentCountForPhoto:object]];
                         
