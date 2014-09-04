@@ -33,6 +33,10 @@
 @property (nonatomic, strong) UIImageView *feedbackImgView;
 @property (nonatomic, strong) UIImageView *feedIndicator;
 @property (nonatomic, strong) UILabel *emptyPlaceholder;
+@property (nonatomic, strong) UIButton *logoBtn;
+@property (nonatomic, strong) UIButton *exploreBtn;
+@property (nonatomic, strong) UIButton *followingBtn;
+@property BOOL firstRun;
 
 @property NSNumber *konotorCount;
 @end
@@ -52,6 +56,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.firstRun = YES;
 
     // button image for feedback
     self.feedbackImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"button-feedback.png"]];
@@ -61,38 +67,31 @@
     
     // refresh feed
     UIFont *feedFont = [UIFont systemFontOfSize:17.0f];
-    UIImage *logoImg = [UIImage imageNamed:@"logoNavigationBar.png"];
-    UIButton *logoBtn = [[UIButton alloc]initWithFrame:CGRectMake(10.0f, 10.0f, logoImg.size.width, logoImg.size.height)];
-    [logoBtn setBackgroundImage:logoImg forState:UIControlStateNormal];
-    [logoBtn addTarget:self action:@selector(refreshCurrentFeed) forControlEvents:UIControlEventTouchUpInside];
+    UIImage *logoImg = [UIImage imageNamed:@"timelineLogo.png"];
     
-    // top nav buttons
-    UIButton *exploreBtn = [[UIButton alloc]initWithFrame:CGRectMake(80.0f, 10.0f, 70.0f, 20.0f)];
-    [exploreBtn setTitle:@"Explore" forState:UIControlStateNormal];
-    [exploreBtn.titleLabel setFont:feedFont];
-    [exploreBtn addTarget:self action:@selector(switchFeedSource:) forControlEvents:UIControlEventTouchUpInside];
+    self.logoBtn = [[UIButton alloc]initWithFrame:CGRectMake(10.0f, 10.0f, logoImg.size.width, logoImg.size.height)];
+    [self.logoBtn setBackgroundImage:logoImg forState:UIControlStateNormal];
+    [self.logoBtn addTarget:self action:@selector(refreshCurrentFeed) forControlEvents:UIControlEventTouchUpInside];
+    
+    // timeline top nav buttons
+    self.exploreBtn = [[UIButton alloc]initWithFrame:CGRectMake(80.0f, 10.0f, 70.0f, 20.0f)];
+    [self.exploreBtn setTitle:@"Explore" forState:UIControlStateNormal];
+    [self.exploreBtn.titleLabel setFont:feedFont];
+    [self.exploreBtn addTarget:self action:@selector(switchFeedSource:) forControlEvents:UIControlEventTouchUpInside];
   
-    UIButton *followingBtn = [[UIButton alloc]initWithFrame:CGRectMake(exploreBtn.frame.origin.x + exploreBtn.frame.size.width + 10.0f, exploreBtn.frame.origin.y, 80.0f, 20.0f)];
-    [followingBtn setTitle:@"Following" forState:UIControlStateNormal];
-    [followingBtn.titleLabel setFont:feedFont];
-    [followingBtn addTarget:self action:@selector(switchFeedSource:) forControlEvents:UIControlEventTouchUpInside];
-    
-    // swipe gestures left & right
-    UISwipeGestureRecognizer *leftSwipe = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeLeftFeedSource)];
-    [leftSwipe setDirection:UISwipeGestureRecognizerDirectionLeft];
-    
-    UISwipeGestureRecognizer *rightSwipe = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeRightFeedSource)];
-    [rightSwipe setDirection:UISwipeGestureRecognizerDirectionRight];
+    self.followingBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.exploreBtn.frame.origin.x + self.exploreBtn.frame.size.width + 10.0f, self.exploreBtn.frame.origin.y, 80.0f, 20.0f)];
+    [self.followingBtn setTitle:@"Following" forState:UIControlStateNormal];
+    [self.followingBtn.titleLabel setFont:feedFont];
+    [self.followingBtn addTarget:self action:@selector(switchFeedSource:) forControlEvents:UIControlEventTouchUpInside];
     
     // triangle indicator image
     UIImage *indicatorImg = [UIImage imageNamed:@"triangle.png"];
     self.feedIndicator = [[UIImageView alloc]initWithImage:indicatorImg];
     [self.feedIndicator setFrame:CGRectMake(115.0f, 37.0f, indicatorImg.size.width, indicatorImg.size.height)];
 
-    [self.navigationController.navigationBar addSubview:logoBtn];
-    [self.navigationController.navigationBar addSubview:exploreBtn];
-    [self.navigationController.navigationBar addSubview:followingBtn];
-    [self.navigationController.navigationBar addSubview:self.feedIndicator];
+    [self.navigationController.navigationBar addSubview:self.logoBtn];
+    [self.navigationController.navigationBar addSubview:self.exploreBtn];
+    [self.navigationController.navigationBar addSubview:self.followingBtn];
     
     // Empty case placeholder, hidden by default
     self.emptyPlaceholder = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/3, self.view.frame.size.width, 40.0f)];
@@ -103,8 +102,6 @@
     self.emptyPlaceholder.hidden = YES;
     
     [super.feed addSubview:self.emptyPlaceholder];
-    [super.feed addGestureRecognizer:leftSwipe];
-    [super.feed addGestureRecognizer:rightSwipe];
     [super.feed setUserInteractionEnabled:YES];
     
     self.navigationItem.rightBarButtonItem = promptTrigger;
@@ -134,7 +131,7 @@
      */
 }
 
--(void)refreshCurrentFeed{
+- (void)refreshCurrentFeed{
     
     // get current feed from parent
     NSString *currentFeed = [super getFeedSourceType];
@@ -149,8 +146,24 @@
     [super loadObjects:nil isRefresh:YES fromSource:currentFeed];
 }
 
--(void)viewWillAppear:(BOOL)animated{
+- (void)setNavBarButtonsHidden:(BOOL)isHidden{
+    
+    // hides set of timeline nav bar buttons
+    [self.logoBtn setHidden:isHidden];
+    [self.exploreBtn setHidden:isHidden];
+    [self.followingBtn setHidden:isHidden];
+    [self.feedIndicator setHidden:isHidden];
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [self setNavBarButtonsHidden:YES];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    [self setNavBarButtonsHidden:NO];
+    
     self.notificationStar.hidden = YES;
     self.notificationExitButton.hidden = YES;
 
@@ -211,6 +224,12 @@
 #pragma mark - Datasource
 
 - (BOOL)objectsDidLoad:(NSError *)error {
+    
+    // add the feed indicator on first run so it appears after view appears, does not work in view did appear
+    if(self.firstRun){
+        [self.navigationController.navigationBar addSubview:self.feedIndicator];
+        self.firstRun = NO;
+    }
     
     BOOL didLoad = [super objectsDidLoad:error];
     
@@ -377,30 +396,15 @@
 }
 */
 
-- (void)swipeLeftFeedSource{
-    [self switchFeedSource:@"following"];
-
-}
-
-- (void)swipeRightFeedSource{
-    [self switchFeedSource:@"explore"];
-}
-
 - (void)switchFeedSource:(id)sender{
     
     NSString *selectedFeedSource = @"";
-    
-    if([sender isKindOfClass:[NSString class]]){
-        selectedFeedSource = sender;
-    }else{
-        UIButton *tappedBtn = (UIButton *)sender;
-         selectedFeedSource = [tappedBtn.titleLabel.text lowercaseString];
-    }
+    UIButton *tappedBtn = (UIButton *)sender;
+    selectedFeedSource = [tappedBtn.titleLabel.text lowercaseString];
     
     NSString *currentFeedSource = [super getFeedSourceType];
     NSIndexPath *lastViewdIndexPath = [super getIndexPathForFeed:selectedFeedSource];
 
-    
     // make sure selected feed is different than current so we can switch instead of refreshing
     if(![currentFeedSource isEqualToString:selectedFeedSource]){
         

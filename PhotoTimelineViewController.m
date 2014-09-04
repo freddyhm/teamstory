@@ -91,11 +91,19 @@ enum ActionSheetTags {
     self.texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     self.feed.backgroundView = self.texturedBackgroundView;
     
+  //  UIView *whiteBkgdForPull = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 200.0f)];
+  //  whiteBkgdForPull.backgroundColor = [UIColor whiteColor];
+
+    
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     refreshControl.tintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:0.5f];
     [refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
+    
+    refreshControl.backgroundColor = [UIColor whiteColor];
+    //[self.feed sendSubviewToBack:whiteBkgdForPull];
     [self.feed addSubview:refreshControl];
-     
+
+
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidPublishPhoto:) name:PAPTabBarControllerDidFinishEditingPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidDeletePhoto:) name:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:nil];
