@@ -38,8 +38,9 @@
 @property (nonatomic, strong) UIButton *followingBtn;
 @property (nonatomic, strong) UIFont *feedFontDeselected;
 @property (nonatomic, strong) UIFont *feedFontSelected;
-@property BOOL firstRun;
+@property (nonatomic, strong) UIView *switchWhiteOverlay;
 
+@property BOOL firstRun;
 @property NSNumber *konotorCount;
 @end
 
@@ -59,6 +60,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // set analytics and first run flag
+    [self setUserInfoAnalytics];
     self.firstRun = YES;
 
     // button image for feedback
@@ -67,12 +70,12 @@
     self.feedbackImgView.userInteractionEnabled = YES;
     [self.feedbackImgView addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(promptFeedback:)]];
     
-    // refresh feed
+    // feed title ui
     self.feedFontSelected = [UIFont boldSystemFontOfSize:17.0f];
     self.feedFontDeselected = [UIFont systemFontOfSize:17.0f];
     
+    // timeline logo
     UIImage *logoImg = [UIImage imageNamed:@"timelineLogo.png"];
-    
     self.logoBtn = [[UIButton alloc]initWithFrame:CGRectMake(10.0f, 10.0f, logoImg.size.width, logoImg.size.height)];
     [self.logoBtn setBackgroundImage:logoImg forState:UIControlStateNormal];
     [self.logoBtn addTarget:self action:@selector(refreshCurrentFeed) forControlEvents:UIControlEventTouchUpInside];
@@ -108,6 +111,13 @@
     
     [super.feed addSubview:self.emptyPlaceholder];
     [super.feed setUserInteractionEnabled:YES];
+    
+    // white switch overlay
+    self.switchWhiteOverlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+    [self.switchWhiteOverlay setBackgroundColor:[UIColor whiteColor]];
+    self.switchWhiteOverlay.layer.opacity = 0.6;
+    [self.switchWhiteOverlay setHidden:YES];
+    [self.view addSubview:self.switchWhiteOverlay];
     
     self.navigationItem.rightBarButtonItem = promptTrigger;
     
@@ -152,8 +162,6 @@
     [PAPUtility captureScreenGA:@"Home"];
     
     [[Mixpanel sharedInstance] track:@"Viewed Home Screen" properties:@{}];
-    
-    [self setUserInfoAnalytics];
     
     // fetch unread messages, show feedback screen
     self.konotorCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
@@ -206,7 +214,7 @@
 
 - (BOOL)objectsDidLoad:(NSError *)error {
     
-    // add the feed indicator on first run so it appears after view appears, does not work in view did appear
+    // add the feed indicator on first run so it appears after view appears, does not work in viewdidappear
     if(self.firstRun){
         [self.navigationController.navigationBar addSubview:self.feedIndicator];
         self.firstRun = NO;
@@ -408,6 +416,7 @@
 
 - (void)switchSelectedButton:(NSString *)source{
     
+    // change opacity and font based on selected and deselected
     if([source isEqualToString:@"explore"]){
         self.exploreBtn.titleLabel.font = self.feedFontSelected;
         self.followingBtn.titleLabel.font = self.feedFontDeselected;
@@ -427,10 +436,12 @@
 
 - (void)switchFeedSource:(id)sender{
     
+    // get button title
     NSString *selectedFeedSource = @"";
     UIButton *tappedBtn = (UIButton *)sender;
     selectedFeedSource = [tappedBtn.titleLabel.text lowercaseString];
     
+    // switch button ui
     [self switchSelectedButton:selectedFeedSource];
     
     NSString *currentFeedSource = [super getFeedSourceType];
@@ -439,6 +450,7 @@
     // make sure selected feed is different than current so we can switch instead of refreshing
     if(![currentFeedSource isEqualToString:selectedFeedSource]){
         
+        [self.switchWhiteOverlay setHidden:NO];
         [SVProgressHUD show];
         
         // get direction of triangle
@@ -460,6 +472,8 @@
                          completion:nil];
         
         [super loadObjects:^(BOOL succeeded) {
+
+            [self.switchWhiteOverlay setHidden:YES];
             [SVProgressHUD dismiss];
             
             if(super.objects.count != 0){
