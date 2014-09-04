@@ -18,6 +18,8 @@ NSInteger selection = 1;
 
 @interface discoverPageViewController() {
     BOOL isSearchString;
+    NSInteger skip;
+    NSInteger limit;
 }
 
 @property (nonatomic, strong) UISearchBar *searchBar;
@@ -29,7 +31,7 @@ NSInteger selection = 1;
 @property (nonatomic, strong) UITableView *searchTV;
 @property (nonatomic, strong) NSArray *industry_datasource;
 @property (nonatomic, strong) NSString *searchSelection;
-@property (nonatomic, strong) NSArray *userList;
+@property (nonatomic, strong) NSMutableArray *userList;
 @property (nonatomic, strong) NSMutableArray *userFilterList;
 @property (nonatomic, strong) NSMutableArray *userFilterListIndustry;
 @property (nonatomic, strong) NSMutableArray *industryFilterList;
@@ -44,6 +46,7 @@ NSInteger selection = 1;
 
 - (void)viewDidLoad
 {
+    self.userList = [[NSMutableArray alloc] init];
     self.userFilterList = [[NSMutableArray alloc] init];
     self.industryFilterList = [[NSMutableArray alloc] init];
     self.userFilterListIndustry = [[NSMutableArray alloc] init];
@@ -193,17 +196,10 @@ NSInteger selection = 1;
             }
         }];
         
-        PFQuery *userQuery = [PFUser query];
-        userQuery.limit = MAXFLOAT;
-        [userQuery whereKeyExists:@"displayName"];
-        [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            if (!error) {
-                self.userList = objects;
-                [self isSearchBarReady];
-            } else {
-                NSLog(@"User query error: %@", error);
-            }
-        }];
+        limit = 1000;
+        skip = 0;
+        
+        [self userQueryPagination];
     }
     
     
@@ -212,6 +208,29 @@ NSInteger selection = 1;
 }
 
 #pragma - ()
+
+-(void) userQueryPagination {
+    PFQuery *userQuery = [PFUser query];
+    [userQuery whereKeyExists:@"displayName"];
+    [userQuery orderByDescending:@"updatedAt"];
+    [userQuery setLimit:limit];
+    [userQuery setSkip:skip];
+    [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            [self.userList addObjectsFromArray:objects];
+            if (objects.count == limit) {
+                skip += limit;
+                [userQuery setSkip:skip];
+                [userQuery findObjectsInBackgroundWithTarget:self selector:@selector(userQueryPagination)];
+            } else {
+                [self isSearchBarReady];
+            }
+        } else {
+            NSLog(@"User query error: %@", error);
+        }
+    }];
+
+}
 
 - (void)isSearchBarReady {
     if ([self.follwerList count] > 0 && [self.userList count] > 0) {
@@ -408,7 +427,10 @@ NSInteger selection = 1;
                 
                 if ([[[self.userFilterList objectAtIndex:indexPath.row] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
                     cell.followButton.hidden = YES;
+                } else {
+                    cell.followButton.hidden = NO;
                 }
+                
                 [cell setUser:[self.userFilterList objectAtIndex:indexPath.row]];
             } else {
                 //Searching for followers
@@ -422,7 +444,10 @@ NSInteger selection = 1;
                 }
                 if ([[[self.userList objectAtIndex:indexPath.row] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
                     cell.followButton.hidden = YES;
+                } else {
+                    cell.followButton.hidden = NO;
                 }
+                
                 [cell setUser:[self.userList objectAtIndex:indexPath.row]];
             }
         } else {
@@ -437,7 +462,10 @@ NSInteger selection = 1;
             }
             if ([[[self.userFilterListIndustry objectAtIndex:indexPath.row] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
                 cell.followButton.hidden = YES;
+            } else {
+                cell.followButton.hidden = NO;
             }
+            
             [cell setUser:[self.userFilterListIndustry objectAtIndex:indexPath.row]];
         }
             
