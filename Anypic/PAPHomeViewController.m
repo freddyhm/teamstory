@@ -153,6 +153,7 @@
     if(!self.isOpeningFeedback){
         [self setNavBarButtonsHidden:YES];
     }else{
+        // reset flag
         self.isOpeningFeedback = NO;
     }
 }

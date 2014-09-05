@@ -8,6 +8,7 @@
 
 #import "PAPwebviewViewController.h"
 #import "OpenInChromeController.h"
+#import "Mixpanel.h"
 
 @interface PAPwebviewViewController ()
 @property (nonatomic, strong) UIWebView *webview;
@@ -102,6 +103,10 @@
 }
 
 -(void)inflatorButotnAction:(id)sender {
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Link Share Options" properties:@{}];
+    
     actionSheet = [[UIActionSheet alloc] init];
     actionSheet.delegate = self;
     
@@ -121,23 +126,43 @@
     if(buttonIndex == 0) {
         // check if chrome is installed (menu change to 1. chrome 2. safari 3. copy)
         if (![self.openInChrome isChromeInstalled]) {
+            
+            // mixpanel analytics - safari
+            [[Mixpanel sharedInstance] track:@"Selected Link Share Option" properties:@{@"link option":@"safari"}];
+            
             //Open in Safari Button.
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:currentWebsite]];
         }else{
+            
+            // mixpanel analytics - chrome
+            [[Mixpanel sharedInstance] track:@"Selected Link Share Option" properties:@{@"link option":@"chrome"}];
+            
             [self.openInChrome openInChrome:[NSURL URLWithString:currentWebsite]];
         }
     } else if (buttonIndex == 1) {
         if (![self.openInChrome isChromeInstalled]) {
+            
+            // mixpanel analytics - copy
+            [[Mixpanel sharedInstance] track:@"Selected Link Share Option" properties:@{@"link option":@"copy"}];
+            
             //Copy Link Button.
             UIPasteboard *pasteBoard = [UIPasteboard generalPasteboard];
             pasteBoard.persistent = YES;
             [pasteBoard setString:currentWebsite];
         }else{
+            
+            // mixpanel analytics - safari
+            [[Mixpanel sharedInstance] track:@"Selected Link Share Option" properties:@{@"link option":@"safari"}];
+            
             //Open in Safari Button.
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:currentWebsite]];
         }
         
     }else if (buttonIndex == 2){
+        
+        // mixpanel analytics - copy
+        [[Mixpanel sharedInstance] track:@"Selected Link Share Option" properties:@{@"link option":@"copy"}];
+        
         //Copy Link Button.
         UIPasteboard *pasteBoard = [UIPasteboard generalPasteboard];
         pasteBoard.persistent = YES;
