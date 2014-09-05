@@ -71,12 +71,12 @@
     [self.feedbackImgView addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(promptFeedback:)]];
     
     // feed title ui
-    self.feedFontSelected = [UIFont boldSystemFontOfSize:17.0f];
-    self.feedFontDeselected = [UIFont systemFontOfSize:17.0f];
+    self.feedFontSelected = [UIFont boldSystemFontOfSize:15.0f];
+    self.feedFontDeselected = [UIFont systemFontOfSize:15.0f];
     
     // timeline logo
     UIImage *logoImg = [UIImage imageNamed:@"timelineLogo.png"];
-    self.logoBtn = [[UIButton alloc]initWithFrame:CGRectMake(10.0f, 10.0f, logoImg.size.width, logoImg.size.height)];
+    self.logoBtn = [[UIButton alloc]initWithFrame:CGRectMake(15.0f, 10.0f, logoImg.size.width, logoImg.size.height)];
     [self.logoBtn setBackgroundImage:logoImg forState:UIControlStateNormal];
     [self.logoBtn addTarget:self action:@selector(refreshCurrentFeed) forControlEvents:UIControlEventTouchUpInside];
     
