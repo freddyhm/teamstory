@@ -30,9 +30,9 @@
 @property (nonatomic, strong) PFObject *notificationPhoto;
 @property (nonatomic, strong) UIButton *notificationExitButton;
 @property (nonatomic, strong) UIImageView *notificationStar;
-@property (nonatomic, strong) UIImageView *feedbackImgView;
 @property (nonatomic, strong) UIImageView *feedIndicator;
 @property (nonatomic, strong) UILabel *emptyPlaceholder;
+@property (nonatomic, strong) UIButton *feedbackBtn;
 @property (nonatomic, strong) UIButton *logoBtn;
 @property (nonatomic, strong) UIButton *exploreBtn;
 @property (nonatomic, strong) UIButton *followingBtn;
@@ -65,11 +65,11 @@
     self.firstRun = YES;
 
     // button image for feedback
-    self.feedbackImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"button-feedback.png"]];
-    UIBarButtonItem *promptTrigger = [[UIBarButtonItem alloc] initWithCustomView:self.feedbackImgView];
-    self.feedbackImgView.userInteractionEnabled = YES;
-    [self.feedbackImgView addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(promptFeedback:)]];
-    
+    UIImage *feedbackImg = [UIImage imageNamed:@"button-feedback.png"];
+    self.feedbackBtn = [[UIButton alloc] initWithFrame:CGRectMake(280, 10, feedbackImg.size.width, feedbackImg.size.height)];
+    [self.feedbackBtn addTarget:self action:@selector(promptFeedback:) forControlEvents:UIControlEventTouchUpInside];
+    [self.feedbackBtn setImage:feedbackImg forState:UIControlStateNormal];
+
     // feed title ui
     self.feedFontSelected = [UIFont boldSystemFontOfSize:17.0f];
     self.feedFontDeselected = [UIFont systemFontOfSize:17.0f];
@@ -98,6 +98,7 @@
     [self.navigationController.navigationBar addSubview:self.logoBtn];
     [self.navigationController.navigationBar addSubview:self.exploreBtn];
     [self.navigationController.navigationBar addSubview:self.followingBtn];
+    [self.navigationController.navigationBar addSubview:self.feedbackBtn];
     
     // Empty case placeholder, hidden by default
     self.emptyPlaceholder = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/3, self.view.frame.size.width, 40.0f)];
@@ -119,8 +120,6 @@
     
     // stream selected by default
     [self switchSelectedButton:@"explore"];
-    
-    self.navigationItem.rightBarButtonItem = promptTrigger;
     
     // diabling notification bar for now.
     /*
@@ -168,9 +167,9 @@
     self.konotorCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
     
     if([self.konotorCount intValue] > 0){
-        [self.feedbackImgView setImage:[UIImage imageNamed:@"button-feedback-notify.png"]];
+        [self.feedbackBtn.imageView setImage:[UIImage imageNamed:@"button-feedback-notify.png"]];
     }else{
-        [self.feedbackImgView setImage:[UIImage imageNamed:@"button-feedback.png"]];
+        [self.feedbackBtn.imageView setImage:[UIImage imageNamed:@"button-feedback.png"]];
     }
     
     // disabling notification bar for now.
