@@ -113,6 +113,8 @@ NSInteger selection = 1;
     
     UITextField *searchField = [self.searchBar valueForKey:@"_searchField"];
     [searchField setValue:[UIColor whiteColor] forKeyPath:@"_placeholderLabel.textColor"];
+    searchField.tintColor = [UIColor whiteColor];
+    searchField.textColor = [UIColor whiteColor];
     
     
     // --------------- UITableView
@@ -285,6 +287,7 @@ NSInteger selection = 1;
 
 -(void)usersLabelAction:(id)sender {
     [self labelSetting:@"users"];
+    self.searchTV.contentOffset = CGPointMake(0, 0);
     [self.searchTV reloadData];
     [UIView animateWithDuration:0.2f animations:^{
         self.searchMovementBar.frame = CGRectMake(0.0f, 0.0f, self.searchOptionView.bounds.size.width / 2, self.searchOptionView.bounds.size.height);
@@ -293,6 +296,7 @@ NSInteger selection = 1;
 
 -(void)industryLabelAction:(id)sender {
     [self labelSetting:@"industry"];
+    self.searchTV.contentOffset = CGPointMake(0, 0);
     [self.searchTV reloadData];
     [UIView animateWithDuration:0.2f animations:^{
         self.searchMovementBar.frame = CGRectMake(self.searchOptionView.bounds.size.width / 2, 0.0f, self.searchOptionView.bounds.size.width / 2, self.searchOptionView.bounds.size.height);
@@ -351,6 +355,8 @@ NSInteger selection = 1;
     self.searchBar.showsCancelButton = NO;
     self.searchBar.text = nil;
     self.searchBar.placeholder = @"Search users and industry";
+    [self labelSetting:@"users"];
+    [self.searchTV reloadData];
     [self.searchBar resignFirstResponder];
     
     [UIView animateWithDuration:0.2f animations:^{
