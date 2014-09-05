@@ -11,6 +11,7 @@
 #import "PAPFindFriendsCell.h"
 #import "PAPAccountViewController.h"
 #import "PAPdiscoverTileView.h"
+#import "SVProgressHUD.h"
 
 #define screenWidth 320.0f
 
@@ -35,7 +36,7 @@ NSInteger selection = 1;
 @property (nonatomic, strong) NSMutableArray *userFilterList;
 @property (nonatomic, strong) NSMutableArray *userFilterListIndustry;
 @property (nonatomic, strong) NSMutableArray *industryFilterList;
-@property (nonatomic, strong) NSArray *follwerList;
+@property (nonatomic, strong) NSMutableArray *follwerList;
 @property (nonatomic, strong) NSArray *postPicQueryResults;
 @property (nonatomic, strong) NSArray *postThoughtQueryResults;
 @property (nonatomic, strong) PAPdiscoverTileView *discoverTileView;
@@ -50,8 +51,10 @@ NSInteger selection = 1;
     self.userFilterList = [[NSMutableArray alloc] init];
     self.industryFilterList = [[NSMutableArray alloc] init];
     self.userFilterListIndustry = [[NSMutableArray alloc] init];
+    self.follwerList = [[NSMutableArray alloc] init];
     
     [super viewDidLoad];
+    [SVProgressHUD show];
     self.view.backgroundColor = [UIColor whiteColor];
     UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
     
@@ -191,7 +194,7 @@ NSInteger selection = 1;
         activityQuery.limit = MAXFLOAT;
         [activityQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (!error) {
-                self.follwerList = objects;
+                [self.follwerList addObjectsFromArray:objects];
                 [self isSearchBarReady];
             } else {
                 NSLog(@"Activity Query Error: %@", error);
@@ -244,6 +247,8 @@ NSInteger selection = 1;
 
 -(void)loadContents {
     if ([self.postPicQueryResults count] > 0 && [self.postThoughtQueryResults count] > 0) {
+        [SVProgressHUD dismiss];
+        
         NSMutableArray *filterEmptyPicResult = [[NSMutableArray alloc] init];
         NSMutableArray *filterEmptyThoughtResult = [[NSMutableArray alloc] init];
         
@@ -549,13 +554,25 @@ NSInteger selection = 1;
 - (void)shouldToggleFollowFriendForCell:(PAPFindFriendsCell*)cell {
     PFUser *cellUser = cell.user;
     if ([cell.followButton isSelected]) {
+        NSLog(@"unfollow");
         // Unfollow
         cell.followButton.selected = NO;
+        
+        for (int i = 0; i < [self.follwerList count]; i++) {
+            if ([[cellUser objectId] isEqualToString:[[[self.follwerList objectAtIndex:i] objectForKey:@"toUser"] objectId]]) {
+                [self.follwerList removeObject:[self.follwerList objectAtIndex:i]];
+            }
+        }
         [PAPUtility unfollowUserEventually:cellUser];
         [[NSNotificationCenter defaultCenter] postNotificationName:PAPUtilityUserFollowingChangedNotification object:nil];
     } else {
+        NSLog(@"follow");
         // Follow
         cell.followButton.selected = YES;
+        PFObject *copyOneObject = [self.follwerList objectAtIndex:0];
+        [copyOneObject setObject:cellUser forKey:@"toUser"];
+        [self.follwerList addObject:copyOneObject];
+        
         [PAPUtility followUserEventually:cellUser block:^(BOOL succeeded, NSError *error) {
             if (!error) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:PAPUtilityUserFollowingChangedNotification object:nil];
