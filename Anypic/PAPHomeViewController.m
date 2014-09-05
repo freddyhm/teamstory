@@ -39,8 +39,8 @@
 @property (nonatomic, strong) UIFont *feedFontDeselected;
 @property (nonatomic, strong) UIFont *feedFontSelected;
 @property (nonatomic, strong) UIView *switchWhiteOverlay;
-
 @property BOOL firstRun;
+@property BOOL isOpeningFeedback;
 @property NSNumber *konotorCount;
 @end
 
@@ -63,7 +63,8 @@
     // set analytics and first run flag
     [self setUserInfoAnalytics];
     self.firstRun = YES;
-
+    self.isOpeningFeedback = NO;
+    
     // button image for feedback
     UIImage *feedbackImg = [UIImage imageNamed:@"button-feedback.png"];
     self.feedbackBtn = [[UIButton alloc] initWithFrame:CGRectMake(282, 6, feedbackImg.size.width, feedbackImg.size.height)];
@@ -147,7 +148,13 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
-    [self setNavBarButtonsHidden:YES];
+    
+    // do not hide buttons if we're opening feedback system
+    if(!self.isOpeningFeedback){
+        [self setNavBarButtonsHidden:YES];
+    }else{
+        self.isOpeningFeedback = NO;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -373,6 +380,7 @@
 }
 
 - (void)promptFeedback:(id)sender{
+    self.isOpeningFeedback = YES;
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     [KonotorFeedbackScreen showFeedbackScreen];
 }
@@ -412,6 +420,7 @@
     [self.exploreBtn setHidden:isHidden];
     [self.followingBtn setHidden:isHidden];
     [self.feedIndicator setHidden:isHidden];
+    [self.feedbackBtn setHidden:isHidden];
 }
 
 - (void)switchSelectedButton:(NSString *)source{
