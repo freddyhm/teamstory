@@ -66,7 +66,7 @@
 
     // button image for feedback
     UIImage *feedbackImg = [UIImage imageNamed:@"button-feedback.png"];
-    self.feedbackBtn = [[UIButton alloc] initWithFrame:CGRectMake(280, 10, feedbackImg.size.width, feedbackImg.size.height)];
+    self.feedbackBtn = [[UIButton alloc] initWithFrame:CGRectMake(282, 6, feedbackImg.size.width, feedbackImg.size.height)];
     [self.feedbackBtn addTarget:self action:@selector(promptFeedback:) forControlEvents:UIControlEventTouchUpInside];
     [self.feedbackBtn setImage:feedbackImg forState:UIControlStateNormal];
 
