@@ -83,13 +83,11 @@
     // timeline top nav buttons
     self.exploreBtn = [[UIButton alloc]initWithFrame:CGRectMake(80.0f, 10.0f, 70.0f, 20.0f)];
     [self.exploreBtn setTitle:@"Explore" forState:UIControlStateNormal];
-    [self.exploreBtn.titleLabel setFont:self.feedFontSelected];
     [self.exploreBtn addTarget:self action:@selector(switchFeedSource:) forControlEvents:UIControlEventTouchUpInside];
   
     self.followingBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.exploreBtn.frame.origin.x + self.exploreBtn.frame.size.width + 10.0f, self.exploreBtn.frame.origin.y, 80.0f, 20.0f)];
     [self.followingBtn setTitle:@"Following" forState:UIControlStateNormal];
     [self.followingBtn.titleLabel setFont:self.feedFontDeselected];
-    self.followingBtn.layer.opacity = 0.8;
     [self.followingBtn addTarget:self action:@selector(switchFeedSource:) forControlEvents:UIControlEventTouchUpInside];
     
     // triangle indicator image
@@ -118,6 +116,9 @@
     self.switchWhiteOverlay.layer.opacity = 0.6;
     [self.switchWhiteOverlay setHidden:YES];
     [self.view addSubview:self.switchWhiteOverlay];
+    
+    // stream selected by default
+    [self switchSelectedButton:@"explore"];
     
     self.navigationItem.rightBarButtonItem = promptTrigger;
     
@@ -479,7 +480,7 @@
             if(super.objects.count != 0){
                 // scroll to last viewed index path
                 [super.feed scrollToRowAtIndexPath:lastViewdIndexPath
-                                  atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                                  atScrollPosition:UITableViewScrollPositionTop animated:NO];
             }
             
         } isRefresh:YES fromSource:selectedFeedSource];
