@@ -93,7 +93,7 @@
     // triangle indicator image
     UIImage *indicatorImg = [UIImage imageNamed:@"triangle.png"];
     self.feedIndicator = [[UIImageView alloc]initWithImage:indicatorImg];
-    [self.feedIndicator setFrame:CGRectMake(115.0f, 37.0f, indicatorImg.size.width, indicatorImg.size.height)];
+    [self.feedIndicator setFrame:CGRectMake(110.0f, 37.0f, indicatorImg.size.width, indicatorImg.size.height)];
 
     [self.navigationController.navigationBar addSubview:self.logoBtn];
     [self.navigationController.navigationBar addSubview:self.exploreBtn];
@@ -457,9 +457,9 @@
         // get direction of triangle
         float triangleMove = 0;
         if([selectedFeedSource isEqualToString:@"explore"]){
-            triangleMove = -70.0f;
+            triangleMove = -84.0f;
         }else if([selectedFeedSource isEqualToString:@"following"]){
-            triangleMove = 70.0f;
+            triangleMove = 84.0f;
         }
         
         [UIView animateWithDuration:0.2
