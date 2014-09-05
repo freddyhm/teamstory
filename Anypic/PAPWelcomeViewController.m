@@ -35,12 +35,23 @@
 
     // Show spinning indicator while user is being refreshed
     [SVProgressHUD setForegroundColor:[UIColor whiteColor]];
-    [SVProgressHUD show];
+
+    // move hud for iphone 4
+    if(!IS_WIDESCREEN){
+        [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, 45.0f)];
+    }
     
+    [SVProgressHUD show];
     
     [user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         
-       [SVProgressHUD dismissQuickly];
+        [SVProgressHUD dismissQuickly];
+        
+        // reset hud to normal
+        if(!IS_WIDESCREEN){
+            [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, 0.0f)];
+        }
+        
         [SVProgressHUD setForegroundColor:[UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
     
         if(!error){

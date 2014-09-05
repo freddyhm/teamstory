@@ -416,8 +416,16 @@
 
 - (void)switchSelectedButton:(NSString *)source{
     
+    
+    
     // change opacity and font based on selected and deselected
     if([source isEqualToString:@"explore"]){
+        
+        if(!self.firstRun){
+            // mixpanel analytics
+            [[Mixpanel sharedInstance] track:@"Viewed Explore Feed" properties:@{}];
+        }
+        
         self.exploreBtn.titleLabel.font = self.feedFontSelected;
         self.followingBtn.titleLabel.font = self.feedFontDeselected;
         
@@ -425,6 +433,10 @@
         self.followingBtn.layer.opacity = 0.8;
         
     }else if([source isEqualToString:@"following"]){
+        
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Viewed Following Feed" properties:@{}];
+        
         self.followingBtn.titleLabel.font = self.feedFontSelected;
         self.exploreBtn.titleLabel.font = self.feedFontDeselected;
         
