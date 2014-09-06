@@ -31,7 +31,9 @@
 @property (nonatomic, strong) UIButton *notificationExitButton;
 @property (nonatomic, strong) UIImageView *notificationStar;
 @property (nonatomic, strong) UIImageView *feedIndicator;
-@property (nonatomic, strong) UILabel *emptyPlaceholder;
+@property (nonatomic, strong) UIView *emptyPlaceholder;
+@property (nonatomic, strong) UIImageView *emptyPlaceholderMessage;
+@property (nonatomic, strong) UIButton *emptyPlaceholderBtn;
 @property (nonatomic, strong) UIButton *feedbackBtn;
 @property (nonatomic, strong) UIButton *logoBtn;
 @property (nonatomic, strong) UIButton *exploreBtn;
@@ -101,16 +103,30 @@
     [self.navigationController.navigationBar addSubview:self.followingBtn];
     [self.navigationController.navigationBar addSubview:self.feedbackBtn];
     
-    // Empty case placeholder, hidden by default
-    self.emptyPlaceholder = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/3, self.view.frame.size.width, 40.0f)];
-    self.emptyPlaceholder.font = [UIFont fontWithName:@"Helvetica" size:16.0f];
-    [self.emptyPlaceholder setText:@"Uh Oh! Get to know more startups :)"];
-    self.emptyPlaceholder.textAlignment = NSTextAlignmentCenter;
-    [self.emptyPlaceholder setTextColor:[UIColor colorWithRed:178.0f/255.0f green:184.0f/255.0f blue:189.0f/255.0f alpha:1.0f]];
-    self.emptyPlaceholder.hidden = YES;
+    /* empty case placeholder, hidden by default */
+    
+    // empty placeholder message and icon
+    UIImage *placeHolderImg = [UIImage imageNamed:@"following_empty.png"];
+    self.emptyPlaceholderMessage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, placeHolderImg.size.width, placeHolderImg.size.height)];
+    [self.emptyPlaceholderMessage setBackgroundColor:[UIColor redColor]];
+    [self.emptyPlaceholderMessage setImage:placeHolderImg];
+    
+    // empty placeholder button
+    UIImage *placeHolderBtnImg = [UIImage imageNamed:@"btn_following_discover.png"];
+    self.emptyPlaceholderBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, self.emptyPlaceholderMessage.frame.size.height + 10.0f , placeHolderBtnImg.size.width, placeHolderBtnImg.size.height)];
+    [self.emptyPlaceholderBtn setImage:placeHolderBtnImg forState:UIControlStateNormal];
+    [self.emptyPlaceholderBtn addTarget:self action:@selector(emptyPlaceHolderBtnAction) forControlEvents:UIControlEventTouchUpInside];
+    
+    // empty placeholder view
+    self.emptyPlaceholder = [[UIView alloc]initWithFrame:CGRectMake(45.0f, self.view.frame.size.height/4, self.emptyPlaceholderBtn.frame.size.width,self.emptyPlaceholderMessage.frame.size.height + self.emptyPlaceholderBtn.frame.size.height)];
+    
+    [self.emptyPlaceholder addSubview:self.emptyPlaceholderMessage];
+    [self.emptyPlaceholder addSubview:self.emptyPlaceholderBtn];
+    [self.emptyPlaceholder  setHidden:YES];
+    
+    
     
     [super.feed addSubview:self.emptyPlaceholder];
-    [super.feed setUserInteractionEnabled:YES];
     
     // white switch overlay
     self.switchWhiteOverlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
@@ -160,7 +176,7 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    
+
     [self setNavBarButtonsHidden:NO];
     
     self.notificationStar.hidden = YES;
@@ -232,13 +248,13 @@
     
     if (super.objects.count == 0 && ![super.loadQuery hasCachedResult] & !self.firstLaunch) {
         
-        super.feed.backgroundView = nil;
+        [self.feedIndicator setHidden:YES];
         [self.emptyPlaceholder setHidden:NO];
         
         super.feed.scrollEnabled = NO;
     } else {
         
-        super.feed.backgroundView = super.texturedBackgroundView;
+        [self.feedIndicator setHidden:NO];
         [self.emptyPlaceholder setHidden:YES];
         
         super.feed.tableHeaderView = nil;
@@ -397,6 +413,12 @@
     
 }
 
+- (void)emptyPlaceHolderBtnAction{
+    
+    // go to discover index
+    [self.tabBarController setSelectedIndex:1];
+}
+
 #pragma mark - Switch Feed
 
 - (void)refreshCurrentFeed{
@@ -405,7 +427,7 @@
     NSString *currentFeed = [super getFeedSourceType];
     
     // if empty will crash when trying to scroll
-    if(super.objects.count > 0){
+    if(super.objects.count != 0){
         // scroll to the top animated and refresh current feed
         [super.feed scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
                           atScrollPosition:UITableViewScrollPositionTop animated:YES];
@@ -420,7 +442,11 @@
     [self.logoBtn setHidden:isHidden];
     [self.exploreBtn setHidden:isHidden];
     [self.followingBtn setHidden:isHidden];
-    [self.feedIndicator setHidden:isHidden];
+    
+    if(super.objects.count != 0){
+        [self.feedIndicator setHidden:isHidden];
+    }
+    
     [self.feedbackBtn setHidden:isHidden];
 }
 
@@ -517,5 +543,7 @@
     [[PAPCache sharedCache] notificationCache:notificationContent];
     //[[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
 }
+
+
 
 @end
