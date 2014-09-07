@@ -194,6 +194,7 @@ NSInteger selection = 1;
         activityQuery.limit = MAXFLOAT;
         [activityQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (!error) {
+                [self.follwerList removeAllObjects];
                 [self.follwerList addObjectsFromArray:objects];
                 [self isSearchBarReady];
             } else {
