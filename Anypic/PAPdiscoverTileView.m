@@ -9,6 +9,7 @@
 #import "PAPdiscoverTileView.h"
 #import "PAPdiscoverCell.h"
 #import "PAPPhotoDetailsViewController.h"
+#import "Mixpanel.h"
 
 @interface PAPdiscoverTileView() {
 
@@ -163,13 +164,22 @@
 -(void)photoTapAction:(UIButton *)sender {
     if ([self.menuSelection isEqualToString:@"Moments"]) {
         PFObject *photo = [self.pictureQuery objectAtIndex:sender.tag];
+        
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Selected Item From Discover" properties:@{@"type":@"picture", @"selected":[photo objectId]}];
+        
         if (photo) {
             PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapDiscoverPhoto"];
             self.navController.navigationBar.hidden = NO;
             [self.navController pushViewController:photoDetailsVC animated:YES];
         }
     } else {
+        
         PFObject *photo = [self.thoughtQuery objectAtIndex:sender.tag];
+        
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Selected Item From Discover" properties:@{@"type":@"thought", @"selected":[photo objectId]}];
+        
         if (photo) {
             PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapDiscoverPhoto"];
             self.navController.navigationBar.hidden = NO;

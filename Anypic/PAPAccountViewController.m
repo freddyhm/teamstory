@@ -410,8 +410,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                                      self.locationLabel.font}].width;
                 
                 [self.locationLabel setFrame:CGRectMake(self.locationIconImageView.frame.origin.x + 20.0f, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, 16.0f)];
-                //[self.locationLabel setBackgroundColor:[UIColor redColor]];
-                
+    
                 [self.headerView addSubview:self.locationLabel];
                 
                 // the bar separating location and website link
@@ -445,7 +444,6 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 websiteLink.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
                 websiteLink.titleLabel.font = [UIFont systemFontOfSize:13.0f];
                 [websiteLink addTarget:self action:@selector(websiteLinkAction:) forControlEvents:UIControlEventTouchUpInside];
-               // [websiteLink setBackgroundColor:[UIColor redColor]];
                 
                 if ([websiteInfo length] > 0) {
                     [websiteLink setTitle:websiteInfo forState:UIControlStateNormal];
@@ -712,8 +710,6 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         }
 
         [websiteLink setFrame:CGRectMake(self.locationSiteSeparator.frame.origin.x + self.locationSiteSeparator.frame.size.width, 89.0f + expectedSize.height, website_expectedSize.width, website_expectedSize.height)];
-      //  [websiteLink setBackgroundColor:[UIColor redColor]];
-
         [websiteLink setTitle:self.websiteInfo forState:UIControlStateNormal];
         
 
