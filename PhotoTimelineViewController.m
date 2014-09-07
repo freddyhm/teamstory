@@ -202,6 +202,11 @@ enum ActionSheetTags {
     if (photo) {
         NSLog(@"TAPPED PHOTO %@ IMAGE %@", photo, cell.imageView.file.url);
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
+        
+        // mixpanel analytics 
+        NSString *type = [photo objectForKey:@"type"] != nil ? [photo objectForKey:@"type"] : @"";
+        [[Mixpanel sharedInstance] track:@"Tapped Post" properties:@{@"Type":type}];
+        
         [self.navigationController pushViewController:photoDetailsVC animated:YES];
     }
 }
