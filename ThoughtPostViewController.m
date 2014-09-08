@@ -222,6 +222,11 @@
         [PAPUtility captureEventGA:@"Thought Bkgd" action:[[NSNumber numberWithInt:self.prevBkgdIndex] stringValue] label:@"Photo"];
         
         [[Mixpanel sharedInstance] track:@"Uploaded Thought" properties:@{}];
+       
+        // fb analytics
+        [FBAppEvents logEvent:FBAppEventNameViewedContent
+                   valueToSum:1
+                   parameters:@{ FBAppEventParameterNameContentType : @"Uploaded Thought"}];
         
         // increment user thought count by one
         [[Mixpanel sharedInstance].people increment:@"Thought Count" by:[NSNumber numberWithInt:1]];

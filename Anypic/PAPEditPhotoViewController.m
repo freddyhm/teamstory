@@ -597,8 +597,16 @@
     
     [[Mixpanel sharedInstance] track:@"Uploaded Photo" properties:@{}];
     
+    // fb analytics
+    [FBAppEvents logEvent:FBAppEventNameViewedContent
+               valueToSum:1
+               parameters:@{ FBAppEventParameterNameContentType : @"Uploaded Photo"}];
+
+    
     // increment user photo count by one
     [[Mixpanel sharedInstance].people increment:@"Photo Count" by:[NSNumber numberWithInt:1]];
+    
+    
     
     // make sure placeholder gets erased
     if([[self.commentTextView text] isEqualToString:@"Add a caption"]){

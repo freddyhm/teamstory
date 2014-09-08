@@ -131,6 +131,8 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
         [Parse setApplicationId:PARSE_APP_ID
                       clientKey:PARSE_CLIENT_KEY];
         [PFFacebookUtils initializeFacebook];
+    
+
         [PFTwitterUtils initializeWithConsumerKey:TWITTER_KEY
                                    consumerSecret:TWITTER_SECRET];
     // ****************************************************************************
@@ -259,6 +261,9 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
+    
+    // fb analytics
+    [FBAppEvents activateApp];
     
     // syncs icon badge with tab bar badge, resets icon badge back to 0
     if (application.applicationIconBadgeNumber != 0) {
