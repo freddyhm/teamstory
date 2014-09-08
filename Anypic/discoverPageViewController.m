@@ -204,7 +204,7 @@ NSInteger selection = 1;
         
         limit = 1000;
         skip = 0;
-        
+        [self.userList removeAllObjects];
         [self userQueryPagination];
     }
     
