@@ -128,14 +128,14 @@
         if (![self.openInChrome isChromeInstalled]) {
             
             // mixpanel analytics - safari
-            [[Mixpanel sharedInstance] track:@"Selected Link Share Option" properties:@{@"link option":@"safari"}];
+            [[Mixpanel sharedInstance] track:@"Selected Link Share Option" properties:@{@"Link option":@"Safari"}];
             
             //Open in Safari Button.
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:currentWebsite]];
         }else{
             
             // mixpanel analytics - chrome
-            [[Mixpanel sharedInstance] track:@"Selected Link Share Option" properties:@{@"link option":@"chrome"}];
+            [[Mixpanel sharedInstance] track:@"Selected Link Share Option" properties:@{@"Link option":@"Chrome"}];
             
             [self.openInChrome openInChrome:[NSURL URLWithString:currentWebsite]];
         }
@@ -143,7 +143,7 @@
         if (![self.openInChrome isChromeInstalled]) {
             
             // mixpanel analytics - copy
-            [[Mixpanel sharedInstance] track:@"Selected Link Share Option" properties:@{@"link option":@"copy"}];
+            [[Mixpanel sharedInstance] track:@"Selected Link Share Option" properties:@{@"Link option":@"Copy"}];
             
             //Copy Link Button.
             UIPasteboard *pasteBoard = [UIPasteboard generalPasteboard];
@@ -152,7 +152,7 @@
         }else{
             
             // mixpanel analytics - safari
-            [[Mixpanel sharedInstance] track:@"Selected Link Share Option" properties:@{@"link option":@"safari"}];
+            [[Mixpanel sharedInstance] track:@"Selected Link Share Option" properties:@{@"Link option":@"Safari"}];
             
             //Open in Safari Button.
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:currentWebsite]];
@@ -161,7 +161,7 @@
     }else if (buttonIndex == 2){
         
         // mixpanel analytics - copy
-        [[Mixpanel sharedInstance] track:@"Selected Link Share Option" properties:@{@"link option":@"copy"}];
+        [[Mixpanel sharedInstance] track:@"Selected Link Share Option" properties:@{@"Link option":@"Copy"}];
         
         //Copy Link Button.
         UIPasteboard *pasteBoard = [UIPasteboard generalPasteboard];

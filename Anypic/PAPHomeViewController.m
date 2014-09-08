@@ -108,7 +108,6 @@
     // empty placeholder message and icon
     UIImage *placeHolderImg = [UIImage imageNamed:@"following_empty.png"];
     self.emptyPlaceholderMessage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, placeHolderImg.size.width, placeHolderImg.size.height)];
-    [self.emptyPlaceholderMessage setBackgroundColor:[UIColor redColor]];
     [self.emptyPlaceholderMessage setImage:placeHolderImg];
     
     // empty placeholder button
@@ -123,7 +122,6 @@
     [self.emptyPlaceholder addSubview:self.emptyPlaceholderMessage];
     [self.emptyPlaceholder addSubview:self.emptyPlaceholderBtn];
     [self.emptyPlaceholder  setHidden:YES];
-    
     
     
     [super.feed addSubview:self.emptyPlaceholder];

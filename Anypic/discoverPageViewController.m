@@ -292,6 +292,10 @@ NSInteger selection = 1;
 }
 
 -(void)usersLabelAction:(id)sender {
+    
+    // mixpane analytics
+    [[Mixpanel sharedInstance] track:@"Touched Tab In Discover Search" properties:@{@"Selected":@"Users"}];
+    
     [self labelSetting:@"users"];
     self.searchTV.contentOffset = CGPointMake(0, 0);
     [self.searchTV reloadData];
@@ -301,6 +305,10 @@ NSInteger selection = 1;
 }
 
 -(void)industryLabelAction:(id)sender {
+    
+    // mixpane analytics
+    [[Mixpanel sharedInstance] track:@"Touched Tab In Discover Search" properties:@{@"Selected":@"Industries"}];
+    
     [self labelSetting:@"industry"];
     self.searchTV.contentOffset = CGPointMake(0, 0);
     [self.searchTV reloadData];
@@ -511,6 +519,9 @@ NSInteger selection = 1;
     [self.userFilterListIndustry removeAllObjects];
     NSString *industry = [self.industry_datasource objectAtIndex:sender.tag];
     
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Selected Industry In Discover" properties:@{@"Selected":industry}];
+    
     if (![industry isEqualToString:@"Other"]) {
         [self.userFilterListIndustry addObjectsFromArray:[self.userList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"industry contains[c] %@", industry]]];
     } else {
@@ -540,6 +551,11 @@ NSInteger selection = 1;
 #pragma mark - PAPFindFriendsCellDelegate
 
 - (void)cell:(PAPFindFriendsCell *)cellView didTapUserButton:(PFUser *)aUser {
+    
+    // mixpanel analytics
+    NSString *selectedUser = [aUser objectForKey:@"displayName"] != nil ? [aUser objectForKey:@"displayName"] : [aUser objectId];
+    [[Mixpanel sharedInstance] track:@"Selected User From Discover" properties:@{@"Selected":selectedUser}];
+    
     // Push account view controller
     PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
     ;
@@ -549,6 +565,11 @@ NSInteger selection = 1;
 }
 
 - (void)cell:(PAPFindFriendsCell *)cellView didTapFollowButton:(PFUser *)aUser {
+    
+    // mixpanel analytics
+    NSString *selectedUser = [aUser objectForKey:@"displayName"] != nil ? [aUser objectForKey:@"displayName"] : [aUser objectId];
+    [[Mixpanel sharedInstance] track:@"Followed User From Discover" properties:@{@"Selected":selectedUser}];
+    
     [self shouldToggleFollowFriendForCell:cellView];
 }
 
