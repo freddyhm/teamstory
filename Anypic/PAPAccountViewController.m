@@ -13,6 +13,7 @@
 #import "PAPwebviewViewController.h"
 #import "FollowersFollowingViewController.h"
 #import "Mixpanel.h"
+#import "PAPMessagingViewController.h"
 
 @interface PAPAccountViewController() {
     float alphaValue_twitter;
@@ -109,6 +110,13 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     // hide back button
     [self.navigationItem setHidesBackButton:YES];
+    
+    UIButton *messageButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [messageButton setFrame:CGRectMake(0, 0, 22.0f, 22.0f)];
+    [messageButton addTarget:self action:@selector(messageButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [messageButton setBackgroundImage:[UIImage imageNamed:@"button-feedback.png"] forState:UIControlStateNormal];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:messageButton];
+    
     
     if (!self.user) {
         [NSException raise:NSInvalidArgumentException format:@"user cannot be nil"];
@@ -734,6 +742,11 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 }
 
 #pragma mark - Custom
+
+-(void)messageButtonAction:(id)sender {
+    PAPMessagingViewController *messagingViewController = [[PAPMessagingViewController alloc] init];
+    [self.navigationController pushViewController:messagingViewController animated:YES];
+}
 
 - (void)backButtonAction:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
