@@ -378,6 +378,8 @@
     [[Mixpanel sharedInstance] registerSuperProperties:@{@"Name": displayName}];
     // super property
     [[Mixpanel sharedInstance] registerSuperProperties:@{@"Industry": industry}];
+    // super property
+    [[Mixpanel sharedInstance] registerSuperProperties:@{@"Email": email}];
 }
 
 /*
