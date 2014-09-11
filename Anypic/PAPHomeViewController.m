@@ -358,28 +358,29 @@
     
     // get user info for analytics
     NSString *displayName = [[PFUser currentUser] objectForKey:@"displayName"] != nil ? [[PFUser currentUser] objectForKey:@"displayName"] : @"";
+    NSString *currentUserObjectId = [[PFUser currentUser] objectId] != nil ? [[PFUser currentUser] objectId] : @"";
+    
+    NSLog(@"%@", displayName);
     NSString *email = [[PFUser currentUser] objectForKey:@"email"] != nil ? [[PFUser currentUser] objectForKey:@"email"] : @"";
-    NSString *currentUserId = [[PFUser currentUser] objectId];
     NSString *industry = [[PFUser currentUser] objectForKey:@"industry"] != nil ? [[PFUser currentUser] objectForKey:@"industry"] : @"";
     NSDate *createdAt = [[PFUser currentUser] createdAt];
     
     // Mxpanel analytics identify: must be called before
     // people properties can be set
-    [[Mixpanel sharedInstance] identify:currentUserId];
+    [[Mixpanel sharedInstance] identify:currentUserObjectId];
     
     // info for crashes
     [Crashlytics setUserName:displayName];
     [Crashlytics setUserEmail:email];
     
     // mixpanel analytics - Sets user
-    [[Mixpanel sharedInstance].people set:@{@"name": displayName, @"email": email, @"industry": industry, @"created": createdAt}];
+    [[Mixpanel sharedInstance].people set:@{@"name": displayName, @"email": email, @"industry": industry, @"created": createdAt, @"userObjId": currentUserObjectId}];
     
-    // super property
+    // super properties
     [[Mixpanel sharedInstance] registerSuperProperties:@{@"Name": displayName}];
-    // super property
     [[Mixpanel sharedInstance] registerSuperProperties:@{@"Industry": industry}];
-    // super property
     [[Mixpanel sharedInstance] registerSuperProperties:@{@"Email": email}];
+    [[Mixpanel sharedInstance] registerSuperProperties:@{@"UserObjId": currentUserObjectId}];
 }
 
 /*

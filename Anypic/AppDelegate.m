@@ -143,11 +143,12 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     // Crash analytics
     [Crashlytics startWithAPIKey:@"9075de9af4f252529090970cd8c2f7e426771d92"];
     
-    // Set installation id for analytics
+    // Set installation id for mixpanel and crashlytics analytics
     NSString *installationId = [[PFInstallation currentInstallation] objectId];
     
     if(installationId != nil){
         [Crashlytics setUserIdentifier:installationId];
+        [[Mixpanel sharedInstance] registerSuperProperties:@{@"InstallationObjId": installationId}];
     }
     
     PFACL *defaultACL = [PFACL ACL];
