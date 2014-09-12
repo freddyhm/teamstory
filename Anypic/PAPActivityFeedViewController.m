@@ -342,7 +342,7 @@
         [cell setActivity:object isSubscription:NO];
     }
     
-    NSDictionary *readListItem = [self.readList valueForKey:[object objectId]];
+    NSMutableDictionary *readListItem = [self.readList valueForKey:[object objectId]];
     
     // safety check make sure read list has enough items
     NSString *activityStatus = [self.readList count] > indexPath.row ? [readListItem objectForKey:@"status"] : @"";
@@ -488,7 +488,7 @@
     // edge case: when old notifications without aid get pushed
     if(itemActivityId != nil){
         
-        NSDictionary *activity;
+        NSMutableDictionary *activity;
         
         // when photo id is missing replace with activity id, case for follower
         if(itemPhotoId != nil){
