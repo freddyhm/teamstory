@@ -14,6 +14,7 @@
 #import "PAPCache.h"
 #import "PAPTabBarController.h"
 #import "Mixpanel.h"
+#import "PAPMessageListViewController.h"
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
@@ -397,9 +398,12 @@
 }
 
 - (void)promptFeedback:(id)sender{
-    self.isOpeningFeedback = YES;
-    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
-    [KonotorFeedbackScreen showFeedbackScreen];
+    //self.isOpeningFeedback = YES;
+    //[[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+    //[KonotorFeedbackScreen showFeedbackScreen];
+    PAPMessageListViewController *messageListViewController = [[PAPMessageListViewController alloc] init];
+    [self.navigationController pushViewController:messageListViewController animated:YES];
+    
 }
 
 -(void)notificationBarButton:(id)sender {

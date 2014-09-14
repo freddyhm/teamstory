@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PAPMessagingCell.h"
 
-@interface PAPMessagingViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface PAPMessagingViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, PAPMessagingCellDelegate, UITextViewDelegate, UIScrollViewDelegate>
+
+- (void)setTargetUser:(PFUser *)targetUser;
 
 @end

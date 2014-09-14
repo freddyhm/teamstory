@@ -67,6 +67,10 @@
 		4609975E1938119A00C5AD96 /* icon-twitter-profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460997501938119A00C5AD96 /* icon-twitter-profile@2x.png */; };
 		4609975F1938119A00C5AD96 /* icon-twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 460997511938119A00C5AD96 /* icon-twitter.png */; };
 		460997601938119A00C5AD96 /* icon-twitter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460997521938119A00C5AD96 /* icon-twitter@2x.png */; };
+		461C57E519BF589400F6575C /* PAPMessagingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 461C57E419BF589400F6575C /* PAPMessagingCell.m */; };
+		461C57E819C0FEA100F6575C /* PAPMessageListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 461C57E719C0FEA100F6575C /* PAPMessageListViewController.m */; };
+		461C57EB19C101ED00F6575C /* PAPMessageListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 461C57EA19C101EC00F6575C /* PAPMessageListCell.m */; };
+		461C57F119C24C2300F6575C /* PAPMessagingSeachUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 461C57F019C24C2300F6575C /* PAPMessagingSeachUsersViewController.m */; };
 		462B363E1880AB5D008C28AE /* discoverPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 462B363D1880AB5D008C28AE /* discoverPageViewController.m */; };
 		462FCB5F188C6AE9005059F3 /* ProfileNavigationBar.png in Resources */ = {isa = PBXBuildFile; fileRef = 462FCB5B188C6AE9005059F3 /* ProfileNavigationBar.png */; };
 		462FCB60188C6AE9005059F3 /* ProfileNavigationBar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 462FCB5C188C6AE9005059F3 /* ProfileNavigationBar@2x.png */; };
@@ -641,6 +645,14 @@
 		460997501938119A00C5AD96 /* icon-twitter-profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-twitter-profile@2x.png"; sourceTree = "<group>"; };
 		460997511938119A00C5AD96 /* icon-twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-twitter.png"; sourceTree = "<group>"; };
 		460997521938119A00C5AD96 /* icon-twitter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-twitter@2x.png"; sourceTree = "<group>"; };
+		461C57E319BF589400F6575C /* PAPMessagingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPMessagingCell.h; path = Anypic/PAPMessagingCell.h; sourceTree = SOURCE_ROOT; };
+		461C57E419BF589400F6575C /* PAPMessagingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPMessagingCell.m; path = Anypic/PAPMessagingCell.m; sourceTree = SOURCE_ROOT; };
+		461C57E619C0FEA100F6575C /* PAPMessageListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPMessageListViewController.h; path = Anypic/PAPMessageListViewController.h; sourceTree = SOURCE_ROOT; };
+		461C57E719C0FEA100F6575C /* PAPMessageListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPMessageListViewController.m; path = Anypic/PAPMessageListViewController.m; sourceTree = SOURCE_ROOT; };
+		461C57E919C101EC00F6575C /* PAPMessageListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPMessageListCell.h; path = Anypic/PAPMessageListCell.h; sourceTree = SOURCE_ROOT; };
+		461C57EA19C101EC00F6575C /* PAPMessageListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPMessageListCell.m; path = Anypic/PAPMessageListCell.m; sourceTree = SOURCE_ROOT; };
+		461C57EF19C24C2300F6575C /* PAPMessagingSeachUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPMessagingSeachUsersViewController.h; path = Anypic/PAPMessagingSeachUsersViewController.h; sourceTree = SOURCE_ROOT; };
+		461C57F019C24C2300F6575C /* PAPMessagingSeachUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPMessagingSeachUsersViewController.m; path = Anypic/PAPMessagingSeachUsersViewController.m; sourceTree = SOURCE_ROOT; };
 		462B363C1880AB5D008C28AE /* discoverPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = discoverPageViewController.h; path = Anypic/discoverPageViewController.h; sourceTree = SOURCE_ROOT; };
 		462B363D1880AB5D008C28AE /* discoverPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = discoverPageViewController.m; path = Anypic/discoverPageViewController.m; sourceTree = SOURCE_ROOT; };
 		462FCB5B188C6AE9005059F3 /* ProfileNavigationBar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProfileNavigationBar.png; sourceTree = "<group>"; };
@@ -1352,11 +1364,26 @@
 			name = Notification;
 			sourceTree = "<group>";
 		};
+		461C57E219BF586B00F6575C /* MessagingCell */ = {
+			isa = PBXGroup;
+			children = (
+				461C57E319BF589400F6575C /* PAPMessagingCell.h */,
+				461C57E419BF589400F6575C /* PAPMessagingCell.m */,
+				461C57E919C101EC00F6575C /* PAPMessageListCell.h */,
+				461C57EA19C101EC00F6575C /* PAPMessageListCell.m */,
+			);
+			name = MessagingCell;
+			sourceTree = "<group>";
+		};
 		4658CEEE19BE81F30057AFA4 /* Messaging */ = {
 			isa = PBXGroup;
 			children = (
 				4658CEF419BE82250057AFA4 /* PAPMessagingViewController.h */,
 				4658CEF519BE82250057AFA4 /* PAPMessagingViewController.m */,
+				461C57E619C0FEA100F6575C /* PAPMessageListViewController.h */,
+				461C57E719C0FEA100F6575C /* PAPMessageListViewController.m */,
+				461C57EF19C24C2300F6575C /* PAPMessagingSeachUsersViewController.h */,
+				461C57F019C24C2300F6575C /* PAPMessagingSeachUsersViewController.m */,
 			);
 			name = Messaging;
 			sourceTree = "<group>";
@@ -1771,6 +1798,7 @@
 		74A504E21565F0C200CFA4E3 /* UITableViewCells */ = {
 			isa = PBXGroup;
 			children = (
+				461C57E219BF586B00F6575C /* MessagingCell */,
 				C46AEBF8157FE078009CBA03 /* PAPBaseTextCell */,
 				C4F102AF156C57820061BC3E /* PAPLoadMoreCell.h */,
 				C4F102B0156C57820061BC3E /* PAPLoadMoreCell.m */,
@@ -2867,12 +2895,14 @@
 			files = (
 				D5654177196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.m in Sources */,
 				46839E7E18E1E89600BD60DB /* PAPLoginTutorialViewController.m in Sources */,
+				461C57E819C0FEA100F6575C /* PAPMessageListViewController.m in Sources */,
 				D542D8BF196A6F4700A0384F /* ELCAsset.m in Sources */,
 				C4F10288156C56F20061BC3E /* UIImage+AlphaAdditions.m in Sources */,
 				D5FC095818A9B552000D85F1 /* FilterCell.m in Sources */,
 				D5FC095518A9B543000D85F1 /* CameraFilterViewController.m in Sources */,
 				46DC23CD19B01CBF00E8FCDF /* PAPdiscoverIndustryCell.m in Sources */,
 				D594C20518EFEBAD0008F5DF /* SVProgressHUD.m in Sources */,
+				461C57EB19C101ED00F6575C /* PAPMessageListCell.m in Sources */,
 				D542D8BE196A6F4700A0384F /* ELCAlbumPickerController.m in Sources */,
 				C4F1028A156C56F20061BC3E /* UIImage+ResizeAdditions.m in Sources */,
 				C4F1028B156C56F20061BC3E /* UIImage+RoundedCornerAdditions.m in Sources */,
@@ -2881,6 +2911,7 @@
 				C4F10292156C571C0061BC3E /* PAPUtility.m in Sources */,
 				D542D8C1196A6F4700A0384F /* ELCAssetTablePicker.m in Sources */,
 				C4F102A0156C574A0061BC3E /* PAPImageView.m in Sources */,
+				461C57E519BF589400F6575C /* PAPMessagingCell.m in Sources */,
 				D52C1E4618D9515D00625887 /* KonotorTextInputOverlay.m in Sources */,
 				C4F102A1156C574A0061BC3E /* PAPProfileImageView.m in Sources */,
 				D56D466519884C33001FAA76 /* PhotoTimelineViewController.m in Sources */,
@@ -2923,6 +2954,7 @@
 				C4F102EF156C58E00061BC3E /* main.m in Sources */,
 				C4A0B505156C5B9F00E48554 /* TTTTimeIntervalFormatter.m in Sources */,
 				747FC485156FFF74003349E1 /* PAPConstants.m in Sources */,
+				461C57F119C24C2300F6575C /* PAPMessagingSeachUsersViewController.m in Sources */,
 				74636BF31578281E00B44132 /* PAPFindFriendsCell.m in Sources */,
 				C4A6D87C157859AA009FE621 /* PAPCache.m in Sources */,
 				D52C1E4918D9515D00625887 /* KonotorVoiceInputOverlay.m in Sources */,
