@@ -69,8 +69,8 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    // analytics
-    [[Mixpanel sharedInstance] track:@"Viewed Link Screen" properties:@{}];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Link"}];
     
     // init nav bar
     [[self navigationController] setNavigationBarHidden:NO animated:YES];
@@ -242,7 +242,8 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     // analytics
     [PAPUtility captureEventGA:@"Engagement" action:@"Upload Link" label:@"Photo"];
     
-    [[Mixpanel sharedInstance] track:@"Uploaded Link" properties:@{}];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Link"}];
     
     
     // fb analytics

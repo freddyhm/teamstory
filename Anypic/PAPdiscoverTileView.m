@@ -166,8 +166,8 @@
         PFObject *photo = [self.pictureQuery objectAtIndex:sender.tag];
         
         // mixpanel analytics
-        [[Mixpanel sharedInstance] track:@"Selected Item From Discover" properties:@{@"Type":@"Picture", @"Selected":[photo objectId]}];
-        
+        [[Mixpanel sharedInstance] track:@"Selected From Discover" properties:@{@"Type":@"Picture", @"Selected":[photo objectId]}];
+    
         if (photo) {
             PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapDiscoverPhoto"];
             self.navController.navigationBar.hidden = NO;
@@ -178,7 +178,7 @@
         PFObject *photo = [self.thoughtQuery objectAtIndex:sender.tag];
         
         // mixpanel analytics
-        [[Mixpanel sharedInstance] track:@"Selected Item From Discover" properties:@{@"Type":@"thought", @"Selected":[photo objectId]}];
+        [[Mixpanel sharedInstance] track:@"Selected From Discover" properties:@{@"Type":@"Thought", @"Selected":[photo objectId]}];
         
         if (photo) {
             PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapDiscoverPhoto"];

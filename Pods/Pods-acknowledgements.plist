@@ -41,6 +41,14 @@ THE SOFTWARE.
 		</dict>
 		<dict>
 			<key>FooterText</key>
+			<string>See https://apptimize.com/admin/terms</string>
+			<key>Title</key>
+			<string>Apptimize</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>FooterText</key>
 			<string>Copyright 2013 Mixpanel, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");

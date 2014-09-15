@@ -163,8 +163,6 @@ enum ActionSheetTags {
     // analytics
     [PAPUtility captureEventGA:@"Engagement" action:@"Comment" label:@"Photo"];
     
-    [[Mixpanel sharedInstance] track:@"Commented" properties:@{}];
-    
     // increment user comment count by one
     [[Mixpanel sharedInstance].people increment:@"Comment Count" by:[NSNumber numberWithInt:1]];
     
@@ -201,16 +199,14 @@ enum ActionSheetTags {
     
     PFObject *photo = [self.objects objectAtIndex:sender.tag];
     
-    NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:sender.tag];
-    PAPPhotoCell *cell = (PAPPhotoCell *)[self.feed cellForRowAtIndexPath:index];
-
     if (photo) {
-        NSLog(@"TAPPED PHOTO %@ IMAGE %@", photo, cell.imageView.file.url);
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
         
         // mixpanel analytics 
         NSString *type = [photo objectForKey:@"type"] != nil ? [photo objectForKey:@"type"] : @"";
-        [[Mixpanel sharedInstance] track:@"Tapped Post" properties:@{@"Type":type}];
+        
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Viewed Post", @"Post Type":type}];
         
         [self.navigationController pushViewController:photoDetailsVC animated:YES];
     }
@@ -682,7 +678,11 @@ enum ActionSheetTags {
         // analytics
         [PAPUtility captureEventGA:@"Engagement" action:@"Like" label:@"Photo"];
         
-        [[Mixpanel sharedInstance] track:@"Liked" properties:@{@"Source":@"Timeline"}];
+        // get post type
+        NSString *postType = [photo objectForKey:@"type"] != nil ? [photo objectForKey:@"type"] : @"";
+        
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Liked Post", @"Source":@"Timeline", @"Post Type": postType}];
         
         // increment user like count by one
         [[Mixpanel sharedInstance].people increment:@"Like Count" by:[NSNumber numberWithInt:1]];

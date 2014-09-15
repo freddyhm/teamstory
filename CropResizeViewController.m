@@ -125,7 +125,8 @@
     // analytics
     [PAPUtility captureScreenGA:@"Crop Photo"];
     
-    [[Mixpanel sharedInstance] track:@"Viewed Crop Screen" properties:@{}];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Crop"}];
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView

@@ -183,7 +183,8 @@
     // analytics
     [PAPUtility captureScreenGA:@"Home"];
     
-    [[Mixpanel sharedInstance] track:@"Viewed Home Screen" properties:@{}];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Home"}];
     
     // fetch unread messages, show feedback screen
     self.konotorCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
@@ -459,8 +460,9 @@
     if([source isEqualToString:@"explore"]){
         
         if(!self.firstRun){
+            
             // mixpanel analytics
-            [[Mixpanel sharedInstance] track:@"Viewed Explore Feed" properties:@{}];
+            [[Mixpanel sharedInstance] track:@"Viewed Timeline Feed" properties:@{@"Feed" : @"Explore"}];
         }
         
         self.exploreBtn.titleLabel.font = self.feedFontSelected;
@@ -472,7 +474,7 @@
     }else if([source isEqualToString:@"following"]){
         
         // mixpanel analytics
-        [[Mixpanel sharedInstance] track:@"Viewed Following Feed" properties:@{}];
+        [[Mixpanel sharedInstance] track:@"Viewed Timeline Feed" properties:@{@"Feed" : @"Following"}];
         
         self.followingBtn.titleLabel.font = self.feedFontSelected;
         self.exploreBtn.titleLabel.font = self.feedFontDeselected;

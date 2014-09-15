@@ -58,7 +58,8 @@
     
     [PAPUtility captureEventGA:@"Testing" action:@"Started profile setup" label:nil];
     
-    [[Mixpanel sharedInstance] track:@"Viewed New Profile Screen 1" properties:@{}];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"New Profile Screen 1"}];
     
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
@@ -373,7 +374,8 @@
                             }];
                         } else {
                             
-                            [[Mixpanel sharedInstance] track:@"Viewed New Profile Screen 2" properties:@{}];
+                            // mixpanel analytics
+                            [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"New Profile Screen 2"}];
                             
                             [self.mainSV setContentOffset:CGPointMake(320.0f, 0.0f) animated:YES];
                             if ([UIScreen mainScreen].bounds.size.height == 480)
@@ -409,7 +411,8 @@
 
 -(void)navNext_2Action:(id)sender {
     
-    [[Mixpanel sharedInstance] track:@"Viewed New Profile Screen 3" properties:@{}];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"New Profile Screen 3"}];
     
     [self.mainSV setContentOffset:CGPointMake(640.0f, 0.0f) animated:YES];
     
@@ -467,6 +470,8 @@
     NSString* email_current_input = self.user[@"email"];
     
     [[Mixpanel sharedInstance] track:@"Pressed Done In Profile Screen" properties:@{@"New user email":email_input}];
+    
+    
     
     self.user[@"username"] = email_input;
     

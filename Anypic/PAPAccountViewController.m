@@ -585,7 +585,8 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     [PAPUtility captureScreenGA:@"Account"];
     
-    [[Mixpanel sharedInstance] track:@"Viewed Account Screen" properties:@{}];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Account"}];
     
     // edge case, if multiaction button frozen because of network problems
     if (self.user == [PFUser currentUser] && !self.multiActionButton.enabled){
@@ -847,7 +848,10 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     // analytics
     [PAPUtility captureEventGA:@"Engagement" action:@"Follow" label:@"User"];
     
-    [[Mixpanel sharedInstance] track:@"Followed" properties:@{}];
+    NSString *followedUserDisplayName = [self.user objectForKey:@"displayName"] != nil ? [self.user objectForKey:@"displayName"]: @"";
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Followed User", @"Source": @"Profile", @"Followed User" : followedUserDisplayName}];
     
     // increment user follow count by one
     [[Mixpanel sharedInstance].people increment:@"Follow Count" by:[NSNumber numberWithInt:1]];

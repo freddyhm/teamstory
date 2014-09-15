@@ -42,8 +42,9 @@
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 	[self.tableView setAllowsSelection:NO];
     
-    // analytics
-    [[Mixpanel sharedInstance] track:@"Viewed Camera Album Screen" properties:@{}];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Photo Album"}];
+
     
     // set color of nav bar to custom grey
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];

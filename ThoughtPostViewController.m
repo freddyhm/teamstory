@@ -91,10 +91,10 @@
     
     // analytics
     [PAPUtility captureScreenGA:@"Thought Post"];
-    
-    // analytics
-    [[Mixpanel sharedInstance] track:@"Viewed Thought Screen" properties:@{}];
-    
+        
+    // new analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Thought"}];
+
     // set color of nav bar to teal
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
@@ -221,7 +221,8 @@
         [PAPUtility captureEventGA:@"Engagement" action:@"Upload Thought" label:@"Photo"];
         [PAPUtility captureEventGA:@"Thought Bkgd" action:[[NSNumber numberWithInt:self.prevBkgdIndex] stringValue] label:@"Photo"];
         
-        [[Mixpanel sharedInstance] track:@"Uploaded Thought" properties:@{}];
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Thought"}];
        
         // fb analytics
         [FBAppEvents logEvent:FBAppEventNameViewedContent

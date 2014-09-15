@@ -183,7 +183,9 @@
     // analytics
     [PAPUtility captureScreenGA:@"Edit Photo"];
     
-    [[Mixpanel sharedInstance] track:@"Viewed Edit Photo Screen" properties:@{}];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Edit Photo"}];
+
 }
 
 #pragma mark - UITextFieldDelegate
@@ -595,7 +597,8 @@
     // analytics
     [PAPUtility captureEventGA:@"Engagement" action:@"Upload Picture" label:@"Photo"];
     
-    [[Mixpanel sharedInstance] track:@"Uploaded Photo" properties:@{}];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Moment"}];
     
     // fb analytics
     [FBAppEvents logEvent:FBAppEventNameViewedContent
