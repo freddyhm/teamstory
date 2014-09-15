@@ -189,6 +189,9 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
     
+    // mixpanel notification setup
+    [[Mixpanel sharedInstance].people addPushDeviceToken:newDeviceToken];
+    
     // konotor notifications setup
     [Konotor addDeviceToken:newDeviceToken];
     [PFPush storeDeviceToken:newDeviceToken];
