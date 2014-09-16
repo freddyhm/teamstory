@@ -7,6 +7,7 @@
 //
 
 #import "PAPMessagingSeachUsersViewController.h"
+#import "SVProgressHUD.h"
 
 #define headerViewHeight 64.0f
 
@@ -128,10 +129,50 @@
 
 # pragma PAPFindFriendsCellDelegate 
 - (void)cell:(PAPFindFriendsCell *)cellView didTapUserButton:(PFUser *)aUser {
-    [self dismissViewControllerAnimated:NO completion:^{
-        PAPMessagingViewController *messageViewController = [[PAPMessagingViewController alloc] init];
-        [messageViewController setTargetUser:aUser];
-        [self.navController pushViewController:messageViewController animated:NO];
+    [SVProgressHUD show];
+    
+    PFQuery *userOneQuery = [PFQuery queryWithClassName:@"ChatRoom"];
+    [userOneQuery whereKey:@"userOne" equalTo:[PFUser currentUser]];
+    [userOneQuery whereKey:@"userTwo" equalTo:aUser];
+    
+    // Received Message
+    PFQuery *userTwoQuery = [PFQuery queryWithClassName:@"ChatRoom"];
+    [userTwoQuery whereKey:@"userOne" equalTo:aUser];
+    [userTwoQuery whereKey:@"userTwo" equalTo:[PFUser currentUser]];
+    
+    PFQuery *finalChatRoomQuery = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:userOneQuery, userTwoQuery,nil]];
+    [finalChatRoomQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        [SVProgressHUD dismiss];
+        
+        if (!error) {
+            if (objects.count == 0) {
+                PFObject *createChatRoom = [PFObject objectWithClassName:@"ChatRoom"];
+                [createChatRoom setObject:[PFUser currentUser] forKey:@"userOne"];
+                [createChatRoom setObject:aUser forKey:@"userTwo"];
+                [createChatRoom saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    if (!error) {
+                        [self dismissViewControllerAnimated:NO completion:^{
+                            PAPMessagingViewController *messageViewController = [[PAPMessagingViewController alloc] init];
+                            [messageViewController setTargetUser:aUser];
+                            [messageViewController setRoomInfo:createChatRoom];
+                            [self.navController pushViewController:messageViewController animated:NO];
+                        }];
+                    } else {
+                        NSLog(@"%@", error);
+                    }
+                    
+                }];
+            } else {
+                [self dismissViewControllerAnimated:NO completion:^{
+                    PAPMessagingViewController *messageViewController = [[PAPMessagingViewController alloc] init];
+                    [messageViewController setTargetUser:aUser];
+                    [messageViewController setRoomInfo:[objects objectAtIndex:0]];
+                    [self.navController pushViewController:messageViewController animated:NO];
+                }];
+            }
+        } else {
+            NSLog(@"%@", error);
+        }
     }];
 }
 

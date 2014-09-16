@@ -13,13 +13,37 @@
 #define navBarHeight 64.0f
 #define tabBarHeight 50.0f
 
-@interface PAPMessageListViewController ()
+@interface PAPMessageListViewController () {
+    BOOL userOne;
+}
 
 @property (nonatomic, strong) UITableView *messageListTV;
+@property (nonatomic, strong) NSArray *messageList;
 
 @end
 
 @implementation PAPMessageListViewController
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
+    
+    PFQuery *userOneQuery = [PFQuery queryWithClassName:@"ChatRoom"];
+    [userOneQuery whereKey:@"userOne" equalTo:[PFUser currentUser]];
+    [userOneQuery whereKeyExists:@"lastMessage"];
+    
+    PFQuery *userTwoQuery = [PFQuery queryWithClassName:@"ChatRoom"];
+    [userTwoQuery whereKey:@"userTwo" equalTo:[PFUser currentUser]];
+    [userTwoQuery whereKeyExists:@"lastMessage"];
+    
+    PFQuery *messageListQuery = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:userOneQuery, userTwoQuery, nil]];
+    [messageListQuery orderByDescending:@"createdAt"];
+    [messageListQuery includeKey:@"userOne.User"];
+    [messageListQuery includeKey:@"userTwo.User"];
+    [messageListQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        self.messageList = objects;
+        [self.messageListTV reloadData];
+    }];
+}
 
 - (void)viewDidLoad
 {
@@ -75,10 +99,21 @@
      */
 }
 
+-(void)cellButtonAction:(UIButton *)sender {
+    PAPMessagingViewController *messageViewController = [[PAPMessagingViewController alloc] init];
+    if (userOne) {
+        [messageViewController setTargetUser:[[self.messageList objectAtIndex:sender.tag] objectForKey:@"userOne"]];
+    } else {
+        [messageViewController setTargetUser:[[self.messageList objectAtIndex:sender.tag] objectForKey:@"userTwo"]];
+    }
+    [messageViewController setRoomInfo:[self.messageList objectAtIndex:sender.tag]];
+    [self.navigationController pushViewController:messageViewController animated:YES];
+}
+
 #pragma UITableViewDelegate 
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 10;
+    return [self.messageList count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -94,8 +129,22 @@
         cell = [[PAPMessageListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.delegate = self;
     }
+    cell.cellButton.tag = indexPath.row;
+    
+    if ([[[[self.messageList objectAtIndex:indexPath.row] objectForKey:@"userOne"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+        [cell setUser:[[self.messageList objectAtIndex:indexPath.row] objectForKey:@"userTwo"]];
+        userOne = NO;
+    } else {
+        [cell setUser:[[self.messageList objectAtIndex:indexPath.row] objectForKey:@"userOne"]];
+        userOne = YES;
+    }
+    cell.lastMessageLabel.text = [[self.messageList objectAtIndex:indexPath.row] objectForKey:@"lastMessage"];
+    [cell.cellButton addTarget:self action:@selector(cellButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    
     
     return cell;
 }
+
+
 
 @end

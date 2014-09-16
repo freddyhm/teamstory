@@ -12,5 +12,6 @@
 @interface PAPMessagingViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, PAPMessagingCellDelegate, UITextViewDelegate, UIScrollViewDelegate>
 
 - (void)setTargetUser:(PFUser *)targetUser;
+- (void)setRoomInfo:(PFObject *)roomInfo;
 
 @end

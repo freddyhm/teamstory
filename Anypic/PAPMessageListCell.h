@@ -13,6 +13,13 @@
 }
 
 @property (nonatomic, strong) id delegate;
+@property (nonatomic, strong) PFUser *messageUser;
+@property (nonatomic, strong) UIButton *cellButton;
+@property (nonatomic, strong) UILabel *lastMessageLabel;
+@property (nonatomic, strong) UILabel *userName;
+@property (nonatomic, strong) PFImageView *profileImageView;
+
+-(void)setUser:(PFUser *)user;
 
 @end
 

@@ -29,7 +29,8 @@
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIButton *sendButton;
 @property (nonatomic, strong) PFUser *recipient;
-@property (nonatomic, strong) NSArray *messageQuery;
+@property (nonatomic, strong) NSMutableArray *messageQuery;
+@property (nonatomic, strong) PFObject *targetChatRoom;
 
 @end
 
@@ -37,6 +38,10 @@
 
 - (void)setTargetUser:(PFUser *)targetUser {
     self.recipient = targetUser;
+}
+
+- (void)setRoomInfo:(PFObject *)roomInfo {
+    self.targetChatRoom = roomInfo;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -54,21 +59,14 @@
     self.tabBarController.tabBar.frame = CGRectZero;
     [self registerForKeyboardNotifications];
     
-    // Sent Message
-    PFQuery *sentMessageQuery = [PFQuery queryWithClassName:@"Message"];
-    [sentMessageQuery whereKey:@"fromUser" equalTo:[PFUser currentUser]];
-    [sentMessageQuery whereKey:@"toUser" equalTo:self.recipient];
+    self.messageQuery = [[NSMutableArray alloc] init];
     
-    // Received Message
-    PFQuery *receivedMessageQuery = [PFQuery queryWithClassName:@"Message"];
-    [receivedMessageQuery whereKey:@"fromUser" equalTo:self.recipient];
-    [receivedMessageQuery whereKey:@"toUser" equalTo:[PFUser currentUser]];
-    
-    PFQuery *finalMessageQuery = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:sentMessageQuery, receivedMessageQuery,nil]];
-    [finalMessageQuery orderByAscending:@"createdAt"];
-    finalMessageQuery.limit = 1000;
-    [finalMessageQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        self.messageQuery = objects;
+    PFQuery *messageQuery = [PFQuery queryWithClassName:@"Message"];
+    [messageQuery whereKey:@"chatRoom" equalTo:self.targetChatRoom];
+    [messageQuery orderByDescending:@"createdAt"];
+    [messageQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        [self.messageQuery removeAllObjects];
+        [self.messageQuery addObjectsFromArray:objects];
         [self.messageList reloadData];
     }];
 }
@@ -114,7 +112,6 @@
     self.messageList.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.messageList.delegate = self;
     self.messageList.dataSource = self;
-    [self.messageList setBackgroundColor:[UIColor orangeColor]];
     [self.view addSubview:self.messageList];
     
     [self.view bringSubviewToFront:self.messageTextViewBG];
@@ -176,6 +173,7 @@
     [messagePFObject setObject:[PFUser currentUser] forKey:@"fromUser"];
     [messagePFObject setObject:self.recipient forKey:@"toUser"];
     [messagePFObject setObject:self.messageTextView.text forKey:@"messageBody"];
+    [messagePFObject setObject:self.targetChatRoom forKey:@"chatRoom"];
     [messagePFObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if(!error) {
             NSLog(@"Message Sent");
@@ -183,6 +181,9 @@
             NSLog(@"%@", error);
         }
     }];
+    
+    [self.targetChatRoom setObject:self.messageTextView.text forKey:@"lastMessage"];
+    [self.targetChatRoom saveInBackground];
 }
 
 # pragma UIKeyboard
@@ -274,11 +275,9 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
     if ([[[currentOBJ objectForKey:@"fromUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
         cell.RECEIVEDMessageView.hidden = YES;
         cell.SENTMessageView.hidden = NO;
-        NSLog(@"RECEIVED");
     } else {
         cell.SENTMessageView.hidden = YES;
         cell.RECEIVEDMessageView.hidden = NO;
-        NSLog(@"SENT");
     }
     
     [cell setText:[currentOBJ objectForKey:@"messageBody"]];
