@@ -35,7 +35,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [[Mixpanel sharedInstance] track:@"Viewed Email Sign Up Screen" properties:@{}];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Email Sign Up"}];
+
     
     cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
     signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];

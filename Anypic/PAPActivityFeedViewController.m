@@ -12,12 +12,13 @@
 #import "PAPLoadMoreCell.h"
 #import "PAPSettingsButtonItem.h"
 #import "FollowersFollowingViewController.h"
-#import "SVProgressHUD.h"
 #import "Mixpanel.h"
+#import "SVProgressHUD.h"
 
 @interface PAPActivityFeedViewController ()
 
 @property (nonatomic, strong) UIView *blankTimelineView;
+@property (nonatomic, strong) UIRefreshControl *refreshFeedControl;
 @property int notificationCount;
 
 
@@ -43,7 +44,7 @@
         // Whether the built-in pagination is enabled
         self.paginationEnabled = YES;
         
-        // Whether the built-in pull-to-refresh is enabled
+        // disable PFQueryTable's default refresh implementation
         self.pullToRefreshEnabled = NO;
        
         // The number of objects to show per page
@@ -87,6 +88,27 @@
     
     self.blankTimelineView = [[UIView alloc] initWithFrame:self.tableView.bounds];
     
+    
+    // pull-to-refresh
+    self.refreshFeedControl = [[UIRefreshControl alloc] init];
+    self.refreshFeedControl.tintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:0.5f];
+    [self.refreshFeedControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
+    
+    
+    self.refreshFeedControl.backgroundColor = [UIColor whiteColor];
+    [self.tableView addSubview:self.refreshFeedControl];
+    
+    // creating view for extending white background
+    CGRect frame = self.tableView.bounds;
+    frame.origin.y = -frame.size.height;
+    UIView* bgView = [[UIView alloc] initWithFrame:frame];
+    bgView.backgroundColor = [UIColor whiteColor];
+    
+    // adding the view below the refresh control
+    [self.tableView insertSubview:bgView atIndex:0];
+
+    
+    
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setBackgroundImage:[UIImage imageNamed:@"ActivityFeedBlank.png"] forState:UIControlStateNormal];
     [button setFrame:CGRectMake(0.0f, 113.0f, 320.0f, 160.0f)];
@@ -102,16 +124,17 @@
     // analytics
     [PAPUtility captureScreenGA:@"Activity"];
     
-    [[Mixpanel sharedInstance] track:@"Viewed Activity Screen" properties:@{}];
-    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Activity"}];
+
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     
     // reset badge number on server and activity bar when user checks activity feed and badge value is present
     if(self.navigationController.tabBarItem.badgeValue != nil){
-        [self loadObjects];
         [self setActivityBadge:nil];
+        [self loadObjects];
     }
-    
+
     [self.tableView reloadData];
 }
 
@@ -242,7 +265,10 @@
 - (void)objectsWillLoad{
     [super objectsWillLoad];
     
-    [SVProgressHUD show];
+    // do not show hud if currently refreshing feed 
+    if(!self.refreshFeedControl.refreshing){
+        [SVProgressHUD show];
+    }
 }
 
 - (void)objectsDidLoad:(NSError *)error {
@@ -323,6 +349,9 @@
             [self setActivityBadge:nil];
         }
     }
+    
+    // end refresh control
+    [self.refreshFeedControl endRefreshing];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
@@ -370,6 +399,16 @@
    }
     return cell;
 }
+
+#pragma mark - Refresh Method
+
+- (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl{
+    
+    
+
+    [self loadObjects];
+}
+
 
 
 #pragma mark - PAPActivityCellDelegate Methods

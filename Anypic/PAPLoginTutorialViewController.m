@@ -31,7 +31,8 @@
 {
     [super viewDidLoad];
     
-    [[Mixpanel sharedInstance] track:@"Viewed Intro Screen" properties:@{}];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Intro"}];
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"intro_bg.png"]]];
     

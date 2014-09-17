@@ -134,7 +134,8 @@
     // analytics
     [PAPUtility captureScreenGA:@"Filter Photo"];
     
-    [[Mixpanel sharedInstance] track:@"Viewed Filter Screen" properties:@{}];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Filter"}];
 }
 
 #pragma mark - Custom
@@ -171,8 +172,8 @@
     
 
     // Mixpanel analytics
-    [[Mixpanel sharedInstance] track:@"Selected filter" properties:@{
-                                                  @"Filter": self.currentFilterName
+    [[Mixpanel sharedInstance] track:@"Selected Filter" properties:@{
+                                                  @"Selected": self.currentFilterName
                                                   }];
     // send selected image to edit controller
     PAPEditPhotoViewController *editController = [[PAPEditPhotoViewController alloc] initWithImage:[self.croppedImageView image]];

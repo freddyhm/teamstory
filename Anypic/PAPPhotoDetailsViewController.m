@@ -113,7 +113,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [super viewDidLoad];
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
-    
+
     // set current default back button to nil and set new one
     self.navigationItem.leftBarButtonItem = nil;
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -635,6 +635,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             
             [[PAPCache sharedCache] incrementCommentCountForPhoto:self.photo];
             
+            // get post type
+            NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
+
+            // mixpanel analytics
+            [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Commented", @"Post Type" : postType}];
+                        
             // Show HUD view
             [SVProgressHUD show];
             
@@ -773,7 +779,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         // analytics
         [PAPUtility captureEventGA:@"Engagement" action:@"Like Comment" label:@"Photo"];
         
-         [[Mixpanel sharedInstance] track:@"Liked Comment" properties:@{}];
+        // get post type
+        NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
+        
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Liked Comment", @"Post Type": postType}];
         
         // increment user like comment count by one
         [[Mixpanel sharedInstance].people increment:@"Like Comment Count" by:[NSNumber numberWithInt:1]];

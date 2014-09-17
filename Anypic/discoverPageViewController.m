@@ -150,8 +150,9 @@ NSInteger selection = 1;
     // analytics
     [PAPUtility captureScreenGA:@"Discover"];
     
-    [[Mixpanel sharedInstance] track:@"Viewed Discover Screen" properties:@{}];
-    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Discover"}];
+
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     self.navigationController.navigationBar.hidden = YES;
     
@@ -520,7 +521,7 @@ NSInteger selection = 1;
     NSString *industry = [self.industry_datasource objectAtIndex:sender.tag];
     
     // mixpanel analytics
-    [[Mixpanel sharedInstance] track:@"Selected Industry In Discover" properties:@{@"Selected":industry}];
+    [[Mixpanel sharedInstance] track:@"Selected From Discover" properties:@{@"Type": @"Industry", @"Selected":industry}];
     
     if (![industry isEqualToString:@"Other"]) {
         [self.userFilterListIndustry addObjectsFromArray:[self.userList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"industry contains[c] %@", industry]]];
@@ -554,7 +555,7 @@ NSInteger selection = 1;
     
     // mixpanel analytics
     NSString *selectedUser = [aUser objectForKey:@"displayName"] != nil ? [aUser objectForKey:@"displayName"] : [aUser objectId];
-    [[Mixpanel sharedInstance] track:@"Selected User From Discover" properties:@{@"Selected":selectedUser}];
+    [[Mixpanel sharedInstance] track:@"Selected From Discover" properties:@{@"Type": @"User", @"Selected": selectedUser}];
     
     // Push account view controller
     PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
@@ -568,7 +569,10 @@ NSInteger selection = 1;
     
     // mixpanel analytics
     NSString *selectedUser = [aUser objectForKey:@"displayName"] != nil ? [aUser objectForKey:@"displayName"] : [aUser objectId];
-    [[Mixpanel sharedInstance] track:@"Followed User From Discover" properties:@{@"Selected":selectedUser}];
+    
+    [[Mixpanel sharedInstance] track:@"Selected From Discover" properties:@{@"Type": @"Followed", @"Selected":selectedUser}];
+    
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Followed User", @"Source": @"Discover", @"Followed User": selectedUser}];
     
     [self shouldToggleFollowFriendForCell:cellView];
 }

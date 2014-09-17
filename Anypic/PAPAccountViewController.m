@@ -393,17 +393,14 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                     self.locationInfo = @"";
                 }
                 
+                // handling slow internet / slow backend
+                if(self.locationLabel == nil ){
+                    self.locationLabel = [[UILabel alloc]init];
+                }
                 
-                
-                /*
-                // re-calculate width size for location label, image, and separator
-                CGFloat locationLabelWidth = [self.locationLabel.text sizeWithAttributes:
-                                              @{NSFontAttributeName:
-                                                    self.locationLabel.font}].width;
-                
-                [self.locationLabel setFrame:CGRectMake(self.locationLabel.frame.origin.x, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, self.locationLabel.frame.size.height)];
-                self.locationSiteSeparator.frame = CGRectMake(locationLabelWidth + self.locationLabel.frame.origin.x + 10.0f, 91.5f + expectedSize.height, 10.0f, 10.0f);
-                 */
+                if(self.locationLabel.font == nil){
+                    self.locationLabel.font = [UIFont fontWithName:@"Helvetica" size:13.0f];
+                }
                 
                 CGFloat locationLabelWidth = [self.locationLabel.text sizeWithAttributes:
                                @{NSFontAttributeName:
@@ -588,7 +585,8 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     [PAPUtility captureScreenGA:@"Account"];
     
-    [[Mixpanel sharedInstance] track:@"Viewed Account Screen" properties:@{}];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Account"}];
     
     // edge case, if multiaction button frozen because of network problems
     if (self.user == [PFUser currentUser] && !self.multiActionButton.enabled){
@@ -686,14 +684,24 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         
         [descriptionLabel setFrame:CGRectMake(10.0f, 88.0f, expectedSize.width, expectedSize.height)];
         
+        
+        // handling slow internet / slow backend
+        if(self.locationLabel == nil ){
+            self.locationLabel = [[UILabel alloc]init];
+        }
+        
+        if(self.locationLabel.font == nil){
+            self.locationLabel.font = [UIFont fontWithName:@"Helvetica" size:13.0f];
+        }
+        
         // re-calculate width size for location label, image, and separator
         CGFloat locationLabelWidth = [self.locationLabel.text sizeWithAttributes:
-                       @{NSFontAttributeName:
-                             self.locationLabel.font}].width;
-        
+                                      @{NSFontAttributeName:
+                                            self.locationLabel.font}].width;
         [self.locationLabel setFrame:CGRectMake(self.locationLabel.frame.origin.x, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, self.locationLabel.frame.size.height)];
         self.locationSiteSeparator.frame = CGRectMake(locationLabelWidth + self.locationLabel.frame.origin.x + 5.0f, 91.5f + expectedSize.height, 10.0f, 10.0f);
         
+    
         if(self.websiteInfo.length > 0 && ![self.locationSiteSeparator.text isEqualToString:@"|"]){
             self.locationSiteSeparator.text = @"|";
         }
@@ -840,7 +848,10 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     // analytics
     [PAPUtility captureEventGA:@"Engagement" action:@"Follow" label:@"User"];
     
-    [[Mixpanel sharedInstance] track:@"Followed" properties:@{}];
+    NSString *followedUserDisplayName = [self.user objectForKey:@"displayName"] != nil ? [self.user objectForKey:@"displayName"]: @"";
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Followed User", @"Source": @"Profile", @"Followed User" : followedUserDisplayName}];
     
     // increment user follow count by one
     [[Mixpanel sharedInstance].people increment:@"Follow Count" by:[NSNumber numberWithInt:1]];

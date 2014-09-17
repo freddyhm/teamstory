@@ -1,5 +1,6 @@
+FRAMEWORK_SEARCH_PATHS = "$(PODS_ROOT)/Apptimize/apptimize-ios-2.7.3" "$(PODS_ROOT)/Apptimize/apptimize-ios-2.7.3"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/AFNetworking" "${PODS_ROOT}/Headers/Mixpanel" "${PODS_ROOT}/Headers/SDWebImage" "${PODS_ROOT}/Headers/embedly-ios"
-OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers" -isystem "${PODS_ROOT}/Headers/AFNetworking" -isystem "${PODS_ROOT}/Headers/Mixpanel" -isystem "${PODS_ROOT}/Headers/SDWebImage" -isystem "${PODS_ROOT}/Headers/embedly-ios"
-OTHER_LDFLAGS = -ObjC -licucore -framework Accelerate -framework CoreGraphics -framework CoreTelephony -framework Foundation -framework ImageIO -framework MobileCoreServices -framework QuartzCore -framework Security -framework SystemConfiguration -framework UIKit
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/AFNetworking" "${PODS_ROOT}/Headers/Apptimize" "${PODS_ROOT}/Headers/Mixpanel" "${PODS_ROOT}/Headers/SDWebImage" "${PODS_ROOT}/Headers/embedly-ios"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers" -isystem "${PODS_ROOT}/Headers/AFNetworking" -isystem "${PODS_ROOT}/Headers/Apptimize" -isystem "${PODS_ROOT}/Headers/Mixpanel" -isystem "${PODS_ROOT}/Headers/SDWebImage" -isystem "${PODS_ROOT}/Headers/embedly-ios"
+OTHER_LDFLAGS = -ObjC -licucore -framework Accelerate -framework Apptimize -framework CFNetwork -framework CoreGraphics -framework CoreTelephony -framework Foundation -framework ImageIO -framework MobileCoreServices -framework QuartzCore -framework Security -framework SystemConfiguration -framework UIKit
 PODS_ROOT = ${SRCROOT}/Pods
