@@ -7,8 +7,7 @@
 //
 
 #import "PAPMessageListViewController.h"
-#import "PAPMessagingViewController.h"
-#import "PAPMessagingSeachUsersViewController.h"
+
 
 #define navBarHeight 64.0f
 #define tabBarHeight 50.0f

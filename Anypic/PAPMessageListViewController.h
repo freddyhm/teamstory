@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "PAPMessageListCell.h"
+#import "PAPMessagingViewController.h"
+#import "PAPMessagingSeachUsersViewController.h"
 
 @interface PAPMessageListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 

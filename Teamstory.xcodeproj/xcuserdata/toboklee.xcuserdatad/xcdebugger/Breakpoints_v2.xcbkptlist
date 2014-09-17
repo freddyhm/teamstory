@@ -194,13 +194,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PAPProfileSettingViewController.m"
-            timestampString = "422722435.788931"
+            timestampString = "432690314.609414"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "96"
-            endingLineNumber = "96"
-            landmarkName = "@implementation PAPProfileSettingViewController"
-            landmarkType = "3">
+            startingLineNumber = "95"
+            endingLineNumber = "95"
+            landmarkName = "-viewDidLoad"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -277,7 +277,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "35"
             endingLineNumber = "35"
-            landmarkName = "displayName_user"
+            landmarkName = "userDescription_user"
             landmarkType = "19">
          </BreakpointContent>
       </BreakpointProxy>

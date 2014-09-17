@@ -26,6 +26,8 @@
 #import "iRate.h"
 #import "PAPprofileSetupViewController.h"
 #import "Mixpanel.h"
+#import "PAPMessageListViewController.h"
+#import "PAPMessagingViewController.h"
 
 
 @interface AppDelegate () {
@@ -52,6 +54,8 @@
 @property (nonatomic, strong) Reachability *hostReach;
 @property (nonatomic, strong) Reachability *internetReach;
 @property (nonatomic, strong) Reachability *wifiReach;
+@property (nonatomic, strong) PFUser *messageTargetUser;
+@property (nonatomic, strong) PFObject *chatRoom;
 
 - (void)setupAppearance;
 - (BOOL)shouldProceedToMainInterface:(PFUser *)user;
@@ -222,7 +226,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
             [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
         }
         
-    }else{
+    } else {
     
         // app is in foreground
         if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
@@ -578,9 +582,19 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     if (remoteNotificationPayload) {
         
         NSString *notificationSource = [userInfo objectForKey:@"source"];
-        NSString *typeOfNotification = [userInfo objectForKey:@"t"];
+        NSString *activityTypeNotification = [userInfo objectForKey:@"t"];
         NSString *photoId = [userInfo objectForKey:@"pid"];
         NSString *activityId = [userInfo objectForKey:@"aid"];
+        NSString *toUserId = [userInfo objectForKey:kPAPPushPayloadToUserObjectIdKey];
+        
+        NSString *messageRoomId = [userInfo objectForKey:kPAPPushPayloadChatRoomObjectIdKey];
+        NSString *notificationType = [userInfo objectForKey:kPAPPushPayloadPayloadTypeKey];
+        
+        if ([notificationType isEqualToString:@"m"]) {
+            
+            [self navigateToChatRoomWithNotificationWithTargetUser:toUserId setRoomInfo:messageRoomId];
+            return;
+        }
         
         if([notificationSource isEqualToString:@"konotor"]){
             self.isKonotor = YES;
@@ -608,7 +622,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
         NSString *photoObjectId = [remoteNotificationPayload objectForKey:kPAPPushPayloadPhotoObjectIdKey];
         if (photoObjectId && photoObjectId.length > 0) {
             
-            [self shouldNavigateToPhoto:[PFObject objectWithoutDataWithClassName:kPAPPhotoClassKey objectId:photoObjectId] notificationType:typeOfNotification];
+            [self shouldNavigateToPhoto:[PFObject objectWithoutDataWithClassName:kPAPPhotoClassKey objectId:photoObjectId] notificationType:activityTypeNotification];
             return;
         }
         
@@ -631,6 +645,43 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
             }];
         }
         
+    }
+}
+
+- (void) navigateToChatRoomWithNotificationWithTargetUser:(NSString *)targetUserId setRoomInfo:(NSString *)roomInfoId {
+    PFQuery *targetUser = [PFUser query];
+    targetUser.cachePolicy = kPFCachePolicyCacheElseNetwork;
+    [targetUser whereKey:@"objectId" equalTo:targetUserId];
+    [targetUser getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        self.messageTargetUser = (PFUser *)object;
+        [self navigateToChatRoom];
+    }];
+    
+    PFQuery *chatRoomQuery = [PFQuery queryWithClassName:@"ChatRoom"];
+    chatRoomQuery.cachePolicy = kPFCachePolicyCacheElseNetwork;
+    [chatRoomQuery whereKey:@"objectId" equalTo:roomInfoId];
+    [chatRoomQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        self.chatRoom = object;
+        [self navigateToChatRoom];
+    }];
+}
+
+-(void) navigateToChatRoom {
+    if (self.messageTargetUser != nil && self.chatRoom != nil) {
+        UINavigationController *homeNavigationController = self.tabBarController.viewControllers[PAPHomeTabBarItemIndex];
+        self.tabBarController.selectedViewController = homeNavigationController;
+        
+        PAPMessageListViewController *messageListViewController = [[PAPMessageListViewController alloc] init];
+        PAPMessagingViewController *messagingViewController = [[PAPMessagingViewController alloc] init];
+        [messagingViewController setTargetUser:self.messageTargetUser];
+        [messagingViewController setRoomInfo:self.chatRoom];
+        
+        [CATransaction begin];
+        [homeNavigationController pushViewController:messageListViewController animated:YES];
+        [CATransaction setCompletionBlock:^{
+            [homeNavigationController pushViewController:messagingViewController animated:NO];
+        }];
+        [CATransaction commit];
     }
 }
 

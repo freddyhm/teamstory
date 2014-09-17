@@ -157,7 +157,7 @@ Parse.Cloud.afterSave('Activity', function(request) {
                                       where: atmetionUserQuery,
                                       data: alertPayload(request)
                                       }).then(function() {
-                                              console.log('Sent atmetion push');
+                                              console.log('Sent atmention push');
                                               }, function(error) {
                                               throw "Push Error" + error.code + " : " + error.message;
                                               });

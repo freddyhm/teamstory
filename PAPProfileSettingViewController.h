@@ -20,7 +20,7 @@
 
 @property (nonatomic, strong) UITextField *companyName;
 @property (nonatomic, strong) UITextField *location;
-@property (nonatomic, strong) UITextField *description;
+@property (nonatomic, strong) UITextField *userDescription;
 @property (nonatomic, strong) UITextField *website;
 @property (nonatomic, strong) UITextField *email_address;
 

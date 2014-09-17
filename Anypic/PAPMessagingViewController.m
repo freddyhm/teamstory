@@ -253,11 +253,8 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:messageTextSize]};
     if (self.messageQuery.count > 0) {
-        for (int i = 0; i < self.messageQuery.count; i++) {
-            CGRect textViewSize = [[[self.messageQuery objectAtIndex:indexPath.row] objectForKey:@"messageBody"] boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - messageHorizontalSpacing, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
-                return textViewSize.size.height + 20.0f;
-        }
-        return [PAPMessagingCell heightForCell];
+        CGRect textViewSize = [[[self.messageQuery objectAtIndex:indexPath.row] objectForKey:@"messageBody"] boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - messageHorizontalSpacing, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
+            return textViewSize.size.height + 20.0f;
     } else {
         return [PAPMessagingCell heightForCell];
     }
