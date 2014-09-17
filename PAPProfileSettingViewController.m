@@ -32,7 +32,7 @@
 @property (nonatomic, strong) NSString *location_user;
 @property (nonatomic, strong) NSString *website_user;
 @property (nonatomic, strong) NSString *displayName_user;
-@property (nonatomic, strong) NSString *description_user;
+@property (nonatomic, strong) NSString *userDescription_user;
 @property (nonatomic, strong) NSString *email_user;
 @property (nonatomic, strong) UIScrollView *backgroundView;
 @property (nonatomic, strong) PFImageView* profilePictureImageView;
@@ -58,7 +58,7 @@
 @implementation PAPProfileSettingViewController
 @synthesize companyName;
 @synthesize location;
-@synthesize description;
+@synthesize userDescription;
 @synthesize website;
 @synthesize navController;
 @synthesize accountViewController_tabBar;
@@ -68,7 +68,7 @@
 @synthesize location_user;
 @synthesize website_user;
 @synthesize displayName_user;
-@synthesize description_user;
+@synthesize userDescription_user;
 @synthesize backgroundView;
 @synthesize profilePictureImageView;
 @synthesize imageProfileFile;
@@ -150,7 +150,7 @@
             location_user = self.user[@"location"];
             website_user = self.user[@"website"];
             displayName_user = self.user[@"displayName"];
-            description_user = self.user[@"description"];
+            userDescription_user = self.user[@"userDescription"];
             email_user = self.user[@"email"];
             industry_user = self.user[@"industry"];
             twitter_user = self.user[@"twitter_url"];
@@ -167,8 +167,8 @@
             if ([displayName_user length] == 0) {
                 displayName_user = @"Display or Company Name";
             }
-            if ([description_user length] == 0) {
-                description_user = @"Description";
+            if ([userDescription_user length] == 0) {
+                userDescription_user = @"userDescription";
             }
             if ([industry_user length] == 0) {
                 industry_user = @"Industry / Market";
@@ -291,10 +291,10 @@
             [locationImageView setFrame:CGRectMake( 10.0f, 105.0f, 40.0f, 40.0f)];
             [self.backgroundView addSubview:locationImageView];
             
-            UIImageView *descriptionImageView = [[UIImageView alloc] initWithImage:nil];
-            [descriptionImageView setImage:[UIImage imageNamed:@"profileDescription.png"]];
-            [descriptionImageView setFrame:CGRectMake( 10.0f, 155.0f, 40.0f, 40.0f)];
-            [self.backgroundView addSubview:descriptionImageView];
+            UIImageView *userDescriptionImageView = [[UIImageView alloc] initWithImage:nil];
+            [userDescriptionImageView setImage:[UIImage imageNamed:@"profileDescription.png"]];
+            [userDescriptionImageView setFrame:CGRectMake( 10.0f, 155.0f, 40.0f, 40.0f)];
+            [self.backgroundView addSubview:userDescriptionImageView];
             
             UIImageView *industryImageView = [[UIImageView alloc] initWithImage:nil];
             [industryImageView setImage:[UIImage imageNamed:@"icon-industry.png"]];
@@ -367,16 +367,16 @@
             lineView2.backgroundColor = lineColor;
             [self.backgroundView addSubview:lineView2];
             
-            CGRect description_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 3, 250.0f, 25.0f);
-            self.description = [[UITextField alloc] initWithFrame:description_frame];
-            self.description.autocorrectionType = UITextAutocorrectionTypeNo;
-            [self.description setBackgroundColor:[UIColor clearColor]];
-            [self.description setFont:fonts];
-            self.description.placeholder = description_user;
-            self.description.userInteractionEnabled = YES;
-            self.description.delegate = self;
-            [self.description resignFirstResponder];
-            [self.backgroundView addSubview:self.description];
+            CGRect userDescription_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 3, 250.0f, 25.0f);
+            self.userDescription = [[UITextField alloc] initWithFrame:userDescription_frame];
+            self.userDescription.autocorrectionType = UITextAutocorrectionTypeNo;
+            [self.userDescription setBackgroundColor:[UIColor clearColor]];
+            [self.userDescription setFont:fonts];
+            self.userDescription.placeholder = userDescription_user;
+            self.userDescription.userInteractionEnabled = YES;
+            self.userDescription.delegate = self;
+            [self.userDescription resignFirstResponder];
+            [self.backgroundView addSubview:self.userDescription];
             
             UIView *lineView3 = [[UIView alloc] initWithFrame:CGRectMake(0, 200.0f, self.view.bounds.size.width, 1)];
             lineView3.backgroundColor = lineColor;
@@ -732,7 +732,7 @@
     } else if (textField == companyName && email_address.userInteractionEnabled == NO) {
         [location becomeFirstResponder];
     } else if (textField == location) {
-        [description becomeFirstResponder];
+        [userDescription becomeFirstResponder];
     } else if (textField == website) {
         [twitter_textfield becomeFirstResponder];
     } else if (textField == twitter_textfield) {
@@ -773,7 +773,7 @@
     [self.view endEditing:YES];
     NSString* companyName_input = self.companyName.text;
     NSString* location_input = self.location.text;
-    NSString* description_input = self.description.text;
+    NSString* userDescription_input = self.userDescription.text;
     NSString* website_input = [self.website.text lowercaseString];
     NSString* twitter_input = self.twitter_textfield.text;
     NSString* industry_input = self.industry_button.titleLabel.text;
@@ -804,8 +804,8 @@
         if ([location_input length] > 0) {
             self.user[@"location"] = location_input;
         }
-        if ([description_input length] > 0) {
-           self.user[@"description"] = description_input;
+        if ([userDescription_input length] > 0) {
+           self.user[@"userDescription"] = userDescription_input;
         }
         if ([website_input length] > 0) {
             self.user[@"website"] = website_input;
@@ -870,8 +870,8 @@
             self.user[@"location"] = location_input;
             
             // optional fields
-            if ([description_input length] > 0) {
-                self.user[@"description"] = description_input;
+            if ([userDescription_input length] > 0) {
+                self.user[@"userDescription"] = userDescription_input;
             }
             if ([website_input length] > 0) {
                 self.user[@"website"] = website_input;
@@ -960,7 +960,7 @@
         } else if (buttonIndex == 0) {
             NSString* companyName_input = self.companyName.text;
             NSString* location_input = self.location.text;
-            NSString* description_input = self.description.text;
+            NSString* userDescription_input = self.userDescription.text;
             NSString* website_input = [self.website.text lowercaseString];
             NSString* email_input = self.email_address.text;
             NSString* industry_input = self.industry_button.titleLabel.text;
@@ -975,8 +975,8 @@
             if ([location_input length] > 0) {
                 self.user[@"location"] = location_input;
             }
-            if ([description_input length] > 0) {
-                self.user[@"description"] = description_input;
+            if ([userDescription_input length] > 0) {
+                self.user[@"userDescription"] = userDescription_input;
             }
             if ([website_input length] > 0) {
                 self.user[@"website"] = website_input;
@@ -1080,8 +1080,8 @@
         angelist_textfield.text = angelist_user;
     } else if (textField == website && ![website_user isEqualToString:@"Website URL"]) {
         website.text = website_user;
-    } else if (textField == description && ![description_user isEqualToString:@"Description"]) {
-        description.text = description_user;
+    } else if (textField == userDescription && ![userDescription_user isEqualToString:@"userDescription"]) {
+        userDescription.text = userDescription_user;
     } else if (textField == companyName && ![displayName_user isEqualToString:@"Display or Company Name"]) {
         companyName.text = displayName_user;
     } else if (textField == location && ![location_user isEqualToString:@"Location"]) {
@@ -1178,8 +1178,8 @@
         angelist_user = angelist_textfield.text;
     } else if (textField == website && ![website_user isEqualToString:@"Website URL"]) {
         website_user = website.text;
-    } else if (textField == description && ![description_user isEqualToString:@"Description"]) {
-        description_user = description.text;
+    } else if (textField == userDescription && ![userDescription_user isEqualToString:@"userDescription"]) {
+        userDescription_user = userDescription.text;
     } else if (textField == companyName && ![displayName_user isEqualToString:@"Display or Company Name"]) {
         displayName_user = companyName.text;
     } else if (textField == location && ![location_user isEqualToString:@"Location"]) {
@@ -1190,7 +1190,7 @@
 
 - (void) textfieldUserInteractionControl:(BOOL) enable {
     [location setUserInteractionEnabled:enable];
-    [description setUserInteractionEnabled:enable];
+    [userDescription setUserInteractionEnabled:enable];
     [website setUserInteractionEnabled:enable];
     self.navigationItem.rightBarButtonItem.enabled = enable;
     self.navigationItem.leftBarButtonItem.enabled = enable;
@@ -1213,7 +1213,7 @@
         if ([UIScreen mainScreen].bounds.size.height == 480) {
             if (textField == twitter_textfield || textField == linkedin_textfield || textField == angelist_textfield || textField == website) {
                 movementDistance = 200;
-            } else if (textField == description) {
+            } else if (textField == userDescription) {
                 movementDistance = 100;
             } else {
                 movementDistance = 0;
