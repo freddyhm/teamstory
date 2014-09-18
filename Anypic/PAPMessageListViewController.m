@@ -12,12 +12,11 @@
 #define navBarHeight 64.0f
 #define tabBarHeight 50.0f
 
-@interface PAPMessageListViewController () {
-    BOOL userOne;
-}
+@interface PAPMessageListViewController ()
 
 @property (nonatomic, strong) UITableView *messageListTV;
 @property (nonatomic, strong) NSArray *messageList;
+@property (nonatomic, strong) NSMutableArray *userNumberList;
 
 @end
 
@@ -25,6 +24,9 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
+    
+    self.userNumberList = [[NSMutableArray alloc] init];
+    [self.userNumberList removeAllObjects];
     
     PFQuery *userOneQuery = [PFQuery queryWithClassName:@"ChatRoom"];
     [userOneQuery whereKey:@"userOne" equalTo:[PFUser currentUser]];
@@ -100,11 +102,7 @@
 
 -(void)cellButtonAction:(UIButton *)sender {
     PAPMessagingViewController *messageViewController = [[PAPMessagingViewController alloc] init];
-    if (userOne) {
-        [messageViewController setTargetUser:[[self.messageList objectAtIndex:sender.tag] objectForKey:@"userOne"]];
-    } else {
-        [messageViewController setTargetUser:[[self.messageList objectAtIndex:sender.tag] objectForKey:@"userTwo"]];
-    }
+    [messageViewController setTargetUser:[[self.messageList objectAtIndex:sender.tag] objectForKey:[self.userNumberList objectAtIndex:sender.tag]]];
     [messageViewController setRoomInfo:[self.messageList objectAtIndex:sender.tag]];
     [self.navigationController pushViewController:messageViewController animated:YES];
 }
@@ -132,11 +130,12 @@
     
     if ([[[[self.messageList objectAtIndex:indexPath.row] objectForKey:@"userOne"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
         [cell setUser:[[self.messageList objectAtIndex:indexPath.row] objectForKey:@"userTwo"]];
-        userOne = NO;
+        [self.userNumberList addObject:@"userTwo"];
     } else {
         [cell setUser:[[self.messageList objectAtIndex:indexPath.row] objectForKey:@"userOne"]];
-        userOne = YES;
+        [self.userNumberList addObject:@"userOne"];
     }
+    
     cell.lastMessageLabel.text = [[self.messageList objectAtIndex:indexPath.row] objectForKey:@"lastMessage"];
     [cell.cellButton addTarget:self action:@selector(cellButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     

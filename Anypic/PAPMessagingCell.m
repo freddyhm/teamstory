@@ -46,7 +46,7 @@
 
 
 - (void)setTime:(NSDate *)date {
-    NSLog(@"%@", date);
+    //NSLog(@"%@", date);
 }
 
 +(CGFloat)heightForCell {

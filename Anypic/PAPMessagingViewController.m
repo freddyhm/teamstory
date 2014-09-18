@@ -38,6 +38,7 @@
 
 - (void)setTargetUser:(PFUser *)targetUser {
     self.recipient = targetUser;
+    NSLog(@"%@", self.recipient);
 }
 
 - (void)setRoomInfo:(PFObject *)roomInfo {

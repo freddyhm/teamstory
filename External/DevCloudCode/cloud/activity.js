@@ -1,69 +1,69 @@
 /*
  Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
-  
+ 
  // Set up to modify user data
  Parse.Cloud.useMasterKey();
-  
+ 
  // Query for all users, used only to break down large +1000 plus query into queries for each user with follows
  var queryUser = new Parse.Query(Parse.User);
  queryUser.limit("1000");
-  
+ 
  var allFollowingEntries = [];
  var followingQuery = new Parse.Query('Activity');
  var count = 0;
-  
+ 
  // get all follow activities and include user field
  followingQuery.equalTo("type", "follow");
  followingQuery.include("toUser");
  followingQuery.include("fromUser");
-  
+ 
  queryUser.find({
-  
+ 
  success: function(results){
-  
+ 
  for(var i = 0; i < results.length; i++){
-  
+ 
  // followings for user
  followingQuery.equalTo("fromUser", results[i]);
-  
+ 
  followingQuery.each(function(following){
-  
+ 
  // get following user display name and follower
  var toUser = following.get("toUser");
  var fromUser = following.get("fromUser");
-  
-  
-  
+ 
+ 
+ 
  // make sure the user exists
  if(typeof toUser !== "undefined"){
-  
+ 
  // create unique combo to check for duplicates through whole db
  var comboUnique = toUser.id + fromUser.id;
-  
+ 
  var displayName = fromUser.get("displayName");
-  
+ 
  //console.log(allFollowingEntries);
-  
+ 
  // if not already in array, push else destroy duplicate
  if(allFollowingEntries.indexOf(comboUnique) == -1){
  allFollowingEntries.push(comboUnique);
  }else{
-  
+ 
  //console.log("GOING TO DELETE COMBO: " + comboUnique);
  //console.log("FOR USER: " + displayName);
-  
+ 
  following.destroy({
  success: function(result) {
  //console.log("DELETED FOLLOWING ID: " + following.id);
  //console.log("FOR USER: " + displayName);
-  
+ 
  }, error: function(result, error){
  console.log(error);
  }
  });
  }
  }else{
-  
+ 
  console.log(count);
  count++;
  following.destroy({
@@ -74,7 +74,7 @@
  console.log(error);
  }
  });
-  
+ 
  }
  });
  }
@@ -82,11 +82,11 @@
  });
  });
  */
- 
+
 Parse.Cloud.beforeSave('Activity', function(request, response) {
                        var currentUser = request.user;
                        var objectUser = request.object.get('fromUser');
-                        
+                       
                        if(!currentUser || !objectUser) {
                        response.error('An Activity should have a valid fromUser.');
                        } else if (currentUser.id === objectUser.id) {
@@ -94,23 +94,39 @@ Parse.Cloud.beforeSave('Activity', function(request, response) {
                        } else {
                        response.error('Cannot set fromUser on Activity to a user other than the current user.');
                        }
-                        
-                        
-                        
-                       });
- 
-Parse.Cloud.afterSave('Activity', function(request) {
                        
+                       
+                       
+                       });
+
+Parse.Cloud.afterSave('Activity', function(request) {
+                      
                       var fromUser = request.object.get("fromUser");
                       var fromUserId = fromUser != undefined ? request.object.get("fromUser").id : "";
                       var fromUserEmail = fromUser != undefined ? request.user.get("email") : "";
- 
-                      Parse.Cloud.run("incrementCounter", {currentObjectId: request.object.get('photo').id, type: request.object.get('type')});
-                       
+                      /*
+                      Parse.Cloud.run("incrementCounter", {
+                          currentObjectId: request.object.get('photo').id, 
+                          type: request.object.get('type')}, 
+                          {
+                            success: function() {
+                                response.success("increment has been completed");
+                            },
+                            error: function(error) {
+                                response.error("Scheduled messages error: " + error);
+                              }
+                            });
+                      */
+
+                      Parse.Cloud.run("incrementCounter", {
+                          currentObjectId: request.object.get('photo').id, 
+                          type: request.object.get('type')});
+
+
                       if (request.object.get("type") === "membership") {
                       var Mailgun = require('mailgun');
                       Mailgun.initialize('teamstoryapp.com', 'key-57rdy7ishc75mi99405w246l22tyevt8');
-                       
+                      
                       Mailgun.sendEmail({
                                         to: fromUserEmail,
                                         from: "info@teamstoryapp.com",
@@ -128,31 +144,31 @@ Parse.Cloud.afterSave('Activity', function(request) {
                                         });
                       return;
                       }
-                       
+                      
                       var toUser = request.object.get("toUser");
                       var toUserId = toUser != undefined ? request.object.get("toUser").id : "";
                       var photoId = request.object.get("photo") != undefined ? request.object.get("photo").id : "";
                       var isSelfie = toUserId == fromUserId;
                       var atmentionUserArray = new Array();
-                       
+                      
                       atmentionUserArray = request.object.get("atmention") != undefined ? request.object.get("atmention") : "";
-                       
+                      
                       // Only send push notifications for new activities
                       if (request.object.existed()) {
                       return;
                       }
-                       
+                      
                       if (!toUser) {
                       throw "Undefined toUser. Skipping push for Activity " + request.object.get('type') + " : " + request.object.id;
                       return;
                       }
-                       
+                      
                       if (atmentionUserArray.length > 0) {
                       for (i = 0; i < atmentionUserArray.length; i++) {
                       var atmetionUserQuery = new Parse.Query(Parse.Installation);
                       console.log("atmention array loop");
                       atmetionUserQuery.equalTo("user", atmentionUserArray[i]);
-                       
+                      
                       Parse.Push.send({
                                       where: atmetionUserQuery,
                                       data: alertPayload(request)
@@ -163,96 +179,100 @@ Parse.Cloud.afterSave('Activity', function(request) {
                                               });
                       }
                       }
-                       
-                       
+                      
+                      
                       // notify all users except fromUser who are subscribed to post when new comment is sent
                       if(request.object.get("type") === "comment" && atmentionUserArray.length == 0){
-                       
-                     
-                          var subscriptionQuery = new Parse.Query("Subscription");
-                          var Photo = Parse.Object.extend("Photo");
-                          var photoPointer = new Photo();
-                          photoPointer.id = photoId;
-                       
-                          // find all the subscriptions with this post
-                          subscriptionQuery.equalTo("post", photoPointer);
-                     
-                          subscriptionQuery.find({
-                                 success: function(results) {
-                                     
-                                     for (var i = 0; i < results.length; i++) {
-                                          
-                                        // make sure to skip when from user is the subscriber
-                                        if(fromUser.id != results[i].get("subscriber").id){
-                                      
-                                            // add subscriber to new comment and save
-                                            request.object.add("subscribers", results[i]);
-                                            request.object.save();
+                      
+                      
+                        var subscriptionQuery = new Parse.Query("Subscription");
+                        var Photo = Parse.Object.extend("Photo");
+                        var photoPointer = new Photo();
+                        photoPointer.id = photoId;
+                      
+                        // find all the subscriptions with this post
+                        subscriptionQuery.equalTo("post", photoPointer);
+                      
+                        subscriptionQuery.find({
+                                             success: function(results) {
                                              
-                                            // notify subscriber
-                                            var query = new Parse.Query(Parse.Installation);
-                                            query.equalTo("user", results[i].get("subscriber"));
-                                          
-                                            Parse.Push.send({
-                                                         where: query,
-                                                         data: alertPayload(request)
-                                                         }).then(function() {
-                                                                 // Push was successful
-                                                                 console.log('Sent subscribers push.');
-                                                                 }, function(error) {
-                                                                 throw "Push Error " + error.code + " : " + error.message;
-                                                                 });
-                                        }
-                                      
- 
-                                    }
-                                     
-                                  },
-                                  error: function(error) {
-                                        alert("Error: " + error.code + " " + error.message);
-                                  }
-                            });
+                                               /* add all subscribers to new comment and save.
+                                                  This is so we can pull in activity feed from
+                                                  client side. */
+                                               
+                                               request.object.set("subscribers", results);
+                                               request.object.save();
+                                               
+                                                // loop through all subscribers
+                                                for (var i = 0; i < results.length; i++) {
+                                               
+                                                   /* notify user except for comment author (fromUserId), post author is not subscribed to own post (client-side check) */
+                                               
+                                                   if(fromUserId != results[i].get("subscriber").id){
+                                               
+                                                        // notify subscriber
+                                                        var query = new Parse.Query(Parse.Installation);
+                                                        query.equalTo("user", results[i].get("subscriber"));
+                                                     
+                                                        Parse.Push.send({
+                                                                     where: query,
+                                                                     data: alertPayload(request)
+                                                                     }).then(function() {
+                                                                             // Push was successful
+                                                                             console.log('Sent subscribers push.');
+                                                                             }, function(error) {
+                                                                             throw "Push Error " + error.code + " : " + error.message;
+                                                                             });
+                                                    }
+                                                }
+                                             
+                                             
+                                             },
+                                             error: function(error) {
+                                               console.error("Error: " + error.code + " " + error.message);
+                                             }
+                                             });
                       }
-                       
+                      
                       // send activity/post owner notification if someone else creates activity
                       if(!isSelfie && atmentionUserArray.length == 0){
-                       
-                          var toOwnerQuery = new Parse.Query(Parse.Installation);
-                          toOwnerQuery.equalTo('user', toUser);
- 
-                          Parse.Push.send({
-                                          where: toOwnerQuery, // Set our Installation query.
-                                          data: alertPayload(request)
-                                          }).then(function() {
-                                                  // Push was successful
-                                                  console.log('Sent owner push.');
-                                                  }, function(error) {
-                                                  throw "Push Error " + error.code + " : " + error.message;
-                                                  });
-                       
+                      
+                      var toOwnerQuery = new Parse.Query(Parse.Installation);
+                      toOwnerQuery.equalTo('user', toUser);
+                      
+                      Parse.Push.send({
+                                      where: toOwnerQuery, // Set our Installation query.
+                                      data: alertPayload(request)
+                                      }).then(function() {
+                                              // Push was successful
+                                              console.log('Sent owner push.');
+                                              }, function(error) {
+                                              throw "Push Error " + error.code + " : " + error.message;
+                                              });
+                      
                       }
-                       
+                      
                       // Only send push notifications for new activities
                       if (request.object.existed()) {
                       return;
                       }
-                       
+                      
                       if (!toUser) {
                       throw "Undefined toUser. Skipping push for Activity " + request.object.get('type') + " : " + request.object.id;
                       return;
                       }
-                       
+                      
                       });
- 
- 
- 
+
+
+
 var alertMessage = function(request) {
     var message = "";
-     
+    
     var atmentionUserArray = new Array();
-     
+    
     atmentionUserArray = request.object.get("atmention") != undefined ? request.object.get("atmention") : "";
-     
+    
     if (request.object.get("type") === "comment" && atmentionUserArray.length == 0) {
         if (request.user.get('displayName')) {
             message = request.user.get('displayName') + ': ' + request.object.get('content').trim();
@@ -284,18 +304,18 @@ var alertMessage = function(request) {
     } else {
         message = "You have a new follower.";
     }
-     
+    
     // Trim our message to 140 characters.
     if (message.length > 140) {
         message = message.substring(0, 140);
     }
-     
+    
     return message;
 }
- 
+
 var alertPayload = function(request) {
     var payload = {};
-     
+    
     if (request.object.get("type") === "comment") {
         return {
         alert: alertMessage(request), // Set our alert message.
@@ -340,35 +360,41 @@ var alertPayload = function(request) {
         aid: request.object.id // Activity Id
         };
     }
-     
-     
+    
+    
 }
- 
- 
+
+
 Parse.Cloud.define ('incrementCounter', function(request, response) {
-                          Parse.Cloud.useMasterKey();
- 
-                          var query = new Parse.Query('Photo');
-                          query.get(request.params.currentObjectId, {
-                            success: function(counter) {
-                                var points;
- 
-                                if (request.params.type === 'comment') {
-                                  points = 2;
-                                } else {
-                                  points = 1;
-                                }
- 
-                                if (counter.get('discoverCount') === undefined) {
-                                  counter.set('discoverCount', points);  
-                                } else {
-                                  counter.set('discoverCount', counter.get('discoverCount') + points);
-                                }
- 
-                            return counter.save();
-                          },
-                          error: function() {
-                            response.error('could not be saved');
-                          } 
-                          });
-                     });
+                    Parse.Cloud.useMasterKey();
+                    
+                    var query = new Parse.Query('Photo');
+                    query.get(request.params.currentObjectId, {
+                              success: function(counter) {
+                              var points;
+                              
+                              if (request.params.type === 'comment') {
+                              points = 2;
+                              } else {
+                              points = 1;
+                              }
+                              
+                              if (counter.get('discoverCount') === undefined) {
+                              counter.set('discoverCount', points);
+                              } else {
+                              counter.set('discoverCount', counter.get('discoverCount') + points);
+                              }
+                              
+                              return counter.save({
+                                    success:function () {
+                                        response.success("Successfully incremented counter");
+                                    },
+                                    error:function (error) {
+                                        response.error("Could not increment the counter: " + error.message);
+                                    }});
+                              },
+                              error: function() {
+                              response.error('could not be saved');
+                              } 
+                              });
+                    });

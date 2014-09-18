@@ -210,6 +210,10 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     [[NSNotificationCenter defaultCenter] postNotificationName:PAPAppDelegateApplicationDidReceiveRemoteNotification object:nil userInfo:userInfo];
     
     NSString *pushSrc = [userInfo objectForKey:@"source"];
+    //NSString *toUserId = [userInfo objectForKey:kPAPPushPayloadToUserObjectIdKey];
+    
+    //NSString *messageRoomId = [userInfo objectForKey:kPAPPushPayloadChatRoomObjectIdKey];
+    NSString *notificationType = [userInfo objectForKey:kPAPPushPayloadPayloadTypeKey];
     
     // handle type of notification
     if ([pushSrc isEqualToString:@"konotor"]){
@@ -226,8 +230,9 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
             [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
         }
         
+    } else if ([notificationType isEqualToString:@"m"]) {
+        
     } else {
-    
         // app is in foreground
         if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
             if ([PFUser currentUser]) {
