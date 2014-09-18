@@ -12,7 +12,6 @@
 		095ACE8613C68EA300566243 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 095ACE8513C68EA300566243 /* AudioToolbox.framework */; };
 		099CCEAD13F9E3760039A464 /* libz.1.1.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 099CCEAC13F9E3760039A464 /* libz.1.1.3.dylib */; };
 		09ABC07213A1D52D009C3FCF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09ABC07113A1D52D009C3FCF /* UIKit.framework */; };
-		09ABC07413A1D52D009C3FCF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09ABC07313A1D52D009C3FCF /* Foundation.framework */; };
 		09ABC07613A1D52D009C3FCF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09ABC07513A1D52D009C3FCF /* CoreGraphics.framework */; };
 		09BEF34C13D51C3F001BBCDB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09BEF34B13D51C3F001BBCDB /* Security.framework */; };
 		2FCDD6B014A573F500295AAC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCDD6AF14A573F500295AAC /* QuartzCore.framework */; };
@@ -409,6 +408,7 @@
 		D5FC09C818A9C272000D85F1 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FC09C718A9C272000D85F1 /* CoreData.framework */; };
 		D5FC09CA18A9C2C2000D85F1 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FC09C918A9C2C2000D85F1 /* CoreImage.framework */; };
 		D5FC09CC18A9C2FF000D85F1 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FC09CB18A9C2FF000D85F1 /* OpenGLES.framework */; };
+		D5FCFA5019CA020300E0D629 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09ABC07313A1D52D009C3FCF /* Foundation.framework */; };
 		FEBE53499B0C4F878DB97BDF /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A01DAF9EA97E406EB3C591D1 /* libPods.a */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -969,11 +969,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5FCFA5019CA020300E0D629 /* Foundation.framework in Frameworks */,
 				D5A9EE2F199C5F8F003513C3 /* ImageIO.framework in Frameworks */,
 				4699F0B119605915002AAACB /* StoreKit.framework in Frameworks */,
 				46A0C25D194E4A2D00811CBC /* CFNetwork.framework in Frameworks */,
 				D542D8C9196A721B00A0384F /* AssetsLibrary.framework in Frameworks */,
-				09ABC07413A1D52D009C3FCF /* Foundation.framework in Frameworks */,
 				D51C98A218E28D16001230DA /* libGoogleAnalyticsServices.a in Frameworks */,
 				D5FC09C818A9C272000D85F1 /* CoreData.framework in Frameworks */,
 				D5A5F52018D2C3CD000BB243 /* Parse.framework in Frameworks */,

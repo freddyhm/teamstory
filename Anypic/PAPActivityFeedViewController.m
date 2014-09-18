@@ -48,7 +48,7 @@
         self.pullToRefreshEnabled = NO;
        
         // The number of objects to show per page
-        self.objectsPerPage = 30;
+        self.objectsPerPage = 200;
         
         // Remove default loading indicator
         self.loadingViewEnabled = NO;
@@ -237,6 +237,7 @@
     
     // pull all activties from user's subscriptions
     PFQuery *activitiesFromSubs = [PFQuery queryWithClassName:self.parseClassName];
+    [activitiesFromSubs whereKey:@"type" equalTo:kPAPActivityTypeComment];
     [activitiesFromSubs whereKey:@"subscribers" matchesQuery:getSubsQuery];
     
     // pull all activities to user
@@ -249,7 +250,7 @@
     PFQuery *atmentionQuery = [PFQuery queryWithClassName:self.parseClassName];
     [atmentionQuery whereKey:@"atmention" containsAllObjectsInArray:array];
     
-    PFQuery *finalQuery = [PFQuery orQueryWithSubqueries:@[personalQuery, atmentionQuery, activitiesFromSubs]];
+    PFQuery *finalQuery = [PFQuery orQueryWithSubqueries:@[activitiesFromSubs]];
     [finalQuery whereKey:kPAPActivityFromUserKey notEqualTo:[PFUser currentUser]];
     [finalQuery whereKeyExists:kPAPActivityFromUserKey];
     
@@ -273,6 +274,8 @@
 
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
+    
+    NSLog(@"%@", self.objects);
     
     [SVProgressHUD dismiss];
     
