@@ -595,9 +595,12 @@ NSInteger selection = 1;
         NSLog(@"follow");
         // Follow
         cell.followButton.selected = YES;
-        PFObject *copyOneObject = [self.follwerList objectAtIndex:0];
-        [copyOneObject setObject:cellUser forKey:@"toUser"];
-        [self.follwerList addObject:copyOneObject];
+        
+        if ([self.follwerList count] > 0 ) {
+            PFObject *copyOneObject = [self.follwerList objectAtIndex:0];
+            [copyOneObject setObject:cellUser forKey:@"toUser"];
+            [self.follwerList addObject:copyOneObject];
+        }
         
         [PAPUtility followUserEventually:cellUser block:^(BOOL succeeded, NSError *error) {
             if (!error) {
