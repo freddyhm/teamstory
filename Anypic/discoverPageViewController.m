@@ -47,12 +47,6 @@ NSInteger selection = 1;
 
 - (void)viewDidLoad
 {
-    self.userList = [[NSMutableArray alloc] init];
-    self.userFilterList = [[NSMutableArray alloc] init];
-    self.industryFilterList = [[NSMutableArray alloc] init];
-    self.userFilterListIndustry = [[NSMutableArray alloc] init];
-    self.follwerList = [[NSMutableArray alloc] init];
-    
     [super viewDidLoad];
     [SVProgressHUD show];
     self.view.backgroundColor = [UIColor whiteColor];
@@ -149,6 +143,12 @@ NSInteger selection = 1;
 - (void)viewWillAppear:(BOOL)animated{
     // analytics
     [PAPUtility captureScreenGA:@"Discover"];
+    
+    self.userList = [[NSMutableArray alloc] init];
+    self.userFilterList = [[NSMutableArray alloc] init];
+    self.industryFilterList = [[NSMutableArray alloc] init];
+    self.userFilterListIndustry = [[NSMutableArray alloc] init];
+    self.follwerList = [[NSMutableArray alloc] init];
     
     [[Mixpanel sharedInstance] track:@"Viewed Discover Screen" properties:@{}];
     
@@ -569,9 +569,11 @@ NSInteger selection = 1;
         NSLog(@"follow");
         // Follow
         cell.followButton.selected = YES;
-        PFObject *copyOneObject = [self.follwerList objectAtIndex:0];
-        [copyOneObject setObject:cellUser forKey:@"toUser"];
-        [self.follwerList addObject:copyOneObject];
+        if ([self.follwerList count] > 0 ) {
+            PFObject *copyOneObject = [self.follwerList objectAtIndex:0];
+            [copyOneObject setObject:cellUser forKey:@"toUser"];
+            [self.follwerList addObject:copyOneObject];
+        }
         
         [PAPUtility followUserEventually:cellUser block:^(BOOL succeeded, NSError *error) {
             if (!error) {
