@@ -17,6 +17,7 @@
 #import "PAPLoadMoreCell.h"
 #import "PAPConstants.h"
 #import "Mixpanel.h"
+#import "ParseFacebookUtils/PFFacebookUtils.h"
 
 
 @interface PAPEditPhotoViewController () {

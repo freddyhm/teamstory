@@ -48,7 +48,7 @@
         self.pullToRefreshEnabled = NO;
        
         // The number of objects to show per page
-        self.objectsPerPage = 200;
+        self.objectsPerPage = 60;
         
         // Remove default loading indicator
         self.loadingViewEnabled = NO;
@@ -250,7 +250,7 @@
     PFQuery *atmentionQuery = [PFQuery queryWithClassName:self.parseClassName];
     [atmentionQuery whereKey:@"atmention" containsAllObjectsInArray:array];
     
-    PFQuery *finalQuery = [PFQuery orQueryWithSubqueries:@[activitiesFromSubs]];
+    PFQuery *finalQuery = [PFQuery orQueryWithSubqueries:@[personalQuery, atmentionQuery, activitiesFromSubs]];
     [finalQuery whereKey:kPAPActivityFromUserKey notEqualTo:[PFUser currentUser]];
     [finalQuery whereKeyExists:kPAPActivityFromUserKey];
     
@@ -274,8 +274,6 @@
 
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
-    
-    NSLog(@"%@", self.objects);
     
     [SVProgressHUD dismiss];
     

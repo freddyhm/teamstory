@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>ApptimizeAppKey</key>
+	<string>Cw_X3dMxewpFkXNYLJwAibhtfJd6mZU</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -46,6 +48,8 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>${FACBEOOK_URL_TYPE}</string>
@@ -57,9 +61,9 @@
 	<key>FacebookAppID</key>
 	<string>${FACEBOOK_ID}</string>
 	<key>FacebookDisplayName</key>
-	<string>${FACBEOOK_NAME}</string>
+	<string>${FACEBOOK_NAME}</string>
 	<key>LSApplicationCategoryType</key>
-	<string>${FACEBOOK_CAT}</string>
+	<string>public.app-category.lifestyle</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
@@ -115,8 +119,6 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>ApptimizeAppKey</key>
-	<string>Cw_X3dMxewpFkXNYLJwAibhtfJd6mZU</string>
 	<key>UIViewEdgeAntialiasing</key>
 	<false/>
 </dict>

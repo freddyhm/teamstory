@@ -13,6 +13,7 @@
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
 #import "Mixpanel.h"
+#import "ParseFacebookUtils/PFFacebookUtils.h"
 
 
 @interface PAPlinkPostViewController ()
