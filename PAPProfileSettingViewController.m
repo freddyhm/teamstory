@@ -32,7 +32,7 @@
 @property (nonatomic, strong) NSString *location_user;
 @property (nonatomic, strong) NSString *website_user;
 @property (nonatomic, strong) NSString *displayName_user;
-@property (nonatomic, strong) NSString *description_user;
+@property (nonatomic, strong) NSString *userDescription_user;
 @property (nonatomic, strong) NSString *email_user;
 @property (nonatomic, strong) UIScrollView *backgroundView;
 @property (nonatomic, strong) PFImageView* profilePictureImageView;
@@ -67,7 +67,7 @@
 @synthesize location_user;
 @synthesize website_user;
 @synthesize displayName_user;
-@synthesize description_user;
+@synthesize userDescription_user;
 @synthesize backgroundView;
 @synthesize profilePictureImageView;
 @synthesize imageProfileFile;
@@ -149,7 +149,7 @@
             location_user = self.user[@"location"];
             website_user = self.user[@"website"];
             displayName_user = self.user[@"displayName"];
-            description_user = self.user[@"description"];
+            userDescription_user = self.user[@"userDescription"];
             email_user = self.user[@"email"];
             industry_user = self.user[@"industry"];
             twitter_user = self.user[@"twitter_url"];
@@ -166,8 +166,8 @@
             if ([displayName_user length] == 0) {
                 displayName_user = @"Display or Company Name";
             }
-            if ([description_user length] == 0) {
-                description_user = @"Description";
+            if ([userDescription_user length] == 0) {
+                userDescription_user = @"userDescription";
             }
             if ([industry_user length] == 0) {
                 industry_user = @"Industry / Market";
@@ -290,10 +290,10 @@
             [locationImageView setFrame:CGRectMake( 10.0f, 105.0f, 40.0f, 40.0f)];
             [self.backgroundView addSubview:locationImageView];
             
-            UIImageView *descriptionImageView = [[UIImageView alloc] initWithImage:nil];
-            [descriptionImageView setImage:[UIImage imageNamed:@"profileDescription.png"]];
-            [descriptionImageView setFrame:CGRectMake( 10.0f, 155.0f, 40.0f, 40.0f)];
-            [self.backgroundView addSubview:descriptionImageView];
+            UIImageView *userDescriptionImageView = [[UIImageView alloc] initWithImage:nil];
+            [userDescriptionImageView setImage:[UIImage imageNamed:@"profileDescription.png"]];
+            [userDescriptionImageView setFrame:CGRectMake( 10.0f, 155.0f, 40.0f, 40.0f)];
+            [self.backgroundView addSubview:userDescriptionImageView];
             
             UIImageView *industryImageView = [[UIImageView alloc] initWithImage:nil];
             [industryImageView setImage:[UIImage imageNamed:@"icon-industry.png"]];
@@ -803,8 +803,8 @@
         if ([location_input length] > 0) {
             self.user[@"location"] = location_input;
         }
-        if ([description_input length] > 0) {
-           self.user[@"description"] = description_input;
+        if ([userDescription_input length] > 0) {
+           self.user[@"userDescription"] = userDescription_input;
         }
         if ([website_input length] > 0) {
             self.user[@"website"] = website_input;
@@ -869,8 +869,8 @@
             self.user[@"location"] = location_input;
             
             // optional fields
-            if ([description_input length] > 0) {
-                self.user[@"description"] = description_input;
+            if ([userDescription_input length] > 0) {
+                self.user[@"userDescription"] = userDescription_input;
             }
             if ([website_input length] > 0) {
                 self.user[@"website"] = website_input;
@@ -974,8 +974,8 @@
             if ([location_input length] > 0) {
                 self.user[@"location"] = location_input;
             }
-            if ([description_input length] > 0) {
-                self.user[@"description"] = description_input;
+            if ([userDescription_input length] > 0) {
+                self.user[@"userDescription"] = userDescription_input;
             }
             if ([website_input length] > 0) {
                 self.user[@"website"] = website_input;
