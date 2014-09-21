@@ -246,7 +246,9 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       return;
                       }
                        
+                      if(request.object.get('photo') != undefined && request.object.get('type') != undefined){
                       Parse.Cloud.run("incrementCounter", {currentObjectId: request.object.get('photo').id, type: request.object.get('type')});
+                      }
                        
                       });
  
@@ -353,34 +355,34 @@ var alertPayload = function(request) {
  
 Parse.Cloud.define ('incrementCounter', function(request, response) {
                     Parse.Cloud.useMasterKey();
-                    
+                     
                     var query = new Parse.Query('Photo');
                     query.get(request.params.currentObjectId, {
                               success: function(counter) {
                               var points;
-                              
+                               
                               if (request.params.type === 'comment') {
                               points = 2;
                               } else {
                               points = 1;
                               }
-                              
+                               
                               if (counter.get('discoverCount') === undefined) {
                               counter.set('discoverCount', points);
                               } else {
                               counter.set('discoverCount', counter.get('discoverCount') + points);
                               }
-                              
+                               
                               return counter.save({
-                                    success:function () {
-                                        response.success("Successfully incremented counter");
-                                    },
-                                    error:function (error) {
-                                        response.error("Could not increment the counter: " + error.message);
-                                    }});
+                                                  success:function () {
+                                                  response.success("Successfully incremented counter");
+                                                  },
+                                                  error:function (error) {
+                                                  response.error("Could not increment the counter: " + error.message);
+                                                  }});
                               },
                               error: function() {
                               response.error('could not be saved');
-                              } 
+                              }
                               });
                     });
