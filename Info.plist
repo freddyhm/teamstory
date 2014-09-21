@@ -52,7 +52,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>${FACBEOOK_URL_TYPE}</string>
+				<string>${FACEBOOK_URL_TYPE}</string>
 			</array>
 		</dict>
 	</array>
