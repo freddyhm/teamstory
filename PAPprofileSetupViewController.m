@@ -199,7 +199,7 @@
     self.displayNameTF = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, middleImageView_1.bounds.size.height, 300.0f, 55.0f)];
     self.displayNameTF.placeholder = @"Startup Name or Individual Name";
     self.displayNameTF.delegate = self;
-    //displayNameTF.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0f];
+    self.displayNameTF.autocorrectionType = UITextAutocorrectionTypeNo;
     [self.displayNameTF becomeFirstResponder];
     [self.contentSV addSubview:self.displayNameTF];
     
@@ -211,6 +211,7 @@
     
     self.locationTF = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height, 300.0f, 55.0f)];
     self.locationTF.placeholder = @"Location";
+    self.locationTF.autocorrectionType = UITextAutocorrectionTypeNo;
     //locationTF.backgroundColor = [UIColor colorWithWhite:0.6 alpha:1.0f];
     [self.contentSV addSubview:self.locationTF];
     
@@ -222,6 +223,7 @@
     self.userEmail = [self.user objectForKey:@"email"];
     
     self.emailTF = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height + self.locationTF.bounds.size.height, 300.0f, 55.0f)];
+    self.emailTF.autocorrectionType = UITextAutocorrectionTypeNo;
     if ([self.userEmail length] == 0) {
         self.emailTF.placeholder = @"Email";
         self.emailTF.userInteractionEnabled = YES;
@@ -239,6 +241,7 @@
     [self.contentSV addSubview:locationDetectButton];
     
     self.descriptionTV = [[UITextView alloc] initWithFrame:CGRectMake(320.0f, middleImageView_2.bounds.size.height, 320.0f, 55.0f)];
+    self.descriptionTV.autocorrectionType = UITextAutocorrectionTypeNo;
     self.descriptionTV.delegate = self;
     //self.descriptionTV.contentInset = UIEdgeInsetsMake(10.0f, 10.0f, 0.0f, 0.0f);
     self.descriptionTV.contentInset = UIEdgeInsetsMake(10.0f, 5.0f, 0.0f, -5.0f);
@@ -292,16 +295,19 @@
     
     self.twitterTF = [[UITextField alloc] initWithFrame:CGRectMake(650.0f, middleImageView_3.bounds.size.height, 300.0f, 55.0f)];
     self.twitterTF.delegate = self;
+    self.twitterTF.autocorrectionType = UITextAutocorrectionTypeNo;
     self.twitterTF.placeholder = @"Twitter";
     [self.contentSV addSubview:self.twitterTF];
     
     self.angellistTF = [[UITextField alloc] initWithFrame:CGRectMake(650.0f, middleImageView_3.bounds.size.height + self.twitterTF.bounds.size.height, 300.0f, 55.0f)];
     self.angellistTF.delegate = self;
+    self.angellistTF.autocorrectionType = UITextAutocorrectionTypeNo;
     self.angellistTF.placeholder = @"AngelList";
     [self.contentSV addSubview:self.angellistTF];
     
     self.linkedInTF = [[UITextField alloc] initWithFrame:CGRectMake(650.0f, middleImageView_3.bounds.size.height + self.twitterTF.bounds.size.height + self.angellistTF.bounds.size.height, 300.0f, 55.0f)];
     self.linkedInTF.delegate = self;
+    self.linkedInTF.autocorrectionType = UITextAutocorrectionTypeNo;
     self.linkedInTF.placeholder = @"LinkedIn";
     [self.contentSV addSubview:self.linkedInTF];
 
