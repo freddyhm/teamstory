@@ -110,20 +110,12 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     // hide back button
     [self.navigationItem setHidesBackButton:YES];
-    
-    /*
-    self.accountTitleLabel = [[UILabel alloc] init];
-    self.accountTitleLabel.text = @"OONNE";
-    [self.accountTitleLabel setFont:[UIFont systemFontOfSize:12]];
-    [self.accountTitleLabel setTextColor:[UIColor whiteColor]];
-    self.accountTitleLabel.backgroundColor = [UIColor clearColor];
-    self.navigationItem.titleView = self.accountTitleLabel;
-     */
-    
-    self.accountTitleLabel = [[UILabel alloc] init];
+        
+    self.accountTitleLabel = [[UILabel alloc] initWithFrame:self.navigationItem.titleView.frame];
     self.accountTitleLabel.text = [self.user objectForKey:@"displayName"];
     self.accountTitleLabel.textColor = [UIColor whiteColor];
-    self.accountTitleLabel.backgroundColor = [UIColor clearColor];
+    self.accountTitleLabel.font = [UIFont boldSystemFontOfSize:16.0f];
+    self.accountTitleLabel.textAlignment = NSTextAlignmentCenter;
     [self.accountTitleLabel sizeToFit];
     
      self.navigationItem.titleView = self.accountTitleLabel;
