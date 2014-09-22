@@ -508,7 +508,8 @@
     if([self.readList count] != 0){
         
         // update input item from read lsit
-        for (id listItemKey in self.readList) {
+        for (NSString *listItemKey in self.readList) {
+            
             NSMutableDictionary *listItem = [self.readList objectForKey:listItemKey];
             NSString *listItemPhotoId = [listItem objectForKey:@"photoId"];
             
