@@ -48,7 +48,7 @@
         self.pullToRefreshEnabled = NO;
        
         // The number of objects to show per page
-        self.objectsPerPage = 60;
+        self.objectsPerPage = 30;
         
         // Remove default loading indicator
         self.loadingViewEnabled = NO;
