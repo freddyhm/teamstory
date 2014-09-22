@@ -83,6 +83,10 @@
     self.tableView.backgroundView = texturedBackgroundView;
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
+    [self.navigationItem.titleView setUserInteractionEnabled:YES];
+    
+    UITapGestureRecognizer *tapNavTitle = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollToTop)];
+    [self.navigationItem.titleView addGestureRecognizer:tapNavTitle];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidReceiveRemoteNotification:) name:PAPAppDelegateApplicationDidReceiveRemoteNotification object:nil];
     
@@ -460,6 +464,11 @@
 
 
 #pragma mark - ()
+
+- (void)scrollToTop{
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
+                      atScrollPosition:UITableViewScrollPositionTop animated:YES];
+}
 
 - (void)setActivityBadge:(NSString *)badge{
 

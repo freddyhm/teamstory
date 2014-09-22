@@ -53,6 +53,7 @@
 @property (nonatomic, strong) UIView *whiteBackground;
 @property (nonatomic, strong) UIButton *multiActionButton;
 @property (nonatomic, strong) UILabel *locationSiteSeparator;
+@property (nonatomic, strong) UILabel *accountTitleLabel;
 @property int userStatUpdateCount;
 
 
@@ -110,6 +111,27 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     // hide back button
     [self.navigationItem setHidesBackButton:YES];
     
+    /*
+    self.accountTitleLabel = [[UILabel alloc] init];
+    self.accountTitleLabel.text = @"OONNE";
+    [self.accountTitleLabel setFont:[UIFont systemFontOfSize:12]];
+    [self.accountTitleLabel setTextColor:[UIColor whiteColor]];
+    self.accountTitleLabel.backgroundColor = [UIColor clearColor];
+    self.navigationItem.titleView = self.accountTitleLabel;
+     */
+    
+    self.accountTitleLabel = [[UILabel alloc] init];
+    self.accountTitleLabel.text = [self.user objectForKey:@"displayName"];
+    self.accountTitleLabel.textColor = [UIColor whiteColor];
+    self.accountTitleLabel.backgroundColor = [UIColor clearColor];
+    [self.accountTitleLabel sizeToFit];
+    
+     self.navigationItem.titleView = self.accountTitleLabel;
+    
+    [self.navigationItem.titleView setUserInteractionEnabled:YES];
+    UITapGestureRecognizer *tapNavTitle = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollToTop)];
+    [self.navigationItem.titleView addGestureRecognizer:tapNavTitle];
+
     if (!self.user) {
         [NSException raise:NSInvalidArgumentException format:@"user cannot be nil"];
     }
@@ -180,8 +202,6 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 }
                 
                 UIColor *textColor = [UIColor colorWithRed:158.0f/255.0f green:158.0f/255.0f blue:158.0f/255.0f alpha:1.0f];
-                
-                self.navigationItem.title = self.displayName;
                 
                 self.navigationItem.rightBarButtonItem = [[PAPSettingsButtonItem alloc] initWithTarget:self action:@selector(settingsButtonAction:)];
                 
@@ -602,7 +622,9 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     [self.user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         self.user = (PFUser *)object;
     
-        self.navigationItem.title  = [self.user objectForKey:@"displayName"];
+        self.accountTitleLabel.text = [self.user objectForKey:@"displayName"];
+        [self.accountTitleLabel sizeToFit];
+        
         self.locationLabel.text = [self.user objectForKey:@"location"];
         self.descriptionLabel.text = [self.user objectForKey:@"description"];
         self.websiteInfo = [self.user objectForKey:@"website"];
@@ -842,6 +864,13 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 
 
 #pragma mark - ()
+
+- (void)scrollToTop{
+    
+    // scroll to top with header view incl.
+    [self.feed scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+}
+
 
 - (void)followButtonAction:(id)sender {
     

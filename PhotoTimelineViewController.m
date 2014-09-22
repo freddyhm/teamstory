@@ -723,7 +723,7 @@ enum ActionSheetTags {
 
 
 
-- (void)postFooterView:(PostFooterView *)postFooterView didTapCommentOnPhotoButton:(UIButton *)button  photo:(PFObject *)photo {
+- (void)postFooterView:(PostFooterView *)postFooterView didTapCommentForPost:photo {
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"commentButton"];
     [self.navigationController pushViewController:photoDetailsVC animated:YES];

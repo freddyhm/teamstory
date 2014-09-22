@@ -113,6 +113,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [super viewDidLoad];
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
+    [self.navigationItem.titleView setUserInteractionEnabled:YES];
+    
+    UITapGestureRecognizer *tapNavTitle = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollToTop)];
+    [self.navigationItem.titleView addGestureRecognizer:tapNavTitle];
 
     // set current default back button to nil and set new one
     self.navigationItem.leftBarButtonItem = nil;
@@ -837,6 +841,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 #pragma mark - ()
+
+- (void)scrollToTop{
+    
+    // scroll to the top (header view incl.)
+   [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+}
 
 - (void)refreshCommentLikes:(NSMutableArray *)comments pullFromServer:(BOOL)pullFromServer block:(void (^)(BOOL succeeded))completionBlock{
     
