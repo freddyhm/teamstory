@@ -697,13 +697,17 @@
     }
     
     UIImagePickerController *cameraUI = [[UIImagePickerController alloc] init];
+    
+    cameraUI.allowsEditing = YES;
+    cameraUI.delegate = self;
+    
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]
         && [[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary] containsObject:(NSString *)kUTTypeImage]) {
         
         cameraUI.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         cameraUI.mediaTypes = [NSArray arrayWithObject:(NSString *) kUTTypeImage];
         
-    } else if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum]
+    }else if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum]
                && [[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum] containsObject:(NSString *)kUTTypeImage]) {
         
         cameraUI.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
@@ -713,10 +717,16 @@
         return NO;
     }
     
-    cameraUI.allowsEditing = YES;
-    cameraUI.delegate = self;
+    // if ip
+    if ([[[UIDevice currentDevice] model] isEqualToString: @"iPad"] || [[[UIDevice currentDevice] model] isEqualToString: @"iPad Simulator"]) {
+        UIPopoverController *popover = [[UIPopoverController alloc] initWithContentViewController:cameraUI];
+        
+        [popover presentPopoverFromRect:self.view.bounds inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+        
+    }else{
     
-    [self presentViewController:cameraUI animated:YES completion:nil];
+        [self presentViewController:cameraUI animated:YES completion:nil];
+    }
     
     return YES;
 }
