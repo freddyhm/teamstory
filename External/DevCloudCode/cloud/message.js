@@ -18,7 +18,7 @@ Parse.Cloud.afterSave('Message', function(request) {
                       var toUser = request.object.get("toUser");
  
                       var recipientQuery = new Parse.Query(Parse.Installation);
-                      recipientQuery.equalTo('user', toUser.id);
+                      recipientQuery.equalTo('user', toUser);
  
                       Parse.Push.send({
                                       where: recipientQuery, // Set our Installation query.
