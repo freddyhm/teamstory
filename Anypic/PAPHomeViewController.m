@@ -35,7 +35,6 @@
 @property (nonatomic, strong) UIView *emptyPlaceholder;
 @property (nonatomic, strong) UIImageView *emptyPlaceholderMessage;
 @property (nonatomic, strong) UIButton *emptyPlaceholderBtn;
-@property (nonatomic, strong) UIButton *feedbackBtn;
 @property (nonatomic, strong) UIButton *logoBtn;
 @property (nonatomic, strong) UIButton *exploreBtn;
 @property (nonatomic, strong) UIButton *followingBtn;
@@ -44,7 +43,6 @@
 @property (nonatomic, strong) UIView *switchWhiteOverlay;
 @property BOOL firstRun;
 @property BOOL isOpeningFeedback;
-@property NSNumber *konotorCount;
 @end
 
 @implementation PAPHomeViewController
@@ -72,7 +70,14 @@
     UIImage *feedbackImg = [UIImage imageNamed:@"button-feedback.png"];
     self.feedbackBtn = [[UIButton alloc] initWithFrame:CGRectMake(282, 6, feedbackImg.size.width, feedbackImg.size.height)];
     [self.feedbackBtn addTarget:self action:@selector(promptFeedback:) forControlEvents:UIControlEventTouchUpInside];
-    [self.feedbackBtn setImage:feedbackImg forState:UIControlStateNormal];
+    
+    if ([[PFUser currentUser] objectForKey:@"messagingBadge"] > 0) {
+        [self.feedbackBtn setTitle:[[[PFUser currentUser] objectForKey:@"messagingBadge"] stringValue] forState:UIControlStateNormal];
+        [self.feedbackBtn setImage:nil forState:UIControlStateNormal];
+    } else {
+        [self.feedbackBtn setImage:feedbackImg forState:UIControlStateNormal];
+        [self.feedbackBtn setTitle:nil forState:UIControlStateNormal];
+    }
 
     // feed title ui
     self.feedFontSelected = [UIFont boldSystemFontOfSize:15.0f];
@@ -187,16 +192,16 @@
     [PAPUtility captureScreenGA:@"Home"];
     
     [[Mixpanel sharedInstance] track:@"Viewed Home Screen" properties:@{}];
-    
+    /*
     // fetch unread messages, show feedback screen
-    self.konotorCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
+    self.messageNotificationCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
     
-    if([self.konotorCount intValue] > 0){
+    if([self.messageNotificationCount intValue] > 0){
         [self.feedbackBtn.imageView setImage:[UIImage imageNamed:@"button-feedback-notify.png"]];
     }else{
         [self.feedbackBtn.imageView setImage:[UIImage imageNamed:@"button-feedback.png"]];
     }
-    
+    */
     // disabling notification bar for now.
     /*
     PFQuery *notificationQuery = [PFQuery queryWithClassName:@"Notification"];
@@ -403,6 +408,12 @@
     //[KonotorFeedbackScreen showFeedbackScreen];
     PAPMessageListViewController *messageListViewController = [[PAPMessageListViewController alloc] init];
     [self.navigationController pushViewController:messageListViewController animated:YES];
+    
+    [self.feedbackBtn setTitle:nil forState:UIControlStateNormal];
+    [self.feedbackBtn setImage:[UIImage imageNamed:@"button-feedback.png"] forState:UIControlStateNormal];
+    
+    [[PFUser currentUser] setObject:[NSNumber numberWithInt:0] forKey:@"messagingBadge"];
+    [[PFUser currentUser] saveInBackground];
     
 }
 

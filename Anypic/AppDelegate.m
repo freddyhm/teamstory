@@ -28,6 +28,7 @@
 #import "Mixpanel.h"
 #import "PAPMessageListViewController.h"
 #import "PAPMessagingViewController.h"
+#import "PAPMessageListCell.h"
 
 
 @interface AppDelegate () {
@@ -43,19 +44,24 @@
 @property (nonatomic, strong) PAPLogInViewController *loginviewcontroller;
 @property (nonatomic, strong) discoverPageViewController *discoverViewController;
 @property (nonatomic, strong) PhotoTimelineViewController *photoTimelineViewController;
+@property (nonatomic, strong) PAPMessageListCell *messageListCell;
+@property (nonatomic, strong) PAPMessagingViewController *messagingViewController;
 
 
 @property (nonatomic, strong) MBProgressHUD *hud;
 
 @property (nonatomic, strong) NSTimer *autoFollowTimer;
 @property BOOL isKonotor;
-@property NSNumber *konotorCount;
 
 @property (nonatomic, strong) Reachability *hostReach;
 @property (nonatomic, strong) Reachability *internetReach;
 @property (nonatomic, strong) Reachability *wifiReach;
 @property (nonatomic, strong) PFUser *messageTargetUser;
 @property (nonatomic, strong) PFObject *chatRoom;
+
+@property (nonatomic, strong) NSString *userView;
+@property (nonatomic, strong) UITableView *messageList;
+@property (nonatomic, strong) PFObject *targetChatRoom;
 
 - (void)setupAppearance;
 - (BOOL)shouldProceedToMainInterface:(PFUser *)user;
@@ -204,16 +210,14 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
-    NSLog(@"%@", newDeviceToken);
     // konotor notifications setup
-    //[Konotor addDeviceToken:newDeviceToken];
+    [Konotor addDeviceToken:newDeviceToken];
     
     [[PFInstallation currentInstallation] setDeviceTokenFromData:newDeviceToken];
     [[PFInstallation currentInstallation] saveInBackground];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-    NSLog(@"General registration failing error: %@", error);
     if ([error code] != 3010) { // 3010 is for the iPhone Simulator
         NSLog(@"Application failed to register for push notifications: %@", error);
 	}
@@ -224,14 +228,10 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     [[NSNotificationCenter defaultCenter] postNotificationName:PAPAppDelegateApplicationDidReceiveRemoteNotification object:nil userInfo:userInfo];
     
     NSString *pushSrc = [userInfo objectForKey:@"source"];
-    //NSString *toUserId = [userInfo objectForKey:kPAPPushPayloadToUserObjectIdKey];
-    
-    //NSString *messageRoomId = [userInfo objectForKey:kPAPPushPayloadChatRoomObjectIdKey];
     NSString *notificationType = [userInfo objectForKey:kPAPPushPayloadPayloadTypeKey];
     
     // handle type of notification
     if ([pushSrc isEqualToString:@"konotor"]){
-        
         self.isKonotor = YES;
         
         // app is in foreground
@@ -245,6 +245,35 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
         }
         
     } else if ([notificationType isEqualToString:@"m"]) {
+        if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+            if ([PFUser currentUser]) {
+                self.messageListCell = [[PAPMessageListCell alloc] init];
+                self.messagingViewController = [[PAPMessagingViewController alloc] init];
+                
+                NSNumber *currentMessageBadgeNumber;
+                NSNumber *newMessageBadeNumber;
+                
+                if ([[PFUser currentUser] objectForKey:@"messagingBadge"] > 0) {
+                    currentMessageBadgeNumber = [[PFUser currentUser] objectForKey:@"messagingBadge"];
+                    newMessageBadeNumber = [NSNumber numberWithInt:[currentMessageBadgeNumber intValue] + 1];
+                } else {
+                    newMessageBadeNumber = [NSNumber numberWithInt:1];
+                }
+                
+                [self.homeViewController.feedbackBtn setTitle:[newMessageBadeNumber stringValue]forState:UIControlStateNormal];
+                [self.homeViewController.feedbackBtn setImage:nil forState:UIControlStateNormal];
+                
+                [[PFUser currentUser] setObject:newMessageBadeNumber forKey:@"messagingBadge"];
+                [[PFUser currentUser] saveInBackground];
+                
+                if ([self.userView isEqual:@"messagingScreen"]) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"updateTableView" object:nil];
+                }
+            }
+        }else{
+            [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
+            [self handlePush:nil userInfo:userInfo source:@"background"];
+        }
         
     } else {
         // app is in foreground
@@ -282,9 +311,11 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    NSNumber *messagingBadgeNumber = [currentInstallation objectForKey:@"messagingBadge"];
     
     // syncs icon badge with tab bar badge, resets icon badge back to 0
-    if (application.applicationIconBadgeNumber != 0) {
+    if (application.applicationIconBadgeNumber != 0 && messagingBadgeNumber == 0) {
 
             // check if tab controllers and activity tab exist
             if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
@@ -298,15 +329,35 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
                 // get current selected tab
                 NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
                 
-                // notify activity controller of new notification (didreceivenot. is not called from background)
-              //  [self.activityViewController notificationSetup:(int)application.applicationIconBadgeNumber source:@"background"];
-                
                 // current view is activity, clear the badge
                if(selectedtabIndex == PAPActivityTabBarItemIndex){
                     [self.activityViewController setActivityBadge:nil];
                     [self.activityViewController loadObjects];
                }
         }
+    } else if (application.applicationIconBadgeNumber != 0 && messagingBadgeNumber != 0) {
+        if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
+            
+            UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
+            
+            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+            NSNumber *newBadgeValue = [NSNumber numberWithInteger:application.applicationIconBadgeNumber];
+            NSNumber *activityBadgeNumber = [NSNumber numberWithInt:[newBadgeValue intValue] - [messagingBadgeNumber intValue]];
+            tabBarItem.badgeValue = [numberFormatter stringFromNumber:activityBadgeNumber];
+            
+            // get current selected tab
+            NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
+            
+            [self.homeViewController.feedbackBtn setTitle:[messagingBadgeNumber stringValue] forState:UIControlStateNormal];
+            
+            if ([self.userView isEqual:@"messagingScreen"]) {
+                [self.homeViewController.feedbackBtn setTitle:nil forState:UIControlStateNormal];
+            } else if(selectedtabIndex == PAPActivityTabBarItemIndex){
+                [self.activityViewController setActivityBadge:nil];
+                [self.activityViewController loadObjects];
+            }
+        }
+        
     }
     
     // Clears out all notifications from Notification Center.
@@ -549,6 +600,11 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 
 
 #pragma mark - ()
+
+- (void)setUserCurrentScreen:(NSString *)currentScreen setTargetRoom:(PFObject *)targetRoom {
+    self.userView = currentScreen;
+    self.targetChatRoom = targetRoom;
+}
 
 - (void)setupAppearance {
     

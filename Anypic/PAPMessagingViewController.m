@@ -16,21 +16,15 @@
 #define sendButtonHeight 30.0f
 #define messageTextSize 13.0f
 #define messageHorizontalSpacing 80.0f
+#define notificationBarHeight 30.0f
 
 @interface PAPMessagingViewController () {
     CGRect tabBarSize;
     double keyboardDuration;
     float keyboardHeight;
+    int _currentPage;
+    BOOL isNewMessage;
 }
-
-@property (nonatomic, strong) UITableView *messageList;
-@property (nonatomic, strong) UITextView *messageTextView;
-@property (nonatomic, strong) UIView *messageTextViewBG;
-@property (nonatomic, strong) UIScrollView *scrollView;
-@property (nonatomic, strong) UIButton *sendButton;
-@property (nonatomic, strong) PFUser *recipient;
-@property (nonatomic, strong) NSMutableArray *messageQuery;
-@property (nonatomic, strong) PFObject *targetChatRoom;
 
 @end
 
@@ -38,7 +32,6 @@
 
 - (void)setTargetUser:(PFUser *)targetUser {
     self.recipient = targetUser;
-    NSLog(@"%@", self.recipient);
 }
 
 - (void)setRoomInfo:(PFObject *)roomInfo {
@@ -50,6 +43,8 @@
     self.tabBarController.tabBar.hidden = NO;
     self.tabBarController.tabBar.frame = tabBarSize;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:nil setTargetRoom:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -59,17 +54,13 @@
     tabBarSize = self.tabBarController.tabBar.frame;
     self.tabBarController.tabBar.frame = CGRectZero;
     [self registerForKeyboardNotifications];
-    
     self.messageQuery = [[NSMutableArray alloc] init];
     
-    PFQuery *messageQuery = [PFQuery queryWithClassName:@"Message"];
-    [messageQuery whereKey:@"chatRoom" equalTo:self.targetChatRoom];
-    [messageQuery orderByDescending:@"createdAt"];
-    [messageQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        [self.messageQuery removeAllObjects];
-        [self.messageQuery addObjectsFromArray:objects];
-        [self.messageList reloadData];
-    }];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTableViewNotification:) name:@"updateTableView" object:nil];
+    
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:@"messagingScreen" setTargetRoom:self.targetChatRoom];
+
+    [self loadMessageQuery];
 }
 
 - (void)viewDidLoad
@@ -115,7 +106,19 @@
     self.messageList.dataSource = self;
     [self.view addSubview:self.messageList];
     
+    // ------------------- New Message Notification
+    self.notificationView = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (navBarHeight + messageTextViewHeight + notificationBarHeight), [UIScreen mainScreen].bounds.size.width, notificationBarHeight)];
+    self.notificationView.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0f];
+    self.notificationView.hidden = YES;
+    [self.notificationView addTarget:self action:@selector(notificationButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.notificationView];
+    
+    UILabel *notificationLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0f, 10.0f, [UIScreen mainScreen].bounds.size.height - 20.0f, 20.0f)];
+    [notificationLabel setText:@"new Notification Has Arrived"];
+    [self.notificationView addSubview:notificationLabel];
+    
     [self.view bringSubviewToFront:self.messageTextViewBG];
+    [self.view bringSubviewToFront:self.notificationView];
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
@@ -157,6 +160,28 @@
 
 -(void)dismissKeyboard {
     [self.view endEditing:YES];
+}
+
+- (void)notificationButtonAction:(id)sender {
+    self.notificationView.hidden = YES;
+}
+
+- (void)updateTableViewNotification:(NSNotification *)notification {
+    isNewMessage = YES;
+    self.notificationView.hidden = NO;
+    [self loadMessageQuery];
+}
+
+-(void)loadMessageQuery{
+    PFQuery *messageQuery = [PFQuery queryWithClassName:@"Message"];
+    [messageQuery whereKey:@"chatRoom" equalTo:self.targetChatRoom];
+    [messageQuery orderByAscending:@"createdAt"];
+    [messageQuery setLimit:100];
+    [messageQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        [self.messageQuery removeAllObjects];
+        [self.messageQuery addObjectsFromArray:objects];
+        [self.messageList reloadData];
+    }];
 }
 
 - (void)changeSendButtonState:(BOOL)state {

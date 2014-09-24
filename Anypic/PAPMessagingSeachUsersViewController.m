@@ -65,11 +65,6 @@
     [cancelButton addTarget:self action:@selector(cancelButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [headerView addSubview:cancelButton];
     
-    UIButton *okayButton = [[UIButton alloc] initWithFrame:CGRectMake(headerView.bounds.size.width - 60.0f, (headerView.bounds.size.height - 20) / 2 - 15.0f, 50.0f, 30.0f)];
-    [okayButton setTitle:@"Okay" forState:UIControlStateNormal];
-    [okayButton addTarget:self action:@selector(okayButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [headerView addSubview:okayButton];
-    
     self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, headerViewHeight, [UIScreen mainScreen].bounds.size.width, 40.0f)];
     self.searchBar.delegate = self;
     self.searchBar.placeholder = @"Search by following users";
@@ -202,12 +197,9 @@
     
 }
 
-- (void) okayButtonAction:(id)sender {
-    
-}
-
 - (void) cancelButtonAction:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:^{
+    }];
 }
 
 @end

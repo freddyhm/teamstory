@@ -29,6 +29,11 @@
         self.lastMessageLabel = [[UILabel alloc] initWithFrame:CGRectMake(30.0f, 40.0f, 250.0f, 30.0f)];
         [self addSubview:self.lastMessageLabel];
         
+        self.badgeLabel = [[UILabel alloc] initWithFrame:CGRectMake(290.0f, 40.0f, 30.0f, 30.0f)];
+        self.badgeLabel.backgroundColor = [UIColor redColor];
+        self.badgeLabel.layer.cornerRadius = 10.0f;
+        [self addSubview:self.badgeLabel];
+        
          
     }
     return self;

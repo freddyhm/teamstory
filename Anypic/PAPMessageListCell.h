@@ -18,6 +18,7 @@
 @property (nonatomic, strong) UILabel *lastMessageLabel;
 @property (nonatomic, strong) UILabel *userName;
 @property (nonatomic, strong) PFImageView *profileImageView;
+@property (nonatomic, strong) UILabel *badgeLabel;
 
 -(void)setUser:(PFUser *)user;
 

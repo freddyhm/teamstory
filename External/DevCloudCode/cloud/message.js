@@ -57,8 +57,6 @@ var alertPayload = function(request) {
  
         return {
         alert: alertMessage(request), // Set our alert message.
-        badge: 'Increment',
-            // The following keys help load the correct photo in response to this push notification.
         p: 'm', // Payload Type: Message
         fu: request.object.get('fromUser').id, // From User
         tu: request.object.get('toUser').id,

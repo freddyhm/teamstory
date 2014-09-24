@@ -21,6 +21,8 @@
 - (void)presentLoginSelectionController;
 - (void)presentTutorialViewController;
 
+- (void)setUserCurrentScreen:(NSString *)currentScreen setTargetRoom:(PFObject *)targetRoom;
+
 - (void)logOut;
 - (void)settingRootViewAsTabBarController;
 
