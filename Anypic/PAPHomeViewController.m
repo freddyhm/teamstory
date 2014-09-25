@@ -14,6 +14,7 @@
 #import "PAPCache.h"
 #import "PAPTabBarController.h"
 #import "Mixpanel.h"
+#import "Apptimize.h"
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
@@ -375,13 +376,23 @@
     [Crashlytics setUserEmail:email];
     
     // mixpanel analytics - Sets user
-    [[Mixpanel sharedInstance].people set:@{@"name": displayName, @"email": email, @"industry": industry, @"created": createdAt, @"userObjId": currentUserObjectId}];
+    [[Mixpanel sharedInstance].people set:@{@"$name": displayName, @"$email": email, @"industry": industry, @"created": createdAt, @"userObjId": currentUserObjectId}];
     
     // super properties
     [[Mixpanel sharedInstance] registerSuperProperties:@{@"Name": displayName}];
     [[Mixpanel sharedInstance] registerSuperProperties:@{@"Industry": industry}];
     [[Mixpanel sharedInstance] registerSuperProperties:@{@"Email": email}];
     [[Mixpanel sharedInstance] registerSuperProperties:@{@"UserObjId": currentUserObjectId}];
+    
+    // aptimize experiment
+    [Apptimize setUserAttributeString:@"No" forKey:@"Admin"];
+    
+    // add admin property if one of us
+    if([currentUserObjectId isEqualToString:@"3KiW2NoGuT"] || [currentUserObjectId isEqualToString:@"rblDQcdZcY"] || [currentUserObjectId isEqualToString:@"vB648p1bT1"] || [currentUserObjectId isEqualToString:@"EFGqHAIxLm"] || [currentUserObjectId isEqualToString:@"k9dyEcXuZT"]){
+        
+        [[Mixpanel sharedInstance] registerSuperProperties:@{@"Admin": @"Yes"}];
+        [Apptimize setUserAttributeString:@"Yes" forKey:@"Admin"];
+    }
 }
 
 /*

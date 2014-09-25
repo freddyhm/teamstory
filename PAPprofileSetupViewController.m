@@ -15,6 +15,7 @@
 #import "Mixpanel.h"
 
 #define SUCCESSFUL 1
+#define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
 @interface PAPprofileSetupViewController () {
     int industry_pickerRow;
@@ -52,6 +53,15 @@
 
 @implementation PAPprofileSetupViewController
 
+- (void)viewWillAppear:(BOOL)animated{
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+    [self.locationManager startUpdatingLocation];
+    
+    [self locationDetectButtonAction:self];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -60,11 +70,6 @@
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"New Profile Screen 1"}];
-    
-    self.locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.delegate = self;
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-    [self.locationManager startUpdatingLocation];
     
     UIView *statusBarBackground = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, [UIApplication sharedApplication].statusBarFrame.size.height)];
     [statusBarBackground setBackgroundColor:[UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
@@ -551,18 +556,24 @@
 }
 
 -(void)locationDetectButtonAction:(id)sender{
-    [SVProgressHUD show];
     
-    [[Mixpanel sharedInstance] track:@"Pressed Auto Detect Location In Profile Screen" properties:@{}];
+    if(IS_WIDESCREEN){
+        [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0, 16.0f)];
+    }else{
+        [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0, 76.0f)];
+    }
+    
+    [SVProgressHUD show];
     
     CLGeocoder *geocoder = [[CLGeocoder alloc] init] ;
     [geocoder reverseGeocodeLocation:self.locationManager.location
                    completionHandler:^(NSArray *placemarks, NSError *error) {
                        NSLog(@"reverseGeocodeLocation:completionHandler: Completion Handler called!");
                        [SVProgressHUD dismiss];
+                       [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0, 0)];
                        if (error){
                            NSLog(@"Geocode failed with error: %@", error);
-                           UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Failed" message:@"Please try again or enter location manually" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                           UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Failed" message:@"Autodetect location failed, please enter manually." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                            alert.alertViewStyle = UIAlertViewStyleDefault;
                            [alert show];
                            return;
@@ -860,6 +871,10 @@
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (alertView.tag == SUCCESSFUL) {
+        
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Signed Up" properties:@{}];
+        
         NSLog(@"login Sucessful");
         [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
     }

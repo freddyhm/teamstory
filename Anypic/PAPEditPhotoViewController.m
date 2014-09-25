@@ -17,7 +17,7 @@
 #import "PAPLoadMoreCell.h"
 #import "PAPConstants.h"
 #import "Mixpanel.h"
-#import "ParseFacebookUtils/PFFacebookUtils.h"
+#import "Apptimize.h"
 
 
 @interface PAPEditPhotoViewController () {
@@ -601,14 +601,11 @@
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Moment"}];
     
-    // fb analytics
-    [FBAppEvents logEvent:FBAppEventNameViewedContent
-               valueToSum:1
-               parameters:@{ FBAppEventParameterNameContentType : @"Uploaded Photo"}];
-
-    
     // increment user photo count by one
     [[Mixpanel sharedInstance].people increment:@"Photo Count" by:[NSNumber numberWithInt:1]];
+    
+    // apptimize experiment
+    [Apptimize metricAchieved:@"Uploaded Picture"];
     
     
     

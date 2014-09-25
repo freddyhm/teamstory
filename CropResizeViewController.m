@@ -12,6 +12,7 @@
 #import "UIImage+ResizeAdditions.h"
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
+#import "Apptimize.h"
 
 @interface CropResizeViewController ()
 
@@ -153,11 +154,21 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             
             [SVProgressHUD dismiss];
-
-            // add to filters
-            CameraFilterViewController *filterController = [[CameraFilterViewController alloc]initWithImage:self.croppedImg nib:@"CameraFilterViewController" source:self.imageSource];
-            // push filter controller to nav stack
-            [self.navigationController pushViewController:filterController animated:YES];
+            
+            // apptimize experiment
+            [Apptimize runTest:@"No Filter" withBaseline:^{
+                // Baseline variant "original"
+                // add to filters
+                CameraFilterViewController *filterController = [[CameraFilterViewController alloc]initWithImage:self.croppedImg nib:@"CameraFilterViewController" source:self.imageSource];
+                // push filter controller to nav stack
+                [self.navigationController pushViewController:filterController animated:YES];
+                
+            } andVariations:@{@"variation1": ^{
+                // Variant "No Filter Version"
+                // send selected image to edit controller
+                PAPEditPhotoViewController *editController = [[PAPEditPhotoViewController alloc] initWithImage:self.croppedImg];
+                [self.navigationController pushViewController:editController animated:YES];
+            }}];
         });
     });
 }
@@ -260,6 +271,12 @@
     }
     
     UIGraphicsEndImageContext();
+    
+
+    if(scrollView.contentOffset.x > 0){
+        // Mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Used photo crop" properties:@{}];
+    }
     
     return  finalImage;
 }
