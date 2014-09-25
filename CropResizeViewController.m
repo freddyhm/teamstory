@@ -9,7 +9,6 @@
 #import "CropResizeViewController.h"
 #import "PAPTabBarController.h"
 #import "CameraFilterViewController.h"
-#import "UIImage+ResizeAdditions.h"
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
 #import "Apptimize.h"
@@ -225,23 +224,6 @@
     [self.overlayView addSubview:borderView];
 }
 
-- (UIImage *)resizeImage:(UIImage *)image{
-    
-    // Create a graphics image context
-    CGSize newSize = CGSizeMake(640, 640);
-    UIGraphicsBeginImageContext(newSize);
-    // Tell the old image to draw in this new context, with the desired
-    // new size
-    [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
-    // Get the new image from the context
-    UIImage* resizedImg = UIGraphicsGetImageFromCurrentImageContext();
-    // End the context
-    UIGraphicsEndImageContext();
-    
-    return resizedImg;
-}
-
-
 -(UIImage *)cropImage:(UIScrollView *)scrollView{
     
     CGFloat scale = [[UIScreen mainScreen] scale];
@@ -284,7 +266,7 @@
 - (UIImage *)processImage {
     
     // Cropping & resizing picture
-    UIImage *resizedCroppedPic = [self resizeImage:[self cropImage:self.moveImage]];
+    UIImage *resizedCroppedPic = [PAPUtility resizeImage:[self cropImage:self.moveImage] width:640 height:640];
     
     return resizedCroppedPic;
 }

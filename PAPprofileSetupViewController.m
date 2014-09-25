@@ -10,7 +10,6 @@
 #import <CoreLocation/CoreLocation.h>
 #import "SVProgressHUD.h"
 #import "AppDelegate.h"
-#import "UIImage+ResizeAdditions.h"
 #import "PAPUtility.h"
 #import "Mixpanel.h"
 
@@ -491,10 +490,10 @@
     if ([companyName_input length] > 0 && [location_input length] > 0 && (([email_input length] > 0 && [self NSStringIsValidEmail:email_input]) || email_current_input )) {
         
             UIImage *image = [UIImage imageNamed:@"default-pic.png"];
-            
-            UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:0.0f interpolationQuality:kCGInterpolationHigh];
-            UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(200.0f, 200.0f) interpolationQuality:kCGInterpolationHigh];
-            
+        
+            UIImage *smallRoundedImage = [PAPUtility resizeImage:image width:84.0f height:84.0f];
+            UIImage *resizedImage = [PAPUtility resizeImage:image width:200.0f height:200.0f];
+
             if (self.imageData_picker) {
                 [self uploadImage_medium:self.imageData_picker];
             } else {
@@ -742,9 +741,9 @@
     // Dismiss controller
     [picker dismissViewControllerAnimated:YES completion:nil];
     
-    UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:0.0f interpolationQuality:kCGInterpolationHigh];
-    UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(200.0f, 200.0f) interpolationQuality:kCGInterpolationHigh];
-    
+    UIImage *smallRoundedImage = [PAPUtility resizeImage:image width:84.0f height:84.0f];
+    UIImage *resizedImage = [PAPUtility resizeImage:image width:200.0f height:200.0f];
+
     // Upload image
     self.imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
     self.imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);

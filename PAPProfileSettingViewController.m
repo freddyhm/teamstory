@@ -6,7 +6,6 @@
 #import "PAPProfileSettingViewController.h"
 #import "PAPAccountViewController.h"
 #import "AppDelegate.h"
-#import "UIImage+ResizeAdditions.h"
 #import "SVProgressHUD.h"
 
 #define SUCCESSFUL 1
@@ -497,8 +496,8 @@
     // Dismiss controller
     [picker dismissViewControllerAnimated:YES completion:nil];
     
-    UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:0.0f interpolationQuality:kCGInterpolationHigh];
-    UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(200.0f, 200.0f) interpolationQuality:kCGInterpolationHigh];
+    UIImage *smallRoundedImage = [PAPUtility resizeImage:image width:84.0f height:84.0f];
+    UIImage *resizedImage = [PAPUtility resizeImage:image width:200.0f height:200.0f];
     
     // Upload image
     imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
@@ -1009,9 +1008,9 @@
             if (profileExist_user == NO) {
                 UIImage *image = [UIImage imageNamed:@"default-pic.png"];
                 
-                UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:0.0f interpolationQuality:kCGInterpolationHigh];
-                UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(200.0f, 200.0f) interpolationQuality:kCGInterpolationHigh];
-                
+                UIImage *smallRoundedImage = [PAPUtility resizeImage:image width:84.0f height:84.0f];
+                UIImage *resizedImage = [PAPUtility resizeImage:image width:200.0f height:200.0f];
+
                 // Upload image
                 imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
                 imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);

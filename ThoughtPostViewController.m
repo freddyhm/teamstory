@@ -10,7 +10,6 @@
 #import "SVProgressHUD.h"
 #import "CameraFilterViewController.h"
 #import "PAPEditPhotoViewController.h"
-#import "UIImage+ResizeAdditions.h"
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
 #import "Mixpanel.h"
@@ -224,11 +223,6 @@
         
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Thought"}];
-       
-        // fb analytics
-        [FBAppEvents logEvent:FBAppEventNameViewedContent
-                   valueToSum:1
-                   parameters:@{ FBAppEventParameterNameContentType : @"Uploaded Thought"}];
         
         // increment user thought count by one
         [[Mixpanel sharedInstance].people increment:@"Thought Count" by:[NSNumber numberWithInt:1]];
@@ -307,7 +301,7 @@
 - (void)shouldUploadImage:(UIImage *)anImage block:(void (^)(BOOL))completed
 {
     
-    UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:10.0f interpolationQuality:kCGInterpolationDefault];
+    UIImage *thumbnailImage = [PAPUtility resizeImage:anImage width:86.0f height:86.0f];
     
     // JPEG to decrease file size and enable faster uploads & downloads
     NSData *imageData = UIImageJPEGRepresentation(anImage, 1.0f);

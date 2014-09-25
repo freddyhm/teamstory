@@ -11,7 +11,6 @@
 #import "PAPPhotoDetailsFooterView.h"
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
-#import "UIImage+ResizeAdditions.h"
 #import "PAPBaseTextCell.h"
 #import "SVProgressHUD.h"
 #import "PAPLoadMoreCell.h"
@@ -234,7 +233,7 @@
 
 - (BOOL)shouldUploadImage:(UIImage *)anImage {
     
-    UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:10.0f interpolationQuality:kCGInterpolationDefault];
+    UIImage *thumbnailImage = [PAPUtility resizeImage:anImage width:86.0f height:86.0f];
     
     // JPEG to decrease file size and enable faster uploads & downloads
     NSData *imageData = UIImageJPEGRepresentation(anImage, 1.0f);

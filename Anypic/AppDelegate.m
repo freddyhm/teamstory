@@ -13,7 +13,6 @@
 #import "MBProgressHUD.h"
 #import "PAPHomeViewController.h"
 #import "PAPLogInViewController.h"
-#import "UIImage+ResizeAdditions.h"
 #import "PAPAccountViewController.h"
 #import "PAPWelcomeViewController.h"
 #import "PAPActivityFeedViewController.h"
@@ -123,9 +122,21 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     
     [Konotor setWelcomeMessage:@"Welcome to Teamstory! Thoughts or feedback? Chat with us here anytime"];
     
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-     (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-    
+    // Register for Push Notitications, if running iOS 8
+    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+        UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
+                                                        UIUserNotificationTypeBadge |
+                                                        UIUserNotificationTypeSound);
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
+                                                                                 categories:nil];
+        [application registerUserNotificationSettings:settings];
+        [application registerForRemoteNotifications];
+    } else {
+        // Register for Push Notifications before iOS 8
+        [application registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
+                                                         UIRemoteNotificationTypeAlert |
+                                                         UIRemoteNotificationTypeSound)];
+    }
     
     // ****************************************************************************
     // Parse initialization
@@ -266,10 +277,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    
-    // fb analytics
-    [FBAppEvents activateApp];
-    
+        
     // syncs icon badge with tab bar badge, resets icon badge back to 0
     if (application.applicationIconBadgeNumber != 0) {
 
