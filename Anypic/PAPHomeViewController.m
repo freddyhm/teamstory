@@ -408,13 +408,6 @@
     //[KonotorFeedbackScreen showFeedbackScreen];
     PAPMessageListViewController *messageListViewController = [[PAPMessageListViewController alloc] init];
     [self.navigationController pushViewController:messageListViewController animated:YES];
-    
-    [self.feedbackBtn setTitle:nil forState:UIControlStateNormal];
-    [self.feedbackBtn setImage:[UIImage imageNamed:@"button-feedback.png"] forState:UIControlStateNormal];
-    
-    [[PFUser currentUser] setObject:[NSNumber numberWithInt:0] forKey:@"messagingBadge"];
-    [[PFUser currentUser] saveInBackground];
-    
 }
 
 -(void)notificationBarButton:(id)sender {

@@ -30,8 +30,9 @@
 
 @implementation PAPMessagingViewController
 
-- (void)setTargetUser:(PFUser *)targetUser {
+- (void)setTargetUser:(PFUser *)targetUser setUserNumber:(NSString *)userNumber{
     self.recipient = targetUser;
+    self.userTypeNumber = userNumber;
 }
 
 - (void)setRoomInfo:(PFObject *)roomInfo {
@@ -209,6 +210,19 @@
     }];
     
     [self.targetChatRoom setObject:self.messageTextView.text forKey:@"lastMessage"];
+    if ([self.userTypeNumber isEqualToString:@"userOne"]) {
+        if ([self.targetChatRoom objectForKey:@"userOneBadge"] > 0) {
+            [self.targetChatRoom incrementKey:@"userOneBadge"];
+        } else {
+            [self.targetChatRoom setObject:[NSNumber numberWithInt:1] forKey:@"userOneBadge"];
+        }
+    } else {
+        if ([self.targetChatRoom objectForKey:@"userTwoBadge"] > 0) {
+            [self.targetChatRoom incrementKey:@"userTwoBadge"];
+        } else {
+            [self.targetChatRoom setObject:[NSNumber numberWithInt:1] forKey:@"userTwoBadge"];
+        }
+    }
     [self.targetChatRoom saveInBackground];
 }
 

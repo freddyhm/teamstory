@@ -102,7 +102,7 @@
 
 -(void)cellButtonAction:(UIButton *)sender {
     PAPMessagingViewController *messageViewController = [[PAPMessagingViewController alloc] init];
-    [messageViewController setTargetUser:[[self.messageList objectAtIndex:sender.tag] objectForKey:[self.userNumberList objectAtIndex:sender.tag]]];
+    [messageViewController setTargetUser:[[self.messageList objectAtIndex:sender.tag] objectForKey:[self.userNumberList objectAtIndex:sender.tag]] setUserNumber:[self.userNumberList objectAtIndex:sender.tag]];
     [messageViewController setRoomInfo:[self.messageList objectAtIndex:sender.tag]];
     [self.navigationController pushViewController:messageViewController animated:YES];
 }

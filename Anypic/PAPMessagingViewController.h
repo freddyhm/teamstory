@@ -21,8 +21,9 @@
 @property (nonatomic, strong) NSMutableArray *messageQuery;
 @property (nonatomic, strong) PFObject *targetChatRoom;
 @property (nonatomic, strong) UIButton *notificationView;
+@property (nonatomic, strong) NSString *userTypeNumber;
 
-- (void)setTargetUser:(PFUser *)targetUser;
+- (void)setTargetUser:(PFUser *)targetUser setUserNumber:(NSString *)userNumber;
 - (void)setRoomInfo:(PFObject *)roomInfo;
 
 @end

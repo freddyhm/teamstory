@@ -136,11 +136,11 @@
     [userTwoQuery whereKey:@"userTwo" equalTo:[PFUser currentUser]];
     
     PFQuery *finalChatRoomQuery = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:userOneQuery, userTwoQuery,nil]];
-    [finalChatRoomQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+    [finalChatRoomQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         [SVProgressHUD dismiss];
         
         if (!error) {
-            if (objects.count == 0) {
+            if (object) {
                 PFObject *createChatRoom = [PFObject objectWithClassName:@"ChatRoom"];
                 [createChatRoom setObject:[PFUser currentUser] forKey:@"userOne"];
                 [createChatRoom setObject:aUser forKey:@"userTwo"];
@@ -148,20 +148,27 @@
                     if (!error) {
                         [self dismissViewControllerAnimated:NO completion:^{
                             PAPMessagingViewController *messageViewController = [[PAPMessagingViewController alloc] init];
-                            [messageViewController setTargetUser:aUser];
+                            [messageViewController setTargetUser:aUser setUserNumber:@"userTwo"];
                             [messageViewController setRoomInfo:createChatRoom];
                             [self.navController pushViewController:messageViewController animated:NO];
                         }];
                     } else {
                         NSLog(@"%@", error);
                     }
-                    
                 }];
             } else {
                 [self dismissViewControllerAnimated:NO completion:^{
                     PAPMessagingViewController *messageViewController = [[PAPMessagingViewController alloc] init];
-                    [messageViewController setTargetUser:aUser];
-                    [messageViewController setRoomInfo:[objects objectAtIndex:0]];
+                    NSString *userNumber;
+                    
+                    if ([[[object objectForKey:@"userOne"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+                        userNumber = @"userTwo";
+                    } else {
+                        userNumber = @"userOne";
+                    }
+                    
+                    [messageViewController setTargetUser:aUser setUserNumber:userNumber];
+                    [messageViewController setRoomInfo:object];
                     [self.navController pushViewController:messageViewController animated:NO];
                 }];
             }

@@ -15,8 +15,9 @@ Parse.Cloud.beforeSave('Message', function(request, response) {
                        });
  
 Parse.Cloud.afterSave('Message', function(request) {
+                      Parse.Cloud.useMasterKey();
                       var toUser = request.object.get("toUser");
- 
+
                       var recipientQuery = new Parse.Query(Parse.Installation);
                       recipientQuery.equalTo('user', toUser);
  
@@ -29,6 +30,9 @@ Parse.Cloud.afterSave('Message', function(request) {
                                               }, function(error) {
                                               throw "Push message Error " + error.code + " : " + error.message;
                                               });
+                    
+                      toUser.increment('messagingBadge', 1);
+                      toUser.save();
                        
                       });
  
@@ -57,10 +61,11 @@ var alertPayload = function(request) {
  
         return {
         alert: alertMessage(request), // Set our alert message.
+        badge: 'Increment',
         p: 'm', // Payload Type: Message
         fu: request.object.get('fromUser').id, // From User
         tu: request.object.get('toUser').id,
-        aid: request.object.id, // Activity Id
+        aid: request.object.id, // chatroom Id
         rid: request.object.get('chatRoom').id // chatroom id.
         };
      
