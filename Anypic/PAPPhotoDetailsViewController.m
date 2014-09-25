@@ -516,6 +516,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     if ([[textView text] isEqualToString:@"Add a comment"]) {
         [textView setText:@""];
+        
+        // get post type
+        NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
+        
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Started Writing Comment" properties:@{@"Post Type" : postType}];
     }
 }
 
