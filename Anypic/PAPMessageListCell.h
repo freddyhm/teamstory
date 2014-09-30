@@ -19,6 +19,7 @@
 @property (nonatomic, strong) UILabel *userName;
 @property (nonatomic, strong) PFImageView *profileImageView;
 @property (nonatomic, strong) UILabel *badgeLabel;
+@property (nonatomic, strong) UILabel *timeStampLabel;
 
 -(void)setUser:(PFUser *)user;
 

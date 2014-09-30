@@ -140,10 +140,32 @@
         [SVProgressHUD dismiss];
         
         if (!error) {
-            if (object) {
+            [self dismissViewControllerAnimated:NO completion:^{
+                PAPMessagingViewController *messageViewController = [[PAPMessagingViewController alloc] init];
+                NSString *userNumber;
+                
+                if ([[[object objectForKey:@"userOne"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+                    userNumber = @"userTwo";
+                } else {
+                    userNumber = @"userOne";
+                }
+                
+                [messageViewController setTargetUser:aUser setUserNumber:userNumber];
+                [messageViewController setRoomInfo:object];
+                [self.navController pushViewController:messageViewController animated:NO];
+            }];
+        } else {
+            if ([error code] == 101) {
                 PFObject *createChatRoom = [PFObject objectWithClassName:@"ChatRoom"];
                 [createChatRoom setObject:[PFUser currentUser] forKey:@"userOne"];
                 [createChatRoom setObject:aUser forKey:@"userTwo"];
+                
+                // setACL;
+                PFACL *chatRoomACL = [PFACL ACLWithUser:[PFUser currentUser]];
+                [chatRoomACL setPublicWriteAccess:YES];
+                [chatRoomACL setPublicReadAccess:YES];
+                createChatRoom.ACL = chatRoomACL;
+                
                 [createChatRoom saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                     if (!error) {
                         [self dismissViewControllerAnimated:NO completion:^{
@@ -157,23 +179,8 @@
                     }
                 }];
             } else {
-                [self dismissViewControllerAnimated:NO completion:^{
-                    PAPMessagingViewController *messageViewController = [[PAPMessagingViewController alloc] init];
-                    NSString *userNumber;
-                    
-                    if ([[[object objectForKey:@"userOne"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
-                        userNumber = @"userTwo";
-                    } else {
-                        userNumber = @"userOne";
-                    }
-                    
-                    [messageViewController setTargetUser:aUser setUserNumber:userNumber];
-                    [messageViewController setRoomInfo:object];
-                    [self.navController pushViewController:messageViewController animated:NO];
-                }];
+                NSLog(@"%@", error);
             }
-        } else {
-            NSLog(@"%@", error);
         }
     }];
 }

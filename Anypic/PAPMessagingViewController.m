@@ -13,8 +13,8 @@
 #define navBarHeight 64.0f
 #define textSize 15.0f
 #define sendButtonWidth 50.0f
-#define sendButtonHeight 30.0f
-#define messageTextSize 13.0f
+#define sendButtonHeight 45.0f
+#define messageTextSize 16.0f
 #define messageHorizontalSpacing 80.0f
 #define notificationBarHeight 30.0f
 
@@ -51,13 +51,12 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     
+    self.messageQuery = [[NSMutableArray alloc] init];
+    [self registerForNotifications];
+    
     self.tabBarController.tabBar.hidden = YES;
     tabBarSize = self.tabBarController.tabBar.frame;
     self.tabBarController.tabBar.frame = CGRectZero;
-    [self registerForKeyboardNotifications];
-    self.messageQuery = [[NSMutableArray alloc] init];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTableViewNotification:) name:@"updateTableView" object:nil];
     
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:@"messagingScreen" setTargetRoom:self.targetChatRoom];
 
@@ -77,26 +76,37 @@
     [self setEdgesForExtendedLayout:UIRectEdgeNone];
     self.view.userInteractionEnabled = YES;
     
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [backButton setFrame:CGRectMake(0, 0, 22.0f, 22.0f)];
+    [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
+    [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    
+    self.navigationItem.title = [self.recipient objectForKey:@"displayName"];
+    
     // --------------------- Keyboard animation
     
     self.messageTextViewBG = [[UIView alloc] initWithFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (navBarHeight + messageTextViewHeight), [UIScreen mainScreen].bounds.size.width, messageTextViewHeight)];
-    [self.messageTextViewBG setBackgroundColor:[UIColor colorWithWhite:0.8f alpha:1.0f]];
+    [self.messageTextViewBG setBackgroundColor:[UIColor colorWithWhite:0.9f alpha:1.0f]];
     [self.view addSubview:self.messageTextViewBG];
     
     self.messageTextView = [[UITextView alloc] initWithFrame:CGRectMake(5.0f, 5.0f, self.messageTextViewBG.bounds.size.width - 10.0f, self.messageTextViewBG.bounds.size.height - 10.0f)];
+    self.messageTextView.keyboardType = UIKeyboardTypeTwitter;
     [self.messageTextView setBackgroundColor:[UIColor whiteColor]];
     self.messageTextView.delegate = self;
-    self.messageTextView.layer.cornerRadius = 5.0f;
     self.messageTextView.font = [UIFont systemFontOfSize:textSize];
-    self.messageTextView.keyboardType = UIKeyboardTypeTwitter;
     [self.messageTextViewBG addSubview:self.messageTextView];
     
-    self.sendButton = [[UIButton alloc] initWithFrame:CGRectMake(self.messageTextViewBG.bounds.size.width - sendButtonWidth, self.messageTextViewBG.bounds.size.height - sendButtonHeight - 10.0f, sendButtonWidth, sendButtonHeight)];
-    [self.sendButton setTitle:@"Send" forState:UIControlStateNormal];
+    UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
+    
+    self.sendButton = [[UIButton alloc] initWithFrame:CGRectMake(self.messageTextViewBG.bounds.size.width - sendButtonWidth, 0.0f, sendButtonWidth, sendButtonHeight)];
+    [self.sendButton setTitle:@"SEND" forState:UIControlStateNormal];
+    self.sendButton.titleLabel.font = [UIFont boldSystemFontOfSize:13.0f];
     self.sendButton.hidden = YES;
     [self.sendButton addTarget:self action:@selector(sendButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.sendButton.alpha = 0.7f;
     self.sendButton.enabled = NO;
+    [self.sendButton setTitleColor:teamStoryColor forState:UIControlStateNormal];
     [self.messageTextViewBG addSubview:self.sendButton];
     
     
@@ -159,6 +169,15 @@
 
 # pragma - ()
 
+- (void) backButtonAction:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)scrollToBottom:(BOOL)animated {
+    NSIndexPath* ipath = [NSIndexPath indexPathForRow: [self.messageQuery count] - 1 inSection: 0];
+    [self.messageList scrollToRowAtIndexPath: ipath atScrollPosition: UITableViewScrollPositionTop animated:animated];
+}
+
 -(void)dismissKeyboard {
     [self.view endEditing:YES];
 }
@@ -182,6 +201,7 @@
         [self.messageQuery removeAllObjects];
         [self.messageQuery addObjectsFromArray:objects];
         [self.messageList reloadData];
+        [self scrollToBottom:NO];
     }];
 }
 
@@ -201,6 +221,11 @@
     [messagePFObject setObject:self.recipient forKey:@"toUser"];
     [messagePFObject setObject:self.messageTextView.text forKey:@"messageBody"];
     [messagePFObject setObject:self.targetChatRoom forKey:@"chatRoom"];
+    
+    // adding new object.
+    [self.messageQuery addObject:messagePFObject];
+    [self.messageList reloadData];
+    [self scrollToBottom:YES];
     [messagePFObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if(!error) {
             NSLog(@"Message Sent");
@@ -208,6 +233,7 @@
             NSLog(@"%@", error);
         }
     }];
+    
     
     [self.targetChatRoom setObject:self.messageTextView.text forKey:@"lastMessage"];
     if ([self.userTypeNumber isEqualToString:@"userOne"]) {
@@ -227,8 +253,7 @@
 }
 
 # pragma UIKeyboard
-- (void)registerForKeyboardNotifications
-{
+- (void)registerForNotifications {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification object:nil];
@@ -236,6 +261,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTableViewNotification:) name:@"updateTableView" object:nil];
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {
@@ -248,12 +275,13 @@
     CGRect keyboardFrame = [keyboardFrameValue CGRectValue];
     keyboardHeight = keyboardFrame.size.height;
     
+    
     // ---------- Adjust TextView location
     [UIView animateWithDuration:keyboardDuration delay:0 options:animationOptionsWithCurve(animationCurve) animations:^{
         self.messageTextViewBG.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (navBarHeight + messageTextViewHeight) - keyboardHeight, [UIScreen mainScreen].bounds.size.width, messageTextViewHeight);
         self.messageList.frame = CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - self.messageTextViewBG.bounds.size.height - navBarHeight - keyboardHeight);
+        [self scrollToBottom:NO];
     } completion:^(BOOL finished) {
-        
     }];
     
 }
@@ -291,10 +319,13 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:messageTextSize]};
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Light" size:messageTextSize]};
     if (self.messageQuery.count > 0) {
         CGRect textViewSize = [[[self.messageQuery objectAtIndex:indexPath.row] objectForKey:@"messageBody"] boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - messageHorizontalSpacing, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
+        
+        if (textViewSize.size.height > 30.0f) {
             return textViewSize.size.height + 20.0f;
+        } else return [PAPMessagingCell heightForCell];
     } else {
         return [PAPMessagingCell heightForCell];
     }
@@ -308,17 +339,39 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
         cell = [[PAPMessagingCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.delegate = self;
     }
+    
     PFObject *currentOBJ = [self.messageQuery objectAtIndex:indexPath.row];
+    
+    self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
+    
+    NSDate *updatedDate = [currentOBJ createdAt];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"h:mm a"];
+    
+    // Get time interval
+    NSTimeInterval timeInterval = [updatedDate timeIntervalSinceNow];
+    [self.timeIntervalFormatter setUsesAbbreviatedCalendarUnits:YES];
+    NSString *timestamp = [self.timeIntervalFormatter stringForTimeInterval:timeInterval];
+    
+    if (fabsf(timeInterval) > (12 * 60 * 60)) {
+        cell.timeStampLabel.text = timestamp;
+    } else {
+        cell.timeStampLabel.text = [dateFormat stringFromDate:updatedDate];
+    }
+    
+    CGFloat cellHeight = [self tableView:tableView heightForRowAtIndexPath:indexPath];
+    
     if ([[[currentOBJ objectForKey:@"fromUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
         cell.RECEIVEDMessageView.hidden = YES;
         cell.SENTMessageView.hidden = NO;
+        cell.timeStampLabel.frame = CGRectMake(5.0f, cellHeight - 25.0f, 50.0f, 15.0f);
     } else {
         cell.SENTMessageView.hidden = YES;
         cell.RECEIVEDMessageView.hidden = NO;
+        cell.timeStampLabel.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 50.0f, cellHeight - 25.0f, 50.0f, 15.0f);
     }
     
     [cell setText:[currentOBJ objectForKey:@"messageBody"]];
-    [cell setTime:[currentOBJ objectForKey:@"createdAt"]];
     
     return cell;
 }

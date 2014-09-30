@@ -192,16 +192,7 @@
     [PAPUtility captureScreenGA:@"Home"];
     
     [[Mixpanel sharedInstance] track:@"Viewed Home Screen" properties:@{}];
-    /*
-    // fetch unread messages, show feedback screen
-    self.messageNotificationCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
     
-    if([self.messageNotificationCount intValue] > 0){
-        [self.feedbackBtn.imageView setImage:[UIImage imageNamed:@"button-feedback-notify.png"]];
-    }else{
-        [self.feedbackBtn.imageView setImage:[UIImage imageNamed:@"button-feedback.png"]];
-    }
-    */
     // disabling notification bar for now.
     /*
     PFQuery *notificationQuery = [PFQuery queryWithClassName:@"Notification"];

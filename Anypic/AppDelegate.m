@@ -260,7 +260,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
                 self.messageListCell = [[PAPMessageListCell alloc] init];
                 self.messagingViewController = [[PAPMessagingViewController alloc] init];
                 
-                [self.homeViewController.feedbackBtn setTitle:[newMessageBadgeNumber stringValue]forState:UIControlStateNormal];
+                [self.homeViewController.feedbackBtn setTitle:[newMessageBadgeNumber stringValue] forState:UIControlStateNormal];
                 [self.homeViewController.feedbackBtn setImage:nil forState:UIControlStateNormal];
                 
                 if ([self.userView isEqual:@"messagingScreen"]) {

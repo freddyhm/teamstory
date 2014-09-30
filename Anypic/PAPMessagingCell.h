@@ -18,10 +18,10 @@
 @property (nonatomic, strong) UIView *SENTMessageView;
 @property (nonatomic, strong) UILabel *SENTMessageLabel;
 @property (nonatomic, strong) NSString *messageType;
+@property (nonatomic, strong) UILabel *timeStampLabel;
 
 -(void)setType:(NSString *)type;
 -(void)setText:(NSString *)text;
--(void)setTime:(NSDate *)date;
 
 +(CGFloat)heightForCell;
 

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PAPMessagingCell.h"
 #import "AppDelegate.h"
+#import "TTTTimeIntervalFormatter.h"
 
 @interface PAPMessagingViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, PAPMessagingCellDelegate, UITextViewDelegate, UIScrollViewDelegate>
 
@@ -22,6 +23,7 @@
 @property (nonatomic, strong) PFObject *targetChatRoom;
 @property (nonatomic, strong) UIButton *notificationView;
 @property (nonatomic, strong) NSString *userTypeNumber;
+@property (nonatomic, strong) TTTTimeIntervalFormatter *timeIntervalFormatter;
 
 - (void)setTargetUser:(PFUser *)targetUser setUserNumber:(NSString *)userNumber;
 - (void)setRoomInfo:(PFObject *)roomInfo;
