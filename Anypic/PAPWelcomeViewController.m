@@ -12,6 +12,7 @@
 #import "PAPHomeViewController.h"
 #import "PAPprofileSetupViewController.h"
 #import "Mixpanel.h"
+#import <ParseFacebookUtils/PFFacebookUtils.h>
 
 @implementation PAPWelcomeViewController
 

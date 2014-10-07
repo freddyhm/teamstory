@@ -83,6 +83,14 @@
     [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     
+    UIImage *moreActionButtonImage = [UIImage imageNamed:@"button-more.png"];
+    UIButton *moreActionButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [moreActionButton setFrame:CGRectMake(0.0f, 0.0f, moreActionButtonImage.size.width, moreActionButtonImage.size.height)];
+    [moreActionButton setBackgroundImage:moreActionButtonImage forState:UIControlStateNormal];
+    [moreActionButton addTarget:self action:@selector(moreActionButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:moreActionButton];
+    
+    
     self.navigationItem.title = [self.recipient objectForKey:@"displayName"];
     
     // --------------------- Keyboard animation
@@ -168,6 +176,14 @@
 }
 
 # pragma - ()
+
+- (void) moreActionButtonAction:(id)sender {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
+    actionSheet.delegate = self;
+    [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Report User"]];
+    [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
+    [actionSheet showFromTabBar:self.tabBarController.tabBar];
+}
 
 - (void) backButtonAction:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
@@ -346,7 +362,7 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
     
     NSDate *updatedDate = [currentOBJ createdAt];
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"h:mm a"];
+    [dateFormat setDateFormat:@"MM dd h:mm a"];
     
     // Get time interval
     NSTimeInterval timeInterval = [updatedDate timeIntervalSinceNow];
@@ -359,21 +375,44 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
         cell.timeStampLabel.text = [dateFormat stringFromDate:updatedDate];
     }
     
-    CGFloat cellHeight = [self tableView:tableView heightForRowAtIndexPath:indexPath];
-    
     if ([[[currentOBJ objectForKey:@"fromUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
         cell.RECEIVEDMessageView.hidden = YES;
         cell.SENTMessageView.hidden = NO;
-        cell.timeStampLabel.frame = CGRectMake(5.0f, cellHeight - 25.0f, 50.0f, 15.0f);
+        cell.timeStampLabel.frame = CGRectMake(5.0f, 0.0f, 50.0f, 15.0f);
+        cell.timeStampLabel.textAlignment = NSTextAlignmentLeft;
     } else {
         cell.SENTMessageView.hidden = YES;
         cell.RECEIVEDMessageView.hidden = NO;
-        cell.timeStampLabel.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 50.0f, cellHeight - 25.0f, 50.0f, 15.0f);
+        cell.timeStampLabel.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 55.0f, 0.0f, 50.0f, 15.0f);
+        cell.timeStampLabel.textAlignment = NSTextAlignmentRight;
     }
     
     [cell setText:[currentOBJ objectForKey:@"messageBody"]];
     
     return cell;
+}
+
+#pragma mark - UIActionSheetDelegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if ([actionSheet destructiveButtonIndex] == buttonIndex) {
+        NSString *emailTitle = @"[USER REPORT] Reporting User (Messages)";
+        NSArray *toRecipients = [NSArray arrayWithObject:@"info@teamstoryapp.com"];
+        
+        NSString *reportingUserName = [self.recipient objectForKey:@"displayName"];
+        NSString *currentUserName = [[PFUser currentUser] objectForKey:@"displayName"];
+        NSString *messageBody = [NSString stringWithFormat:@"Current Username: %@\nTarget Username: %@\nI am reporting because:\n", currentUserName, reportingUserName];
+        
+        MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+        mc.mailComposeDelegate = self;
+        [mc setSubject:emailTitle];
+        [mc setMessageBody:messageBody isHTML:NO];
+        [mc setToRecipients:toRecipients];
+        
+        
+        // Present mail view controller on screen
+        [self presentViewController:mc animated:YES completion:nil];
+    }
 }
 
 @end

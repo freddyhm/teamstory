@@ -10,8 +10,9 @@
 #import "PAPMessagingCell.h"
 #import "AppDelegate.h"
 #import "TTTTimeIntervalFormatter.h"
+#import <MessageUI/MFMailComposeViewController.h>
 
-@interface PAPMessagingViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, PAPMessagingCellDelegate, UITextViewDelegate, UIScrollViewDelegate>
+@interface PAPMessagingViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, PAPMessagingCellDelegate, UITextViewDelegate, UIScrollViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate>
 
 @property (nonatomic, strong) UITableView *messageList;
 @property (nonatomic, strong) UITextView *messageTextView;

@@ -67,6 +67,7 @@
 		4609975E1938119A00C5AD96 /* icon-twitter-profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460997501938119A00C5AD96 /* icon-twitter-profile@2x.png */; };
 		4609975F1938119A00C5AD96 /* icon-twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 460997511938119A00C5AD96 /* icon-twitter.png */; };
 		460997601938119A00C5AD96 /* icon-twitter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460997521938119A00C5AD96 /* icon-twitter@2x.png */; };
+		4611EE9D19DF427C00B319C0 /* ParseFacebookUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4611EE9C19DF427C00B319C0 /* ParseFacebookUtils.framework */; };
 		461C57E519BF589400F6575C /* PAPMessagingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 461C57E419BF589400F6575C /* PAPMessagingCell.m */; };
 		461C57E819C0FEA100F6575C /* PAPMessageListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 461C57E719C0FEA100F6575C /* PAPMessageListViewController.m */; };
 		461C57EB19C101ED00F6575C /* PAPMessageListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 461C57EA19C101EC00F6575C /* PAPMessageListCell.m */; };
@@ -645,6 +646,7 @@
 		460997501938119A00C5AD96 /* icon-twitter-profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-twitter-profile@2x.png"; sourceTree = "<group>"; };
 		460997511938119A00C5AD96 /* icon-twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-twitter.png"; sourceTree = "<group>"; };
 		460997521938119A00C5AD96 /* icon-twitter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-twitter@2x.png"; sourceTree = "<group>"; };
+		4611EE9C19DF427C00B319C0 /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseFacebookUtils.framework; sourceTree = "<group>"; };
 		461C57E319BF589400F6575C /* PAPMessagingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPMessagingCell.h; path = Anypic/PAPMessagingCell.h; sourceTree = SOURCE_ROOT; };
 		461C57E419BF589400F6575C /* PAPMessagingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPMessagingCell.m; path = Anypic/PAPMessagingCell.m; sourceTree = SOURCE_ROOT; };
 		461C57E619C0FEA100F6575C /* PAPMessageListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPMessageListViewController.h; path = Anypic/PAPMessageListViewController.h; sourceTree = SOURCE_ROOT; };
@@ -1256,6 +1258,7 @@
 				092354B513A1D7F000DA740F /* SystemConfiguration.framework in Frameworks */,
 				09ABC07613A1D52D009C3FCF /* CoreGraphics.framework in Frameworks */,
 				D5FB8E6C18F79E2D0034CAE6 /* Crashlytics.framework in Frameworks */,
+				4611EE9D19DF427C00B319C0 /* ParseFacebookUtils.framework in Frameworks */,
 				09ABC07213A1D52D009C3FCF /* UIKit.framework in Frameworks */,
 				D52C1E4B18D9515D00625887 /* libKonotorCombined.a in Frameworks */,
 				FEBE53499B0C4F878DB97BDF /* libPods.a in Frameworks */,
@@ -1903,6 +1906,7 @@
 		C4A0B4FF156C5B9F00E48554 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				4611EE9C19DF427C00B319C0 /* ParseFacebookUtils.framework */,
 				D5654174196F64D400E74164 /* ALAssetsLibrary-CustomPhotoAlbum */,
 				D542D8AB196A6F4700A0384F /* ELCImagePicker */,
 				D5D65A0119155E6F00FAC142 /* ProdCloudCode */,

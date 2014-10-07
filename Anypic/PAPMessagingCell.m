@@ -12,6 +12,8 @@
 #define defaultMessageCellHeight 40.0f
 #define messageTextSize 16.0f
 #define arrowSpacerWidth 20.0f
+#define MAXMessageViewWidth 250.0f
+#define MAXMessageLabelWidth 230.0f
 
 @implementation PAPMessagingCell
 
@@ -20,13 +22,13 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         
-        self.RECEIVEDMessageView = [[UIView alloc] initWithFrame:CGRectMake(arrowSpacerWidth, 0.0f, [UIScreen mainScreen].bounds.size.width - messageHorizontalSpacing, 40.0f)];
+        self.RECEIVEDMessageView = [[UIView alloc] initWithFrame:CGRectMake(arrowSpacerWidth, 0.0f, MAXMessageViewWidth, 40.0f)];
         self.RECEIVEDMessageView.backgroundColor = [UIColor colorWithRed:234.0f/255.0f green:237.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
         self.RECEIVEDMessageView.layer.cornerRadius = 5.0f;
         self.RECEIVEDMessageView.clipsToBounds = YES;
         [self addSubview:self.RECEIVEDMessageView];
         
-        self.SENTMessageView = [[UIView alloc] initWithFrame:CGRectMake(messageHorizontalSpacing, 0.0f, [UIScreen mainScreen].bounds.size.width - messageHorizontalSpacing - arrowSpacerWidth, 40.0f)];
+        self.SENTMessageView = [[UIView alloc] initWithFrame:CGRectMake(messageHorizontalSpacing, 0.0f, MAXMessageViewWidth, 40.0f)];
         self.SENTMessageView.backgroundColor = [UIColor colorWithRed:0 green:158.0f/255.0f blue:255.0f/255.0f alpha:1.0f];
         self.SENTMessageView.layer.cornerRadius = 5.0f;
         self.SENTMessageView.clipsToBounds = YES;
@@ -41,10 +43,9 @@
         self.SENTMessageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:messageTextSize];
         [self.SENTMessageView addSubview:self.SENTMessageLabel];
         
-        self.timeStampLabel = [[UILabel alloc] init];
+        self.timeStampLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 50.0f, 15.0f)];
         [self.timeStampLabel setTextColor:[UIColor colorWithWhite:0.8f alpha:1.0f]];
         [self.timeStampLabel setFont:[UIFont systemFontOfSize:11.0f]];
-        self.timeStampLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.timeStampLabel];
         
     }
@@ -64,10 +65,11 @@
     
     NSDictionary *attributes = @{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Light" size:messageTextSize]};
     
-    CGRect textViewSize = [self.RECEIVEDMessageLabel.text boundingRectWithSize:CGSizeMake(self.RECEIVEDMessageLabel.bounds.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
+    CGRect textViewSize = [self.RECEIVEDMessageLabel.text boundingRectWithSize:CGSizeMake(MAXMessageLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
+    NSLog(@"%f", textViewSize.size.width);
     
-    self.RECEIVEDMessageView.frame = CGRectMake(arrowSpacerWidth, 0.0f, [UIScreen mainScreen].bounds.size.width - messageHorizontalSpacing - arrowSpacerWidth, textViewSize.size.height + 10.0f);
-    self.SENTMessageView.frame = CGRectMake(messageHorizontalSpacing, 0.0f, [UIScreen mainScreen].bounds.size.width - messageHorizontalSpacing - arrowSpacerWidth, textViewSize.size.height + 10.0f);
+    self.RECEIVEDMessageView.frame = CGRectMake(arrowSpacerWidth, 0.0f, textViewSize.size.width + 20.0f, textViewSize.size.height + 10.0f);
+    self.SENTMessageView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - textViewSize.size.width - 20.0f - arrowSpacerWidth, 0.0f, textViewSize.size.width + 20.0f, textViewSize.size.height + 10.0f);
     
     [self resizeTextView];
     
