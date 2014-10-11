@@ -69,6 +69,13 @@
     [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
     [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    self.navigationController.navigationBar.backgroundColor = [UIColor whiteColor];
+    
+    UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
+    
+    UIView *statusBarView = [[UIView alloc] initWithFrame:CGRectMake(0, -20, 320, 22)];
+    statusBarView.backgroundColor = teamStoryColor;
+    [self.navigationController.navigationBar addSubview:statusBarView];
     
     UIImage *newMessageButtonImage = [UIImage imageNamed:@"btn_new_message.png"];
     UIButton *newMessageButton = [UIButton buttonWithType:UIButtonTypeCustom];

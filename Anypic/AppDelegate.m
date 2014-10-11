@@ -708,6 +708,9 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
         NSString *notificationType = [userInfo objectForKey:kPAPPushPayloadPayloadTypeKey];
         
         if ([notificationType isEqualToString:@"m"]) {
+            self.messageTargetUser = nil;
+            self.chatRoom = nil;
+            
             [self navigateToChatRoomWithNotificationWithTargetUser:toUserId setRoomInfo:messageRoomId];
             [[PFUser currentUser] setObject:[NSNumber numberWithInt:0] forKey:@"messagingBadge"];
             [[PFUser currentUser] saveInBackground];
