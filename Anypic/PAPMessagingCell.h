@@ -19,6 +19,8 @@
 @property (nonatomic, strong) UILabel *SENTMessageLabel;
 @property (nonatomic, strong) NSString *messageType;
 @property (nonatomic, strong) UILabel *timeStampLabel;
+@property (nonatomic, strong) UIImageView *SENTTriangle;
+@property (nonatomic, strong) UIImageView *RECEIVEDTriangle;
 
 -(void)setType:(NSString *)type;
 -(void)setText:(NSString *)text;

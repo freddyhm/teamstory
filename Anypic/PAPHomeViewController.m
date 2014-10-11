@@ -41,6 +41,8 @@
 @property (nonatomic, strong) UIFont *feedFontDeselected;
 @property (nonatomic, strong) UIFont *feedFontSelected;
 @property (nonatomic, strong) UIView *switchWhiteOverlay;
+@property (nonatomic, strong) UIImage *feedbackImg;
+@property (nonatomic, strong) UIImage *feedbackImgBadge;
 @property BOOL firstRun;
 @property BOOL isOpeningFeedback;
 @end
@@ -67,15 +69,21 @@
     self.isOpeningFeedback = NO;
     
     // button image for feedback
-    UIImage *feedbackImg = [UIImage imageNamed:@"button-feedback.png"];
-    self.feedbackBtn = [[UIButton alloc] initWithFrame:CGRectMake(282, 6, feedbackImg.size.width, feedbackImg.size.height)];
+    self.feedbackImg = [UIImage imageNamed:@"btn_message_empty.png"];
+    self.feedbackImgBadge = [UIImage imageNamed:@"btn_message_count.png"];
+    self.feedbackBtn = [[UIButton alloc] initWithFrame:CGRectMake(282, 10, self.feedbackImg.size.width, self.feedbackImg.size.height)];
+    self.feedbackBtn.titleEdgeInsets = UIEdgeInsetsMake(-2.0f, 1.0f, 0.0f, 0.0f);
+    self.feedbackBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
+    [self.feedbackBtn.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:10.0f]];
     [self.feedbackBtn addTarget:self action:@selector(promptFeedback:) forControlEvents:UIControlEventTouchUpInside];
     
-    if ([[PFUser currentUser] objectForKey:@"messagingBadge"] > 0) {
+    if ([[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue] > 0) {
         [self.feedbackBtn setTitle:[[[PFUser currentUser] objectForKey:@"messagingBadge"] stringValue] forState:UIControlStateNormal];
-        [self.feedbackBtn setImage:nil forState:UIControlStateNormal];
+        self.feedbackBtn.frame = CGRectMake(282, 10, self.feedbackImgBadge.size.width, self.feedbackImgBadge.size.height);
+        [self.feedbackBtn setBackgroundImage:self.feedbackImgBadge forState:UIControlStateNormal];
     } else {
-        [self.feedbackBtn setImage:feedbackImg forState:UIControlStateNormal];
+        self.feedbackBtn.frame = CGRectMake(282, 10, self.feedbackImg.size.width, self.feedbackImg.size.height);
+        [self.feedbackBtn setBackgroundImage:self.feedbackImg forState:UIControlStateNormal];
         [self.feedbackBtn setTitle:nil forState:UIControlStateNormal];
     }
 
@@ -192,6 +200,10 @@
     [PAPUtility captureScreenGA:@"Home"];
     
     [[Mixpanel sharedInstance] track:@"Viewed Home Screen" properties:@{}];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateMessageButton:)
+                                                 name:@"updateMessageButton"
+                                               object:nil];
     
     // disabling notification bar for now.
     /*
@@ -229,6 +241,21 @@
         }
     }];
      */
+}
+
+- (void) updateMessageButton:(NSNotification *)notification {
+    [[PFUser currentUser] refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if ([[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue] > 0) {
+            [self.feedbackBtn setTitle:[[[PFUser currentUser] objectForKey:@"messagingBadge"] stringValue] forState:UIControlStateNormal];
+            self.feedbackBtn.frame = CGRectMake(282, 10, self.feedbackImgBadge.size.width, self.feedbackImgBadge.size.height);
+            [self.feedbackBtn setBackgroundImage:self.feedbackImgBadge forState:UIControlStateNormal];
+            [self.feedbackBtn setTitle:[[[PFUser currentUser] objectForKey:@"messagingBadge"] stringValue] forState:UIControlStateNormal];
+        } else {
+            self.feedbackBtn.frame = CGRectMake(282, 10, self.feedbackImg.size.width, self.feedbackImg.size.height);
+            [self.feedbackBtn setBackgroundImage:self.feedbackImg forState:UIControlStateNormal];
+            [self.feedbackBtn setTitle:nil forState:UIControlStateNormal];
+        }
+    }];
 }
 
 #pragma mark - Datasource

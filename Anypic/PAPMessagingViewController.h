@@ -11,8 +11,9 @@
 #import "AppDelegate.h"
 #import "TTTTimeIntervalFormatter.h"
 #import <MessageUI/MFMailComposeViewController.h>
+#import "CustomKeyboardViewController.h"
 
-@interface PAPMessagingViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, PAPMessagingCellDelegate, UITextViewDelegate, UIScrollViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate>
+@interface PAPMessagingViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, PAPMessagingCellDelegate, UIScrollViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate,CustomKeyboardViewControllerDelegate>
 
 @property (nonatomic, strong) UITableView *messageList;
 @property (nonatomic, strong) UITextView *messageTextView;
@@ -25,6 +26,7 @@
 @property (nonatomic, strong) UIButton *notificationView;
 @property (nonatomic, strong) NSString *userTypeNumber;
 @property (nonatomic, strong) TTTTimeIntervalFormatter *timeIntervalFormatter;
+@property (nonatomic, strong) CustomKeyboardViewController *customKeyboard;
 
 - (void)setTargetUser:(PFUser *)targetUser setUserNumber:(NSString *)userNumber;
 - (void)setRoomInfo:(PFObject *)roomInfo;

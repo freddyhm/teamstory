@@ -70,7 +70,7 @@
     [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     
-    UIImage *newMessageButtonImage = [UIImage imageNamed:@"button-feedback.png"];
+    UIImage *newMessageButtonImage = [UIImage imageNamed:@"btn_new_message.png"];
     UIButton *newMessageButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [newMessageButton setFrame:CGRectMake(0.0f, 0.0f, newMessageButtonImage.size.width, newMessageButtonImage.size.height)];
     [newMessageButton setImage:newMessageButtonImage forState:UIControlStateNormal];
@@ -128,17 +128,6 @@
     [searchBarViewController setNavigationController:self.navigationController];
     [self presentViewController:searchBarViewController animated:YES completion:nil];
     
-    /*
-    PAPMessagingViewController *messagingViewController = [[PAPMessagingViewController alloc] init];
-    
-    [self.navigationController presentViewController:messagingViewController animated:YES completion:nil];
-    [UIView  beginAnimations:nil context:NULL];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-    [UIView setAnimationDuration:0.75];
-    [self.navigationController pushViewController:messagingViewController animated:YES];
-    [UIView setAnimationTransition:UIViewAnimationTransitionNone forView:self.navigationController.view cache:NO];
-    [UIView commitAnimations];
-     */
 }
 
 -(void)cellButtonAction:(UIButton *)sender {
@@ -154,9 +143,15 @@
         offSetBadgeNumber = [currentObject objectForKey:@"userOneBadge"];
         [currentObject setObject:[NSNumber numberWithInt:0] forKey:@"userOneBadge"];
     }
+    
     [currentObject saveInBackground];
     
-    [[PFUser currentUser] incrementKey:@"messagingBadge" byAmount:[NSNumber numberWithInt:0 - [offSetBadgeNumber intValue]]];
+    if ([[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue] - [offSetBadgeNumber intValue] < 0 ) {
+        [[PFUser currentUser] setObject:[NSNumber numberWithInt:0] forKey:@"messagingBadge"];
+    } else {
+        [[PFUser currentUser] setObject:[NSNumber numberWithInt:[[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue] - [offSetBadgeNumber intValue]] forKey:@"messagingBadge"];
+    }
+
     [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageButton" object:nil];
     }];
@@ -213,7 +208,7 @@
     }
     
     cell.lastMessageLabel.text = [[self.messageList objectAtIndex:indexPath.row] objectForKey:@"lastMessage"];
-    [cell.lastMessageLabel sizeToFit];
+    //[cell.lastMessageLabel sizeToFit];
     
     self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
     

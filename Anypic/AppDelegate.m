@@ -250,7 +250,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
         NSNumber *newMessageBadgeNumber;
         currentMessageBadgeNumber = [[PFUser currentUser] objectForKey:@"messagingBadge"];
         
-        if (currentMessageBadgeNumber > 0) {
+        if ([currentMessageBadgeNumber intValue] > 0) {
             newMessageBadgeNumber = [NSNumber numberWithInt:[currentMessageBadgeNumber intValue] + 1];
         } else {
             newMessageBadgeNumber = [NSNumber numberWithInt:1];
@@ -261,8 +261,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
                 self.messageListCell = [[PAPMessageListCell alloc] init];
                 self.messagingViewController = [[PAPMessagingViewController alloc] init];
                 
-                [self.homeViewController.feedbackBtn setTitle:[newMessageBadgeNumber stringValue] forState:UIControlStateNormal];
-                [self.homeViewController.feedbackBtn setImage:nil forState:UIControlStateNormal];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageButton" object:nil];
                 
                 if ([self.userView isEqual:@"messagingScreen"]) {
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"updateTableView" object:nil];
@@ -308,11 +307,12 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    NSNumber *messagingBadgeNumber = [[PFUser currentUser] objectForKey:@"messagingBadge"];
-    
-    // syncs icon badge with tab bar badge, resets icon badge back to 0
-    if (application.applicationIconBadgeNumber != 0 && messagingBadgeNumber == 0) {
-
+    [[PFUser currentUser] refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        NSNumber *messagingBadgeNumber = [[PFUser currentUser] objectForKey:@"messagingBadge"];
+        
+        // syncs icon badge with tab bar badge, resets icon badge back to 0
+        if (application.applicationIconBadgeNumber != 0 && messagingBadgeNumber == 0) {
+            
             // check if tab controllers and activity tab exist
             if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
                 
@@ -326,43 +326,50 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
                 NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
                 
                 // current view is activity, clear the badge
-               if(selectedtabIndex == PAPActivityTabBarItemIndex){
+                if(selectedtabIndex == PAPActivityTabBarItemIndex){
                     [self.activityViewController setActivityBadge:nil];
                     [self.activityViewController loadObjects];
-               }
-        }
-    } else if (application.applicationIconBadgeNumber != 0 && messagingBadgeNumber != 0) {
-        if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
-            
-            UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
-            
-            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-            NSNumber *newBadgeValue = [NSNumber numberWithInteger:application.applicationIconBadgeNumber];
-            NSNumber *activityBadgeNumber = [NSNumber numberWithInt:[newBadgeValue intValue] - [messagingBadgeNumber intValue]];
-            tabBarItem.badgeValue = [numberFormatter stringFromNumber:activityBadgeNumber];
-            
-            // get current selected tab
-            NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
-            
-            [self.homeViewController.feedbackBtn setTitle:[messagingBadgeNumber stringValue] forState:UIControlStateNormal];
-            
-            if ([self.userView isEqual:@"messagingScreen"]) {
-                [self.homeViewController.feedbackBtn setTitle:nil forState:UIControlStateNormal];
-            } else if(selectedtabIndex == PAPActivityTabBarItemIndex){
-                [self.activityViewController setActivityBadge:nil];
-                [self.activityViewController loadObjects];
+                }
             }
+        } else if (application.applicationIconBadgeNumber != 0 && messagingBadgeNumber != 0) {
+            if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
+                UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
+                
+                NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+                NSNumber *newBadgeValue = [NSNumber numberWithInteger:application.applicationIconBadgeNumber];
+                NSNumber *activityBadgeNumber = [NSNumber numberWithInt:[newBadgeValue intValue] - [messagingBadgeNumber intValue]];
+                                
+                if ([activityBadgeNumber intValue] > 0) {
+                    tabBarItem.badgeValue = [numberFormatter stringFromNumber:activityBadgeNumber];
+                } else {
+                    tabBarItem.badgeValue = nil;
+                }
+                
+                // get current selected tab
+                NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageButton" object:nil];
+                
+                if ([self.userView isEqual:@"messagingScreen"]) {
+                    [self.homeViewController.feedbackBtn setTitle:nil forState:UIControlStateNormal];
+                    
+                } else if(selectedtabIndex == PAPActivityTabBarItemIndex){
+                    [self.activityViewController setActivityBadge:nil];
+                    [self.activityViewController loadObjects];
+                }
+            }
+            
         }
         
-    }
+        // Clears out all notifications from Notification Center.
+        [[UIApplication sharedApplication] cancelAllLocalNotifications];
+        
+        [[FBSession activeSession] handleDidBecomeActive];
+        
+        // initiate konotor
+        [Konotor newSession];
+    }];
     
-    // Clears out all notifications from Notification Center.
-    [[UIApplication sharedApplication] cancelAllLocalNotifications];
-
-    [[FBSession activeSession] handleDidBecomeActive];
-    
-    // initiate konotor
-    [Konotor newSession];
 }
 
 #pragma mark - UITabBarControllerDelegate
@@ -582,7 +589,12 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
             NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
             NSNumber *newBadgeValue = [NSNumber numberWithInteger:application.applicationIconBadgeNumber];
             NSNumber *activityBadgeNumber = [NSNumber numberWithInt:[newBadgeValue intValue] - [messagingBadgeNumber intValue]];
-            tabBarItem.badgeValue = [numberFormatter stringFromNumber:activityBadgeNumber];
+            
+            if ([activityBadgeNumber intValue] > 0) {
+                tabBarItem.badgeValue = [numberFormatter stringFromNumber:activityBadgeNumber];
+            } else {
+                tabBarItem.badgeValue = nil;
+            }
             
             // get current selected tab
             NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
@@ -591,12 +603,12 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
             
             if ([self.userView isEqual:@"messagingScreen"]) {
                 [self.homeViewController.feedbackBtn setTitle:nil forState:UIControlStateNormal];
+                
             } else if(selectedtabIndex == PAPActivityTabBarItemIndex){
                 [self.activityViewController setActivityBadge:nil];
                 [self.activityViewController loadObjects];
             }
         }
-        
     }
 }
 

@@ -22,6 +22,16 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         
+        UIImage *RECEIVEDTriangleImage = [UIImage imageNamed:@"bubble_triangle_left.png"];
+        self.RECEIVEDTriangle = [[UIImageView alloc] initWithFrame:CGRectMake(13.0f, 7.0f, RECEIVEDTriangleImage.size.width, RECEIVEDTriangleImage.size.height)];
+        [self.RECEIVEDTriangle setImage:RECEIVEDTriangleImage];
+        [self addSubview:self.RECEIVEDTriangle];
+        
+        UIImage *SENTTriangleImage = [UIImage imageNamed:@"bubble_triangle_right.png"];
+        self.SENTTriangle = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 20.0f, 7.0f, SENTTriangleImage.size.width, SENTTriangleImage.size.height)];
+        [self.SENTTriangle setImage:SENTTriangleImage];
+        [self addSubview:self.SENTTriangle];
+        
         self.RECEIVEDMessageView = [[UIView alloc] initWithFrame:CGRectMake(arrowSpacerWidth, 0.0f, MAXMessageViewWidth, 40.0f)];
         self.RECEIVEDMessageView.backgroundColor = [UIColor colorWithRed:234.0f/255.0f green:237.0f/255.0f blue:240.0f/255.0f alpha:1.0f];
         self.RECEIVEDMessageView.layer.cornerRadius = 5.0f;
@@ -66,7 +76,6 @@
     NSDictionary *attributes = @{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Light" size:messageTextSize]};
     
     CGRect textViewSize = [self.RECEIVEDMessageLabel.text boundingRectWithSize:CGSizeMake(MAXMessageLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
-    NSLog(@"%f", textViewSize.size.width);
     
     self.RECEIVEDMessageView.frame = CGRectMake(arrowSpacerWidth, 0.0f, textViewSize.size.width + 20.0f, textViewSize.size.height + 10.0f);
     self.SENTMessageView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - textViewSize.size.width - 20.0f - arrowSpacerWidth, 0.0f, textViewSize.size.width + 20.0f, textViewSize.size.height + 10.0f);

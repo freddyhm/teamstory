@@ -60,10 +60,18 @@
     headerView.backgroundColor = teamStoryColor;
     [self.view addSubview:headerView];
     
-    UIButton *cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0f, (headerView.bounds.size.height - 20) / 2 - 15.0f, 60.0f, 30.0f)];
-    [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
-    [cancelButton addTarget:self action:@selector(cancelButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [headerView addSubview:cancelButton];
+    UILabel *navLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, (headerView.bounds.size.height - 20) / 2, [UIScreen mainScreen].bounds.size.width, 30.0f)];
+    [navLabel setText:@"Choose User"];
+    navLabel.textColor = [UIColor whiteColor];
+    navLabel.textAlignment = NSTextAlignmentCenter;
+    navLabel.font = [UIFont boldSystemFontOfSize:18.0f];
+    [headerView addSubview:navLabel];
+    
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0f, (headerView.bounds.size.height - 11) / 2, 22.0f, 22.0f)];
+    [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
+    [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
+    [backButton addTarget:self action:@selector(cancelButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [headerView addSubview:backButton];
     
     self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, headerViewHeight, [UIScreen mainScreen].bounds.size.width, 40.0f)];
     self.searchBar.delegate = self;
