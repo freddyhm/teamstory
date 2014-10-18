@@ -243,6 +243,8 @@
 		D51072D21937F33F00B1FF0E /* share_thought_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D51072CE1937F33F00B1FF0E /* share_thought_grey@2x.png */; };
 		D51072D31937F33F00B1FF0E /* share_thought_white.png in Resources */ = {isa = PBXBuildFile; fileRef = D51072CF1937F33F00B1FF0E /* share_thought_white.png */; };
 		D51072D41937F33F00B1FF0E /* share_thought_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D51072D01937F33F00B1FF0E /* share_thought_white@2x.png */; };
+		D5135AF719EEDA78001F274A /* PAPActivityFeedViewController_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D5135AF619EEDA78001F274A /* PAPActivityFeedViewController_Tests.m */; };
+		D5135B0719EEDADE001F274A /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A5F51F18D2C3CD000BB243 /* Parse.framework */; };
 		D5144B1C195951D100650061 /* button-feedback-notify.png in Resources */ = {isa = PBXBuildFile; fileRef = D5144B1A195951D100650061 /* button-feedback-notify.png */; };
 		D5144B1D195951D100650061 /* button-feedback-notify@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5144B1B195951D100650061 /* button-feedback-notify@2x.png */; };
 		D5182C93193E1FDE00DD578C /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5182C92193E1FDE00DD578C /* Default@2x.png */; };
@@ -410,6 +412,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		D5135AF819EEDA78001F274A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 09ABC06413A1D52D009C3FCF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 09ABC06C13A1D52D009C3FCF;
+			remoteInfo = Teamstory;
+		};
+		D5135B0519EEDAD0001F274A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 09ABC06413A1D52D009C3FCF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 09ABC06C13A1D52D009C3FCF;
+			remoteInfo = Teamstory;
+		};
 		D537882019B91B0100E40DC9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D56A714119B78416006F25FA /* Pods.xcodeproj */;
@@ -738,6 +754,9 @@
 		D51072CE1937F33F00B1FF0E /* share_thought_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "share_thought_grey@2x.png"; sourceTree = "<group>"; };
 		D51072CF1937F33F00B1FF0E /* share_thought_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = share_thought_white.png; sourceTree = "<group>"; };
 		D51072D01937F33F00B1FF0E /* share_thought_white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "share_thought_white@2x.png"; sourceTree = "<group>"; };
+		D5135AF219EEDA77001F274A /* Teamstory Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Teamstory Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D5135AF519EEDA78001F274A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D5135AF619EEDA78001F274A /* PAPActivityFeedViewController_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PAPActivityFeedViewController_Tests.m; sourceTree = "<group>"; };
 		D5144B1A195951D100650061 /* button-feedback-notify.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback-notify.png"; sourceTree = "<group>"; };
 		D5144B1B195951D100650061 /* button-feedback-notify@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback-notify@2x.png"; sourceTree = "<group>"; };
 		D5182C92193E1FDE00DD578C /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
@@ -995,6 +1014,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D5135AEF19EEDA77001F274A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D5135B0719EEDADE001F274A /* Parse.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -1003,6 +1030,7 @@
 			children = (
 				09ABC07713A1D52D009C3FCF /* Teamstory */,
 				C4A0B4FF156C5B9F00E48554 /* External */,
+				D5135AF319EEDA78001F274A /* Teamstory Tests */,
 				09ABC07013A1D52D009C3FCF /* Frameworks */,
 				09ABC06E13A1D52D009C3FCF /* Products */,
 				45FF90152F5E49D089B6BDAE /* Pods.xcconfig */,
@@ -1014,6 +1042,7 @@
 			isa = PBXGroup;
 			children = (
 				09ABC06D13A1D52D009C3FCF /* Teamstory.app */,
+				D5135AF219EEDA77001F274A /* Teamstory Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1619,6 +1648,23 @@
 			name = Activity;
 			sourceTree = "<group>";
 		};
+		D5135AF319EEDA78001F274A /* Teamstory Tests */ = {
+			isa = PBXGroup;
+			children = (
+				D5135AF619EEDA78001F274A /* PAPActivityFeedViewController_Tests.m */,
+				D5135AF419EEDA78001F274A /* Supporting Files */,
+			);
+			path = "Teamstory Tests";
+			sourceTree = "<group>";
+		};
+		D5135AF419EEDA78001F274A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D5135AF519EEDA78001F274A /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		D51C989A18E28D16001230DA /* GoogleAnalytics */ = {
 			isa = PBXGroup;
 			children = (
@@ -1898,6 +1944,25 @@
 			productReference = 09ABC06D13A1D52D009C3FCF /* Teamstory.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D5135AF119EEDA77001F274A /* Teamstory Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D5135B0419EEDA78001F274A /* Build configuration list for PBXNativeTarget "Teamstory Tests" */;
+			buildPhases = (
+				D5135AEE19EEDA77001F274A /* Sources */,
+				D5135AEF19EEDA77001F274A /* Frameworks */,
+				D5135AF019EEDA77001F274A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D5135AF919EEDA78001F274A /* PBXTargetDependency */,
+				D5135B0619EEDAD0001F274A /* PBXTargetDependency */,
+			);
+			name = "Teamstory Tests";
+			productName = "Teamstory Tests";
+			productReference = D5135AF219EEDA77001F274A /* Teamstory Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1908,6 +1973,10 @@
 				TargetAttributes = {
 					09ABC06C13A1D52D009C3FCF = {
 						DevelopmentTeam = NJ5SX3QK2K;
+					};
+					D5135AF119EEDA77001F274A = {
+						CreatedOnToolsVersion = 6.0.1;
+						TestTargetID = 09ABC06C13A1D52D009C3FCF;
 					};
 				};
 			};
@@ -1930,6 +1999,7 @@
 			projectRoot = "";
 			targets = (
 				09ABC06C13A1D52D009C3FCF /* Teamstory */,
+				D5135AF119EEDA77001F274A /* Teamstory Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -2289,6 +2359,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D5135AF019EEDA77001F274A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -2410,7 +2487,28 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D5135AEE19EEDA77001F274A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D5135AF719EEDA78001F274A /* PAPActivityFeedViewController_Tests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D5135AF919EEDA78001F274A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 09ABC06C13A1D52D009C3FCF /* Teamstory */;
+			targetProxy = D5135AF819EEDA78001F274A /* PBXContainerItemProxy */;
+		};
+		D5135B0619EEDAD0001F274A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 09ABC06C13A1D52D009C3FCF /* Teamstory */;
+			targetProxy = D5135B0519EEDAD0001F274A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		C4F102E5156C58570061BC3E /* InfoPlist.strings */ = {
@@ -2721,6 +2819,129 @@
 			};
 			name = "Ad Hoc";
 		};
+		D5135AFA19EEDA78001F274A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(PROJECT_DIR)/External",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "Teamstory Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Teamstory.app/Teamstory";
+			};
+			name = Debug;
+		};
+		D5135AFB19EEDA78001F274A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(PROJECT_DIR)/External",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "Teamstory Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Teamstory.app/Teamstory";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D5135AFC19EEDA78001F274A /* Ad Hoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(PROJECT_DIR)/External",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "Teamstory Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Teamstory.app/Teamstory";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Ad Hoc";
+		};
+		D5135AFD19EEDA78001F274A /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(PROJECT_DIR)/External",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "Teamstory Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Teamstory.app/Teamstory";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Distribution;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2742,6 +2963,17 @@
 				09ABC09013A1D52E009C3FCF /* Release */,
 				C4F10201156C54D40061BC3E /* Ad Hoc */,
 				C42500E11599424D0087C4F4 /* Distribution */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Distribution;
+		};
+		D5135B0419EEDA78001F274A /* Build configuration list for PBXNativeTarget "Teamstory Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D5135AFA19EEDA78001F274A /* Debug */,
+				D5135AFB19EEDA78001F274A /* Release */,
+				D5135AFC19EEDA78001F274A /* Ad Hoc */,
+				D5135AFD19EEDA78001F274A /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Distribution;
