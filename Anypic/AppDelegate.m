@@ -606,18 +606,10 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
         }
         
         // add to read list, set as read, and reset badges
-        [self.activityViewController addToReadList:photoId itemActivityId:activityId];
-        
-        // default to activity id if photoid is missing (case of follows)
-        if(photoId != nil){
-            [self.activityViewController updateReadList:photoId];
-        }else{
-            [self.activityViewController updateReadList:activityId];
-        }
+        [self.activityViewController addActivityToReadList:activityId postId:photoId customAttributes:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"read", @"status", nil]];
         
         [self.activityViewController setActivityBadge:nil];
         
-    
         // If the push notification payload references a photo, we will attempt to push this view controller into view
         NSString *photoObjectId = [remoteNotificationPayload objectForKey:kPAPPushPayloadPhotoObjectIdKey];
         if (photoObjectId && photoObjectId.length > 0) {

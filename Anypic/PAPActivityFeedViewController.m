@@ -47,25 +47,14 @@
         // disable PFQueryTable's default refresh implementation
         self.pullToRefreshEnabled = NO;
        
-        // The number of objects to show per page
+        // the number of objects to show per page
         self.objectsPerPage = 30;
         
-        // Remove default loading indicator
+        // remove default loading indicator
         self.loadingViewEnabled = NO;
         
-        //resets read list
-        // [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"readList"];
-        // [[NSUserDefaults standardUserDefaults] synchronize];
-        
-        // get read list from local storage
-        self.readList = [[[NSUserDefaults standardUserDefaults] objectForKey:@"readList"] mutableCopy];
-        
-        // new read list if still in old mutable array format or nil
-        if(self.readList == nil || [self.readList isKindOfClass:[NSMutableArray class]]){
-            self.readList = [[NSMutableDictionary alloc]init];
-            [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }   
+        // set the readlist
+        [self setActivityReadList];
     }
     return self;
 }
@@ -186,19 +175,9 @@
     
         PFObject *activity = [self.objects objectAtIndex:indexPath.row];
         
-        // get status from read list and update if necessary
-        NSString *status = [[self.readList objectForKey:[activity objectId]] objectForKey:@"status"];
-        if([status isEqualToString:@"unread"]){
-            
-            // check if photo is set first, if not use activity to mark as read (case for follows)
-            if([activity objectForKey:@"photo"] != nil){
-                [self updateReadList:[[activity objectForKey:@"photo"] objectId]];
-            }else{
-                [self updateReadList:[activity objectId]];
-            }
-            
-        }
-
+        // update status for activity
+        [self updateStatusForActivityInReadList:[activity objectId] newStatus:@"read"];
+        
         if ([activity objectForKey:kPAPActivityPhotoKey]) {
             
             PAPPhotoDetailsViewController *detailViewController;
@@ -282,18 +261,18 @@
     [SVProgressHUD dismiss];
     
     // init read list with current objects
-    if([self.readList count] == 0){
+    if([self.activityReadList count] == 0){
         for (int i = 0; i < self.objects.count; i++) {
             
             PFObject *pfObj = self.objects[i];
-
-            NSMutableDictionary *activity = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                               @"read", @"status", [[pfObj objectForKey:@"photo"] objectId], @"photoId", nil];
-             
-             [self.readList setObject:activity forKey:[pfObj objectId]];
+            
+            NSString *activityId = [pfObj objectId];
+            NSString *postId = [[pfObj objectForKey:@"photo"] objectId];
+            
+            // get activity id and photo id (if present) and add to read list
+           [self addActivityToReadList:activityId postId:postId customAttributes:nil];
         }
-        
-        [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
+        [self saveReadList:nil];
     }else{
         
         /* out-of-sync occurs when:
@@ -302,16 +281,20 @@
         
         // make sure loaded objects are present in read list
         for (PFObject *object in self.objects) {
+            
             NSString *activityId = [object objectId];
-            if([self.readList valueForKey:activityId] == nil){
-                NSString *photoId = [[object objectForKey:@"photo"] objectId];
-                [self addToReadList:photoId itemActivityId:activityId];
+            NSString *postId = [[object objectForKey:@"photo"] objectId];
+            
+            if([self findActivityInReadList:activityId] == nil){
+                 // get activity id and post id (if present) and add to read list
+                [self addActivityToReadList:activityId postId:postId customAttributes:nil];
             }
         }
         
         // make sure read list is identical to loaded object list
-        NSMutableArray *extraKeys = [[NSMutableArray alloc] init];
-        for (NSString *activityId in self.readList) {
+        NSMutableArray *extraActivities = [[NSMutableArray alloc] init];
+        
+        for (NSString *activityId in self.activityReadList) {
             
             if([self.objects valueForKey:activityId]){
                 
@@ -322,15 +305,15 @@
                 }];
                 
                 if(indexOfObject == NSNotFound){
-                    [extraKeys addObject:activityId];
+                    [extraActivities addObject:activityId];
                 }
             }
         }
         
         // cannot delete while loop so get rid of excess items here
-        if(extraKeys.count != 0){
-            [self.readList removeObjectsForKeys:extraKeys];
-            [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
+        if(extraActivities.count != 0){
+            [self removeActivitiesInReadList:extraActivities];
+            [self saveReadList:nil];
         }
     }
 
@@ -376,17 +359,19 @@
         [cell setActivity:object isSubscription:NO];
     }
     
-    NSMutableDictionary *readListItem = [self.readList valueForKey:[object objectId]];
     
-    // safety check make sure read list has enough items
-    NSString *activityStatus = [self.readList count] > indexPath.row ? [readListItem objectForKey:@"status"] : @"";
+    NSString *activityStatus = [self getStatusForActivityInReadList:[object objectId]];
     
-    if ([activityStatus isEqualToString:@"unread"] || [activityStatus isEqualToString:@""]) {
+    if(activityStatus){
+        if ([activityStatus isEqualToString:@"unread"]) {
+            [cell setIsNew:YES];
+        }else if([activityStatus isEqualToString:@"read"]){
+            [cell setIsNew:NO];
+        }
+    }else{
         [cell setIsNew:YES];
-    }else if([activityStatus isEqualToString:@"read"]){
-        [cell setIsNew:NO];
     }
-
+    
     [cell hideSeparator:(indexPath.row == self.objects.count - 1)];
 
     return cell;
@@ -497,7 +482,7 @@
         // only for active, background notification are handled in app delegate
         if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
             // load & fill on readlist init or set new unread
-            [self addToReadList:photoId itemActivityId:activityId];
+            [self addActivityToReadList:activityId postId:photoId customAttributes:nil];
         }
         
         // always load objects when notification is received excl. konotor
@@ -506,53 +491,160 @@
 }
 
 
+#pragma mark - Activity Read List Methods
 
-- (void)updateReadList:(NSString *)itemPhotoId{
+- (void)setActivityReadList{
     
-    // load objects if read list is empty, fail safe
-    if([self.readList count] == 0){
-        [self loadObjects];
+    // set pointer to read list if user already has an activity read list, if not create new one
+    if([[PFUser currentUser] objectForKey:@"activityReadList"]){
+        self.activityReadList = [[PFUser currentUser] objectForKey:@"activityReadList"];
+    }else{
+        self.activityReadList = [[NSMutableDictionary alloc] init];
     }
     
-    if([self.readList count] != 0){
+    [self checkForOldReadList];
+}
+
+- (void)checkForOldReadList{
+    
+    // try to get old read list from local storage
+    NSDictionary *oldReadList = [[NSUserDefaults standardUserDefaults] objectForKey:@"readList"];
+    
+    // copy contents of old read list to new
+    if(oldReadList){
+        [self copyLocalReadListToCloudActivityReadList:oldReadList];
+    }
+}
+
+- (void)copyLocalReadListToCloudActivityReadList:(NSDictionary *)oldReadList{
+    
+    if([self.activityReadList count] == 0){
         
-        // update input item from read lsit
-        for (NSString *listItemKey in self.readList) {
+        // loop through activities, get attributes and add activity to new read list
+        for(NSString *activityId in oldReadList){
             
-            NSMutableDictionary *listItem = [self.readList objectForKey:listItemKey];
-            NSString *listItemPhotoId = [listItem objectForKey:@"photoId"];
+            NSString *status = [[oldReadList objectForKey:activityId] objectForKey:@"status"];
+            NSString *postId = [[oldReadList objectForKey:activityId] objectForKey:@"photoId"];
             
-            if([listItemPhotoId isEqualToString:itemPhotoId]){
-                [listItem setValue:@"read" forKey:@"status"];
+            // old read list had activity id set as post id if it was missing, new one has empty string
+            if([activityId isEqualToString:postId]){
+                postId = @"";
             }
+            
+            // add activity
+            [self addActivityToReadList:activityId postId:postId customAttributes:[NSMutableDictionary dictionaryWithObjectsAndKeys:status, @"status", postId, @"postId", nil]];
         }
         
-        // save list locally & reload table
-        [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
+        //set old readlist to nil
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"readList"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
+- (void)fetchReadListFromServer:(void (^)(id readList, NSError*error))completionBlock {
+
+    // fetch read list
+    [[PFUser currentUser] refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        completionBlock([object objectForKey:@"activityReadList"], error);
+    }];
+}
+
+
+- (void)addActivityToReadList:(NSString *)activityId postId:(NSString *)postId customAttributes:(NSMutableDictionary *)customAttributes{
+    
+    // edge case: when old notifications without aid get pushed
+    if(activityId){
+        
+        NSMutableDictionary *attributes;
+        
+        // set to empty string if post id is nil
+        postId = postId ? postId : @"";
+    
+        // set default attributes or add post id to custom attributes
+        if(!customAttributes){
+            attributes = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"unread", @"status", postId, @"postId", nil];
+        }else{
+            [customAttributes setObject:postId forKey:@"postId"];
+            attributes = customAttributes;
+        }
+        
+        // add item
+        [self.activityReadList setObject:attributes forKey:activityId];
+        
+        // save list
+        [self saveReadList:nil];
+    }
+}
+
+- (void)saveReadList:(void (^)(BOOL success, NSError*error))completionBlock {
+    
+    // save current read list to user object
+    [[PFUser currentUser] setObject:self.activityReadList forKey:@"activityReadList"];
+    
+    // return result if block is passed
+    if(completionBlock){
+        [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            completionBlock(succeeded, error);
+        }];
+    }else{
+        [[PFUser currentUser] saveInBackground];
+    }
+}
+
+- (void)updateStatusForActivityInReadList:(NSString *)activityId newStatus:(NSString *)newStatus{
+    
+    // get activity for id
+    NSMutableDictionary *activity = [self findActivityInReadList:activityId];
+
+    if(activity && newStatus){
+        
+        NSString *postId = [activity objectForKey:@"postId"];
+        
+        // update all related activites if post id exists
+        if(![postId isEqualToString:@""]){
+            [self updateStatusForAllRelatedActivitiesWithPostId:postId newStatus:newStatus];
+        }else{
+            // update if post id does not exist
+            [activity setValue:newStatus forKey:@"status"];
+        }
+        
+        // save list and reload table
+        [self saveReadList:nil];
         [self.tableView reloadData];
     }
 }
 
-- (void)addToReadList:(NSString *)itemPhotoId itemActivityId:(NSString *)itemActivityId{
+- (void)updateStatusForAllRelatedActivitiesWithPostId:(NSString *)postId newStatus:(NSString *)newStatus{
     
-    // edge case: when old notifications without aid get pushed
-    if(itemActivityId != nil){
-        
-        NSMutableDictionary *activity;
-        
-        // when photo id is missing replace with activity id, case for follower
-        if(itemPhotoId != nil){
-          activity = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                      @"unread", @"status",  itemPhotoId, @"photoId", nil];
-        }else{
-            activity = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                        @"unread", @"status",  itemActivityId, @"photoId", nil];
+    if(postId && newStatus){
+        // loop through activity list and update where post id is the same
+        for (NSString *activityItemKey in self.activityReadList){
+            
+            NSMutableDictionary *currentActivity = [self.activityReadList objectForKey:activityItemKey];
+            NSString *currentPostId = [currentActivity objectForKey:@"postId"];
+            
+            if([currentPostId isEqualToString:postId]){
+                [currentActivity setValue:newStatus forKey:@"status"];
+            }
         }
-        
-        [self.readList setObject:activity forKey:itemActivityId];
-        
-        [[NSUserDefaults standardUserDefaults] setObject:self.readList forKey:@"readList"];
     }
+}
+
+- (NSString *)getStatusForActivityInReadList:(NSString *)activityId{
+    
+    // get activity for id
+    NSMutableDictionary *activity = [self findActivityInReadList:activityId];
+    
+    return [activity objectForKey:@"status"];
+}
+
+- (NSMutableDictionary *)findActivityInReadList:(NSString *)activityId{
+  
+    return [self.activityReadList valueForKey:activityId];
+}
+
+- (void)removeActivitiesInReadList:(NSMutableArray *)activities{
+    [self.activityReadList removeObjectsForKeys:activities];
 }
 
 
