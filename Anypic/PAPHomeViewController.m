@@ -393,6 +393,11 @@
         [[Mixpanel sharedInstance] registerSuperProperties:@{@"Admin": @"Yes"}];
         [Apptimize setUserAttributeString:@"Yes" forKey:@"Admin"];
     }
+    
+    /* Following three methods are to identify a user. These user properties will be viewable on the konotor web dashboard */
+    [Konotor setUserName:displayName]; // To set an identifiable name for the user
+    [Konotor setUserEmail:email]; //To set user's email id
+    [Konotor setUserIdentifier:currentUserObjectId]; // To set the user's identifier unique to your system
 }
 
 /*
