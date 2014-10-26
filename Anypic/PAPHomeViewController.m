@@ -541,14 +541,16 @@
         [super loadObjects:^(BOOL succeeded) {
 
             [self.switchWhiteOverlay setHidden:YES];
+            
             [SVProgressHUD dismiss];
             
-            if(super.objects.count != 0){
+            // make sure index path supplied is within the feed's bounds and feed has objects
+            if (lastViewdIndexPath.section <= [super.feed numberOfSections] && super.objects.count > 0){
                 // scroll to last viewed index path
                 [super.feed scrollToRowAtIndexPath:lastViewdIndexPath
                                   atScrollPosition:UITableViewScrollPositionTop animated:NO];
             }
-            
+    
         } isRefresh:YES fromSource:selectedFeedSource];
         
     }else{
