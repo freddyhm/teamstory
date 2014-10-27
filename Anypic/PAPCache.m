@@ -68,7 +68,6 @@
     [self setAttributes:attributes forComment:comment];
 }
 
-
 - (NSDictionary *)attributesForComment:(PFObject *)comment {
     NSString *key = [self keyForComment:comment];
     return [self.cache objectForKey:key];

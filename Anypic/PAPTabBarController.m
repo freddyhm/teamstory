@@ -46,6 +46,12 @@
 
 #pragma mark - UIViewController
 
+- (void)viewDidLayoutSubviews
+{
+    // fix for iOS7 bug in UITabBarController
+    self.selectedViewController.view.superview.frame = self.view.bounds;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     

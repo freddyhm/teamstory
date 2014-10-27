@@ -57,7 +57,6 @@
 @implementation PAPProfileSettingViewController
 @synthesize companyName;
 @synthesize location;
-@synthesize userDescription;
 @synthesize website;
 @synthesize navController;
 @synthesize accountViewController_tabBar;
@@ -67,6 +66,7 @@
 @synthesize location_user;
 @synthesize website_user;
 @synthesize displayName_user;
+@synthesize description_user;
 @synthesize backgroundView;
 @synthesize profilePictureImageView;
 @synthesize imageProfileFile;
@@ -149,6 +149,7 @@
             website_user = self.user[@"website"];
             displayName_user = self.user[@"displayName"];
             self.description_user = self.user[@"description"];
+            
             email_user = self.user[@"email"];
             industry_user = self.user[@"industry"];
             twitter_user = self.user[@"twitter_url"];
@@ -364,6 +365,13 @@
             UIView *lineView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 150.0f, self.view.bounds.size.width, 1)];
             lineView2.backgroundColor = lineColor;
             [self.backgroundView addSubview:lineView2];
+            
+            CGRect userDescription_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 3, 250.0f, 25.0f);
+            self.userDescription = [[UITextField alloc] initWithFrame:userDescription_frame];
+            self.userDescription.autocorrectionType = UITextAutocorrectionTypeNo;
+            [self.userDescription setBackgroundColor:[UIColor clearColor]];
+            [self.userDescription setFont:fonts];
+            self.userDescription.placeholder = description_user;
             
             CGRect description_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 3, 250.0f, 25.0f);
             self.userDescription = [[UITextField alloc] initWithFrame:description_frame];
@@ -781,7 +789,7 @@
     [self.view endEditing:YES];
     NSString* companyName_input = self.companyName.text;
     NSString* location_input = self.location.text;
-    NSString* description_input = self.userDescription.text;
+    NSString* userDescription_input = self.userDescription.text;
     NSString* website_input = [self.website.text lowercaseString];
     NSString* twitter_input = self.twitter_textfield.text;
     NSString* industry_input = self.industry_button.titleLabel.text;
@@ -812,8 +820,8 @@
         if ([location_input length] > 0) {
             self.user[@"location"] = location_input;
         }
-        if ([description_input length] > 0) {
-           self.user[@"description"] = description_input;
+        if ([userDescription_input length] > 0) {
+           self.user[@"description"] = userDescription_input;
         }
         if ([website_input length] > 0) {
             self.user[@"website"] = website_input;
@@ -878,8 +886,8 @@
             self.user[@"location"] = location_input;
             
             // optional fields
-            if ([description_input length] > 0) {
-                self.user[@"description"] = description_input;
+            if ([userDescription_input length] > 0) {
+                self.user[@"description"] = userDescription_input;
             }
             if ([website_input length] > 0) {
                 self.user[@"website"] = website_input;
@@ -968,7 +976,8 @@
         } else if (buttonIndex == 0) {
             NSString* companyName_input = self.companyName.text;
             NSString* location_input = self.location.text;
-            NSString* description_input = self.userDescription.text;
+            NSString* userDescription_input = self.userDescription.text;
+
             NSString* website_input = [self.website.text lowercaseString];
             NSString* email_input = self.email_address.text;
             NSString* industry_input = self.industry_button.titleLabel.text;
@@ -983,8 +992,8 @@
             if ([location_input length] > 0) {
                 self.user[@"location"] = location_input;
             }
-            if ([description_input length] > 0) {
-                self.user[@"description"] = description_input;
+            if ([userDescription_input length] > 0) {
+                self.user[@"description"] = userDescription_input;
             }
             if ([website_input length] > 0) {
                 self.user[@"website"] = website_input;

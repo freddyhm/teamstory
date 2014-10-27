@@ -47,12 +47,6 @@ NSInteger selection = 1;
 
 - (void)viewDidLoad
 {
-    self.userList = [[NSMutableArray alloc] init];
-    self.userFilterList = [[NSMutableArray alloc] init];
-    self.industryFilterList = [[NSMutableArray alloc] init];
-    self.userFilterListIndustry = [[NSMutableArray alloc] init];
-    self.follwerList = [[NSMutableArray alloc] init];
-    
     [super viewDidLoad];
     [SVProgressHUD show];
     self.view.backgroundColor = [UIColor whiteColor];
@@ -150,6 +144,14 @@ NSInteger selection = 1;
     // analytics
     [PAPUtility captureScreenGA:@"Discover"];
     
+    self.userList = [[NSMutableArray alloc] init];
+    self.userFilterList = [[NSMutableArray alloc] init];
+    self.industryFilterList = [[NSMutableArray alloc] init];
+    self.userFilterListIndustry = [[NSMutableArray alloc] init];
+    self.follwerList = [[NSMutableArray alloc] init];
+    
+    [[Mixpanel sharedInstance] track:@"Viewed Discover Screen" properties:@{}];
+    
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Discover"}];
 
@@ -208,10 +210,6 @@ NSInteger selection = 1;
         [self.userList removeAllObjects];
         [self userQueryPagination];
     }
-    
-    
-    
-    
 }
 
 #pragma - ()

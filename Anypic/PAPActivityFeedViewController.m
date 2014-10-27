@@ -127,7 +127,10 @@
         [self setActivityBadge:nil];
         [self loadObjects];
     }
-
+    
+    [[PFUser currentUser] setObject:[NSNumber numberWithInt:0] forKey:@"activityBadge"];
+    [[PFUser currentUser] saveInBackground];
+    
     [self.tableView reloadData];
 }
 

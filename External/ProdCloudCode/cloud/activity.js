@@ -104,9 +104,7 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       var fromUser = request.object.get("fromUser");
                       var fromUserId = fromUser != undefined ? request.object.get("fromUser").id : "";
                       var fromUserEmail = fromUser != undefined ? request.user.get("email") : "";
-                      
-                      
-                      
+
                       if (request.object.get("type") === "membership") {
                       var Mailgun = require('mailgun');
                       Mailgun.initialize('teamstoryapp.com', 'key-57rdy7ishc75mi99405w246l22tyevt8');
@@ -167,37 +165,36 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       
                       // notify all users except fromUser who are subscribed to post when new comment is sent
                       if(request.object.get("type") === "comment" && atmentionUserArray.length == 0){
-                      
-                      
+
                       var subscriptionQuery = new Parse.Query("Subscription");
                       var Photo = Parse.Object.extend("Photo");
                       var photoPointer = new Photo();
                       photoPointer.id = photoId;
-                      
+                       
                       // find all the subscriptions with this post
                       subscriptionQuery.equalTo("post", photoPointer);
-                      
+                       
                       subscriptionQuery.find({
                                              success: function(results) {
-                                             
+                                              
                                              /* add all subscribers to new comment and save.
                                               This is so we can pull in activity feed from
                                               client side. */
-                                             
+                                              
                                              request.object.set("subscribers", results);
                                              request.object.save();
-                                             
+                                              
                                              // loop through all subscribers
                                              for (var i = 0; i < results.length; i++) {
-                                             
+                                              
                                              /* notify user except for comment author (fromUserId), post author is not subscribed to own post (client-side check) */
-                                             
+                                              
                                              if(fromUserId != results[i].get("subscriber").id){
-                                             
+                                              
                                              // notify subscriber
                                              var query = new Parse.Query(Parse.Installation);
                                              query.equalTo("user", results[i].get("subscriber"));
-                                             
+                                              
                                              Parse.Push.send({
                                                              where: query,
                                                              data: alertPayload(request)
@@ -209,8 +206,7 @@ Parse.Cloud.afterSave('Activity', function(request) {
                                                                      });
                                              }
                                              }
-                                             
-                                             
+
                                              },
                                              error: function(error) {
                                              console.error("Error: " + error.code + " " + error.message);
@@ -220,6 +216,7 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       
                       // send activity/post owner notification if someone else creates activity
                       if(!isSelfie && atmentionUserArray.length == 0){
+
                       
                       var toOwnerQuery = new Parse.Query(Parse.Installation);
                       toOwnerQuery.equalTo('user', toUser);
@@ -233,7 +230,7 @@ Parse.Cloud.afterSave('Activity', function(request) {
                                               }, function(error) {
                                               throw "Push Error " + error.code + " : " + error.message;
                                               });
-                      
+
                       }
                       
                       // Only send push notifications for new activities
@@ -245,6 +242,7 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       throw "Undefined toUser. Skipping push for Activity " + request.object.get('type') + " : " + request.object.id;
                       return;
                       }
+
                       
                       if(request.object.get('photo').id != undefined && request.object.get('type') != undefined){
                       Parse.Cloud.run("incrementCounter", {currentObjectId: request.object.get('photo').id, type: request.object.get('type')});
@@ -355,24 +353,20 @@ var alertPayload = function(request) {
 
 Parse.Cloud.define ('incrementCounter', function(request, response) {
                     Parse.Cloud.useMasterKey();
-                    
                     var query = new Parse.Query('Photo');
                     query.get(request.params.currentObjectId, {
                               success: function(counter) {
                               var points;
-                              
                               if (request.params.type === 'comment') {
                               points = 2;
                               } else {
                               points = 1;
                               }
-                              
                               if (counter.get('discoverCount') === undefined) {
                               counter.set('discoverCount', points);
                               } else {
                               counter.set('discoverCount', counter.get('discoverCount') + points);
                               }
-                              
                               return counter.save({
                                                   success:function () {
                                                   response.success("Successfully incremented counter");
