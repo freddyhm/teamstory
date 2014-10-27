@@ -806,6 +806,7 @@ typedef void (^FBDialogAppCallCompletionHandler)(
  @param params The parameters for the Message Dialog. The "friends" and "place" properties
  will be ignored as the Facebook Messenger app does not support tagging.
 
+
  @param clientState An NSDictionary that's passed through when the completion handler
  is called. This is useful for the app to maintain state about the share request that
  was made so as to have appropriate action when the handler is called. May be nil.

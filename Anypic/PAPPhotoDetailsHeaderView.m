@@ -346,8 +346,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         PFFile *imageFile = [self.photo objectForKey:kPAPPhotoPictureKey];
         
-       NSLog(@"TAPPED PHOTO IN DETAILS: %@", imageFile.url);
-        
         if (imageFile) {
             self.photoImageView.file = imageFile;
             [self.photoImageView loadInBackground];
@@ -410,9 +408,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.photoImageView.contentMode = UIViewContentModeScaleAspectFit;
         
         PFFile *imageFile = [self.photo objectForKey:kPAPPhotoPictureKey];
-        
-       NSLog(@"TAPPED PHOTO IN DETAILS: %@", imageFile.url);
-        
+            
         if (imageFile) {
             self.photoImageView.file = imageFile;
             
@@ -585,10 +581,15 @@ static TTTTimeIntervalFormatter *timeFormatter;
     
     if (liked) {
         
+        
+        // get post type
+        NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
+        
         // analytics
         [PAPUtility captureEventGA:@"Engagement" action:@"Like" label:@"Photo"];
         
-        [[Mixpanel sharedInstance] track:@"Liked" properties:@{@"Source":@"Details"}];
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Liked Post", @"Source": @"Details", @"Post Type": postType}];
         
         // increment user like count by one
         [[Mixpanel sharedInstance].people increment:@"Like Count" by:[NSNumber numberWithInt:1]];
@@ -643,6 +644,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 - (void)openUrl:(id)sender {
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Viewed Link"}];
+    
     if ([self.website rangeOfString:@"(?i)http" options:NSRegularExpressionSearch].location == NSNotFound) {
         NSString *http = @"http://";
         self.website = [NSString stringWithFormat:@"%@%@", http, self.website];

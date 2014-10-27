@@ -6,7 +6,6 @@
 #import "PAPProfileSettingViewController.h"
 #import "PAPAccountViewController.h"
 #import "AppDelegate.h"
-#import "UIImage+ResizeAdditions.h"
 #import "SVProgressHUD.h"
 
 #define SUCCESSFUL 1
@@ -135,7 +134,7 @@
     UIButton *profileImagePicker = [UIButton buttonWithType:UIButtonTypeCustom];
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg-intro.png"]];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     
     [profileImagePicker setImage:[UIImage imageNamed:@"icon-upload.png"] forState:UIControlStateNormal];
     [profileImagePicker addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -149,7 +148,8 @@
             location_user = self.user[@"location"];
             website_user = self.user[@"website"];
             displayName_user = self.user[@"displayName"];
-            userDescription_user = self.user[@"userDescription"];
+            self.userDescription_user = self.user[@"description"];
+            
             email_user = self.user[@"email"];
             industry_user = self.user[@"industry"];
             twitter_user = self.user[@"twitter_url"];
@@ -166,8 +166,8 @@
             if ([displayName_user length] == 0) {
                 displayName_user = @"Display or Company Name";
             }
-            if ([userDescription_user length] == 0) {
-                userDescription_user = @"userDescription";
+            if ([self.userDescription_user length] == 0) {
+                self.description_user = @"Description";
             }
             if ([industry_user length] == 0) {
                 industry_user = @"Industry / Market";
@@ -372,6 +372,13 @@
             [self.userDescription setBackgroundColor:[UIColor clearColor]];
             [self.userDescription setFont:fonts];
             self.userDescription.placeholder = userDescription_user;
+            
+            CGRect description_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 3, 250.0f, 25.0f);
+            self.userDescription = [[UITextField alloc] initWithFrame:description_frame];
+            self.userDescription.autocorrectionType = UITextAutocorrectionTypeNo;
+            [self.userDescription setBackgroundColor:[UIColor clearColor]];
+            [self.userDescription setFont:fonts];
+            self.userDescription.placeholder = self.description_user;
             self.userDescription.userInteractionEnabled = YES;
             self.userDescription.delegate = self;
             [self.userDescription resignFirstResponder];
@@ -497,8 +504,8 @@
     // Dismiss controller
     [picker dismissViewControllerAnimated:YES completion:nil];
     
-    UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:0.0f interpolationQuality:kCGInterpolationHigh];
-    UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(200.0f, 200.0f) interpolationQuality:kCGInterpolationHigh];
+    UIImage *smallRoundedImage = [PAPUtility resizeImage:image width:84.0f height:84.0f];
+    UIImage *resizedImage = [PAPUtility resizeImage:image width:200.0f height:200.0f];
     
     // Upload image
     imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
@@ -697,13 +704,17 @@
     }
     
     UIImagePickerController *cameraUI = [[UIImagePickerController alloc] init];
+    
+    cameraUI.allowsEditing = YES;
+    cameraUI.delegate = self;
+    
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]
         && [[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary] containsObject:(NSString *)kUTTypeImage]) {
         
         cameraUI.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         cameraUI.mediaTypes = [NSArray arrayWithObject:(NSString *) kUTTypeImage];
         
-    } else if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum]
+    }else if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum]
                && [[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum] containsObject:(NSString *)kUTTypeImage]) {
         
         cameraUI.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
@@ -713,10 +724,16 @@
         return NO;
     }
     
-    cameraUI.allowsEditing = YES;
-    cameraUI.delegate = self;
+    // if ip
+    if ([[[UIDevice currentDevice] model] isEqualToString: @"iPad"] || [[[UIDevice currentDevice] model] isEqualToString: @"iPad Simulator"]) {
+        UIPopoverController *popover = [[UIPopoverController alloc] initWithContentViewController:cameraUI];
+        
+        [popover presentPopoverFromRect:self.view.bounds inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+        
+    }else{
     
-    [self presentViewController:cameraUI animated:YES completion:nil];
+        [self presentViewController:cameraUI animated:YES completion:nil];
+    }
     
     return YES;
 }
@@ -804,7 +821,7 @@
             self.user[@"location"] = location_input;
         }
         if ([userDescription_input length] > 0) {
-           self.user[@"userDescription"] = userDescription_input;
+           self.user[@"description"] = userDescription_input;
         }
         if ([website_input length] > 0) {
             self.user[@"website"] = website_input;
@@ -870,7 +887,7 @@
             
             // optional fields
             if ([userDescription_input length] > 0) {
-                self.user[@"userDescription"] = userDescription_input;
+                self.user[@"description"] = userDescription_input;
             }
             if ([website_input length] > 0) {
                 self.user[@"website"] = website_input;
@@ -960,6 +977,7 @@
             NSString* companyName_input = self.companyName.text;
             NSString* location_input = self.location.text;
             NSString* userDescription_input = self.userDescription.text;
+
             NSString* website_input = [self.website.text lowercaseString];
             NSString* email_input = self.email_address.text;
             NSString* industry_input = self.industry_button.titleLabel.text;
@@ -975,7 +993,7 @@
                 self.user[@"location"] = location_input;
             }
             if ([userDescription_input length] > 0) {
-                self.user[@"userDescription"] = userDescription_input;
+                self.user[@"description"] = userDescription_input;
             }
             if ([website_input length] > 0) {
                 self.user[@"website"] = website_input;
@@ -999,9 +1017,9 @@
             if (profileExist_user == NO) {
                 UIImage *image = [UIImage imageNamed:@"default-pic.png"];
                 
-                UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:0.0f interpolationQuality:kCGInterpolationHigh];
-                UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(200.0f, 200.0f) interpolationQuality:kCGInterpolationHigh];
-                
+                UIImage *smallRoundedImage = [PAPUtility resizeImage:image width:84.0f height:84.0f];
+                UIImage *resizedImage = [PAPUtility resizeImage:image width:200.0f height:200.0f];
+
                 // Upload image
                 imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
                 imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
@@ -1079,8 +1097,8 @@
         angelist_textfield.text = angelist_user;
     } else if (textField == website && ![website_user isEqualToString:@"Website URL"]) {
         website.text = website_user;
-    } else if (textField == self.userDescription && ![userDescription_user isEqualToString:@"userDescription"]) {
-        self.userDescription.text = userDescription_user;
+    } else if (textField == self.userDescription && ![self.description_user isEqualToString:@"Description"]) {
+        self.userDescription.text = self.description_user;
     } else if (textField == companyName && ![displayName_user isEqualToString:@"Display or Company Name"]) {
         companyName.text = displayName_user;
     } else if (textField == location && ![location_user isEqualToString:@"Location"]) {
@@ -1177,8 +1195,8 @@
         angelist_user = angelist_textfield.text;
     } else if (textField == website && ![website_user isEqualToString:@"Website URL"]) {
         website_user = website.text;
-    } else if (textField == self.userDescription && ![userDescription_user isEqualToString:@"userDescription"]) {
-        self.userDescription_user = self.userDescription.text;
+    } else if (textField == self.userDescription && ![self.description_user isEqualToString:@"Description"]) {
+        self.description_user = self.userDescription.text;
     } else if (textField == companyName && ![displayName_user isEqualToString:@"Display or Company Name"]) {
         displayName_user = companyName.text;
     } else if (textField == location && ![location_user isEqualToString:@"Location"]) {

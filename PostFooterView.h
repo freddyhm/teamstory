@@ -84,7 +84,7 @@ typedef enum {
  Sent to the delegate when the comment on photo button is tapped
  @param photo the PFObject for the photo that will be commented on
  */
-- (void)postFooterView:(PostFooterView *)postFooterView didTapCommentOnPhotoButton:(UIButton *)button photo:(PFObject *)photo;
+- (void)postFooterView:(PostFooterView *)postFooterView didTapCommentForPost:(PFObject *)post;
 
 - (void) moreActionButton_inflator:(PFUser *)user photo:(PFObject *)photo;
 

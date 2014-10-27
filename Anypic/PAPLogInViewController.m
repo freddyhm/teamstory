@@ -49,7 +49,8 @@
     
     if ([self.login_type isEqualToString:@"signIn"]) {
         
-        [[Mixpanel sharedInstance] track:@"Viewed Sign In Screen" properties:@{}];
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Sign In"}];
         
         UIImage *dividerImage = [UIImage imageNamed:@"intro_divider.png"];
         UIImageView *divider = [[UIImageView alloc] initWithFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - 190.0f, dividerImage.size.width, dividerImage.size.height)];
@@ -118,7 +119,8 @@
         user_email.frame = CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - 170.0f, 290.0f, 50.0f);
     } else {
         
-        [[Mixpanel sharedInstance] track:@"Viewed Register Screen" properties:@{}];
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Register"}];
         
         float screenOffset;
         if ([UIScreen mainScreen].bounds.size.height == 480) {

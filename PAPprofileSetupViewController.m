@@ -10,11 +10,11 @@
 #import <CoreLocation/CoreLocation.h>
 #import "SVProgressHUD.h"
 #import "AppDelegate.h"
-#import "UIImage+ResizeAdditions.h"
 #import "PAPUtility.h"
 #import "Mixpanel.h"
 
 #define SUCCESSFUL 1
+#define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
 @interface PAPprofileSetupViewController () {
     int industry_pickerRow;
@@ -52,18 +52,23 @@
 
 @implementation PAPprofileSetupViewController
 
+- (void)viewWillAppear:(BOOL)animated{
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+    [self.locationManager startUpdatingLocation];
+    
+    [self locationDetectButtonAction:self];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     [PAPUtility captureEventGA:@"Testing" action:@"Started profile setup" label:nil];
     
-    [[Mixpanel sharedInstance] track:@"Viewed New Profile Screen 1" properties:@{}];
-    
-    self.locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.delegate = self;
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-    [self.locationManager startUpdatingLocation];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"New Profile Screen 1"}];
     
     UIView *statusBarBackground = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, [UIApplication sharedApplication].statusBarFrame.size.height)];
     [statusBarBackground setBackgroundColor:[UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
@@ -198,7 +203,7 @@
     self.displayNameTF = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, middleImageView_1.bounds.size.height, 300.0f, 55.0f)];
     self.displayNameTF.placeholder = @"Startup Name or Individual Name";
     self.displayNameTF.delegate = self;
-    //displayNameTF.backgroundColor = [UIColor colorWithWhite:0.8 alpha:1.0f];
+    self.displayNameTF.autocorrectionType = UITextAutocorrectionTypeNo;
     [self.displayNameTF becomeFirstResponder];
     [self.contentSV addSubview:self.displayNameTF];
     
@@ -210,6 +215,7 @@
     
     self.locationTF = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height, 300.0f, 55.0f)];
     self.locationTF.placeholder = @"Location";
+    self.locationTF.autocorrectionType = UITextAutocorrectionTypeNo;
     //locationTF.backgroundColor = [UIColor colorWithWhite:0.6 alpha:1.0f];
     [self.contentSV addSubview:self.locationTF];
     
@@ -221,6 +227,7 @@
     self.userEmail = [self.user objectForKey:@"email"];
     
     self.emailTF = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height + self.locationTF.bounds.size.height, 300.0f, 55.0f)];
+    self.emailTF.autocorrectionType = UITextAutocorrectionTypeNo;
     if ([self.userEmail length] == 0) {
         self.emailTF.placeholder = @"Email";
         self.emailTF.userInteractionEnabled = YES;
@@ -238,6 +245,7 @@
     [self.contentSV addSubview:locationDetectButton];
     
     self.descriptionTV = [[UITextView alloc] initWithFrame:CGRectMake(320.0f, middleImageView_2.bounds.size.height, 320.0f, 55.0f)];
+    self.descriptionTV.autocorrectionType = UITextAutocorrectionTypeNo;
     self.descriptionTV.delegate = self;
     //self.descriptionTV.contentInset = UIEdgeInsetsMake(10.0f, 10.0f, 0.0f, 0.0f);
     self.descriptionTV.contentInset = UIEdgeInsetsMake(10.0f, 5.0f, 0.0f, -5.0f);
@@ -291,16 +299,19 @@
     
     self.twitterTF = [[UITextField alloc] initWithFrame:CGRectMake(650.0f, middleImageView_3.bounds.size.height, 300.0f, 55.0f)];
     self.twitterTF.delegate = self;
+    self.twitterTF.autocorrectionType = UITextAutocorrectionTypeNo;
     self.twitterTF.placeholder = @"Twitter";
     [self.contentSV addSubview:self.twitterTF];
     
     self.angellistTF = [[UITextField alloc] initWithFrame:CGRectMake(650.0f, middleImageView_3.bounds.size.height + self.twitterTF.bounds.size.height, 300.0f, 55.0f)];
     self.angellistTF.delegate = self;
+    self.angellistTF.autocorrectionType = UITextAutocorrectionTypeNo;
     self.angellistTF.placeholder = @"AngelList";
     [self.contentSV addSubview:self.angellistTF];
     
     self.linkedInTF = [[UITextField alloc] initWithFrame:CGRectMake(650.0f, middleImageView_3.bounds.size.height + self.twitterTF.bounds.size.height + self.angellistTF.bounds.size.height, 300.0f, 55.0f)];
     self.linkedInTF.delegate = self;
+    self.linkedInTF.autocorrectionType = UITextAutocorrectionTypeNo;
     self.linkedInTF.placeholder = @"LinkedIn";
     [self.contentSV addSubview:self.linkedInTF];
 
@@ -373,7 +384,8 @@
                             }];
                         } else {
                             
-                            [[Mixpanel sharedInstance] track:@"Viewed New Profile Screen 2" properties:@{}];
+                            // mixpanel analytics
+                            [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"New Profile Screen 2"}];
                             
                             [self.mainSV setContentOffset:CGPointMake(320.0f, 0.0f) animated:YES];
                             if ([UIScreen mainScreen].bounds.size.height == 480)
@@ -409,7 +421,8 @@
 
 -(void)navNext_2Action:(id)sender {
     
-    [[Mixpanel sharedInstance] track:@"Viewed New Profile Screen 3" properties:@{}];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"New Profile Screen 3"}];
     
     [self.mainSV setContentOffset:CGPointMake(640.0f, 0.0f) animated:YES];
     
@@ -468,6 +481,8 @@
     
     [[Mixpanel sharedInstance] track:@"Pressed Done In Profile Screen" properties:@{@"New user email":email_input}];
     
+    
+    
     self.user[@"username"] = email_input;
     
     self.navDone.userInteractionEnabled = NO;
@@ -475,10 +490,10 @@
     if ([companyName_input length] > 0 && [location_input length] > 0 && (([email_input length] > 0 && [self NSStringIsValidEmail:email_input]) || email_current_input )) {
         
             UIImage *image = [UIImage imageNamed:@"default-pic.png"];
-            
-            UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:0.0f interpolationQuality:kCGInterpolationHigh];
-            UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(200.0f, 200.0f) interpolationQuality:kCGInterpolationHigh];
-            
+        
+            UIImage *smallRoundedImage = [PAPUtility resizeImage:image width:84.0f height:84.0f];
+            UIImage *resizedImage = [PAPUtility resizeImage:image width:200.0f height:200.0f];
+
             if (self.imageData_picker) {
                 [self uploadImage_medium:self.imageData_picker];
             } else {
@@ -540,18 +555,24 @@
 }
 
 -(void)locationDetectButtonAction:(id)sender{
-    [SVProgressHUD show];
     
-    [[Mixpanel sharedInstance] track:@"Pressed Auto Detect Location In Profile Screen" properties:@{}];
+    if(IS_WIDESCREEN){
+        [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0, 16.0f)];
+    }else{
+        [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0, 76.0f)];
+    }
+    
+    [SVProgressHUD show];
     
     CLGeocoder *geocoder = [[CLGeocoder alloc] init] ;
     [geocoder reverseGeocodeLocation:self.locationManager.location
                    completionHandler:^(NSArray *placemarks, NSError *error) {
                        NSLog(@"reverseGeocodeLocation:completionHandler: Completion Handler called!");
                        [SVProgressHUD dismiss];
+                       [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0, 0)];
                        if (error){
                            NSLog(@"Geocode failed with error: %@", error);
-                           UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Failed" message:@"Please try again or enter location manually" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                           UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Failed" message:@"Autodetect location failed, please enter manually." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                            alert.alertViewStyle = UIAlertViewStyleDefault;
                            [alert show];
                            return;
@@ -720,9 +741,9 @@
     // Dismiss controller
     [picker dismissViewControllerAnimated:YES completion:nil];
     
-    UIImage *smallRoundedImage = [image thumbnailImage:84.0f transparentBorder:0 cornerRadius:0.0f interpolationQuality:kCGInterpolationHigh];
-    UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(200.0f, 200.0f) interpolationQuality:kCGInterpolationHigh];
-    
+    UIImage *smallRoundedImage = [PAPUtility resizeImage:image width:84.0f height:84.0f];
+    UIImage *resizedImage = [PAPUtility resizeImage:image width:200.0f height:200.0f];
+
     // Upload image
     self.imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
     self.imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
@@ -849,6 +870,10 @@
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (alertView.tag == SUCCESSFUL) {
+        
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Signed Up" properties:@{}];
+        
         NSLog(@"login Sucessful");
         [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
     }

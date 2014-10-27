@@ -11,12 +11,12 @@
 #import "PAPPhotoDetailsFooterView.h"
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
-#import "UIImage+ResizeAdditions.h"
 #import "PAPBaseTextCell.h"
 #import "SVProgressHUD.h"
 #import "PAPLoadMoreCell.h"
 #import "PAPConstants.h"
 #import "Mixpanel.h"
+#import "Apptimize.h"
 
 
 @interface PAPEditPhotoViewController () {
@@ -183,7 +183,9 @@
     // analytics
     [PAPUtility captureScreenGA:@"Edit Photo"];
     
-    [[Mixpanel sharedInstance] track:@"Viewed Edit Photo Screen" properties:@{}];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Edit Photo"}];
+
 }
 
 #pragma mark - UITextFieldDelegate
@@ -231,7 +233,7 @@
 
 - (BOOL)shouldUploadImage:(UIImage *)anImage {
     
-    UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:10.0f interpolationQuality:kCGInterpolationDefault];
+    UIImage *thumbnailImage = [PAPUtility resizeImage:anImage width:86.0f height:86.0f];
     
     // JPEG to decrease file size and enable faster uploads & downloads
     NSData *imageData = UIImageJPEGRepresentation(anImage, 1.0f);
@@ -415,7 +417,18 @@
         text = [text stringByAppendingString:@" "];
         
         if (range.location != NSNotFound) {
-            textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, range.length + 1) withString:text];
+           
+            /* If the user presses the Delete key, the length of the range is 1 and an empty string object replaces that single character. Goes out of bounds when user presses delete and selects display name at the start of message.*/
+            
+            int replacementRange = range.length + 1;
+            
+            // Check if new range is in bounds of current text, accounting for extra key when deleting
+            if(replacementRange < textView.text.length){
+                textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, replacementRange) withString:text];
+            }else{
+                textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, range.length) withString:text];
+            }
+
         }
         
         cellType = nil;
@@ -595,10 +608,16 @@
     // analytics
     [PAPUtility captureEventGA:@"Engagement" action:@"Upload Picture" label:@"Photo"];
     
-    [[Mixpanel sharedInstance] track:@"Uploaded Photo" properties:@{}];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Moment"}];
     
     // increment user photo count by one
     [[Mixpanel sharedInstance].people increment:@"Photo Count" by:[NSNumber numberWithInt:1]];
+    
+    // apptimize experiment
+    [Apptimize metricAchieved:@"Uploaded Picture"];
+    
+    
     
     // make sure placeholder gets erased
     if([[self.commentTextView text] isEqualToString:@"Add a caption"]){

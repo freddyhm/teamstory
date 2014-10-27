@@ -13,7 +13,6 @@
 #import "MBProgressHUD.h"
 #import "PAPHomeViewController.h"
 #import "PAPLogInViewController.h"
-#import "UIImage+ResizeAdditions.h"
 #import "PAPAccountViewController.h"
 #import "PAPWelcomeViewController.h"
 #import "PAPActivityFeedViewController.h"
@@ -132,16 +131,31 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     [Konotor InitWithAppID:KONOTOR_APP_ID AppKey:KONOTOR_APP_KEY withDelegate:[KonotorEventHandler sharedInstance]];
     
     [Konotor setWelcomeMessage:@"Welcome to Teamstory! Thoughts or feedback? Chat with us here anytime"];
-    /*
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-     (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-    */
+
+    
+    // Register for Push Notitications, if running iOS 8
+    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+        UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
+                                                        UIUserNotificationTypeBadge |
+                                                        UIUserNotificationTypeSound);
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
+                                                                                 categories:nil];
+        [application registerUserNotificationSettings:settings];
+        [application registerForRemoteNotifications];
+    } else {
+        // Register for Push Notifications before iOS 8
+        [application registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
+                                                         UIRemoteNotificationTypeAlert |
+                                                         UIRemoteNotificationTypeSound)];
+    }
     
     // ****************************************************************************
     // Parse initialization
         [Parse setApplicationId:PARSE_APP_ID
                       clientKey:PARSE_CLIENT_KEY];
         [PFFacebookUtils initializeFacebook];
+    
+
         [PFTwitterUtils initializeWithConsumerKey:TWITTER_KEY
                                    consumerSecret:TWITTER_SECRET];
     // ****************************************************************************
@@ -152,11 +166,12 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     // Crash analytics
     [Crashlytics startWithAPIKey:@"9075de9af4f252529090970cd8c2f7e426771d92"];
     
-    // Set installation id for analytics
+    // Set installation id for mixpanel and crashlytics analytics
     NSString *installationId = [[PFInstallation currentInstallation] objectId];
     
     if(installationId != nil){
         [Crashlytics setUserIdentifier:installationId];
+        [[Mixpanel sharedInstance] registerSuperProperties:@{@"InstallationObjId": installationId}];
     }
     
     PFACL *defaultACL = [PFACL ACL];
@@ -178,22 +193,6 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     self.window.rootViewController = self.navController;
     
     [self.window makeKeyAndVisible];
-    
-    // Register for Push Notitications, if running iOS 8
-    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-        UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
-                                                        UIUserNotificationTypeBadge |
-                                                        UIUserNotificationTypeSound);
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
-                                                                                 categories:nil];
-        [application registerUserNotificationSettings:settings];
-        [application registerForRemoteNotifications];
-    } else {
-        // Register for Push Notifications before iOS 8
-        [application registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
-                                                         UIRemoteNotificationTypeAlert |
-                                                         UIRemoteNotificationTypeSound)];
-    }
 
     
     // handle push notifications
@@ -211,6 +210,9 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
+    // mixpanel notification setup
+    [[Mixpanel sharedInstance].people addPushDeviceToken:newDeviceToken];
+    
     // konotor notifications setup
     [Konotor addDeviceToken:newDeviceToken];
     
@@ -317,6 +319,10 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
         NSNumber *activityBadgeNumber = [[PFUser currentUser] objectForKey:@"activityBadge"];
         
         if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
+        
+    // syncs icon badge with tab bar badge, resets icon badge back to 0
+    if (application.applicationIconBadgeNumber != 0) {
+
             // check if tab controllers and activity tab exist
             if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
                 
@@ -529,11 +535,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     
     
     [self.navController setViewControllers:@[ self.welcomeViewController, self.tabBarController ] animated:NO];
-/*
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|
-     UIRemoteNotificationTypeAlert|
-     UIRemoteNotificationTypeSound];
-  */
+
     // Download user's profile picture
     NSURL *profilePictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large", [[PFUser currentUser] objectForKey:kPAPUserFacebookIDKey]]];
     NSURLRequest *profilePictureURLRequest = [NSURLRequest requestWithURL:profilePictureURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.0f]; // Facebook profile picture cache policy: Expires in 2 weeks
@@ -704,19 +706,10 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
             return;
         }
         
-        // add to read list, set as read, and reset badges
-        [self.activityViewController addToReadList:photoId itemActivityId:activityId];
-        
-        // default to activity id if photoid is missing (case of follows)
-        if(photoId != nil){
-            [self.activityViewController updateReadList:photoId];
-        }else{
-            [self.activityViewController updateReadList:activityId];
-        }
-        
+        // add to read list as read and reset badge
+        [self.activityViewController addActivityToReadList:activityId postId:photoId customAttributes:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"read",@"status", nil]];
         [self.activityViewController setActivityBadge:nil];
         
-    
         // If the push notification payload references a photo, we will attempt to push this view controller into view
         NSString *photoObjectId = [remoteNotificationPayload objectForKey:kPAPPushPayloadPhotoObjectIdKey];
         if (photoObjectId && photoObjectId.length > 0) {

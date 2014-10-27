@@ -15,6 +15,7 @@
 #import "PAPTabBarController.h"
 #import "Mixpanel.h"
 #import "PAPMessageListViewController.h"
+#import "Apptimize.h"
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
@@ -122,7 +123,6 @@
     // empty placeholder message and icon
     UIImage *placeHolderImg = [UIImage imageNamed:@"following_empty.png"];
     self.emptyPlaceholderMessage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, placeHolderImg.size.width, placeHolderImg.size.height)];
-    [self.emptyPlaceholderMessage setBackgroundColor:[UIColor redColor]];
     [self.emptyPlaceholderMessage setImage:placeHolderImg];
     
     // empty placeholder button
@@ -137,7 +137,6 @@
     [self.emptyPlaceholder addSubview:self.emptyPlaceholderMessage];
     [self.emptyPlaceholder addSubview:self.emptyPlaceholderBtn];
     [self.emptyPlaceholder  setHidden:YES];
-    
     
     
     [super.feed addSubview:self.emptyPlaceholder];
@@ -199,11 +198,21 @@
     // analytics
     [PAPUtility captureScreenGA:@"Home"];
     
-    [[Mixpanel sharedInstance] track:@"Viewed Home Screen" properties:@{}];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(updateMessageButton:)
                                                  name:@"updateMessageButton"
                                                object:nil];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Home"}];
+    
+    // fetch unread messages, show feedback screen
+    self.konotorCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
+    
+    if([self.konotorCount intValue] > 0){
+        [self.feedbackBtn.imageView setImage:[UIImage imageNamed:@"button-feedback-notify.png"]];
+    }else{
+        [self.feedbackBtn.imageView setImage:[UIImage imageNamed:@"button-feedback.png"]];
+    }
     
     // disabling notification bar for now.
     /*
@@ -384,26 +393,44 @@
     
     // get user info for analytics
     NSString *displayName = [[PFUser currentUser] objectForKey:@"displayName"] != nil ? [[PFUser currentUser] objectForKey:@"displayName"] : @"";
+    NSString *currentUserObjectId = [[PFUser currentUser] objectId] != nil ? [[PFUser currentUser] objectId] : @"";
+    
+    NSLog(@"%@", displayName);
     NSString *email = [[PFUser currentUser] objectForKey:@"email"] != nil ? [[PFUser currentUser] objectForKey:@"email"] : @"";
-    NSString *currentUserId = [[PFUser currentUser] objectId];
     NSString *industry = [[PFUser currentUser] objectForKey:@"industry"] != nil ? [[PFUser currentUser] objectForKey:@"industry"] : @"";
     NSDate *createdAt = [[PFUser currentUser] createdAt];
     
     // Mxpanel analytics identify: must be called before
     // people properties can be set
-    [[Mixpanel sharedInstance] identify:currentUserId];
+    [[Mixpanel sharedInstance] identify:currentUserObjectId];
     
     // info for crashes
     [Crashlytics setUserName:displayName];
     [Crashlytics setUserEmail:email];
     
     // mixpanel analytics - Sets user
-    [[Mixpanel sharedInstance].people set:@{@"name": displayName, @"email": email, @"industry": industry, @"created": createdAt}];
+    [[Mixpanel sharedInstance].people set:@{@"$name": displayName, @"$email": email, @"industry": industry, @"created": createdAt, @"userObjId": currentUserObjectId}];
     
-    // super property
+    // super properties
     [[Mixpanel sharedInstance] registerSuperProperties:@{@"Name": displayName}];
-    // super property
     [[Mixpanel sharedInstance] registerSuperProperties:@{@"Industry": industry}];
+    [[Mixpanel sharedInstance] registerSuperProperties:@{@"Email": email}];
+    [[Mixpanel sharedInstance] registerSuperProperties:@{@"UserObjId": currentUserObjectId}];
+    
+    // aptimize experiment
+    [Apptimize setUserAttributeString:@"No" forKey:@"Admin"];
+    
+    // add admin property if one of us
+    if([currentUserObjectId isEqualToString:@"3KiW2NoGuT"] || [currentUserObjectId isEqualToString:@"rblDQcdZcY"] || [currentUserObjectId isEqualToString:@"vB648p1bT1"] || [currentUserObjectId isEqualToString:@"EFGqHAIxLm"] || [currentUserObjectId isEqualToString:@"k9dyEcXuZT"]){
+        
+        [[Mixpanel sharedInstance] registerSuperProperties:@{@"Admin": @"Yes"}];
+        [Apptimize setUserAttributeString:@"Yes" forKey:@"Admin"];
+    }
+    
+    /* Following three methods are to identify a user. These user properties will be viewable on the konotor web dashboard */
+    [Konotor setUserName:displayName]; // To set an identifiable name for the user
+    [Konotor setUserEmail:email]; //To set user's email id
+    [Konotor setUserIdentifier:currentUserObjectId]; // To set the user's identifier unique to your system
 }
 
 /*
@@ -484,8 +511,9 @@
     if([source isEqualToString:@"explore"]){
         
         if(!self.firstRun){
+            
             // mixpanel analytics
-            [[Mixpanel sharedInstance] track:@"Viewed Explore Feed" properties:@{}];
+            [[Mixpanel sharedInstance] track:@"Viewed Timeline Feed" properties:@{@"Feed" : @"Explore"}];
         }
         
         self.exploreBtn.titleLabel.font = self.feedFontSelected;
@@ -497,7 +525,7 @@
     }else if([source isEqualToString:@"following"]){
         
         // mixpanel analytics
-        [[Mixpanel sharedInstance] track:@"Viewed Following Feed" properties:@{}];
+        [[Mixpanel sharedInstance] track:@"Viewed Timeline Feed" properties:@{@"Feed" : @"Following"}];
         
         self.followingBtn.titleLabel.font = self.feedFontSelected;
         self.exploreBtn.titleLabel.font = self.feedFontDeselected;
@@ -548,14 +576,16 @@
         [super loadObjects:^(BOOL succeeded) {
 
             [self.switchWhiteOverlay setHidden:YES];
+            
             [SVProgressHUD dismiss];
             
-            if(super.objects.count != 0){
+            // make sure index path supplied is within the feed's bounds and feed has objects
+            if (lastViewdIndexPath.section <= [super.feed numberOfSections] && super.objects.count > 0){
                 // scroll to last viewed index path
                 [super.feed scrollToRowAtIndexPath:lastViewdIndexPath
                                   atScrollPosition:UITableViewScrollPositionTop animated:NO];
             }
-            
+    
         } isRefresh:YES fromSource:selectedFeedSource];
         
     }else{

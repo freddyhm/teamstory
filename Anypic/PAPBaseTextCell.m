@@ -11,6 +11,8 @@
 #import "PAPwebviewViewController.h"
 #import "PAPPhotoDetailsViewController.h"
 #import "SVProgressHUD.h"
+#import "Apptimize.h"
+#import "Mixpanel.h"
 
 #define unlikeButtonDimHeight 15.0f
 #define unlikeButtonDimWidth 50.0f
@@ -438,6 +440,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 - (void)commentInflatorActionWithUrl:(id)sender {
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Comment Menu" properties:@{}];
+    
     UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
     actionSheet.delegate = self;
     actionSheet.tag = withUrl;
@@ -449,6 +455,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 - (void)commentInflatorAction:(id)sender {
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Comment Menu" properties:@{}];
+    
     UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
     actionSheet.delegate = self;
     actionSheet.tag = withOutUrl;
@@ -459,6 +469,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 - (void)openUrl:(id)sender {
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Opened URL" properties:@{}];
+    
     if ([self.website rangeOfString:@"(?i)http" options:NSRegularExpressionSearch].location == NSNotFound) {
         NSString *http = @"http://";
         self.website = [NSString stringWithFormat:@"%@%@", http, self.website];
@@ -518,6 +532,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     if(actionSheet.tag == withOutUrl) {
         if(buttonIndex == 0) {
+            
+            // mixpanel analytics
+            [[Mixpanel sharedInstance] track:@"Viewed Comment Menu" properties:@{@"Selected" : @"Edit"}];
+            
             //Edit comment button
             NSString *comment = [self.contentLabel.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
             
@@ -528,6 +546,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
             
         } else if (buttonIndex == 1) {
             
+            // mixpanel analytics
+            [[Mixpanel sharedInstance] track:@"Viewed Comment Menu" properties:@{@"Selected" : @"Delete"}];
+            
             //Delete comment
             [self shouldDeleteComment];
         }
@@ -536,6 +557,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
             //Open Url
             [self openUrl:self];
         } else if (buttonIndex == 1) {
+            
+            // mixpanel analytics
+            [[Mixpanel sharedInstance] track:@"Viewed Comment Menu" properties:@{@"Selected" : @"Edit"}];
+            
             //Edit Comment Button
             NSString *comment = [self.contentLabel.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
             
@@ -544,6 +569,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [alertView textFieldAtIndex:0].text = comment;
             [alertView show];
         } else if (buttonIndex == 2) {
+            
+            // mixpanel analytics
+            [[Mixpanel sharedInstance] track:@"Viewed Comment Menu" properties:@{@"Selected" : @"Delete"}];
             
             //Delete comment
             [self shouldDeleteComment];

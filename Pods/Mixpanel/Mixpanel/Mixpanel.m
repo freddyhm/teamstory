@@ -26,6 +26,7 @@
 #import "MPABTestDesignerConnection.h"
 
 #define VERSION @"2.5.0"
+#define MIXPANEL_NO_IFA
 
 #ifdef MIXPANEL_LOG
 #define MixpanelLog(...) NSLog(__VA_ARGS__)
@@ -307,6 +308,7 @@ static Mixpanel *sharedInstance = nil;
 {
     NSString *ifa = nil;
 #ifndef MIXPANEL_NO_IFA
+    /*
     Class ASIdentifierManagerClass = NSClassFromString(@"ASIdentifierManager");
     if (ASIdentifierManagerClass) {
         SEL sharedManagerSelector = NSSelectorFromString(@"sharedManager");
@@ -315,6 +317,7 @@ static Mixpanel *sharedInstance = nil;
         NSUUID *uuid = ((NSUUID* (*)(id, SEL))[sharedManager methodForSelector:advertisingIdentifierSelector])(sharedManager, advertisingIdentifierSelector);
         ifa = [uuid UUIDString];
     }
+     */
 #endif
     return ifa;
 }

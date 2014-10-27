@@ -5,7 +5,6 @@
 //
 
 #import "PAPUtility.h"
-#import "UIImage+ResizeAdditions.h"
 #import "GAI.h"
 #import "GAIDictionaryBuilder.h"
 #import "GAIFields.h"
@@ -14,6 +13,24 @@
 
 
 #pragma mark - PAPUtility
+
+#pragma mark Images
+
++ (UIImage *)resizeImage:(UIImage *)image width:(int)w height:(int)h{
+    
+    // Create a graphics image context
+    CGSize newSize = CGSizeMake(w, h);
+    UIGraphicsBeginImageContext(newSize);
+    // Tell the old image to draw in this new context, with the desired
+    // new size
+    [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
+    // Get the new image from the context
+    UIImage* resizedImg = UIGraphicsGetImageFromCurrentImageContext();
+    // End the context
+    UIGraphicsEndImageContext();
+    
+    return resizedImg;
+}
 
 
 #pragma mark Notifications
@@ -272,10 +289,10 @@
     }
 
     UIImage *image = [UIImage imageWithData:newProfilePictureData];
-
-    UIImage *mediumImage = [image thumbnailImage:305 transparentBorder:0 cornerRadius:0 interpolationQuality:kCGInterpolationHigh];
-    UIImage *smallRoundedImage = [image thumbnailImage:64 transparentBorder:0 cornerRadius:0 interpolationQuality:kCGInterpolationLow];
-
+    
+    UIImage *mediumImage = [PAPUtility resizeImage:image width:305 height:305];
+    UIImage *smallRoundedImage = [PAPUtility resizeImage:image width:64 height:64];
+    
     NSData *mediumImageData = UIImageJPEGRepresentation(mediumImage, 0.5); // using JPEG for larger pictures
     NSData *smallRoundedImageData = UIImagePNGRepresentation(smallRoundedImage);
 

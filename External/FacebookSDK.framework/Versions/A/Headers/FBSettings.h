@@ -60,6 +60,8 @@ FBSDK_EXTERN NSString *const FBLoggingBehaviorDeveloperErrors;
 typedef NS_ENUM(NSUInteger, FBBetaFeatures) {
     FBBetaFeaturesNone                  = 0,
 #if defined(DEBUG) || defined(FB_BUILD_ONLY)
+    FBBetaFeaturesLikeButton            = 1 << 2,
+
 #endif
 };
 

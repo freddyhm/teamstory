@@ -137,7 +137,7 @@
     }
     
     query.cachePolicy = kPFCachePolicyNetworkOnly;
-    [query orderByAscending:kPAPUserDisplayNameKey];
+    [query orderByDescending:@"createdAt"];
     
     return query;
 }

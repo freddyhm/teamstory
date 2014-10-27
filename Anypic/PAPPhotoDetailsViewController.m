@@ -113,7 +113,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [super viewDidLoad];
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
+    [self.navigationItem.titleView setUserInteractionEnabled:YES];
     
+    UITapGestureRecognizer *tapNavTitle = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollToTop)];
+    [self.navigationItem.titleView addGestureRecognizer:tapNavTitle];
+
     // set current default back button to nil and set new one
     self.navigationItem.leftBarButtonItem = nil;
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -512,6 +516,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     if ([[textView text] isEqualToString:@"Add a comment"]) {
         [textView setText:@""];
+        
+        // get post type
+        NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
+        
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Started Writing Comment" properties:@{@"Post Type" : postType}];
     }
 }
 
@@ -583,7 +593,18 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         text = [text stringByAppendingString:@" "];
         
         if (range.location != NSNotFound) {
-            textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, range.length + 1) withString:text];
+            
+
+            /* If the user presses the Delete key, the length of the range is 1 and an empty string object replaces that single character. Goes out of bounds when user presses delete and selects display name at the start of message.*/
+            
+            int replacementRange = range.length + 1;
+            
+            // Check if new range is in bounds of current text, accounting for extra key when deleting
+            if(replacementRange < textView.text.length){
+                textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, replacementRange) withString:text];
+            }else{
+                textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, range.length) withString:text];
+            }
         }
         
         cellType = nil;
@@ -635,6 +656,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             
             [[PAPCache sharedCache] incrementCommentCountForPhoto:self.photo];
             
+            // get post type
+            NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
+
+            // mixpanel analytics
+            [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Commented", @"Post Type" : postType}];
+                        
             // Show HUD view
             [SVProgressHUD show];
             
@@ -773,7 +800,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         // analytics
         [PAPUtility captureEventGA:@"Engagement" action:@"Like Comment" label:@"Photo"];
         
-         [[Mixpanel sharedInstance] track:@"Liked Comment" properties:@{}];
+        // get post type
+        NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
+        
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Liked Comment", @"Post Type": postType}];
         
         // increment user like comment count by one
         [[Mixpanel sharedInstance].people increment:@"Like Comment Count" by:[NSNumber numberWithInt:1]];
@@ -827,6 +858,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 #pragma mark - ()
+
+- (void)scrollToTop{
+    
+    // scroll to the top (header view incl.)
+   [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+}
 
 - (void)refreshCommentLikes:(NSMutableArray *)comments pullFromServer:(BOOL)pullFromServer block:(void (^)(BOOL succeeded))completionBlock{
     

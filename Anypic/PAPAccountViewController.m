@@ -54,6 +54,7 @@
 @property (nonatomic, strong) UIView *whiteBackground;
 @property (nonatomic, strong) UIButton *multiActionButton;
 @property (nonatomic, strong) UILabel *locationSiteSeparator;
+@property (nonatomic, strong) UILabel *accountTitleLabel;
 @property int userStatUpdateCount;
 
 
@@ -110,6 +111,15 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     // hide back button
     [self.navigationItem setHidesBackButton:YES];
+        
+    self.accountTitleLabel = [[UILabel alloc] initWithFrame:self.navigationItem.titleView.frame];
+    self.accountTitleLabel.text = [self.user objectForKey:@"displayName"];
+    self.accountTitleLabel.textColor = [UIColor whiteColor];
+    self.accountTitleLabel.font = [UIFont boldSystemFontOfSize:16.0f];
+    self.accountTitleLabel.textAlignment = NSTextAlignmentCenter;
+    [self.accountTitleLabel sizeToFit];
+    
+     self.navigationItem.titleView = self.accountTitleLabel;
     
     UIButton *messageButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [messageButton setFrame:CGRectMake(0, 0, 22.0f, 22.0f)];
@@ -117,7 +127,10 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     [messageButton setBackgroundImage:[UIImage imageNamed:@"button-feedback.png"] forState:UIControlStateNormal];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:messageButton];
     
-    
+    [self.navigationItem.titleView setUserInteractionEnabled:YES];
+    UITapGestureRecognizer *tapNavTitle = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollToTop)];
+    [self.navigationItem.titleView addGestureRecognizer:tapNavTitle];
+
     if (!self.user) {
         [NSException raise:NSInvalidArgumentException format:@"user cannot be nil"];
     }
@@ -188,8 +201,6 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 }
                 
                 UIColor *textColor = [UIColor colorWithRed:158.0f/255.0f green:158.0f/255.0f blue:158.0f/255.0f alpha:1.0f];
-                
-                self.navigationItem.title = self.displayName;
                 
                 self.navigationItem.rightBarButtonItem = [[PAPSettingsButtonItem alloc] initWithTarget:self action:@selector(settingsButtonAction:)];
                 
@@ -401,25 +412,21 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                     self.locationInfo = @"";
                 }
                 
+                // handling slow internet / slow backend
+                if(self.locationLabel == nil ){
+                    self.locationLabel = [[UILabel alloc]init];
+                }
                 
-                
-                /*
-                // re-calculate width size for location label, image, and separator
-                CGFloat locationLabelWidth = [self.locationLabel.text sizeWithAttributes:
-                                              @{NSFontAttributeName:
-                                                    self.locationLabel.font}].width;
-                
-                [self.locationLabel setFrame:CGRectMake(self.locationLabel.frame.origin.x, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, self.locationLabel.frame.size.height)];
-                self.locationSiteSeparator.frame = CGRectMake(locationLabelWidth + self.locationLabel.frame.origin.x + 10.0f, 91.5f + expectedSize.height, 10.0f, 10.0f);
-                 */
+                if(self.locationLabel.font == nil){
+                    self.locationLabel.font = [UIFont fontWithName:@"Helvetica" size:13.0f];
+                }
                 
                 CGFloat locationLabelWidth = [self.locationLabel.text sizeWithAttributes:
                                @{NSFontAttributeName:
                                      self.locationLabel.font}].width;
                 
                 [self.locationLabel setFrame:CGRectMake(self.locationIconImageView.frame.origin.x + 20.0f, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, 16.0f)];
-                //[self.locationLabel setBackgroundColor:[UIColor redColor]];
-                
+    
                 [self.headerView addSubview:self.locationLabel];
                 
                 // the bar separating location and website link
@@ -453,7 +460,6 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 websiteLink.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
                 websiteLink.titleLabel.font = [UIFont systemFontOfSize:13.0f];
                 [websiteLink addTarget:self action:@selector(websiteLinkAction:) forControlEvents:UIControlEventTouchUpInside];
-               // [websiteLink setBackgroundColor:[UIColor redColor]];
                 
                 if ([websiteInfo length] > 0) {
                     [websiteLink setTitle:websiteInfo forState:UIControlStateNormal];
@@ -598,7 +604,8 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     [PAPUtility captureScreenGA:@"Account"];
     
-    [[Mixpanel sharedInstance] track:@"Viewed Account Screen" properties:@{}];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Account"}];
     
     // edge case, if multiaction button frozen because of network problems
     if (self.user == [PFUser currentUser] && !self.multiActionButton.enabled){
@@ -614,7 +621,9 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     [self.user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         self.user = (PFUser *)object;
     
-        self.navigationItem.title  = [self.user objectForKey:@"displayName"];
+        self.accountTitleLabel.text = [self.user objectForKey:@"displayName"];
+        [self.accountTitleLabel sizeToFit];
+        
         self.locationLabel.text = [self.user objectForKey:@"location"];
         self.descriptionLabel.text = [self.user objectForKey:@"description"];
         self.websiteInfo = [self.user objectForKey:@"website"];
@@ -696,14 +705,24 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         
         [descriptionLabel setFrame:CGRectMake(10.0f, 88.0f, expectedSize.width, expectedSize.height)];
         
+        
+        // handling slow internet / slow backend
+        if(self.locationLabel == nil ){
+            self.locationLabel = [[UILabel alloc]init];
+        }
+        
+        if(self.locationLabel.font == nil){
+            self.locationLabel.font = [UIFont fontWithName:@"Helvetica" size:13.0f];
+        }
+        
         // re-calculate width size for location label, image, and separator
         CGFloat locationLabelWidth = [self.locationLabel.text sizeWithAttributes:
-                       @{NSFontAttributeName:
-                             self.locationLabel.font}].width;
-        
+                                      @{NSFontAttributeName:
+                                            self.locationLabel.font}].width;
         [self.locationLabel setFrame:CGRectMake(self.locationLabel.frame.origin.x, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, self.locationLabel.frame.size.height)];
         self.locationSiteSeparator.frame = CGRectMake(locationLabelWidth + self.locationLabel.frame.origin.x + 5.0f, 91.5f + expectedSize.height, 10.0f, 10.0f);
         
+    
         if(self.websiteInfo.length > 0 && ![self.locationSiteSeparator.text isEqualToString:@"|"]){
             self.locationSiteSeparator.text = @"|";
         }
@@ -720,8 +739,6 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         }
 
         [websiteLink setFrame:CGRectMake(self.locationSiteSeparator.frame.origin.x + self.locationSiteSeparator.frame.size.width, 89.0f + expectedSize.height, website_expectedSize.width, website_expectedSize.height)];
-      //  [websiteLink setBackgroundColor:[UIColor redColor]];
-
         [websiteLink setTitle:self.websiteInfo forState:UIControlStateNormal];
         
 
@@ -852,12 +869,22 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 
 #pragma mark - ()
 
+- (void)scrollToTop{
+    
+    // scroll to top with header view incl.
+    [self.feed scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+}
+
+
 - (void)followButtonAction:(id)sender {
     
     // analytics
     [PAPUtility captureEventGA:@"Engagement" action:@"Follow" label:@"User"];
     
-    [[Mixpanel sharedInstance] track:@"Followed" properties:@{}];
+    NSString *followedUserDisplayName = [self.user objectForKey:@"displayName"] != nil ? [self.user objectForKey:@"displayName"]: @"";
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Followed User", @"Source": @"Profile", @"Followed User" : followedUserDisplayName}];
     
     // increment user follow count by one
     [[Mixpanel sharedInstance].people increment:@"Follow Count" by:[NSNumber numberWithInt:1]];

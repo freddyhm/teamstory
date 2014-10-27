@@ -9,10 +9,10 @@
 #import "PAPlinkPostViewController.h"
 #import "Embedly.h"
 #import "SVProgressHUD.h"
-#import "UIImage+ResizeAdditions.h"
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
 #import "Mixpanel.h"
+#import "ParseFacebookUtils/PFFacebookUtils.h"
 
 
 @interface PAPlinkPostViewController ()
@@ -69,8 +69,8 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    // analytics
-    [[Mixpanel sharedInstance] track:@"Viewed Link Screen" properties:@{}];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Link"}];
     
     // init nav bar
     [[self navigationController] setNavigationBarHidden:NO animated:YES];
@@ -242,7 +242,8 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     // analytics
     [PAPUtility captureEventGA:@"Engagement" action:@"Upload Link" label:@"Photo"];
     
-    [[Mixpanel sharedInstance] track:@"Uploaded Link" properties:@{}];
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Link"}];
     
     // increment user link count by one
     [[Mixpanel sharedInstance].people increment:@"Link Count" by:[NSNumber numberWithInt:1]];
@@ -306,6 +307,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     }];
 }
 
+
 - (void)shouldUploadImage:(UIImage *)anImage block:(void (^)(BOOL))completed
 {
     if (anImage == nil) {
@@ -313,7 +315,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
         return;
     }
     
-    UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:10.0f interpolationQuality:kCGInterpolationDefault];
+    UIImage *thumbnailImage = [PAPUtility resizeImage:anImage width:86.0f height:86.0f];
     
     // JPEG to decrease file size and enable faster uploads & downloads
     NSData *imageData = UIImageJPEGRepresentation(anImage, 1.0f);

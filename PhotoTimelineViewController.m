@@ -92,16 +92,21 @@ enum ActionSheetTags {
     self.texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     self.feed.backgroundView = self.texturedBackgroundView;
     
-  //  UIView *whiteBkgdForPull = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 200.0f)];
-  //  whiteBkgdForPull.backgroundColor = [UIColor whiteColor];
-
+    // pull-to-refresh
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     refreshControl.tintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:0.5f];
     [refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
-    
     refreshControl.backgroundColor = [UIColor whiteColor];
-    //[self.feed sendSubviewToBack:whiteBkgdForPull];
     [self.feed addSubview:refreshControl];
+    
+    // creating view for extending white background
+    CGRect frame = self.feed.bounds;
+    frame.origin.y = -frame.size.height;
+    UIView* bgView = [[UIView alloc] initWithFrame:frame];
+    bgView.backgroundColor = [UIColor whiteColor];
+    
+    // adding the view below the refresh control
+    [self.feed insertSubview:bgView atIndex:0];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidPublishPhoto:) name:PAPTabBarControllerDidFinishEditingPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidDeletePhoto:) name:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:nil];
@@ -158,8 +163,6 @@ enum ActionSheetTags {
     // analytics
     [PAPUtility captureEventGA:@"Engagement" action:@"Comment" label:@"Photo"];
     
-    [[Mixpanel sharedInstance] track:@"Commented" properties:@{}];
-    
     // increment user comment count by one
     [[Mixpanel sharedInstance].people increment:@"Comment Count" by:[NSNumber numberWithInt:1]];
     
@@ -196,12 +199,15 @@ enum ActionSheetTags {
     
     PFObject *photo = [self.objects objectAtIndex:sender.tag];
     
-    NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:sender.tag];
-    PAPPhotoCell *cell = (PAPPhotoCell *)[self.feed cellForRowAtIndexPath:index];
-
     if (photo) {
-        NSLog(@"TAPPED PHOTO %@ IMAGE %@", photo, cell.imageView.file.url);
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
+        
+        // mixpanel analytics 
+        NSString *type = [photo objectForKey:@"type"] != nil ? [photo objectForKey:@"type"] : @"";
+        
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Viewed Post", @"Post Type":type}];
+        
         [self.navigationController pushViewController:photoDetailsVC animated:YES];
     }
 }
@@ -672,7 +678,11 @@ enum ActionSheetTags {
         // analytics
         [PAPUtility captureEventGA:@"Engagement" action:@"Like" label:@"Photo"];
         
-        [[Mixpanel sharedInstance] track:@"Liked" properties:@{@"Source":@"Timeline"}];
+        // get post type
+        NSString *postType = [photo objectForKey:@"type"] != nil ? [photo objectForKey:@"type"] : @"";
+        
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Liked Post", @"Source":@"Timeline", @"Post Type": postType}];
         
         // increment user like count by one
         [[Mixpanel sharedInstance].people increment:@"Like Count" by:[NSNumber numberWithInt:1]];
@@ -713,7 +723,7 @@ enum ActionSheetTags {
 
 
 
-- (void)postFooterView:(PostFooterView *)postFooterView didTapCommentOnPhotoButton:(UIButton *)button  photo:(PFObject *)photo {
+- (void)postFooterView:(PostFooterView *)postFooterView didTapCommentForPost:photo {
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"commentButton"];
     [self.navigationController pushViewController:photoDetailsVC animated:YES];

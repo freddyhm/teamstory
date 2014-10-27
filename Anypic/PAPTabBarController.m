@@ -165,7 +165,8 @@
     // analytics
     [PAPUtility captureEventGA:@"Testing" action:@"Pressed Post" label:nil];
     
-    [[Mixpanel sharedInstance] track:@"Pressed Post Menu" properties:@{}];
+    // new analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Post Menu" properties:@{}];
     
     self.postButton.selected = self.postButton.selected ? NO : YES;
     
@@ -179,7 +180,8 @@
     // analytics
     [PAPUtility captureEventGA:@"Testing" action:@"Pressed Camera" label:nil];
     
-    [[Mixpanel sharedInstance] track:@"Pressed Camera" properties:@{}];
+    // new analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Post Menu" properties:@{@"Selected": @"Camera"}];
     
     postButton.selected = self.postButton.selected ? NO : YES;
     
@@ -227,7 +229,8 @@
     // analytics
     [PAPUtility captureEventGA:@"Testing" action:@"Pressed Link" label:nil];
     
-    [[Mixpanel sharedInstance] track:@"Pressed Link" properties:@{}];
+    // new analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Post Menu" properties:@{@"Selected": @"Link"}];
     
     self.postMenu.hidden = YES;
     postButton.selected = self.postButton.selected ? NO : YES;
@@ -269,7 +272,8 @@
     // analytics
     [PAPUtility captureEventGA:@"Testing" action:@"Pressed Thought" label:nil];
     
-    [[Mixpanel sharedInstance] track:@"Pressed Thought" properties:@{}];
+    // new analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Post Menu" properties:@{@"Selected": @"Thought"}];
     
     postButton.selected = self.postButton.selected ? NO : YES;
     self.postMenu.hidden = YES;

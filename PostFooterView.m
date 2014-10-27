@@ -120,11 +120,13 @@
             [self.likeCountLabel setFont:[UIFont systemFontOfSize:12.0f]];
             [self.likeCountLabel setText:@"0"];
             [self.likeCountLabel setTextColor:likeCommentColor];
+            [self.likeCountLabel setUserInteractionEnabled:YES];
             
             self.likeTitle = [[UILabel alloc] initWithFrame:CGRectMake(self.likeCountLabel.frame.origin.x + self.likeCountLabel.frame.size.width, self.likeButton.frame.origin.y + 5.0f, 40, 15)];
             [self.likeTitle setText:@" Likes"];
             [self.likeTitle setFont:self.likeCountLabel.font];
             [self.likeTitle setTextColor:likeCommentColor];
+            [self.likeTitle setUserInteractionEnabled:YES];
             
             [containerView addSubview:self.likeCountLabel];
             [containerView addSubview:self.likeTitle];
@@ -137,14 +139,21 @@
         [containerView addSubview:self.moreActionButton];
         
         if (self.buttons & PAPPhotoHeaderButtonsComment2) {
-            [self.commentButton addTarget:self action:@selector(didTapCommentOnPhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+            [self.commentButton addTarget:self action:@selector(didTapCommentAction) forControlEvents:UIControlEventTouchUpInside];
             
             // Add tap gestures for comment count and title
-            UITapGestureRecognizer* tapGestureCommentCount = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapCommentOnPhotoButtonAction:)];
-            UITapGestureRecognizer* tapGestureCommentTitle = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapCommentOnPhotoButtonAction:)];
+            UITapGestureRecognizer* tapGestureCommentCount = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapCommentAction)];
+            UITapGestureRecognizer* tapGestureCommentTitle = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapCommentAction)];
     
             [self.commentCountLabel addGestureRecognizer:tapGestureCommentCount];
             [self.commentTitle addGestureRecognizer:tapGestureCommentTitle];
+            
+            // Add tap gestures for like count and title
+            UITapGestureRecognizer* tapGestureLikeCount = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapLikeDescriptionAction)];
+            UITapGestureRecognizer* tapGestureLikeTitle = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapLikeDescriptionAction)];
+            
+            [self.likeCountLabel addGestureRecognizer:tapGestureLikeCount];
+            [self.likeTitle addGestureRecognizer:tapGestureLikeTitle];
             
         }
         
@@ -225,15 +234,21 @@
     }
 }
 
+- (void)didTapLikeDescriptionAction{
+    if (delegate && [delegate respondsToSelector:@selector(postFooterView:didTapLikePhotoButton:photo:)]) {
+        [delegate postFooterView:self didTapLikePhotoButton:self.likeButton photo:self.photo];
+    }
+}
+
 - (void)didTapLikePhotoButtonAction:(UIButton *)button {
     if (delegate && [delegate respondsToSelector:@selector(postFooterView:didTapLikePhotoButton:photo:)]) {
         [delegate postFooterView:self didTapLikePhotoButton:button photo:self.photo];
     }
 }
 
-- (void)didTapCommentOnPhotoButtonAction:(UIButton *)sender {
-    if (delegate && [delegate respondsToSelector:@selector(postFooterView:didTapCommentOnPhotoButton:photo:)]) {
-        [delegate postFooterView:self didTapCommentOnPhotoButton:sender photo:self.photo];
+- (void)didTapCommentAction{
+    if (delegate && [delegate respondsToSelector:@selector(postFooterView:didTapCommentForPost:)]) {
+        [delegate postFooterView:self didTapCommentForPost:self.photo];
     }
 }
 

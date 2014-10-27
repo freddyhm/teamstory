@@ -152,6 +152,9 @@ NSInteger selection = 1;
     
     [[Mixpanel sharedInstance] track:@"Viewed Discover Screen" properties:@{}];
     
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Discover"}];
+
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     self.navigationController.navigationBar.hidden = YES;
     
@@ -194,6 +197,7 @@ NSInteger selection = 1;
         activityQuery.limit = MAXFLOAT;
         [activityQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (!error) {
+                [self.follwerList removeAllObjects];
                 [self.follwerList addObjectsFromArray:objects];
                 [self isSearchBarReady];
             } else {
@@ -203,13 +207,9 @@ NSInteger selection = 1;
         
         limit = 1000;
         skip = 0;
-        
+        [self.userList removeAllObjects];
         [self userQueryPagination];
     }
-    
-    
-    
-    
 }
 
 #pragma - ()
@@ -291,6 +291,10 @@ NSInteger selection = 1;
 }
 
 -(void)usersLabelAction:(id)sender {
+    
+    // mixpane analytics
+    [[Mixpanel sharedInstance] track:@"Touched Tab In Discover Search" properties:@{@"Selected":@"Users"}];
+    
     [self labelSetting:@"users"];
     self.searchTV.contentOffset = CGPointMake(0, 0);
     [self.searchTV reloadData];
@@ -300,6 +304,10 @@ NSInteger selection = 1;
 }
 
 -(void)industryLabelAction:(id)sender {
+    
+    // mixpane analytics
+    [[Mixpanel sharedInstance] track:@"Touched Tab In Discover Search" properties:@{@"Selected":@"Industries"}];
+    
     [self labelSetting:@"industry"];
     self.searchTV.contentOffset = CGPointMake(0, 0);
     [self.searchTV reloadData];
@@ -510,6 +518,9 @@ NSInteger selection = 1;
     [self.userFilterListIndustry removeAllObjects];
     NSString *industry = [self.industry_datasource objectAtIndex:sender.tag];
     
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Selected From Discover" properties:@{@"Type": @"Industry", @"Selected":industry}];
+    
     if (![industry isEqualToString:@"Other"]) {
         [self.userFilterListIndustry addObjectsFromArray:[self.userList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"industry contains[c] %@", industry]]];
     } else {
@@ -539,6 +550,11 @@ NSInteger selection = 1;
 #pragma mark - PAPFindFriendsCellDelegate
 
 - (void)cell:(PAPFindFriendsCell *)cellView didTapUserButton:(PFUser *)aUser {
+    
+    // mixpanel analytics
+    NSString *selectedUser = [aUser objectForKey:@"displayName"] != nil ? [aUser objectForKey:@"displayName"] : [aUser objectId];
+    [[Mixpanel sharedInstance] track:@"Selected From Discover" properties:@{@"Type": @"User", @"Selected": selectedUser}];
+    
     // Push account view controller
     PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
     ;
@@ -548,6 +564,14 @@ NSInteger selection = 1;
 }
 
 - (void)cell:(PAPFindFriendsCell *)cellView didTapFollowButton:(PFUser *)aUser {
+    
+    // mixpanel analytics
+    NSString *selectedUser = [aUser objectForKey:@"displayName"] != nil ? [aUser objectForKey:@"displayName"] : [aUser objectId];
+    
+    [[Mixpanel sharedInstance] track:@"Selected From Discover" properties:@{@"Type": @"Followed", @"Selected":selectedUser}];
+    
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Followed User", @"Source": @"Discover", @"Followed User": selectedUser}];
+    
     [self shouldToggleFollowFriendForCell:cellView];
 }
 
@@ -569,6 +593,7 @@ NSInteger selection = 1;
         NSLog(@"follow");
         // Follow
         cell.followButton.selected = YES;
+        
         if ([self.follwerList count] > 0 ) {
             PFObject *copyOneObject = [self.follwerList objectAtIndex:0];
             [copyOneObject setObject:cellUser forKey:@"toUser"];
