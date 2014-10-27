@@ -518,7 +518,9 @@ NSInteger selection = 1;
 
 -(void) discoverCellButtonAction:(UIButton *)sender {
     [self.userFilterListIndustry removeAllObjects];
-    NSString *industry = [self.industry_datasource objectAtIndex:sender.tag];
+    
+    // check if industry datasource is not empty
+    NSString *industry = self.industry_datasource.count > 0 ? [self.industry_datasource objectAtIndex:sender.tag] : @"";
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Selected From Discover" properties:@{@"Type": @"Industry", @"Selected":industry}];
@@ -535,7 +537,9 @@ NSInteger selection = 1;
 
 - (void) discoverCellButtonActionWithSearchString:(UIButton *)sender{
     [self.userFilterListIndustry removeAllObjects];
-    NSString *industry = [self.industryFilterList objectAtIndex:sender.tag];
+    
+    // check if filter list is not empty
+    NSString *industry = self.industryFilterList.count > 0 ? [self.industryFilterList objectAtIndex:sender.tag] : @"";
     
     if (![industry isEqualToString:@"Other"]) {
         [self.userFilterListIndustry addObjectsFromArray:[self.userList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"industry contains[c] %@", industry]]];
