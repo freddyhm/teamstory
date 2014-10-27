@@ -100,7 +100,7 @@ Parse.Cloud.beforeSave('Activity', function(request, response) {
                        });
   
 Parse.Cloud.afterSave('Activity', function(request) {
-                        
+                      Parse.Cloud.useMasterKey();  
                       var fromUser = request.object.get("fromUser");
                       var fromUserId = fromUser != undefined ? request.object.get("fromUser").id : "";
                       var fromUserEmail = fromUser != undefined ? request.user.get("email") : "";
@@ -235,6 +235,9 @@ Parse.Cloud.afterSave('Activity', function(request) {
                                               });
                         
                       }
+
+                      toUser.increment('activityBadge', 1);
+                      toUser.save();
                         
                       // Only send push notifications for new activities
                       if (request.object.existed()) {

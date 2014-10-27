@@ -139,7 +139,7 @@
     actionSheet.delegate = self;
     [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Report User"]];
     [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
-    [actionSheet showFromTabBar:self.tabBarController.tabBar];
+    [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
 - (void) backButtonAction:(id)sender {
@@ -170,11 +170,14 @@
 -(void) loadMessageQuery {
     PFQuery *messageQuery = [PFQuery queryWithClassName:@"Message"];
     [messageQuery whereKey:@"chatRoom" equalTo:self.targetChatRoom];
-    [messageQuery orderByAscending:@"createdAt"];
-    [messageQuery setLimit:100];
+    [messageQuery orderByDescending:@"createdAt"];
+    [messageQuery setLimit:200];
     [messageQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         [self.messageQuery removeAllObjects];
-        [self.messageQuery addObjectsFromArray:objects];
+        
+        for (long i = objects.count - 1; i >= 0; i--) {
+            [self.messageQuery addObject:[objects objectAtIndex:i]];
+        }
         [self.messageList reloadData];
         [self scrollToBottom:NO];
     }];
@@ -348,7 +351,7 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
         cell.RECEIVEDMessageView.hidden = YES;
         cell.SENTTriangle.hidden = NO;
         cell.SENTMessageView.hidden = NO;
-        cell.timeStampLabel.frame = CGRectMake(5.0f, 0.0f, 50.0f, 15.0f);
+        cell.timeStampLabel.frame = CGRectMake(5.0f, 10.0f, 50.0f, 15.0f);
         cell.timeStampLabel.textAlignment = NSTextAlignmentLeft;
         cell.RECEIVEDTriangle.hidden = YES;
     } else {
@@ -356,7 +359,7 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
         cell.RECEIVEDTriangle.hidden = NO;
         cell.SENTTriangle.hidden = YES;
         cell.RECEIVEDMessageView.hidden = NO;
-        cell.timeStampLabel.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 55.0f, 0.0f, 50.0f, 15.0f);
+        cell.timeStampLabel.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 55.0f, 10.0f, 50.0f, 15.0f);
         cell.timeStampLabel.textAlignment = NSTextAlignmentRight;
     }
     
@@ -386,6 +389,15 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
         // Present mail view controller on screen
         [self presentViewController:mc animated:YES completion:nil];
     }
+}
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller
+          didFinishWithResult:(MFMailComposeResult)result
+                        error:(NSError*)error
+{
+    if(error) NSLog(@"ERROR - mailComposeController: %@", [error localizedDescription]);
+    [self dismissViewControllerAnimated:YES completion:nil];
+    return;
 }
 
 @end
