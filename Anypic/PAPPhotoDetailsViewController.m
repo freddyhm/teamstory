@@ -593,7 +593,18 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         text = [text stringByAppendingString:@" "];
         
         if (range.location != NSNotFound) {
-            textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, range.length + 1) withString:text];
+            
+
+            /* If the user presses the Delete key, the length of the range is 1 and an empty string object replaces that single character. Goes out of bounds when user presses delete and selects display name at the start of message.*/
+            
+            int replacementRange = range.length + 1;
+            
+            // Check if new range is in bounds of current text, accounting for extra key when deleting
+            if(replacementRange < textView.text.length){
+                textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, replacementRange) withString:text];
+            }else{
+                textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, range.length) withString:text];
+            }
         }
         
         cellType = nil;
