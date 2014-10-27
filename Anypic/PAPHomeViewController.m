@@ -44,6 +44,7 @@
 @property (nonatomic, strong) UIView *switchWhiteOverlay;
 @property (nonatomic, strong) UIImage *feedbackImg;
 @property (nonatomic, strong) UIImage *feedbackImgBadge;
+@property (nonatomic, strong) NSNumber *konotorCount;
 @property BOOL firstRun;
 @property BOOL isOpeningFeedback;
 @end

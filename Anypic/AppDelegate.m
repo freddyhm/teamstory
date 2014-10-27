@@ -356,8 +356,8 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
         
         // initiate konotor
         [Konotor newSession];
+    }
     }];
-    
 }
 
 #pragma mark - UITabBarControllerDelegate

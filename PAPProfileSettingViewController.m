@@ -31,7 +31,7 @@
 @property (nonatomic, strong) NSString *location_user;
 @property (nonatomic, strong) NSString *website_user;
 @property (nonatomic, strong) NSString *displayName_user;
-@property (nonatomic, strong) NSString *userDescription_user;
+@property (nonatomic, strong) NSString *description_user;
 @property (nonatomic, strong) NSString *email_user;
 @property (nonatomic, strong) UIScrollView *backgroundView;
 @property (nonatomic, strong) PFImageView* profilePictureImageView;
@@ -66,7 +66,7 @@
 @synthesize location_user;
 @synthesize website_user;
 @synthesize displayName_user;
-@synthesize userDescription_user;
+@synthesize description_user;
 @synthesize backgroundView;
 @synthesize profilePictureImageView;
 @synthesize imageProfileFile;
@@ -148,7 +148,7 @@
             location_user = self.user[@"location"];
             website_user = self.user[@"website"];
             displayName_user = self.user[@"displayName"];
-            self.userDescription_user = self.user[@"description"];
+            self.description_user = self.user[@"description"];
             
             email_user = self.user[@"email"];
             industry_user = self.user[@"industry"];
@@ -166,7 +166,7 @@
             if ([displayName_user length] == 0) {
                 displayName_user = @"Display or Company Name";
             }
-            if ([self.userDescription_user length] == 0) {
+            if ([self.description_user length] == 0) {
                 self.description_user = @"Description";
             }
             if ([industry_user length] == 0) {
@@ -371,7 +371,7 @@
             self.userDescription.autocorrectionType = UITextAutocorrectionTypeNo;
             [self.userDescription setBackgroundColor:[UIColor clearColor]];
             [self.userDescription setFont:fonts];
-            self.userDescription.placeholder = userDescription_user;
+            self.userDescription.placeholder = description_user;
             
             CGRect description_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 3, 250.0f, 25.0f);
             self.userDescription = [[UITextField alloc] initWithFrame:description_frame];
