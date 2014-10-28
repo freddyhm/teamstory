@@ -43,7 +43,7 @@
 
 -(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
-    
+    [SVProgressHUD show];
     
     self.filterFollowUserList = [[NSMutableArray alloc] init];
     self.userList = [[NSMutableArray alloc] init];
@@ -52,10 +52,18 @@
     [followerQuery whereKey:@"fromUser" equalTo:[PFUser currentUser]];
     [followerQuery whereKeyExists:@"toUser"];
     [followerQuery whereKey:@"type" equalTo:@"follow"];
-    [followerQuery includeKey:@"toUser.User"];
-    [followerQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+    
+    PFQuery *followingQuery = [PFQuery queryWithClassName:@"Activity"];
+    [followingQuery whereKey:@"toUser" equalTo:[PFUser currentUser]];
+    [followingQuery whereKeyExists:@"fromUser"];
+    [followingQuery whereKey:@"type" equalTo:@"follow"];
+    
+    PFQuery *finalQuery = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:followerQuery, followingQuery, nil]];
+    [finalQuery includeKey:@"fromUser.User"];
+    [finalQuery includeKey:@"toUser.User"];
+    [finalQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
-            NSLog(@"call successful");
+            [SVProgressHUD dismiss];
             self.followUserList = objects;
             [self.followerTV reloadData];
         } else {
@@ -74,6 +82,7 @@
     
     PFQuery *userQuery = [PFUser query];
     [userQuery whereKeyExists:@"displayName"];
+    [userQuery whereKey:@"displayName" notEqualTo:[[PFUser currentUser] objectForKey:@"displayName"]];
     [userQuery orderByDescending:@"updatedAt"];
     [userQuery setLimit:limit];
     [userQuery setSkip:skip];
@@ -210,9 +219,18 @@
     
     if (self.followUserList.count > 0 && [self.querySelectionString isEqualToString:@"Follower"]){
         if (isSearchString) {
-            [cell setUser:[[self.filterFollowUserList objectAtIndex:indexPath.row] objectForKey:@"toUser"]];
+            if ([[[PFUser currentUser] objectId] isEqualToString:[[[self.filterFollowUserList objectAtIndex:indexPath.row] objectForKey:@"toUser"] objectId]]) {
+                [cell setUser:[[self.filterFollowUserList objectAtIndex:indexPath.row] objectForKey:@"fromUser"]];
+            } else {
+                [cell setUser:[[self.filterFollowUserList objectAtIndex:indexPath.row] objectForKey:@"toUser"]];
+            }
         } else {
-            [cell setUser:[[self.followUserList objectAtIndex:indexPath.row] objectForKey:@"toUser"]];
+            if ([[[PFUser currentUser] objectId] isEqualToString:[[[self.followUserList objectAtIndex:indexPath.row] objectForKey:@"toUser"] objectId]]) {
+                [cell setUser:[[self.followUserList objectAtIndex:indexPath.row] objectForKey:@"fromUser"]];
+            } else {
+                [cell setUser:[[self.followUserList objectAtIndex:indexPath.row] objectForKey:@"toUser"]];
+            }
+            
         }
         [cell setDelegate:self];
         cell.followButton.hidden = YES;
@@ -295,6 +313,14 @@
 }
 
 # pragma UISearchBarDelegate
+
+-(void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    self.followerTV.frame = CGRectMake(0.0f, headerViewHeight + querySelectionViewheight + self.searchBar.bounds.size.height, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.height - headerViewHeight - querySelectionViewheight - self.searchBar.bounds.size.height - 216.0f);
+}
+
+-(void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
+    self.followerTV.frame = CGRectMake(0.0f, headerViewHeight + querySelectionViewheight + self.searchBar.bounds.size.height, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.height - headerViewHeight - querySelectionViewheight - self.searchBar.bounds.size.height);
+}
 
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     //Remove all objects first.
