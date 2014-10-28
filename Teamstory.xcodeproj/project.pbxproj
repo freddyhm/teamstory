@@ -315,6 +315,9 @@
 		D579140E19FF3E0900585370 /* IconHomeSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = D579140A19FF3E0900585370 /* IconHomeSelected.png */; };
 		D579140F19FF3E0900585370 /* nav_home@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D579140B19FF3E0900585370 /* nav_home@2x.png */; };
 		D579141019FF3E0900585370 /* IconHomeSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D579140C19FF3E0900585370 /* IconHomeSelected@2x.png */; };
+		D579141419FF47E100585370 /* btn_camera_bright.png in Resources */ = {isa = PBXBuildFile; fileRef = D579141119FF47E100585370 /* btn_camera_bright.png */; };
+		D579141519FF47E100585370 /* btn_camera_bright@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D579141219FF47E100585370 /* btn_camera_bright@3x.png */; };
+		D579141619FF47E100585370 /* btn_camera_bright@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D579141319FF47E100585370 /* btn_camera_bright@2x.png */; };
 		D57E663619A5705100E0E3FF /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = D57E663419A5705100E0E3FF /* bg.png */; };
 		D57E663719A5705100E0E3FF /* bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D57E663519A5705100E0E3FF /* bg@2x.png */; };
 		D5856F8E19F87E2500D0086F /* KonotorConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5856F5919F87E2500D0086F /* KonotorConversationViewController.m */; };
@@ -848,6 +851,9 @@
 		D579140A19FF3E0900585370 /* IconHomeSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconHomeSelected.png; sourceTree = "<group>"; };
 		D579140B19FF3E0900585370 /* nav_home@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_home@2x.png"; sourceTree = "<group>"; };
 		D579140C19FF3E0900585370 /* IconHomeSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IconHomeSelected@2x.png"; sourceTree = "<group>"; };
+		D579141119FF47E100585370 /* btn_camera_bright.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_camera_bright.png; sourceTree = "<group>"; };
+		D579141219FF47E100585370 /* btn_camera_bright@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_camera_bright@3x.png"; sourceTree = "<group>"; };
+		D579141319FF47E100585370 /* btn_camera_bright@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_camera_bright@2x.png"; sourceTree = "<group>"; };
 		D57E663419A5705100E0E3FF /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
 		D57E663519A5705100E0E3FF /* bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg@2x.png"; sourceTree = "<group>"; };
 		D5856F5619F87E2500D0086F /* Konotor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Konotor.h; sourceTree = "<group>"; };
@@ -1232,6 +1238,9 @@
 				46A2FE431963562100D8ED12 /* Link Popup@2x.png */,
 				D5F45B01196CE6DE001C2875 /* select_overlay.png */,
 				D5F45B02196CE6DE001C2875 /* select_overlay@2x.png */,
+				D579141119FF47E100585370 /* btn_camera_bright.png */,
+				D579141219FF47E100585370 /* btn_camera_bright@3x.png */,
+				D579141319FF47E100585370 /* btn_camera_bright@2x.png */,
 				D5F45AFD196CE6A9001C2875 /* btn_camera@2x.png */,
 				D5F45AFE196CE6A9001C2875 /* btn_camera.png */,
 				D5D571111947F8E900354340 /* btn_following_user.png */,
@@ -2071,6 +2080,7 @@
 				46A2FE461963562100D8ED12 /* Thought Popup.png in Resources */,
 				D5856FAD19F87E2600D0086F /* konotor_stop@2x.png in Resources */,
 				C4F102E2156C58440061BC3E /* Entitlements.plist in Resources */,
+				D579141519FF47E100585370 /* btn_camera_bright@3x.png in Resources */,
 				4691B4F418BEF61C00B7DF6A /* follow.png in Resources */,
 				D579140F19FF3E0900585370 /* nav_home@2x.png in Resources */,
 				D5856FB019F87E2600D0086F /* konotor_uploading.png in Resources */,
@@ -2085,6 +2095,7 @@
 				469CF3761996FB4D0081FCED /* btn_twitter_select.png in Resources */,
 				D552B0E719C7D3EB009F2862 /* arrows_left_white@2x.png in Resources */,
 				46B31EF0184E35150028D11C /* companyName.png in Resources */,
+				D579141619FF47E100585370 /* btn_camera_bright@2x.png in Resources */,
 				D5856F8F19F87E2500D0086F /* KonotorConversationViewController.xib in Resources */,
 				467A40C91993056C00D4C693 /* btn_email@2x.png in Resources */,
 				D552B0EA19C7D3EB009F2862 /* arrows_right_white.png in Resources */,
@@ -2144,6 +2155,7 @@
 				D5BFDEE018CC84A5004FEC42 /* toronto@2x.png in Resources */,
 				D5856FA719F87E2600D0086F /* konotor_progress_blue@2x.png in Resources */,
 				C4BE676D157FC7F700A291C2 /* BackgroundComments.png in Resources */,
+				D579141419FF47E100585370 /* btn_camera_bright.png in Resources */,
 				D5903C76192EBBF900DC9896 /* ThoughtPostViewController.xib in Resources */,
 				C4BE676E157FC7F700A291C2 /* BackgroundComments@2x.png in Resources */,
 				465B19AD18B81FE500EDBCFC /* browser-button-forward-no.png in Resources */,
@@ -2614,7 +2626,7 @@
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/**",
@@ -2656,7 +2668,7 @@
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/**",
@@ -2728,7 +2740,7 @@
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/**",
@@ -2804,7 +2816,7 @@
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/**",

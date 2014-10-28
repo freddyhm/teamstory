@@ -388,7 +388,7 @@
     [Apptimize setUserAttributeString:@"No" forKey:@"Admin"];
     
     // add admin property if one of us
-    if([currentUserObjectId isEqualToString:@"3KiW2NoGuT"] || [currentUserObjectId isEqualToString:@"rblDQcdZcY"] || [currentUserObjectId isEqualToString:@"vB648p1bT1"] || [currentUserObjectId isEqualToString:@"EFGqHAIxLm"] || [currentUserObjectId isEqualToString:@"k9dyEcXuZT"]){
+    if([currentUserObjectId isEqualToString:@"3KiW2NoGuT"] || [currentUserObjectId isEqualToString:@"rblDQcdZcY"] || [currentUserObjectId isEqualToString:@"vB648p1bT1"] || [currentUserObjectId isEqualToString:@"EFGqHAIxLm"] || ![currentUserObjectId isEqualToString:@"k9dyEcXuZT"]){
         
         [[Mixpanel sharedInstance] registerSuperProperties:@{@"Admin": @"Yes"}];
         [Apptimize setUserAttributeString:@"Yes" forKey:@"Admin"];

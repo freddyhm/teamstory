@@ -7,6 +7,7 @@
 
 #import "ELCAssetCell.h"
 #import "ELCAsset.h"
+#import <Apptimize/Apptimize.h>
 
 @interface ELCAssetCell ()
 
@@ -62,16 +63,36 @@
             if(!asset.isCam){
                 imageView.image = [UIImage imageWithCGImage:asset.asset.thumbnail];
             }else{
-                imageView.image = [UIImage imageNamed:@"btn_camera.png"];
+                
+                // new camera button experiment
+                [Apptimize runTest:@"Prominent Camera Button" withBaseline:^{
+                    // Baseline variant "original"
+                    imageView.image = [UIImage imageNamed:@"btn_camera.png"];
+                } andVariations:@{@"variation1": ^{
+                    // Variant "New Camera Button"
+                    imageView.image = [UIImage imageNamed:@"btn_camera_bright.png"];
+                }}];
             }
         } else {
             
             UIImageView *imageView;
             
+            
             if(!asset.isCam){
                 imageView = [[UIImageView alloc] initWithImage:[UIImage imageWithCGImage:asset.asset.thumbnail]];
             }else{
-                imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_camera.png"]];
+                
+                imageView = [[UIImageView alloc] init];
+                
+                // new camera button test
+                [Apptimize runTest:@"Prominent Camera Button" withBaseline:^{
+                    // Baseline variant "original"
+                    imageView.image = [UIImage imageNamed:@"btn_camera.png"];
+                } andVariations:@{@"variation1": ^{
+                    // Variant "New Camera Button"
+                    imageView.image = [UIImage imageNamed:@"btn_camera_bright.png"];
+                }}];
+                
             }
             
             [_imageViewArray addObject:imageView];
