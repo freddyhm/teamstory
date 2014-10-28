@@ -420,7 +420,7 @@
            
             /* If the user presses the Delete key, the length of the range is 1 and an empty string object replaces that single character. Goes out of bounds when user presses delete and selects display name at the start of message.*/
             
-            int replacementRange = range.length + 1;
+            int replacementRange = (int)range.length + 1;
             
             // Check if new range is in bounds of current text, accounting for extra key when deleting
             if(replacementRange < textView.text.length){
