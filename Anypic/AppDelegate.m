@@ -452,27 +452,27 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     
     UITabBarItem *activityFeedTabBarItem = [[UITabBarItem alloc] init];
     
-    [activityFeedTabBarItem setImage:[[UIImage imageNamed:@"nav_home.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [activityFeedTabBarItem setImage:[[UIImage imageNamed:@"nav_activity.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     
-    [activityFeedTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconHomeSelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [activityFeedTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconActivitySelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
 
     activityFeedTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
 
     
     UITabBarItem *perksTabBarItem = [[UITabBarItem alloc] init];
     
-    [perksTabBarItem setImage:[[UIImage imageNamed:@"nav_home.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [perksTabBarItem setImage:[[UIImage imageNamed:@"nav_discover.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     
-    [perksTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconHomeSelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [perksTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconDiscoverSelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
    
     perksTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
 
     
     UITabBarItem *accountTabBarItem = [[UITabBarItem alloc] init];
 
-    [accountTabBarItem setImage:[[UIImage imageNamed:@"nav_home.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [accountTabBarItem setImage:[[UIImage imageNamed:@"nav_profile.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     
-    [accountTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconHomeSelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [accountTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconProfileSelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     
     accountTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
     
