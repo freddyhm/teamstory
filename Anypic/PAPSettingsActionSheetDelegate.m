@@ -101,9 +101,19 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         }
         case kPAPAboutThisVersion:
         {
-            PAPwebviewViewController *webviewController = [[PAPwebviewViewController alloc] initWithWebsite:@"https://medium.com/@teamstory/teamstory-versions-cfcff69bcffc"];
-            webviewController.hidesBottomBarWhenPushed = YES;
-            [navController pushViewController:webviewController animated:YES];
+            // add version info
+            NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+            NSString *title = @"What's New in Version ";
+            NSString *titleWithVersion = [title stringByAppendingString:[infoDictionary objectForKey:@"CFBundleVersion"]];
+            NSString *changes = [infoDictionary objectForKey:@"VersionChanges"];
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:titleWithVersion
+                                                            message:changes
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Ok"
+                                                  otherButtonTitles: nil];
+            [alert show];
+            
             break;
         }
         case kPAPNotification:
