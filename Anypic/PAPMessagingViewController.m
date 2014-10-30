@@ -194,43 +194,46 @@
 }
 
 - (void)sendButtonAction:(id)sender {
-    PFObject *messagePFObject = [PFObject objectWithClassName:@"Message"];
-    [messagePFObject setObject:[PFUser currentUser] forKey:@"fromUser"];
-    [messagePFObject setObject:self.recipient forKey:@"toUser"];
-    [messagePFObject setObject:self.customKeyboard.messageTextView.text forKey:@"messageBody"];
-    [messagePFObject setObject:self.targetChatRoom forKey:@"chatRoom"];
-    
-    // adding new object.
-    [self.messageQuery addObject:messagePFObject];
-    [self.messageList reloadData];
-    [self scrollToBottom:YES];
-    
-    [messagePFObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if(!error) {
-            NSLog(@"Message Sent");
+    if ([self.customKeyboard.messageTextView.text length] > 0) {
+        PFObject *messagePFObject = [PFObject objectWithClassName:@"Message"];
+        [messagePFObject setObject:[PFUser currentUser] forKey:@"fromUser"];
+        [messagePFObject setObject:self.recipient forKey:@"toUser"];
+        [messagePFObject setObject:self.customKeyboard.messageTextView.text forKey:@"messageBody"];
+        [messagePFObject setObject:self.targetChatRoom forKey:@"chatRoom"];
+        
+        // adding new object.
+        [self.messageQuery addObject:messagePFObject];
+        [self.messageList reloadData];
+        [self scrollToBottom:YES];
+        
+        [messagePFObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if(!error) {
+                NSLog(@"Message Sent");
+            } else {
+                NSLog(@"%@", error);
+            }
+        }];
+        
+        
+        [self.targetChatRoom setObject:self.customKeyboard.messageTextView.text forKey:@"lastMessage"];
+        if ([self.userTypeNumber isEqualToString:@"userOne"]) {
+            if ([self.targetChatRoom objectForKey:@"userOneBadge"] > 0) {
+                [self.targetChatRoom incrementKey:@"userOneBadge"];
+            } else {
+                [self.targetChatRoom setObject:[NSNumber numberWithInt:1] forKey:@"userOneBadge"];
+            }
         } else {
-            NSLog(@"%@", error);
+            if ([self.targetChatRoom objectForKey:@"userTwoBadge"] > 0) {
+                [self.targetChatRoom incrementKey:@"userTwoBadge"];
+            } else {
+                [self.targetChatRoom setObject:[NSNumber numberWithInt:1] forKey:@"userTwoBadge"];
+            }
         }
-    }];
-    
-    
-    [self.targetChatRoom setObject:self.customKeyboard.messageTextView.text forKey:@"lastMessage"];
-    if ([self.userTypeNumber isEqualToString:@"userOne"]) {
-        if ([self.targetChatRoom objectForKey:@"userOneBadge"] > 0) {
-            [self.targetChatRoom incrementKey:@"userOneBadge"];
-        } else {
-            [self.targetChatRoom setObject:[NSNumber numberWithInt:1] forKey:@"userOneBadge"];
-        }
-    } else {
-        if ([self.targetChatRoom objectForKey:@"userTwoBadge"] > 0) {
-            [self.targetChatRoom incrementKey:@"userTwoBadge"];
-        } else {
-            [self.targetChatRoom setObject:[NSNumber numberWithInt:1] forKey:@"userTwoBadge"];
-        }
+        [self.targetChatRoom saveInBackground];
+        
+        self.customKeyboard.messageTextView.text = nil;
+        [self.customKeyboard textViewDidChange:self.customKeyboard.messageTextView];
     }
-    [self.targetChatRoom saveInBackground];
-    
-    self.customKeyboard.messageTextView.text = nil;
 }
 
 # pragma UIKeyboard
@@ -341,6 +344,8 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
     [self.timeIntervalFormatter setUsesAbbreviatedCalendarUnits:YES];
     NSString *timestamp = [self.timeIntervalFormatter stringForTimeInterval:timeInterval];
     
+    cell.userInteractionEnabled = NO;
+    
     if (fabsf(timeInterval) > (12 * 60 * 60)) {
         cell.timeStampLabel.text = timestamp;
     } else {
@@ -351,7 +356,7 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
         cell.RECEIVEDMessageView.hidden = YES;
         cell.SENTTriangle.hidden = NO;
         cell.SENTMessageView.hidden = NO;
-        cell.timeStampLabel.frame = CGRectMake(5.0f, 10.0f, 50.0f, 15.0f);
+        cell.timeStampLabel.frame = CGRectMake(10.0f, 10.0f, 50.0f, 15.0f);
         cell.timeStampLabel.textAlignment = NSTextAlignmentLeft;
         cell.RECEIVEDTriangle.hidden = YES;
     } else {
@@ -359,7 +364,7 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
         cell.RECEIVEDTriangle.hidden = NO;
         cell.SENTTriangle.hidden = YES;
         cell.RECEIVEDMessageView.hidden = NO;
-        cell.timeStampLabel.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 55.0f, 10.0f, 50.0f, 15.0f);
+        cell.timeStampLabel.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 60.0f, 10.0f, 50.0f, 15.0f);
         cell.timeStampLabel.textAlignment = NSTextAlignmentRight;
     }
     

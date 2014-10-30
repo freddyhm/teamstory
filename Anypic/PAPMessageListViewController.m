@@ -14,7 +14,9 @@
 #define tabBarHeight 50.0f
 #define notificationBarHeight 50.0f
 
-@interface PAPMessageListViewController ()
+@interface PAPMessageListViewController () {
+    CGRect tabBarSize;
+}
 
 @property (nonatomic, strong) UITableView *messageListTV;
 @property (nonatomic, strong) NSArray *messageList;
@@ -30,6 +32,10 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
+    
+    self.tabBarController.tabBar.hidden = YES;
+    tabBarSize = self.tabBarController.tabBar.frame;
+    self.tabBarController.tabBar.frame = CGRectZero;
     
     // fetch unread messages, show feedback screen
     self.messageNotificationCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
@@ -53,6 +59,13 @@
         self.messageList = objects;
         [self.messageListTV reloadData];
     }];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:YES];
+    
+    self.tabBarController.tabBar.hidden = NO;
+    self.tabBarController.tabBar.frame = tabBarSize;
 }
 
 - (void)viewDidLoad

@@ -121,12 +121,6 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
      self.navigationItem.titleView = self.accountTitleLabel;
     
-    UIButton *messageButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [messageButton setFrame:CGRectMake(0, 0, 22.0f, 22.0f)];
-    [messageButton addTarget:self action:@selector(messageButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [messageButton setBackgroundImage:[UIImage imageNamed:@"button-feedback.png"] forState:UIControlStateNormal];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:messageButton];
-    
     [self.navigationItem.titleView setUserInteractionEnabled:YES];
     UITapGestureRecognizer *tapNavTitle = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollToTop)];
     [self.navigationItem.titleView addGestureRecognizer:tapNavTitle];
@@ -546,7 +540,12 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 
                 if (![[self.user objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
                     
-                    self.navigationItem.rightBarButtonItem = nil;
+                    UIImage *messageButtonImage = [UIImage imageNamed:@"btn_message_empty.png"];
+                    UIButton *messageButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                    [messageButton setFrame:CGRectMake(0, 0, messageButtonImage.size.width, messageButtonImage.size.height)];
+                    [messageButton addTarget:self action:@selector(messageButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+                    [messageButton setBackgroundImage:messageButtonImage forState:UIControlStateNormal];
+                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:messageButton];
                     
                     // check if the currentUser is following this user
                     PFQuery *queryIsFollowing = [PFQuery queryWithClassName:kPAPActivityClassKey];

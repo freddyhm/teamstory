@@ -10,7 +10,7 @@
 
 #define cellHeight 85.0f
 #define profilePictureGap 80.0f
-#define leftGap 60.0f
+#define leftGap 80.0f
 
 @implementation PAPMessageListCell
 
@@ -48,6 +48,7 @@
         self.timeStampLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - leftGap + 10.0f, 15.0f, 60.0f, 15.0f)];
         [self.timeStampLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:10.0f]];
         [self.timeStampLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0f]];
+        self.timeStampLabel.textAlignment = NSTextAlignmentRight;
         [self.cellButton addSubview:self.timeStampLabel];
         
         UIView *lineBreak = [[UIView alloc] initWithFrame:CGRectMake(profilePictureGap, 84.0f, [UIScreen mainScreen].bounds.size.width, 1.0f)];

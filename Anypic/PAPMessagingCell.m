@@ -13,7 +13,7 @@
 #define messageTextSize 16.0f
 #define arrowSpacerWidth 20.0f
 #define MAXMessageViewWidth 250.0f
-#define MAXMessageLabelWidth 230.0f
+#define MAXMessageLabelWidth 215.0f
 
 @implementation PAPMessagingCell
 
