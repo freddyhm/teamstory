@@ -44,9 +44,14 @@
         [commentField setValue:[UIColor colorWithRed:154.0f/255.0f green:146.0f/255.0f blue:138.0f/255.0f alpha:1.0f] forKeyPath:@"_placeholderLabel.textColor"]; // Are we allowed to modify private properties like this? -Héctor
         [mainView addSubview:commentField];
          */
-         
-         
         
+        
+        // --------------------- Keyboard animation
+        self.commentView = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
+        self.commentView.delegate = self;
+        [self.mainView addSubview:self.commentView.view];
+         
+        /*
         commentView = [[UITextView alloc] initWithFrame:CGRectMake(10.0f, 10.0f, 299.0f, 31.0f)];
         commentView.backgroundColor = [UIColor colorWithRed:231.0f/255.0f green:231.0f/255.0f blue:231.0f/255.0f alpha:1.0f];
         commentView.font = [UIFont systemFontOfSize:12.0f];
@@ -59,6 +64,7 @@
         //[commentView setValue:[UIColor colorWithRed:154.0f/255.0f green:146.0f/255.0f blue:138.0f/255.0f alpha:1.0f] forKeyPath:@"_placeholderLabel.textColor"]; // Are we allowed to modify private properties like this? -Héctor
         
         [mainView addSubview:commentView];
+         */
         
         /*
         // Set comment send button
@@ -92,6 +98,14 @@
 
 + (CGRect)rectForEditView {
     return CGRectMake( 0.0f, 0.0f, 305.0f, 100.0f);
+}
+
+- (void)sendButtonAction:(id)sender {
+    
+}
+
+- (void)setTableViewHeight{
+    
 }
 
 @end

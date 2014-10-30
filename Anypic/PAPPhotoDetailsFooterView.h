@@ -4,10 +4,12 @@
 //
 //
 
-@interface PAPPhotoDetailsFooterView : UIView
+#import "CustomKeyboardViewController.h"
 
+@interface PAPPhotoDetailsFooterView : UIView <CustomKeyboardViewControllerDelegate>
+
+@property (nonatomic, strong) CustomKeyboardViewController *commentView;
 @property (nonatomic, strong) UITextField *commentField;
-@property (nonatomic, strong) UITextView *commentView;
 
 @property (nonatomic, strong) UIView *mainView;
 @property (nonatomic) BOOL hideDropShadow;

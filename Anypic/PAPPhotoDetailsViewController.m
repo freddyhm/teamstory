@@ -112,6 +112,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     [super viewDidLoad];
     
+    self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
+    self.customKeyboard.delegate = self;
+    [self.tableView addSubview:self.customKeyboard.view];
+    
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     [self.navigationItem.titleView setUserInteractionEnabled:YES];
     
@@ -167,15 +171,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.dimView.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.8f];
     [self.view addSubview:self.dimView];
     
-    
-    // Set table footer
-    self.footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:[PAPPhotoDetailsFooterView rectForView]];
-    
-    commentTextView = self.footerView.commentView;
-    self.defaultFooterViewFrame = self.footerView.mainView.frame;
-    self.defaultCommentTextViewFrame = self.commentTextView.frame;
-    commentTextView.delegate = self;
-    self.tableView.tableFooterView = self.footerView;
+
     
     self.autocompleteTableView = [[UITableView alloc] init];
     self.autocompleteTableView.delegate = self;
@@ -1158,5 +1154,13 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     // update content size based on current textview
     [self.tableView setContentSize:CGSizeMake(self.tableView.contentSize.width, [self getCurrentTableContentHeightWithTextView])];
+}
+
+- (void)sendButtonAction:(id)sender {
+    
+}
+
+- (void)setTableViewHeight{
+    
 }
 @end

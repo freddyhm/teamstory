@@ -119,7 +119,7 @@
     
     self.footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:footerRect];
     self.defaultFooterViewFrame = self.footerView.mainView.frame;
-    self.commentTextView = self.footerView.commentView;
+    self.commentTextView = self.footerView.commentView.messageTextView;
     self.commentTextView.text = @"Add a caption";
     self.commentTextView.delegate = self;
     [self.commentTextView setAutocorrectionType:UITextAutocorrectionTypeDefault];
