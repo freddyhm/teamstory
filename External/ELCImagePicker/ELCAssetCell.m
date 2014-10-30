@@ -7,7 +7,7 @@
 
 #import "ELCAssetCell.h"
 #import "ELCAsset.h"
-#import <Apptimize/Apptimize.h>
+#import "MPTweakInline.h"
 
 @interface ELCAssetCell ()
 
@@ -64,14 +64,18 @@
                 imageView.image = [UIImage imageWithCGImage:asset.asset.thumbnail];
             }else{
                 
-                // new camera button experiment
-                [Apptimize runTest:@"Prominent Camera Button" withBaseline:^{
-                    // Baseline variant "original"
+                
+                // mixpanel ab test for camera button
+                if( MPTweakValue(@"show new camera button", NO) ) {
+                    
+                    // Show original view
                     imageView.image = [UIImage imageNamed:@"btn_camera.png"];
-                } andVariations:@{@"variation1": ^{
-                    // Variant "New Camera Button"
+                    
+                } else {
+                    
+                    // Show alternate view with new camera button
                     imageView.image = [UIImage imageNamed:@"btn_camera_bright.png"];
-                }}];
+                }
             }
         } else {
             
@@ -84,15 +88,17 @@
                 
                 imageView = [[UIImageView alloc] init];
                 
-                // new camera button test
-                [Apptimize runTest:@"Prominent Camera Button" withBaseline:^{
-                    // Baseline variant "original"
+                // mixpanel ab test for camera button
+                if( MPTweakValue(@"show new camera button", NO) ) {
+                    
+                    // Show original view
                     imageView.image = [UIImage imageNamed:@"btn_camera.png"];
-                } andVariations:@{@"variation1": ^{
-                    // Variant "New Camera Button"
+                    
+                } else {
+                    
+                    // Show alternate view with new camera button
                     imageView.image = [UIImage imageNamed:@"btn_camera_bright.png"];
-                }}];
-                
+                }
             }
             
             [_imageViewArray addObject:imageView];

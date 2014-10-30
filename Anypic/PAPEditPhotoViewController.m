@@ -16,7 +16,6 @@
 #import "PAPLoadMoreCell.h"
 #import "PAPConstants.h"
 #import "Mixpanel.h"
-#import "Apptimize.h"
 
 
 @interface PAPEditPhotoViewController () {
@@ -611,12 +610,11 @@
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Moment"}];
     
+    // mixpanel ab test
+    [[Mixpanel sharedInstance] track:@"Goal: Uploaded Picture" properties:@{@"Type": @"Experiment"}];
+    
     // increment user photo count by one
     [[Mixpanel sharedInstance].people increment:@"Photo Count" by:[NSNumber numberWithInt:1]];
-    
-    // apptimize experiment
-    [Apptimize metricAchieved:@"Uploaded Picture"];
-    
     
     
     // make sure placeholder gets erased

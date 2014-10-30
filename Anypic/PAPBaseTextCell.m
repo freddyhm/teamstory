@@ -11,7 +11,6 @@
 #import "PAPwebviewViewController.h"
 #import "PAPPhotoDetailsViewController.h"
 #import "SVProgressHUD.h"
-#import "Apptimize.h"
 #import "Mixpanel.h"
 
 #define unlikeButtonDimHeight 15.0f

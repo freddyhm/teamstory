@@ -11,7 +11,7 @@
 #import "CameraFilterViewController.h"
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
-#import "Apptimize.h"
+#import "MPTweakInline.h"
 
 @interface CropResizeViewController ()
 
@@ -154,20 +154,24 @@
             
             [SVProgressHUD dismiss];
             
-            // apptimize experiment
-            [Apptimize runTest:@"No Filter" withBaseline:^{
-                // Baseline variant "original"
+            // mixpanel ab test for filter
+            if( MPTweakValue(@"show no filter", NO) ) {
+                
+                // Show original view
+                
+                // send selected image to edit controller
+                PAPEditPhotoViewController *editController = [[PAPEditPhotoViewController alloc] initWithImage:self.croppedImg];
+                [self.navigationController pushViewController:editController animated:YES];
+            
+            } else {
+               
+                // Show alternate view without filter
+                
                 // add to filters
                 CameraFilterViewController *filterController = [[CameraFilterViewController alloc]initWithImage:self.croppedImg nib:@"CameraFilterViewController" source:self.imageSource];
                 // push filter controller to nav stack
                 [self.navigationController pushViewController:filterController animated:YES];
-                
-            } andVariations:@{@"variation1": ^{
-                // Variant "No Filter Version"
-                // send selected image to edit controller
-                PAPEditPhotoViewController *editController = [[PAPEditPhotoViewController alloc] initWithImage:self.croppedImg];
-                [self.navigationController pushViewController:editController animated:YES];
-            }}];
+            }
         });
     });
 }

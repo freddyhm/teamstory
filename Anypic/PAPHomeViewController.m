@@ -14,7 +14,6 @@
 #import "PAPCache.h"
 #import "PAPTabBarController.h"
 #import "Mixpanel.h"
-#import "Apptimize.h"
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
@@ -133,6 +132,8 @@
     self.switchWhiteOverlay.layer.opacity = 0.6;
     [self.switchWhiteOverlay setHidden:YES];
     [self.view addSubview:self.switchWhiteOverlay];
+    
+    
     
     // stream selected by default
     [self switchSelectedButton:@"explore"];
@@ -384,14 +385,11 @@
     [[Mixpanel sharedInstance] registerSuperProperties:@{@"Email": email}];
     [[Mixpanel sharedInstance] registerSuperProperties:@{@"UserObjId": currentUserObjectId}];
     
-    // aptimize experiment
-    [Apptimize setUserAttributeString:@"No" forKey:@"Admin"];
     
     // add admin property if one of us
     if([currentUserObjectId isEqualToString:@"3KiW2NoGuT"] || [currentUserObjectId isEqualToString:@"rblDQcdZcY"] || [currentUserObjectId isEqualToString:@"vB648p1bT1"] || [currentUserObjectId isEqualToString:@"EFGqHAIxLm"] || ![currentUserObjectId isEqualToString:@"k9dyEcXuZT"]){
         
         [[Mixpanel sharedInstance] registerSuperProperties:@{@"Admin": @"Yes"}];
-        [Apptimize setUserAttributeString:@"Yes" forKey:@"Admin"];
     }
     
     /* Following three methods are to identify a user. These user properties will be viewable on the konotor web dashboard */

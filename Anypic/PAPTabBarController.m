@@ -12,7 +12,6 @@
 #import "PAPlinkPostViewController.h"
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
-#import "Apptimize.h"
 
 @interface PAPTabBarController ()
 @property (nonatomic,strong) NSString *imageSource;
@@ -284,9 +283,6 @@
     [PAPUtility captureEventGA:@"Camera & Album" action:@"Picked Camera" label:@"Photo"];
 
     [[Mixpanel sharedInstance] track:@"Took Camera Picture" properties:@{}];
-    
-    // new camera button experiment goal
-    [Apptimize metricAchieved:@"Tapped Camera Button"];
     
     /* starts camera, sets tabbarcontroller as delegate, and returns image picker */
     
