@@ -7,14 +7,15 @@
 #import "PAPPhotoDetailsHeaderView.h"
 #import "PAPBaseTextCell.h"
 #import <MessageUI/MFMailComposeViewController.h>
-#import "CustomKeyboardViewController.h"
 
 @class PAPPhotoDetailsViewController;
 
-@interface PAPPhotoDetailsViewController : PFQueryTableViewController <UITextFieldDelegate, PAPPhotoDetailsHeaderViewDelegate, PAPBaseTextCellDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UITextViewDelegate, CustomKeyboardViewControllerDelegate>
+@interface PAPPhotoDetailsViewController : UIViewController <UITextFieldDelegate, PAPPhotoDetailsHeaderViewDelegate, PAPBaseTextCellDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UITextViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) PFObject *photo;
-@property (nonatomic, strong) CustomKeyboardViewController *customKeyboard;
+@property (nonatomic, strong) UITableView *postDetails;
+@property (nonatomic, strong) NSMutableArray *objects;
+@property int objectsPerPage;
 
 - (id)initWithPhoto:(PFObject *)aPhoto source:(NSString *)source;
 - (void)dismissKeyboard;

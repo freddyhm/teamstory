@@ -119,13 +119,12 @@
     
     self.footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:footerRect];
     self.defaultFooterViewFrame = self.footerView.mainView.frame;
-    self.commentTextView = self.footerView.commentView.messageTextView;
+    self.commentTextView = self.footerView.commentView;
     self.commentTextView.text = @"Add a caption";
     self.commentTextView.delegate = self;
     [self.commentTextView setAutocorrectionType:UITextAutocorrectionTypeDefault];
     
     [self.scrollView addSubview:self.footerView];
-    
 
     [self.scrollView setContentSize:CGSizeMake(self.scrollView.bounds.size.width, photoImageView.frame.origin.y + photoImageView.frame.size.height + self.footerView.frame.size.height)];
     

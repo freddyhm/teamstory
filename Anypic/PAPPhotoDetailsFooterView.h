@@ -6,9 +6,9 @@
 
 #import "CustomKeyboardViewController.h"
 
-@interface PAPPhotoDetailsFooterView : UIView <CustomKeyboardViewControllerDelegate>
+@interface PAPPhotoDetailsFooterView : UIView
 
-@property (nonatomic, strong) CustomKeyboardViewController *commentView;
+@property (nonatomic, strong) UITextView *commentView;
 @property (nonatomic, strong) UITextField *commentField;
 
 @property (nonatomic, strong) UIView *mainView;

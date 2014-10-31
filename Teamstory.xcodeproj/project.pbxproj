@@ -230,7 +230,6 @@
 		C4F102C3156C57DA0061BC3E /* PAPWelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102C0156C57DA0061BC3E /* PAPWelcomeViewController.m */; };
 		C4F102CB156C57EE0061BC3E /* PAPActivityFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102C6156C57ED0061BC3E /* PAPActivityFeedViewController.m */; };
 		C4F102CC156C57EE0061BC3E /* PAPHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102C8156C57ED0061BC3E /* PAPHomeViewController.m */; };
-		C4F102CD156C57EE0061BC3E /* PAPPhotoTimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102CA156C57EE0061BC3E /* PAPPhotoTimelineViewController.m */; };
 		C4F102D2156C57FD0061BC3E /* PAPAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102CF156C57FD0061BC3E /* PAPAccountViewController.m */; };
 		C4F102D3156C57FD0061BC3E /* PAPPhotoDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102D1156C57FD0061BC3E /* PAPPhotoDetailsViewController.m */; };
 		C4F102D9156C580C0061BC3E /* PAPSettingsActionSheetDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102D7156C580C0061BC3E /* PAPSettingsActionSheetDelegate.m */; };
@@ -732,8 +731,6 @@
 		C4F102C6156C57ED0061BC3E /* PAPActivityFeedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = PAPActivityFeedViewController.m; path = Anypic/PAPActivityFeedViewController.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C4F102C7156C57ED0061BC3E /* PAPHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPHomeViewController.h; path = Anypic/PAPHomeViewController.h; sourceTree = SOURCE_ROOT; };
 		C4F102C8156C57ED0061BC3E /* PAPHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPHomeViewController.m; path = Anypic/PAPHomeViewController.m; sourceTree = SOURCE_ROOT; };
-		C4F102C9156C57ED0061BC3E /* PAPPhotoTimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPPhotoTimelineViewController.h; path = Anypic/PAPPhotoTimelineViewController.h; sourceTree = SOURCE_ROOT; };
-		C4F102CA156C57EE0061BC3E /* PAPPhotoTimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = PAPPhotoTimelineViewController.m; path = Anypic/PAPPhotoTimelineViewController.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C4F102CE156C57FD0061BC3E /* PAPAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPAccountViewController.h; path = Anypic/PAPAccountViewController.h; sourceTree = SOURCE_ROOT; };
 		C4F102CF156C57FD0061BC3E /* PAPAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = PAPAccountViewController.m; path = Anypic/PAPAccountViewController.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C4F102D0156C57FD0061BC3E /* PAPPhotoDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPPhotoDetailsViewController.h; path = Anypic/PAPPhotoDetailsViewController.h; sourceTree = SOURCE_ROOT; };
@@ -1549,8 +1546,6 @@
 			children = (
 				462B363C1880AB5D008C28AE /* discoverPageViewController.h */,
 				462B363D1880AB5D008C28AE /* discoverPageViewController.m */,
-				C4F102C9156C57ED0061BC3E /* PAPPhotoTimelineViewController.h */,
-				C4F102CA156C57EE0061BC3E /* PAPPhotoTimelineViewController.m */,
 				C4F102C7156C57ED0061BC3E /* PAPHomeViewController.h */,
 				C4F102C8156C57ED0061BC3E /* PAPHomeViewController.m */,
 				C4F102CE156C57FD0061BC3E /* PAPAccountViewController.h */,
@@ -2475,7 +2470,6 @@
 				C4F102CB156C57EE0061BC3E /* PAPActivityFeedViewController.m in Sources */,
 				46A1DCAD195BB6F100729FD0 /* PAPlinkPostViewController.m in Sources */,
 				C4F102CC156C57EE0061BC3E /* PAPHomeViewController.m in Sources */,
-				C4F102CD156C57EE0061BC3E /* PAPPhotoTimelineViewController.m in Sources */,
 				D5B5D0E31995316400916108 /* PostFooterView.m in Sources */,
 				C4F102D2156C57FD0061BC3E /* PAPAccountViewController.m in Sources */,
 				C4F102D3156C57FD0061BC3E /* PAPPhotoDetailsViewController.m in Sources */,
