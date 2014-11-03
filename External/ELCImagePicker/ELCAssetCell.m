@@ -67,14 +67,12 @@
                 
                 // mixpanel ab test for camera button
                 if( MPTweakValue(@"show new camera button", NO) ) {
-                    
+                    // Show alternate view with new camera button
+                    imageView.image = [UIImage imageNamed:@"btn_camera_bright.png"];
+                } else {
                     // Show original view
                     imageView.image = [UIImage imageNamed:@"btn_camera.png"];
                     
-                } else {
-                    
-                    // Show alternate view with new camera button
-                    imageView.image = [UIImage imageNamed:@"btn_camera_bright.png"];
                 }
             }
         } else {
@@ -90,14 +88,11 @@
                 
                 // mixpanel ab test for camera button
                 if( MPTweakValue(@"show new camera button", NO) ) {
-                    
-                    // Show original view
-                    imageView.image = [UIImage imageNamed:@"btn_camera.png"];
-                    
-                } else {
-                    
                     // Show alternate view with new camera button
                     imageView.image = [UIImage imageNamed:@"btn_camera_bright.png"];
+                } else {
+                    // Show original view
+                    imageView.image = [UIImage imageNamed:@"btn_camera.png"];
                 }
             }
             

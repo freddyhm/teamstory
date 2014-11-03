@@ -157,7 +157,7 @@
             // mixpanel ab test for filter
             if( MPTweakValue(@"show no filter", NO) ) {
                 
-                // Show original view
+                // Show alternate view without filter
                 
                 // send selected image to edit controller
                 PAPEditPhotoViewController *editController = [[PAPEditPhotoViewController alloc] initWithImage:self.croppedImg];
@@ -165,7 +165,7 @@
             
             } else {
                
-                // Show alternate view without filter
+                // Show original view
                 
                 // add to filters
                 CameraFilterViewController *filterController = [[CameraFilterViewController alloc]initWithImage:self.croppedImg nib:@"CameraFilterViewController" source:self.imageSource];
