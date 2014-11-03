@@ -2604,7 +2604,6 @@
 			baseConfigurationReference = 45FF90152F5E49D089B6BDAE /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				APPTIMIZE_KEY = Cw_X3dMxewpFkXNYLJwAibhtfJd6mZU;
 				BUNDLE_DISPLAY_NAME_SUFFIX = "∆";
 				BUNDLE_ID_SUFFIX = .dev;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -2647,7 +2646,6 @@
 			baseConfigurationReference = 45FF90152F5E49D089B6BDAE /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				APPTIMIZE_KEY = "CoQpaZcCdANF-KWaxNduW_xfnjbor4s";
 				BUNDLE_DISPLAY_NAME_SUFFIX = "";
 				BUNDLE_ID_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -2720,7 +2718,6 @@
 			baseConfigurationReference = 45FF90152F5E49D089B6BDAE /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				APPTIMIZE_KEY = "CoQpaZcCdANF-KWaxNduW_xfnjbor4s";
 				BUNDLE_DISPLAY_NAME_SUFFIX = "";
 				BUNDLE_ID_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -2795,7 +2792,6 @@
 			baseConfigurationReference = 45FF90152F5E49D089B6BDAE /* Pods.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				APPTIMIZE_KEY = "CoQpaZcCdANF-KWaxNduW_xfnjbor4s";
 				BUNDLE_DISPLAY_NAME_SUFFIX = "";
 				BUNDLE_ID_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;

@@ -284,6 +284,9 @@
 
     [[Mixpanel sharedInstance] track:@"Took Camera Picture" properties:@{}];
     
+    // mixpanel ab test new camera button goal
+    [[Mixpanel sharedInstance] track:@"Goal: Tapped New Camera Button" properties:@{@"Type": @"Experiment"}];
+    
     /* starts camera, sets tabbarcontroller as delegate, and returns image picker */
     
     self.camera = [[UIImagePickerController alloc] init];

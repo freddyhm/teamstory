@@ -610,7 +610,7 @@
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Moment"}];
     
-    // mixpanel ab test
+    // mixpanel ab test no filter goal
     [[Mixpanel sharedInstance] track:@"Goal: Uploaded Picture" properties:@{@"Type": @"Experiment"}];
     
     // increment user photo count by one

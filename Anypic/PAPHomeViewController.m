@@ -387,7 +387,7 @@
     
     
     // add admin property if one of us
-    if([currentUserObjectId isEqualToString:@"3KiW2NoGuT"] || [currentUserObjectId isEqualToString:@"rblDQcdZcY"] || [currentUserObjectId isEqualToString:@"vB648p1bT1"] || [currentUserObjectId isEqualToString:@"EFGqHAIxLm"] || ![currentUserObjectId isEqualToString:@"k9dyEcXuZT"]){
+    if([currentUserObjectId isEqualToString:@"3KiW2NoGuT"] || [currentUserObjectId isEqualToString:@"rblDQcdZcY"] || [currentUserObjectId isEqualToString:@"vB648p1bT1"] || [currentUserObjectId isEqualToString:@"EFGqHAIxLm"]){
         
         [[Mixpanel sharedInstance] registerSuperProperties:@{@"Admin": @"Yes"}];
     }
@@ -397,15 +397,6 @@
     [Konotor setUserEmail:email]; //To set user's email id
     [Konotor setUserIdentifier:currentUserObjectId]; // To set the user's identifier unique to your system
 }
-
-/*
-- (void)settingsButtonAction:(id)sender {
-    self.settingsActionSheetDelegate = [[PAPSettingsActionSheetDelegate alloc] initWithNavigationController:self.navigationController];
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self.settingsActionSheetDelegate cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"My Profile",@"Find Friends",@"Log Out", nil];
-    
-    [actionSheet showFromTabBar:self.tabBarController.tabBar];
-}
-*/
 
 - (void)inviteFriendsButtonAction:(id)sender {
     FollowersFollowingViewController *detailViewController = [[FollowersFollowingViewController alloc] init];
