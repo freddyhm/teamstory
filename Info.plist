@@ -120,14 +120,10 @@
 	<key>UIViewEdgeAntialiasing</key>
 	<false/>
 	<key>VersionChanges</key>
-	<string>• New! Tap title to scroll up in activity, comment, and profile screens
-• New! Tap heart count or title to like 
-• Fixed following bug for first time users
-• Improved uploading speed 
-• Improved thought arrows
-• Added pull-to-refresh for activities
-• Fixed account crash with low internet
-• Fixed missing background in profile settings
-• Fixed new profile setup bug for iOS8</string>
+	<string>• Improved tab icons and usability 
+• Fixed mention crash 
+• Fixed discovery search crash
+• Fixed switch feeds crash
+• Added in-app version info</string>
 </dict>
 </plist>
