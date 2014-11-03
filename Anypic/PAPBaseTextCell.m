@@ -468,10 +468,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 - (void)openUrl:(id)sender {
-    
-    // mixpanel analytics
-    [[Mixpanel sharedInstance] track:@"Opened URL" properties:@{}];
-    
+        
     if ([self.website rangeOfString:@"(?i)http" options:NSRegularExpressionSearch].location == NSNotFound) {
         NSString *http = @"http://";
         self.website = [NSString stringWithFormat:@"%@%@", http, self.website];
