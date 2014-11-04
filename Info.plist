@@ -121,6 +121,8 @@
 	<false/>
 	<key>VersionChanges</key>
 	<string>• Improved tab icons and usability 
+• Fixed black gap when viewing link
+• Fixed profile settings layout bug  
 • Fixed mention crash 
 • Fixed discovery search crash
 • Fixed switch feeds crash
