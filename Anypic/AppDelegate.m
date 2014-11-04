@@ -246,12 +246,8 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
         if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
             if ([PFUser currentUser]) {
                 
-                
-                // get current selected tab
-                NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
-                
-                // set activity and icon badge value only if selected screen isn't activity screen (image size issue)
-                if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex && selectedtabIndex != PAPActivityTabBarItemIndex) {
+                // set activity and icon badge value
+                if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
                     
                     UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
                     
@@ -268,7 +264,15 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
                         // icon value
                         application.applicationIconBadgeNumber = [newBadgeValue intValue];
                     } else {
-                        tabBarItem.badgeValue = @"1";
+                        
+                        // get current selected tab
+                        NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
+                        
+                        // add badge value only if current screen isn't activity (image sizing issue)
+                        if(selectedtabIndex != PAPActivityTabBarItemIndex){
+                            tabBarItem.badgeValue = @"1";
+                        }
+                        
                         application.applicationIconBadgeNumber = 1;
                     }
                 }
@@ -285,12 +289,9 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     // syncs icon badge with tab bar badge, resets icon badge back to 0
     if (application.applicationIconBadgeNumber != 0) {
 
-        // get current selected tab
-        NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
-        
-        // set activity and icon badge if controller exists and if selected screen isn't activity screen (image size issue
-        if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex && selectedtabIndex != PAPActivityTabBarItemIndex) {
-            
+            // check if tab controllers and activity tab exist
+            if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
+                
                 UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
                 
                 NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
@@ -503,12 +504,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     
     // syncs icon badge with tab bar badge if value is not 0 and controllers present (only on launch)
     if ([UIApplication sharedApplication].applicationIconBadgeNumber != 0) {
-        
-        // get current selected tab
-        NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
-        
-        // set activity and icon badge value only if selected screen isn't activity screen (image size issue)
-        if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex && selectedtabIndex != PAPActivityTabBarItemIndex) {
+        if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
             
             UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
             
