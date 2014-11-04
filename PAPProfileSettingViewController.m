@@ -115,7 +115,7 @@
     dimView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, [UIScreen mainScreen].bounds.size.height)];
     dimView.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.8f];
     dimView.hidden = YES;
-
+    
     
     industry_dataSource = [NSArray arrayWithObjects:@"Information Technology", @"Consumers", @"Enterprises", @"Media", @"Education", @"Health Care", @"Finance", @"Sales and Marketing", @"Fashion", @"Health and Wellness", @"Retail", @"Sports", @"UI/UX Design", @"Travel", @"Web Development", @"Real Estate", @"Recruiting", @"Entertainment", @"Clean Technology", @"Events", @"B2B", @"Restaurants", @"Lifestyle", @"Big Data Analytics", @"Music Services", @"Event Management", @"Non Profits", @"Discovery", @"Incubators", @"Other", nil];
     
@@ -138,7 +138,7 @@
     
     [profileImagePicker setImage:[UIImage imageNamed:@"icon-upload.png"] forState:UIControlStateNormal];
     [profileImagePicker addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-
+    
     
     [self.user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if(!error){
@@ -203,15 +203,15 @@
                 [self.backgroundView setContentSize:CGSizeMake(320.0f, 500.0f)];
                 
                 if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
-                    profileImagePicker.frame = CGRectMake( 122.5f, 95.0f, 75.0f, 75.0f );
+                    profileImagePicker.frame = CGRectMake( 122.5f, 31.0f, 75.0f, 75.0f );
                     self.backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 280.0f, self.view.bounds.size.width, 280.0f);
                     saveButton.frame = CGRectMake(35.0f, self.backgroundView.bounds.size.height - 60.0f, 250.0f, 45.0f);
-                    profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 95.0f, 75.0f, 75.0f )];
+                    profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 31.0f, 75.0f, 75.0f )];
                 } else {
-                    profileImagePicker.frame = CGRectMake( 122.5f, 135.0f, 75.0f, 75.0f );
+                    profileImagePicker.frame = CGRectMake( 122.5f, 71.0f, 75.0f, 75.0f );
                     self.backgroundView.frame = CGRectMake(0.0f, self.view.bounds.size.height - 280.0f, self.view.bounds.size.width, 280.0f);
                     saveButton.frame = CGRectMake(35.0f, self.backgroundView.bounds.size.height - 70.0f, 250.0f, 45.0f);
-                    profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 135.0f, 75.0f, 75.0f )];
+                    profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 122.5f, 71.0f, 75.0f, 75.0f )];
                 }
                 
                 UIImageView *companyImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"companyName.png"]];
@@ -262,7 +262,7 @@
             [saveButton addTarget:self action:@selector(saveButtonAction:) forControlEvents:UIControlEventTouchUpInside];
             [backgroundView addSubview:saveButton];
             
-
+            
             if (imageProfileFile) {
                 [profilePictureImageView setFile:imageProfileFile];
                 [profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {
@@ -275,7 +275,7 @@
             } else {
                 NSLog(@"ImageFile Not found");
             }
-
+            
             [profilePictureImageView setContentMode:UIViewContentModeScaleToFill];
             [self.view addSubview:profilePictureImageView];
             
@@ -330,7 +330,7 @@
             UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(lineStartPoint, 50.0f, 320.0f, 1)];
             lineView.backgroundColor = lineColor;
             [self.backgroundView addSubview:lineView];
-
+            
             self.email_address = [[UITextField alloc] initWithFrame:email_address_frame];
             self.email_address.autocorrectionType = UITextAutocorrectionTypeNo;
             [self.email_address setBackgroundColor:[UIColor clearColor]];
@@ -349,7 +349,7 @@
             UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 100.0f, self.view.bounds.size.width, 1)];
             lineView1.backgroundColor = lineColor;
             [self.backgroundView addSubview:lineView1];
-
+            
             CGRect location_frame = CGRectMake( 60.0f, 12.5f + offsetHeight * 2, 250.0f, 25.0f);
             self.location = [[UITextField alloc] initWithFrame:location_frame];
             self.location.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -384,7 +384,7 @@
             self.industry_button = [[UIButton alloc] initWithFrame:industry_frame];
             [self.industry_button setTitle:industry_user forState:UIControlStateNormal];
             [self.industry_button setBackgroundColor:[UIColor clearColor]];
-   //         [self.industry_button.titleLabel setTextColor:[UIColor colorWithWhite:0.7f alpha:1.0f]];
+            //         [self.industry_button.titleLabel setTextColor:[UIColor colorWithWhite:0.7f alpha:1.0f]];
             [self.industry_button setTitleColor:[UIColor colorWithWhite:0.7f alpha:1.0f] forState:UIControlStateNormal];
             [self.industry_button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
             [self.industry_button.titleLabel setFont:fonts];
@@ -456,8 +456,8 @@
             [self.backgroundView addSubview:self.angelist_textfield];
             
             UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
-                                           initWithTarget:self
-                                           action:@selector(dismissKeyboard)];
+                                                  initWithTarget:self
+                                                  action:@selector(dismissKeyboard)];
             
             [self.view addGestureRecognizer:tapOutside];
             [self.view addSubview:dimView];
@@ -502,21 +502,21 @@
     // Upload image
     imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
     imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
-
+    
     UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
     NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
     bool profileExist_user = [profilExist_num boolValue];
     
     if (!profileExist_user) {
         /*
-        if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
-            cameraButton.frame = CGRectMake( 122.5f, 35.0f, 75.0f, 75.0f );
-            cameraButton.center = CGPointMake(160.0f, 73.0f);
-        } else {
-            cameraButton.frame = CGRectMake( 122.5f, 85.0f, 75.0f, 75.0f );
-            cameraButton.center = CGPointMake(160.0f, 123.0f);
-        }
-        */
+         if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
+         cameraButton.frame = CGRectMake( 122.5f, 35.0f, 75.0f, 75.0f );
+         cameraButton.center = CGPointMake(160.0f, 73.0f);
+         } else {
+         cameraButton.frame = CGRectMake( 122.5f, 85.0f, 75.0f, 75.0f );
+         cameraButton.center = CGPointMake(160.0f, 123.0f);
+         }
+         */
         
         //prevents from poping back to -20 pixels;
         [self.backgroundView setContentOffset:CGPointMake(0, 20)];
@@ -528,15 +528,11 @@
         [self.backgroundView addSubview:cameraButton];
     } else {
         if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
-            cameraButton.frame = CGRectMake( 122.5f, 35.0f, 75.0f, 75.0f );
-            cameraButton.center = CGPointMake(160.0f, 132.0f);
+            cameraButton.frame = CGRectMake( 122.5f, 31.0f, 75.0f, 75.0f );
         } else {
-            cameraButton.frame = CGRectMake( 122.5f, 85.0f, 75.0f, 75.0f );
-            cameraButton.center = CGPointMake(160.0f, 172.0f);
+            cameraButton.frame = CGRectMake( 122.5f, 71.0f, 75.0f, 75.0f );
         }
         
-        
-        cameraButton.frame = CGRectIntegral(cameraButton.frame);
         [cameraButton setImage:resizedImage forState:UIControlStateNormal];
         [cameraButton addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:cameraButton];
@@ -546,7 +542,7 @@
     [swipeUpGestureRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
     [swipeUpGestureRecognizer setNumberOfTouchesRequired:1];
     [cameraButton addGestureRecognizer:swipeUpGestureRecognizer];
-
+    
 }
 
 -(void)uploadImage_small:(NSData *)imageData {
@@ -569,7 +565,7 @@
     [SVProgressHUD show];
     user = [PFUser currentUser];
     user[@"profilePictureMedium"] = imageFile;
- 
+    
     [user saveInBackground];
     [SVProgressHUD dismiss];
 }
@@ -583,7 +579,7 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     self.navController = navigationController;
-
+    
     viewController.navigationItem.titleView =[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     viewController.navigationItem.rightBarButtonItem = nil;
     
@@ -707,7 +703,7 @@
         cameraUI.mediaTypes = [NSArray arrayWithObject:(NSString *) kUTTypeImage];
         
     }else if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum]
-               && [[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum] containsObject:(NSString *)kUTTypeImage]) {
+              && [[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum] containsObject:(NSString *)kUTTypeImage]) {
         
         cameraUI.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
         cameraUI.mediaTypes = [NSArray arrayWithObject:(NSString *) kUTTypeImage];
@@ -723,7 +719,7 @@
         [popover presentPopoverFromRect:self.view.bounds inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
         
     }else{
-    
+        
         [self presentViewController:cameraUI animated:YES completion:nil];
     }
     
@@ -813,7 +809,7 @@
             self.user[@"location"] = location_input;
         }
         if ([description_input length] > 0) {
-           self.user[@"description"] = description_input;
+            self.user[@"description"] = description_input;
         }
         if ([website_input length] > 0) {
             self.user[@"website"] = website_input;
@@ -831,15 +827,15 @@
             self.user[@"angellist_url"] = angellist_input;
         }
         /*
-        if (([email_input length] > 0 && [self NSStringIsValidEmail:email_input]) || email_current_input) {
-            self.user[@"email"] = email_input;
-        } else {
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your email input is not valid." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            alert.alertViewStyle = UIAlertViewStyleDefault;
-            [alert show];
-            return;
-        }
-        */
+         if (([email_input length] > 0 && [self NSStringIsValidEmail:email_input]) || email_current_input) {
+         self.user[@"email"] = email_input;
+         } else {
+         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your email input is not valid." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+         alert.alertViewStyle = UIAlertViewStyleDefault;
+         [alert show];
+         return;
+         }
+         */
         //[[PFUser currentUser] saveEventually];
         [SVProgressHUD show];
         [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -850,7 +846,7 @@
                 alert.alertViewStyle = UIAlertViewStyleDefault;
                 alert.tag = SUCCESSFUL;
                 [alert show];
-            
+                
             }else{
                 UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your Information could not be saved. Reach us at info@teamstoryapp.com" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                 alert.alertViewStyle = UIAlertViewStyleDefault;
@@ -916,7 +912,7 @@
             
             [SVProgressHUD show];
             [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            [SVProgressHUD dismiss];
+                [SVProgressHUD dismiss];
                 
                 if(succeeded){
                     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
@@ -929,7 +925,7 @@
                     [alert show];
                 }
             }];
-
+            
         } else {
             saveButton.userInteractionEnabled = YES;
             
@@ -1010,7 +1006,7 @@
                 
                 UIImage *smallRoundedImage = [PAPUtility resizeImage:image width:84.0f height:84.0f];
                 UIImage *resizedImage = [PAPUtility resizeImage:image width:200.0f height:200.0f];
-
+                
                 // Upload image
                 imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
                 imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);

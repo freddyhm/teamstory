@@ -47,7 +47,7 @@
 {
     [super viewDidLoad];
     
-    UIView *mainView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 64.0f, 320.0f, [UIScreen mainScreen].bounds.size.height - 64.0f)];
+    UIView *mainView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, [UIScreen mainScreen].bounds.size.height - 64.0f)];
     [mainView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:mainView];
     
