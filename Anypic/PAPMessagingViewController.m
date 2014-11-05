@@ -17,6 +17,7 @@
 #define messageTextSize 16.0f
 #define messageHorizontalSpacing 80.0f
 #define notificationBarHeight 30.0f
+#define MAXMessageLabelWidth 215.0f
 
 @interface PAPMessagingViewController () {
     CGRect tabBarSize;
@@ -39,15 +40,6 @@
     self.targetChatRoom = roomInfo;
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:YES];
-    self.tabBarController.tabBar.hidden = NO;
-    self.tabBarController.tabBar.frame = tabBarSize;
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:nil setTargetRoom:nil];
-}
-
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     
@@ -59,8 +51,17 @@
     self.tabBarController.tabBar.frame = CGRectZero;
     
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:@"messagingScreen" setTargetRoom:self.targetChatRoom];
-
+    
     [self loadMessageQuery];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:YES];
+    self.tabBarController.tabBar.hidden = NO;
+    self.tabBarController.tabBar.frame = tabBarSize;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:nil setTargetRoom:nil];
 }
 
 - (void)viewDidLoad
@@ -74,7 +75,6 @@
     self.view = self.scrollView;
     
     [self setEdgesForExtendedLayout:UIRectEdgeNone];
-    self.view.userInteractionEnabled = YES;
     
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [backButton setFrame:CGRectMake(0, 0, 22.0f, 22.0f)];
@@ -96,6 +96,7 @@
     // --------------------- Keyboard animation
     self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
     self.customKeyboard.delegate = self;
+    self.customKeyboard.messageTextView.userInteractionEnabled = YES;
     [self.view addSubview:self.customKeyboard.view];
     
     // --------------------- Message body UITableView
@@ -116,14 +117,16 @@
     [notificationLabel setText:@"new Notification Has Arrived"];
     [self.notificationView addSubview:notificationLabel];
     
-    [self.view bringSubviewToFront:self.customKeyboard.view];
     [self.view bringSubviewToFront:self.notificationView];
+    [self.view bringSubviewToFront:self.customKeyboard.view];
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
                                           action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tapOutside];
+    
+    //[self.customKeyboard.messageTextView becomeFirstResponder];
     
 }
 
@@ -181,16 +184,6 @@
         [self.messageList reloadData];
         [self scrollToBottom:NO];
     }];
-}
-
-- (void)changeSendButtonState:(BOOL)state {
-    if (state) {
-        self.sendButton.alpha = 1.0f;
-        self.sendButton.enabled = YES;
-    } else {
-        self.sendButton.alpha = 0.7f;
-        self.sendButton.enabled = NO;
-    }
 }
 
 - (void)sendButtonAction:(id)sender {
@@ -309,7 +302,7 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *attributes = @{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Light" size:messageTextSize]};
     if (self.messageQuery.count > 0) {
-        CGRect textViewSize = [[[self.messageQuery objectAtIndex:indexPath.row] objectForKey:@"messageBody"] boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - messageHorizontalSpacing, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
+        CGRect textViewSize = [[[self.messageQuery objectAtIndex:indexPath.row] objectForKey:@"messageBody"] boundingRectWithSize:CGSizeMake(MAXMessageLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
         
         if (textViewSize.size.height > 30.0f) {
             return textViewSize.size.height + 20.0f;
