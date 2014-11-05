@@ -9,6 +9,7 @@
 #import "PAPMessageListViewController.h"
 #import "TTTTimeIntervalFormatter.h"
 #import "KonotorUI.h"
+#import "PAPAccountViewController.h"
 
 #define navBarHeight 64.0f
 #define tabBarHeight 50.0f
@@ -19,7 +20,7 @@
 }
 
 @property (nonatomic, strong) UITableView *messageListTV;
-@property (nonatomic, strong) NSArray *messageList;
+@property (nonatomic, strong) NSMutableArray *messageList;
 @property (nonatomic, strong) NSMutableArray *userNumberList;
 @property (nonatomic, strong) UIButton *notificationView;
 @property (nonatomic, strong) TTTTimeIntervalFormatter *timeIntervalFormatter;
@@ -40,9 +41,6 @@
     // fetch unread messages, show feedback screen
     self.messageNotificationCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
     
-    self.userNumberList = [[NSMutableArray alloc] init];
-    [self.userNumberList removeAllObjects];
-    
     PFQuery *userOneQuery = [PFQuery queryWithClassName:@"ChatRoom"];
     [userOneQuery whereKey:@"userOne" equalTo:[PFUser currentUser]];
     [userOneQuery whereKeyExists:@"lastMessage"];
@@ -56,7 +54,9 @@
     [messageListQuery includeKey:@"userOne.User"];
     [messageListQuery includeKey:@"userTwo.User"];
     [messageListQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        self.messageList = objects;
+        [self.userNumberList removeAllObjects];
+        [self.messageList removeAllObjects];
+        [self.messageList addObjectsFromArray:objects];
         [self.messageListTV reloadData];
     }];
 }
@@ -75,6 +75,9 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     self.navigationItem.title = @"Messages";
+    
+    self.userNumberList = [[NSMutableArray alloc] init];
+    self.messageList = [[NSMutableArray alloc] init];
     
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [backButton setFrame:CGRectMake(0, 0, 22.0f, 22.0f)];
@@ -150,9 +153,18 @@
     
 }
 
--(void)cellButtonAction:(UIButton *)sender {
+-(void)userButtonAction:(UIButton *)sender {
     NSString *userNumber = [self.userNumberList objectAtIndex:sender.tag];
-    PFObject *currentObject = [self.messageList objectAtIndex:sender.tag];
+    
+    PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
+    accountViewController.user = (PFUser *)[[self.messageList objectAtIndex:sender.tag] objectForKey:userNumber];
+    [self.navigationController pushViewController:accountViewController animated:YES];
+}
+
+-(void)cellButtonAction:(UITapGestureRecognizer *)sender {
+    UIView *view = sender.view;
+    NSString *userNumber = [self.userNumberList objectAtIndex:view.tag];
+    PFObject *currentObject = [self.messageList objectAtIndex:view.tag];
     NSNumber *offSetBadgeNumber;
     
     
@@ -185,15 +197,19 @@
     
     // load message view.
     PAPMessagingViewController *messageViewController = [[PAPMessagingViewController alloc] init];
-    [messageViewController setTargetUser:[[self.messageList objectAtIndex:sender.tag] objectForKey:userNumber] setUserNumber:userNumber];
-    [messageViewController setRoomInfo:[self.messageList objectAtIndex:sender.tag]];
+    [messageViewController setTargetUser:[[self.messageList objectAtIndex:view.tag] objectForKey:userNumber] setUserNumber:userNumber];
+    [messageViewController setRoomInfo:[self.messageList objectAtIndex:view.tag]];
     [self.navigationController pushViewController:messageViewController animated:YES];
 }
 
 #pragma UITableViewDelegate 
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.messageList count];
+    if ([self.messageList count] > 0) {
+        return [self.messageList count];
+    } else {
+        return 0;
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -209,7 +225,8 @@
         cell = [[PAPMessageListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.delegate = self;
     }
-    cell.cellButton.tag = indexPath.row;
+    cell.tag = indexPath.row;
+    cell.userButton.tag = indexPath.row;
     
     if ([[[[self.messageList objectAtIndex:indexPath.row] objectForKey:@"userOne"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
         [cell setUser:[[self.messageList objectAtIndex:indexPath.row] objectForKey:@"userTwo"]];
@@ -221,14 +238,13 @@
         cell.badgeLabel.text = [[[self.messageList objectAtIndex:indexPath.row] objectForKey:@"userTwoBadge"] stringValue];
     }
     
-    if ([cell.badgeLabel.text isEqualToString:@"0"]) {
-        cell.badgeLabel.hidden = YES;
-    } else {
+    if (![cell.badgeLabel.text isEqualToString:@"0"]) {
         cell.badgeLabel.hidden = NO;
+    } else {
+        cell.badgeLabel.hidden = YES;
     }
     
     cell.lastMessageLabel.text = [[self.messageList objectAtIndex:indexPath.row] objectForKey:@"lastMessage"];
-    //[cell.lastMessageLabel sizeToFit];
     
     self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
     
@@ -247,12 +263,40 @@
         cell.timeStampLabel.text = [dateFormat stringFromDate:updatedDate];
     }
     
-    [cell.cellButton addTarget:self action:@selector(cellButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cellButtonAction:)];
+    [cell addGestureRecognizer:tapGesture];
     
+    [cell.userButton addTarget:self action:@selector(userButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
     return cell;
 }
 
+
+- (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewRowAction *moreAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"More" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
+        // maybe show an action sheet with more options
+        [self.messageListTV setEditing:NO];
+    }];
+    moreAction.backgroundColor = [UIColor lightGrayColor];
+    
+    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"Delete"  handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
+        [(PFObject *)[self.messageList objectAtIndex:indexPath.row] deleteInBackground];
+        [self.messageList removeObjectAtIndex:indexPath.row];
+        [self.messageListTV deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }];
+    
+    return @[deleteAction, moreAction];
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        [self.messageList removeObjectAtIndex:indexPath.row];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
+    }
+}
 
 
 @end
