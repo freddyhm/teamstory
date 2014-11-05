@@ -107,9 +107,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self.postDetails setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     self.postDetails.delegate = self;
     self.postDetails.dataSource = self;
-    self.postDetails.frame = self.view.frame;   
+    self.postDetails.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - 113);
     [self.view addSubview:self.postDetails];
-    
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     [self.navigationItem.titleView setUserInteractionEnabled:YES];
@@ -173,7 +172,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.defaultFooterViewFrame = self.footerView.mainView.frame;
     self.defaultCommentTextViewFrame = self.commentTextView.frame;
     commentTextView.delegate = self;
-    self.postDetails.tableFooterView = self.footerView;
+   // self.postDetails.tableFooterView = self.footerView;
     
     self.autocompleteTableView = [[UITableView alloc] init];
     self.autocompleteTableView.delegate = self;
@@ -182,38 +181,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.autocompleteTableView.scrollEnabled = YES;
     self.autocompleteTableView.hidden = YES;
     [self.view addSubview:self.autocompleteTableView];
-    
-    /*
-     if ([self currentUserOwnsPhoto]) {
-     
-     // Else we only want to show an action button if the user owns the photo and has permission to delete it.
-     UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
-     shareButton.frame = CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f);
-     [shareButton addTarget:self action:@selector(actionButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-     [shareButton setImage:[UIImage imageNamed:@"share.png"] forState:UIControlStateNormal];
-     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
-     
-     //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonAction:)];
-     } else if (NSClassFromString(@"UIActivityViewController")) {
-     // Use UIActivityViewController if it is available (iOS 6 +)
-     //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(activityButtonAction:)];
-     
-     UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
-     shareButton.frame = CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f);
-     [shareButton addTarget:self action:@selector(activityButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-     [shareButton setBackgroundImage:[UIImage imageNamed:@"share.png"] forState:UIControlStateNormal];
-     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
-     
-     
-     }
-     */
-    /*
-     UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
-     shareButton.frame = CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f);
-     [shareButton addTarget:self action:@selector(activityButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-     [shareButton setBackgroundImage:[UIImage imageNamed:@"share.png"] forState:UIControlStateNormal];
-     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
-     */
     
     // Register to be notified when the keyboard will be shown to scroll the view
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -249,6 +216,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self.commentTextView setAutocorrectionType:UITextAutocorrectionTypeDefault];
     
     [self loadObjects];
+    
+    self.customKeyboard = [[CustomKeyboardViewController alloc]initWithNibName:@"CustomKeyboardViewController" bundle:nil];
+    self.customKeyboard.delegate = self;
+    [self.view addSubview:self.customKeyboard.view];
+    
 }
 
 
@@ -1129,6 +1101,14 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [[PAPCache sharedCache] setAttributesForPhoto:photo likers:likers commenters:commenters likedByCurrentUser:isLikedByCurrentUser];
         [self.headerView reloadLikeBar];
     }];
+}
+
+- (void)sendButtonAction:(id)sender{
+    
+}
+
+- (void)setTableViewHeight{
+    
 }
 
 @end
