@@ -110,6 +110,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.postDetails.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - 113);
     [self.view addSubview:self.postDetails];
     
+    
+
+    
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     [self.navigationItem.titleView setUserInteractionEnabled:YES];
     
@@ -217,10 +220,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     [self loadObjects];
     
-    self.customKeyboard = [[CustomKeyboardViewController alloc]initWithNibName:@"CustomKeyboardViewController" bundle:nil];
-    self.customKeyboard.delegate = self;
-    [self.view addSubview:self.customKeyboard.view];
     
+    self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
+    self.customKeyboard.delegate = self;
+    self.customKeyboard.view.layer.zPosition = 1000;
+    [self.view addSubview:self.customKeyboard.view];
 }
 
 
