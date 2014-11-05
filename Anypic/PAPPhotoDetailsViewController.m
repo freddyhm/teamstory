@@ -449,15 +449,13 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     // Check system version for keyboard offset, ios8 added suggestion bar
     if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
         if ([UIScreen mainScreen].bounds.size.height == 480) {
-            offset = -20.0f;
-        } else {
-            offset = 60.0f;
+            offset = -80.0f;
         }
     }else{
         if ([UIScreen mainScreen].bounds.size.height == 480) {
+            offset = -10.0f;
+        }else{
             offset = 60.0f;
-        } else {
-            offset = 150.0f;
         }
     }
     
