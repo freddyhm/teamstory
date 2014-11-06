@@ -27,6 +27,7 @@
 @property (nonatomic, strong) NSString *userTypeNumber;
 @property (nonatomic, strong) TTTTimeIntervalFormatter *timeIntervalFormatter;
 @property (nonatomic, strong) CustomKeyboardViewController *customKeyboard;
+@property (nonatomic, strong) UIView *placeHolder;
 
 - (void)setTargetUser:(PFUser *)targetUser setUserNumber:(NSString *)userNumber;
 - (void)setRoomInfo:(PFObject *)roomInfo;

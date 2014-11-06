@@ -15,6 +15,9 @@
 #import "SVProgressHUD.h"
 #import "MBProgressHUD.h"
 #import "Mixpanel.h"
+#import "AppDelegate.h"
+
+#define APP ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 
 enum ActionSheetTags {
     MainActionSheetTag = 0,
@@ -1040,15 +1043,14 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                     break;
             }
             
-            MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
-            mc.mailComposeDelegate = self;
-            [mc setSubject:emailTitle];
-            [mc setMessageBody:messageBody isHTML:NO];
-            [mc setToRecipients:toRecipients];
+            APP.mc.mailComposeDelegate = self;
+            [APP.mc setSubject:emailTitle];
+            [APP.mc setMessageBody:messageBody isHTML:NO];
+            [APP.mc setToRecipients:toRecipients];
             
             
             // Present mail view controller on screen
-            [self presentViewController:mc animated:YES completion:nil];
+            [self presentViewController:APP.mc animated:YES completion:nil];
         }
     }
 }

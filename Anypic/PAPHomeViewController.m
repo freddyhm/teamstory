@@ -186,6 +186,8 @@
         // reset flag
         self.isOpeningFeedback = NO;
     }
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated{

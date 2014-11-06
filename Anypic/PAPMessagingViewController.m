@@ -7,6 +7,7 @@
 //
 
 #import "PAPMessagingViewController.h"
+#import "SVProgressHUD.h"
 
 
 #define messageTextViewHeight 45.0f
@@ -18,6 +19,7 @@
 #define messageHorizontalSpacing 80.0f
 #define notificationBarHeight 30.0f
 #define MAXMessageLabelWidth 215.0f
+#define APP ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 
 @interface PAPMessagingViewController () {
     CGRect tabBarSize;
@@ -70,7 +72,7 @@
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
     self.scrollView.delegate = self;
-    self.scrollView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
+    self.scrollView.backgroundColor = [UIColor whiteColor];
     [self.scrollView setShowsVerticalScrollIndicator:NO];
     self.view = self.scrollView;
     
@@ -104,6 +106,7 @@
     self.messageList.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.messageList.delegate = self;
     self.messageList.dataSource = self;
+    self.messageList.hidden = YES;
     [self.view addSubview:self.messageList];
     
     // ------------------- New Message Notification
@@ -117,8 +120,23 @@
     [notificationLabel setText:@"new Notification Has Arrived"];
     [self.notificationView addSubview:notificationLabel];
     
-    [self.view bringSubviewToFront:self.notificationView];
-    [self.view bringSubviewToFront:self.customKeyboard.view];
+    //----------------------- Placeholder
+    
+    UIImage *placeHolderImage = [UIImage imageNamed:@"message_empty.png"];
+    self.placeHolder = [[UIView alloc] initWithFrame:self.messageList.frame];
+    [self.view addSubview:self.placeHolder];
+    
+    UIImageView *placeHolderImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, placeHolderImage.size.width, placeHolderImage.size.height)];
+    [placeHolderImageView setImage:placeHolderImage];
+    [self.placeHolder addSubview:placeHolderImageView];
+    
+    UILabel *placeHolderLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 100.0f, [UIScreen mainScreen].bounds.size.width, 60.0f)];
+    [placeHolderLabel setTextAlignment:NSTextAlignmentCenter];
+    [placeHolderLabel setText:@"Say something awesome!\nConnect with like-minded people."];
+    placeHolderLabel.numberOfLines = 2;
+    [placeHolderLabel setTextColor:[UIColor colorWithRed:234.0f/255.0f green:238.0f/255.0f blue:243.0f/255.0f alpha:1.0f]];
+    [placeHolderLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:15.0f]];
+    [self.placeHolder addSubview:placeHolderLabel];
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
@@ -126,7 +144,9 @@
     
     [self.view addGestureRecognizer:tapOutside];
     
-    //[self.customKeyboard.messageTextView becomeFirstResponder];
+    [self.view bringSubviewToFront:self.notificationView];
+    [self.view bringSubviewToFront:self.customKeyboard.view];
+    [self.customKeyboard.messageTextView becomeFirstResponder];
     
 }
 
@@ -171,18 +191,24 @@
 }
 
 -(void) loadMessageQuery {
+    [SVProgressHUD show];
     PFQuery *messageQuery = [PFQuery queryWithClassName:@"Message"];
     [messageQuery whereKey:@"chatRoom" equalTo:self.targetChatRoom];
     [messageQuery orderByDescending:@"createdAt"];
     [messageQuery setLimit:200];
     [messageQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        [self.messageQuery removeAllObjects];
-        
-        for (long i = objects.count - 1; i >= 0; i--) {
-            [self.messageQuery addObject:[objects objectAtIndex:i]];
+        [SVProgressHUD dismiss];
+        if (!error && [objects count] > 0) {
+            self.messageList.hidden = NO;
+            self.placeHolder.hidden = YES;
+            [self.messageQuery removeAllObjects];
+            
+            for (long i = objects.count - 1; i >= 0; i--) {
+                [self.messageQuery addObject:[objects objectAtIndex:i]];
+            }
+            [self.messageList reloadData];
+            [self scrollToBottom:NO];
         }
-        [self.messageList reloadData];
-        [self scrollToBottom:NO];
     }];
 }
 
@@ -197,6 +223,8 @@
         // adding new object.
         [self.messageQuery addObject:messagePFObject];
         [self.messageList reloadData];
+        self.messageList.hidden = NO;
+        self.placeHolder.hidden = YES;
         [self scrollToBottom:YES];
         
         [messagePFObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -305,7 +333,7 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
         CGRect textViewSize = [[[self.messageQuery objectAtIndex:indexPath.row] objectForKey:@"messageBody"] boundingRectWithSize:CGSizeMake(MAXMessageLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
         
         if (textViewSize.size.height > 30.0f) {
-            return textViewSize.size.height + 20.0f;
+            return textViewSize.size.height + 30.0f;
         } else return [PAPMessagingCell heightForCell];
     } else {
         return [PAPMessagingCell heightForCell];
@@ -377,15 +405,14 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
         NSString *currentUserName = [[PFUser currentUser] objectForKey:@"displayName"];
         NSString *messageBody = [NSString stringWithFormat:@"Current Username: %@\nTarget Username: %@\nI am reporting because:\n", currentUserName, reportingUserName];
         
-        MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
-        mc.mailComposeDelegate = self;
-        [mc setSubject:emailTitle];
-        [mc setMessageBody:messageBody isHTML:NO];
-        [mc setToRecipients:toRecipients];
+        APP.mc.mailComposeDelegate = self;
+        [APP.mc setSubject:emailTitle];
+        [APP.mc setMessageBody:messageBody isHTML:NO];
+        [APP.mc setToRecipients:toRecipients];
         
         
         // Present mail view controller on screen
-        [self presentViewController:mc animated:YES completion:nil];
+        [self presentViewController:APP.mc animated:YES completion:nil];
     }
 }
 

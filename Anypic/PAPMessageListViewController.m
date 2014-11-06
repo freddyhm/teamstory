@@ -10,13 +10,17 @@
 #import "TTTTimeIntervalFormatter.h"
 #import "KonotorUI.h"
 #import "PAPAccountViewController.h"
+#import "AppDelegate.h"
 
+
+#define APP ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 #define navBarHeight 64.0f
 #define tabBarHeight 50.0f
 #define notificationBarHeight 50.0f
 
 @interface PAPMessageListViewController () {
     CGRect tabBarSize;
+    float currentIndexPathRow;
 }
 
 @property (nonatomic, strong) UITableView *messageListTV;
@@ -102,7 +106,7 @@
     
     self.notificationView = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, notificationBarHeight)];
     self.notificationView.backgroundColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:0.15f];
-    [self.notificationView setTitle:@"Updates & Feedback" forState:UIControlStateNormal];
+    [self.notificationView setTitle:@"Chat with Teamstory!" forState:UIControlStateNormal];
     [self.notificationView setTitleColor:[UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
     self.notificationView.titleEdgeInsets = UIEdgeInsetsMake(0.0f, -130.0f, 0.0f, 0.0f);
     self.notificationView.titleLabel.font = [UIFont boldSystemFontOfSize:14.0f];
@@ -238,7 +242,7 @@
         cell.badgeLabel.text = [[[self.messageList objectAtIndex:indexPath.row] objectForKey:@"userTwoBadge"] stringValue];
     }
     
-    if (![cell.badgeLabel.text isEqualToString:@"0"]) {
+    if ([cell.badgeLabel.text intValue] > 0) {
         cell.badgeLabel.hidden = NO;
     } else {
         cell.badgeLabel.hidden = YES;
@@ -274,7 +278,13 @@
 
 - (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewRowAction *moreAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"More" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
-        // maybe show an action sheet with more options
+        currentIndexPathRow = indexPath.row;
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
+        actionSheet.delegate = self;
+        [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Report User"]];
+        [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
+        [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
+        
         [self.messageListTV setEditing:NO];
     }];
     moreAction.backgroundColor = [UIColor lightGrayColor];
@@ -296,6 +306,39 @@
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
     }
+}
+
+#pragma mark - UIActionSheetDelegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if ([actionSheet destructiveButtonIndex] == buttonIndex) {
+        NSString *emailTitle = @"[USER REPORT] Reporting User (Messages)";
+        NSArray *toRecipients = [NSArray arrayWithObject:@"info@teamstoryapp.com"];
+        NSString *userNumber = [self.userNumberList objectAtIndex:currentIndexPathRow];
+        
+        NSString *reportingUserName = [[[self.messageList objectAtIndex:currentIndexPathRow] objectForKey:userNumber] objectForKey:@"displayName"];
+        NSString *currentUserName = [[PFUser currentUser] objectForKey:@"displayName"];
+        NSString *messageBody = [NSString stringWithFormat:@"Current Username: %@\nTarget Username: %@\nI am reporting because:\n", currentUserName, reportingUserName];
+        
+        if ([MFMailComposeViewController canSendMail]) {
+            APP.mc.mailComposeDelegate = self;
+            [APP.mc setSubject:emailTitle];
+            [APP.mc setMessageBody:messageBody isHTML:NO];
+            [APP.mc setToRecipients:toRecipients];
+            
+            // Present mail view controller on screen
+            [self presentViewController:APP.mc animated:YES completion:nil];
+        }
+    }
+}
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller
+          didFinishWithResult:(MFMailComposeResult)result
+                        error:(NSError*)error {
+    if(error) NSLog(@"ERROR - mailComposeController: %@", [error localizedDescription]);
+    [self dismissViewControllerAnimated:YES completion:^{
+        [APP cycleTheGlobalMailComposer];
+    }];
 }
 
 

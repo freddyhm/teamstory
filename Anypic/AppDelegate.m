@@ -47,7 +47,6 @@
 @property (nonatomic, strong) PAPMessageListCell *messageListCell;
 @property (nonatomic, strong) PAPMessagingViewController *messagingViewController;
 
-
 @property (nonatomic, strong) MBProgressHUD *hud;
 
 @property (nonatomic, strong) NSTimer *autoFollowTimer;
@@ -193,12 +192,20 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     self.window.rootViewController = self.navController;
     
     [self.window makeKeyAndVisible];
+    
+    [self cycleTheGlobalMailComposer];
 
     
     // handle push notifications
     [self handlePush:launchOptions userInfo:nil source:@"launch"];
 
     return YES;
+}
+
+-(void)cycleTheGlobalMailComposer {
+    // we are cycling the damned GlobalMailComposer... due to horrible iOS issue
+    self.mc = nil;
+    self.mc = [[MFMailComposeViewController alloc] init];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {

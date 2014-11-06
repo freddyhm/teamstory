@@ -9,7 +9,7 @@
 #import "PAPMessagingCell.h"
 
 #define messageHorizontalSpacing 60.0f
-#define defaultMessageCellHeight 40.0f
+#define defaultMessageCellHeight 50.0f
 #define messageTextSize 16.0f
 #define arrowSpacerWidth 20.0f
 #define MAXMessageViewWidth 250.0f

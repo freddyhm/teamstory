@@ -44,6 +44,7 @@
         self.badgeLabel.alpha = 0.8f;
         self.badgeLabel.layer.cornerRadius = 13.0f;
         self.badgeLabel.clipsToBounds = YES;
+        self.badgeLabel.hidden = YES;
         [self.badgeLabel setTextColor:[UIColor whiteColor]];
         self.badgeLabel.textAlignment = NSTextAlignmentCenter;
         self.badgeLabel.font = [UIFont boldSystemFontOfSize:13.0f];

@@ -19,7 +19,7 @@
 }
 
 @property (nonatomic, strong) UISearchBar *searchBar;
-@property (nonatomic, strong) NSArray *followUserList;
+@property (nonatomic, strong) NSMutableArray *followUserList;
 @property (nonatomic, strong) UITableView *followerTV;
 @property (nonatomic, strong) NSMutableArray *filterFollowUserList;
 @property (nonatomic, strong) UINavigationController *navController;
@@ -32,6 +32,7 @@
 @property (nonatomic, strong) NSString *querySelectionString;
 @property (nonatomic, strong) UIView *querySelectionMovementView;
 @property (nonatomic, strong) NSMutableArray *userList;
+@property (nonatomic, strong) NSMutableArray *filterUserList;
 
 @end
 
@@ -47,6 +48,8 @@
     
     self.filterFollowUserList = [[NSMutableArray alloc] init];
     self.userList = [[NSMutableArray alloc] init];
+    self.followUserList = [[NSMutableArray alloc] init];
+    self.filterUserList = [[NSMutableArray alloc] init];
     
     PFQuery *followerQuery = [PFQuery queryWithClassName:@"Activity"];
     [followerQuery whereKey:@"fromUser" equalTo:[PFUser currentUser]];
@@ -64,7 +67,20 @@
     [finalQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
             [SVProgressHUD dismiss];
-            self.followUserList = objects;
+            for (int i = 0; i < objects.count; i++) {
+                if ([[[objects[i] objectForKey:@"fromUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+                    if ([self.filterUserList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", [[objects[i] objectForKey:@"toUser"] objectForKey:@"displayName"]]].count <= 0) {
+                        [self.filterUserList addObject:[objects[i] objectForKey:@"toUser"]];
+                        [self.followUserList addObject:objects[i]];
+                    }
+                } else {
+                    if ([self.filterUserList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", [[objects[i] objectForKey:@"fromUser"] objectForKey:@"displayName"]]].count <= 0) {
+                        [self.filterUserList addObject:[objects[i] objectForKey:@"fromUser"]];
+                        [self.followUserList addObject:objects[i]];
+                    }
+                }
+            }
+            
             [self.followerTV reloadData];
         } else {
             NSLog(@"Query Calling Error %@", error);
@@ -169,6 +185,17 @@
     [self.querySelectionOptionViewBG addSubview:self.querySelectionMovementView];
     [self.querySelectionOptionViewBG addSubview:self.allUserButton];
     [self.querySelectionOptionViewBG addSubview:self.followerButton];
+    
+    UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
+                                          initWithTarget:self
+                                          action:@selector(dismissKeyboard)];
+    
+    [self.view addGestureRecognizer:tapOutside];
+}
+
+
+-(void)dismissKeyboard {
+    [self.view endEditing:YES];
 }
 
 - (void)followerButtonAction:(id)sender {

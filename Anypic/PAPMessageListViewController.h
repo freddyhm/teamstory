@@ -11,6 +11,6 @@
 #import "PAPMessagingViewController.h"
 #import "PAPMessagingSeachUsersViewController.h"
 
-@interface PAPMessageListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface PAPMessageListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate>
 
 @end
