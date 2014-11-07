@@ -104,23 +104,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     [super viewDidLoad];
     
-    [self.view setFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
-    
-    [self.view setBackgroundColor:[UIColor redColor]];
-    
-    self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
-    self.customKeyboard.delegate = self;
-    [self.view addSubview:self.customKeyboard.view];
-    //[self.view bringSubviewToFront:self.customKeyboard.view];
-    
     [self.postDetails setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     self.postDetails.delegate = self;
     self.postDetails.dataSource = self;
-    self.postDetails.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - 200);
-   // [self.view addSubview:self.postDetails];
-    
-    
-
+    self.postDetails.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - 113);
+    [self.view addSubview:self.postDetails];
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     [self.navigationItem.titleView setUserInteractionEnabled:YES];
@@ -228,6 +216,15 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self.commentTextView setAutocorrectionType:UITextAutocorrectionTypeDefault];
     
     [self loadObjects];
+    
+    
+    
+    self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
+    self.customKeyboard.delegate = self;
+    [self.customKeyboard setKeyboardVerticalPos:70.0];
+    [self.view addSubview:self.customKeyboard.view];
+    [self.view bringSubviewToFront:self.customKeyboard.view];
+    
 }
 
 

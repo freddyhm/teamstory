@@ -68,6 +68,15 @@
     self.keyboardHeight = kbHeight;
 }
 
+- (void)setKeyboardVerticalPos:(CGFloat)vertPos{
+    
+    //[self.view setBackgroundColor:[UIColor redColor]];
+    //[self.messageTextView setBackgroundColor:[UIColor blueColor]];
+    
+    [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y - vertPos, self.view.frame.size.width, self.view.frame.size.height)];
+    //[self.messageTextView setFrame:CGRectMake(self.messageTextView.frame.origin.x, self.messageTextView.frame.origin.y - vertPos, self.messageTextView.frame.size.width, self.messageTextView.frame.size.height)];
+}
+
 #pragma mark - Delegate Methods
 - (void)sendButtonAction:(id)sender{
     if (self.delegate && [self.delegate respondsToSelector:@selector(sendButtonAction:)]) {
@@ -80,7 +89,6 @@
         [self.delegate setTableViewHeight];
     }
 }
-
 #pragma mark - TextView Methods
 
 -(void)textViewDidChange:(UITextView *)textView {
