@@ -222,7 +222,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
     self.customKeyboard.delegate = self;
-    [self.customKeyboard setKeyboardVerticalPos:70.0];
     [self.view addSubview:self.customKeyboard.view];
     [self.view bringSubviewToFront:self.customKeyboard.view];
     
