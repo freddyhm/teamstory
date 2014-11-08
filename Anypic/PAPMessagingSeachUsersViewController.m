@@ -147,6 +147,9 @@
     self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, headerViewHeight + querySelectionViewheight, [UIScreen mainScreen].bounds.size.width, 40.0f)];
     self.searchBar.delegate = self;
     self.searchBar.placeholder = @"Search by following users";
+    self.searchBar.barTintColor = [UIColor colorWithWhite:0.95f alpha:1.0f];
+    self.searchBar.layer.borderColor = [UIColor colorWithWhite:0.5f alpha:1.0f].CGColor;
+    self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
     [self.view addSubview:self.searchBar];
     
     self.followerTV = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, headerViewHeight + querySelectionViewheight + self.searchBar.bounds.size.height, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.height - headerViewHeight - querySelectionViewheight - self.searchBar.bounds.size.height)];
