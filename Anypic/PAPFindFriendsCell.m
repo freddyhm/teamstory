@@ -71,6 +71,12 @@
         [self.followButton setImage:[UIImage imageNamed:@"btn_following_user.png"] forState:UIControlStateSelected];
         [self.followButton addTarget:self action:@selector(didTapFollowButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:self.followButton];
+        
+        if ([reuseIdentifier isEqualToString:@"MessageUserListCell"]) {
+            UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
+                                                     initWithTarget:self action:@selector(didTapUserButtonAction:)];
+            [self addGestureRecognizer:tapRecognizer];
+        }
     }
     return self;
 }

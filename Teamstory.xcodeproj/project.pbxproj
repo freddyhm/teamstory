@@ -36,7 +36,11 @@
 		4609975E1938119A00C5AD96 /* icon-twitter-profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460997501938119A00C5AD96 /* icon-twitter-profile@2x.png */; };
 		4609975F1938119A00C5AD96 /* icon-twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 460997511938119A00C5AD96 /* icon-twitter.png */; };
 		460997601938119A00C5AD96 /* icon-twitter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460997521938119A00C5AD96 /* icon-twitter@2x.png */; };
-		4611EE9D19DF427C00B319C0 /* ParseFacebookUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4611EE9C19DF427C00B319C0 /* ParseFacebookUtils.framework */; };
+		460E331B1A0EA47100028A84 /* button_feedback_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 460E33181A0EA47100028A84 /* button_feedback_arrow.png */; };
+		460E331C1A0EA47100028A84 /* button_feedback_arrow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460E33191A0EA47100028A84 /* button_feedback_arrow@3x.png */; };
+		460E331D1A0EA47100028A84 /* button_feedback_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460E331A1A0EA47100028A84 /* button_feedback_arrow@2x.png */; };
+		460E33261A0EAFEF00028A84 /* nomessage_placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 460E33241A0EAFEF00028A84 /* nomessage_placeholder.png */; };
+		460E33271A0EAFEF00028A84 /* nomessage_placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460E33251A0EAFEF00028A84 /* nomessage_placeholder@2x.png */; };
 		461C57E519BF589400F6575C /* PAPMessagingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 461C57E419BF589400F6575C /* PAPMessagingCell.m */; };
 		461C57E819C0FEA100F6575C /* PAPMessageListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 461C57E719C0FEA100F6575C /* PAPMessageListViewController.m */; };
 		461C57EB19C101ED00F6575C /* PAPMessageListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 461C57EA19C101EC00F6575C /* PAPMessageListCell.m */; };
@@ -155,6 +159,9 @@
 		469CF3751996FB4D0081FCED /* btn_facebook_select@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 469CF36D1996FB4D0081FCED /* btn_facebook_select@2x.png */; };
 		469CF3761996FB4D0081FCED /* btn_twitter_select.png in Resources */ = {isa = PBXBuildFile; fileRef = 469CF36E1996FB4D0081FCED /* btn_twitter_select.png */; };
 		469CF3771996FB4D0081FCED /* btn_twitter_select@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 469CF36F1996FB4D0081FCED /* btn_twitter_select@2x.png */; };
+		469D9B5B1A0B041900A585FD /* message_empty.png in Resources */ = {isa = PBXBuildFile; fileRef = 469D9B581A0B041900A585FD /* message_empty.png */; };
+		469D9B5C1A0B041900A585FD /* message_empty@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 469D9B591A0B041900A585FD /* message_empty@2x.png */; };
+		469D9B5D1A0B041900A585FD /* message_empty@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 469D9B5A1A0B041900A585FD /* message_empty@3x.png */; };
 		46A0C25D194E4A2D00811CBC /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 092354B213A1D7EB00DA740F /* CFNetwork.framework */; };
 		46A1DCAD195BB6F100729FD0 /* PAPlinkPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46A1DCAC195BB6F100729FD0 /* PAPlinkPostViewController.m */; };
 		46A2FE441963562100D8ED12 /* Moment Popup.png in Resources */ = {isa = PBXBuildFile; fileRef = 46A2FE3E1963562100D8ED12 /* Moment Popup.png */; };
@@ -532,6 +539,11 @@
 		460997501938119A00C5AD96 /* icon-twitter-profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-twitter-profile@2x.png"; sourceTree = "<group>"; };
 		460997511938119A00C5AD96 /* icon-twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-twitter.png"; sourceTree = "<group>"; };
 		460997521938119A00C5AD96 /* icon-twitter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-twitter@2x.png"; sourceTree = "<group>"; };
+		460E33181A0EA47100028A84 /* button_feedback_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_feedback_arrow.png; sourceTree = "<group>"; };
+		460E33191A0EA47100028A84 /* button_feedback_arrow@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_feedback_arrow@3x.png"; sourceTree = "<group>"; };
+		460E331A1A0EA47100028A84 /* button_feedback_arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_feedback_arrow@2x.png"; sourceTree = "<group>"; };
+		460E33241A0EAFEF00028A84 /* nomessage_placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nomessage_placeholder.png; sourceTree = "<group>"; };
+		460E33251A0EAFEF00028A84 /* nomessage_placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nomessage_placeholder@2x.png"; sourceTree = "<group>"; };
 		4611EE9C19DF427C00B319C0 /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseFacebookUtils.framework; sourceTree = "<group>"; };
 		461C57E319BF589400F6575C /* PAPMessagingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPMessagingCell.h; path = Anypic/PAPMessagingCell.h; sourceTree = SOURCE_ROOT; };
 		461C57E419BF589400F6575C /* PAPMessagingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPMessagingCell.m; path = Anypic/PAPMessagingCell.m; sourceTree = SOURCE_ROOT; };
@@ -660,6 +672,9 @@
 		469CF36D1996FB4D0081FCED /* btn_facebook_select@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_facebook_select@2x.png"; sourceTree = "<group>"; };
 		469CF36E1996FB4D0081FCED /* btn_twitter_select.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_twitter_select.png; sourceTree = "<group>"; };
 		469CF36F1996FB4D0081FCED /* btn_twitter_select@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_twitter_select@2x.png"; sourceTree = "<group>"; };
+		469D9B581A0B041900A585FD /* message_empty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message_empty.png; sourceTree = "<group>"; };
+		469D9B591A0B041900A585FD /* message_empty@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "message_empty@2x.png"; sourceTree = "<group>"; };
+		469D9B5A1A0B041900A585FD /* message_empty@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "message_empty@3x.png"; sourceTree = "<group>"; };
 		46A1DCAB195BB6F100729FD0 /* PAPlinkPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPlinkPostViewController.h; path = Anypic/PAPlinkPostViewController.h; sourceTree = SOURCE_ROOT; };
 		46A1DCAC195BB6F100729FD0 /* PAPlinkPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPlinkPostViewController.m; path = Anypic/PAPlinkPostViewController.m; sourceTree = SOURCE_ROOT; };
 		46A2FE3E1963562100D8ED12 /* Moment Popup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Moment Popup.png"; sourceTree = "<group>"; };
@@ -1199,6 +1214,14 @@
 		463CE62B19E9987D001F607C /* Message Asset */ = {
 			isa = PBXGroup;
 			children = (
+				460E33241A0EAFEF00028A84 /* nomessage_placeholder.png */,
+				460E33251A0EAFEF00028A84 /* nomessage_placeholder@2x.png */,
+				460E33181A0EA47100028A84 /* button_feedback_arrow.png */,
+				460E33191A0EA47100028A84 /* button_feedback_arrow@3x.png */,
+				460E331A1A0EA47100028A84 /* button_feedback_arrow@2x.png */,
+				469D9B581A0B041900A585FD /* message_empty.png */,
+				469D9B591A0B041900A585FD /* message_empty@2x.png */,
+				469D9B5A1A0B041900A585FD /* message_empty@3x.png */,
 				463CE64F19E99DD9001F607C /* bubble_triangle_left.png */,
 				463CE65019E99DD9001F607C /* bubble_triangle_left@2x.png */,
 				463CE65119E99DD9001F607C /* bubble_triangle_left@3x.png */,
@@ -2182,12 +2205,14 @@
 				D575A0701947834C00C6BCC2 /* btn_editprofile@2x.png in Resources */,
 				46839E9E18E1E8C100BD60DB /* icon-upload.png in Resources */,
 				467A40DD1993059300D4C693 /* join_teamstory@2x.png in Resources */,
+				460E33271A0EAFEF00028A84 /* nomessage_placeholder@2x.png in Resources */,
 				C45C260715671D730035BCA6 /* PlaceholderPhoto.png in Resources */,
 				D59AE7B618CD501D007F882B /* valley.png in Resources */,
 				467A40AE198FF1B200D4C693 /* profile_header_3.png in Resources */,
 				C45C260815671D730035BCA6 /* PlaceholderPhoto@2x.png in Resources */,
 				D57683F31933E9E3008BAA2C /* nav_post@2x.png in Resources */,
 				D5856F9F19F87E2600D0086F /* konotor_mic@2x.png in Resources */,
+				460E331B1A0EA47100028A84 /* button_feedback_arrow.png in Resources */,
 				C4F101F4156C2D800061BC3E /* ActivityFeedBlank.png in Resources */,
 				C4F101F5156C2D800061BC3E /* ActivityFeedBlank@2x.png in Resources */,
 				462FCB7B188C806C005059F3 /* button_done.png in Resources */,
@@ -2215,9 +2240,7 @@
 				463CE63D19E9987D001F607C /* btn_message_count@3x.png in Resources */,
 				467A40CB1993056C00D4C693 /* btn_facebook@2x.png in Resources */,
 				4602FCE818BA9F390097DBEC /* update.png in Resources */,
-				4602FD1D18BD553B0097DBEC /* clarity-logo@2x.png in Resources */,
 				463CE63F19E9987D001F607C /* btn_message_empty@2x.png in Resources */,
-				D52C1E3718D9515D00625887 /* konotor_progress_black.png in Resources */,
 				469CF3741996FB4D0081FCED /* btn_facebook_select.png in Resources */,
 				D57684031933EBA3008BAA2C /* nav_profile@2x.png in Resources */,
 				46A2FE521963572E00D8ED12 /* Thought Popup_selected.png in Resources */,
@@ -2239,6 +2262,7 @@
 				D5144B1D195951D100650061 /* button-feedback-notify@2x.png in Resources */,
 				46B31EEF184E35150028D11C /* profileLocation@2x.png in Resources */,
 				D59B997E18C59836002D6EFE /* AppIcon80x80.png in Resources */,
+				460E331C1A0EA47100028A84 /* button_feedback_arrow@3x.png in Resources */,
 				462FCB85188C8533005059F3 /* button_back.png in Resources */,
 				467154A618835E470000C0CA /* privacy.png in Resources */,
 				46076EEE193FE3EF00A7B317 /* notif_star@2x.png in Resources */,
@@ -2255,8 +2279,6 @@
 				463CE64019E9987D001F607C /* btn_message_empty@3x.png in Resources */,
 				467A5E5819E96F4F00D4636B /* CustomKeyboardViewController.xib in Resources */,
 				463CE63E19E9987D001F607C /* btn_message_empty.png in Resources */,
-				46FB0A7C1888989800E978CD /* tab-product-unselected.png in Resources */,
-				46FB0A961888BBF400E978CD /* news3.png in Resources */,
 				462FCB7E188C806C005059F3 /* button_setting@2x.png in Resources */,
 				467A40B719900FA600D4C693 /* btn_auto_detect@2x.png in Resources */,
 				C4BE670F157FC7D000A291C2 /* Icon-Small-50.png in Resources */,
@@ -2309,6 +2331,7 @@
 				D594C20418EFEBAD0008F5DF /* SVProgressHUD.bundle in Resources */,
 				C4BE677C157FC7F700A291C2 /* BackgroundTabBar@2x.png in Resources */,
 				D5BFDED818CC84A5004FEC42 /* london@2x.png in Resources */,
+				469D9B5B1A0B041900A585FD /* message_empty.png in Resources */,
 				46839E9918E1E8C100BD60DB /* icon-email@2x.png in Resources */,
 				460997561938119A00C5AD96 /* icon-angel@2x.png in Resources */,
 				467A40AD198FF1B200D4C693 /* profile_header_2@2x.png in Resources */,
@@ -2331,7 +2354,6 @@
 				D5856F9919F87E2600D0086F /* konotor_chatbubble_ios7_other@2x.png in Resources */,
 				46ABD74F18B147FC008F5AAB /* button_cancel_selected@2x.png in Resources */,
 				46A2FE451963562100D8ED12 /* Moment Popup@2x.png in Resources */,
-				D51072CB1937EF7300B1FF0E /* arrow_right_white.png in Resources */,
 				463CE64619E9987D001F607C /* btn_new_message@3x.png in Resources */,
 				D57683F61933EA96008BAA2C /* nav_discover.png in Resources */,
 				465A4ED918A8222A00E43DC6 /* iconlocation.png in Resources */,
@@ -2344,6 +2366,7 @@
 				4691B50618BFD9B200B7DF6A /* button-more@2x.png in Resources */,
 				46A2FE471963562100D8ED12 /* Thought Popup@2x.png in Resources */,
 				D552B0E619C7D3EB009F2862 /* arrows_left_white.png in Resources */,
+				460E331D1A0EA47100028A84 /* button_feedback_arrow@2x.png in Resources */,
 				465B19B618B81FE500EDBCFC /* browser-refresh@2x.png in Resources */,
 				46B31EEC184E35150028D11C /* profileDescription.png in Resources */,
 				46ABD73018AADFFB008F5AAB /* default-pic@2x.png in Resources */,
@@ -2355,7 +2378,6 @@
 				D57684021933EBA3008BAA2C /* nav_profile.png in Resources */,
 				462FCB7C188C806C005059F3 /* button_done@2x.png in Resources */,
 				463CE65919E99DD9001F607C /* bubble_triangle_right@2x.png in Resources */,
-				46ABD74B18B144D4008F5AAB /* news2@2x.png in Resources */,
 				46B31EEA184E35150028D11C /* profileWebsite.png in Resources */,
 				463B0CEF1985A8C80075E496 /* intro_logo@2x.png in Resources */,
 				C4BE6797157FC7F700A291C2 /* ButtonLike.png in Resources */,
@@ -2364,9 +2386,7 @@
 				D55AEF3719BA7B9C00ECF342 /* btn_following_discover@2x.png in Resources */,
 				467A40DE1993059300D4C693 /* welcome_back.png in Resources */,
 				463CE64419E9987D001F607C /* btn_new_message.png in Resources */,
-				D52C1E3A18D9515D00625887 /* konotor_progress_blue@2x.png in Resources */,
 				463CE64219E9987D001F607C /* btn_message_more@2x.png in Resources */,
-				4691B50118BFB0AD00B7DF6A /* intro1-iphone4@2x.png in Resources */,
 				463CE65719E99DD9001F607C /* bubble_triangle_left@3x.png in Resources */,
 				D57683F71933EA96008BAA2C /* nav_discover@2x.png in Resources */,
 				C4BE6799157FC7F700A291C2 /* ButtonLikeSelected.png in Resources */,
@@ -2388,16 +2408,12 @@
 				D5BFDEDF18CC84A5004FEC42 /* toronto.png in Resources */,
 				465A4EE518A83D5100E43DC6 /* share.png in Resources */,
 				467A40DB1993059300D4C693 /* intro_divider@2x.png in Resources */,
+				460E33261A0EAFEF00028A84 /* nomessage_placeholder.png in Resources */,
 				467A40DA1993059300D4C693 /* intro_divider.png in Resources */,
 				46A2FE501963572E00D8ED12 /* Moment Popup_selected.png in Resources */,
 				D542D8C4196A6F4700A0384F /* ELCAssetPicker.xib in Resources */,
 				46B31EED184E35150028D11C /* profileDescription@2x.png in Resources */,
-				D51072CC1937EF7300B1FF0E /* arrow_right_white@2x.png in Resources */,
-				4602FD1E18BD553B0097DBEC /* slingbot-popup.png in Resources */,
-				4691B50218BFB0AD00B7DF6A /* intro1-iphone4.png in Resources */,
-				46ABD73F18B1381D008F5AAB /* discover-content-button@2x.png in Resources */,
 				463CE65619E99DD9001F607C /* bubble_triangle_left@2x.png in Resources */,
-				D52C1E3518D9515D00625887 /* konotor_profile.png in Resources */,
 				D575A0711947834C00C6BCC2 /* btn_follow.png in Resources */,
 				463B0CEB1985A8C80075E496 /* intro_moment_2@2x.png in Resources */,
 				46DC23C519AAC7F300E8FCDF /* icon_search@2x.png in Resources */,
@@ -2408,8 +2424,6 @@
 				D5D571161947F8E900354340 /* btn_following_user@2x.png in Resources */,
 				463B0CE91985A8C80075E496 /* intro_moment_3@2x.png in Resources */,
 				463CE65A19E99DD9001F607C /* bubble_triangle_right@3x.png in Resources */,
-				46B31EF8184E3DCB0028D11C /* profileAddNew.png in Resources */,
-				46FB0A841888989800E978CD /* tab-people-unselected.png in Resources */,
 				D575A0721947834C00C6BCC2 /* btn_follow@2x.png in Resources */,
 				463CE65819E99DD9001F607C /* bubble_triangle_right.png in Resources */,
 				D576840E1933F910008BAA2C /* IconDiscoverSelected.png in Resources */,
@@ -2446,7 +2460,6 @@
 				D5856FAA19F87E2600D0086F /* konotor_sent.png in Resources */,
 				D51072D41937F33F00B1FF0E /* share_thought_white@2x.png in Resources */,
 				C4BE67B8157FC7F700A291C2 /* LogoNavigationBar@2x.png in Resources */,
-				46FB0A811888989800E978CD /* tab-startup-unselected@2x.png in Resources */,
 				463CE65519E99DD9001F607C /* bubble_triangle_left.png in Resources */,
 				46ABD72F18AADFFB008F5AAB /* default-pic.png in Resources */,
 				4609975A1938119A00C5AD96 /* icon-linkedin-profile@2x.png in Resources */,
@@ -2464,6 +2477,7 @@
 				D5856FB719F87E2600D0086F /* KonotorModels.bundle in Resources */,
 				D5856F9C19F87E2600D0086F /* konotor_cross.png in Resources */,
 				C4BE67BD157FC7F700A291C2 /* SeparatorTimeline.png in Resources */,
+				469D9B5C1A0B041900A585FD /* message_empty@2x.png in Resources */,
 				467A40AF198FF1B200D4C693 /* profile_header_3@2x.png in Resources */,
 				46B31EF1184E35150028D11C /* companyName@2x.png in Resources */,
 				467A40D91993059300D4C693 /* btn_twitter@2x.png in Resources */,
@@ -2488,15 +2502,12 @@
 				D5F45AFF196CE6A9001C2875 /* btn_camera@2x.png in Resources */,
 				462FCB79188C806C005059F3 /* button_cancel.png in Resources */,
 				460997531938119A00C5AD96 /* icon-angel-profile.png in Resources */,
-				4602FD1C18BD553B0097DBEC /* clarity-logo.png in Resources */,
-				46FB0A921888BBF400E978CD /* news1.png in Resources */,
 				463CE64119E9987D001F607C /* btn_message_more.png in Resources */,
 				465B19B218B81FE500EDBCFC /* browser-button-no@2x.png in Resources */,
 				D5856F9E19F87E2600D0086F /* konotor_mic.png in Resources */,
 				D5856F9B19F87E2600D0086F /* konotor_chatbubble_ios7_you@2x.png in Resources */,
 				465B19A218B81DD000EDBCFC /* bg-browser-bar@2x.png in Resources */,
 				D5BFDEE218CC84A5004FEC42 /* vancity@2x.png in Resources */,
-				46FB0A861888989800E978CD /* tab-people-selected.png in Resources */,
 				463CE63B19E9987D001F607C /* btn_message_count.png in Resources */,
 				D542D8C5196A6F4700A0384F /* ELCAssetTablePicker.xib in Resources */,
 				465B19B018B81FE500EDBCFC /* browser-button-forward-normal@2x.png in Resources */,
@@ -2514,6 +2525,7 @@
 				D576840B1933F908008BAA2C /* IconProfileSelected@2x.png in Resources */,
 				D576840A1933F908008BAA2C /* IconProfileSelected.png in Resources */,
 				D55A180119B5342200B9C48A /* timelineLogo@2x.png in Resources */,
+				469D9B5D1A0B041900A585FD /* message_empty@3x.png in Resources */,
 				460997571938119A00C5AD96 /* icon-industry.png in Resources */,
 				460997581938119A00C5AD96 /* icon-industry@2x.png in Resources */,
 			);
@@ -2590,9 +2602,7 @@
 				D594C20518EFEBAD0008F5DF /* SVProgressHUD.m in Sources */,
 				461C57EB19C101ED00F6575C /* PAPMessageListCell.m in Sources */,
 				D542D8BE196A6F4700A0384F /* ELCAlbumPickerController.m in Sources */,
-				C4F1028A156C56F20061BC3E /* UIImage+ResizeAdditions.m in Sources */,
 				467A5E5719E96F4F00D4636B /* CustomKeyboardViewController.m in Sources */,
-				C4F1028B156C56F20061BC3E /* UIImage+RoundedCornerAdditions.m in Sources */,
 				4688686F185F8B78002BA081 /* emailSignUpViewController.m in Sources */,
 				C4F10291156C571C0061BC3E /* AppDelegate.m in Sources */,
 				D5856FB519F87E2600D0086F /* KonotorUtility.m in Sources */,
@@ -2600,7 +2610,6 @@
 				D542D8C1196A6F4700A0384F /* ELCAssetTablePicker.m in Sources */,
 				C4F102A0156C574A0061BC3E /* PAPImageView.m in Sources */,
 				461C57E519BF589400F6575C /* PAPMessagingCell.m in Sources */,
-				D52C1E4618D9515D00625887 /* KonotorTextInputOverlay.m in Sources */,
 				C4F102A1156C574A0061BC3E /* PAPProfileImageView.m in Sources */,
 				D56D466519884C33001FAA76 /* PhotoTimelineViewController.m in Sources */,
 				D5856FB219F87E2600D0086F /* KonotorMediaUIButton.m in Sources */,
@@ -2638,7 +2647,6 @@
 				C4F102DC156C58170061BC3E /* PAPEditPhotoViewController.m in Sources */,
 				46DC23BF19AA1F0400E8FCDF /* PAPdiscoverTileView.m in Sources */,
 				4658CEF619BE82250057AFA4 /* PAPMessagingViewController.m in Sources */,
-				D52C1E4718D9515D00625887 /* KonotorUITextView.m in Sources */,
 				C4F102EF156C58E00061BC3E /* main.m in Sources */,
 				C4A0B505156C5B9F00E48554 /* TTTTimeIntervalFormatter.m in Sources */,
 				747FC485156FFF74003349E1 /* PAPConstants.m in Sources */,
@@ -2763,8 +2771,8 @@
 				BUNDLE_DISPLAY_NAME_SUFFIX = "∆";
 				BUNDLE_ID_SUFFIX = .dev;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Freddy Hidalgo-Monchez (Y7HZGR6VTG)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Freddy Hidalgo-Monchez (Y7HZGR6VTG)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				FACEBOOK_ID = 290587851092940;
 				FACEBOOK_NAME = "Teamstory∆";
@@ -2792,7 +2800,7 @@
 					"$(PROJECT_DIR)/External/GoogleAnalytics",
 				);
 				PRODUCT_NAME = Teamstory;
-				PROVISIONING_PROFILE = "51c6db26-75dc-4c9c-9e6c-2cf1b1ed7f66";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2806,8 +2814,8 @@
 				BUNDLE_DISPLAY_NAME_SUFFIX = "";
 				BUNDLE_ID_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Growple, inc. (NJ5SX3QK2K)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Growple, inc. (NJ5SX3QK2K)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FACEBOOK_ID = 533792813373044;
 				FACEBOOK_NAME = Teamstory;
@@ -2834,7 +2842,7 @@
 					"$(PROJECT_DIR)/External/GoogleAnalytics",
 				);
 				PRODUCT_NAME = Teamstory;
-				PROVISIONING_PROFILE = "fe269d94-6506-4449-b07f-b8209f1d859c";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "fe269d94-6506-4449-b07f-b8209f1d859c";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
@@ -2879,8 +2887,8 @@
 				BUNDLE_DISPLAY_NAME_SUFFIX = "";
 				BUNDLE_ID_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Growple, inc. (NJ5SX3QK2K)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Growple, inc. (NJ5SX3QK2K)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FACEBOOK_ID = 533792813373044;
 				FACEBOOK_NAME = Teamstory;
@@ -2906,7 +2914,7 @@
 					"$(PROJECT_DIR)/External/GoogleAnalytics",
 				);
 				PRODUCT_NAME = Teamstory;
-				PROVISIONING_PROFILE = "fe269d94-6506-4449-b07f-b8209f1d859c";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "fe269d94-6506-4449-b07f-b8209f1d859c";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
@@ -2954,9 +2962,9 @@
 				BUNDLE_DISPLAY_NAME_SUFFIX = "";
 				BUNDLE_ID_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Distribution: Growple, inc. (NJ5SX3QK2K)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Growple, inc. (NJ5SX3QK2K)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FACEBOOK_ID = 533792813373044;
 				FACEBOOK_NAME = Teamstory;
@@ -2982,7 +2990,7 @@
 					"$(PROJECT_DIR)/External/GoogleAnalytics",
 				);
 				PRODUCT_NAME = Teamstory;
-				PROVISIONING_PROFILE = "f8b7bdf6-1668-455b-89a8-92ad39ec7187";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "f8b7bdf6-1668-455b-89a8-92ad39ec7187";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;

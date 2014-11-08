@@ -73,7 +73,7 @@
     // button image for feedback
     self.feedbackImg = [UIImage imageNamed:@"btn_message_empty.png"];
     self.feedbackImgBadge = [UIImage imageNamed:@"btn_message_count.png"];
-    self.feedbackBtn = [[UIButton alloc] initWithFrame:CGRectMake(282, 10, self.feedbackImg.size.width, self.feedbackImg.size.height)];
+    self.feedbackBtn = [[UIButton alloc] initWithFrame:CGRectMake(282, 0, self.feedbackImg.size.width, self.feedbackImg.size.height)];
     self.feedbackBtn.titleEdgeInsets = UIEdgeInsetsMake(-2.0f, 1.0f, 0.0f, 0.0f);
     self.feedbackBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
     [self.feedbackBtn.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:10.0f]];
@@ -81,10 +81,10 @@
     
     if ([[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue] > 0) {
         [self.feedbackBtn setTitle:[[[PFUser currentUser] objectForKey:@"messagingBadge"] stringValue] forState:UIControlStateNormal];
-        self.feedbackBtn.frame = CGRectMake(282, 10, self.feedbackImgBadge.size.width, self.feedbackImgBadge.size.height);
+        self.feedbackBtn.frame = CGRectMake(275, 1, self.feedbackImgBadge.size.width, self.feedbackImgBadge.size.height);
         [self.feedbackBtn setBackgroundImage:self.feedbackImgBadge forState:UIControlStateNormal];
     } else {
-        self.feedbackBtn.frame = CGRectMake(282, 10, self.feedbackImg.size.width, self.feedbackImg.size.height);
+        self.feedbackBtn.frame = CGRectMake(275, 1, self.feedbackImg.size.width, self.feedbackImg.size.height);
         [self.feedbackBtn setBackgroundImage:self.feedbackImg forState:UIControlStateNormal];
         [self.feedbackBtn setTitle:nil forState:UIControlStateNormal];
     }
@@ -186,6 +186,8 @@
         // reset flag
         self.isOpeningFeedback = NO;
     }
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -257,11 +259,11 @@
     [[PFUser currentUser] refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if ([[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue] > 0) {
             [self.feedbackBtn setTitle:[[[PFUser currentUser] objectForKey:@"messagingBadge"] stringValue] forState:UIControlStateNormal];
-            self.feedbackBtn.frame = CGRectMake(282, 10, self.feedbackImgBadge.size.width, self.feedbackImgBadge.size.height);
+            self.feedbackBtn.frame = CGRectMake(275, 1, self.feedbackImgBadge.size.width, self.feedbackImgBadge.size.height);
             [self.feedbackBtn setBackgroundImage:self.feedbackImgBadge forState:UIControlStateNormal];
             [self.feedbackBtn setTitle:[[[PFUser currentUser] objectForKey:@"messagingBadge"] stringValue] forState:UIControlStateNormal];
         } else {
-            self.feedbackBtn.frame = CGRectMake(282, 10, self.feedbackImg.size.width, self.feedbackImg.size.height);
+            self.feedbackBtn.frame = CGRectMake(275, 1, self.feedbackImg.size.width, self.feedbackImg.size.height);
             [self.feedbackBtn setBackgroundImage:self.feedbackImg forState:UIControlStateNormal];
             [self.feedbackBtn setTitle:nil forState:UIControlStateNormal];
         }

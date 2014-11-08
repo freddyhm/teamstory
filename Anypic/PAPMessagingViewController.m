@@ -7,6 +7,7 @@
 //
 
 #import "PAPMessagingViewController.h"
+#import "SVProgressHUD.h"
 
 
 #define messageTextViewHeight 45.0f
@@ -17,6 +18,8 @@
 #define messageTextSize 16.0f
 #define messageHorizontalSpacing 80.0f
 #define notificationBarHeight 30.0f
+#define MAXMessageLabelWidth 215.0f
+#define APP ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 
 @interface PAPMessagingViewController () {
     CGRect tabBarSize;
@@ -39,15 +42,6 @@
     self.targetChatRoom = roomInfo;
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:YES];
-    self.tabBarController.tabBar.hidden = NO;
-    self.tabBarController.tabBar.frame = tabBarSize;
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:nil setTargetRoom:nil];
-}
-
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     
@@ -59,8 +53,17 @@
     self.tabBarController.tabBar.frame = CGRectZero;
     
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:@"messagingScreen" setTargetRoom:self.targetChatRoom];
-
+    
     [self loadMessageQuery];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:YES];
+    self.tabBarController.tabBar.hidden = NO;
+    self.tabBarController.tabBar.frame = tabBarSize;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:nil setTargetRoom:nil];
 }
 
 - (void)viewDidLoad
@@ -69,12 +72,11 @@
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
     self.scrollView.delegate = self;
-    self.scrollView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
+    self.scrollView.backgroundColor = [UIColor whiteColor];
     [self.scrollView setShowsVerticalScrollIndicator:NO];
     self.view = self.scrollView;
     
     [self setEdgesForExtendedLayout:UIRectEdgeNone];
-    self.view.userInteractionEnabled = YES;
     
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [backButton setFrame:CGRectMake(0, 0, 22.0f, 22.0f)];
@@ -96,6 +98,7 @@
     // --------------------- Keyboard animation
     self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
     self.customKeyboard.delegate = self;
+    self.customKeyboard.messageTextView.userInteractionEnabled = YES;
     [self.view addSubview:self.customKeyboard.view];
     
     // --------------------- Message body UITableView
@@ -103,6 +106,7 @@
     self.messageList.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.messageList.delegate = self;
     self.messageList.dataSource = self;
+    self.messageList.hidden = YES;
     [self.view addSubview:self.messageList];
     
     // ------------------- New Message Notification
@@ -116,14 +120,26 @@
     [notificationLabel setText:@"new Notification Has Arrived"];
     [self.notificationView addSubview:notificationLabel];
     
-    [self.view bringSubviewToFront:self.customKeyboard.view];
-    [self.view bringSubviewToFront:self.notificationView];
+    //----------------------- Placeholder
+    
+    UIImage *placeHolderImage = [UIImage imageNamed:@"nomessage_placeholder.png"];
+    self.placeHolder = [[UIView alloc] initWithFrame:self.messageList.frame];
+    self.placeHolder.hidden = YES;
+    [self.view addSubview:self.placeHolder];
+    
+    UIImageView *placeHolderImageView = [[UIImageView alloc] initWithFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width - placeHolderImage.size.width) / 2, 25.0f, placeHolderImage.size.width, placeHolderImage.size.height)];
+    [placeHolderImageView setImage:placeHolderImage];
+    [self.placeHolder addSubview:placeHolderImageView];
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
                                           action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tapOutside];
+    
+    [self.view bringSubviewToFront:self.notificationView];
+    [self.view bringSubviewToFront:self.customKeyboard.view];
+    [self.customKeyboard.messageTextView becomeFirstResponder];
     
 }
 
@@ -168,69 +184,73 @@
 }
 
 -(void) loadMessageQuery {
+    [SVProgressHUD show];
     PFQuery *messageQuery = [PFQuery queryWithClassName:@"Message"];
     [messageQuery whereKey:@"chatRoom" equalTo:self.targetChatRoom];
     [messageQuery orderByDescending:@"createdAt"];
     [messageQuery setLimit:200];
     [messageQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        [self.messageQuery removeAllObjects];
-        
-        for (long i = objects.count - 1; i >= 0; i--) {
-            [self.messageQuery addObject:[objects objectAtIndex:i]];
+        [SVProgressHUD dismiss];
+        if (!error && [objects count] > 0) {
+            self.messageList.hidden = NO;
+            self.placeHolder.hidden = YES;
+            [self.messageQuery removeAllObjects];
+            
+            for (long i = objects.count - 1; i >= 0; i--) {
+                [self.messageQuery addObject:[objects objectAtIndex:i]];
+            }
+            [self.messageList reloadData];
+            [self scrollToBottom:NO];
+        } else {
+            self.placeHolder.hidden = NO;
+            self.messageList.hidden = YES;
         }
-        [self.messageList reloadData];
-        [self scrollToBottom:NO];
     }];
-}
-
-- (void)changeSendButtonState:(BOOL)state {
-    if (state) {
-        self.sendButton.alpha = 1.0f;
-        self.sendButton.enabled = YES;
-    } else {
-        self.sendButton.alpha = 0.7f;
-        self.sendButton.enabled = NO;
-    }
 }
 
 - (void)sendButtonAction:(id)sender {
-    PFObject *messagePFObject = [PFObject objectWithClassName:@"Message"];
-    [messagePFObject setObject:[PFUser currentUser] forKey:@"fromUser"];
-    [messagePFObject setObject:self.recipient forKey:@"toUser"];
-    [messagePFObject setObject:self.customKeyboard.messageTextView.text forKey:@"messageBody"];
-    [messagePFObject setObject:self.targetChatRoom forKey:@"chatRoom"];
-    
-    // adding new object.
-    [self.messageQuery addObject:messagePFObject];
-    [self.messageList reloadData];
-    [self scrollToBottom:YES];
-    
-    [messagePFObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if(!error) {
-            NSLog(@"Message Sent");
+    if ([self.customKeyboard.messageTextView.text length] > 0) {
+        PFObject *messagePFObject = [PFObject objectWithClassName:@"Message"];
+        [messagePFObject setObject:[PFUser currentUser] forKey:@"fromUser"];
+        [messagePFObject setObject:self.recipient forKey:@"toUser"];
+        [messagePFObject setObject:self.customKeyboard.messageTextView.text forKey:@"messageBody"];
+        [messagePFObject setObject:self.targetChatRoom forKey:@"chatRoom"];
+        
+        // adding new object.
+        [self.messageQuery addObject:messagePFObject];
+        [self.messageList reloadData];
+        self.messageList.hidden = NO;
+        self.placeHolder.hidden = YES;
+        [self scrollToBottom:YES];
+        
+        [messagePFObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if(!error) {
+                NSLog(@"Message Sent");
+            } else {
+                NSLog(@"%@", error);
+            }
+        }];
+        
+        
+        [self.targetChatRoom setObject:self.customKeyboard.messageTextView.text forKey:@"lastMessage"];
+        if ([self.userTypeNumber isEqualToString:@"userOne"]) {
+            if ([self.targetChatRoom objectForKey:@"userOneBadge"] > 0) {
+                [self.targetChatRoom incrementKey:@"userOneBadge"];
+            } else {
+                [self.targetChatRoom setObject:[NSNumber numberWithInt:1] forKey:@"userOneBadge"];
+            }
         } else {
-            NSLog(@"%@", error);
+            if ([self.targetChatRoom objectForKey:@"userTwoBadge"] > 0) {
+                [self.targetChatRoom incrementKey:@"userTwoBadge"];
+            } else {
+                [self.targetChatRoom setObject:[NSNumber numberWithInt:1] forKey:@"userTwoBadge"];
+            }
         }
-    }];
-    
-    
-    [self.targetChatRoom setObject:self.customKeyboard.messageTextView.text forKey:@"lastMessage"];
-    if ([self.userTypeNumber isEqualToString:@"userOne"]) {
-        if ([self.targetChatRoom objectForKey:@"userOneBadge"] > 0) {
-            [self.targetChatRoom incrementKey:@"userOneBadge"];
-        } else {
-            [self.targetChatRoom setObject:[NSNumber numberWithInt:1] forKey:@"userOneBadge"];
-        }
-    } else {
-        if ([self.targetChatRoom objectForKey:@"userTwoBadge"] > 0) {
-            [self.targetChatRoom incrementKey:@"userTwoBadge"];
-        } else {
-            [self.targetChatRoom setObject:[NSNumber numberWithInt:1] forKey:@"userTwoBadge"];
-        }
+        [self.targetChatRoom saveInBackground];
+        
+        self.customKeyboard.messageTextView.text = nil;
+        [self.customKeyboard textViewDidChange:self.customKeyboard.messageTextView];
     }
-    [self.targetChatRoom saveInBackground];
-    
-    self.customKeyboard.messageTextView.text = nil;
 }
 
 # pragma UIKeyboard
@@ -306,10 +326,10 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *attributes = @{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Light" size:messageTextSize]};
     if (self.messageQuery.count > 0) {
-        CGRect textViewSize = [[[self.messageQuery objectAtIndex:indexPath.row] objectForKey:@"messageBody"] boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - messageHorizontalSpacing, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
+        CGRect textViewSize = [[[self.messageQuery objectAtIndex:indexPath.row] objectForKey:@"messageBody"] boundingRectWithSize:CGSizeMake(MAXMessageLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
         
         if (textViewSize.size.height > 30.0f) {
-            return textViewSize.size.height + 20.0f;
+            return textViewSize.size.height + 30.0f;
         } else return [PAPMessagingCell heightForCell];
     } else {
         return [PAPMessagingCell heightForCell];
@@ -341,6 +361,8 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
     [self.timeIntervalFormatter setUsesAbbreviatedCalendarUnits:YES];
     NSString *timestamp = [self.timeIntervalFormatter stringForTimeInterval:timeInterval];
     
+    cell.userInteractionEnabled = NO;
+    
     if (fabsf(timeInterval) > (12 * 60 * 60)) {
         cell.timeStampLabel.text = timestamp;
     } else {
@@ -351,7 +373,7 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
         cell.RECEIVEDMessageView.hidden = YES;
         cell.SENTTriangle.hidden = NO;
         cell.SENTMessageView.hidden = NO;
-        cell.timeStampLabel.frame = CGRectMake(5.0f, 10.0f, 50.0f, 15.0f);
+        cell.timeStampLabel.frame = CGRectMake(10.0f, 10.0f, 50.0f, 15.0f);
         cell.timeStampLabel.textAlignment = NSTextAlignmentLeft;
         cell.RECEIVEDTriangle.hidden = YES;
     } else {
@@ -359,7 +381,7 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
         cell.RECEIVEDTriangle.hidden = NO;
         cell.SENTTriangle.hidden = YES;
         cell.RECEIVEDMessageView.hidden = NO;
-        cell.timeStampLabel.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 55.0f, 10.0f, 50.0f, 15.0f);
+        cell.timeStampLabel.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 60.0f, 10.0f, 50.0f, 15.0f);
         cell.timeStampLabel.textAlignment = NSTextAlignmentRight;
     }
     
@@ -379,15 +401,14 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
         NSString *currentUserName = [[PFUser currentUser] objectForKey:@"displayName"];
         NSString *messageBody = [NSString stringWithFormat:@"Current Username: %@\nTarget Username: %@\nI am reporting because:\n", currentUserName, reportingUserName];
         
-        MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
-        mc.mailComposeDelegate = self;
-        [mc setSubject:emailTitle];
-        [mc setMessageBody:messageBody isHTML:NO];
-        [mc setToRecipients:toRecipients];
+        APP.mc.mailComposeDelegate = self;
+        [APP.mc setSubject:emailTitle];
+        [APP.mc setMessageBody:messageBody isHTML:NO];
+        [APP.mc setToRecipients:toRecipients];
         
         
         // Present mail view controller on screen
-        [self presentViewController:mc animated:YES completion:nil];
+        [self presentViewController:APP.mc animated:YES completion:nil];
     }
 }
 

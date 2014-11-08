@@ -121,12 +121,6 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
      self.navigationItem.titleView = self.accountTitleLabel;
     
-    UIButton *messageButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [messageButton setFrame:CGRectMake(0, 0, 22.0f, 22.0f)];
-    [messageButton addTarget:self action:@selector(messageButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [messageButton setBackgroundImage:[UIImage imageNamed:@"button-feedback.png"] forState:UIControlStateNormal];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:messageButton];
-    
     [self.navigationItem.titleView setUserInteractionEnabled:YES];
     UITapGestureRecognizer *tapNavTitle = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollToTop)];
     [self.navigationItem.titleView addGestureRecognizer:tapNavTitle];
@@ -546,7 +540,12 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 
                 if (![[self.user objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
                     
-                    self.navigationItem.rightBarButtonItem = nil;
+                    UIImage *messageButtonImage = [UIImage imageNamed:@"btn_message_empty.png"];
+                    UIButton *messageButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                    [messageButton setFrame:CGRectMake(0, 0, messageButtonImage.size.width, messageButtonImage.size.height)];
+                    [messageButton addTarget:self action:@selector(messageButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+                    [messageButton setBackgroundImage:messageButtonImage forState:UIControlStateNormal];
+                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:messageButton];
                     
                     // check if the currentUser is following this user
                     PFQuery *queryIsFollowing = [PFQuery queryWithClassName:kPAPActivityClassKey];
@@ -761,8 +760,64 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 #pragma mark - Custom
 
 -(void)messageButtonAction:(id)sender {
-    PAPMessagingViewController *messagingViewController = [[PAPMessagingViewController alloc] init];
-    [self.navigationController pushViewController:messagingViewController animated:YES];
+    [SVProgressHUD show];
+    
+    PFUser *aUser = self.user;
+    PFQuery *userOneQuery = [PFQuery queryWithClassName:@"ChatRoom"];
+    [userOneQuery whereKey:@"userOne" equalTo:[PFUser currentUser]];
+    [userOneQuery whereKey:@"userTwo" equalTo:aUser];
+    
+    // Received Message
+    PFQuery *userTwoQuery = [PFQuery queryWithClassName:@"ChatRoom"];
+    [userTwoQuery whereKey:@"userOne" equalTo:aUser];
+    [userTwoQuery whereKey:@"userTwo" equalTo:[PFUser currentUser]];
+    
+    PFQuery *finalChatRoomQuery = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:userOneQuery, userTwoQuery,nil]];
+    [finalChatRoomQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        [SVProgressHUD dismiss];
+        
+        if (!error) {
+                PAPMessagingViewController *messageViewController = [[PAPMessagingViewController alloc] init];
+                NSString *userNumber;
+                
+                if ([[[object objectForKey:@"userOne"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+                    userNumber = @"userTwo";
+                } else {
+                    userNumber = @"userOne";
+                }
+                
+                [messageViewController setTargetUser:aUser setUserNumber:userNumber];
+                [messageViewController setRoomInfo:object];
+                [self.navigationController pushViewController:messageViewController animated:NO];
+        } else {
+            if ([error code] == 101) {
+                PFObject *createChatRoom = [PFObject objectWithClassName:@"ChatRoom"];
+                [createChatRoom setObject:[PFUser currentUser] forKey:@"userOne"];
+                [createChatRoom setObject:aUser forKey:@"userTwo"];
+                
+                // setACL;
+                PFACL *chatRoomACL = [PFACL ACLWithUser:[PFUser currentUser]];
+                [chatRoomACL setPublicWriteAccess:YES];
+                [chatRoomACL setPublicReadAccess:YES];
+                createChatRoom.ACL = chatRoomACL;
+                
+                [createChatRoom saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    if (!error) {
+                        [self dismissViewControllerAnimated:NO completion:^{
+                            PAPMessagingViewController *messageViewController = [[PAPMessagingViewController alloc] init];
+                            [messageViewController setTargetUser:aUser setUserNumber:@"userTwo"];
+                            [messageViewController setRoomInfo:createChatRoom];
+                            [self.navigationController pushViewController:messageViewController animated:NO];
+                        }];
+                    } else {
+                        NSLog(@"%@", error);
+                    }
+                }];
+            } else {
+                NSLog(@"%@", error);
+            }
+        }
+    }];
 }
 
 - (void)backButtonAction:(id)sender {

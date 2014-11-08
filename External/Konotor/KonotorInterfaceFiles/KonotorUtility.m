@@ -60,6 +60,9 @@ static NSTimer* timer=nil;
     
     if(messageID==nil)
         tapRecognizer=[[UITapGestureRecognizer alloc] initWithTarget:[KonotorUtility class] action:@selector(dismissToast:)];
+    else if ([messageID isEqualToString:@"messaging"]) {
+        
+    }
     else
         tapRecognizer=[[UITapGestureRecognizer alloc] initWithTarget:[KonotorUtility class] action:@selector(showFeedback:)];
     [toastView addGestureRecognizer:tapRecognizer];

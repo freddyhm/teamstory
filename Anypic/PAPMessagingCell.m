@@ -9,11 +9,11 @@
 #import "PAPMessagingCell.h"
 
 #define messageHorizontalSpacing 60.0f
-#define defaultMessageCellHeight 40.0f
+#define defaultMessageCellHeight 50.0f
 #define messageTextSize 16.0f
 #define arrowSpacerWidth 20.0f
 #define MAXMessageViewWidth 250.0f
-#define MAXMessageLabelWidth 230.0f
+#define MAXMessageLabelWidth 215.0f
 
 @implementation PAPMessagingCell
 
@@ -44,11 +44,11 @@
         self.SENTMessageView.clipsToBounds = YES;
         [self addSubview:self.SENTMessageView];
         
-        self.RECEIVEDMessageLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, 5.0f, self.RECEIVEDMessageView.bounds.size.width - 20.0f, 30.0f)];
+        self.RECEIVEDMessageLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, 4.0f, self.RECEIVEDMessageView.bounds.size.width - 20.0f, 30.0f)];
         self.RECEIVEDMessageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:messageTextSize];
         [self.RECEIVEDMessageView addSubview:self.RECEIVEDMessageLabel];
         
-        self.SENTMessageLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, 5.0f, self.SENTMessageView.bounds.size.width - 20.0f, 30.0f)];
+        self.SENTMessageLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, 4.0f, self.SENTMessageView.bounds.size.width - 20.0f, 30.0f)];
         self.SENTMessageLabel.textColor = [UIColor whiteColor];
         self.SENTMessageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:messageTextSize];
         [self.SENTMessageView addSubview:self.SENTMessageLabel];
@@ -85,8 +85,8 @@
 }
 
 -(void) resizeTextView {
-    self.RECEIVEDMessageLabel.frame = CGRectMake(10.0f, 5.0f, self.RECEIVEDMessageView.bounds.size.width - 20.0f, self.RECEIVEDMessageView.bounds.size.height - 10.0f);
-    self.SENTMessageLabel.frame = CGRectMake(10.0f, 5.0f, self.SENTMessageView.bounds.size.width - 20.0f, self.SENTMessageView.bounds.size.height - 10.0f);
+    self.RECEIVEDMessageLabel.frame = CGRectMake(10.0f, 4.0f, self.RECEIVEDMessageView.bounds.size.width - 20.0f, self.RECEIVEDMessageView.bounds.size.height - 10.0f);
+    self.SENTMessageLabel.frame = CGRectMake(10.0f, 4.0f, self.SENTMessageView.bounds.size.width - 20.0f, self.SENTMessageView.bounds.size.height - 10.0f);
 }
 
 +(CGFloat)heightForCell {
