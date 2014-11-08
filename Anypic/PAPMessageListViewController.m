@@ -130,7 +130,7 @@
         self.badgeLabel.hidden = YES;
     }
     
-    self.messageListTV = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, notificationBarHeight, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - navBarHeight - tabBarHeight - notificationBarHeight)];
+    self.messageListTV = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, notificationBarHeight, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - navBarHeight - notificationBarHeight)];
     [self.messageListTV setBackgroundColor:[UIColor whiteColor]];
     self.messageListTV.dataSource = self;
     self.messageListTV.delegate = self;

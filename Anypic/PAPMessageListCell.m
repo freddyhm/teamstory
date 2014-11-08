@@ -39,7 +39,7 @@
         [self.lastMessageLabel setNumberOfLines:2];
         [self addSubview:self.lastMessageLabel];
         
-        self.badgeLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - leftGap + 10.0f, 40.0f, 35.0f, 25.0f)];
+        self.badgeLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - leftGap + 30.0f, 40.0f, 35.0f, 25.0f)];
         self.badgeLabel.backgroundColor = [UIColor redColor];
         self.badgeLabel.alpha = 0.8f;
         self.badgeLabel.layer.cornerRadius = 13.0f;
