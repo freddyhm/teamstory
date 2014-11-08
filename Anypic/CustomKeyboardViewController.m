@@ -41,7 +41,6 @@
     [self.messageTextView setFrame:CGRectMake(5.0f, 5.0f, self.view.bounds.size.width - (10.0f + sendButtonWidth), self.view.bounds.size.height - 10.0f)];
     
     // set send button
-    [self.sendButton setFrame:CGRectMake(self.view.bounds.size.width - sendButtonWidth, 0.0f, sendButtonWidth, sendButtonHeight)];
     self.sendButton.hidden = NO;
     [self.sendButton addTarget:self action:@selector(sendButtonAction:) forControlEvents:UIControlEventTouchUpInside];
 }

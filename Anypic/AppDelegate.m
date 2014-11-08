@@ -255,6 +255,8 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
         }
         
     } else if ([notificationType isEqualToString:@"m"]) {
+        [KonotorUtility showToastWithString:@"New message received" forMessageID:@"all"];
+        
         NSNumber *currentMessageBadgeNumber;
         NSNumber *newMessageBadgeNumber;
         currentMessageBadgeNumber = [[PFUser currentUser] objectForKey:@"messagingBadge"];
@@ -699,6 +701,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
             self.messageTargetUser = nil;
             self.chatRoom = nil;
             [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageButton" object:nil];
+            [KonotorUtility showToastWithString:@"New message received" forMessageID:@"all"];
             
             [self navigateToChatRoomWithNotificationWithTargetUser:toUserId setRoomInfo:messageRoomId];
             return;

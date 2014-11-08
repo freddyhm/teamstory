@@ -122,21 +122,14 @@
     
     //----------------------- Placeholder
     
-    UIImage *placeHolderImage = [UIImage imageNamed:@"message_empty.png"];
+    UIImage *placeHolderImage = [UIImage imageNamed:@"nomessage_placeholder.png"];
     self.placeHolder = [[UIView alloc] initWithFrame:self.messageList.frame];
+    self.placeHolder.hidden = YES;
     [self.view addSubview:self.placeHolder];
     
-    UIImageView *placeHolderImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, placeHolderImage.size.width, placeHolderImage.size.height)];
+    UIImageView *placeHolderImageView = [[UIImageView alloc] initWithFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width - placeHolderImage.size.width) / 2, 25.0f, placeHolderImage.size.width, placeHolderImage.size.height)];
     [placeHolderImageView setImage:placeHolderImage];
     [self.placeHolder addSubview:placeHolderImageView];
-    
-    UILabel *placeHolderLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 100.0f, [UIScreen mainScreen].bounds.size.width, 60.0f)];
-    [placeHolderLabel setTextAlignment:NSTextAlignmentCenter];
-    [placeHolderLabel setText:@"Say something awesome!\nConnect with like-minded people."];
-    placeHolderLabel.numberOfLines = 2;
-    [placeHolderLabel setTextColor:[UIColor colorWithRed:234.0f/255.0f green:238.0f/255.0f blue:243.0f/255.0f alpha:1.0f]];
-    [placeHolderLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:15.0f]];
-    [self.placeHolder addSubview:placeHolderLabel];
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
@@ -208,6 +201,9 @@
             }
             [self.messageList reloadData];
             [self scrollToBottom:NO];
+        } else {
+            self.placeHolder.hidden = NO;
+            self.messageList.hidden = YES;
         }
     }];
 }

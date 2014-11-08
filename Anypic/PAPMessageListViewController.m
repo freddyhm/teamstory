@@ -45,6 +45,15 @@
     // fetch unread messages, show feedback screen
     self.messageNotificationCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
     
+    if([self.messageNotificationCount intValue] > 0){
+        self.badgeLabel.hidden = NO;
+        self.badgeLabel.text = [self.messageNotificationCount stringValue];
+        self.notificationView.titleEdgeInsets = UIEdgeInsetsMake(0.0f, -70.0f, 0.0f, 0.0f);
+    }else{
+        self.badgeLabel.hidden = YES;
+        self.notificationView.titleEdgeInsets = UIEdgeInsetsMake(0.0f, -130.0f, 0.0f, 0.0f);
+    }
+    
     PFQuery *userOneQuery = [PFQuery queryWithClassName:@"ChatRoom"];
     [userOneQuery whereKey:@"userOne" equalTo:[PFUser currentUser]];
     [userOneQuery whereKeyExists:@"lastMessage"];
@@ -101,19 +110,19 @@
     UIButton *newMessageButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [newMessageButton setFrame:CGRectMake(0.0f, 0.0f, newMessageButtonImage.size.width, newMessageButtonImage.size.height)];
     [newMessageButton setImage:newMessageButtonImage forState:UIControlStateNormal];
+    newMessageButton.imageEdgeInsets = UIEdgeInsetsMake(0.0f, 10.0f, 0.0f, -10.0f);
     [newMessageButton addTarget:self action:@selector(newMessageButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:newMessageButton];
     
     self.notificationView = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, notificationBarHeight)];
-    self.notificationView.backgroundColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:0.15f];
+    self.notificationView.backgroundColor = [UIColor colorWithRed:229.0f/255.0f green:235.0f/255.0f blue:241.0f/255.0f alpha:1.0f];
     [self.notificationView setTitle:@"Chat with Teamstory!" forState:UIControlStateNormal];
-    [self.notificationView setTitleColor:[UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
-    self.notificationView.titleEdgeInsets = UIEdgeInsetsMake(0.0f, -130.0f, 0.0f, 0.0f);
+    [self.notificationView setTitleColor:[UIColor colorWithRed:74.0f/255.0f green:144.0f/255.0f blue:226.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
     self.notificationView.titleLabel.font = [UIFont boldSystemFontOfSize:14.0f];
     [self.notificationView addTarget:self action:@selector(notificationButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.notificationView];
     
-    self.badgeLabel = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 50.0f, 12.5f, 35.0f, 25.0f)];
+    self.badgeLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, 12.5f, 35.0f, 25.0f)];
     self.badgeLabel.backgroundColor = [UIColor redColor];
     self.badgeLabel.alpha = 0.8f;
     self.badgeLabel.layer.cornerRadius = 13.0f;
@@ -123,12 +132,10 @@
     self.badgeLabel.font = [UIFont boldSystemFontOfSize:13.0f];
     [self.notificationView addSubview:self.badgeLabel];
     
-    if([self.messageNotificationCount intValue] > 0){
-        self.badgeLabel.hidden = NO;
-        self.badgeLabel.text = [self.messageNotificationCount stringValue];
-    }else{
-        self.badgeLabel.hidden = YES;
-    }
+    UIImage *notificationArrowImage = [UIImage imageNamed:@"button_feedback_arrow.png"];
+    UIImageView *notificationArrow = [[UIImageView alloc] initWithFrame:CGRectMake(self.notificationView.bounds.size.width - notificationArrowImage.size.width - 15.0f, (self.notificationView.bounds.size.height - notificationArrowImage.size.height) / 2, notificationArrowImage.size.width, notificationArrowImage.size.height)];
+    [notificationArrow setImage:notificationArrowImage];
+    [self.notificationView addSubview:notificationArrow];
     
     self.messageListTV = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, notificationBarHeight, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - navBarHeight - notificationBarHeight)];
     [self.messageListTV setBackgroundColor:[UIColor whiteColor]];
