@@ -218,6 +218,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self loadObjects];
     
     
+    self.tabBarController.tabBar.frame = CGRectZero;
     
     self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
     self.customKeyboard.delegate = self;
