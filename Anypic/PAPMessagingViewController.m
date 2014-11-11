@@ -52,8 +52,6 @@
     tabBarSize = self.tabBarController.tabBar.frame;
     self.tabBarController.tabBar.frame = CGRectZero;
     
-    NSLog(@"%f", self.view.bounds.size.height);
-    
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:@"messagingScreen" setTargetRoom:self.targetChatRoom];
     
     [self loadMessageQuery];
