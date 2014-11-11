@@ -260,8 +260,6 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     } else if ([notificationType isEqualToString:@"m"]) {
         self.currentUserInfo = userInfo;
         
-        [KonotorUtility showToastWithString:@"New message received" forMessageID:@"messaging"];
-        
         NSNumber *currentMessageBadgeNumber;
         NSNumber *newMessageBadgeNumber;
         currentMessageBadgeNumber = [[PFUser currentUser] objectForKey:@"messagingBadge"];
@@ -281,6 +279,8 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
                 
                 if ([self.userView isEqual:@"messagingScreen"]) {
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"updateTableView" object:nil];
+                } else {
+                    [KonotorUtility showToastWithString:@"New message received" forMessageID:@"messaging"];
                 }
             }
         } else {

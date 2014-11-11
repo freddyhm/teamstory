@@ -26,7 +26,6 @@
     double keyboardDuration;
     float keyboardHeight;
     int _currentPage;
-    BOOL isNewMessage;
     float textViewHeight;
 }
 
@@ -178,8 +177,7 @@
 }
 
 - (void)updateTableViewNotification:(NSNotification *)notification {
-    isNewMessage = YES;
-    self.notificationView.hidden = NO;
+    self.notificationView.hidden = YES;
     [self loadMessageQuery];
 }
 
