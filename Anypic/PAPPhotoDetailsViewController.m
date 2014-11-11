@@ -107,7 +107,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self.postDetails setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     self.postDetails.delegate = self;
     self.postDetails.dataSource = self;
-    self.postDetails.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height + 48);
+    self.postDetails.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
+    [self.postDetails setContentSize:CGSizeMake(self.postDetails.frame.size.width, self.postDetails.frame.size.height)];
     [self.view addSubview:self.postDetails];
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
@@ -187,7 +188,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLikedOrUnlikedPhoto:) name:PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:self.photo];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardDidHide) name:UIKeyboardDidHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
@@ -219,9 +220,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     self.tabBarController.tabBar.frame = CGRectZero;
     self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
-    [self.customKeyboard.view setFrame:CGRectMake(self.customKeyboard.view.frame.origin.x, self.customKeyboard.view.frame.origin.y + 65, self.customKeyboard.view.frame.size.width, self.customKeyboard.view.frame.size.height)];
     self.customKeyboard.delegate = self;
-    
+    [self.customKeyboard setKeyboardPosition:-64];
     [self.view addSubview:self.customKeyboard.view];
 }
 
@@ -399,7 +399,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 - (void)keyboardDidHide{
     
     // set new content size for table, update with current textview height
-    [self.postDetails setContentSize:CGSizeMake(self.postDetails.contentSize.width, [self getCurrentTableContentHeightWithTextView])];
+    //[self.postDetails setContentSize:CGSizeMake(self.postDetails.contentSize.width, [self getCurrentTableContentHeightWithTextView])];
     
 }
 
@@ -407,15 +407,16 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     // Scroll the view to the comment text box
     NSDictionary* info = [note userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    NSInteger offset = 0.0f;
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    //NSInteger offset = 0.0f;
     
+    /*
     // Check system version for keyboard offset, ios8 added suggestion bar
     if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
         if ([UIScreen mainScreen].bounds.size.height == 480) {
             offset = -20.0f;
         } else {
-            offset = 60.0f;
+            offset = -60.0f;
         }
     }else{
         if ([UIScreen mainScreen].bounds.size.height == 480) {
@@ -424,9 +425,14 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             offset = 150.0f;
         }
     }
+     */
     
-    // set new offset based on custom text view + keyboard + phone offset
-    [self.postDetails setContentOffset:CGPointMake(0.0f, ([self getCurrentTableContentHeightWithTextView]- kbSize.height - offset)) animated:YES];
+    [self.customKeyboard setKeyboardHeight:kbSize.height];
+    [self.customKeyboard setKeyboardPosition:kbSize.height - 64];
+    
+    //[self.postDetails setContentOffset:CGPointMake(self.postDetails.contentOffset.x, self.postDetails.contentOffset.y + kbSize.height + self.customKeyboard.view.frame.size.height)];
+    
+    [self.postDetails setContentSize:CGSizeMake(self.postDetails.frame.size.width, self.postDetails.contentSize.height + kbSize.height)];
 }
 
 - (void)dismissKeyboard {
@@ -435,48 +441,22 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.dimView.hidden = YES;
 }
 
-- (void)keyboardWillHide{
+- (void)keyboardWillHide:(NSNotification *)notification{
     
-    // set new offset based on custom text view
-    [self.postDetails setContentOffset:CGPointMake(0.0f, [self getCurrentTableOffsetWithTextView]) animated:YES];
+    NSDictionary* info = [notification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    
+    [self.customKeyboard setKeyboardHeight:kbSize.height];
+    [self.customKeyboard setKeyboardPosition:-64];
+    
+    [self.postDetails setContentSize:CGSizeMake(self.postDetails.frame.size.width, self.postDetails.contentSize.height - kbSize.height)];
 }
 
-#pragma mark - Custom TextView
-
-- (void)updateTextView:(float)newHeight{
-    
-    // expands textview based on content
-    self.footerView.mainView.frame = CGRectMake(self.footerView.mainView.frame.origin.x, self.footerView.mainView.frame.origin.y, self.footerView.mainView.frame.size.width, newHeight + 20);
-    
-    // expands footer frame that contains textview
-    self.footerView.frame =  CGRectMake(self.footerView.frame.origin.x, self.footerView.frame.origin.y, self.footerView.frame.size.width, newHeight + 20);
-}
-
-- (float)getCurrentTableContentHeightWithTextView{
-    
-    // set offset for table based on current table height
-    float currentTextViewContentHeight = self.footerView.mainView.frame.size.height - self.defaultFooterViewFrame.size.height;
-    
-    float newTableContentHeight = self.postDetails.contentSize.height + currentTextViewContentHeight;
-    
-    return currentTextViewContentHeight != 0 ? newTableContentHeight : self.postDetails.contentSize.height;
-}
-
-- (float)getCurrentTableOffsetWithTextView{
-    
-    // get new offset for table with current textview height
-    float currentTextViewHeight = self.footerView.mainView.frame.size.height - self.defaultFooterViewFrame.size.height;
-    
-    return self.postDetails.contentOffset.y + currentTextViewHeight;
-}
 
 #pragma mark - UITextViewDelegate
 
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
-    
-    // update content size - especially important when dragging while editing
-    [self.postDetails setContentSize:CGSizeMake(self.postDetails.contentSize.width, [self getCurrentTableContentHeightWithTextView])];
     
     if ([[textView text] isEqualToString:@"Add a comment"]) {
         [textView setText:@""];
@@ -493,64 +473,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     if ([textView.text length] == 0) {
         // reset default text view and frame
         [textView setText:@"Add a comment"];
-        self.footerView.mainView.frame = self.defaultFooterViewFrame;
-        textView.frame = self.defaultCommentTextViewFrame;
     }
 }
-
-- (void)textViewDidChange:(UITextView *)textView{
-    
-    UITextPosition* pos = textView.endOfDocument;
-    CGRect currentRect = [textView caretRectForPosition:pos];
-    
-    CGRect frame = textView.frame;
-    frame.size.height = [textView contentSize].height;
-    textView.frame = frame;
-    
-    if (text_offset == NSNotFound) {
-        text_offset = 0;
-    }
-    
-    // Expandable textview
-    
-    // for next line excl. first line
-    if (currentRect.origin.y > self.previousRect.origin.y && self.previousRect.origin.y != 0){
-        
-        // update custom textview
-        [self updateTextView:frame.size.height];
-        
-        // update content size - especially important when dragging while editing
-        [self.postDetails setContentSize:CGSizeMake(self.postDetails.contentSize.width, self.postDetails.contentSize.height + 15)];
-        
-        // moves keyboard to proper height
-        [self.postDetails setContentOffset:CGPointMake(0.0f, self.postDetails.contentOffset.y + 15) animated:YES];
-        
-        //reset @mention table.
-        if (self.autocompleteTableView.hidden == NO) {
-            if ([UIScreen mainScreen].bounds.size.height == 480) {
-                self.autocompleteTableView.frame = CGRectMake(7.5f, self.postDetails.contentSize.height - 212.0f, 305.0f, 143.0f);
-            } else {
-                self.autocompleteTableView.frame = CGRectMake(7.5f, self.postDetails.contentSize.height - 302.0f, 305.0f, 232.0f);
-            }
-            
-        }
-        
-        // for prev line excl. first line
-    }else if (currentRect.origin.y < self.previousRect.origin.y && self.previousRect.origin.y != 0){
-        
-        // update custom textview
-        [self updateTextView:frame.size.height];
-        
-        // update content size - especially important when dragging while editing
-        [self.postDetails setContentSize:CGSizeMake(self.postDetails.contentSize.width, self.postDetails.contentSize.height - 15)];
-        
-        // moves keyboard to proper height
-        [self.postDetails setContentOffset:CGPointMake(0.0f, self.postDetails.contentOffset.y  - 15) animated:YES];
-    }
-    
-    self.previousRect = currentRect;
-}
-
 
 - (BOOL) textView:(UITextView*)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString*)text{
     if ([cellType isEqualToString:@"atmentionCell"]) {
@@ -1112,5 +1036,58 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 - (void)setTableViewHeight{
     
 }
+
+/*
+
+- (void)keyboardWillShow:(NSNotification *)notification {
+    NSDictionary *info = [notification userInfo];
+    NSNumber *number = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    NSValue *keyboardFrameValue = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
+    UIViewAnimationCurve animationCurve = [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    
+    keyboardDuration = [number doubleValue];
+    CGRect keyboardFrame = [keyboardFrameValue CGRectValue];
+    keyboardHeight = keyboardFrame.size.height;
+    
+    [self.customKeyboard setKeyboardHeight:keyboardHeight];
+    
+    // ---------- Adjust TextView location
+    [UIView animateWithDuration:keyboardDuration delay:0 options:animationOptionsWithCurve(animationCurve) animations:^{
+        self.customKeyboard.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (navBarHeight + messageTextViewHeight) - keyboardHeight, [UIScreen mainScreen].bounds.size.width, messageTextViewHeight);
+        self.messageList.frame = CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - self.customKeyboard.view.bounds.size.height - navBarHeight - keyboardHeight);
+        [self scrollToBottom:NO];
+    } completion:^(BOOL finished) {
+    }];
+    
+}
+
+static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCurve curve) {
+    return (UIViewAnimationOptions)curve << 16;
+}
+
+
+- (void)keyboardWillHide:(NSNotification *)notification {
+    NSDictionary *info = [notification userInfo];
+    NSNumber *number = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    NSValue *keyboardFrameValue = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
+    UIViewAnimationCurve animationCurve = [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    
+    keyboardDuration = [number doubleValue];
+    CGRect keyboardFrame = [keyboardFrameValue CGRectValue];
+    keyboardHeight = keyboardFrame.size.height;
+    
+    [self.customKeyboard setKeyboardHeight:keyboardHeight];
+    
+    // ---------- Adjust TextView location
+    [UIView animateWithDuration:keyboardDuration delay:0 options:animationOptionsWithCurve(animationCurve) animations:^{
+        float textViewHeight = self.customKeyboard.view.frame.size.height;
+        self.customKeyboard.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (navBarHeight + textViewHeight), [UIScreen mainScreen].bounds.size.width, messageTextViewHeight);
+        self.messageList.frame = CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - textViewHeight - navBarHeight);
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+ */
+
 
 @end

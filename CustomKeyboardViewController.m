@@ -65,6 +65,12 @@
     self.keyboardHeight = kbHeight;
 }
 
+- (void)setKeyboardPosition:(CGFloat)kbHeight{
+    [self.view setFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (64.0f + messageTextViewHeight) - kbHeight, [UIScreen mainScreen].bounds.size.width, messageTextViewHeight)];
+}
+
+
+
 #pragma mark - Delegate Methods
 - (void)sendButtonAction:(id)sender{
     if (self.delegate && [self.delegate respondsToSelector:@selector(sendButtonAction:)]) {
