@@ -61,20 +61,20 @@ NSInteger selection = 1;
     
     // --------------- Search option menu
     
-    self.searchOptionBgView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 20.0f, screenWidth, 44.0f)];
+    self.searchOptionBgView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 20.0f, screenWidth, 37.5f)];
     [self.searchOptionBgView setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
     [self.view addSubview:self.searchOptionBgView];
     
-    self.searchOptionView = [[UIView alloc] initWithFrame:CGRectMake(5.0f, 5.0f, screenWidth - 10.0f, 34.0f)];
-    [self.searchOptionView setBackgroundColor:[UIColor colorWithWhite:0.8f alpha:1.0f]];
+    self.searchOptionView = [[UIView alloc] initWithFrame:CGRectMake(5.0f, 5.0f, screenWidth - 10.0f, 27.5f)];
+    [self.searchOptionView setBackgroundColor:[UIColor colorWithWhite:0.9f alpha:1.0f]];
     self.searchOptionView.layer.cornerRadius = 5.0f;
     [self.searchOptionBgView addSubview:self.searchOptionView];
     
     self.searchMovementBar = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.searchOptionView.bounds.size.width / 2, self.searchOptionView.bounds.size.height)];
     [self.searchMovementBar setBackgroundColor:[UIColor whiteColor]];
     self.searchMovementBar.layer.cornerRadius = 5.0f;
-    self.searchMovementBar.layer.borderWidth = 1.0f;
-    self.searchMovementBar.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
+    self.searchMovementBar.layer.borderWidth = 2.0f;
+    self.searchMovementBar.layer.borderColor = [UIColor colorWithWhite:0.9f alpha:1.0f].CGColor;
     [self.searchOptionView addSubview:self.searchMovementBar];
     
     self.searchSelection = @"users";
@@ -82,16 +82,18 @@ NSInteger selection = 1;
     self.usersLabel = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.searchOptionView.bounds.size.width / 2, self.searchOptionView.bounds.size.height)];
     [self.usersLabel setTitle:@"Users" forState:UIControlStateNormal];
     self.usersLabel.titleLabel.textAlignment = NSTextAlignmentCenter;
-    [self.usersLabel setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
-    [self.usersLabel setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.usersLabel setTitleColor:[UIColor colorWithWhite:0.4f alpha:1.0f] forState:UIControlStateHighlighted];
+    [self.usersLabel setTitleColor:[UIColor colorWithWhite:0.4f alpha:1.0f] forState:UIControlStateNormal];
     [self.usersLabel addTarget:self action:@selector(usersLabelAction:) forControlEvents:UIControlEventTouchUpInside];
+    self.usersLabel.titleLabel.font = [UIFont boldSystemFontOfSize:13.0f];
     [self.searchOptionView addSubview:self.usersLabel];
     
     self.industryLabel = [[UIButton alloc] initWithFrame:CGRectMake(self.searchOptionView.bounds.size.width / 2, 0.0f, self.searchOptionView.bounds.size.width / 2, self.searchOptionView.bounds.size.height)];
     [self.industryLabel setTitle:@"Industries" forState:UIControlStateNormal];
     self.industryLabel.titleLabel.textAlignment = NSTextAlignmentCenter;
-    [self.industryLabel setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
-    [self.industryLabel setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.industryLabel setTitleColor:[UIColor colorWithWhite:0.4f alpha:1.0f] forState:UIControlStateHighlighted];
+    [self.industryLabel setTitleColor:[UIColor colorWithWhite:0.4f alpha:1.0f] forState:UIControlStateNormal];
+    self.industryLabel.titleLabel.font = [UIFont boldSystemFontOfSize:13.0f];
     [self.industryLabel addTarget:self action:@selector(industryLabelAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.searchOptionView addSubview:self.industryLabel];
     
@@ -159,7 +161,7 @@ NSInteger selection = 1;
     self.navigationController.navigationBar.hidden = YES;
     
     NSDate *currentDate = [NSDate date];
-    NSDate *sevenDaysAgo = [currentDate dateByAddingTimeInterval:-7*24*60*60];
+    NSDate *twoWeeks = [currentDate dateByAddingTimeInterval:-14*24*60*60];
     
     self.postThoughtQueryResults = nil;
     self.postPicQueryResults = nil;
@@ -167,7 +169,7 @@ NSInteger selection = 1;
     PFQuery *postQuery_pic = [PFQuery queryWithClassName:@"Photo"];
     [postQuery_pic setLimit:1000];
     [postQuery_pic whereKey:@"type" equalTo:@"picture"];
-    [postQuery_pic whereKey:@"createdAt" greaterThanOrEqualTo:sevenDaysAgo];
+    [postQuery_pic whereKey:@"createdAt" greaterThanOrEqualTo:twoWeeks];
     [postQuery_pic findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
             self.postPicQueryResults = objects;
@@ -180,7 +182,7 @@ NSInteger selection = 1;
     PFQuery *postQuery_thoughts = [PFQuery queryWithClassName:@"Photo"];
     [postQuery_thoughts setLimit:1000];
     [postQuery_thoughts whereKey:@"type" equalTo:@"thought"];
-    [postQuery_thoughts whereKey:@"createdAt" greaterThanOrEqualTo:sevenDaysAgo];
+    [postQuery_thoughts whereKey:@"createdAt" greaterThanOrEqualTo:twoWeeks];
     [postQuery_thoughts findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
             self.postThoughtQueryResults = objects;

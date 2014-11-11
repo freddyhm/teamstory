@@ -173,7 +173,7 @@
     
     self.querySelectionOptionViewBG = [[UIView alloc] initWithFrame:CGRectMake(5.0f, 5.0f, self.querySelectionView.bounds.size.width - 10.0f, self.querySelectionView.bounds.size.height - 10.0f)];
     self.querySelectionOptionViewBG.layer.cornerRadius = 3.0f;
-    self.querySelectionOptionViewBG.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f];
+    self.querySelectionOptionViewBG.backgroundColor = [UIColor colorWithWhite:0.9f alpha:1.0f];
     [self.querySelectionView addSubview:self.querySelectionOptionViewBG];
     
     self.followerButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.querySelectionOptionViewBG.bounds.size.width / 2, self.querySelectionOptionViewBG.bounds.size.height)];
@@ -194,7 +194,7 @@
     self.querySelectionMovementView.backgroundColor = [UIColor whiteColor];
     self.querySelectionMovementView.layer.borderWidth = 2.0f;
     self.querySelectionMovementView.layer.cornerRadius = 5.0f;
-    self.querySelectionMovementView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
+    self.querySelectionMovementView.layer.borderColor = [UIColor colorWithWhite:0.9f alpha:1.0f].CGColor;
     self.querySelectionMovementView.clipsToBounds = YES;
     
     [self.querySelectionOptionViewBG addSubview:self.querySelectionMovementView];
