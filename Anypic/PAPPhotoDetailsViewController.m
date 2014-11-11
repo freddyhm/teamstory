@@ -107,9 +107,20 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self.postDetails setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     self.postDetails.delegate = self;
     self.postDetails.dataSource = self;
+    
     self.postDetails.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
-    [self.postDetails setContentSize:CGSizeMake(self.postDetails.frame.size.width, self.postDetails.frame.size.height)];
+    
+    
+    //self.view.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height + 100);
+
     [self.view addSubview:self.postDetails];
+    
+    [self.postDetails setContentSize:CGSizeMake(self.postDetails.frame.size.width, 200)];
+    self.postDetails.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height + 200);
+    
+    //[self.postDetails setContentOffset:CGPointMake(self.postDetails.contentOffset.x, self.postDetails.contentOffset.y + 100)];
+    
+    
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     [self.navigationItem.titleView setUserInteractionEnabled:YES];
