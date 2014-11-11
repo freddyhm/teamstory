@@ -179,7 +179,7 @@
 
 - (void)updateTableViewNotification:(NSNotification *)notification {
     isNewMessage = YES;
-    self.notificationView.hidden = NO;
+    self.notificationView.hidden = YES;
     [self loadMessageQuery];
 }
 

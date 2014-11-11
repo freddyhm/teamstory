@@ -320,13 +320,13 @@ NSInteger selection = 1;
 
 -(void) labelSetting:(NSString *)selected {
     if ([selected isEqualToString:@"users"]) {
-        self.usersLabel.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
-        self.industryLabel.titleLabel.font = [UIFont systemFontOfSize:15.0f];
+        self.usersLabel.titleLabel.font = [UIFont boldSystemFontOfSize:13.0f];
+        self.industryLabel.titleLabel.font = [UIFont systemFontOfSize:13.0f];
         self.searchSelection = @"users";
         self.searchBar.placeholder = @"Search users";
     } else {
-        self.industryLabel.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
-        self.usersLabel.titleLabel.font = [UIFont systemFontOfSize:15.0f];
+        self.industryLabel.titleLabel.font = [UIFont boldSystemFontOfSize:13.0f];
+        self.usersLabel.titleLabel.font = [UIFont systemFontOfSize:13.0f];
         self.searchSelection = @"industry";
         self.searchBar.placeholder = @"Search industry";
     }
