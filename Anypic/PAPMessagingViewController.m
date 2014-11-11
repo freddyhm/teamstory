@@ -27,6 +27,7 @@
     float keyboardHeight;
     int _currentPage;
     BOOL isNewMessage;
+    float textViewHeight;
 }
 
 @end
@@ -44,7 +45,6 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
-    
     self.messageQuery = [[NSMutableArray alloc] init];
     [self registerForNotifications];
     
@@ -61,7 +61,6 @@
     [super viewWillDisappear:YES];
     self.tabBarController.tabBar.hidden = NO;
     self.tabBarController.tabBar.frame = tabBarSize;
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:nil setTargetRoom:nil];
 }
@@ -99,6 +98,7 @@
     self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
     self.customKeyboard.delegate = self;
     self.customKeyboard.messageTextView.userInteractionEnabled = YES;
+    textViewHeight = self.customKeyboard.view.bounds.size.height;
     [self.view addSubview:self.customKeyboard.view];
     
     // --------------------- Message body UITableView
@@ -170,7 +170,7 @@
 }
 
 -(void)dismissKeyboard {
-    [self.view endEditing:YES];
+    [self.customKeyboard.messageTextView resignFirstResponder];
 }
 
 - (void)notificationButtonAction:(id)sender {
@@ -280,7 +280,7 @@
     
     // ---------- Adjust TextView location
     [UIView animateWithDuration:keyboardDuration delay:0 options:animationOptionsWithCurve(animationCurve) animations:^{
-        self.customKeyboard.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (navBarHeight + messageTextViewHeight) - keyboardHeight, [UIScreen mainScreen].bounds.size.width, messageTextViewHeight);
+        self.customKeyboard.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (navBarHeight + textViewHeight) - keyboardHeight, [UIScreen mainScreen].bounds.size.width, textViewHeight);
         self.messageList.frame = CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - self.customKeyboard.view.bounds.size.height - navBarHeight - keyboardHeight);
         [self scrollToBottom:NO];
     } completion:^(BOOL finished) {
@@ -307,8 +307,8 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
     
     // ---------- Adjust TextView location
     [UIView animateWithDuration:keyboardDuration delay:0 options:animationOptionsWithCurve(animationCurve) animations:^{
-        float textViewHeight = self.customKeyboard.view.frame.size.height;
-        self.customKeyboard.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (navBarHeight + textViewHeight), [UIScreen mainScreen].bounds.size.width, messageTextViewHeight);
+        textViewHeight = self.customKeyboard.view.frame.size.height;
+        self.customKeyboard.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (navBarHeight + textViewHeight), [UIScreen mainScreen].bounds.size.width, textViewHeight);
         self.messageList.frame = CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - textViewHeight - navBarHeight);
     } completion:^(BOOL finished) {
         

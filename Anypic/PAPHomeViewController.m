@@ -186,8 +186,6 @@
         // reset flag
         self.isOpeningFeedback = NO;
     }
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -207,15 +205,8 @@
                                                object:nil];
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Home"}];
+    [self refreshBadge];
     
-    // fetch unread messages, show feedback screen
-    self.konotorCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
-    
-    if([self.konotorCount intValue] > 0){
-        [self.feedbackBtn.imageView setImage:[UIImage imageNamed:@"button-feedback-notify.png"]];
-    }else{
-        [self.feedbackBtn.imageView setImage:[UIImage imageNamed:@"button-feedback.png"]];
-    }
     
     // disabling notification bar for now.
     /*
@@ -256,7 +247,12 @@
 }
 
 - (void) updateMessageButton:(NSNotification *)notification {
+    [self refreshBadge];
+}
+
+- (void) refreshBadge {
     [[PFUser currentUser] refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        NSLog(@"messaging badge value after: %d", [[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue]);
         if ([[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue] > 0) {
             [self.feedbackBtn setTitle:[[[PFUser currentUser] objectForKey:@"messagingBadge"] stringValue] forState:UIControlStateNormal];
             self.feedbackBtn.frame = CGRectMake(275, 1, self.feedbackImgBadge.size.width, self.feedbackImgBadge.size.height);

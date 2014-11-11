@@ -10,7 +10,7 @@
 #import "SVProgressHUD.h"
 
 #define headerViewHeight 64.0f
-#define querySelectionViewheight 40.0f
+#define querySelectionViewheight 37.5f
 
 @interface PAPMessagingSeachUsersViewController () {
     BOOL isSearchString;
@@ -80,7 +80,6 @@
                     }
                 }
             }
-            
             [self.followerTV reloadData];
         } else {
             NSLog(@"Query Calling Error %@", error);
@@ -112,7 +111,6 @@
             } else if ([self.querySelectionString isEqualToString:@"Everyone"]) {
                 [self.followerTV reloadData];
             }
-            NSLog(@"%lu", (unsigned long)[self.userList count]);
         } else {
             NSLog(@"User query error: %@", error);
         }
@@ -149,8 +147,16 @@
     self.searchBar.placeholder = @"Search by following users";
     self.searchBar.barTintColor = [UIColor colorWithWhite:0.95f alpha:1.0f];
     self.searchBar.layer.borderColor = [UIColor colorWithWhite:0.5f alpha:1.0f].CGColor;
-    self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
     [self.view addSubview:self.searchBar];
+    
+    CGRect rect = self.searchBar.frame;
+    UIView *topLineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, rect.size.width, 1)];
+    topLineView.backgroundColor = [UIColor colorWithWhite:0.9f alpha:1.0f];
+    [self.searchBar addSubview:topLineView];
+    
+    UIView *bottomLineView = [[UIView alloc]initWithFrame:CGRectMake(0, rect.size.height - 1, rect.size.width, 1)];
+    bottomLineView.backgroundColor = [UIColor colorWithWhite:0.9f alpha:1.0f];
+    [self.searchBar addSubview:bottomLineView];
     
     self.followerTV = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, headerViewHeight + querySelectionViewheight + self.searchBar.bounds.size.height, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.height - headerViewHeight - querySelectionViewheight - self.searchBar.bounds.size.height)];
     self.followerTV.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -166,25 +172,31 @@
     [self.view addSubview:self.querySelectionView];
     
     self.querySelectionOptionViewBG = [[UIView alloc] initWithFrame:CGRectMake(5.0f, 5.0f, self.querySelectionView.bounds.size.width - 10.0f, self.querySelectionView.bounds.size.height - 10.0f)];
-    self.querySelectionOptionViewBG.layer.cornerRadius = 5.0f;
+    self.querySelectionOptionViewBG.layer.cornerRadius = 3.0f;
     self.querySelectionOptionViewBG.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f];
     [self.querySelectionView addSubview:self.querySelectionOptionViewBG];
     
     self.followerButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.querySelectionOptionViewBG.bounds.size.width / 2, self.querySelectionOptionViewBG.bounds.size.height)];
     [self.followerButton addTarget:self action:@selector(followerButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.followerButton setTitle:@"Follower" forState:UIControlStateNormal];
-    [self.followerButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    self.followerButton.titleLabel.font = [UIFont boldSystemFontOfSize:13.0f];
+    [self.followerButton setTitleColor:[UIColor colorWithWhite:0.4f alpha:1.0f] forState:UIControlStateNormal];
 
     
     self.allUserButton = [[UIButton alloc] initWithFrame:CGRectMake(self.querySelectionOptionViewBG.bounds.size.width / 2, 0.0f, self.querySelectionOptionViewBG.bounds.size.width / 2, self.querySelectionOptionViewBG.bounds.size.height)];
     [self.allUserButton addTarget:self action:@selector(allUserButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.allUserButton setTitle:@"Everyone" forState:UIControlStateNormal];
-    [self.allUserButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    self.allUserButton.titleLabel.font = [UIFont boldSystemFontOfSize:13.0f];
+    [self.allUserButton setTitleColor:[UIColor colorWithWhite:0.4f alpha:1.0f] forState:UIControlStateNormal];
 
     
     self.querySelectionMovementView = [[UIView alloc] initWithFrame:self.followerButton.frame];
     self.querySelectionMovementView.backgroundColor = [UIColor whiteColor];
+    self.querySelectionMovementView.layer.borderWidth = 2.0f;
     self.querySelectionMovementView.layer.cornerRadius = 5.0f;
+    self.querySelectionMovementView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
+    self.querySelectionMovementView.clipsToBounds = YES;
+    
     [self.querySelectionOptionViewBG addSubview:self.querySelectionMovementView];
     [self.querySelectionOptionViewBG addSubview:self.allUserButton];
     [self.querySelectionOptionViewBG addSubview:self.followerButton];

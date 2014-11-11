@@ -7,6 +7,7 @@
 //
 
 #import "KonotorUtility.h"
+#import "AppDelegate.h"
 
 static UILabel* toastView=nil;
 static UITapGestureRecognizer* tapRecognizer=nil;
@@ -58,13 +59,15 @@ static NSTimer* timer=nil;
     toastView.center=centerpoint;
     toastView.frame=CGRectIntegral(toastView.frame);
     
-    if(messageID==nil)
+    if(messageID == nil) {
         tapRecognizer=[[UITapGestureRecognizer alloc] initWithTarget:[KonotorUtility class] action:@selector(dismissToast:)];
-    else if ([messageID isEqualToString:@"messaging"]) {
-        
     }
-    else
+    else if ([messageID isEqualToString:@"messaging"]) {
+        tapRecognizer=[[UITapGestureRecognizer alloc] initWithTarget:[KonotorUtility class] action:@selector(navigateToMessaging:)];
+    }
+    else {
         tapRecognizer=[[UITapGestureRecognizer alloc] initWithTarget:[KonotorUtility class] action:@selector(showFeedback:)];
+    }
     [toastView addGestureRecognizer:tapRecognizer];
     [[[[UIApplication sharedApplication] delegate] window] addSubview:toastView];
     
@@ -89,6 +92,12 @@ static NSTimer* timer=nil;
 {
     [KonotorUtility dismissToast];
     [KonotorFeedbackScreen showFeedbackScreen];
+}
+
++(void) navigateToMessaging: (UIGestureRecognizer*) gestureRecognizer
+{
+    [KonotorUtility dismissToast];
+    [(AppDelegate *)[[UIApplication sharedApplication] delegate] navigateToCurrentMessagingRoom];
 }
 
 +(void) updateBadgeLabel:(UILabel*) badgeLabel

@@ -34,6 +34,7 @@
 @interface AppDelegate () {
     NSMutableData *_data;
     BOOL firstLaunch;
+    BOOL navigation;
 }
 
 
@@ -46,6 +47,8 @@
 @property (nonatomic, strong) PhotoTimelineViewController *photoTimelineViewController;
 @property (nonatomic, strong) PAPMessageListCell *messageListCell;
 @property (nonatomic, strong) PAPMessagingViewController *messagingViewController;
+
+@property (nonatomic, strong) NSDictionary *currentUserInfo;
 
 @property (nonatomic, strong) MBProgressHUD *hud;
 
@@ -255,7 +258,9 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
         }
         
     } else if ([notificationType isEqualToString:@"m"]) {
-        [KonotorUtility showToastWithString:@"New message received" forMessageID:@"all"];
+        self.currentUserInfo = userInfo;
+        
+        [KonotorUtility showToastWithString:@"New message received" forMessageID:@"messaging"];
         
         NSNumber *currentMessageBadgeNumber;
         NSNumber *newMessageBadgeNumber;
@@ -700,8 +705,6 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
         if ([notificationType isEqualToString:@"m"]) {
             self.messageTargetUser = nil;
             self.chatRoom = nil;
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageButton" object:nil];
-            [KonotorUtility showToastWithString:@"New message received" forMessageID:@"all"];
             
             [self navigateToChatRoomWithNotificationWithTargetUser:toUserId setRoomInfo:messageRoomId];
             return;
@@ -751,6 +754,8 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 }
 
 - (void) navigateToChatRoomWithNotificationWithTargetUser:(NSString *)targetUserId setRoomInfo:(NSString *)roomInfoId {
+    navigation = NO;
+    
     PFQuery *targetUser = [PFUser query];
     targetUser.cachePolicy = kPFCachePolicyCacheElseNetwork;
     [targetUser whereKey:@"objectId" equalTo:targetUserId];
@@ -769,7 +774,8 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 }
 
 -(void) navigateToChatRoom {
-    if (self.messageTargetUser != nil && self.chatRoom != nil) {
+    if (self.messageTargetUser != nil && self.chatRoom != nil && navigation == NO) {
+        navigation = YES;
         UINavigationController *homeNavigationController = self.tabBarController.viewControllers[PAPHomeTabBarItemIndex];
         self.tabBarController.selectedViewController = homeNavigationController;
         NSString *userNumber;
@@ -1057,6 +1063,14 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
             NSLog(@"The Facebook token was invalidated. Logging out.");
             [self logOut];
         }
+    }
+}
+
+- (void)navigateToCurrentMessagingRoom {
+    if (self.currentUserInfo != NULL) {
+        NSString *toUserId = [self.currentUserInfo objectForKey:kPAPPushPayloadToUserObjectIdKey];
+        NSString *messageRoomId = [self.currentUserInfo objectForKey:kPAPPushPayloadChatRoomObjectIdKey];
+        [self navigateToChatRoomWithNotificationWithTargetUser:toUserId setRoomInfo:messageRoomId];
     }
 }
 

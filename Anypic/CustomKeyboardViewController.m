@@ -88,9 +88,7 @@
     
     if (textViewSize.size.height > 20.0f) {
         self.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (64.0f + textViewSize.size.height + self.keyboardHeight + 30.0f), [UIScreen mainScreen].bounds.size.width, textViewSize.size.height + 30.0f);
-        
     } else {
-        
         self.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (64.0f + messageTextViewHeight + self.keyboardHeight), [UIScreen mainScreen].bounds.size.width, messageTextViewHeight);
     }
     

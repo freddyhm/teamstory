@@ -34,6 +34,7 @@
 - (void)facebookRequestDidLoad:(id)result;
 - (void)facebookRequestDidFailWithError:(NSError *)error;
 
+- (void)navigateToCurrentMessagingRoom;
 
 
 @end
