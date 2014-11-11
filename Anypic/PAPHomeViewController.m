@@ -186,8 +186,6 @@
         // reset flag
         self.isOpeningFeedback = NO;
     }
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -257,6 +255,7 @@
 
 - (void) updateMessageButton:(NSNotification *)notification {
     [[PFUser currentUser] refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+            NSLog(@"messaging badge value after: %d", [[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue]);
         if ([[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue] > 0) {
             [self.feedbackBtn setTitle:[[[PFUser currentUser] objectForKey:@"messagingBadge"] stringValue] forState:UIControlStateNormal];
             self.feedbackBtn.frame = CGRectMake(275, 1, self.feedbackImgBadge.size.width, self.feedbackImgBadge.size.height);
