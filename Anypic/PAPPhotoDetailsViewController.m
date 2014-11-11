@@ -107,7 +107,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self.postDetails setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     self.postDetails.delegate = self;
     self.postDetails.dataSource = self;
-    self.postDetails.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - 113);
+    self.postDetails.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height + 48);
     [self.view addSubview:self.postDetails];
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
@@ -217,14 +217,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     [self loadObjects];
     
-    
     self.tabBarController.tabBar.frame = CGRectZero;
-    
     self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
+    [self.customKeyboard.view setFrame:CGRectMake(self.customKeyboard.view.frame.origin.x, self.customKeyboard.view.frame.origin.y + 65, self.customKeyboard.view.frame.size.width, self.customKeyboard.view.frame.size.height)];
     self.customKeyboard.delegate = self;
-    [self.view addSubview:self.customKeyboard.view];
-    [self.view bringSubviewToFront:self.customKeyboard.view];
     
+    [self.view addSubview:self.customKeyboard.view];
 }
 
 

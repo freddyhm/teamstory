@@ -18,7 +18,6 @@
 #import "MBProgressHUD.h"
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
-#import "TestViewController.h"
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
@@ -200,7 +199,7 @@ enum ActionSheetTags {
     PFObject *photo = [self.objects objectAtIndex:sender.tag];
     
     if (photo) {
-       // PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
+        PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
         
         // mixpanel analytics 
         NSString *type = [photo objectForKey:@"type"] != nil ? [photo objectForKey:@"type"] : @"";
@@ -208,9 +207,7 @@ enum ActionSheetTags {
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Viewed Post", @"Post Type":type}];
         
-        TestViewController *test = [[TestViewController alloc]init];
-        
-        [self.navigationController pushViewController:test animated:YES];
+        [self.navigationController pushViewController:photoDetailsVC animated:YES];
     }
 }
 

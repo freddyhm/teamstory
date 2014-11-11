@@ -266,7 +266,6 @@
 		D542D8C9196A721B00A0384F /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D542D8C8196A721B00A0384F /* AssetsLibrary.framework */; };
 		D54E0FF819A7B75C000B1F9D /* PAPwebviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D54E0FF719A7B75C000B1F9D /* PAPwebviewViewController.m */; };
 		D54E0FFB19A7B76B000B1F9D /* OpenInChromeController.m in Sources */ = {isa = PBXBuildFile; fileRef = D54E0FF919A7B76B000B1F9D /* OpenInChromeController.m */; };
-		D5504E591A0DA94900620EFE /* TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5504E581A0DA94900620EFE /* TestViewController.m */; };
 		D5504E731A0DAD5000620EFE /* CustomKeyboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5504E711A0DAD5000620EFE /* CustomKeyboardViewController.m */; };
 		D5504E741A0DAD5000620EFE /* CustomKeyboardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5504E721A0DAD5000620EFE /* CustomKeyboardViewController.xib */; };
 		D552B0E619C7D3EB009F2862 /* arrows_left_white.png in Resources */ = {isa = PBXBuildFile; fileRef = D552B0DE19C7D3EB009F2862 /* arrows_left_white.png */; };
@@ -791,8 +790,6 @@
 		D54E0FF919A7B76B000B1F9D /* OpenInChromeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenInChromeController.m; sourceTree = SOURCE_ROOT; };
 		D54E0FFA19A7B76B000B1F9D /* OpenInChromeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenInChromeController.h; sourceTree = SOURCE_ROOT; };
 		D54E0FFC19A7B7AF000B1F9D /* PAPwebviewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PAPwebviewViewController.h; sourceTree = SOURCE_ROOT; };
-		D5504E571A0DA94900620EFE /* TestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestViewController.h; sourceTree = SOURCE_ROOT; };
-		D5504E581A0DA94900620EFE /* TestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestViewController.m; sourceTree = SOURCE_ROOT; };
 		D5504E701A0DAD5000620EFE /* CustomKeyboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomKeyboardViewController.h; sourceTree = SOURCE_ROOT; };
 		D5504E711A0DAD5000620EFE /* CustomKeyboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomKeyboardViewController.m; sourceTree = SOURCE_ROOT; };
 		D5504E721A0DAD5000620EFE /* CustomKeyboardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomKeyboardViewController.xib; sourceTree = SOURCE_ROOT; };
@@ -1453,8 +1450,6 @@
 				C4F102A6156C57620061BC3E /* PAPPhotoDetailsFooterView.m */,
 				C4F102D0156C57FD0061BC3E /* PAPPhotoDetailsViewController.h */,
 				C4F102D1156C57FD0061BC3E /* PAPPhotoDetailsViewController.m */,
-				D5504E571A0DA94900620EFE /* TestViewController.h */,
-				D5504E581A0DA94900620EFE /* TestViewController.m */,
 			);
 			name = Detail;
 			sourceTree = "<group>";
@@ -2451,7 +2446,6 @@
 				C4F102A1156C574A0061BC3E /* PAPProfileImageView.m in Sources */,
 				D56D466519884C33001FAA76 /* PhotoTimelineViewController.m in Sources */,
 				D5856FB219F87E2600D0086F /* KonotorMediaUIButton.m in Sources */,
-				D5504E591A0DA94900620EFE /* TestViewController.m in Sources */,
 				46DC23C219AA8C2200E8FCDF /* PAPdiscoverCell.m in Sources */,
 				C4F102A4156C57560061BC3E /* PAPPhotoHeaderView.m in Sources */,
 				46076EE7193E9A6000A7B317 /* PAPNotificationViewController.m in Sources */,
