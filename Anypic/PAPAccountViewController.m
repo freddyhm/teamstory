@@ -498,18 +498,10 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 
                 [self.followerCountLabel setText:@"0"];
                 
-                // filter out zombie pointers (manually deleted users)
-                PFQuery *noZombieQuery = [PFUser query];
-                [noZombieQuery whereKeyExists:@"objectId"];
-                [noZombieQuery setLimit:1000];
-                
                 PFQuery *queryFollowerCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
                 [queryFollowerCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
                 [queryFollowerCount whereKey:kPAPActivityToUserKey equalTo:self.user];
-                [queryFollowerCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
-                
-                // get followers for current user
-                [queryFollowerCount whereKey:kPAPActivityFromUserKey matchesQuery:noZombieQuery];
+                [queryFollowerCount setCachePolicy:kPFCachePolicyNetworkElseCache];
                 
                 [queryFollowerCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
                     if (!error) {
@@ -526,11 +518,9 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 PFQuery *queryFollowingCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
                 [queryFollowingCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
                 [queryFollowingCount whereKey:kPAPActivityFromUserKey equalTo:self.user];
-                [queryFollowingCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
+                [queryFollowingCount setCachePolicy:kPFCachePolicyNetworkElseCache];
                 
-                // get followers for current user
-                [queryFollowingCount whereKey:kPAPActivityToUserKey matchesQuery:noZombieQuery];
-                
+                // get followers for current user                
                 [queryFollowingCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
                     if (!error) {
                         [self.followingCountLabel setText:[NSString stringWithFormat:@"%d", number]];
@@ -949,11 +939,6 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 
 -(void)refreshFollowerCount:(void (^)(BOOL))completed{
     
-    // filter out zombie pointers (manually deleted users)
-    PFQuery *noZombieQuery = [PFUser query];
-    [noZombieQuery whereKeyExists:@"objectId"];
-    [noZombieQuery setLimit:1000];
-    
     // return completed when both queries have finished
     self.userStatUpdateCount = 0;
     
@@ -961,9 +946,8 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     PFQuery *queryFollowerCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
     [queryFollowerCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
     [queryFollowerCount whereKey:kPAPActivityToUserKey equalTo:self.user];
-    [queryFollowerCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
-    [queryFollowerCount whereKey:kPAPActivityFromUserKey matchesQuery:noZombieQuery];
-    
+    [queryFollowerCount setCachePolicy:kPFCachePolicyNetworkElseCache];
+ 
     [queryFollowerCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
         if (!error) {
             
@@ -986,9 +970,8 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     PFQuery *queryFollowingCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
     [queryFollowingCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
     [queryFollowingCount whereKey:kPAPActivityFromUserKey equalTo:self.user];
-    [queryFollowingCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
-    [queryFollowingCount whereKey:kPAPActivityToUserKey matchesQuery:noZombieQuery];
-    
+    [queryFollowingCount setCachePolicy:kPFCachePolicyNetworkElseCache];
+  
     [queryFollowingCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
         if (!error) {
             

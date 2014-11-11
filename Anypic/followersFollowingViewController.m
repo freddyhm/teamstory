@@ -114,29 +114,20 @@
     PFQuery *query = [PFQuery queryWithClassName:kPAPActivityClassKey];
     [query whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
     
-    // filter out zombie pointers (manually deleted users)
-    PFQuery *noZombieQuery = [PFUser query];
-    [noZombieQuery whereKeyExists:@"objectId"];
-    [noZombieQuery setLimit:1000];
-    
     if([self.type isEqualToString:@"following"]){
         
         // get following for current user
         [query whereKey:kPAPActivityFromUserKey equalTo:self.selectedUser];
         [query includeKey:kPAPActivityToUserKey];
         
-        [query whereKey:kPAPActivityToUserKey matchesQuery:noZombieQuery];
-        
     }else if([self.type isEqualToString:@"followers"]){
         
         // get followers for current user
         [query whereKey:kPAPActivityToUserKey equalTo:self.selectedUser];
         [query includeKey:kPAPActivityFromUserKey];
-        
-        [query whereKey:kPAPActivityFromUserKey matchesQuery:noZombieQuery];
     }
     
-    query.cachePolicy = kPFCachePolicyNetworkOnly;
+    query.cachePolicy = kPFCachePolicyNetworkElseCache;
     [query orderByDescending:@"createdAt"];
     
     return query;
