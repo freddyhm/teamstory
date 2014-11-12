@@ -54,6 +54,7 @@
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:@"messagingScreen" setTargetRoom:self.targetChatRoom];
     
     [self loadMessageQuery];
+    [self updateRoomBadge];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -143,6 +144,37 @@
 }
 
 # pragma - ()
+
+- (void) updateRoomBadge {
+    NSNumber *offSetBadgeNumber;
+    
+    if ([[[self.targetChatRoom objectForKey:@"userOne"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+        [self.targetChatRoom setObject:[NSNumber numberWithInt:0] forKey:@"userOneBadge"];
+        offSetBadgeNumber = [self.targetChatRoom objectForKey:@"userOneBadge"];
+    } else {
+        [self.targetChatRoom setObject:[NSNumber numberWithInt:0] forKey:@"userTwoBadge"];
+        offSetBadgeNumber = [self.targetChatRoom objectForKey:@"userTwoBadge"];
+    }
+    
+    [self.targetChatRoom saveInBackground];
+    
+    if ([[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue] - [offSetBadgeNumber intValue] < 0 ) {
+        [[PFUser currentUser] setObject:[NSNumber numberWithInt:0] forKey:@"messagingBadge"];
+    } else {
+        [[PFUser currentUser] setObject:[NSNumber numberWithInt:[[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue] - [offSetBadgeNumber intValue]] forKey:@"messagingBadge"];
+    }
+    
+    [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageButton" object:nil];
+    }];
+    
+    if ([PFInstallation currentInstallation].badge - [offSetBadgeNumber intValue] < 0) {
+        [[PFInstallation currentInstallation] setBadge:0];
+    } else {
+        [[PFInstallation currentInstallation] setBadge:[PFInstallation currentInstallation].badge - [offSetBadgeNumber intValue]];
+    }
+    [[PFInstallation currentInstallation] saveInBackground];
+}
 
 - (void) setTableViewHeight {
     self.messageList.frame = CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - self.customKeyboard.view.bounds.size.height - navBarHeight - keyboardHeight);
@@ -262,6 +294,8 @@
                                                  name:UIKeyboardWillHideNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTableViewNotification:) name:@"updateTableView" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateRoomBadge) name:@"updateMessageListView" object:nil];
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {

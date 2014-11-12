@@ -279,6 +279,9 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
                 
                 if ([self.userView isEqual:@"messagingScreen"]) {
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"updateTableView" object:nil];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageListView" object:nil];
+                } else if ([self.userView isEqualToString:@"messagingListViewScreen"]){
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"updateListViewQuery" object:nil];
                 } else {
                     [KonotorUtility showToastWithString:@"New message received" forMessageID:@"messaging"];
                 }
