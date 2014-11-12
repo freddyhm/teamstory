@@ -69,7 +69,7 @@
 
 - (void)setKeyboardPosition:(CGFloat)kbPos{
     // set the view frame
-    [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height + kbPos)];
+    [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y + kbPos, self.view.frame.size.width, self.view.frame.size.height)];
 }
 
 #pragma mark - Delegate Methods

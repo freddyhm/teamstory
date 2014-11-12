@@ -100,6 +100,22 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 #pragma mark - UIViewController
 
+- (void)viewWillAppear:(BOOL)animated{
+    
+    self.tabBarController.tabBar.frame = CGRectZero;
+    self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
+    self.customKeyboard.delegate = self;
+    [self.customKeyboard setKeyboardPosition:64];
+    [self.customKeyboard.sendButton setTitle:@"Post" forState:UIControlStateNormal];
+    self.customKeyboard.view.layer.zPosition = 100;
+    [self.view addSubview:self.customKeyboard.view];
+    
+    if([self.source isEqualToString:@"commentButton"]){
+        [self.customKeyboard.messageTextView becomeFirstResponder];
+    }
+}
+
+
 - (void)viewDidLoad {
     
     [super viewDidLoad];
@@ -220,21 +236,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     [self loadObjects];
     
-    
-    self.tabBarController.tabBar.frame = CGRectZero;
-    self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
-    self.customKeyboard.delegate = self;
-    //    [self.customKeyboard setKeyboardPosition:-64];
-    [self.customKeyboard.sendButton.titleLabel setText:@"Post"];
-    self.customKeyboard.view.layer.zPosition = 100;
-    [self.view addSubview:self.customKeyboard.view];
-    
-    
-    if([self.source isEqualToString:@"commentButton"]){
-        [self.customKeyboard.messageTextView becomeFirstResponder];
-    }
 }
-
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -308,7 +310,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [self refreshCommentLikes:loadedObjects pullFromServer:newLikes block:^(BOOL succeeded) {
             if(succeeded){
                 // move to last comments when notification relates to a new comment
-                if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] || [self.source isEqual:@"activityComment"])){
+                if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] || [self.source isEqual:@"activityComment"] || [self.source isEqual:@"commentButton"])){
                     [self.postDetails setContentOffset:CGPointMake(0, self.postDetails.contentSize.height - self.postDetails.bounds.size.height + 44)];
                 }
             }
@@ -413,6 +415,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
 }
 
+
 - (void)keyboardWillShow:(NSNotification*)note {
     
     // Scroll the view to the comment text box
@@ -438,7 +441,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
      */
     
     [self.customKeyboard setKeyboardHeight:kbSize.height - 64];
-   // [self.customKeyboard setKeyboardPosition:kbSize.height - 64];
+    [self.customKeyboard setKeyboardPosition:-kbSize.height];
     
     //[self.postDetails setContentOffset:CGPointMake(self.postDetails.contentOffset.x, self.postDetails.contentOffset.y + kbSize.height + self.customKeyboard.view.frame.size.height)];
     
@@ -456,8 +459,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     NSDictionary* info = [notification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     
-    [self.customKeyboard setKeyboardHeight:kbSize.height];
-  //  [self.customKeyboard setKeyboardPosition:-64];
+    [self.customKeyboard setKeyboardHeight:-(kbSize.height - 64)];
+    [self.customKeyboard setKeyboardPosition:kbSize.height];
     
     [self.postDetails setContentSize:CGSizeMake(self.postDetails.frame.size.width, self.postDetails.contentSize.height - kbSize.height)];
 }
