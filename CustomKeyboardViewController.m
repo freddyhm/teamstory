@@ -38,21 +38,23 @@
     [self.view setFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (64.0f + messageTextViewHeight), [UIScreen mainScreen].bounds.size.width, messageTextViewHeight)];
     
     // set text view
-    [self.messageTextView setFrame:CGRectMake(5.0f, 5.0f, self.view.bounds.size.width - 10.0f, self.view.bounds.size.height - 10.0f)];
+    [self.messageTextView setFrame:CGRectMake(5.0f, 5.0f, self.view.bounds.size.width - (10.0f + sendButtonWidth), self.view.bounds.size.height - 10.0f)];
     
     // set send button
-    [self.sendButton setFrame:CGRectMake(self.view.bounds.size.width - sendButtonWidth, 0.0f, sendButtonWidth, sendButtonHeight)];
-    self.sendButton.hidden = YES;
+    self.sendButton.hidden = NO;
     [self.sendButton addTarget:self action:@selector(sendButtonAction:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)changeSendButtonState:(BOOL)state {
     if (state) {
+        UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
         self.sendButton.alpha = 1.0f;
         self.sendButton.enabled = YES;
+        [self.sendButton setTitleColor:teamStoryColor forState:UIControlStateNormal];
     } else {
         self.sendButton.alpha = 0.7f;
         self.sendButton.enabled = NO;
+        [self.sendButton setTitleColor:[UIColor colorWithWhite:0.7 alpha:1.0] forState:UIControlStateNormal];
     }
 }
 
@@ -65,11 +67,10 @@
     self.keyboardHeight = kbHeight;
 }
 
-- (void)setKeyboardPosition:(CGFloat)kbHeight{
-    [self.view setFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (64.0f + messageTextViewHeight) - kbHeight, [UIScreen mainScreen].bounds.size.width, messageTextViewHeight)];
+- (void)setKeyboardPosition:(CGFloat)kbPos{
+    // set the view frame
+    [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height + kbPos)];
 }
-
-
 
 #pragma mark - Delegate Methods
 - (void)sendButtonAction:(id)sender{
@@ -86,22 +87,13 @@
 
 #pragma mark - TextView Methods
 
--(void)textViewDidBeginEditing:(UITextView *)textView {
-    [UIView animateWithDuration:0.2f animations:^{
-        self.messageTextView.frame = CGRectMake(5.0f, 5.0f, self.view.bounds.size.width - (10.0f + sendButtonWidth), self.view.bounds.size.height - 10.0f);
-        self.sendButton.hidden = NO;
-    }];
-}
-
 -(void)textViewDidChange:(UITextView *)textView {
     NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:textSize]};
     CGRect textViewSize = [textView.text boundingRectWithSize:CGSizeMake(self.messageTextView.bounds.size.width - 10.0f, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
     
     if (textViewSize.size.height > 20.0f) {
         self.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (64.0f + textViewSize.size.height + self.keyboardHeight + 30.0f), [UIScreen mainScreen].bounds.size.width, textViewSize.size.height + 30.0f);
-        
     } else {
-        
         self.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (64.0f + messageTextViewHeight + self.keyboardHeight), [UIScreen mainScreen].bounds.size.width, messageTextViewHeight);
     }
     

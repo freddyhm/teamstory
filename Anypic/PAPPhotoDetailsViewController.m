@@ -197,6 +197,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     [self.view addGestureRecognizer:tapOutside];
     
+
+
     
     // set comment block view for spinner
     float tableCommentVerticalPos = self.postDetails.tableHeaderView.frame.origin.y + self.postDetails.tableHeaderView.frame.size.height;
@@ -207,8 +209,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     // set spinner
     self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.postDetails.frame.size.width/2 - 50,0,100,100)];
     self.spinner.activityIndicatorViewStyle =UIActivityIndicatorViewStyleWhiteLarge;
-    self.spinner.color = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
-    
+    self.spinner.color = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];    
     [self.hideCommentsView addSubview:self.spinner];
     
     self.spinner.hidesWhenStopped = YES;
@@ -219,11 +220,19 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     [self loadObjects];
     
+    
     self.tabBarController.tabBar.frame = CGRectZero;
     self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
     self.customKeyboard.delegate = self;
-    [self.customKeyboard setKeyboardPosition:-64];
+    //    [self.customKeyboard setKeyboardPosition:-64];
+    [self.customKeyboard.sendButton.titleLabel setText:@"Post"];
+    self.customKeyboard.view.layer.zPosition = 100;
     [self.view addSubview:self.customKeyboard.view];
+    
+    
+    if([self.source isEqualToString:@"commentButton"]){
+        [self.customKeyboard.messageTextView becomeFirstResponder];
+    }
 }
 
 
@@ -429,7 +438,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
      */
     
     [self.customKeyboard setKeyboardHeight:kbSize.height - 64];
-    [self.customKeyboard setKeyboardPosition:kbSize.height - 64];
+   // [self.customKeyboard setKeyboardPosition:kbSize.height - 64];
     
     //[self.postDetails setContentOffset:CGPointMake(self.postDetails.contentOffset.x, self.postDetails.contentOffset.y + kbSize.height + self.customKeyboard.view.frame.size.height)];
     
@@ -448,7 +457,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
     
     [self.customKeyboard setKeyboardHeight:kbSize.height];
-    [self.customKeyboard setKeyboardPosition:-64];
+  //  [self.customKeyboard setKeyboardPosition:-64];
     
     [self.postDetails setContentSize:CGSizeMake(self.postDetails.frame.size.width, self.postDetails.contentSize.height - kbSize.height)];
 }

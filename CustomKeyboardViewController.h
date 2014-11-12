@@ -19,7 +19,9 @@
 
 - (void)changeSendButtonState:(BOOL)state;
 - (void)setCustomKeyboardHeight:(CGFloat)kbHeight;
-- (void)setKeyboardPosition:(CGFloat)kbHeight;
+- (void)textViewDidChange:(UITextView *)textView;
+- (void)setKeyboardPosition:(CGFloat)kbPos;
+
 @end
 
 @protocol CustomKeyboardViewControllerDelegate <NSObject>

@@ -266,8 +266,6 @@
 		D542D8C9196A721B00A0384F /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D542D8C8196A721B00A0384F /* AssetsLibrary.framework */; };
 		D54E0FF819A7B75C000B1F9D /* PAPwebviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D54E0FF719A7B75C000B1F9D /* PAPwebviewViewController.m */; };
 		D54E0FFB19A7B76B000B1F9D /* OpenInChromeController.m in Sources */ = {isa = PBXBuildFile; fileRef = D54E0FF919A7B76B000B1F9D /* OpenInChromeController.m */; };
-		D5504E731A0DAD5000620EFE /* CustomKeyboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5504E711A0DAD5000620EFE /* CustomKeyboardViewController.m */; };
-		D5504E741A0DAD5000620EFE /* CustomKeyboardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5504E721A0DAD5000620EFE /* CustomKeyboardViewController.xib */; };
 		D552B0E619C7D3EB009F2862 /* arrows_left_white.png in Resources */ = {isa = PBXBuildFile; fileRef = D552B0DE19C7D3EB009F2862 /* arrows_left_white.png */; };
 		D552B0E719C7D3EB009F2862 /* arrows_left_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D552B0DF19C7D3EB009F2862 /* arrows_left_white@2x.png */; };
 		D552B0E819C7D3EB009F2862 /* arrows_left.png in Resources */ = {isa = PBXBuildFile; fileRef = D552B0E019C7D3EB009F2862 /* arrows_left.png */; };
@@ -375,6 +373,8 @@
 		D59B998E18C5A902002D6EFE /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D59B998B18C5A902002D6EFE /* Default-568h@2x.png */; };
 		D5A5F52018D2C3CD000BB243 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A5F51F18D2C3CD000BB243 /* Parse.framework */; };
 		D5A9EE2F199C5F8F003513C3 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4217BC11552234E00CD3A47 /* ImageIO.framework */; };
+		D5B1E6F61A1417130096D5EC /* CustomKeyboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5B1E6F41A1417130096D5EC /* CustomKeyboardViewController.m */; };
+		D5B1E6F71A1417130096D5EC /* CustomKeyboardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5B1E6F51A1417130096D5EC /* CustomKeyboardViewController.xib */; };
 		D5B5D0E31995316400916108 /* PostFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5B5D0E11995316400916108 /* PostFooterView.m */; };
 		D5BFDED518CC84A5004FEC42 /* la.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDEC718CC84A4004FEC42 /* la.png */; };
 		D5BFDED618CC84A5004FEC42 /* la@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDEC818CC84A4004FEC42 /* la@2x.png */; };
@@ -790,9 +790,6 @@
 		D54E0FF919A7B76B000B1F9D /* OpenInChromeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenInChromeController.m; sourceTree = SOURCE_ROOT; };
 		D54E0FFA19A7B76B000B1F9D /* OpenInChromeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenInChromeController.h; sourceTree = SOURCE_ROOT; };
 		D54E0FFC19A7B7AF000B1F9D /* PAPwebviewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PAPwebviewViewController.h; sourceTree = SOURCE_ROOT; };
-		D5504E701A0DAD5000620EFE /* CustomKeyboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomKeyboardViewController.h; sourceTree = SOURCE_ROOT; };
-		D5504E711A0DAD5000620EFE /* CustomKeyboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomKeyboardViewController.m; sourceTree = SOURCE_ROOT; };
-		D5504E721A0DAD5000620EFE /* CustomKeyboardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomKeyboardViewController.xib; sourceTree = SOURCE_ROOT; };
 		D552B0DE19C7D3EB009F2862 /* arrows_left_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrows_left_white.png; sourceTree = "<group>"; };
 		D552B0DF19C7D3EB009F2862 /* arrows_left_white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrows_left_white@2x.png"; sourceTree = "<group>"; };
 		D552B0E019C7D3EB009F2862 /* arrows_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrows_left.png; sourceTree = "<group>"; };
@@ -918,6 +915,9 @@
 		D59B997D18C59836002D6EFE /* AppIcon80x80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon80x80.png; sourceTree = "<group>"; };
 		D59B998B18C5A902002D6EFE /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		D5A5F51F18D2C3CD000BB243 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = External/Parse.framework; sourceTree = "<group>"; };
+		D5B1E6F31A1417130096D5EC /* CustomKeyboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomKeyboardViewController.h; sourceTree = SOURCE_ROOT; };
+		D5B1E6F41A1417130096D5EC /* CustomKeyboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomKeyboardViewController.m; sourceTree = SOURCE_ROOT; };
+		D5B1E6F51A1417130096D5EC /* CustomKeyboardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomKeyboardViewController.xib; sourceTree = SOURCE_ROOT; };
 		D5B5D0E11995316400916108 /* PostFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostFooterView.m; sourceTree = SOURCE_ROOT; };
 		D5B5D0E21995316400916108 /* PostFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostFooterView.h; sourceTree = SOURCE_ROOT; };
 		D5BFDEC718CC84A4004FEC42 /* la.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = la.png; sourceTree = "<group>"; };
@@ -1725,9 +1725,9 @@
 		D5504E751A0DAD6200620EFE /* Keyboard */ = {
 			isa = PBXGroup;
 			children = (
-				D5504E701A0DAD5000620EFE /* CustomKeyboardViewController.h */,
-				D5504E711A0DAD5000620EFE /* CustomKeyboardViewController.m */,
-				D5504E721A0DAD5000620EFE /* CustomKeyboardViewController.xib */,
+				D5B1E6F31A1417130096D5EC /* CustomKeyboardViewController.h */,
+				D5B1E6F41A1417130096D5EC /* CustomKeyboardViewController.m */,
+				D5B1E6F51A1417130096D5EC /* CustomKeyboardViewController.xib */,
 			);
 			name = Keyboard;
 			sourceTree = "<group>";
@@ -2061,7 +2061,7 @@
 			files = (
 				46ABD74E18B147FC008F5AAB /* button_cancel_selected.png in Resources */,
 				D552B0ED19C7D3EB009F2862 /* arrows_right@2x.png in Resources */,
-				D5504E741A0DAD5000620EFE /* CustomKeyboardViewController.xib in Resources */,
+				D5B1E6F71A1417130096D5EC /* CustomKeyboardViewController.xib in Resources */,
 				D575A0701947834C00C6BCC2 /* btn_editprofile@2x.png in Resources */,
 				46839E9E18E1E8C100BD60DB /* icon-upload.png in Resources */,
 				467A40DD1993059300D4C693 /* join_teamstory@2x.png in Resources */,
@@ -2448,6 +2448,7 @@
 				D5856FB219F87E2600D0086F /* KonotorMediaUIButton.m in Sources */,
 				46DC23C219AA8C2200E8FCDF /* PAPdiscoverCell.m in Sources */,
 				C4F102A4156C57560061BC3E /* PAPPhotoHeaderView.m in Sources */,
+				D5B1E6F61A1417130096D5EC /* CustomKeyboardViewController.m in Sources */,
 				46076EE7193E9A6000A7B317 /* PAPNotificationViewController.m in Sources */,
 				C4F102A9156C57620061BC3E /* PAPPhotoDetailsFooterView.m in Sources */,
 				C4F102AA156C57620061BC3E /* PAPPhotoDetailsHeaderView.m in Sources */,
@@ -2485,7 +2486,6 @@
 				C4A6D87C157859AA009FE621 /* PAPCache.m in Sources */,
 				D54E0FFB19A7B76B000B1F9D /* OpenInChromeController.m in Sources */,
 				C4A6A246158FF842003F64A8 /* MBProgressHUD.m in Sources */,
-				D5504E731A0DAD5000620EFE /* CustomKeyboardViewController.m in Sources */,
 				46E1EB6F183BCA6300F64274 /* PAPProfileSettingViewController.m in Sources */,
 				D542D8C0196A6F4700A0384F /* ELCAssetCell.m in Sources */,
 				D5903C75192EBBF900DC9896 /* ThoughtPostViewController.m in Sources */,
