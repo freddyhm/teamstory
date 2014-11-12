@@ -21,6 +21,7 @@
 @interface PAPMessageListViewController () {
     CGRect tabBarSize;
     float currentIndexPathRow;
+    int totalBadgeNumber;
 }
 
 @property (nonatomic, strong) UITableView *messageListTV;
@@ -38,9 +39,14 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     
+    totalBadgeNumber = 0;
+    
     self.tabBarController.tabBar.hidden = YES;
     tabBarSize = self.tabBarController.tabBar.frame;
     self.tabBarController.tabBar.frame = CGRectZero;
+    
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:@"messagingListViewScreen" setTargetRoom:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateListViewQuery) name:@"updateListViewQuery" object:nil];
     
     // fetch unread messages, show feedback screen
     self.messageNotificationCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
@@ -54,6 +60,10 @@
         self.notificationView.titleEdgeInsets = UIEdgeInsetsMake(0.0f, -130.0f, 0.0f, 0.0f);
     }
     
+    [self updateListViewQuery];
+}
+
+- (void) updateListViewQuery {
     PFQuery *userOneQuery = [PFQuery queryWithClassName:@"ChatRoom"];
     [userOneQuery whereKey:@"userOne" equalTo:[PFUser currentUser]];
     [userOneQuery whereKeyExists:@"lastMessage"];
@@ -79,6 +89,12 @@
     
     self.tabBarController.tabBar.hidden = NO;
     self.tabBarController.tabBar.frame = tabBarSize;
+    
+    [[PFUser currentUser] setObject:[NSNumber numberWithInt:totalBadgeNumber] forKey:@"messagingBadge"];
+    [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageButton" object:nil];
+    }];
+    
 }
 
 - (void)viewDidLoad
@@ -175,36 +191,6 @@
 -(void)cellButtonAction:(UITapGestureRecognizer *)sender {
     UIView *view = sender.view;
     NSString *userNumber = [self.userNumberList objectAtIndex:view.tag];
-    PFObject *currentObject = [self.messageList objectAtIndex:view.tag];
-    NSNumber *offSetBadgeNumber;
-    
-    
-    if ([userNumber isEqualToString:@"userOne"]) {
-        offSetBadgeNumber = [currentObject objectForKey:@"userTwoBadge"];
-        [currentObject setObject:[NSNumber numberWithInt:0] forKey:@"userTwoBadge"];
-    } else {
-        offSetBadgeNumber = [currentObject objectForKey:@"userOneBadge"];
-        [currentObject setObject:[NSNumber numberWithInt:0] forKey:@"userOneBadge"];
-    }
-    
-    [currentObject saveInBackground];
-    
-    if ([[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue] - [offSetBadgeNumber intValue] < 0 ) {
-        [[PFUser currentUser] setObject:[NSNumber numberWithInt:0] forKey:@"messagingBadge"];
-    } else {
-        [[PFUser currentUser] setObject:[NSNumber numberWithInt:[[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue] - [offSetBadgeNumber intValue]] forKey:@"messagingBadge"];
-    }
-
-    [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageButton" object:nil];
-    }];
-    
-    if ([PFInstallation currentInstallation].badge - [offSetBadgeNumber intValue] < 0) {
-        [[PFInstallation currentInstallation] setBadge:0];
-    } else {
-        [[PFInstallation currentInstallation] setBadge:[PFInstallation currentInstallation].badge - [offSetBadgeNumber intValue]];
-    }
-    [[PFInstallation currentInstallation] saveInBackground];
     
     // load message view.
     PAPMessagingViewController *messageViewController = [[PAPMessagingViewController alloc] init];
@@ -251,6 +237,7 @@
     
     if ([cell.badgeLabel.text intValue] > 0) {
         cell.badgeLabel.hidden = NO;
+        totalBadgeNumber += [cell.badgeLabel.text intValue];
     } else {
         cell.badgeLabel.hidden = YES;
     }
