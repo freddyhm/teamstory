@@ -87,6 +87,8 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:YES];
     
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:nil setTargetRoom:nil];
+    
     self.tabBarController.tabBar.hidden = NO;
     self.tabBarController.tabBar.frame = tabBarSize;
     
@@ -272,7 +274,7 @@
 
 - (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewRowAction *moreAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"More" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
-        currentIndexPathRow = indexPath.row;
+        
         UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
         actionSheet.delegate = self;
         [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Report User"]];

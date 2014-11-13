@@ -377,47 +377,49 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
         cell.delegate = self;
     }
     
-    PFObject *currentOBJ = [self.messageQuery objectAtIndex:indexPath.row];
-    
-    self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
-    
-    NSDate *updatedDate = [currentOBJ createdAt];
-    if (!updatedDate) {
-        updatedDate = [NSDate date];
+    if ([self.messageQuery count] > 0) {
+        PFObject *currentOBJ = [self.messageQuery objectAtIndex:indexPath.row];
+        
+        self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
+        
+        NSDate *updatedDate = [currentOBJ createdAt];
+        if (!updatedDate) {
+            updatedDate = [NSDate date];
+        }
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        [dateFormat setDateFormat:@"h:mm a"];
+        
+        // Get time interval
+        NSTimeInterval timeInterval = [updatedDate timeIntervalSinceNow];
+        [self.timeIntervalFormatter setUsesAbbreviatedCalendarUnits:YES];
+        NSString *timestamp = [self.timeIntervalFormatter stringForTimeInterval:timeInterval];
+        
+        cell.userInteractionEnabled = NO;
+        
+        if (fabsf(timeInterval) > (12 * 60 * 60)) {
+            cell.timeStampLabel.text = timestamp;
+        } else {
+            cell.timeStampLabel.text = [dateFormat stringFromDate:updatedDate];
+        }
+        
+        if ([[[currentOBJ objectForKey:@"fromUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+            cell.RECEIVEDMessageView.hidden = YES;
+            cell.SENTTriangle.hidden = NO;
+            cell.SENTMessageView.hidden = NO;
+            cell.timeStampLabel.frame = CGRectMake(10.0f, 10.0f, 50.0f, 15.0f);
+            cell.timeStampLabel.textAlignment = NSTextAlignmentLeft;
+            cell.RECEIVEDTriangle.hidden = YES;
+        } else {
+            cell.SENTMessageView.hidden = YES;
+            cell.RECEIVEDTriangle.hidden = NO;
+            cell.SENTTriangle.hidden = YES;
+            cell.RECEIVEDMessageView.hidden = NO;
+            cell.timeStampLabel.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 60.0f, 10.0f, 50.0f, 15.0f);
+            cell.timeStampLabel.textAlignment = NSTextAlignmentRight;
+        }
+        
+        [cell setText:[currentOBJ objectForKey:@"messageBody"]];
     }
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"h:mm a"];
-    
-    // Get time interval
-    NSTimeInterval timeInterval = [updatedDate timeIntervalSinceNow];
-    [self.timeIntervalFormatter setUsesAbbreviatedCalendarUnits:YES];
-    NSString *timestamp = [self.timeIntervalFormatter stringForTimeInterval:timeInterval];
-    
-    cell.userInteractionEnabled = NO;
-    
-    if (fabsf(timeInterval) > (12 * 60 * 60)) {
-        cell.timeStampLabel.text = timestamp;
-    } else {
-        cell.timeStampLabel.text = [dateFormat stringFromDate:updatedDate];
-    }
-    
-    if ([[[currentOBJ objectForKey:@"fromUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
-        cell.RECEIVEDMessageView.hidden = YES;
-        cell.SENTTriangle.hidden = NO;
-        cell.SENTMessageView.hidden = NO;
-        cell.timeStampLabel.frame = CGRectMake(10.0f, 10.0f, 50.0f, 15.0f);
-        cell.timeStampLabel.textAlignment = NSTextAlignmentLeft;
-        cell.RECEIVEDTriangle.hidden = YES;
-    } else {
-        cell.SENTMessageView.hidden = YES;
-        cell.RECEIVEDTriangle.hidden = NO;
-        cell.SENTTriangle.hidden = YES;
-        cell.RECEIVEDMessageView.hidden = NO;
-        cell.timeStampLabel.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 60.0f, 10.0f, 50.0f, 15.0f);
-        cell.timeStampLabel.textAlignment = NSTextAlignmentRight;
-    }
-    
-    [cell setText:[currentOBJ objectForKey:@"messageBody"]];
     
     return cell;
 }
