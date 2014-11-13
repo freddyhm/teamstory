@@ -1,4 +1,4 @@
-/*
+
  Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
  
  // Set up to modify user data
@@ -81,7 +81,6 @@
  }
  });
  });
- */
 
 Parse.Cloud.beforeSave('Activity', function(request, response) {
                        var currentUser = request.user;
@@ -100,7 +99,7 @@ Parse.Cloud.beforeSave('Activity', function(request, response) {
                        });
 
 Parse.Cloud.afterSave('Activity', function(request) {
-                      
+                      Parse.Cloud.useMasterKey();
                       var fromUser = request.object.get("fromUser");
                       var fromUserId = fromUser != undefined ? request.object.get("fromUser").id : "";
                       var fromUserEmail = fromUser != undefined ? request.user.get("email") : "";
@@ -236,6 +235,9 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       
                       }
                       
+                      toUser.increment('activityBadge', 1);
+                      toUser.save();
+                      
                       // Only send push notifications for new activities
                       if (request.object.existed()) {
                       return;
@@ -246,9 +248,7 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       return;
                       }
                       
-                      if(request.object.get('photo').id != undefined && request.object.get('type') != undefined){
-                        Parse.Cloud.run("incrementCounter", {currentObjectId: request.object.get('photo').id, type: request.object.get('type')});
-                      }
+                      Parse.Cloud.run("incrementCounter", {currentObjectId: request.object.get('photo').id, type: request.object.get('type')});
                       
                       });
 
