@@ -20,7 +20,8 @@
 - (void)changeSendButtonState:(BOOL)state;
 - (void)setCustomKeyboardHeight:(CGFloat)kbHeight;
 - (void)textViewDidChange:(UITextView *)textView;
-- (void)setKeyboardPosition:(CGFloat)kbPos;
+- (void)setTextViewPosition:(CGFloat)txtViewPos;
+- (void)resetTextViewHeight;
 
 @end
 

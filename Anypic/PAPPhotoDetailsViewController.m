@@ -52,6 +52,7 @@ enum ActionSheetTags {
 @property CGRect defaultCommentTextViewFrame;
 @property CGRect previousRect;
 @property CGFloat previousKbHeight;
+@property CGFloat previousContentHeight;
 @end
 
 static const CGFloat kPAPCellInsetWidth = 7.5f;
@@ -224,13 +225,18 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.tabBarController.tabBar.frame = CGRectZero;
     self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
     self.customKeyboard.delegate = self;
-    [self.customKeyboard setKeyboardPosition:64];
+    [self.customKeyboard setTextViewPosition:64];
     [self.customKeyboard.sendButton setTitle:@"Post" forState:UIControlStateNormal];
     self.customKeyboard.view.layer.zPosition = 100;
     [self.view addSubview:self.customKeyboard.view];
     
+    self.previousContentHeight = self.postDetails.contentSize.height;
     
-    
+    if([self.source isEqualToString:@"commentButton"]){
+        [self.customKeyboard.messageTextView becomeFirstResponder];
+        
+    }
+
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -302,15 +308,22 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     // refresh based on source when comments are present
     if([loadedObjects count] > 0){
+        
         [self refreshCommentLikes:loadedObjects pullFromServer:newLikes block:^(BOOL succeeded) {
             if(succeeded){
+                
+                if([self.source isEqualToString:@"commentButton"]){
+                    
+                    NSLog(@"%f", self.postDetails.contentSize.height);
+                                        NSLog(@"%f", self.postDetails.contentSize.height);
+                    
+                    CGFloat diffContentHeight = self.postDetails.contentSize.height - self.previousContentHeight;
+                    
+                    [self.postDetails setContentSize:CGSizeMake(self.postDetails.frame.size.width, self.postDetails.contentSize.height + diffContentHeight)];
+                }
+                
                 // move to last comments when notification relates to a new comment
-                if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] || [self.source isEqual:@"activityComment"] || [self.source isEqual:@"commentButton"])){
-                    
-                    if([self.source isEqualToString:@"commentButton"]){
-                        [self.customKeyboard.messageTextView becomeFirstResponder];
-                    }
-                    
+                if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] || [self.source isEqual:@"activityComment"] || [self.source isEqual:@"commentButton"] || [self.source isEqual:@"postedComment"]  )){
                     [self.postDetails setContentOffset:CGPointMake(0, self.postDetails.contentSize.height - self.postDetails.bounds.size.height + 44)];
                 }
             }
@@ -434,7 +447,7 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
     [UIView animateWithDuration:keyboardDuration delay:0 options:animationOptionsWithCurve(animationCurve) animations:^{
         // update textview position to sit on top of keyboard, update table with keyboard height
         [self.customKeyboard setKeyboardHeight:kbSize.height - 64];
-        [self.customKeyboard setKeyboardPosition:-kbSize.height];
+        [self.customKeyboard setTextViewPosition:-kbSize.height];
         [self.postDetails setContentSize:CGSizeMake(self.postDetails.frame.size.width, self.postDetails.contentSize.height + (kbSize.height + 10))];
     } completion:^(BOOL finished) {
     }];
@@ -480,7 +493,7 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
     [UIView animateWithDuration:keyboardDuration delay:0 options:animationOptionsWithCurve(animationCurve) animations:^{
         // update textview position to sit on top of keyboard, update table with keyboard height
         [self.customKeyboard setKeyboardHeight:-(kbSize.height - 64)];
-        [self.customKeyboard setKeyboardPosition:kbSize.height];
+        [self.customKeyboard setTextViewPosition:kbSize.height];
         [self.postDetails setContentSize:CGSizeMake(self.postDetails.frame.size.width, self.postDetails.contentSize.height - kbSize.height)];
     } completion:^(BOOL finished) {
     }];
@@ -1066,6 +1079,67 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
 
 - (void)sendButtonAction:(id)sender{
     
+    NSString *trimmedComment = [self.customKeyboard.messageTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if (trimmedComment.length != 0 && [self.photo objectForKey:kPAPPhotoUserKey]) {
+        
+        PFObject *comment = [PFObject objectWithClassName:kPAPActivityClassKey];
+        [comment setObject:trimmedComment forKey:kPAPActivityContentKey]; // Set comment text
+        [comment setObject:[self.photo objectForKey:kPAPPhotoUserKey] forKey:kPAPActivityToUserKey]; // Set toUser
+        [comment setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey]; // Set fromUser
+        [comment setObject:kPAPActivityTypeComment forKey:kPAPActivityTypeKey];
+        [comment setObject:self.photo forKey:kPAPActivityPhotoKey];
+    
+        PFACL *ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+        [ACL setPublicReadAccess:YES];
+        [ACL setWriteAccess:YES forUser:[self.photo objectForKey:kPAPPhotoUserKey]];
+        comment.ACL = ACL;
+        
+        [[PAPCache sharedCache] incrementCommentCountForPhoto:self.photo];
+        
+        // get post type
+        NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
+        
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Commented", @"Post Type" : postType}];
+        
+        // Show HUD view
+        [SVProgressHUD show];
+        
+        // If more than 5 seconds pass since we post a comment, stop waiting for the server to respond
+        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(handleCommentTimeout:) userInfo:@{@"comment": comment} repeats:NO];
+        
+        [comment saveEventually:^(BOOL succeeded, NSError *error) {
+            [timer invalidate];
+            
+            if (error && error.code == kPFErrorObjectNotFound) {
+                [[PAPCache sharedCache] decrementCommentCountForPhoto:self.photo];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Could not post comment", nil) message:NSLocalizedString(@"This photo is no longer available", nil) delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                [alert show];
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:self.photo userInfo:@{@"comments": @(self.objects.count + 1)}];
+            
+            self.atmentionUserArray = nil;
+            self.atmentionUserArray = [[NSMutableArray alloc] init];
+            [SVProgressHUD dismiss];
+            [self loadObjects];
+            
+            // suscribe to post if commenter is not photo owner
+            if(![[[self.photo objectForKey:kPAPPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]){
+                [PAPUtility updateSubscriptionToPost:self.photo forState:@"Subscribe"];
+            }
+            
+        }];
+        
+        // reset textview to default height, update flag so table goes to posted comment
+        [self.customKeyboard.messageTextView setText:@""];
+        [self.customKeyboard.messageTextView resignFirstResponder];
+        [self.customKeyboard resetTextViewHeight];
+        [self.customKeyboard setTextViewPosition:64];
+        self.source = @"postedComment";
+    }
 }
 
 - (void)setTableViewHeight{

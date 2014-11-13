@@ -67,9 +67,18 @@
     self.keyboardHeight = kbHeight;
 }
 
-- (void)setKeyboardPosition:(CGFloat)kbPos{
+- (void)setTextViewPosition:(CGFloat)textViewPos{
     // set the view frame
-    [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y + kbPos, self.view.frame.size.width, self.view.frame.size.height)];
+    [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y + textViewPos, self.view.frame.size.width, self.view.frame.size.height)];
+}
+
+- (void)resetTextViewHeight{
+    
+    // set the view frame
+    [self.view setFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (64.0f + messageTextViewHeight), [UIScreen mainScreen].bounds.size.width, messageTextViewHeight)];
+    
+    // set text view
+    [self.messageTextView setFrame:CGRectMake(5.0f, 5.0f, self.view.bounds.size.width - (10.0f + sendButtonWidth), self.view.bounds.size.height - 10.0f)];
 }
 
 #pragma mark - Delegate Methods
