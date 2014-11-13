@@ -144,7 +144,7 @@
     
     self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, headerViewHeight + querySelectionViewheight, [UIScreen mainScreen].bounds.size.width, 40.0f)];
     self.searchBar.delegate = self;
-    self.searchBar.placeholder = @"Search by following users";
+    self.searchBar.placeholder = @"Search";
     self.searchBar.barTintColor = [UIColor colorWithWhite:0.95f alpha:1.0f];
     self.searchBar.layer.borderColor = [UIColor colorWithWhite:0.5f alpha:1.0f].CGColor;
     [self.view addSubview:self.searchBar];
@@ -178,7 +178,7 @@
     
     self.followerButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.querySelectionOptionViewBG.bounds.size.width / 2, self.querySelectionOptionViewBG.bounds.size.height)];
     [self.followerButton addTarget:self action:@selector(followerButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.followerButton setTitle:@"Follower" forState:UIControlStateNormal];
+    [self.followerButton setTitle:@"List" forState:UIControlStateNormal];
     self.followerButton.titleLabel.font = [UIFont boldSystemFontOfSize:13.0f];
     [self.followerButton setTitleColor:[UIColor colorWithWhite:0.4f alpha:1.0f] forState:UIControlStateNormal];
 
@@ -215,7 +215,6 @@
 
 - (void)followerButtonAction:(id)sender {
     self.querySelectionString = @"Follower";
-    self.searchBar.placeholder = @"Search by following users";
     [self.followerTV reloadData];
     
     [UIView animateWithDuration:0.2f animations:^{
@@ -225,7 +224,6 @@
 
 -(void) allUserButtonAction:(id)sender {
     self.querySelectionString = @"Everyone";
-    self.searchBar.placeholder = @"Search from everyone";
     [self.followerTV reloadData];
     
     [UIView animateWithDuration:0.2f animations:^{
