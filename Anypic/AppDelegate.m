@@ -65,6 +65,8 @@
 @property (nonatomic, strong) UITableView *messageList;
 @property (nonatomic, strong) PFObject *targetChatRoom;
 
+@property (nonatomic, strong) UINavigationController *currentNavController;
+
 - (void)setupAppearance;
 - (BOOL)shouldProceedToMainInterface:(PFUser *)user;
 - (BOOL)handleActionURL:(NSURL *)url;
@@ -641,9 +643,10 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 
 #pragma mark - ()
 
-- (void)setUserCurrentScreen:(NSString *)currentScreen setTargetRoom:(PFObject *)targetRoom {
+- (void)setUserCurrentScreen:(NSString *)currentScreen setTargetRoom:(PFObject *)targetRoom setNavigationController:(UINavigationController *)navigationController{
     self.userView = currentScreen;
     self.targetChatRoom = targetRoom;
+    self.currentNavController = navigationController;
 }
 
 - (void)setupAppearance {
@@ -818,6 +821,8 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
             [[PFInstallation currentInstallation] setBadge:[PFInstallation currentInstallation].badge - [offSetBadgeNumber intValue]];
         }
         [[PFInstallation currentInstallation] saveInBackground];
+        
+        [self.currentNavController popToRootViewControllerAnimated:NO];
         
         PAPMessageListViewController *messageListViewController = [[PAPMessageListViewController alloc] init];
         PAPMessagingViewController *messagingViewController = [[PAPMessagingViewController alloc] init];

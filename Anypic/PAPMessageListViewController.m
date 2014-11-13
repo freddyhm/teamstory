@@ -45,7 +45,7 @@
     tabBarSize = self.tabBarController.tabBar.frame;
     self.tabBarController.tabBar.frame = CGRectZero;
     
-    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:@"messagingListViewScreen" setTargetRoom:nil];
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:@"messagingListViewScreen" setTargetRoom:nil setNavigationController:self.navigationController];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateListViewQuery) name:@"updateListViewQuery" object:nil];
     
     // fetch unread messages, show feedback screen
@@ -87,7 +87,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:YES];
     
-    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:nil setTargetRoom:nil];
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:nil setTargetRoom:nil setNavigationController:nil];
     
     self.tabBarController.tabBar.hidden = NO;
     self.tabBarController.tabBar.frame = tabBarSize;

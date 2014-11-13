@@ -51,7 +51,7 @@
     tabBarSize = self.tabBarController.tabBar.frame;
     self.tabBarController.tabBar.frame = CGRectZero;
     
-    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:@"messagingScreen" setTargetRoom:self.targetChatRoom];
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:@"messagingScreen" setTargetRoom:self.targetChatRoom setNavigationController:nil];
     
     [self loadMessageQuery];
     [self updateRoomBadge];
@@ -62,7 +62,7 @@
     self.tabBarController.tabBar.hidden = NO;
     self.tabBarController.tabBar.frame = tabBarSize;
     
-    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:nil setTargetRoom:nil];
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:nil setTargetRoom:nil setNavigationController:nil];
 }
 
 - (void)viewDidLoad
