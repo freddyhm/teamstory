@@ -272,16 +272,29 @@
 }
 
 - (void)shouldToggleFollowFriendForCell:(PAPFindFriendsCell*)cell {
+    
+    // temp disable follow button to avoid duplicates
+    cell.followButton.enabled = NO;
+    
     PFUser *cellUser = cell.user;
     if ([cell.followButton isSelected]) {
         // Unfollow
         cell.followButton.selected = NO;
-        [PAPUtility unfollowUserEventually:cellUser];
+        [PAPUtility unfollowUserEventually:cellUser block:^(BOOL succeeded) {
+            
+            // enable button again
+            cell.followButton.enabled = YES;
+
+        }];
         [[NSNotificationCenter defaultCenter] postNotificationName:PAPUtilityUserFollowingChangedNotification object:nil];
     } else {
         // Follow
         cell.followButton.selected = YES;
         [PAPUtility followUserEventually:cellUser block:^(BOOL succeeded, NSError *error) {
+            
+            // enable button again
+            cell.followButton.enabled = YES;
+            
             if (!error) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:PAPUtilityUserFollowingChangedNotification object:nil];
             } else {
