@@ -65,6 +65,8 @@
 @property (nonatomic, strong) UITableView *messageList;
 @property (nonatomic, strong) PFObject *targetChatRoom;
 
+@property (nonatomic, strong) UINavigationController *currentNavController;
+
 - (void)setupAppearance;
 - (BOOL)shouldProceedToMainInterface:(PFUser *)user;
 - (BOOL)handleActionURL:(NSURL *)url;
@@ -641,9 +643,10 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 
 #pragma mark - ()
 
-- (void)setUserCurrentScreen:(NSString *)currentScreen setTargetRoom:(PFObject *)targetRoom {
+- (void)setUserCurrentScreen:(NSString *)currentScreen setTargetRoom:(PFObject *)targetRoom setNavigationController:(UINavigationController *)navigationController{
     self.userView = currentScreen;
     self.targetChatRoom = targetRoom;
+    self.currentNavController = navigationController;
 }
 
 - (void)setupAppearance {
@@ -700,15 +703,12 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
         NSString *activityTypeNotification = [userInfo objectForKey:@"t"];
         NSString *photoId = [userInfo objectForKey:@"pid"];
         NSString *activityId = [userInfo objectForKey:@"aid"];
-        NSString *toUserId = [userInfo objectForKey:kPAPPushPayloadToUserObjectIdKey];
+        NSString *toUserId = [userInfo objectForKey:kPAPPushPayloadFromUserObjectIdKey];
         
         NSString *messageRoomId = [userInfo objectForKey:kPAPPushPayloadChatRoomObjectIdKey];
         NSString *notificationType = [userInfo objectForKey:kPAPPushPayloadPayloadTypeKey];
         
         if ([notificationType isEqualToString:@"m"]) {
-            self.messageTargetUser = nil;
-            self.chatRoom = nil;
-            
             [self navigateToChatRoomWithNotificationWithTargetUser:toUserId setRoomInfo:messageRoomId];
             return;
         }
@@ -758,6 +758,9 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 
 - (void) navigateToChatRoomWithNotificationWithTargetUser:(NSString *)targetUserId setRoomInfo:(NSString *)roomInfoId {
     navigation = NO;
+    
+    self.messageTargetUser = nil;
+    self.chatRoom = nil;
     
     PFQuery *targetUser = [PFUser query];
     targetUser.cachePolicy = kPFCachePolicyCacheElseNetwork;
@@ -818,6 +821,8 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
             [[PFInstallation currentInstallation] setBadge:[PFInstallation currentInstallation].badge - [offSetBadgeNumber intValue]];
         }
         [[PFInstallation currentInstallation] saveInBackground];
+        
+        [self.currentNavController popToRootViewControllerAnimated:NO];
         
         PAPMessageListViewController *messageListViewController = [[PAPMessageListViewController alloc] init];
         PAPMessagingViewController *messagingViewController = [[PAPMessagingViewController alloc] init];
@@ -1071,7 +1076,8 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 
 - (void)navigateToCurrentMessagingRoom {
     if (self.currentUserInfo != NULL) {
-        NSString *toUserId = [self.currentUserInfo objectForKey:kPAPPushPayloadToUserObjectIdKey];
+        NSLog(@"currentUserInfo: %@", self.currentUserInfo);
+        NSString *toUserId = [self.currentUserInfo objectForKey:kPAPPushPayloadFromUserObjectIdKey];
         NSString *messageRoomId = [self.currentUserInfo objectForKey:kPAPPushPayloadChatRoomObjectIdKey];
         [self navigateToChatRoomWithNotificationWithTargetUser:toUserId setRoomInfo:messageRoomId];
     }
