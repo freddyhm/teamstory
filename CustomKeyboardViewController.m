@@ -88,6 +88,7 @@
 #pragma mark - TextView Methods
 
 -(void)textViewDidChange:(UITextView *)textView {
+    
     NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:textSize]};
     CGRect textViewSize = [textView.text boundingRectWithSize:CGSizeMake(self.messageTextView.bounds.size.width - 10.0f, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
     
@@ -100,6 +101,7 @@
     self.messageTextView.frame = CGRectMake(5.0f, 5.0f, self.view.bounds.size.width - 10.0f - sendButtonWidth, self.view.bounds.size.height - 10.0f);
     
     [self changeTableViewHeight];
+    
     if ([textView.text length] > 0) {
         [self changeSendButtonState:YES];
     } else {

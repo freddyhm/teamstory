@@ -51,6 +51,7 @@ enum ActionSheetTags {
 @property CGRect defaultFooterViewFrame;
 @property CGRect defaultCommentTextViewFrame;
 @property CGRect previousRect;
+@property CGFloat previousKbHeight;
 @end
 
 static const CGFloat kPAPCellInsetWidth = 7.5f;
@@ -99,22 +100,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 #pragma mark - UIViewController
-
-- (void)viewWillAppear:(BOOL)animated{
-    
-    self.tabBarController.tabBar.frame = CGRectZero;
-    self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
-    self.customKeyboard.delegate = self;
-    [self.customKeyboard setKeyboardPosition:64];
-    [self.customKeyboard.sendButton setTitle:@"Post" forState:UIControlStateNormal];
-    self.customKeyboard.view.layer.zPosition = 100;
-    [self.view addSubview:self.customKeyboard.view];
-    
-    if([self.source isEqualToString:@"commentButton"]){
-        [self.customKeyboard.messageTextView becomeFirstResponder];
-    }
-}
-
 
 - (void)viewDidLoad {
     
@@ -236,6 +221,16 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     [self loadObjects];
     
+    self.tabBarController.tabBar.frame = CGRectZero;
+    self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
+    self.customKeyboard.delegate = self;
+    [self.customKeyboard setKeyboardPosition:64];
+    [self.customKeyboard.sendButton setTitle:@"Post" forState:UIControlStateNormal];
+    self.customKeyboard.view.layer.zPosition = 100;
+    [self.view addSubview:self.customKeyboard.view];
+    
+    
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -311,6 +306,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             if(succeeded){
                 // move to last comments when notification relates to a new comment
                 if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] || [self.source isEqual:@"activityComment"] || [self.source isEqual:@"commentButton"])){
+                    
+                    if([self.source isEqualToString:@"commentButton"]){
+                        [self.customKeyboard.messageTextView becomeFirstResponder];
+                    }
+                    
                     [self.postDetails setContentOffset:CGPointMake(0, self.postDetails.contentSize.height - self.postDetails.bounds.size.height + 44)];
                 }
             }
@@ -416,11 +416,29 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 
-- (void)keyboardWillShow:(NSNotification*)note {
+static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCurve curve) {
+    return (UIViewAnimationOptions)curve << 16;
+}
+
+
+
+- (void)keyboardWillShow:(NSNotification*)notification {
     
-    // Scroll the view to the comment text box
-    NSDictionary* info = [note userInfo];
+    NSDictionary* info = [notification userInfo];
+    NSNumber *number = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    UIViewAnimationCurve animationCurve = [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    float keyboardDuration = [number doubleValue];
+    
+    // ---------- Animation in sync with keyboard moving up
+    [UIView animateWithDuration:keyboardDuration delay:0 options:animationOptionsWithCurve(animationCurve) animations:^{
+        // update textview position to sit on top of keyboard, update table with keyboard height
+        [self.customKeyboard setKeyboardHeight:kbSize.height - 64];
+        [self.customKeyboard setKeyboardPosition:-kbSize.height];
+        [self.postDetails setContentSize:CGSizeMake(self.postDetails.frame.size.width, self.postDetails.contentSize.height + (kbSize.height + 10))];
+    } completion:^(BOOL finished) {
+    }];
+    
     //NSInteger offset = 0.0f;
     
     /*
@@ -440,13 +458,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
      */
     
-    [self.customKeyboard setKeyboardHeight:kbSize.height - 64];
-    [self.customKeyboard setKeyboardPosition:-kbSize.height];
-    
-    //[self.postDetails setContentOffset:CGPointMake(self.postDetails.contentOffset.x, self.postDetails.contentOffset.y + kbSize.height + self.customKeyboard.view.frame.size.height)];
-    
-    [self.postDetails setContentSize:CGSizeMake(self.postDetails.frame.size.width, self.postDetails.contentSize.height + (kbSize.height + 10))];
 }
+
+
 
 - (void)dismissKeyboard {
     [self.view endEditing:YES];
@@ -455,15 +469,23 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification{
-    
+
     NSDictionary* info = [notification userInfo];
+    NSNumber *number = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    UIViewAnimationCurve animationCurve = [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    float keyboardDuration = [number doubleValue];
     
-    [self.customKeyboard setKeyboardHeight:-(kbSize.height - 64)];
-    [self.customKeyboard setKeyboardPosition:kbSize.height];
-    
-    [self.postDetails setContentSize:CGSizeMake(self.postDetails.frame.size.width, self.postDetails.contentSize.height - kbSize.height)];
+    // ---------- Animation in sync with keyboard moving up
+    [UIView animateWithDuration:keyboardDuration delay:0 options:animationOptionsWithCurve(animationCurve) animations:^{
+        // update textview position to sit on top of keyboard, update table with keyboard height
+        [self.customKeyboard setKeyboardHeight:-(kbSize.height - 64)];
+        [self.customKeyboard setKeyboardPosition:kbSize.height];
+        [self.postDetails setContentSize:CGSizeMake(self.postDetails.frame.size.width, self.postDetails.contentSize.height - kbSize.height)];
+    } completion:^(BOOL finished) {
+    }];
 }
+
 
 
 #pragma mark - UITextViewDelegate
@@ -1048,59 +1070,18 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 - (void)setTableViewHeight{
     
+    /* Called in kb class on key pressed. Keep track of textview height so we change tableview content size accordingly - need to refactor */
+    
+    CGFloat msgTxtViewDiff = 0;
+    
+    if(!(self.previousKbHeight == 0)){
+        msgTxtViewDiff = self.customKeyboard.messageTextView.frame.size.height - self.previousKbHeight;
+    }
+    
+    [self.postDetails setContentSize:CGSizeMake(self.postDetails.frame.size.width, self.postDetails.contentSize.height + msgTxtViewDiff)];
+    
+    self.previousKbHeight = self.customKeyboard.messageTextView.frame.size.height;
 }
-
-/*
-
-- (void)keyboardWillShow:(NSNotification *)notification {
-    NSDictionary *info = [notification userInfo];
-    NSNumber *number = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSValue *keyboardFrameValue = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
-    UIViewAnimationCurve animationCurve = [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    
-    keyboardDuration = [number doubleValue];
-    CGRect keyboardFrame = [keyboardFrameValue CGRectValue];
-    keyboardHeight = keyboardFrame.size.height;
-    
-    [self.customKeyboard setKeyboardHeight:keyboardHeight];
-    
-    // ---------- Adjust TextView location
-    [UIView animateWithDuration:keyboardDuration delay:0 options:animationOptionsWithCurve(animationCurve) animations:^{
-        self.customKeyboard.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (navBarHeight + messageTextViewHeight) - keyboardHeight, [UIScreen mainScreen].bounds.size.width, messageTextViewHeight);
-        self.messageList.frame = CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - self.customKeyboard.view.bounds.size.height - navBarHeight - keyboardHeight);
-        [self scrollToBottom:NO];
-    } completion:^(BOOL finished) {
-    }];
-    
-}
-
-static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCurve curve) {
-    return (UIViewAnimationOptions)curve << 16;
-}
-
-
-- (void)keyboardWillHide:(NSNotification *)notification {
-    NSDictionary *info = [notification userInfo];
-    NSNumber *number = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSValue *keyboardFrameValue = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
-    UIViewAnimationCurve animationCurve = [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    
-    keyboardDuration = [number doubleValue];
-    CGRect keyboardFrame = [keyboardFrameValue CGRectValue];
-    keyboardHeight = keyboardFrame.size.height;
-    
-    [self.customKeyboard setKeyboardHeight:keyboardHeight];
-    
-    // ---------- Adjust TextView location
-    [UIView animateWithDuration:keyboardDuration delay:0 options:animationOptionsWithCurve(animationCurve) animations:^{
-        float textViewHeight = self.customKeyboard.view.frame.size.height;
-        self.customKeyboard.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (navBarHeight + textViewHeight), [UIScreen mainScreen].bounds.size.width, messageTextViewHeight);
-        self.messageList.frame = CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - textViewHeight - navBarHeight);
-    } completion:^(BOOL finished) {
-        
-    }];
-}
- */
 
 
 @end
