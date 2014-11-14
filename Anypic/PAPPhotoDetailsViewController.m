@@ -52,7 +52,6 @@ enum ActionSheetTags {
 @property CGRect defaultCommentTextViewFrame;
 @property CGRect previousRect;
 @property CGFloat previousKbHeight;
-@property CGFloat previousContentHeight;
 @end
 
 static const CGFloat kPAPCellInsetWidth = 7.5f;
@@ -186,12 +185,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.autocompleteTableView.hidden = YES;
     [self.view addSubview:self.autocompleteTableView];
     
-    // Register to be notified when the keyboard will be shown to scroll the view
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLikedOrUnlikedPhoto:) name:PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:self.photo];
     
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardDidHide) name:UIKeyboardDidHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLikedOrUnlikedPhoto:) name:PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:self.photo];
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
@@ -200,8 +195,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self.view addGestureRecognizer:tapOutside];
     
 
-
-    
     // set comment block view for spinner
     float tableCommentVerticalPos = self.postDetails.tableHeaderView.frame.origin.y + self.postDetails.tableHeaderView.frame.size.height;
     float tableCommentHeight = self.postDetails.tableFooterView.frame.origin.y + (self.postDetails.tableFooterView.frame.size.height * 2);
@@ -228,15 +221,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self.customKeyboard setTextViewPosition:64];
     [self.customKeyboard.sendButton setTitle:@"Post" forState:UIControlStateNormal];
     self.customKeyboard.view.layer.zPosition = 100;
+    [self.customKeyboard setBackgroundTable:self.postDetails];
     [self.view addSubview:self.customKeyboard.view];
-    
-    self.previousContentHeight = self.postDetails.contentSize.height;
-    
-    if([self.source isEqualToString:@"commentButton"]){
-        [self.customKeyboard.messageTextView becomeFirstResponder];
-        
-    }
-
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -312,18 +298,13 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [self refreshCommentLikes:loadedObjects pullFromServer:newLikes block:^(BOOL succeeded) {
             if(succeeded){
                 
-                if([self.source isEqualToString:@"commentButton"]){
-                    
-                    NSLog(@"%f", self.postDetails.contentSize.height);
-                                        NSLog(@"%f", self.postDetails.contentSize.height);
-                    
-                    CGFloat diffContentHeight = self.postDetails.contentSize.height - self.previousContentHeight;
-                    
-                    [self.postDetails setContentSize:CGSizeMake(self.postDetails.frame.size.width, self.postDetails.contentSize.height + diffContentHeight)];
-                }
-                
                 // move to last comments when notification relates to a new comment
                 if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] || [self.source isEqual:@"activityComment"] || [self.source isEqual:@"commentButton"] || [self.source isEqual:@"postedComment"]  )){
+                    
+                    if([self.source isEqualToString:@"commentButton"]){
+                        [self.customKeyboard.messageTextView becomeFirstResponder];
+                    }
+                    
                     [self.postDetails setContentOffset:CGPointMake(0, self.postDetails.contentSize.height - self.postDetails.bounds.size.height + 44)];
                 }
             }
@@ -417,86 +398,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
     
     return cell;
-}
-
-#pragma mark - UIKeyboard
-
-- (void)keyboardDidHide{
-    
-    // set new content size for table, update with current textview height
-    //[self.postDetails setContentSize:CGSizeMake(self.postDetails.contentSize.width, [self getCurrentTableContentHeightWithTextView])];
-    
-}
-
-
-static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCurve curve) {
-    return (UIViewAnimationOptions)curve << 16;
-}
-
-
-
-- (void)keyboardWillShow:(NSNotification*)notification {
-    
-    NSDictionary* info = [notification userInfo];
-    NSNumber *number = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    UIViewAnimationCurve animationCurve = [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    float keyboardDuration = [number doubleValue];
-    
-    // ---------- Animation in sync with keyboard moving up
-    [UIView animateWithDuration:keyboardDuration delay:0 options:animationOptionsWithCurve(animationCurve) animations:^{
-        // update textview position to sit on top of keyboard, update table with keyboard height
-        [self.customKeyboard setKeyboardHeight:kbSize.height - 64];
-        [self.customKeyboard setTextViewPosition:-kbSize.height];
-        [self.postDetails setContentSize:CGSizeMake(self.postDetails.frame.size.width, self.postDetails.contentSize.height + (kbSize.height + 10))];
-    } completion:^(BOOL finished) {
-    }];
-    
-    //NSInteger offset = 0.0f;
-    
-    /*
-    // Check system version for keyboard offset, ios8 added suggestion bar
-    if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
-        if ([UIScreen mainScreen].bounds.size.height == 480) {
-            offset = -20.0f;
-        } else {
-            offset = -60.0f;
-        }
-    }else{
-        if ([UIScreen mainScreen].bounds.size.height == 480) {
-            offset = 60.0f;
-        } else {
-            offset = 150.0f;
-        }
-    }
-     */
-    
-}
-
-
-
-- (void)dismissKeyboard {
-    [self.view endEditing:YES];
-    self.autocompleteTableView.hidden = YES;
-    self.dimView.hidden = YES;
-}
-
-- (void)keyboardWillHide:(NSNotification *)notification{
-
-    NSDictionary* info = [notification userInfo];
-    NSNumber *number = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-    UIViewAnimationCurve animationCurve = [[info objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    float keyboardDuration = [number doubleValue];
-    
-    // ---------- Animation in sync with keyboard moving up
-    [UIView animateWithDuration:keyboardDuration delay:0 options:animationOptionsWithCurve(animationCurve) animations:^{
-        // update textview position to sit on top of keyboard, update table with keyboard height
-        [self.customKeyboard setKeyboardHeight:-(kbSize.height - 64)];
-        [self.customKeyboard setTextViewPosition:kbSize.height];
-        [self.postDetails setContentSize:CGSizeMake(self.postDetails.frame.size.width, self.postDetails.contentSize.height - kbSize.height)];
-    } completion:^(BOOL finished) {
-    }];
 }
 
 
@@ -1155,6 +1056,10 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
     [self.postDetails setContentSize:CGSizeMake(self.postDetails.frame.size.width, self.postDetails.contentSize.height + msgTxtViewDiff)];
     
     self.previousKbHeight = self.customKeyboard.messageTextView.frame.size.height;
+}
+
+- (void)dismissKeyboard {
+    [self.customKeyboard dismissKeyboard];
 }
 
 

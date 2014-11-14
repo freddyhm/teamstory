@@ -10,18 +10,20 @@
 
 @protocol CustomKeyboardViewControllerDelegate;
 
-@interface CustomKeyboardViewController : UIViewController <UITextViewDelegate>
+@interface CustomKeyboardViewController : UIViewController <UITextViewDelegate, UITableViewDelegate>
 @property (nonatomic, strong) IBOutlet UIButton *sendButton;
 @property (nonatomic, strong) IBOutlet UITextView *messageTextView;
 @property (nonatomic, weak) id<CustomKeyboardViewControllerDelegate> delegate;
 @property (nonatomic, strong) UITableView *ih_tableView;
 @property CGFloat keyboardHeight;
+- (void)setBackgroundTable:(UITableView *)tableView;
 
 - (void)changeSendButtonState:(BOOL)state;
 - (void)setCustomKeyboardHeight:(CGFloat)kbHeight;
 - (void)textViewDidChange:(UITextView *)textView;
 - (void)setTextViewPosition:(CGFloat)txtViewPos;
 - (void)resetTextViewHeight;
+- (void)dismissKeyboard;
 
 @end
 
