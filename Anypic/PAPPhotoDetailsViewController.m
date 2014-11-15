@@ -30,14 +30,11 @@ enum ActionSheetTags {
     NSInteger text_offset;
 }
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;
-@property (nonatomic, strong) UITextField *commentTextField;
 @property (nonatomic, strong) PAPPhotoDetailsHeaderView *headerView;
 @property (nonatomic, assign) BOOL likersQueryInProgress;
 @property (nonatomic, strong) NSString *photoID;
 @property (nonatomic, strong) PFObject *current_photo;
 @property (nonatomic, strong) PFUser *reported_user;
-@property (nonatomic, strong) UITextView *commentTextView;
-@property (nonatomic, strong) PAPPhotoDetailsFooterView *footerView;
 @property (nonatomic, strong) NSString *source;
 @property (nonatomic, strong) NSMutableArray *userArray;
 @property (nonatomic, strong) NSString *atmentionSearchString;
@@ -48,9 +45,6 @@ enum ActionSheetTags {
 @property (nonatomic, strong) NSMutableArray *atmentionUserArray;
 @property (nonatomic, strong) UIView *dimView;
 @property (nonatomic, strong) UIView *hideCommentsView;
-@property CGRect defaultFooterViewFrame;
-@property CGRect defaultCommentTextViewFrame;
-@property CGRect previousRect;
 @property CGRect tabBarSize;
 @property CGFloat previousKbHeight;
 @end
@@ -59,13 +53,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 @implementation PAPPhotoDetailsViewController
 
-@synthesize commentTextField;
 @synthesize photo, headerView;
 @synthesize photoID;
 @synthesize current_photo;
 @synthesize reported_user;
-@synthesize commentTextView;
-@synthesize footerView;
 @synthesize userArray;
 @synthesize autocompleteTableView;
 @synthesize atmentionSearchString;
@@ -167,17 +158,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.dimView.hidden = YES;
     self.dimView.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.8f];
     [self.view addSubview:self.dimView];
-    
-    
-    // Set table footer
-    self.footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:[PAPPhotoDetailsFooterView rectForView]];
-    
-    commentTextView = self.footerView.commentView;
-    self.defaultFooterViewFrame = self.footerView.mainView.frame;
-    self.defaultCommentTextViewFrame = self.commentTextView.frame;
-    commentTextView.delegate = self;
-   // self.postDetails.tableFooterView = self.footerView;
-    
+
     self.autocompleteTableView = [[UITableView alloc] init];
     self.autocompleteTableView.delegate = self;
     self.autocompleteTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -211,9 +192,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.spinner.hidesWhenStopped = YES;
     self.postDetails.showsVerticalScrollIndicator = NO;
     
-    // Enable autocorrect
-    [self.commentTextView setAutocorrectionType:UITextAutocorrectionTypeDefault];
-    
     [self loadObjects];
     
     self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
@@ -238,8 +216,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-    self.previousRect = CGRectZero;
     
     [self.headerView reloadLikeBar];
     
@@ -503,7 +479,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             
             self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
             
-            NSLog(@"%f", self.autocompleteTableView.frame.origin.y);
+            NSLog(@"%f", self.customKeyboard.view.frame.origin.y + self.customKeyboard.keyboardHeight);
             
             // frames should be handled differently for iphone 4 and 5.
             if ([UIScreen mainScreen].bounds.size.height == 480) {
@@ -511,7 +487,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 self.autocompleteTableView.frame = CGRectMake(7.5f, self.postDetails.contentSize.height - 212.0f + text_offset, 305.0f, 143.0f - text_offset);
             } else {
                 self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
-                self.autocompleteTableView.frame = CGRectMake(7.5f, self.customKeyboard.view.frame.origin.y - 200, 305.0f, 185.0f - text_offset);
+                self.autocompleteTableView.frame = CGRectMake(7.5f, self.customKeyboard.view.frame.origin.y - 140 - text_offset, 305.0f, [[UIScreen mainScreen] bounds].size.height - self.navigationController.navigationBar.frame.size.height - (self.customKeyboard.view.frame.origin.y + self.customKeyboard.keyboardHeight));
             }
             
             if ([self.filteredArray count] < 1) {
