@@ -365,6 +365,24 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
     }];
 }
 
+#pragma mark - UITextViewDelegate
+
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboardDidBeginEditing)]) {
+        [self.delegate keyboardDidBeginEditing];
+    }
+}
+
+- (BOOL) textView:(UITextView*)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString*)text{
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(keyboardShouldChangeTextInRange:replacementText:)]) {
+        return [self.delegate keyboardShouldChangeTextInRange:range replacementText:text];
+    }
+    
+    return YES;
+}
+
 
 
 @end

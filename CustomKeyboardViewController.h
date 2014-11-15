@@ -28,6 +28,10 @@
 @end
 
 @protocol CustomKeyboardViewControllerDelegate <NSObject>
+@optional
+- (void)keyboardDidBeginEditing;
+- (BOOL)keyboardShouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
+
 @required
 - (void)sendButtonAction:(id)sender;
 - (void)setTableViewHeight;

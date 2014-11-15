@@ -402,35 +402,36 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 
 
-#pragma mark - UITextViewDelegate
+#pragma mark - CustomKeyboardDelegate
 
 
-- (void)textViewDidBeginEditing:(UITextView *)textView {
+- (void)keyboardDidBeginEditing{
+
+    // get post type
+    NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
     
-    if ([[textView text] isEqualToString:@"Add a comment"]) {
-        [textView setText:@""];
-        
-        // get post type
-        NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
-        
-        // mixpanel analytics
-        [[Mixpanel sharedInstance] track:@"Started Writing Comment" properties:@{@"Post Type" : postType}];
-    }
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Started Writing Comment" properties:@{@"Post Type" : postType}];
 }
 
-- (void)textViewDidEndEditing:(UITextView *)textView {
-    if ([textView.text length] == 0) {
-        // reset default text view and frame
-        [textView setText:@"Add a comment"];
-    }
-}
+- (BOOL)keyboardShouldChangeTextInRange:(NSRange)range replacementText:(NSString*)text{
 
-- (BOOL) textView:(UITextView*)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString*)text{
     if ([cellType isEqualToString:@"atmentionCell"]) {
         text = [text stringByAppendingString:@" "];
         
         if (range.location != NSNotFound) {
-            textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, range.length + 1) withString:text];
+            
+            
+            /* If the user presses the Delete key, the length of the range is 1 and an empty string object replaces that single character. Goes out of bounds when user presses delete and selects display name at the start of message.*/
+            
+            long replacementRange = range.length + 1;
+            
+            // Check if new range is in bounds of current text, accounting for extra key when deleting
+            if(replacementRange < self.customKeyboard.messageTextView.text.length){
+                self.customKeyboard.messageTextView.text = [self.customKeyboard.messageTextView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, replacementRange) withString:text];
+            }else{
+                self.customKeyboard.messageTextView.text = [self.customKeyboard.messageTextView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, range.length) withString:text];
+            }
         }
         
         cellType = nil;
@@ -459,73 +460,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 [SVProgressHUD dismiss];
             }
         
-    } else if ([text isEqualToString:@"\n"]) {
-        NSString *trimmedComment = [textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        if (trimmedComment.length != 0 && [self.photo objectForKey:kPAPPhotoUserKey]) {
-            PFObject *comment = [PFObject objectWithClassName:kPAPActivityClassKey];
-            [comment setObject:trimmedComment forKey:kPAPActivityContentKey]; // Set comment text
-            [comment setObject:[self.photo objectForKey:kPAPPhotoUserKey] forKey:kPAPActivityToUserKey]; // Set toUser
-            [comment setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey]; // Set fromUser
-            [comment setObject:kPAPActivityTypeComment forKey:kPAPActivityTypeKey];
-            [comment setObject:self.photo forKey:kPAPActivityPhotoKey];
-            
-            // storing atmention user list to the array (only filtered cases).
-            if ([self.atmentionUserArray count] > 0) {
-                NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", textView.text]];
-                [comment setObject:mod_atmentionUserArray forKey:@"atmention"];
-            }
-            
-            PFACL *ACL = [PFACL ACLWithUser:[PFUser currentUser]];
-            [ACL setPublicReadAccess:YES];
-            [ACL setWriteAccess:YES forUser:[self.photo objectForKey:kPAPPhotoUserKey]];
-            comment.ACL = ACL;
-            
-            [[PAPCache sharedCache] incrementCommentCountForPhoto:self.photo];
-            
-            // get post type
-            NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
-            
-            // mixpanel analytics
-            [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Commented", @"Post Type" : postType}];
-            
-            // Show HUD view
-            [SVProgressHUD show];
-            
-            // If more than 5 seconds pass since we post a comment, stop waiting for the server to respond
-            NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(handleCommentTimeout:) userInfo:@{@"comment": comment} repeats:NO];
-            
-            [comment saveEventually:^(BOOL succeeded, NSError *error) {
-                [timer invalidate];
-                
-                if (error && error.code == kPFErrorObjectNotFound) {
-                    [[PAPCache sharedCache] decrementCommentCountForPhoto:self.photo];
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Could not post comment", nil) message:NSLocalizedString(@"This photo is no longer available", nil) delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                    [alert show];
-                    [self.navigationController popViewControllerAnimated:YES];
-                }
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:self.photo userInfo:@{@"comments": @(self.objects.count + 1)}];
-                
-                self.atmentionUserArray = nil;
-                self.atmentionUserArray = [[NSMutableArray alloc] init];
-                [SVProgressHUD dismiss];
-                [self loadObjects];
-                
-                // suscribe to post if commenter is not photo owner
-                if(![[[self.photo objectForKey:kPAPPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]){
-                    [PAPUtility updateSubscriptionToPost:self.photo forState:@"Subscribe"];
-                }
-                
-            }];
-        }
-        
-        [textView setText:@""];
-        [textView resignFirstResponder];
-        return NO;
     }
     
     if ([self.userArray count] > 0) {
-        NSMutableString *updatedText = [[NSMutableString alloc] initWithString:textView.text];
+        NSMutableString *updatedText = [[NSMutableString alloc] initWithString:self.customKeyboard.messageTextView.text];
         if (range.location == 0 || range.location == text_location) {
             self.autocompleteTableView.hidden = YES;
             self.dimView.hidden = YES;
@@ -554,13 +492,15 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             
             self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
             
+            NSLog(@"%f", self.autocompleteTableView.frame.origin.y);
+            
             // frames should be handled differently for iphone 4 and 5.
             if ([UIScreen mainScreen].bounds.size.height == 480) {
                 self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
                 self.autocompleteTableView.frame = CGRectMake(7.5f, self.postDetails.contentSize.height - 212.0f + text_offset, 305.0f, 143.0f - text_offset);
             } else {
                 self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
-                self.autocompleteTableView.frame = CGRectMake(7.5f, self.postDetails.contentSize.height - 302.0f + text_offset, 305.0f, 232.0f - text_offset);
+                self.autocompleteTableView.frame = CGRectMake(7.5f, self.customKeyboard.view.frame.origin.y - 200, 305.0f, 185.0f - text_offset);
             }
             
             if ([self.filteredArray count] < 1) {
@@ -574,8 +514,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             [self.autocompleteTableView reloadData];
         }
     }
+
     
     return YES;
+    
 }
 
 
@@ -587,7 +529,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         text_location = 0;
         
         if (atmentionRange.location != NSNotFound) {
-            [self textView:commentTextView shouldChangeTextInRange:atmentionRange replacementText:[aUser objectForKey:@"displayName"]];
+            [self keyboardShouldChangeTextInRange:atmentionRange replacementText:[aUser objectForKey:@"displayName"]];
         }
         
         self.autocompleteTableView.hidden = YES;
@@ -990,6 +932,13 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [comment setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey]; // Set fromUser
         [comment setObject:kPAPActivityTypeComment forKey:kPAPActivityTypeKey];
         [comment setObject:self.photo forKey:kPAPActivityPhotoKey];
+        
+        // storing atmention user list to the array (only filtered cases).
+        if ([self.atmentionUserArray count] > 0) {
+            NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", self.customKeyboard.messageTextView.text]];
+            [comment setObject:mod_atmentionUserArray forKey:@"atmention"];
+        }
+
     
         PFACL *ACL = [PFACL ACLWithUser:[PFUser currentUser]];
         [ACL setPublicReadAccess:YES];
