@@ -51,6 +51,7 @@ enum ActionSheetTags {
 @property CGRect defaultFooterViewFrame;
 @property CGRect defaultCommentTextViewFrame;
 @property CGRect previousRect;
+@property CGRect tabBarSize;
 @property CGFloat previousKbHeight;
 @end
 
@@ -215,7 +216,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     [self loadObjects];
     
-    self.tabBarController.tabBar.frame = CGRectZero;
     self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
     self.customKeyboard.delegate = self;
     [self.customKeyboard setTextViewPosition:64];
@@ -223,6 +223,17 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.customKeyboard.view.layer.zPosition = 100;
     [self.customKeyboard setBackgroundTable:self.postDetails];
     [self.view addSubview:self.customKeyboard.view];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    self.tabBarController.tabBar.hidden = YES;
+    self.tabBarSize = self.tabBarController.tabBar.frame;
+    self.tabBarController.tabBar.frame = CGRectZero;
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    self.tabBarController.tabBar.hidden = NO;
+    self.tabBarController.tabBar.frame = self.tabBarSize;
 }
 
 - (void)viewDidAppear:(BOOL)animated {

@@ -264,6 +264,8 @@
 		D542D8C4196A6F4700A0384F /* ELCAssetPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = D542D8BA196A6F4700A0384F /* ELCAssetPicker.xib */; };
 		D542D8C5196A6F4700A0384F /* ELCAssetTablePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = D542D8BB196A6F4700A0384F /* ELCAssetTablePicker.xib */; };
 		D542D8C9196A721B00A0384F /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D542D8C8196A721B00A0384F /* AssetsLibrary.framework */; };
+		D546275E1A16E1AF00EA739C /* OriginalBackgroundNavigationBar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D546275D1A16E1AF00EA739C /* OriginalBackgroundNavigationBar@2x.png */; };
+		D54627601A16E1B400EA739C /* OriginalBackgroundNavigationBar.png in Resources */ = {isa = PBXBuildFile; fileRef = D546275F1A16E1B400EA739C /* OriginalBackgroundNavigationBar.png */; };
 		D54E0FF819A7B75C000B1F9D /* PAPwebviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D54E0FF719A7B75C000B1F9D /* PAPwebviewViewController.m */; };
 		D54E0FFB19A7B76B000B1F9D /* OpenInChromeController.m in Sources */ = {isa = PBXBuildFile; fileRef = D54E0FF919A7B76B000B1F9D /* OpenInChromeController.m */; };
 		D552B0E619C7D3EB009F2862 /* arrows_left_white.png in Resources */ = {isa = PBXBuildFile; fileRef = D552B0DE19C7D3EB009F2862 /* arrows_left_white.png */; };
@@ -786,6 +788,8 @@
 		D542D8BA196A6F4700A0384F /* ELCAssetPicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ELCAssetPicker.xib; sourceTree = "<group>"; };
 		D542D8BB196A6F4700A0384F /* ELCAssetTablePicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ELCAssetTablePicker.xib; sourceTree = "<group>"; };
 		D542D8C8196A721B00A0384F /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		D546275D1A16E1AF00EA739C /* OriginalBackgroundNavigationBar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "OriginalBackgroundNavigationBar@2x.png"; sourceTree = "<group>"; };
+		D546275F1A16E1B400EA739C /* OriginalBackgroundNavigationBar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OriginalBackgroundNavigationBar.png; sourceTree = "<group>"; };
 		D54E0FF719A7B75C000B1F9D /* PAPwebviewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPwebviewViewController.m; sourceTree = SOURCE_ROOT; };
 		D54E0FF919A7B76B000B1F9D /* OpenInChromeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenInChromeController.m; sourceTree = SOURCE_ROOT; };
 		D54E0FFA19A7B76B000B1F9D /* OpenInChromeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenInChromeController.h; sourceTree = SOURCE_ROOT; };
@@ -1373,6 +1377,8 @@
 				462FCB76188C806C005059F3 /* button_done@2x.png */,
 				462FCB77188C806C005059F3 /* button_setting.png */,
 				462FCB78188C806C005059F3 /* button_setting@2x.png */,
+				D546275D1A16E1AF00EA739C /* OriginalBackgroundNavigationBar@2x.png */,
+				D546275F1A16E1B400EA739C /* OriginalBackgroundNavigationBar.png */,
 				467154A418835E470000C0CA /* privacy.png */,
 				467154A518835E470000C0CA /* privacy@2x.png */,
 				46B31EE2184E35150028D11C /* profileWebsite.png */,
@@ -2167,6 +2173,7 @@
 				D55AEF1F19BA5E3800ECF342 /* btn_webview_options@2x.png in Resources */,
 				D5856F9D19F87E2600D0086F /* konotor_cross@2x.png in Resources */,
 				D5856FA219F87E2600D0086F /* konotor_profile.png in Resources */,
+				D54627601A16E1B400EA739C /* OriginalBackgroundNavigationBar.png in Resources */,
 				467A40B2199000B100D4C693 /* btn_image_upload.png in Resources */,
 				D5FC095C18A9B586000D85F1 /* CameraFilterViewController.xib in Resources */,
 				C4BE6777157FC7F700A291C2 /* BackgroundNavigationBar.png in Resources */,
@@ -2331,6 +2338,7 @@
 				460997591938119A00C5AD96 /* icon-linkedin-profile.png in Resources */,
 				463B0CEA1985A8C80075E496 /* intro_moment_2.png in Resources */,
 				D57684131933F917008BAA2C /* IconActivitySelected@2x.png in Resources */,
+				D546275E1A16E1AF00EA739C /* OriginalBackgroundNavigationBar@2x.png in Resources */,
 				46839E9F18E1E8C100BD60DB /* icon-upload@2x.png in Resources */,
 				D552B0EC19C7D3EB009F2862 /* arrows_right.png in Resources */,
 				467A40AC198FF1B200D4C693 /* profile_header_2.png in Resources */,
