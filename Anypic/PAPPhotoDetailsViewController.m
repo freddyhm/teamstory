@@ -179,21 +179,23 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
     // set comment block view for spinner
     float tableCommentVerticalPos = self.postDetails.tableHeaderView.frame.origin.y + self.postDetails.tableHeaderView.frame.size.height;
-    float tableCommentHeight = self.postDetails.tableFooterView.frame.origin.y + (self.postDetails.tableFooterView.frame.size.height * 2);
+    
+    // make this tall enough to cover all comments
+    float tableCommentHeight = self.postDetails.frame.size.height * 4;
     self.hideCommentsView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, tableCommentVerticalPos, 320.0f, tableCommentHeight)];
     [self.hideCommentsView setBackgroundColor:[UIColor whiteColor]];
     
     // set spinner
     self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.postDetails.frame.size.width/2 - 50,0,100,100)];
-    self.spinner.activityIndicatorViewStyle =UIActivityIndicatorViewStyleWhiteLarge;
-    self.spinner.color = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];    
+    self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+    self.spinner.color = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
     [self.hideCommentsView addSubview:self.spinner];
     
     self.spinner.hidesWhenStopped = YES;
     self.postDetails.showsVerticalScrollIndicator = NO;
     
     [self loadObjects];
-    
+   
     self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
     self.customKeyboard.delegate = self;
     [self.customKeyboard setTextViewPosition:64];
@@ -201,6 +203,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.customKeyboard.view.layer.zPosition = 100;
     [self.customKeyboard setBackgroundTable:self.postDetails];
     [self.view addSubview:self.customKeyboard.view];
+     
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -387,6 +390,14 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     return cell;
 }
 
+#pragma mark - CustomKeyboardDelegate
+
+- (void)dismissKeyboard {
+    self.autocompleteTableView.hidden = YES;
+    self.dimView.hidden = YES;
+    [self.customKeyboard dismissKeyboard];
+}
+
 
 
 #pragma mark - CustomKeyboardDelegate
@@ -479,7 +490,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             
             self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
             
-            NSLog(@"%f", self.customKeyboard.view.frame.origin.y + self.customKeyboard.keyboardHeight);
+           // NSLog(@"%f", self.customKeyboard.view.frame.size.height);
+           
+             NSLog(@"%f",  self.customKeyboard.view.frame.origin.y);
+            
+           
             
             // frames should be handled differently for iphone 4 and 5.
             if ([UIScreen mainScreen].bounds.size.height == 480) {
@@ -487,7 +502,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 self.autocompleteTableView.frame = CGRectMake(7.5f, self.postDetails.contentSize.height - 212.0f + text_offset, 305.0f, 143.0f - text_offset);
             } else {
                 self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
-                self.autocompleteTableView.frame = CGRectMake(7.5f, self.customKeyboard.view.frame.origin.y - 140 - text_offset, 305.0f, [[UIScreen mainScreen] bounds].size.height - self.navigationController.navigationBar.frame.size.height - (self.customKeyboard.view.frame.origin.y + self.customKeyboard.keyboardHeight));
+                self.autocompleteTableView.frame = CGRectMake(7.5f, 70, 305.0f, [[UIScreen mainScreen] bounds].size.height - self.navigationController.navigationBar.frame.size.height - self.customKeyboard.view.frame.size.height - 300);
             }
             
             if ([self.filteredArray count] < 1) {
@@ -624,7 +639,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     //start spinner
     [self.spinner startAnimating];
-    [self.view addSubview:self.hideCommentsView];
+    [self.postDetails addSubview:self.hideCommentsView];
     
     //refresh comment(s) on background thread
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
@@ -994,9 +1009,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.previousKbHeight = self.customKeyboard.messageTextView.frame.size.height;
 }
 
-- (void)dismissKeyboard {
-    [self.customKeyboard dismissKeyboard];
-}
+
 
 
 @end
