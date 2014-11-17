@@ -20,5 +20,6 @@
 @property int objectsPerPage;
 
 - (id)initWithPhoto:(PFObject *)aPhoto source:(NSString *)source;
+- (void)dismissKeyboard;
 
 @end
