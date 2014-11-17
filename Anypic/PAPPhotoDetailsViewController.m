@@ -502,7 +502,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 self.autocompleteTableView.frame = CGRectMake(7.5f, self.postDetails.contentSize.height - 212.0f + text_offset, 305.0f, 143.0f - text_offset);
             } else {
                 self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
-                self.autocompleteTableView.frame = CGRectMake(7.5f, 70, 305.0f, [[UIScreen mainScreen] bounds].size.height - self.navigationController.navigationBar.frame.size.height - self.customKeyboard.view.frame.size.height - 300);
+                self.autocompleteTableView.frame = CGRectMake(0, 64, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height - self.navigationController.navigationBar.frame.size.height - self.customKeyboard.view.frame.size.height - 273);
             }
             
             if ([self.filteredArray count] < 1) {
