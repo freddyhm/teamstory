@@ -295,13 +295,28 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                         [self.customKeyboard.messageTextView becomeFirstResponder];
                     }
                     
-                    [self.postDetails setContentOffset:CGPointMake(0, self.postDetails.contentSize.height - self.postDetails.bounds.size.height + 44)];
+                    float newVerticalPos = self.postDetails.contentSize.height - self.postDetails.bounds.size.height + 44;
+                    
+                    if(newVerticalPos > 0){
+                        [self.postDetails setContentOffset:CGPointMake(0, newVerticalPos)];
+                    }
                 }
             }
         }];
     }
     
     [self.postDetails reloadData];
+    
+    
+    if([self.source isEqualToString:@"commentButton"] && [loadedObjects count] == 0){
+        [self.customKeyboard.messageTextView becomeFirstResponder];
+        
+        float newVerticalPos = self.postDetails.contentSize.height - self.postDetails.bounds.size.height + 44;
+        
+        if(newVerticalPos > 0){
+            [self.postDetails setContentOffset:CGPointMake(0, newVerticalPos)];
+        }
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -498,11 +513,20 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             
             // frames should be handled differently for iphone 4 and 5.
             if ([UIScreen mainScreen].bounds.size.height == 480) {
-                self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
-                self.autocompleteTableView.frame = CGRectMake(7.5f, self.postDetails.contentSize.height - 212.0f + text_offset, 305.0f, 143.0f - text_offset);
+               
+                
             } else {
+                
+                // Check system version for keyboard offset, ios8 added suggestion bar
+                // Align the mention table view
+                
                 self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
-                self.autocompleteTableView.frame = CGRectMake(0, 64, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height - self.navigationController.navigationBar.frame.size.height - self.customKeyboard.view.frame.size.height - 273);
+                
+                if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
+                    self.autocompleteTableView.frame = CGRectMake(0, 64, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height - self.navigationController.navigationBar.frame.size.height - self.customKeyboard.view.frame.size.height - 273);
+                }else{
+                    self.autocompleteTableView.frame = CGRectMake(0, 64, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height - self.navigationController.navigationBar.frame.size.height - self.customKeyboard.view.frame.size.height - 273 + 37);
+                }
             }
             
             if ([self.filteredArray count] < 1) {
@@ -517,9 +541,83 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         }
     }
 
-    
     return YES;
+}
+
+- (void)sendButtonAction:(id)sender{
     
+    // hide mention tableview
+    self.autocompleteTableView.hidden = YES;
+    self.dimView.hidden = YES;
+    
+    NSString *trimmedComment = [self.customKeyboard.messageTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if (trimmedComment.length != 0 && [self.photo objectForKey:kPAPPhotoUserKey]) {
+        
+        PFObject *comment = [PFObject objectWithClassName:kPAPActivityClassKey];
+        [comment setObject:trimmedComment forKey:kPAPActivityContentKey]; // Set comment text
+        [comment setObject:[self.photo objectForKey:kPAPPhotoUserKey] forKey:kPAPActivityToUserKey]; // Set toUser
+        [comment setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey]; // Set fromUser
+        [comment setObject:kPAPActivityTypeComment forKey:kPAPActivityTypeKey];
+        [comment setObject:self.photo forKey:kPAPActivityPhotoKey];
+        
+        // storing atmention user list to the array (only filtered cases).
+        if ([self.atmentionUserArray count] > 0) {
+            NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", self.customKeyboard.messageTextView.text]];
+            [comment setObject:mod_atmentionUserArray forKey:@"atmention"];
+        }
+        
+        
+        PFACL *ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+        [ACL setPublicReadAccess:YES];
+        [ACL setWriteAccess:YES forUser:[self.photo objectForKey:kPAPPhotoUserKey]];
+        comment.ACL = ACL;
+        
+        [[PAPCache sharedCache] incrementCommentCountForPhoto:self.photo];
+        
+        // get post type
+        NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
+        
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Commented", @"Post Type" : postType}];
+        
+        // Show HUD view
+        [SVProgressHUD show];
+        
+        // If more than 5 seconds pass since we post a comment, stop waiting for the server to respond
+        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(handleCommentTimeout:) userInfo:@{@"comment": comment} repeats:NO];
+        
+        [comment saveEventually:^(BOOL succeeded, NSError *error) {
+            [timer invalidate];
+            
+            if (error && error.code == kPFErrorObjectNotFound) {
+                [[PAPCache sharedCache] decrementCommentCountForPhoto:self.photo];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Could not post comment", nil) message:NSLocalizedString(@"This photo is no longer available", nil) delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                [alert show];
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:self.photo userInfo:@{@"comments": @(self.objects.count + 1)}];
+            
+            self.atmentionUserArray = nil;
+            self.atmentionUserArray = [[NSMutableArray alloc] init];
+            [SVProgressHUD dismiss];
+            [self loadObjects];
+            
+            // suscribe to post if commenter is not photo owner
+            if(![[[self.photo objectForKey:kPAPPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]){
+                [PAPUtility updateSubscriptionToPost:self.photo forState:@"Subscribe"];
+            }
+            
+        }];
+        
+        // reset textview to default height, update flag so table goes to posted comment
+        [self.customKeyboard.messageTextView setText:@""];
+        [self.customKeyboard.messageTextView resignFirstResponder];
+        [self.customKeyboard resetTextViewHeight];
+        [self.customKeyboard setTextViewPosition:64];
+        self.source = @"postedComment";
+    }
 }
 
 
@@ -920,78 +1018,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [[PAPCache sharedCache] setAttributesForPhoto:photo likers:likers commenters:commenters likedByCurrentUser:isLikedByCurrentUser];
         [self.headerView reloadLikeBar];
     }];
-}
-
-- (void)sendButtonAction:(id)sender{
-    
-    NSString *trimmedComment = [self.customKeyboard.messageTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    
-    if (trimmedComment.length != 0 && [self.photo objectForKey:kPAPPhotoUserKey]) {
-        
-        PFObject *comment = [PFObject objectWithClassName:kPAPActivityClassKey];
-        [comment setObject:trimmedComment forKey:kPAPActivityContentKey]; // Set comment text
-        [comment setObject:[self.photo objectForKey:kPAPPhotoUserKey] forKey:kPAPActivityToUserKey]; // Set toUser
-        [comment setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey]; // Set fromUser
-        [comment setObject:kPAPActivityTypeComment forKey:kPAPActivityTypeKey];
-        [comment setObject:self.photo forKey:kPAPActivityPhotoKey];
-        
-        // storing atmention user list to the array (only filtered cases).
-        if ([self.atmentionUserArray count] > 0) {
-            NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", self.customKeyboard.messageTextView.text]];
-            [comment setObject:mod_atmentionUserArray forKey:@"atmention"];
-        }
-
-    
-        PFACL *ACL = [PFACL ACLWithUser:[PFUser currentUser]];
-        [ACL setPublicReadAccess:YES];
-        [ACL setWriteAccess:YES forUser:[self.photo objectForKey:kPAPPhotoUserKey]];
-        comment.ACL = ACL;
-        
-        [[PAPCache sharedCache] incrementCommentCountForPhoto:self.photo];
-        
-        // get post type
-        NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
-        
-        // mixpanel analytics
-        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Commented", @"Post Type" : postType}];
-        
-        // Show HUD view
-        [SVProgressHUD show];
-        
-        // If more than 5 seconds pass since we post a comment, stop waiting for the server to respond
-        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(handleCommentTimeout:) userInfo:@{@"comment": comment} repeats:NO];
-        
-        [comment saveEventually:^(BOOL succeeded, NSError *error) {
-            [timer invalidate];
-            
-            if (error && error.code == kPFErrorObjectNotFound) {
-                [[PAPCache sharedCache] decrementCommentCountForPhoto:self.photo];
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Could not post comment", nil) message:NSLocalizedString(@"This photo is no longer available", nil) delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                [alert show];
-                [self.navigationController popViewControllerAnimated:YES];
-            }
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:self.photo userInfo:@{@"comments": @(self.objects.count + 1)}];
-            
-            self.atmentionUserArray = nil;
-            self.atmentionUserArray = [[NSMutableArray alloc] init];
-            [SVProgressHUD dismiss];
-            [self loadObjects];
-            
-            // suscribe to post if commenter is not photo owner
-            if(![[[self.photo objectForKey:kPAPPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]){
-                [PAPUtility updateSubscriptionToPost:self.photo forState:@"Subscribe"];
-            }
-            
-        }];
-        
-        // reset textview to default height, update flag so table goes to posted comment
-        [self.customKeyboard.messageTextView setText:@""];
-        [self.customKeyboard.messageTextView resignFirstResponder];
-        [self.customKeyboard resetTextViewHeight];
-        [self.customKeyboard setTextViewPosition:64];
-        self.source = @"postedComment";
-    }
 }
 
 - (void)setTableViewHeight{

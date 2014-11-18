@@ -108,6 +108,7 @@
 #pragma mark - Delegate Methods
 - (void)sendButtonAction:(id)sender{
     if (self.delegate && [self.delegate respondsToSelector:@selector(sendButtonAction:)]) {
+        [self changeSendButtonState:NO];
         [self.delegate sendButtonAction:sender];
     }
 }
@@ -337,6 +338,22 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
         [self setKeyboardHeight:kbSize.height - 64];
         [self setTextViewPosition:-kbSize.height];
         [self.tableView setContentSize:CGSizeMake(self.tableView.frame.size.width, self.tableView.contentSize.height + (kbSize.height + 10))];
+        float newOffset = self.tableView.contentOffset.y + kbSize.height;
+        
+        BOOL isLink = self.tableView.tableHeaderView.frame.size.height == 187;
+        BOOL linkWithComments = isLink && self.tableView.contentSize.height > 500;
+       // BOOL linkFewComments = isLink && self.tableView.contentSize.height > 500 && self.tableView.contentSize.height <= 650;
+        
+        
+        NSLog(@"%f content offset y:", self.tableView.contentOffset.y);
+        NSLog(@"%f tableHeaderViewHeight:", self.tableView.tableHeaderView.frame.size.height);
+        NSLog(@"%f table content size:", self.tableView.contentSize.height);
+        NSLog(@"%f newOffset:", newOffset);
+        
+        if(!isLink || linkWithComments){
+            [self.tableView setContentOffset:CGPointMake(0, newOffset)];
+        }
+        
     } completion:^(BOOL finished) {
     }];
 }
@@ -361,6 +378,15 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
         [self setKeyboardHeight:-(kbSize.height - 64)];
         [self setTextViewPosition:kbSize.height];
         [self.tableView setContentSize:CGSizeMake(self.tableView.frame.size.width, self.tableView.contentSize.height - kbSize.height)];
+        
+        float newOffset = self.tableView.contentOffset.y - kbSize.height;
+        
+        //NSLog(@"%f hide:", newOffset);
+        
+        if(newOffset > -65){
+            [self.tableView setContentOffset:CGPointMake(0, newOffset)];
+        }
+        
     } completion:^(BOOL finished) {
     }];
 }
