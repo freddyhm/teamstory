@@ -244,6 +244,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     
     NSString *pushSrc = [userInfo objectForKey:@"source"];
     NSString *notificationType = [userInfo objectForKey:kPAPPushPayloadPayloadTypeKey];
+    NSString *currentObjectId = [userInfo objectForKey:@"aid"];
     
     // handle type of notification
     if ([pushSrc isEqualToString:@"konotor"]){
@@ -280,7 +281,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageButton" object:nil];
                 
                 if ([self.userView isEqual:@"messagingScreen"]) {
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"updateTableView" object:nil];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"updateTableView" object:currentObjectId];
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageListView" object:nil];
                 } else if ([self.userView isEqualToString:@"messagingListViewScreen"]){
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"updateListViewQuery" object:nil];
