@@ -217,7 +217,7 @@
         if (!error) {
             [self.messageQuery addObject:object];
             [self.messageList reloadData];
-            [self scrollToBottom:NO];
+            [self scrollToBottom:YES];
         } else {
             NSLog(@"newMessageQuery Error: %@", error);
         }
