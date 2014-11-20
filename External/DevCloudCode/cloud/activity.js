@@ -238,55 +238,39 @@ Parse.Cloud.afterSave('Activity', function(request) {
                                               }, function(error) {
                                               throw "Push Error " + error.code + " : " + error.message;
                                               });
+
                         
                       }
 
                       toUser.increment('activityBadge', 1);
                       toUser.save();
                       
-                      }
-                      
                       // Only send push notifications for new activities
+                      
                       if (request.object.existed()) {
-                      return;
+                        return;
                       }
                       
                       if (!toUser) {
-                      throw "Undefined toUser. Skipping push for Activity " + request.object.get('type') + " : " + request.object.id;
-                      return;
+                        throw "Undefined toUser. Skipping push for Activity " + request.object.get('type') + " : " + request.object.id;
+                        return;
                       }
                         
-                      Parse.Cloud.run("incrementCounter", {currentObjectId: request.object.get('photo').id, type: request.object.get('type')});
-                        
-                      });
-  
-  
-  
-var alertMessage = function(request) {
-    var message = "";
-      
-    var atmentionUserArray = new Array();
-      
-    atmentionUserArray = request.object.get("atmention") != undefined ? request.object.get("atmention") : "";
-      
-=======
-                      
                       if(request.object.get('photo').id != undefined && request.object.get('type') != undefined){
                         Parse.Cloud.run("incrementCounter", {currentObjectId: request.object.get('photo').id, type: request.object.get('type')});
                       }
-                      
+
                       });
-
-
-
+  
+  
+  
 var alertMessage = function(request) {
     var message = "";
-    
+      
     var atmentionUserArray = new Array();
-    
+      
     atmentionUserArray = request.object.get("atmention") != undefined ? request.object.get("atmention") : "";
-    
->>>>>>> origin/develop
+      
     if (request.object.get("type") === "comment" && atmentionUserArray.length == 0) {
         if (request.user.get('displayName')) {
             message = request.user.get('displayName') + ': ' + request.object.get('content').trim();
