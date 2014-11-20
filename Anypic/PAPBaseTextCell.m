@@ -30,7 +30,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
     BOOL hideSeparator; // True if the separator shouldn't be shown
 }
 
-@property (nonatomic, strong) UITabBarController *ih_tabBarController;
 @property (nonatomic, strong) PFObject *ih_object;
 @property (nonatomic, strong) PFObject *ih_photo;
 @property (nonatomic, strong) UIButton *editButton;
@@ -54,7 +53,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 @synthesize website;
 @synthesize navController;
 @synthesize cellType;
-@synthesize ih_tabBarController;
+@synthesize parentView;
 @synthesize ih_object;
 @synthesize ih_photo;
 @synthesize editButton;
@@ -372,10 +371,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
     self.navController = anavController;
 }
 
--(void)tabBarController:(UITabBarController *)tabBarController {
-    self.ih_tabBarController = tabBarController;
-}
-
 -(void)object:(PFObject *)object {
     self.ih_object = object;
 }
@@ -450,7 +445,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Edit Comment"]];
     [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Delete Comment"]];
     [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
-    [actionSheet showFromTabBar:self.ih_tabBarController.tabBar];
+    [actionSheet showInView:self.parentView];
 }
 
 - (void)commentInflatorAction:(id)sender {
@@ -464,7 +459,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Edit Comment"]];
     [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Delete Comment"]];
     [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
-    [actionSheet showFromTabBar:self.ih_tabBarController.tabBar];
+    [actionSheet showInView:self.parentView];
 }
 
 - (void)openUrl:(id)sender {

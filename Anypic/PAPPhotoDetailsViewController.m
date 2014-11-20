@@ -210,14 +210,27 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
     self.tabBarController.tabBar.hidden = YES;
     self.tabBarSize = self.tabBarController.tabBar.frame;
     self.tabBarController.tabBar.frame = CGRectZero;
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
     self.tabBarController.tabBar.hidden = NO;
     self.tabBarController.tabBar.frame = self.tabBarSize;
+}
+
+- (void)viewDidDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
+    if(self.tabBarController.tabBar.hidden){
+        self.tabBarController.tabBar.hidden = NO;
+        self.tabBarController.tabBar.frame = self.tabBarSize;
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -344,7 +357,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         }
         [cell navigationController:self.navigationController];
         [cell object:[self.objects objectAtIndex:indexPath.row]];
-        [cell tabBarController:self.tabBarController];
+        [cell setParentView:self.customKeyboard.view];
         [cell photo:self.photo];
         
         [cell setUser:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityFromUserKey]];
@@ -513,28 +526,14 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             
             self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
             
-           // NSLog(@"%f", self.customKeyboard.view.frame.size.height);
-           
-             NSLog(@"%f",  self.customKeyboard.view.frame.origin.y);
+            // Check system version for keyboard offset, ios8 added suggestion bar
+            // Align the mention table view
+            self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
             
-           
-            
-            // frames should be handled differently for iphone 4 and 5.
-            if ([UIScreen mainScreen].bounds.size.height == 480) {
-               
-                
-            } else {
-                
-                // Check system version for keyboard offset, ios8 added suggestion bar
-                // Align the mention table view
-                
-                self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
-                
-                if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
-                    self.autocompleteTableView.frame = CGRectMake(0, 64, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height - self.navigationController.navigationBar.frame.size.height - self.customKeyboard.view.frame.size.height - 273);
-                }else{
-                    self.autocompleteTableView.frame = CGRectMake(0, 64, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height - self.navigationController.navigationBar.frame.size.height - self.customKeyboard.view.frame.size.height - 273 + 37);
-                }
+            if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
+                self.autocompleteTableView.frame = CGRectMake(0, 64, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height - self.navigationController.navigationBar.frame.size.height - self.customKeyboard.view.frame.size.height - 273);
+            }else{
+                self.autocompleteTableView.frame = CGRectMake(0, 64, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height - self.navigationController.navigationBar.frame.size.height - self.customKeyboard.view.frame.size.height - 273 + 37);
             }
             
             if ([self.filteredArray count] < 1) {
@@ -814,7 +813,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Report Inappropriate", nil)]];
     }
     [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
-    [actionSheet showFromTabBar:self.tabBarController.tabBar];
+    [actionSheet showInView:self.customKeyboard.view];
 }
 
 - (BOOL)currentUserOwnsPhoto {
