@@ -195,10 +195,13 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.postDetails.showsVerticalScrollIndicator = NO;
     
     [self loadObjects];
+    
+    NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
    
     self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
     self.customKeyboard.delegate = self;
     [self.customKeyboard setTextViewPosition:64];
+    [self.customKeyboard setPostType:postType];
     [self.customKeyboard.sendButton setTitle:@"Post" forState:UIControlStateNormal];
     self.customKeyboard.view.layer.zPosition = 100;
     [self.customKeyboard setBackgroundTable:self.postDetails];
@@ -291,15 +294,18 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 // move to last comments when notification relates to a new comment
                 if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] || [self.source isEqual:@"activityComment"] || [self.source isEqual:@"commentButton"] || [self.source isEqual:@"postedComment"]  )){
                     
-                    if([self.source isEqualToString:@"commentButton"]){
-                        [self.customKeyboard.messageTextView becomeFirstResponder];
-                    }
                     
-                    float newVerticalPos = self.postDetails.contentSize.height - self.postDetails.bounds.size.height + 44;
+                    float newVerticalPos = self.postDetails.contentSize.height - self.postDetails.bounds.size.height + 84;
                     
                     if(newVerticalPos > 0){
                         [self.postDetails setContentOffset:CGPointMake(0, newVerticalPos)];
                     }
+                    
+                    if([self.source isEqualToString:@"commentButton"]){
+                        [self.customKeyboard setObjCount:[loadedObjects count]];
+                        [self.customKeyboard.messageTextView becomeFirstResponder];
+                    }
+                
                 }
             }
         }];
@@ -309,6 +315,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     
     if([self.source isEqualToString:@"commentButton"] && [loadedObjects count] == 0){
+        
+        [self.customKeyboard setObjCount:0];
         [self.customKeyboard.messageTextView becomeFirstResponder];
         
         float newVerticalPos = self.postDetails.contentSize.height - self.postDetails.bounds.size.height + 44;

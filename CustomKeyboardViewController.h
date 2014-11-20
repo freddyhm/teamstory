@@ -16,6 +16,9 @@
 @property (nonatomic, weak) id<CustomKeyboardViewControllerDelegate> delegate;
 @property (nonatomic, strong) UITableView *ih_tableView;
 @property CGFloat keyboardHeight;
+@property NSUInteger objCount;
+@property (nonatomic, strong) NSString *postType;
+
 - (void)setBackgroundTable:(UITableView *)tableView;
 
 - (void)changeSendButtonState:(BOOL)state;

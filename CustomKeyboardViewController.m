@@ -61,8 +61,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
-    
-
+    self.postType = @"";
+    self.objCount = 0;
 }
 
 - (void)changeSendButtonState:(BOOL)state {
@@ -337,13 +337,48 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
         // update textview position to sit on top of keyboard, update table with keyboard height
         [self setKeyboardHeight:kbSize.height - 64];
         [self setTextViewPosition:-kbSize.height];
+        
+        
+        /*
+        NSIndexPath *lastCellIndexPath = [NSIndexPath indexPathForItem:[self.tableView numberOfRowsInSection:0]-1 inSection:0];
+        
+        UITableViewCell *m = [self.tableView cellForRowAtIndexPath:lastCellIndexPath];
+        
+        NSLog(@"%f", m.frame.origin.y);
+        
+      //  [self.tableView scrollToRowAtIndexPath:lastCellIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        
+     //   NSLog(@"indexpath %@", lastCellIndexPath.l);
+        
+    //    NSInteger totalRows = [self.tableView numberOfRowsInSection:0];//first get total rows in that section by current indexPath.
+      //  if(indexPath.row == totalRow -1){
+            //this is the last row in section.
+       // }
+        
+        //int visiblePart = [UIScreen mainScreen].bounds.size.height - (self.navigationController.tabBarController.tabBar.frame.size.height + kbSize.height + self.view.frame.size.height);
+        float headerHeight = self.tableView.tableHeaderView.frame.size.height;
+        
+        float tableHeight = self.tableView.frame.size.height;
+        NSLog(@"tableHeight %f",tableHeight);
+                NSLog(@"headerHeight %f",headerHeight);
+        
+        if([self.postType isEqualToString:@"link"]){
+            
+         
+            if(self.objCount > 0 && self.objCount < ){
+                
+            }
+         
+        }
+         */
+        
+        
         [self.tableView setContentSize:CGSizeMake(self.tableView.frame.size.width, self.tableView.contentSize.height + (kbSize.height + 10))];
         float newOffset = self.tableView.contentOffset.y + kbSize.height;
         
         BOOL isLink = self.tableView.tableHeaderView.frame.size.height == 187;
         BOOL linkWithComments = isLink && self.tableView.contentSize.height > 500;
-       // BOOL linkFewComments = isLink && self.tableView.contentSize.height > 500 && self.tableView.contentSize.height <= 650;
-        
+        // BOOL linkFewComments = isLink && self.tableView.contentSize.height > 500 && self.tableView.contentSize.height <= 650;
         
         NSLog(@"%f content offset y:", self.tableView.contentOffset.y);
         NSLog(@"%f tableHeaderViewHeight:", self.tableView.tableHeaderView.frame.size.height);
@@ -353,6 +388,7 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
         if(!isLink || linkWithComments){
             [self.tableView setContentOffset:CGPointMake(0, newOffset)];
         }
+
         
     } completion:^(BOOL finished) {
     }];
