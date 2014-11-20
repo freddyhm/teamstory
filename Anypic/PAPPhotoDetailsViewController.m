@@ -357,7 +357,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         }
         [cell navigationController:self.navigationController];
         [cell object:[self.objects objectAtIndex:indexPath.row]];
-        [cell setParentView:self.customKeyboard.view];
+        [cell setParentView:self.view];
         [cell photo:self.photo];
         
         [cell setUser:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityFromUserKey]];
@@ -813,7 +813,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Report Inappropriate", nil)]];
     }
     [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
-    [actionSheet showInView:self.customKeyboard.view];
+    [actionSheet showInView:self.view];
 }
 
 - (BOOL)currentUserOwnsPhoto {
@@ -861,7 +861,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:@"Cancel"]];
                 actionSheet.tag = reportTypeTag;
             }
-            [actionSheet showFromTabBar:self.tabBarController.tabBar];
+            [actionSheet showInView:self.view];
         }
     } else if (actionSheet.tag == deletePhoto) {
         if ([actionSheet destructiveButtonIndex] == buttonIndex) {

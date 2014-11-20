@@ -445,7 +445,12 @@ static TTTTimeIntervalFormatter *timeFormatter;
     [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Edit Comment"]];
     [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Delete Comment"]];
     [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
-    [actionSheet showInView:self.parentView];
+    
+    if(self.tabBarController){
+        [actionSheet showFromTabBar:self.tabBarController.tabBar];
+    }else{
+        [actionSheet showInView:self.parentView];
+    }
 }
 
 - (void)commentInflatorAction:(id)sender {
@@ -459,7 +464,13 @@ static TTTTimeIntervalFormatter *timeFormatter;
     [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Edit Comment"]];
     [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Delete Comment"]];
     [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
-    [actionSheet showInView:self.parentView];
+    
+    
+    if(self.tabBarController){
+        [actionSheet showFromTabBar:self.tabBarController.tabBar];
+    }else{
+        [actionSheet showInView:self.parentView];
+    }
 }
 
 - (void)openUrl:(id)sender {
