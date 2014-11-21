@@ -45,6 +45,7 @@ enum ActionSheetTags {
 @property (nonatomic, strong) NSMutableArray *atmentionUserArray;
 @property (nonatomic, strong) UIView *dimView;
 @property (nonatomic, strong) UIView *hideCommentsView;
+@property CGRect tabBarSize;
 @property CGFloat previousKbHeight;
 @end
 
@@ -206,6 +207,30 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self.customKeyboard setBackgroundTable:self.postDetails];
     [self.view addSubview:self.customKeyboard.view];
      
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    self.tabBarController.tabBar.hidden = YES;
+    self.tabBarSize = self.tabBarController.tabBar.frame;
+    self.tabBarController.tabBar.frame = CGRectZero;
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
+    self.tabBarController.tabBar.hidden = NO;
+    self.tabBarController.tabBar.frame = self.tabBarSize;
+}
+
+- (void)viewDidDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
+    if(self.tabBarController.tabBar.hidden){
+        self.tabBarController.tabBar.hidden = NO;
+        self.tabBarController.tabBar.frame = self.tabBarSize;
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
