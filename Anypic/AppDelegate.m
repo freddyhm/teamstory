@@ -733,7 +733,10 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
             }else if ([type isEqualToString:kPAPPushPayloadActivityLikeKey]){
                 detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notificationLike"];
             }
-           
+            
+            // hides tab bar so we can add custom keyboard
+            detailViewController.hidesBottomBarWhenPushed = YES;
+
             [homeNavigationController pushViewController:detailViewController animated:YES];
         }
     }];

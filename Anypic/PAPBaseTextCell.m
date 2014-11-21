@@ -593,6 +593,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.navController popViewControllerAnimated:NO];
             
             PAPPhotoDetailsViewController *photoDetailsViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:self.ih_photo source:@"tapPhoto"];
+            
+            // hides tab bar so we can add custom keyboard
+            photoDetailsViewController.hidesBottomBarWhenPushed = YES;
+            
             [self.navController pushViewController:photoDetailsViewController animated:NO];
             
         } else {
@@ -615,6 +619,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
                 [self.navController popViewControllerAnimated:NO];
                 
                 PAPPhotoDetailsViewController *photoDetailsViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:self.ih_photo source:@"tapPhoto"];
+                
+                // hides tab bar so we can add custom keyboard
+                photoDetailsViewController.hidesBottomBarWhenPushed = YES;
+                
                 [self.navController pushViewController:photoDetailsViewController animated:NO];
             } else {
                 NSLog(@"%@", error);

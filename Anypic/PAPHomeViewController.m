@@ -424,6 +424,10 @@
     
     if (notificationPhoto) {
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:notificationPhoto source:@"Notification"];
+        
+        // hides tab bar so we can add custom keyboard
+        photoDetailsVC.hidesBottomBarWhenPushed = YES;
+        
         [self.navigationController pushViewController:photoDetailsVC animated:YES];
     }
     
