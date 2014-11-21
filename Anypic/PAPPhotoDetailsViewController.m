@@ -45,7 +45,6 @@ enum ActionSheetTags {
 @property (nonatomic, strong) NSMutableArray *atmentionUserArray;
 @property (nonatomic, strong) UIView *dimView;
 @property (nonatomic, strong) UIView *hideCommentsView;
-@property CGRect tabBarSize;
 @property CGFloat previousKbHeight;
 @end
 
@@ -207,30 +206,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self.customKeyboard setBackgroundTable:self.postDetails];
     [self.view addSubview:self.customKeyboard.view];
      
-}
-
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    
-    self.tabBarController.tabBar.hidden = YES;
-    self.tabBarSize = self.tabBarController.tabBar.frame;
-    self.tabBarController.tabBar.frame = CGRectZero;
-}
-
-- (void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    
-    self.tabBarController.tabBar.hidden = NO;
-    self.tabBarController.tabBar.frame = self.tabBarSize;
-}
-
-- (void)viewDidDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    
-    if(self.tabBarController.tabBar.hidden){
-        self.tabBarController.tabBar.hidden = NO;
-        self.tabBarController.tabBar.frame = self.tabBarSize;
-    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -426,48 +401,13 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     return cell;
 }
 
-#pragma mark - UIKeyboard
-
-- (void)keyboardDidHide{
-    
-    // set new content size for table, update with current textview height
-    [self.tableView setContentSize:CGSizeMake(self.tableView.contentSize.width, [self getCurrentTableContentHeightWithTextView])];
-    
-}
-
-- (void)keyboardWillShow:(NSNotification*)note {
-    
-    // Scroll the view to the comment text box
-    NSDictionary* info = [note userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    NSInteger offset = 0.0f;
-    
-    // Check system version for keyboard offset, ios8 added suggestion bar
-    if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
-        if ([UIScreen mainScreen].bounds.size.height == 480) {
-            offset = -80.0f;
-        }
-    }else{
-        if ([UIScreen mainScreen].bounds.size.height == 480) {
-            offset = -10.0f;
-        }else{
-            offset = 60.0f;
-        }
-    }
-    
-    // set new offset based on custom text view + keyboard + phone offset
-    [self.tableView setContentOffset:CGPointMake(0.0f, ([self getCurrentTableContentHeightWithTextView]- kbSize.height - offset)) animated:YES];
-}
+#pragma mark - CustomKeyboardDelegate & Related
 
 - (void)dismissKeyboard {
     self.autocompleteTableView.hidden = YES;
     self.dimView.hidden = YES;
     [self.customKeyboard dismissKeyboard];
 }
-
-
-
-#pragma mark - CustomKeyboardDelegate
 
 
 - (void)keyboardDidBeginEditing{
