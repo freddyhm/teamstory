@@ -230,7 +230,6 @@
 		C4F102C3156C57DA0061BC3E /* PAPWelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102C0156C57DA0061BC3E /* PAPWelcomeViewController.m */; };
 		C4F102CB156C57EE0061BC3E /* PAPActivityFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102C6156C57ED0061BC3E /* PAPActivityFeedViewController.m */; };
 		C4F102CC156C57EE0061BC3E /* PAPHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102C8156C57ED0061BC3E /* PAPHomeViewController.m */; };
-		C4F102CD156C57EE0061BC3E /* PAPPhotoTimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102CA156C57EE0061BC3E /* PAPPhotoTimelineViewController.m */; };
 		C4F102D2156C57FD0061BC3E /* PAPAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102CF156C57FD0061BC3E /* PAPAccountViewController.m */; };
 		C4F102D3156C57FD0061BC3E /* PAPPhotoDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102D1156C57FD0061BC3E /* PAPPhotoDetailsViewController.m */; };
 		C4F102D9156C580C0061BC3E /* PAPSettingsActionSheetDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102D7156C580C0061BC3E /* PAPSettingsActionSheetDelegate.m */; };
@@ -267,6 +266,8 @@
 		D542D8C4196A6F4700A0384F /* ELCAssetPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = D542D8BA196A6F4700A0384F /* ELCAssetPicker.xib */; };
 		D542D8C5196A6F4700A0384F /* ELCAssetTablePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = D542D8BB196A6F4700A0384F /* ELCAssetTablePicker.xib */; };
 		D542D8C9196A721B00A0384F /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D542D8C8196A721B00A0384F /* AssetsLibrary.framework */; };
+		D546275E1A16E1AF00EA739C /* OriginalBackgroundNavigationBar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D546275D1A16E1AF00EA739C /* OriginalBackgroundNavigationBar@2x.png */; };
+		D54627601A16E1B400EA739C /* OriginalBackgroundNavigationBar.png in Resources */ = {isa = PBXBuildFile; fileRef = D546275F1A16E1B400EA739C /* OriginalBackgroundNavigationBar.png */; };
 		D54E0FF819A7B75C000B1F9D /* PAPwebviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D54E0FF719A7B75C000B1F9D /* PAPwebviewViewController.m */; };
 		D54E0FFB19A7B76B000B1F9D /* OpenInChromeController.m in Sources */ = {isa = PBXBuildFile; fileRef = D54E0FF919A7B76B000B1F9D /* OpenInChromeController.m */; };
 		D552B0E619C7D3EB009F2862 /* arrows_left_white.png in Resources */ = {isa = PBXBuildFile; fileRef = D552B0DE19C7D3EB009F2862 /* arrows_left_white.png */; };
@@ -374,8 +375,8 @@
 		D59B998E18C5A902002D6EFE /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D59B998B18C5A902002D6EFE /* Default-568h@2x.png */; };
 		D5A5F52018D2C3CD000BB243 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A5F51F18D2C3CD000BB243 /* Parse.framework */; };
 		D5A9EE2F199C5F8F003513C3 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4217BC11552234E00CD3A47 /* ImageIO.framework */; };
-		D5AC4B4D1A02ED18005D6CA8 /* CustomKeyboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5AC4B4B1A02ED18005D6CA8 /* CustomKeyboardViewController.m */; };
-		D5AC4B4E1A02ED18005D6CA8 /* CustomKeyboardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5AC4B4C1A02ED18005D6CA8 /* CustomKeyboardViewController.xib */; };
+		D5B1E6F61A1417130096D5EC /* CustomKeyboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5B1E6F41A1417130096D5EC /* CustomKeyboardViewController.m */; };
+		D5B1E6F71A1417130096D5EC /* CustomKeyboardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5B1E6F51A1417130096D5EC /* CustomKeyboardViewController.xib */; };
 		D5B5D0E31995316400916108 /* PostFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5B5D0E11995316400916108 /* PostFooterView.m */; };
 		D5BFDED518CC84A5004FEC42 /* la.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDEC718CC84A4004FEC42 /* la.png */; };
 		D5BFDED618CC84A5004FEC42 /* la@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDEC818CC84A4004FEC42 /* la@2x.png */; };
@@ -732,8 +733,6 @@
 		C4F102C6156C57ED0061BC3E /* PAPActivityFeedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = PAPActivityFeedViewController.m; path = Anypic/PAPActivityFeedViewController.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C4F102C7156C57ED0061BC3E /* PAPHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPHomeViewController.h; path = Anypic/PAPHomeViewController.h; sourceTree = SOURCE_ROOT; };
 		C4F102C8156C57ED0061BC3E /* PAPHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPHomeViewController.m; path = Anypic/PAPHomeViewController.m; sourceTree = SOURCE_ROOT; };
-		C4F102C9156C57ED0061BC3E /* PAPPhotoTimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPPhotoTimelineViewController.h; path = Anypic/PAPPhotoTimelineViewController.h; sourceTree = SOURCE_ROOT; };
-		C4F102CA156C57EE0061BC3E /* PAPPhotoTimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = PAPPhotoTimelineViewController.m; path = Anypic/PAPPhotoTimelineViewController.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C4F102CE156C57FD0061BC3E /* PAPAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPAccountViewController.h; path = Anypic/PAPAccountViewController.h; sourceTree = SOURCE_ROOT; };
 		C4F102CF156C57FD0061BC3E /* PAPAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = PAPAccountViewController.m; path = Anypic/PAPAccountViewController.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C4F102D0156C57FD0061BC3E /* PAPPhotoDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPPhotoDetailsViewController.h; path = Anypic/PAPPhotoDetailsViewController.h; sourceTree = SOURCE_ROOT; };
@@ -791,6 +790,8 @@
 		D542D8BA196A6F4700A0384F /* ELCAssetPicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ELCAssetPicker.xib; sourceTree = "<group>"; };
 		D542D8BB196A6F4700A0384F /* ELCAssetTablePicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ELCAssetTablePicker.xib; sourceTree = "<group>"; };
 		D542D8C8196A721B00A0384F /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		D546275D1A16E1AF00EA739C /* OriginalBackgroundNavigationBar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "OriginalBackgroundNavigationBar@2x.png"; sourceTree = "<group>"; };
+		D546275F1A16E1B400EA739C /* OriginalBackgroundNavigationBar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OriginalBackgroundNavigationBar.png; sourceTree = "<group>"; };
 		D54E0FF719A7B75C000B1F9D /* PAPwebviewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPwebviewViewController.m; sourceTree = SOURCE_ROOT; };
 		D54E0FF919A7B76B000B1F9D /* OpenInChromeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenInChromeController.m; sourceTree = SOURCE_ROOT; };
 		D54E0FFA19A7B76B000B1F9D /* OpenInChromeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenInChromeController.h; sourceTree = SOURCE_ROOT; };
@@ -918,9 +919,9 @@
 		D59B997D18C59836002D6EFE /* AppIcon80x80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon80x80.png; sourceTree = "<group>"; };
 		D59B998B18C5A902002D6EFE /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		D5A5F51F18D2C3CD000BB243 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = External/Parse.framework; sourceTree = "<group>"; };
-		D5AC4B4A1A02ED18005D6CA8 /* CustomKeyboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomKeyboardViewController.h; sourceTree = "<group>"; };
-		D5AC4B4B1A02ED18005D6CA8 /* CustomKeyboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomKeyboardViewController.m; sourceTree = "<group>"; };
-		D5AC4B4C1A02ED18005D6CA8 /* CustomKeyboardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomKeyboardViewController.xib; sourceTree = "<group>"; };
+		D5B1E6F31A1417130096D5EC /* CustomKeyboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomKeyboardViewController.h; sourceTree = SOURCE_ROOT; };
+		D5B1E6F41A1417130096D5EC /* CustomKeyboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomKeyboardViewController.m; sourceTree = SOURCE_ROOT; };
+		D5B1E6F51A1417130096D5EC /* CustomKeyboardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomKeyboardViewController.xib; sourceTree = SOURCE_ROOT; };
 		D5B5D0E11995316400916108 /* PostFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostFooterView.m; sourceTree = SOURCE_ROOT; };
 		D5B5D0E21995316400916108 /* PostFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostFooterView.h; sourceTree = SOURCE_ROOT; };
 		D5BFDEC718CC84A4004FEC42 /* la.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = la.png; sourceTree = "<group>"; };
@@ -1376,6 +1377,8 @@
 				462FCB76188C806C005059F3 /* button_done@2x.png */,
 				462FCB77188C806C005059F3 /* button_setting.png */,
 				462FCB78188C806C005059F3 /* button_setting@2x.png */,
+				D546275D1A16E1AF00EA739C /* OriginalBackgroundNavigationBar@2x.png */,
+				D546275F1A16E1B400EA739C /* OriginalBackgroundNavigationBar.png */,
 				467154A418835E470000C0CA /* privacy.png */,
 				467154A518835E470000C0CA /* privacy@2x.png */,
 				46B31EE2184E35150028D11C /* profileWebsite.png */,
@@ -1549,8 +1552,6 @@
 			children = (
 				462B363C1880AB5D008C28AE /* discoverPageViewController.h */,
 				462B363D1880AB5D008C28AE /* discoverPageViewController.m */,
-				C4F102C9156C57ED0061BC3E /* PAPPhotoTimelineViewController.h */,
-				C4F102CA156C57EE0061BC3E /* PAPPhotoTimelineViewController.m */,
 				C4F102C7156C57ED0061BC3E /* PAPHomeViewController.h */,
 				C4F102C8156C57ED0061BC3E /* PAPHomeViewController.m */,
 				C4F102CE156C57FD0061BC3E /* PAPAccountViewController.h */,
@@ -1592,7 +1593,7 @@
 		C4A89496155879F600DC57D3 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				D5AC4B491A02ED18005D6CA8 /* Keyboard */,
+				D5504E751A0DAD6200620EFE /* Keyboard */,
 				46076EE4193E9A3A00A7B317 /* Notification */,
 				46ABD75C18B53C1D008F5AAB /* webview */,
 				46E1EB6C183BCA4600F64274 /* ProfileSetting */,
@@ -1727,6 +1728,16 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		D5504E751A0DAD6200620EFE /* Keyboard */ = {
+			isa = PBXGroup;
+			children = (
+				D5B1E6F31A1417130096D5EC /* CustomKeyboardViewController.h */,
+				D5B1E6F41A1417130096D5EC /* CustomKeyboardViewController.m */,
+				D5B1E6F51A1417130096D5EC /* CustomKeyboardViewController.xib */,
+			);
+			name = Keyboard;
+			sourceTree = "<group>";
+		};
 		D5654174196F64D400E74164 /* ALAssetsLibrary-CustomPhotoAlbum */ = {
 			isa = PBXGroup;
 			children = (
@@ -1851,16 +1862,6 @@
 			);
 			path = SVProgressHUD;
 			sourceTree = "<group>";
-		};
-		D5AC4B491A02ED18005D6CA8 /* Keyboard */ = {
-			isa = PBXGroup;
-			children = (
-				D5AC4B4A1A02ED18005D6CA8 /* CustomKeyboardViewController.h */,
-				D5AC4B4B1A02ED18005D6CA8 /* CustomKeyboardViewController.m */,
-				D5AC4B4C1A02ED18005D6CA8 /* CustomKeyboardViewController.xib */,
-			);
-			path = Keyboard;
-			sourceTree = SOURCE_ROOT;
 		};
 		D5D659EF19155A1E00FAC142 /* DevCloudCode */ = {
 			isa = PBXGroup;
@@ -2066,7 +2067,7 @@
 			files = (
 				46ABD74E18B147FC008F5AAB /* button_cancel_selected.png in Resources */,
 				D552B0ED19C7D3EB009F2862 /* arrows_right@2x.png in Resources */,
-				D5AC4B4E1A02ED18005D6CA8 /* CustomKeyboardViewController.xib in Resources */,
+				D5B1E6F71A1417130096D5EC /* CustomKeyboardViewController.xib in Resources */,
 				D575A0701947834C00C6BCC2 /* btn_editprofile@2x.png in Resources */,
 				46839E9E18E1E8C100BD60DB /* icon-upload.png in Resources */,
 				467A40DD1993059300D4C693 /* join_teamstory@2x.png in Resources */,
@@ -2174,6 +2175,7 @@
 				D55AEF1F19BA5E3800ECF342 /* btn_webview_options@2x.png in Resources */,
 				D5856F9D19F87E2600D0086F /* konotor_cross@2x.png in Resources */,
 				D5856FA219F87E2600D0086F /* konotor_profile.png in Resources */,
+				D54627601A16E1B400EA739C /* OriginalBackgroundNavigationBar.png in Resources */,
 				467A40B2199000B100D4C693 /* btn_image_upload.png in Resources */,
 				D5FC095C18A9B586000D85F1 /* CameraFilterViewController.xib in Resources */,
 				C4BE6777157FC7F700A291C2 /* BackgroundNavigationBar.png in Resources */,
@@ -2336,6 +2338,7 @@
 				460997591938119A00C5AD96 /* icon-linkedin-profile.png in Resources */,
 				463B0CEA1985A8C80075E496 /* intro_moment_2.png in Resources */,
 				D57684131933F917008BAA2C /* IconActivitySelected@2x.png in Resources */,
+				D546275E1A16E1AF00EA739C /* OriginalBackgroundNavigationBar@2x.png in Resources */,
 				46839E9F18E1E8C100BD60DB /* icon-upload@2x.png in Resources */,
 				D552B0EC19C7D3EB009F2862 /* arrows_right.png in Resources */,
 				467A40AC198FF1B200D4C693 /* profile_header_2.png in Resources */,
@@ -2453,6 +2456,7 @@
 				D5856FB219F87E2600D0086F /* KonotorMediaUIButton.m in Sources */,
 				46DC23C219AA8C2200E8FCDF /* PAPdiscoverCell.m in Sources */,
 				C4F102A4156C57560061BC3E /* PAPPhotoHeaderView.m in Sources */,
+				D5B1E6F61A1417130096D5EC /* CustomKeyboardViewController.m in Sources */,
 				46076EE7193E9A6000A7B317 /* PAPNotificationViewController.m in Sources */,
 				C4F102A9156C57620061BC3E /* PAPPhotoDetailsFooterView.m in Sources */,
 				C4F102AA156C57620061BC3E /* PAPPhotoDetailsHeaderView.m in Sources */,
@@ -2475,7 +2479,6 @@
 				C4F102CB156C57EE0061BC3E /* PAPActivityFeedViewController.m in Sources */,
 				46A1DCAD195BB6F100729FD0 /* PAPlinkPostViewController.m in Sources */,
 				C4F102CC156C57EE0061BC3E /* PAPHomeViewController.m in Sources */,
-				C4F102CD156C57EE0061BC3E /* PAPPhotoTimelineViewController.m in Sources */,
 				D5B5D0E31995316400916108 /* PostFooterView.m in Sources */,
 				C4F102D2156C57FD0061BC3E /* PAPAccountViewController.m in Sources */,
 				C4F102D3156C57FD0061BC3E /* PAPPhotoDetailsViewController.m in Sources */,
@@ -2491,7 +2494,6 @@
 				C4A6D87C157859AA009FE621 /* PAPCache.m in Sources */,
 				D54E0FFB19A7B76B000B1F9D /* OpenInChromeController.m in Sources */,
 				C4A6A246158FF842003F64A8 /* MBProgressHUD.m in Sources */,
-				D5AC4B4D1A02ED18005D6CA8 /* CustomKeyboardViewController.m in Sources */,
 				46E1EB6F183BCA6300F64274 /* PAPProfileSettingViewController.m in Sources */,
 				D542D8C0196A6F4700A0384F /* ELCAssetCell.m in Sources */,
 				D5903C75192EBBF900DC9896 /* ThoughtPostViewController.m in Sources */,

@@ -125,7 +125,6 @@
     [self.commentTextView setAutocorrectionType:UITextAutocorrectionTypeDefault];
     
     [self.scrollView addSubview:self.footerView];
-    
 
     [self.scrollView setContentSize:CGSizeMake(self.scrollView.bounds.size.width, photoImageView.frame.origin.y + photoImageView.frame.size.height + self.footerView.frame.size.height)];
     

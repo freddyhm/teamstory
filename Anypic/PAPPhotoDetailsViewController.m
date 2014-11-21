@@ -30,14 +30,11 @@ enum ActionSheetTags {
     NSInteger text_offset;
 }
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;
-@property (nonatomic, strong) UITextField *commentTextField;
 @property (nonatomic, strong) PAPPhotoDetailsHeaderView *headerView;
 @property (nonatomic, assign) BOOL likersQueryInProgress;
 @property (nonatomic, strong) NSString *photoID;
 @property (nonatomic, strong) PFObject *current_photo;
 @property (nonatomic, strong) PFUser *reported_user;
-@property (nonatomic, strong) UITextView *commentTextView;
-@property (nonatomic, strong) PAPPhotoDetailsFooterView *footerView;
 @property (nonatomic, strong) NSString *source;
 @property (nonatomic, strong) NSMutableArray *userArray;
 @property (nonatomic, strong) NSString *atmentionSearchString;
@@ -48,22 +45,18 @@ enum ActionSheetTags {
 @property (nonatomic, strong) NSMutableArray *atmentionUserArray;
 @property (nonatomic, strong) UIView *dimView;
 @property (nonatomic, strong) UIView *hideCommentsView;
-@property CGRect defaultFooterViewFrame;
-@property CGRect defaultCommentTextViewFrame;
-@property CGRect previousRect;
+@property CGRect tabBarSize;
+@property CGFloat previousKbHeight;
 @end
 
 static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 @implementation PAPPhotoDetailsViewController
 
-@synthesize commentTextField;
 @synthesize photo, headerView;
 @synthesize photoID;
 @synthesize current_photo;
 @synthesize reported_user;
-@synthesize commentTextView;
-@synthesize footerView;
 @synthesize userArray;
 @synthesize autocompleteTableView;
 @synthesize atmentionSearchString;
@@ -81,26 +74,19 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 - (id)initWithPhoto:(PFObject *)aPhoto source:(NSString *)source{
-    self = [super initWithStyle:UITableViewStylePlain];
+    
+    self = [super init];
+
     if (self) {
-        // The className to query on
-        self.parseClassName = kPAPActivityClassKey;
-        
-        // Whether the built-in pagination is enabled
-        self.paginationEnabled = YES;
-        
-        // The number of comments to show per page
-        self.objectsPerPage = 60;
         
         self.photo = aPhoto;
         
         self.likersQueryInProgress = NO;
         
-        // disable default loading symbol
-        self.loadingViewEnabled = NO;
-        
         // notification or activity item source
         self.source = source;
+        
+        self.postDetails = [[UITableView alloc] init];
     }
     return self;
 }
@@ -108,16 +94,23 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
-    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     
     [super viewDidLoad];
+    
+    [self.postDetails setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    self.postDetails.delegate = self;
+    self.postDetails.dataSource = self;
+    self.postDetails.frame = self.view.frame;
+    [self.postDetails setContentInset:UIEdgeInsetsMake(0, 0, 50, 0)];
+    [self.view addSubview:self.postDetails];
+ 
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     [self.navigationItem.titleView setUserInteractionEnabled:YES];
     
     UITapGestureRecognizer *tapNavTitle = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollToTop)];
     [self.navigationItem.titleView addGestureRecognizer:tapNavTitle];
-
+    
     // set current default back button to nil and set new one
     self.navigationItem.leftBarButtonItem = nil;
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -130,8 +123,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     // Set table view properties
     UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
     texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
-    self.tableView.backgroundView = texturedBackgroundView;
-    
+    self.postDetails.backgroundView = texturedBackgroundView;
     
     
     NSString *caption_local = [self.photo objectForKey:@"caption"];
@@ -151,7 +143,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 351.0f + expectedSize.height + 43.0f + 37.0f + 15.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
         }
         self.headerView.delegate = self;
-        self.tableView.tableHeaderView = self.headerView;
+        self.postDetails.tableHeaderView = self.headerView;
     } else {
         if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
             self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 187.0f) photo:self.photo description:nil navigationController:self.navigationController];
@@ -159,24 +151,14 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:[PAPPhotoDetailsHeaderView rectForView] photo:self.photo description:nil navigationController:self.navigationController];
         }
         self.headerView.delegate = self;
-        self.tableView.tableHeaderView = self.headerView;
+        self.postDetails.tableHeaderView = self.headerView;
     }
     
     self.dimView = [[UIView alloc] init];
     self.dimView.hidden = YES;
     self.dimView.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.8f];
     [self.view addSubview:self.dimView];
-    
-    
-    // Set table footer
-    self.footerView = [[PAPPhotoDetailsFooterView alloc] initWithFrame:[PAPPhotoDetailsFooterView rectForView]];
-    
-    commentTextView = self.footerView.commentView;
-    self.defaultFooterViewFrame = self.footerView.mainView.frame;
-    self.defaultCommentTextViewFrame = self.commentTextView.frame;
-    commentTextView.delegate = self;
-    self.tableView.tableFooterView = self.footerView;
-    
+
     self.autocompleteTableView = [[UITableView alloc] init];
     self.autocompleteTableView.delegate = self;
     self.autocompleteTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -185,44 +167,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.autocompleteTableView.hidden = YES;
     [self.view addSubview:self.autocompleteTableView];
     
-    /*
-     if ([self currentUserOwnsPhoto]) {
-     
-     // Else we only want to show an action button if the user owns the photo and has permission to delete it.
-     UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
-     shareButton.frame = CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f);
-     [shareButton addTarget:self action:@selector(actionButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-     [shareButton setImage:[UIImage imageNamed:@"share.png"] forState:UIControlStateNormal];
-     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
-     
-     //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonAction:)];
-     } else if (NSClassFromString(@"UIActivityViewController")) {
-     // Use UIActivityViewController if it is available (iOS 6 +)
-     //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(activityButtonAction:)];
-     
-     UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
-     shareButton.frame = CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f);
-     [shareButton addTarget:self action:@selector(activityButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-     [shareButton setBackgroundImage:[UIImage imageNamed:@"share.png"] forState:UIControlStateNormal];
-     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
-     
-     
-     }
-     */
-    /*
-     UIButton *shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
-     shareButton.frame = CGRectMake( 0.0f, 0.0f, 22.0f, 22.0f);
-     [shareButton addTarget:self action:@selector(activityButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-     [shareButton setBackgroundImage:[UIImage imageNamed:@"share.png"] forState:UIControlStateNormal];
-     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
-     */
     
-    // Register to be notified when the keyboard will be shown to scroll the view
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLikedOrUnlikedPhoto:) name:PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:self.photo];
-    
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardDidHide) name:UIKeyboardDidHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
@@ -230,32 +176,65 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     [self.view addGestureRecognizer:tapOutside];
     
-    
+
     // set comment block view for spinner
-    float tableCommentVerticalPos = self.tableView.tableHeaderView.frame.origin.y + self.tableView.tableHeaderView.frame.size.height;
-    float tableCommentHeight = self.tableView.tableFooterView.frame.origin.y + (self.tableView.tableFooterView.frame.size.height * 2);
+    float tableCommentVerticalPos = self.postDetails.tableHeaderView.frame.origin.y + self.postDetails.tableHeaderView.frame.size.height;
+    
+    // make this tall enough to cover all comments
+    float tableCommentHeight = self.postDetails.frame.size.height * 4;
     self.hideCommentsView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, tableCommentVerticalPos, 320.0f, tableCommentHeight)];
     [self.hideCommentsView setBackgroundColor:[UIColor whiteColor]];
     
     // set spinner
-    self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width/2 - 50,0,100,100)];
-    self.spinner.activityIndicatorViewStyle =UIActivityIndicatorViewStyleWhiteLarge;
+    self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.postDetails.frame.size.width/2 - 50,0,100,100)];
+    self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
     self.spinner.color = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
-    
     [self.hideCommentsView addSubview:self.spinner];
     
     self.spinner.hidesWhenStopped = YES;
-    self.tableView.showsVerticalScrollIndicator = NO;
+    self.postDetails.showsVerticalScrollIndicator = NO;
     
-    // Enable autocorrect
-    [self.commentTextView setAutocorrectionType:UITextAutocorrectionTypeDefault];
+    [self loadObjects];
+    
+    NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
+   
+    self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
+    self.customKeyboard.delegate = self;
+    [self.customKeyboard setTextViewPosition:64];
+    [self.customKeyboard setPostType:postType];
+    [self.customKeyboard.sendButton setTitle:@"Post" forState:UIControlStateNormal];
+    self.customKeyboard.view.layer.zPosition = 100;
+    [self.customKeyboard setBackgroundTable:self.postDetails];
+    [self.view addSubview:self.customKeyboard.view];
+     
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    self.tabBarController.tabBar.hidden = YES;
+    self.tabBarSize = self.tabBarController.tabBar.frame;
+    self.tabBarController.tabBar.frame = CGRectZero;
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
+    self.tabBarController.tabBar.hidden = NO;
+    self.tabBarController.tabBar.frame = self.tabBarSize;
+}
+
+- (void)viewDidDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
+    if(self.tabBarController.tabBar.hidden){
+        self.tabBarController.tabBar.hidden = NO;
+        self.tabBarController.tabBar.frame = self.tabBarSize;
+    }
+}
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-    self.previousRect = CGRectZero;
     
     [self.headerView reloadLikeBar];
     
@@ -291,38 +270,26 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     return 44.0f;
 }
 
-#pragma mark - PFQueryTableViewController
-//#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-
-- (PFQuery *)queryForTable {
-    PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
-    [query whereKey:kPAPActivityPhotoKey equalTo:self.photo];
-    [query includeKey:kPAPActivityFromUserKey];
-    [query whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeComment];
-    [query orderByAscending:@"createdAt"];
+- (void)loadObjects {
     
-    [query setCachePolicy:kPFCachePolicyNetworkOnly];
+    PFQuery *commentQuery = [PFQuery queryWithClassName:@"Activity"];
+    [commentQuery whereKey:kPAPActivityPhotoKey equalTo:self.photo];
+    [commentQuery includeKey:kPAPActivityFromUserKey];
+    [commentQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeComment];
+    [commentQuery orderByAscending:@"createdAt"];
     
-    // If no objects are loaded in memory, we look to the cache first to fill the table
-    // and then subsequently do a query against the network.
-    //
-    // If there is no network connection, we will hit the cache first.
-    /*
-     SEL isParseReachableSelector = sel_registerName("isParseReachable");
-     if (self.objects.count == 0 || ![[UIApplication sharedApplication].delegate performSelector:isParseReachableSelector]) {
-     [query setCachePolicy:kPFCachePolicyCacheThenNetwork];
-     }
-     */
+    [commentQuery setCachePolicy:kPFCachePolicyNetworkOnly];
     
-    return query;
-}
-
-- (void)objectsWillLoad{
-    [super objectsWillLoad];
+    [commentQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if(!error){
+            self.objects = [NSMutableArray arrayWithArray:objects];
+            [self objectsDidLoad:error];
+        }
+    }];
 }
 
 - (void)objectsDidLoad:(NSError *)error {
-    [super objectsDidLoad:error];
+    
     [self.headerView reloadLikeBar];
     [self loadLikers];
     
@@ -333,14 +300,43 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     // refresh based on source when comments are present
     if([loadedObjects count] > 0){
+        
         [self refreshCommentLikes:loadedObjects pullFromServer:newLikes block:^(BOOL succeeded) {
             if(succeeded){
+                
                 // move to last comments when notification relates to a new comment
-                if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] || [self.source isEqual:@"activityComment"])){
-                    [self.tableView setContentOffset:CGPointMake(0, self.tableView.contentSize.height - self.tableView.bounds.size.height + 44)];
+                if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] || [self.source isEqual:@"activityComment"] || [self.source isEqual:@"commentButton"] || [self.source isEqual:@"postedComment"]  )){
+                    
+                    
+                    float newVerticalPos = self.postDetails.contentSize.height - self.postDetails.bounds.size.height + 84;
+                    
+                    if(newVerticalPos > 0){
+                        [self.postDetails setContentOffset:CGPointMake(0, newVerticalPos)];
+                    }
+                    
+                    if([self.source isEqualToString:@"commentButton"]){
+                        [self.customKeyboard setObjCount:[loadedObjects count]];
+                        [self.customKeyboard.messageTextView becomeFirstResponder];
+                    }
+                
                 }
             }
         }];
+    }
+    
+    [self.postDetails reloadData];
+    
+    
+    if([self.source isEqualToString:@"commentButton"] && [loadedObjects count] == 0){
+        
+        [self.customKeyboard setObjCount:0];
+        [self.customKeyboard.messageTextView becomeFirstResponder];
+        
+        float newVerticalPos = self.postDetails.contentSize.height - self.postDetails.bounds.size.height + 44;
+        
+        if(newVerticalPos > 0){
+            [self.postDetails setContentOffset:CGPointMake(0, newVerticalPos)];
+        }
     }
 }
 
@@ -361,7 +357,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         }
         [cell navigationController:self.navigationController];
         [cell object:[self.objects objectAtIndex:indexPath.row]];
-        [cell tabBarController:self.tabBarController];
+        [cell setParentView:self.view];
         [cell photo:self.photo];
         
         [cell setUser:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityFromUserKey]];
@@ -464,144 +460,42 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 - (void)dismissKeyboard {
-    [self.view endEditing:YES];
     self.autocompleteTableView.hidden = YES;
     self.dimView.hidden = YES;
-}
-
-- (void)keyboardWillHide{
-    
-    // set new offset based on custom text view
-    [self.tableView setContentOffset:CGPointMake(0.0f, [self getCurrentTableOffsetWithTextView]) animated:YES];
-}
-
-#pragma mark - Custom TextView
-
-- (void)updateTextView:(float)newHeight{
-    
-    // expands textview based on content
-    self.footerView.mainView.frame = CGRectMake(self.footerView.mainView.frame.origin.x, self.footerView.mainView.frame.origin.y, self.footerView.mainView.frame.size.width, newHeight + 20);
-    
-    // expands footer frame that contains textview
-    self.footerView.frame =  CGRectMake(self.footerView.frame.origin.x, self.footerView.frame.origin.y, self.footerView.frame.size.width, newHeight + 20);
-}
-
-- (float)getCurrentTableContentHeightWithTextView{
-    
-    // set offset for table based on current table height
-    float currentTextViewContentHeight = self.footerView.mainView.frame.size.height - self.defaultFooterViewFrame.size.height;
-    
-    float newTableContentHeight = self.tableView.contentSize.height + currentTextViewContentHeight;
-    
-    return currentTextViewContentHeight != 0 ? newTableContentHeight : self.tableView.contentSize.height;
-}
-
-- (float)getCurrentTableOffsetWithTextView{
-    
-    // get new offset for table with current textview height
-    float currentTextViewHeight = self.footerView.mainView.frame.size.height - self.defaultFooterViewFrame.size.height;
-    
-    return self.tableView.contentOffset.y + currentTextViewHeight;
-}
-
-#pragma mark - UITextViewDelegate
-
-
-- (void)textViewDidBeginEditing:(UITextView *)textView {
-    
-    // update content size - especially important when dragging while editing
-    [self.tableView setContentSize:CGSizeMake(self.tableView.contentSize.width, [self getCurrentTableContentHeightWithTextView])];
-    
-    if ([[textView text] isEqualToString:@"Add a comment"]) {
-        [textView setText:@""];
-        
-        // get post type
-        NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
-        
-        // mixpanel analytics
-        [[Mixpanel sharedInstance] track:@"Started Writing Comment" properties:@{@"Post Type" : postType}];
-    }
-}
-
-- (void)textViewDidEndEditing:(UITextView *)textView {
-    if ([textView.text length] == 0) {
-        // reset default text view and frame
-        [textView setText:@"Add a comment"];
-        self.footerView.mainView.frame = self.defaultFooterViewFrame;
-        textView.frame = self.defaultCommentTextViewFrame;
-    }
-}
-
-- (void)textViewDidChange:(UITextView *)textView{
-    
-    UITextPosition* pos = textView.endOfDocument;
-    CGRect currentRect = [textView caretRectForPosition:pos];
-    
-    CGRect frame = textView.frame;
-    frame.size.height = [textView contentSize].height;
-    textView.frame = frame;
-    
-    if (text_offset == NSNotFound) {
-        text_offset = 0;
-    }
-    
-    // Expandable textview
-    
-    // for next line excl. first line
-    if (currentRect.origin.y > self.previousRect.origin.y && self.previousRect.origin.y != 0){
-        
-        // update custom textview
-        [self updateTextView:frame.size.height];
-        
-        // update content size - especially important when dragging while editing
-        [self.tableView setContentSize:CGSizeMake(self.tableView.contentSize.width, self.tableView.contentSize.height + 15)];
-        
-        // moves keyboard to proper height
-        [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentOffset.y + 15) animated:YES];
-        
-        //reset @mention table.
-        if (self.autocompleteTableView.hidden == NO) {
-            if ([UIScreen mainScreen].bounds.size.height == 480) {
-                self.autocompleteTableView.frame = CGRectMake(7.5f, self.tableView.contentSize.height - 212.0f, 305.0f, 143.0f);
-            } else {
-                self.autocompleteTableView.frame = CGRectMake(7.5f, self.tableView.contentSize.height - 302.0f, 305.0f, 232.0f);
-            }
-            
-        }
-        
-        // for prev line excl. first line
-    }else if (currentRect.origin.y < self.previousRect.origin.y && self.previousRect.origin.y != 0){
-        
-        // update custom textview
-        [self updateTextView:frame.size.height];
-        
-        // update content size - especially important when dragging while editing
-        [self.tableView setContentSize:CGSizeMake(self.tableView.contentSize.width, self.tableView.contentSize.height - 15)];
-        
-        // moves keyboard to proper height
-        [self.tableView setContentOffset:CGPointMake(0.0f, self.tableView.contentOffset.y  - 15) animated:YES];
-    }
-    
-    self.previousRect = currentRect;
+    [self.customKeyboard dismissKeyboard];
 }
 
 
-- (BOOL) textView:(UITextView*)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString*)text{
+
+#pragma mark - CustomKeyboardDelegate
+
+
+- (void)keyboardDidBeginEditing{
+
+    // get post type
+    NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Started Writing Comment" properties:@{@"Post Type" : postType}];
+}
+
+- (BOOL)keyboardShouldChangeTextInRange:(NSRange)range replacementText:(NSString*)text{
+
     if ([cellType isEqualToString:@"atmentionCell"]) {
         text = [text stringByAppendingString:@" "];
         
         if (range.location != NSNotFound) {
             
-
+            
             /* If the user presses the Delete key, the length of the range is 1 and an empty string object replaces that single character. Goes out of bounds when user presses delete and selects display name at the start of message.*/
             
-            int replacementRange = (int)range.length + 1;
+            long replacementRange = range.length + 1;
             
             // Check if new range is in bounds of current text, accounting for extra key when deleting
-            if(replacementRange < textView.text.length){
-                textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, replacementRange) withString:text];
+            if(replacementRange < self.customKeyboard.messageTextView.text.length){
+                self.customKeyboard.messageTextView.text = [self.customKeyboard.messageTextView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, replacementRange) withString:text];
             }else{
-                textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, range.length) withString:text];
+                self.customKeyboard.messageTextView.text = [self.customKeyboard.messageTextView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, range.length) withString:text];
             }
         }
         
@@ -631,77 +525,14 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 [SVProgressHUD dismiss];
             }
         
-    } else if ([text isEqualToString:@"\n"]) {
-        NSString *trimmedComment = [textView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        if (trimmedComment.length != 0 && [self.photo objectForKey:kPAPPhotoUserKey]) {
-            PFObject *comment = [PFObject objectWithClassName:kPAPActivityClassKey];
-            [comment setObject:trimmedComment forKey:kPAPActivityContentKey]; // Set comment text
-            [comment setObject:[self.photo objectForKey:kPAPPhotoUserKey] forKey:kPAPActivityToUserKey]; // Set toUser
-            [comment setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey]; // Set fromUser
-            [comment setObject:kPAPActivityTypeComment forKey:kPAPActivityTypeKey];
-            [comment setObject:self.photo forKey:kPAPActivityPhotoKey];
-            
-            // storing atmention user list to the array (only filtered cases).
-            if ([self.atmentionUserArray count] > 0) {
-                NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", textView.text]];
-                [comment setObject:mod_atmentionUserArray forKey:@"atmention"];
-            }
-            
-            PFACL *ACL = [PFACL ACLWithUser:[PFUser currentUser]];
-            [ACL setPublicReadAccess:YES];
-            [ACL setWriteAccess:YES forUser:[self.photo objectForKey:kPAPPhotoUserKey]];
-            comment.ACL = ACL;
-            
-            [[PAPCache sharedCache] incrementCommentCountForPhoto:self.photo];
-            
-            // get post type
-            NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
-
-            // mixpanel analytics
-            [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Commented", @"Post Type" : postType}];
-                        
-            // Show HUD view
-            [SVProgressHUD show];
-            
-            // If more than 5 seconds pass since we post a comment, stop waiting for the server to respond
-            NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(handleCommentTimeout:) userInfo:@{@"comment": comment} repeats:NO];
-            
-            [comment saveEventually:^(BOOL succeeded, NSError *error) {
-                [timer invalidate];
-                
-                if (error && error.code == kPFErrorObjectNotFound) {
-                    [[PAPCache sharedCache] decrementCommentCountForPhoto:self.photo];
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Could not post comment", nil) message:NSLocalizedString(@"This photo is no longer available", nil) delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                    [alert show];
-                    [self.navigationController popViewControllerAnimated:YES];
-                }
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:self.photo userInfo:@{@"comments": @(self.objects.count + 1)}];
-                
-                self.atmentionUserArray = nil;
-                self.atmentionUserArray = [[NSMutableArray alloc] init];
-                [SVProgressHUD dismiss];
-                [self loadObjects];
-                
-                // suscribe to post if commenter is not photo owner
-                if(![[[self.photo objectForKey:kPAPPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]){
-                    [PAPUtility updateSubscriptionToPost:self.photo forState:@"Subscribe"];
-                }
-                
-            }];
-        }
-        
-        [textView setText:@""];
-        [textView resignFirstResponder];
-        return NO;
     }
     
     if ([self.userArray count] > 0) {
-        NSMutableString *updatedText = [[NSMutableString alloc] initWithString:textView.text];
+        NSMutableString *updatedText = [[NSMutableString alloc] initWithString:self.customKeyboard.messageTextView.text];
         if (range.location == 0 || range.location == text_location) {
             self.autocompleteTableView.hidden = YES;
             self.dimView.hidden = YES;
-            self.tableView.scrollEnabled = YES;
+            self.postDetails.scrollEnabled = YES;
             text_location = 0;
         } else if (range.location > 0 && [[updatedText substringWithRange:NSMakeRange(range.location - 1, 1)] isEqualToString:@"@"]) {
             text_location = range.location;
@@ -726,13 +557,14 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             
             self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
             
-            // frames should be handled differently for iphone 4 and 5.
-            if ([UIScreen mainScreen].bounds.size.height == 480) {
-                self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
-                self.autocompleteTableView.frame = CGRectMake(7.5f, self.tableView.contentSize.height - 212.0f + text_offset, 305.0f, 143.0f - text_offset);
-            } else {
-                self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
-                self.autocompleteTableView.frame = CGRectMake(7.5f, self.tableView.contentSize.height - 302.0f + text_offset, 305.0f, 232.0f - text_offset);
+            // Check system version for keyboard offset, ios8 added suggestion bar
+            // Align the mention table view
+            self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
+            
+            if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
+                self.autocompleteTableView.frame = CGRectMake(0, 64, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height - self.navigationController.navigationBar.frame.size.height - self.customKeyboard.view.frame.size.height - 273);
+            }else{
+                self.autocompleteTableView.frame = CGRectMake(0, 64, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height - self.navigationController.navigationBar.frame.size.height - self.customKeyboard.view.frame.size.height - 273 + 37);
             }
             
             if ([self.filteredArray count] < 1) {
@@ -742,12 +574,88 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             }
             
             self.autocompleteTableView.hidden = NO;
-            self.tableView.scrollEnabled = NO;
+            self.postDetails.scrollEnabled = NO;
             [self.autocompleteTableView reloadData];
         }
     }
-    
+
     return YES;
+}
+
+- (void)sendButtonAction:(id)sender{
+    
+    // hide mention tableview
+    self.autocompleteTableView.hidden = YES;
+    self.dimView.hidden = YES;
+    
+    NSString *trimmedComment = [self.customKeyboard.messageTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if (trimmedComment.length != 0 && [self.photo objectForKey:kPAPPhotoUserKey]) {
+        
+        PFObject *comment = [PFObject objectWithClassName:kPAPActivityClassKey];
+        [comment setObject:trimmedComment forKey:kPAPActivityContentKey]; // Set comment text
+        [comment setObject:[self.photo objectForKey:kPAPPhotoUserKey] forKey:kPAPActivityToUserKey]; // Set toUser
+        [comment setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey]; // Set fromUser
+        [comment setObject:kPAPActivityTypeComment forKey:kPAPActivityTypeKey];
+        [comment setObject:self.photo forKey:kPAPActivityPhotoKey];
+        
+        // storing atmention user list to the array (only filtered cases).
+        if ([self.atmentionUserArray count] > 0) {
+            NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", self.customKeyboard.messageTextView.text]];
+            [comment setObject:mod_atmentionUserArray forKey:@"atmention"];
+        }
+        
+        
+        PFACL *ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+        [ACL setPublicReadAccess:YES];
+        [ACL setWriteAccess:YES forUser:[self.photo objectForKey:kPAPPhotoUserKey]];
+        comment.ACL = ACL;
+        
+        [[PAPCache sharedCache] incrementCommentCountForPhoto:self.photo];
+        
+        // get post type
+        NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
+        
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Commented", @"Post Type" : postType}];
+        
+        // Show HUD view
+        [SVProgressHUD show];
+        
+        // If more than 5 seconds pass since we post a comment, stop waiting for the server to respond
+        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(handleCommentTimeout:) userInfo:@{@"comment": comment} repeats:NO];
+        
+        [comment saveEventually:^(BOOL succeeded, NSError *error) {
+            [timer invalidate];
+            
+            if (error && error.code == kPFErrorObjectNotFound) {
+                [[PAPCache sharedCache] decrementCommentCountForPhoto:self.photo];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Could not post comment", nil) message:NSLocalizedString(@"This photo is no longer available", nil) delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                [alert show];
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:self.photo userInfo:@{@"comments": @(self.objects.count + 1)}];
+            
+            self.atmentionUserArray = nil;
+            self.atmentionUserArray = [[NSMutableArray alloc] init];
+            [SVProgressHUD dismiss];
+            [self loadObjects];
+            
+            // suscribe to post if commenter is not photo owner
+            if(![[[self.photo objectForKey:kPAPPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]){
+                [PAPUtility updateSubscriptionToPost:self.photo forState:@"Subscribe"];
+            }
+            
+        }];
+        
+        // reset textview to default height, update flag so table goes to posted comment
+        [self.customKeyboard.messageTextView setText:@""];
+        [self.customKeyboard.messageTextView resignFirstResponder];
+        [self.customKeyboard resetTextViewHeight];
+        [self.customKeyboard setTextViewPosition:64];
+        self.source = @"postedComment";
+    }
 }
 
 
@@ -759,12 +667,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         text_location = 0;
         
         if (atmentionRange.location != NSNotFound) {
-            [self textView:commentTextView shouldChangeTextInRange:atmentionRange replacementText:[aUser objectForKey:@"displayName"]];
+            [self keyboardShouldChangeTextInRange:atmentionRange replacementText:[aUser objectForKey:@"displayName"]];
         }
         
         self.autocompleteTableView.hidden = YES;
         self.dimView.hidden = YES;
-        self.tableView.scrollEnabled = YES;
+        self.postDetails.scrollEnabled = YES;
         
         [self.atmentionUserArray addObject:aUser];
     } else {
@@ -782,7 +690,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [cellView setLikeCommentButtonState:liked forCurrentUser:YES];
     
     // get comment object
-    NSIndexPath *cellIndexPath = [self.tableView indexPathForCell:cellView];
+    NSIndexPath *cellIndexPath = [self.postDetails indexPathForCell:cellView];
     PFObject *comment = [self.objects  objectAtIndex:cellIndexPath.row];
     
     // disable like button temp
@@ -860,14 +768,14 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 - (void)scrollToTop{
     
     // scroll to the top (header view incl.)
-   [self.tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+    [self.postDetails scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
 }
 
 - (void)refreshCommentLikes:(NSMutableArray *)comments pullFromServer:(BOOL)pullFromServer block:(void (^)(BOOL succeeded))completionBlock{
     
     //start spinner
     [self.spinner startAnimating];
-    [self.view addSubview:self.hideCommentsView];
+    [self.postDetails addSubview:self.hideCommentsView];
     
     //refresh comment(s) on background thread
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
@@ -878,7 +786,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         }
         
         // reload table with updated data from cache/server
-        [self.tableView reloadData];
+        [self.postDetails reloadData];
         
         // hide spinner and blocking comments view
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -936,7 +844,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Report Inappropriate", nil)]];
     }
     [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
-    [actionSheet showFromTabBar:self.tabBarController.tabBar];
+    [actionSheet showInView:self.view];
 }
 
 - (BOOL)currentUserOwnsPhoto {
@@ -984,7 +892,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:@"Cancel"]];
                 actionSheet.tag = reportTypeTag;
             }
-            [actionSheet showFromTabBar:self.tabBarController.tabBar];
+            [actionSheet showInView:self.view];
         }
     } else if (actionSheet.tag == deletePhoto) {
         if ([actionSheet destructiveButtonIndex] == buttonIndex) {
@@ -1150,11 +1058,22 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }];
 }
 
-- (void)refreshControlValueChanged:(UIRefreshControl *)refreshControl {
-    [self.refreshControl endRefreshing];
-    self.tableView.scrollEnabled = YES;
+- (void)setTableViewHeight{
     
-    // update content size based on current textview
-    [self.tableView setContentSize:CGSizeMake(self.tableView.contentSize.width, [self getCurrentTableContentHeightWithTextView])];
+    /* Called in kb class on key pressed. Keep track of textview height so we change tableview content size accordingly - need to refactor */
+    
+    CGFloat msgTxtViewDiff = 0;
+    
+    if(!(self.previousKbHeight == 0)){
+        msgTxtViewDiff = self.customKeyboard.messageTextView.frame.size.height - self.previousKbHeight;
+    }
+    
+    [self.postDetails setContentSize:CGSizeMake(self.postDetails.frame.size.width, self.postDetails.contentSize.height + msgTxtViewDiff)];
+    
+    self.previousKbHeight = self.customKeyboard.messageTextView.frame.size.height;
 }
+
+
+
+
 @end

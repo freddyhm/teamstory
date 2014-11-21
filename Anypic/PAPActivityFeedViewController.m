@@ -190,12 +190,14 @@
                 detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:[activity objectForKey:kPAPActivityPhotoKey] source:@"activity"];
             }
             
+            // hides tab bar so we can add custom keyboard
+            detailViewController.hidesBottomBarWhenPushed = YES;
+            
             [self.navigationController pushViewController:detailViewController animated:YES];
         } else if ([activity objectForKey:kPAPActivityFromUserKey]) {
-            PAPAccountViewController *detailViewController = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
-
-            [detailViewController setUser:[activity objectForKey:kPAPActivityFromUserKey]];
-            [self.navigationController pushViewController:detailViewController animated:YES];
+            PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
+            [accountViewController setUser:[activity objectForKey:kPAPActivityFromUserKey]];
+            [self.navigationController pushViewController:accountViewController animated:YES];
         }
     } else if (self.paginationEnabled) {
         // load more
@@ -410,6 +412,10 @@
     // Push single photo view controller
     
     PAPPhotoDetailsViewController *photoViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"activity"];
+    
+    // hides tab bar so we can add custom keyboard
+    photoViewController.hidesBottomBarWhenPushed = YES;
+    
     [self.navigationController pushViewController:photoViewController animated:YES];
 }
 

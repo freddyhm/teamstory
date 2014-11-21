@@ -560,7 +560,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 
     [[UINavigationBar appearance] setTitleTextAttributes:navBarAttributes];
     
-    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"BackgroundNavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"OriginalBackgroundNavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
     
     NSDictionary *barButtonItemAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
     
@@ -741,7 +741,10 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
             }else if ([type isEqualToString:kPAPPushPayloadActivityLikeKey]){
                 detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notificationLike"];
             }
-           
+            
+            // hides tab bar so we can add custom keyboard
+            detailViewController.hidesBottomBarWhenPushed = YES;
+
             [homeNavigationController pushViewController:detailViewController animated:YES];
         }
     }];

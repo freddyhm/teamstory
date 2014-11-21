@@ -170,6 +170,10 @@
     
         if (photo) {
             PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapDiscoverPhoto"];
+            
+            // hides tab bar so we can add custom keyboard
+            photoDetailsVC.hidesBottomBarWhenPushed = YES;
+            
             self.navController.navigationBar.hidden = NO;
             [self.navController pushViewController:photoDetailsVC animated:YES];
         }
@@ -182,6 +186,10 @@
         
         if (photo) {
             PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapDiscoverPhoto"];
+            
+            // hides tab bar so we can add custom keyboard
+            photoDetailsVC.hidesBottomBarWhenPushed = YES;
+            
             self.navController.navigationBar.hidden = NO;
             [self.navController pushViewController:photoDetailsVC animated:YES];
         }

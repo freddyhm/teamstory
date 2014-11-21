@@ -19,7 +19,6 @@
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
 
-
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
 
@@ -200,13 +199,17 @@ enum ActionSheetTags {
     PFObject *photo = [self.objects objectAtIndex:sender.tag];
     
     if (photo) {
-        PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
         
-        // mixpanel analytics 
+        // mixpanel analytics
         NSString *type = [photo objectForKey:@"type"] != nil ? [photo objectForKey:@"type"] : @"";
         
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Viewed Post", @"Post Type":type}];
+        
+        PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
+        
+        // hides tab bar so we can add custom keyboard
+        photoDetailsVC.hidesBottomBarWhenPushed = YES;
         
         [self.navigationController pushViewController:photoDetailsVC animated:YES];
     }
@@ -726,13 +729,12 @@ enum ActionSheetTags {
 - (void)postFooterView:(PostFooterView *)postFooterView didTapCommentForPost:photo {
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"commentButton"];
+    
+    // hides tab bar so we can add custom keyboard
+    photoDetailsVC.hidesBottomBarWhenPushed = YES;
+    
     [self.navigationController pushViewController:photoDetailsVC animated:YES];
 }
-
-
-
-
-
 
 
 #pragma mark - UIActionSheetDelegate

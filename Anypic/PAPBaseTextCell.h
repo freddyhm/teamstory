@@ -36,12 +36,13 @@
 @property (nonatomic, strong) NSString *website;
 @property (nonatomic, strong) UINavigationController *navController;
 @property (nonatomic, strong) NSString *cellType;
+@property (nonatomic, strong) UIView *parentView;
+@property (nonatomic, strong) UITabBarController *tabBarController;
 
 /*! The horizontal inset of the cell */
 @property (nonatomic) CGFloat cellInsetWidth;
 
 
--(void)tabBarController:(UITabBarController *)tabBarController;
 -(void)object:(PFObject *)object;
 -(void)photo:(PFObject *)photo;
 
