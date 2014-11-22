@@ -785,7 +785,7 @@
     [self.view endEditing:YES];
     NSString* companyName_input = self.companyName.text;
     NSString* location_input = self.location.text;
-    NSString* userDescription_input = self.userDescription.text;
+    NSString* description_input = self.userDescription.text;
     NSString* website_input = [self.website.text lowercaseString];
     NSString* twitter_input = self.twitter_textfield.text;
     NSString* industry_input = self.industry_button.titleLabel.text;
@@ -882,8 +882,8 @@
             self.user[@"location"] = location_input;
             
             // optional fields
-            if ([userDescription_input length] > 0) {
-                self.user[@"description"] = userDescription_input;
+            if ([description_input length] > 0) {
+                self.user[@"description"] = description_input;
             }
             if ([website_input length] > 0) {
                 self.user[@"website"] = website_input;

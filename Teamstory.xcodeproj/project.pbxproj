@@ -133,8 +133,6 @@
 		467A40DD1993059300D4C693 /* join_teamstory@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 467A40D31993059300D4C693 /* join_teamstory@2x.png */; };
 		467A40DE1993059300D4C693 /* welcome_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 467A40D41993059300D4C693 /* welcome_back.png */; };
 		467A40DF1993059300D4C693 /* welcome_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 467A40D51993059300D4C693 /* welcome_back@2x.png */; };
-		467A5E5719E96F4F00D4636B /* CustomKeyboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 467A5E5519E96F4F00D4636B /* CustomKeyboardViewController.m */; };
-		467A5E5819E96F4F00D4636B /* CustomKeyboardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 467A5E5619E96F4F00D4636B /* CustomKeyboardViewController.xib */; };
 		46839E7E18E1E89600BD60DB /* PAPLoginTutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46839E7B18E1E89600BD60DB /* PAPLoginTutorialViewController.m */; };
 		46839E9618E1E8C100BD60DB /* btn-back.png in Resources */ = {isa = PBXBuildFile; fileRef = 46839E8218E1E8C100BD60DB /* btn-back.png */; };
 		46839E9718E1E8C100BD60DB /* btn-back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46839E8318E1E8C100BD60DB /* btn-back@2x.png */; };
@@ -409,7 +407,6 @@
 		D5A5F52018D2C3CD000BB243 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A5F51F18D2C3CD000BB243 /* Parse.framework */; };
 		D5A9EE2F199C5F8F003513C3 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4217BC11552234E00CD3A47 /* ImageIO.framework */; };
 		D5B1E6F61A1417130096D5EC /* CustomKeyboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5B1E6F41A1417130096D5EC /* CustomKeyboardViewController.m */; };
-		D5B1E6F71A1417130096D5EC /* CustomKeyboardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5B1E6F51A1417130096D5EC /* CustomKeyboardViewController.xib */; };
 		D5B5D0E31995316400916108 /* PostFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5B5D0E11995316400916108 /* PostFooterView.m */; };
 		D5BFDED518CC84A5004FEC42 /* la.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDEC718CC84A4004FEC42 /* la.png */; };
 		D5BFDED618CC84A5004FEC42 /* la@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDEC818CC84A4004FEC42 /* la@2x.png */; };
@@ -425,6 +422,7 @@
 		D5BFDEE018CC84A5004FEC42 /* toronto@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDED218CC84A5004FEC42 /* toronto@2x.png */; };
 		D5BFDEE118CC84A5004FEC42 /* vancity.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDED318CC84A5004FEC42 /* vancity.png */; };
 		D5BFDEE218CC84A5004FEC42 /* vancity@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDED418CC84A5004FEC42 /* vancity@2x.png */; };
+		D5C955321A201EE700DD2787 /* CustomKeyboardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5C955301A201EE700DD2787 /* CustomKeyboardViewController.xib */; };
 		D5D1042818B5C7AF0084C901 /* konotor.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042718B5C7AF0084C901 /* konotor.png */; };
 		D5D1042B18B5CF4E0084C901 /* button-feedback.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042918B5CF4E0084C901 /* button-feedback.png */; };
 		D5D1042C18B5CF4E0084C901 /* button-feedback@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */; };
@@ -642,9 +640,6 @@
 		467A40D31993059300D4C693 /* join_teamstory@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "join_teamstory@2x.png"; sourceTree = "<group>"; };
 		467A40D41993059300D4C693 /* welcome_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = welcome_back.png; sourceTree = "<group>"; };
 		467A40D51993059300D4C693 /* welcome_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome_back@2x.png"; sourceTree = "<group>"; };
-		467A5E5419E96F4F00D4636B /* CustomKeyboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CustomKeyboardViewController.h; path = Anypic/CustomKeyboardViewController.h; sourceTree = SOURCE_ROOT; };
-		467A5E5519E96F4F00D4636B /* CustomKeyboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CustomKeyboardViewController.m; path = Anypic/CustomKeyboardViewController.m; sourceTree = SOURCE_ROOT; };
-		467A5E5619E96F4F00D4636B /* CustomKeyboardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CustomKeyboardViewController.xib; path = Anypic/CustomKeyboardViewController.xib; sourceTree = SOURCE_ROOT; };
 		46839E7A18E1E89600BD60DB /* PAPLoginTutorialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPLoginTutorialViewController.h; path = Anypic/PAPLoginTutorialViewController.h; sourceTree = SOURCE_ROOT; };
 		46839E7B18E1E89600BD60DB /* PAPLoginTutorialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPLoginTutorialViewController.m; path = Anypic/PAPLoginTutorialViewController.m; sourceTree = SOURCE_ROOT; };
 		46839E8218E1E8C100BD60DB /* btn-back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-back.png"; sourceTree = "<group>"; };
@@ -1011,6 +1006,9 @@
 		D5BFDED218CC84A5004FEC42 /* toronto@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toronto@2x.png"; sourceTree = "<group>"; };
 		D5BFDED318CC84A5004FEC42 /* vancity.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vancity.png; sourceTree = "<group>"; };
 		D5BFDED418CC84A5004FEC42 /* vancity@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vancity@2x.png"; sourceTree = "<group>"; };
+		D5C9552E1A201EE700DD2787 /* CustomKeyboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomKeyboardViewController.h; sourceTree = SOURCE_ROOT; };
+		D5C9552F1A201EE700DD2787 /* CustomKeyboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomKeyboardViewController.m; sourceTree = SOURCE_ROOT; };
+		D5C955301A201EE700DD2787 /* CustomKeyboardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomKeyboardViewController.xib; sourceTree = SOURCE_ROOT; };
 		D5D1042718B5C7AF0084C901 /* konotor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor.png; sourceTree = "<group>"; };
 		D5D1042918B5CF4E0084C901 /* button-feedback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback.png"; sourceTree = "<group>"; };
 		D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback@2x.png"; sourceTree = "<group>"; };
@@ -1265,9 +1263,9 @@
 		467A5E4E19E96F4300D4636B /* keyboard */ = {
 			isa = PBXGroup;
 			children = (
-				467A5E5419E96F4F00D4636B /* CustomKeyboardViewController.h */,
-				467A5E5519E96F4F00D4636B /* CustomKeyboardViewController.m */,
-				467A5E5619E96F4F00D4636B /* CustomKeyboardViewController.xib */,
+				D5C9552E1A201EE700DD2787 /* CustomKeyboardViewController.h */,
+				D5C9552F1A201EE700DD2787 /* CustomKeyboardViewController.m */,
+				D5C955301A201EE700DD2787 /* CustomKeyboardViewController.xib */,
 			);
 			name = keyboard;
 			sourceTree = "<group>";
@@ -2213,7 +2211,6 @@
 				463CE64519E9987D001F607C /* btn_new_message@2x.png in Resources */,
 				46ABD74E18B147FC008F5AAB /* button_cancel_selected.png in Resources */,
 				D552B0ED19C7D3EB009F2862 /* arrows_right@2x.png in Resources */,
-				D5B1E6F71A1417130096D5EC /* CustomKeyboardViewController.xib in Resources */,
 				D575A0701947834C00C6BCC2 /* btn_editprofile@2x.png in Resources */,
 				46839E9E18E1E8C100BD60DB /* icon-upload.png in Resources */,
 				467A40DD1993059300D4C693 /* join_teamstory@2x.png in Resources */,
@@ -2291,7 +2288,6 @@
 				C4BE670E157FC7D000A291C2 /* Icon-72@2x.png in Resources */,
 				46A2FE441963562100D8ED12 /* Moment Popup.png in Resources */,
 				463CE64019E9987D001F607C /* btn_message_empty@3x.png in Resources */,
-				467A5E5819E96F4F00D4636B /* CustomKeyboardViewController.xib in Resources */,
 				463CE63E19E9987D001F607C /* btn_message_empty.png in Resources */,
 				462FCB7E188C806C005059F3 /* button_setting@2x.png in Resources */,
 				467A40B719900FA600D4C693 /* btn_auto_detect@2x.png in Resources */,
@@ -2408,6 +2404,7 @@
 				D57683F71933EA96008BAA2C /* nav_discover@2x.png in Resources */,
 				C4BE6799157FC7F700A291C2 /* ButtonLikeSelected.png in Resources */,
 				462FCB84188C8533005059F3 /* button_back_selected@2x.png in Resources */,
+				D5C955321A201EE700DD2787 /* CustomKeyboardViewController.xib in Resources */,
 				4639EDF61965CE3D00930873 /* link_thumbnail@2x.png in Resources */,
 				D5856FAF19F87E2600D0086F /* konotor_supportprofile@2x.png in Resources */,
 				4691B51618C0314600B7DF6A /* discover@2x.png in Resources */,
@@ -2619,7 +2616,6 @@
 				D594C20518EFEBAD0008F5DF /* SVProgressHUD.m in Sources */,
 				461C57EB19C101ED00F6575C /* PAPMessageListCell.m in Sources */,
 				D542D8BE196A6F4700A0384F /* ELCAlbumPickerController.m in Sources */,
-				467A5E5719E96F4F00D4636B /* CustomKeyboardViewController.m in Sources */,
 				4688686F185F8B78002BA081 /* emailSignUpViewController.m in Sources */,
 				C4F10291156C571C0061BC3E /* AppDelegate.m in Sources */,
 				D5856FB519F87E2600D0086F /* KonotorUtility.m in Sources */,
