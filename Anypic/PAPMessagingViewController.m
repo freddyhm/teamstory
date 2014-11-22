@@ -210,7 +210,19 @@
 
 - (void)updateTableViewNotification:(NSNotification *)notification {
     self.notificationView.hidden = YES;
-    [self loadMessageQuery];
+    
+    PFQuery *newMessageQuery = [PFQuery queryWithClassName:@"Message"];
+    [newMessageQuery whereKey:@"objectId" equalTo:notification.object];
+    [newMessageQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if (!error) {
+            [self.messageQuery addObject:object];
+            [self.messageList reloadData];
+            [self scrollToBottom:YES];
+        } else {
+            NSLog(@"newMessageQuery Error: %@", error);
+        }
+    }];
+    //[self loadMessageQuery];
 }
 
 -(void) loadMessageQuery {

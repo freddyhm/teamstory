@@ -83,18 +83,21 @@
 #pragma mark - TextView Methods
 
 -(void)textViewDidChange:(UITextView *)textView {
-    NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:textSize]};
-    CGRect textViewSize = [textView.text boundingRectWithSize:CGSizeMake(self.messageTextView.bounds.size.width - 10.0f, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
-    
-    if (textViewSize.size.height > 20.0f) {
-        self.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (64.0f + textViewSize.size.height + self.keyboardHeight + 30.0f), [UIScreen mainScreen].bounds.size.width, textViewSize.size.height + 30.0f);
-    } else {
-        self.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (64.0f + messageTextViewHeight + self.keyboardHeight), [UIScreen mainScreen].bounds.size.width, messageTextViewHeight);
+    if (self.view.frame.origin.y < 400) {
+        NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:textSize]};
+        CGRect textViewSize = [textView.text boundingRectWithSize:CGSizeMake(self.messageTextView.bounds.size.width - 10.0f, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
+        
+        if (textViewSize.size.height > 20.0f) {
+            self.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (64.0f + textViewSize.size.height + self.keyboardHeight + 30.0f), [UIScreen mainScreen].bounds.size.width, textViewSize.size.height + 30.0f);
+        } else {
+            self.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (64.0f + messageTextViewHeight + self.keyboardHeight), [UIScreen mainScreen].bounds.size.width, messageTextViewHeight);
+        }
+        
+        self.messageTextView.frame = CGRectMake(5.0f, 5.0f, self.view.bounds.size.width - 10.0f - sendButtonWidth, self.view.bounds.size.height - 10.0f);
+        
+        [self changeTableViewHeight];
     }
     
-    self.messageTextView.frame = CGRectMake(5.0f, 5.0f, self.view.bounds.size.width - 10.0f - sendButtonWidth, self.view.bounds.size.height - 10.0f);
-    
-    [self changeTableViewHeight];
     if ([textView.text length] > 0) {
         [self changeSendButtonState:YES];
     } else {
