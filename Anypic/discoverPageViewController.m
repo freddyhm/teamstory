@@ -518,7 +518,9 @@ NSInteger selection = 1;
 
 -(void) discoverCellButtonAction:(UIButton *)sender {
     [self.userFilterListIndustry removeAllObjects];
-    NSString *industry = [self.industry_datasource objectAtIndex:sender.tag];
+    
+    // check if industry datasource is not empty
+    NSString *industry = self.industry_datasource.count > 0 ? [self.industry_datasource objectAtIndex:sender.tag] : @"";
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Selected From Discover" properties:@{@"Type": @"Industry", @"Selected":industry}];
@@ -535,7 +537,9 @@ NSInteger selection = 1;
 
 - (void) discoverCellButtonActionWithSearchString:(UIButton *)sender{
     [self.userFilterListIndustry removeAllObjects];
-    NSString *industry = [self.industryFilterList objectAtIndex:sender.tag];
+    
+    // check if filter list is not empty
+    NSString *industry = self.industryFilterList.count > 0 ? [self.industryFilterList objectAtIndex:sender.tag] : @"";
     
     if (![industry isEqualToString:@"Other"]) {
         [self.userFilterListIndustry addObjectsFromArray:[self.userList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"industry contains[c] %@", industry]]];
@@ -578,6 +582,10 @@ NSInteger selection = 1;
 }
 
 - (void)shouldToggleFollowFriendForCell:(PAPFindFriendsCell*)cell {
+    
+    // temp disable follow button to avoid duplicates
+    cell.followButton.enabled = NO;
+
     PFUser *cellUser = cell.user;
     if ([cell.followButton isSelected]) {
         NSLog(@"unfollow");
@@ -589,7 +597,12 @@ NSInteger selection = 1;
                 [self.follwerList removeObject:[self.follwerList objectAtIndex:i]];
             }
         }
-        [PAPUtility unfollowUserEventually:cellUser];
+        [PAPUtility unfollowUserEventually:cellUser block:^(BOOL succeeded) {
+            
+            // enable button again
+            cell.followButton.enabled = YES;
+        }];
+        
         [[NSNotificationCenter defaultCenter] postNotificationName:PAPUtilityUserFollowingChangedNotification object:nil];
     } else {
         NSLog(@"follow");
@@ -603,6 +616,10 @@ NSInteger selection = 1;
         }
         
         [PAPUtility followUserEventually:cellUser block:^(BOOL succeeded, NSError *error) {
+            
+            // enable button again
+            cell.followButton.enabled = YES;
+            
             if (!error) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:PAPUtilityUserFollowingChangedNotification object:nil];
             } else {

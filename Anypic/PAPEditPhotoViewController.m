@@ -16,7 +16,6 @@
 #import "PAPLoadMoreCell.h"
 #import "PAPConstants.h"
 #import "Mixpanel.h"
-#import "Apptimize.h"
 
 
 @interface PAPEditPhotoViewController () {
@@ -126,7 +125,6 @@
     [self.commentTextView setAutocorrectionType:UITextAutocorrectionTypeDefault];
     
     [self.scrollView addSubview:self.footerView];
-    
 
     [self.scrollView setContentSize:CGSizeMake(self.scrollView.bounds.size.width, photoImageView.frame.origin.y + photoImageView.frame.size.height + self.footerView.frame.size.height)];
     
@@ -420,7 +418,7 @@
            
             /* If the user presses the Delete key, the length of the range is 1 and an empty string object replaces that single character. Goes out of bounds when user presses delete and selects display name at the start of message.*/
             
-            long replacementRange = range.length + 1;
+            int replacementRange = (int)range.length + 1;
             
             // Check if new range is in bounds of current text, accounting for extra key when deleting
             if(replacementRange < textView.text.length){
@@ -611,12 +609,11 @@
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Moment"}];
     
+    // mixpanel ab test no filter goal
+    [[Mixpanel sharedInstance] track:@"Goal: Uploaded Picture" properties:@{@"Type": @"Experiment"}];
+    
     // increment user photo count by one
     [[Mixpanel sharedInstance].people increment:@"Photo Count" by:[NSNumber numberWithInt:1]];
-    
-    // apptimize experiment
-    [Apptimize metricAchieved:@"Uploaded Picture"];
-    
     
     
     // make sure placeholder gets erased

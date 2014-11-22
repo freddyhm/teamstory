@@ -14,6 +14,7 @@
 @interface PAPTabBarController : UITabBarController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, ELCImagePickerControllerDelegate>
 
 @property (nonatomic, strong) UIView *postMenu;
+@property (nonatomic, strong) UIButton *postButton;
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info;
 - (UIImagePickerController *)shouldStartCameraController;

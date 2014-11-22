@@ -15,7 +15,6 @@
 #import "PAPTabBarController.h"
 #import "Mixpanel.h"
 #import "PAPMessageListViewController.h"
-#import "Apptimize.h"
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
@@ -148,6 +147,8 @@
     self.switchWhiteOverlay.layer.opacity = 0.6;
     [self.switchWhiteOverlay setHidden:YES];
     [self.view addSubview:self.switchWhiteOverlay];
+    
+    
     
     // stream selected by default
     [self switchSelectedButton:@"explore"];
@@ -415,14 +416,11 @@
     [[Mixpanel sharedInstance] registerSuperProperties:@{@"Email": email}];
     [[Mixpanel sharedInstance] registerSuperProperties:@{@"UserObjId": currentUserObjectId}];
     
-    // aptimize experiment
-    [Apptimize setUserAttributeString:@"No" forKey:@"Admin"];
     
     // add admin property if one of us
-    if([currentUserObjectId isEqualToString:@"3KiW2NoGuT"] || [currentUserObjectId isEqualToString:@"rblDQcdZcY"] || [currentUserObjectId isEqualToString:@"vB648p1bT1"] || [currentUserObjectId isEqualToString:@"EFGqHAIxLm"] || [currentUserObjectId isEqualToString:@"k9dyEcXuZT"]){
+    if([currentUserObjectId isEqualToString:@"3KiW2NoGuT"] || [currentUserObjectId isEqualToString:@"rblDQcdZcY"] || [currentUserObjectId isEqualToString:@"vB648p1bT1"] || [currentUserObjectId isEqualToString:@"EFGqHAIxLm"]){
         
         [[Mixpanel sharedInstance] registerSuperProperties:@{@"Admin": @"Yes"}];
-        [Apptimize setUserAttributeString:@"Yes" forKey:@"Admin"];
     }
     
     /* Following three methods are to identify a user. These user properties will be viewable on the konotor web dashboard */
@@ -430,15 +428,6 @@
     [Konotor setUserEmail:email]; //To set user's email id
     [Konotor setUserIdentifier:currentUserObjectId]; // To set the user's identifier unique to your system
 }
-
-/*
-- (void)settingsButtonAction:(id)sender {
-    self.settingsActionSheetDelegate = [[PAPSettingsActionSheetDelegate alloc] initWithNavigationController:self.navigationController];
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self.settingsActionSheetDelegate cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"My Profile",@"Find Friends",@"Log Out", nil];
-    
-    [actionSheet showFromTabBar:self.tabBarController.tabBar];
-}
-*/
 
 - (void)inviteFriendsButtonAction:(id)sender {
     FollowersFollowingViewController *detailViewController = [[FollowersFollowingViewController alloc] init];
@@ -459,6 +448,10 @@
     
     if (notificationPhoto) {
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:notificationPhoto source:@"Notification"];
+        
+        // hides tab bar so we can add custom keyboard
+        photoDetailsVC.hidesBottomBarWhenPushed = YES;
+        
         [self.navigationController pushViewController:photoDetailsVC animated:YES];
     }
     

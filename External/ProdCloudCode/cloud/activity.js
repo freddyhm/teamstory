@@ -1,4 +1,4 @@
-/*
+
  Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
    
  // Set up to modify user data
@@ -17,7 +17,9 @@
  
  // Query for all users, used only to break down large +1000 plus query into queries for each user with follows
  var queryUser = new Parse.Query(Parse.User);
- queryUser.limit("1000");
+queryUser.skip("1000");
+queryUser.limit("1000");
+
  
  var allFollowingEntries = [];
  var followingQuery = new Parse.Query('Activity');
@@ -92,7 +94,6 @@
  }
  });
  });
- */
 
 
 Parse.Cloud.beforeSave('Activity', function(request, response) {
@@ -378,8 +379,6 @@ Parse.Cloud.define ('incrementCounter', function(request, response) {
 
                               if (counter.get('discoverCount') === undefined) {
                               counter.set('discoverCount', points);
-                              } else {
-                              counter.set('discoverCount', counter.get('discoverCount') + points);
                               }
                               
                               return counter.save({

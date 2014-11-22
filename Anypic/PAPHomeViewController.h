@@ -5,7 +5,6 @@
 //
 
 #import "GAITrackedViewController.h"
-#import "PAPPhotoTimelineViewController.h"
 #import "PhotoTimelineViewController.h"
 
 @interface PAPHomeViewController : PhotoTimelineViewController <UIScrollViewDelegate>

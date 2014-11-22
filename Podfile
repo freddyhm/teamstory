@@ -6,6 +6,4 @@ pod 'SDWebImage', '~>3.6'
 
 pod 'Mixpanel'
 
-pod 'Apptimize'
-
 xcodeproj 'Teamstory.xcodeproj'
