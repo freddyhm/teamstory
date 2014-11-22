@@ -31,7 +31,6 @@
 @property (nonatomic, strong) UILabel *photoPostTitle;
 @property (nonatomic, strong) UILabel *thoughtPostTitle;
 
-@property (nonatomic, strong) UIButton *postButton;
 
 @end
 
@@ -109,19 +108,19 @@
 - (void)setViewControllers:(NSArray *)viewControllers animated:(BOOL)animated {
     [super setViewControllers:viewControllers animated:animated];
     
-    postButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [postButton setImage:[UIImage imageNamed:@"nav_post.png"] forState:UIControlStateNormal];
-    [postButton setImage:[UIImage imageNamed:@"btn_close_timeline.png"] forState:UIControlStateSelected];
-    postButton.frame = CGRectMake( (self.tabBar.bounds.size.width / 5) * 2, 0.0f, 63.0f, 50.0f);
-    postButton.backgroundColor = [UIColor colorWithRed:88.0f/255.0f green:186.0f/255.0f blue:159.0f/255.0f alpha:1.0f];
+    self.postButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.postButton setImage:[UIImage imageNamed:@"nav_post.png"] forState:UIControlStateNormal];
+    [self.postButton setImage:[UIImage imageNamed:@"btn_close_timeline.png"] forState:UIControlStateSelected];
+    self.postButton.frame = CGRectMake( (self.tabBar.bounds.size.width / 5) * 2, 0.0f, 63.0f, 50.0f);
+    self.postButton.backgroundColor = [UIColor colorWithRed:88.0f/255.0f green:186.0f/255.0f blue:159.0f/255.0f alpha:1.0f];
     
-    [postButton addTarget:self action:@selector(postButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.tabBar addSubview:postButton];
+    [self.postButton addTarget:self action:@selector(postButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.tabBar addSubview:self.postButton];
     
     UISwipeGestureRecognizer *swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
     [swipeUpGestureRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
     [swipeUpGestureRecognizer setNumberOfTouchesRequired:1];
-    [postButton addGestureRecognizer:swipeUpGestureRecognizer];
+    [self.postButton addGestureRecognizer:swipeUpGestureRecognizer];
 }
 
 
@@ -289,6 +288,9 @@
     [PAPUtility captureEventGA:@"Camera & Album" action:@"Picked Camera" label:@"Photo"];
 
     [[Mixpanel sharedInstance] track:@"Took Camera Picture" properties:@{}];
+    
+    // mixpanel ab test new camera button goal
+    [[Mixpanel sharedInstance] track:@"Goal: Tapped New Camera Button" properties:@{@"Type": @"Experiment"}];
     
     /* starts camera, sets tabbarcontroller as delegate, and returns image picker */
     

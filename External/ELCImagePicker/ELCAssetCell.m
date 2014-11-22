@@ -7,6 +7,7 @@
 
 #import "ELCAssetCell.h"
 #import "ELCAsset.h"
+#import "MPTweakInline.h"
 
 @interface ELCAssetCell ()
 
@@ -62,16 +63,37 @@
             if(!asset.isCam){
                 imageView.image = [UIImage imageWithCGImage:asset.asset.thumbnail];
             }else{
-                imageView.image = [UIImage imageNamed:@"btn_camera.png"];
+                
+                
+                // mixpanel ab test for camera button
+                if( MPTweakValue(@"show new camera button", NO) ) {
+                    // Show alternate view with new camera button
+                    imageView.image = [UIImage imageNamed:@"btn_camera_bright.png"];
+                } else {
+                    // Show original view
+                    imageView.image = [UIImage imageNamed:@"btn_camera.png"];
+                    
+                }
             }
         } else {
             
             UIImageView *imageView;
             
+            
             if(!asset.isCam){
                 imageView = [[UIImageView alloc] initWithImage:[UIImage imageWithCGImage:asset.asset.thumbnail]];
             }else{
-                imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_camera.png"]];
+                
+                imageView = [[UIImageView alloc] init];
+                
+                // mixpanel ab test for camera button
+                if( MPTweakValue(@"show new camera button", NO) ) {
+                    // Show alternate view with new camera button
+                    imageView.image = [UIImage imageNamed:@"btn_camera_bright.png"];
+                } else {
+                    // Show original view
+                    imageView.image = [UIImage imageNamed:@"btn_camera.png"];
+                }
             }
             
             [_imageViewArray addObject:imageView];

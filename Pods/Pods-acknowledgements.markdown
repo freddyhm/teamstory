@@ -24,10 +24,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
-## Apptimize
-
-See https://apptimize.com/admin/terms
-
 ## Mixpanel
 
 Copyright 2013 Mixpanel, Inc.

@@ -319,7 +319,15 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
                         // icon value
                         application.applicationIconBadgeNumber = [newBadgeValue intValue];
                     } else {
-                        tabBarItem.badgeValue = @"1";
+                        
+                        // get current selected tab
+                        NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
+                        
+                        // add badge value only if current screen isn't activity (image sizing issue)
+                        if(selectedtabIndex != PAPActivityTabBarItemIndex){
+                            tabBarItem.badgeValue = @"1";
+                        }
+                        
                         application.applicationIconBadgeNumber = 1;
                         
                         [[PFUser currentUser] setObject:[NSNumber numberWithInt:1] forKey:@"activityBadge"];
@@ -661,7 +669,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 
     [[UINavigationBar appearance] setTitleTextAttributes:navBarAttributes];
     
-    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"BackgroundNavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"OriginalBackgroundNavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
     
     NSDictionary *barButtonItemAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
     
@@ -933,7 +941,10 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
             }else if ([type isEqualToString:kPAPPushPayloadActivityLikeKey]){
                 detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notificationLike"];
             }
-           
+            
+            // hides tab bar so we can add custom keyboard
+            detailViewController.hidesBottomBarWhenPushed = YES;
+
             [homeNavigationController pushViewController:detailViewController animated:YES];
         }
     }];
