@@ -2843,7 +2843,7 @@
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "fe269d94-6506-4449-b07f-b8209f1d859c";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ca3c2edb-2f3c-49c9-a626-9f65f907191b";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2915,7 +2915,7 @@
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "fe269d94-6506-4449-b07f-b8209f1d859c";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ca3c2edb-2f3c-49c9-a626-9f65f907191b";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2991,7 +2991,7 @@
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "f8b7bdf6-1668-455b-89a8-92ad39ec7187";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ca3c2edb-2f3c-49c9-a626-9f65f907191b";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
