@@ -250,12 +250,15 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     if ([pushSrc isEqualToString:@"konotor"]){
         self.isKonotor = YES;
         
+        [[PFUser currentUser] incrementKey:@"messagingBadge"];
+        [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageButton" object:nil];
+        }];
+        
         // app is in foreground
         if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
             [Konotor handleRemoteNotification:userInfo withShowScreen:NO];
-
         }else{
-
             [Konotor handleRemoteNotification:userInfo withShowScreen:YES];
             [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
         }
