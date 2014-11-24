@@ -463,7 +463,7 @@ NSInteger selection = 1;
                         cell.followButton.selected = NO;
                     }
                 }
-                if ([[[self.userList objectAtIndex:indexPath.row] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+                if ([self.userList count] > 0 && [[[self.userList objectAtIndex:indexPath.row] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
                     cell.followButton.hidden = YES;
                 } else {
                     cell.followButton.hidden = NO;

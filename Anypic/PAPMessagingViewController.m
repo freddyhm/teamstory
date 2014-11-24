@@ -226,7 +226,6 @@
             NSLog(@"newMessageQuery Error: %@", error);
         }
     }];
-    //[self loadMessageQuery];
 }
 
 -(void) loadMessageQuery {
