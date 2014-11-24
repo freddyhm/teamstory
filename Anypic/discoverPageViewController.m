@@ -434,7 +434,7 @@ NSInteger selection = 1;
             cell.delegate = self;
         }
         
-        if ([self.searchSelection isEqualToString:@"users"]) {
+        if ([self.searchSelection isEqualToString:@"users"] && [self.follwerList count] > 0 && [self.userList count] > 0) {
             if (isSearchString) {
                 //Searching for followers
                 for (int i = 0; i < [self.follwerList count]; i++) {
@@ -463,7 +463,7 @@ NSInteger selection = 1;
                         cell.followButton.selected = NO;
                     }
                 }
-                if ([[[self.follwerList objectAtIndex:indexPath.row] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+                if ([[[self.userList objectAtIndex:indexPath.row] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
                     cell.followButton.hidden = YES;
                 } else {
                     cell.followButton.hidden = NO;
@@ -492,8 +492,7 @@ NSInteger selection = 1;
             
     
         return cell;
-    }
-    else {
+    } else {
         static NSString *CellIdentifier = @"discoverIndustryCell";
         
         PAPdiscoverIndustryCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -513,7 +512,6 @@ NSInteger selection = 1;
         
         return cell;
     }
-    
 }
 
 -(void) discoverCellButtonAction:(UIButton *)sender {
