@@ -48,6 +48,13 @@ NSInteger selection = 1;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.userList = [[NSMutableArray alloc] init];
+    self.userFilterList = [[NSMutableArray alloc] init];
+    self.industryFilterList = [[NSMutableArray alloc] init];
+    self.userFilterListIndustry = [[NSMutableArray alloc] init];
+    self.follwerList = [[NSMutableArray alloc] init];
+    
     [SVProgressHUD show];
     self.view.backgroundColor = [UIColor whiteColor];
     UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
@@ -145,12 +152,6 @@ NSInteger selection = 1;
 - (void)viewWillAppear:(BOOL)animated{
     // analytics
     [PAPUtility captureScreenGA:@"Discover"];
-    
-    self.userList = [[NSMutableArray alloc] init];
-    self.userFilterList = [[NSMutableArray alloc] init];
-    self.industryFilterList = [[NSMutableArray alloc] init];
-    self.userFilterListIndustry = [[NSMutableArray alloc] init];
-    self.follwerList = [[NSMutableArray alloc] init];
     
     [[Mixpanel sharedInstance] track:@"Viewed Discover Screen" properties:@{}];
     
