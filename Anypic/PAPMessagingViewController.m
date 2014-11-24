@@ -177,7 +177,11 @@
 }
 
 - (void) setTableViewHeight {
-    self.messageList.frame = CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - self.customKeyboard.view.bounds.size.height - navBarHeight - keyboardHeight);
+    if (self.customKeyboard.view.frame.origin.y < 400) { // keyboard showing
+        self.messageList.frame = CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - self.customKeyboard.view.bounds.size.height - navBarHeight - keyboardHeight);
+    } else { // keyboard hiding
+        self.messageList.frame = CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - self.customKeyboard.view.bounds.size.height - navBarHeight);
+    }
     [self scrollToBottom:NO];
 }
 
@@ -290,6 +294,7 @@
         }
         [self.targetChatRoom saveInBackground];
         
+        textViewHeight = messageTextViewHeight;
         self.customKeyboard.messageTextView.text = nil;
         [self.customKeyboard textViewDidChange:self.customKeyboard.messageTextView];
     }
