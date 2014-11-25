@@ -5,11 +5,11 @@
 //
 
 #import "PAPTabBarController.h"
-#import  "CameraFilterViewController.h"
 #import "MBProgressHUD.h"
 #import "CropResizeViewController.h"
 #import "ThoughtPostViewController.h"
 #import "PAPlinkPostViewController.h"
+#import "PostPicViewController.h"
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
 
@@ -330,9 +330,14 @@
     // Fix rotation
     UIImage *fixedImg = [self fixrotation:image];
     
-    CropResizeViewController *cropViewController = [[CropResizeViewController alloc] initWithImage:fixedImg nib:nil source:self.imageSource];
+    PostPicViewController *postPicController = [[PostPicViewController alloc]initWithNibName:nil originalImg:fixedImg bundle:nil];
     
-    [self.navigationController pushViewController:cropViewController animated:NO];
+   // CropResizeViewController *cropViewController = [[CropResizeViewController alloc] initWithImage:fixedImg nib:nil source:self.imageSource];
+    
+   // ImageCropper *cropper = [[ImageCropper alloc] initWithImage:fixedImg];
+   // [cropper setDelegate:self];
+    
+    [self.navigationController pushViewController:postPicController animated:NO];
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -417,6 +422,20 @@
     CGContextRelease(ctx);
     CGImageRelease(cgimg);
     return img;
+}
+
+- (void)imageCropper:(ImageCropper *)cropper didFinishCroppingWithImage:(UIImage *)image {
+   // [imageView setImage:image];
+    
+   // [self dismissModalViewControllerAnimated:YES];
+    
+    //[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+}
+
+- (void)imageCropperDidCancel:(ImageCropper *)cropper {
+   // [self dismissModalViewControllerAnimated:YES];
+    
+    //[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
 }
 
 

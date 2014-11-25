@@ -8,7 +8,6 @@
 
 #import "CropResizeViewController.h"
 #import "PAPTabBarController.h"
-#import "CameraFilterViewController.h"
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
 #import "MPTweakInline.h"
@@ -68,8 +67,8 @@
 
     CGRect screenSize = [[UIScreen mainScreen] bounds];
     
-    CGSize cropSize = CGSizeMake(screenSize.size.width - 40.0,
-                                 screenSize.size.width - 40.0);
+    CGSize cropSize = CGSizeMake(screenSize.size.width,
+                                 screenSize.size.width);
     
     self.moveImage = [[UIScrollView alloc] initWithFrame:
                       CGRectInset(self.view.bounds, (self.view.frame.size.width - cropSize.width) / 2,
@@ -105,8 +104,7 @@
     [self.moveImage setMinimumZoomScale:zoomScale];
     [self.moveImage setMaximumZoomScale:1.0];
     [self.moveImage setZoomScale:zoomScale];
-    [self.moveImage setContentOffset:CGPointMake((self.displayImage.frame.size.width - self.moveImage.frame.size.width) / 2,
-                                                  (self.displayImage.frame.size.height - self.moveImage.frame.size.height) / 2)];
+    [self.moveImage setContentOffset:CGPointMake((self.displayImage.frame.size.width - self.moveImage.frame.size.width) / 2, (self.displayImage.frame.size.height - self.moveImage.frame.size.height) / 2)];
     [self.moveImage addSubview:self.displayImage];
     [self.view addSubview:self.moveImage];
     
@@ -119,6 +117,10 @@
     [self.view addSubview:self.overlayView];
     
     [self updateOverlay];
+    
+    
+    
+   // self.moveImage.frame = CGRectMake(self.moveImage.frame.origin.x, 0, self.moveImage.frame.size.width, self.moveImage.frame.size.height);
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -154,24 +156,10 @@
             
             [SVProgressHUD dismiss];
             
-            // mixpanel ab test for filter
-            if( MPTweakValue(@"show no filter", NO) ) {
-                
-                // Show alternate view without filter
-                
-                // send selected image to edit controller
-                PAPEditPhotoViewController *editController = [[PAPEditPhotoViewController alloc] initWithImage:self.croppedImg];
-                [self.navigationController pushViewController:editController animated:YES];
+            // send selected image to edit controller
+            PAPEditPhotoViewController *editController = [[PAPEditPhotoViewController alloc] initWithImage:self.croppedImg];
+            [self.navigationController pushViewController:editController animated:YES];
             
-            } else {
-               
-                // Show original view
-                
-                // add to filters
-                CameraFilterViewController *filterController = [[CameraFilterViewController alloc]initWithImage:self.croppedImg nib:@"CameraFilterViewController" source:self.imageSource];
-                // push filter controller to nav stack
-                [self.navigationController pushViewController:filterController animated:YES];
-            }
         });
     });
 }

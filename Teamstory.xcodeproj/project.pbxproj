@@ -250,6 +250,9 @@
 		D5144B1D195951D100650061 /* button-feedback-notify@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5144B1B195951D100650061 /* button-feedback-notify@2x.png */; };
 		D5182C93193E1FDE00DD578C /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5182C92193E1FDE00DD578C /* Default@2x.png */; };
 		D51C98A218E28D16001230DA /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D51C98A118E28D16001230DA /* libGoogleAnalyticsServices.a */; };
+		D527D3AF1A2405C40072766E /* PostPicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D527D3AD1A2405C40072766E /* PostPicViewController.m */; };
+		D527D3B01A2405C40072766E /* PostPicViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D527D3AE1A2405C40072766E /* PostPicViewController.xib */; };
+		D527D3B81A2419180072766E /* ImageCropper.m in Sources */ = {isa = PBXBuildFile; fileRef = D527D3B71A2419180072766E /* ImageCropper.m */; };
 		D528C37F191034DE00CEEA35 /* ButtonLikeComment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D528C37C191034DE00CEEA35 /* ButtonLikeComment@2x.png */; };
 		D528C380191034DE00CEEA35 /* ButtonLikeCommentSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = D528C37D191034DE00CEEA35 /* ButtonLikeCommentSelected.png */; };
 		D528C381191034DE00CEEA35 /* ButtonLikeCommentSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D528C37E191034DE00CEEA35 /* ButtonLikeCommentSelected@2x.png */; };
@@ -406,7 +409,6 @@
 		D5F45B04196CE6DE001C2875 /* select_overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5F45B02196CE6DE001C2875 /* select_overlay@2x.png */; };
 		D5FB8E6C18F79E2D0034CAE6 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FB8E6B18F79E2D0034CAE6 /* Crashlytics.framework */; };
 		D5FC095218A9B518000D85F1 /* CropResizeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095018A9B518000D85F1 /* CropResizeViewController.m */; };
-		D5FC095518A9B543000D85F1 /* CameraFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095418A9B543000D85F1 /* CameraFilterViewController.m */; };
 		D5FC095818A9B552000D85F1 /* FilterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095718A9B552000D85F1 /* FilterCell.m */; };
 		D5FC095C18A9B586000D85F1 /* CameraFilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FC095918A9B586000D85F1 /* CameraFilterViewController.xib */; };
 		D5FC09C618A9C267000D85F1 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FC09C518A9C267000D85F1 /* CoreMedia.framework */; };
@@ -766,6 +768,11 @@
 		D51C989F18E28D16001230DA /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
 		D51C98A018E28D16001230DA /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
 		D51C98A118E28D16001230DA /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
+		D527D3AC1A2405C40072766E /* PostPicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostPicViewController.h; sourceTree = SOURCE_ROOT; };
+		D527D3AD1A2405C40072766E /* PostPicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostPicViewController.m; sourceTree = SOURCE_ROOT; };
+		D527D3AE1A2405C40072766E /* PostPicViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PostPicViewController.xib; sourceTree = SOURCE_ROOT; };
+		D527D3B61A2419180072766E /* ImageCropper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCropper.h; sourceTree = SOURCE_ROOT; };
+		D527D3B71A2419180072766E /* ImageCropper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCropper.m; sourceTree = SOURCE_ROOT; };
 		D528C37C191034DE00CEEA35 /* ButtonLikeComment@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonLikeComment@2x.png"; sourceTree = "<group>"; };
 		D528C37D191034DE00CEEA35 /* ButtonLikeCommentSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonLikeCommentSelected.png; sourceTree = "<group>"; };
 		D528C37E191034DE00CEEA35 /* ButtonLikeCommentSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonLikeCommentSelected@2x.png"; sourceTree = "<group>"; };
@@ -967,8 +974,6 @@
 		D5FB8E6B18F79E2D0034CAE6 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		D5FC094F18A9B518000D85F1 /* CropResizeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CropResizeViewController.h; sourceTree = SOURCE_ROOT; };
 		D5FC095018A9B518000D85F1 /* CropResizeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CropResizeViewController.m; sourceTree = SOURCE_ROOT; };
-		D5FC095318A9B543000D85F1 /* CameraFilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraFilterViewController.h; sourceTree = SOURCE_ROOT; };
-		D5FC095418A9B543000D85F1 /* CameraFilterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraFilterViewController.m; sourceTree = SOURCE_ROOT; };
 		D5FC095618A9B552000D85F1 /* FilterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterCell.h; sourceTree = SOURCE_ROOT; };
 		D5FC095718A9B552000D85F1 /* FilterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterCell.m; sourceTree = SOURCE_ROOT; };
 		D5FC095918A9B586000D85F1 /* CameraFilterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraFilterViewController.xib; sourceTree = SOURCE_ROOT; };
@@ -1576,16 +1581,19 @@
 		C4A894941558796C00DC57D3 /* Photo & Post */ = {
 			isa = PBXGroup;
 			children = (
+				D527D3B61A2419180072766E /* ImageCropper.h */,
+				D527D3B71A2419180072766E /* ImageCropper.m */,
 				D5FC094F18A9B518000D85F1 /* CropResizeViewController.h */,
 				D5FC095018A9B518000D85F1 /* CropResizeViewController.m */,
-				D5FC095318A9B543000D85F1 /* CameraFilterViewController.h */,
-				D5FC095418A9B543000D85F1 /* CameraFilterViewController.m */,
 				C4F102DA156C58170061BC3E /* PAPEditPhotoViewController.h */,
 				C4F102DB156C58170061BC3E /* PAPEditPhotoViewController.m */,
 				D5903C72192EBBF900DC9896 /* ThoughtPostViewController.h */,
 				D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */,
 				46A1DCAB195BB6F100729FD0 /* PAPlinkPostViewController.h */,
 				46A1DCAC195BB6F100729FD0 /* PAPlinkPostViewController.m */,
+				D527D3AC1A2405C40072766E /* PostPicViewController.h */,
+				D527D3AD1A2405C40072766E /* PostPicViewController.m */,
+				D527D3AE1A2405C40072766E /* PostPicViewController.xib */,
 			);
 			name = "Photo & Post";
 			sourceTree = "<group>";
@@ -2342,6 +2350,7 @@
 				46839E9F18E1E8C100BD60DB /* icon-upload@2x.png in Resources */,
 				D552B0EC19C7D3EB009F2862 /* arrows_right.png in Resources */,
 				467A40AC198FF1B200D4C693 /* profile_header_2.png in Resources */,
+				D527D3B01A2405C40072766E /* PostPicViewController.xib in Resources */,
 				C47DDDE915927631002114F6 /* iTunesArtwork@2x in Resources */,
 				C42500DC159939940087C4F4 /* Icon-Small-50@2x.png in Resources */,
 				460997601938119A00C5AD96 /* icon-twitter@2x.png in Resources */,
@@ -2441,7 +2450,6 @@
 				46839E7E18E1E89600BD60DB /* PAPLoginTutorialViewController.m in Sources */,
 				D542D8BF196A6F4700A0384F /* ELCAsset.m in Sources */,
 				D5FC095818A9B552000D85F1 /* FilterCell.m in Sources */,
-				D5FC095518A9B543000D85F1 /* CameraFilterViewController.m in Sources */,
 				46DC23CD19B01CBF00E8FCDF /* PAPdiscoverIndustryCell.m in Sources */,
 				D594C20518EFEBAD0008F5DF /* SVProgressHUD.m in Sources */,
 				D542D8BE196A6F4700A0384F /* ELCAlbumPickerController.m in Sources */,
@@ -2470,6 +2478,7 @@
 				C4F102B6156C57820061BC3E /* PAPPhotoCell.m in Sources */,
 				C4F102B9156C57B90061BC3E /* PAPSettingsButtonItem.m in Sources */,
 				C4F102BC156C57CD0061BC3E /* PAPTabBarController.m in Sources */,
+				D527D3B81A2419180072766E /* ImageCropper.m in Sources */,
 				C4F102C2156C57DA0061BC3E /* PAPLogInViewController.m in Sources */,
 				C4F102C3156C57DA0061BC3E /* PAPWelcomeViewController.m in Sources */,
 				D5856FB419F87E2600D0086F /* KonotorUITextView.m in Sources */,
@@ -2493,6 +2502,7 @@
 				74636BF31578281E00B44132 /* PAPFindFriendsCell.m in Sources */,
 				C4A6D87C157859AA009FE621 /* PAPCache.m in Sources */,
 				D54E0FFB19A7B76B000B1F9D /* OpenInChromeController.m in Sources */,
+				D527D3AF1A2405C40072766E /* PostPicViewController.m in Sources */,
 				C4A6A246158FF842003F64A8 /* MBProgressHUD.m in Sources */,
 				46E1EB6F183BCA6300F64274 /* PAPProfileSettingViewController.m in Sources */,
 				D542D8C0196A6F4700A0384F /* ELCAssetCell.m in Sources */,

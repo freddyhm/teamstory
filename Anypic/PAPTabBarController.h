@@ -8,10 +8,11 @@
 #import "ELCImagePickerController.h"
 #import "ELCAlbumPickerController.h"
 #import "ELCAssetTablePicker.h"
+#import "ImageCropper.h"
 
 @protocol PAPTabBarControllerDelegate;
 
-@interface PAPTabBarController : UITabBarController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, ELCImagePickerControllerDelegate>
+@interface PAPTabBarController : UITabBarController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, ELCImagePickerControllerDelegate, ImageCropperDelegate>
 
 @property (nonatomic, strong) UIView *postMenu;
 @property (nonatomic, strong) UIButton *postButton;
