@@ -312,17 +312,21 @@
                 NSString *userNumber;
                 
                 if ([[[object objectForKey:@"userOne"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+                    [object setObject:[NSNumber numberWithBool:YES] forKey:@"userOneShowChatRoom"];
                     userNumber = @"userTwo";
                 } else {
+                    [object setObject:[NSNumber numberWithBool:YES] forKey:@"userTwoShowChatRoom"];
                     userNumber = @"userOne";
                 }
+                
+                [object saveInBackground];
                 
                 [messageViewController setTargetUser:aUser setUserNumber:userNumber];
                 [messageViewController setRoomInfo:object];
                 [self.navController pushViewController:messageViewController animated:NO];
             }];
         } else {
-            if ([error code] == 101) {
+            if ([error code] == 101) { // Error code 101 is "no query matched".
                 PFObject *createChatRoom = [PFObject objectWithClassName:@"ChatRoom"];
                 [createChatRoom setObject:[PFUser currentUser] forKey:@"userOne"];
                 [createChatRoom setObject:aUser forKey:@"userTwo"];

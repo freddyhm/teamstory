@@ -279,17 +279,28 @@
         
         [self.targetChatRoom setObject:self.customKeyboard.messageTextView.text forKey:@"lastMessage"];
         if ([self.userTypeNumber isEqualToString:@"userOne"]) {
+            
+            // Update Badge for userone.
             if ([self.targetChatRoom objectForKey:@"userOneBadge"] > 0) {
                 [self.targetChatRoom incrementKey:@"userOneBadge"];
             } else {
                 [self.targetChatRoom setObject:[NSNumber numberWithInt:1] forKey:@"userOneBadge"];
             }
+            
+            // Update User ChatRoom showing.
+            [self.targetChatRoom setValue:[NSNumber numberWithBool:YES] forKey:@"userTwoShowChatRoom"];
+            
         } else {
+            
+            // Update Badge for usertwo.
             if ([self.targetChatRoom objectForKey:@"userTwoBadge"] > 0) {
                 [self.targetChatRoom incrementKey:@"userTwoBadge"];
             } else {
                 [self.targetChatRoom setObject:[NSNumber numberWithInt:1] forKey:@"userTwoBadge"];
             }
+            
+            // Update User ChatRoom showing.
+            [self.targetChatRoom setValue:[NSNumber numberWithBool:YES] forKey:@"userOneShowChatRoom"];
         }
         [self.targetChatRoom saveInBackground];
         

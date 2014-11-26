@@ -45,7 +45,7 @@
     tabBarSize = self.tabBarController.tabBar.frame;
     self.tabBarController.tabBar.frame = CGRectZero;
     
-    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:@"messagingListViewScreen" setTargetRoom:nil setNavigationController:self.navigationController];
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:@"messagingListViewScreen" setTargetRoom:nil setTargetUser:nil setNavigationController:self.navigationController];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateListViewQuery) name:@"updateListViewQuery" object:nil];
     
     // fetch unread messages, show feedback screen
@@ -66,10 +66,12 @@
 - (void) updateListViewQuery {
     PFQuery *userOneQuery = [PFQuery queryWithClassName:@"ChatRoom"];
     [userOneQuery whereKey:@"userOne" equalTo:[PFUser currentUser]];
+    [userOneQuery whereKey:@"userOneShowChatRoom" notEqualTo:[NSNumber numberWithBool:NO]];
     [userOneQuery whereKeyExists:@"lastMessage"];
     
     PFQuery *userTwoQuery = [PFQuery queryWithClassName:@"ChatRoom"];
     [userTwoQuery whereKey:@"userTwo" equalTo:[PFUser currentUser]];
+    [userTwoQuery whereKey:@"userTwoShowChatRoom" notEqualTo:[NSNumber numberWithBool:NO]];
     [userTwoQuery whereKeyExists:@"lastMessage"];
     
     PFQuery *messageListQuery = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:userOneQuery, userTwoQuery, nil]];
@@ -87,7 +89,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:YES];
     
-    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:nil setTargetRoom:nil setNavigationController:nil];
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:nil setTargetRoom:nil setTargetUser:nil setNavigationController:nil];
     
     self.tabBarController.tabBar.hidden = NO;
     self.tabBarController.tabBar.frame = tabBarSize;
@@ -286,23 +288,30 @@
     moreAction.backgroundColor = [UIColor lightGrayColor];
     
     UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"Delete"  handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
+        if ([[[[self.messageList objectAtIndex:indexPath.row] objectForKey:@"userOne"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+          [[self.messageList objectAtIndex:indexPath.row] setObject:[NSNumber numberWithBool:NO] forKey:@"userOneShowChatRoom"];
+        } else {
+          [[self.messageList objectAtIndex:indexPath.row] setObject:[NSNumber numberWithBool:NO] forKey:@"userTwoShowChatRoom"];
+        }
+        [[self.messageList objectAtIndex:indexPath.row] saveInBackground];
+        
+        [self.messageList removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }];
     
     return @[deleteAction, moreAction];
 }
 
+// ios 7
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        /*
-        [(PFObject *)[self.messageList objectAtIndex:indexPath.row] deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (!error) {
-                NSLog(@"Deleted Successfully");
-            } else {
-                NSLog(@"Message Deleting error: %@", error);
-            }
-        }];
-         */
+        if ([[[[self.messageList objectAtIndex:indexPath.row] objectForKey:@"userOne"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+            [[self.messageList objectAtIndex:indexPath.row] setObject:[NSNumber numberWithBool:NO] forKey:@"userOneShowChatRoom"];
+        } else {
+            [[self.messageList objectAtIndex:indexPath.row] setObject:[NSNumber numberWithBool:NO] forKey:@"userTwoShowChatRoom"];
+        }
+        [[self.messageList objectAtIndex:indexPath.row] saveInBackground];
+        
         [self.messageList removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
