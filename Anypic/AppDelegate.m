@@ -64,6 +64,7 @@
 @property (nonatomic, strong) NSString *userView;
 @property (nonatomic, strong) UITableView *messageList;
 @property (nonatomic, strong) PFObject *targetChatRoom;
+@property (nonatomic, strong) PFUser *targetChatRoomUser;
 
 @property (nonatomic, strong) UINavigationController *currentNavController;
 
@@ -245,6 +246,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     NSString *pushSrc = [userInfo objectForKey:@"source"];
     NSString *notificationType = [userInfo objectForKey:kPAPPushPayloadPayloadTypeKey];
     NSString *currentObjectId = [userInfo objectForKey:@"aid"];
+    NSString *targetUserObjectId = [userInfo objectForKey:kPAPPushPayloadFromUserObjectIdKey];
     
     // handle type of notification
     if ([pushSrc isEqualToString:@"konotor"]){
@@ -283,7 +285,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageButton" object:nil];
                 
-                if ([self.userView isEqual:@"messagingScreen"]) {
+                if ([self.userView isEqual:@"messagingScreen"] && [[self.targetChatRoomUser objectId] isEqualToString:targetUserObjectId]) {
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"updateTableView" object:currentObjectId];
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageListView" object:nil];
                 } else if ([self.userView isEqualToString:@"messagingListViewScreen"]){
@@ -655,9 +657,10 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 
 #pragma mark - ()
 
-- (void)setUserCurrentScreen:(NSString *)currentScreen setTargetRoom:(PFObject *)targetRoom setNavigationController:(UINavigationController *)navigationController{
+- (void)setUserCurrentScreen:(NSString *)currentScreen setTargetRoom:(PFObject *)targetRoom setTargetUser:(PFUser *)user setNavigationController:(UINavigationController *)navigationController{
     self.userView = currentScreen;
     self.targetChatRoom = targetRoom;
+    self.targetChatRoomUser = user;
     self.currentNavController = navigationController;
 }
 

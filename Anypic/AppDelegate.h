@@ -26,7 +26,7 @@
 
 -(void)cycleTheGlobalMailComposer;
 
-- (void)setUserCurrentScreen:(NSString *)currentScreen setTargetRoom:(PFObject *)targetRoom setNavigationController:(UINavigationController *)navigationController;
+- (void)setUserCurrentScreen:(NSString *)currentScreen setTargetRoom:(PFObject *)targetRoom setTargetUser:(PFUser *)user setNavigationController:(UINavigationController *)navigationController;
 
 - (void)logOut;
 - (void)settingRootViewAsTabBarController;
