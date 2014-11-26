@@ -23,6 +23,10 @@
     return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -34,17 +38,32 @@
    // self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonAction:)];
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
     
+    self.cropScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 400.0)];
     [self.cropScrollView setBackgroundColor:[UIColor blackColor]];
     [self.cropScrollView setDelegate:self];
     [self.cropScrollView setShowsHorizontalScrollIndicator:NO];
     [self.cropScrollView setShowsVerticalScrollIndicator:NO];
     [self.cropScrollView setMaximumZoomScale:2.0];
     
-    [self.cropImgView setImage:self.originalImg];
-        
-    [self.cropScrollView setContentSize:[self.cropImgView frame].size];
-    [self.cropScrollView setMinimumZoomScale:[self.cropScrollView frame].size.width / [self.cropImgView frame].size.width];
-    [self.cropScrollView setZoomScale:[self.cropScrollView minimumZoomScale]];
+    self.cropImgView = [[UIImageView alloc] initWithImage:self.originalImg];
+    [self.cropImgView setBackgroundColor:[UIColor redColor]];
+    [self.cropImgView setFrame:CGRectMake(0.0, 0.0, self.originalImg.size.width, self.originalImg.size.height)];
+    [self.cropScrollView setContentSize:self.originalImg.size];
+    
+    CGRect scrollViewFrame = self.cropScrollView.frame;
+    CGFloat scaleWidth = scrollViewFrame.size.width / self.cropScrollView.contentSize.width;
+    CGFloat scaleHeight = scrollViewFrame.size.height / self.cropScrollView.contentSize.height;
+    CGFloat minScale = MAX(scaleWidth,scaleHeight);
+    
+    [self.cropScrollView setMinimumZoomScale:minScale];
+    [self.cropScrollView setMaximumZoomScale:2.0f];
+    [self.cropScrollView setZoomScale:minScale];
+    [self.cropScrollView addSubview:self.cropImgView];
+    
+    CGFloat newContentOffsetX = (self.cropScrollView.contentSize.width/2) - (self.cropScrollView.bounds.size.width/2);
+    [self.cropScrollView setContentOffset:CGPointMake(newContentOffsetX, 0)];
+
+    [self.view addSubview:self.cropScrollView];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -55,7 +74,6 @@
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
     return self.cropImgView;
 }
-
 
 
 /*

@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <deployment defaultVersion="1808" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PostPicViewController">
             <connections>
-                <outlet property="cropImgView" destination="AoW-Xa-sSF" id="6HF-eS-dS0"/>
-                <outlet property="cropScrollView" destination="cmE-eG-b7J" id="RuC-2Z-Fo6"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -17,44 +13,7 @@
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
             <rect key="frame" x="0.0" y="64" width="375" height="603"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <subviews>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" maximumZoomScale="2" translatesAutoresizingMaskIntoConstraints="NO" id="cmE-eG-b7J">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="380"/>
-                    <subviews>
-                        <imageView multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AoW-Xa-sSF">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="380"/>
-                        </imageView>
-                    </subviews>
-                    <constraints>
-                        <constraint firstItem="AoW-Xa-sSF" firstAttribute="top" secondItem="cmE-eG-b7J" secondAttribute="top" id="2Kd-HN-uZd"/>
-                        <constraint firstAttribute="bottom" secondItem="AoW-Xa-sSF" secondAttribute="bottom" id="8Bv-Xf-C3w"/>
-                        <constraint firstAttribute="trailing" secondItem="AoW-Xa-sSF" secondAttribute="trailing" id="Umk-iJ-MS0"/>
-                        <constraint firstItem="AoW-Xa-sSF" firstAttribute="centerX" secondItem="cmE-eG-b7J" secondAttribute="centerX" id="Unj-Q2-NhR"/>
-                        <constraint firstItem="AoW-Xa-sSF" firstAttribute="leading" secondItem="cmE-eG-b7J" secondAttribute="leading" id="kxO-t5-fKf"/>
-                        <constraint firstItem="AoW-Xa-sSF" firstAttribute="centerY" secondItem="cmE-eG-b7J" secondAttribute="centerY" id="yjk-oE-paD"/>
-                    </constraints>
-                </scrollView>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2dS-NF-vo6">
-                    <rect key="frame" x="0.0" y="380" width="367" height="223"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="223" id="4hn-fo-gwh"/>
-                    </constraints>
-                    <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                </textView>
-            </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-            <constraints>
-                <constraint firstItem="2dS-NF-vo6" firstAttribute="top" secondItem="cmE-eG-b7J" secondAttribute="bottom" id="556-HP-9ma"/>
-                <constraint firstItem="cmE-eG-b7J" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="ThS-c9-VaM"/>
-                <constraint firstItem="2dS-NF-vo6" firstAttribute="leading" secondItem="cmE-eG-b7J" secondAttribute="leading" id="TvN-Lv-fZE"/>
-                <constraint firstItem="cmE-eG-b7J" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="nZN-cS-KZm"/>
-                <constraint firstAttribute="trailing" secondItem="cmE-eG-b7J" secondAttribute="trailing" id="qyS-Tg-O3e"/>
-                <constraint firstAttribute="bottom" secondItem="2dS-NF-vo6" secondAttribute="bottom" id="s7g-y7-3Ta"/>
-                <constraint firstItem="2dS-NF-vo6" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailingMargin" id="y2e-ud-B02"/>
-            </constraints>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
             <point key="canvasLocation" x="-302.5" y="47.5"/>
