@@ -77,8 +77,8 @@
     
     CGRect textViewSize = [self.RECEIVEDMessageLabel.text boundingRectWithSize:CGSizeMake(MAXMessageLabelWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
     
-    self.RECEIVEDMessageView.frame = CGRectMake(arrowSpacerWidth, 10.0f, textViewSize.size.width + 20.0f, textViewSize.size.height + 10.0f);
-    self.SENTMessageView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - textViewSize.size.width - 20.0f - arrowSpacerWidth, 10.0f, textViewSize.size.width + 20.0f, textViewSize.size.height + 10.0f);
+    self.RECEIVEDMessageView.frame = CGRectMake(arrowSpacerWidth, 10.0f, textViewSize.size.width + 20.0f, textViewSize.size.height + 12.0f);
+    self.SENTMessageView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - textViewSize.size.width - 20.0f - arrowSpacerWidth, 10.0f, textViewSize.size.width + 20.0f, textViewSize.size.height + 12.0f);
     
     [self resizeTextView];
     
