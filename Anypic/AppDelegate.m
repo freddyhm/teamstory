@@ -845,6 +845,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
         [messagingViewController setRoomInfo:self.chatRoom];
         
         [CATransaction begin];
+        homeNavigationController.hidesBottomBarWhenPushed = YES;
         [homeNavigationController pushViewController:messageListViewController animated:NO];
         [CATransaction setCompletionBlock:^{
             [homeNavigationController pushViewController:messagingViewController animated:NO];

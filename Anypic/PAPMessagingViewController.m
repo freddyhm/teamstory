@@ -51,7 +51,7 @@
     tabBarSize = self.tabBarController.tabBar.frame;
     self.tabBarController.tabBar.frame = CGRectZero;
     
-    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:@"messagingScreen" setTargetRoom:self.targetChatRoom setTargetUser:self.recipient setNavigationController:nil];
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:@"messagingScreen" setTargetRoom:self.targetChatRoom setTargetUser:self.recipient setNavigationController:self.navigationController];
     
     [self loadMessageQuery];
     [self updateRoomBadge];
@@ -177,7 +177,7 @@
 }
 
 - (void) setTableViewHeight {
-    if (self.customKeyboard.view.frame.origin.y < 400) { // keyboard showing
+    if (self.customKeyboard.view.frame.origin.y < 300) { // keyboard showing
         self.messageList.frame = CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - self.customKeyboard.view.bounds.size.height - navBarHeight - keyboardHeight);
     } else { // keyboard hiding
         self.messageList.frame = CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - self.customKeyboard.view.bounds.size.height - navBarHeight);
@@ -229,13 +229,11 @@
 }
 
 -(void) loadMessageQuery {
-    [SVProgressHUD show];
     PFQuery *messageQuery = [PFQuery queryWithClassName:@"Message"];
     [messageQuery whereKey:@"chatRoom" equalTo:self.targetChatRoom];
     [messageQuery orderByDescending:@"createdAt"];
     [messageQuery setLimit:200];
     [messageQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        [SVProgressHUD dismiss];
         if (!error && [objects count] > 0) {
             self.messageList.hidden = NO;
             self.placeHolder.hidden = YES;

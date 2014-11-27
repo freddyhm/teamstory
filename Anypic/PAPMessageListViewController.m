@@ -46,6 +46,7 @@
     self.tabBarController.tabBar.frame = CGRectZero;
     
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:@"messagingListViewScreen" setTargetRoom:nil setTargetUser:nil setNavigationController:self.navigationController];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateListViewQuery) name:@"updateListViewQuery" object:nil];
     
     // fetch unread messages, show feedback screen
@@ -302,7 +303,7 @@
     return @[deleteAction, moreAction];
 }
 
-// ios 7
+// ios 7. For iOS 8, all the process get handled in tableView:editActionForRowAtIndexPath:.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         if ([[[[self.messageList objectAtIndex:indexPath.row] objectForKey:@"userOne"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {

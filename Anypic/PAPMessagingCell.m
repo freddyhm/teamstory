@@ -85,8 +85,8 @@
 }
 
 -(void) resizeTextView {
-    self.RECEIVEDMessageLabel.frame = CGRectMake(10.0f, 4.0f, self.RECEIVEDMessageView.bounds.size.width - 20.0f, self.RECEIVEDMessageView.bounds.size.height - 10.0f);
-    self.SENTMessageLabel.frame = CGRectMake(10.0f, 4.0f, self.SENTMessageView.bounds.size.width - 20.0f, self.SENTMessageView.bounds.size.height - 10.0f);
+    self.RECEIVEDMessageLabel.frame = CGRectMake(10.0f, 2.0f, self.RECEIVEDMessageView.bounds.size.width - 20.0f, self.RECEIVEDMessageView.bounds.size.height - 5.0f);
+    self.SENTMessageLabel.frame = CGRectMake(10.0f, 2.0f, self.SENTMessageView.bounds.size.width - 20.0f, self.SENTMessageView.bounds.size.height - 5.0f);
 }
 
 +(CGFloat)heightForCell {
