@@ -15,11 +15,15 @@
 
 @interface PostPicViewController ()
 
+// ui variables
 @property (nonatomic, strong) UIScrollView *cropScrollView;
 @property (nonatomic, strong) UIImageView *cropImgView;
+@property (nonatomic, strong) UITextView *descriptionTextView;
 @property (nonatomic, strong) UIImage *originalImg;
 @property (nonatomic, strong) UIImage *croppedImg;
 @property (nonatomic, strong) UIBarButtonItem *rightNavButton;
+
+// upload variables
 @property (nonatomic, strong) PFFile *photoFile;
 @property (nonatomic, strong) PFFile *thumbnailFile;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier fileUploadBackgroundTaskId;
@@ -68,7 +72,7 @@
     self.navigationItem.rightBarButtonItem = self.rightNavButton;
     
     // scrollview set up
-    self.cropScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 400.0)];
+    self.cropScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0, 0.0, [UIScreen mainScreen].bounds.size.width, 400.0)];
     [self.cropScrollView setDelegate:self];
     [self.cropScrollView setShowsHorizontalScrollIndicator:NO];
     [self.cropScrollView setShowsVerticalScrollIndicator:NO];
@@ -96,6 +100,13 @@
     [self.cropScrollView setContentOffset:CGPointMake(newContentOffsetX, 0)];
 
     [self.view addSubview:self.cropScrollView];
+    
+    // create text view placed below crop area
+    self.descriptionTextView = [[UITextView alloc]initWithFrame:CGRectMake(0, self.cropScrollView.frame.origin.y + self.cropScrollView.frame.size.height, [UIScreen mainScreen].bounds.size.width, 180.0)];
+    [self.descriptionTextView setDelegate:self];
+    [self.descriptionTextView setBackgroundColor:[UIColor redColor]];
+    
+    [self.view addSubview:self.descriptionTextView];
 }
 
 - (void)backButtonAction{

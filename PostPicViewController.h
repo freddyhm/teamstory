@@ -8,10 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PostPicViewController : UIViewController <UIScrollViewDelegate>
-
-
-@property (nonatomic, strong) IBOutlet UITextView *descriptionTextView;
+@interface PostPicViewController : UIViewController <UIScrollViewDelegate, UITextViewDelegate>
 
 - (id)initWithNibName:(NSString *)nibNameOrNil originalImg:(UIImage *)originalImg bundle:(NSBundle *)nibBundleOrNil;
 
