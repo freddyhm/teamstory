@@ -10,9 +10,8 @@
 
 @interface PostPicViewController : UIViewController <UIScrollViewDelegate>
 
-@property (nonatomic, strong) IBOutlet UIScrollView *cropScrollView;
-@property (nonatomic, strong) IBOutlet UIImageView *cropImgView;
-@property (nonatomic, strong) UIImage *originalImg;
+
+@property (nonatomic, strong) IBOutlet UITextView *descriptionTextView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil originalImg:(UIImage *)originalImg bundle:(NSBundle *)nibBundleOrNil;
 
