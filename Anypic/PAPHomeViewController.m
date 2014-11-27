@@ -439,6 +439,7 @@
     //[[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     //[KonotorFeedbackScreen showFeedbackScreen];
     PAPMessageListViewController *messageListViewController = [[PAPMessageListViewController alloc] init];
+    messageListViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:messageListViewController animated:YES];
 }
 
