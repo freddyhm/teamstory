@@ -19,7 +19,6 @@
 #define notificationBarHeight 50.0f
 
 @interface PAPMessageListViewController () {
-    CGRect tabBarSize;
     float currentIndexPathRow;
     int totalBadgeNumber;
 }
@@ -40,10 +39,6 @@
     [super viewWillAppear:YES];
     
     totalBadgeNumber = 0;
-    
-    self.tabBarController.tabBar.hidden = YES;
-    tabBarSize = self.tabBarController.tabBar.frame;
-    self.tabBarController.tabBar.frame = CGRectZero;
     
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:@"messagingListViewScreen" setTargetRoom:nil setTargetUser:nil setNavigationController:self.navigationController];
     
@@ -91,9 +86,6 @@
     [super viewWillDisappear:YES];
     
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:nil setTargetRoom:nil setTargetUser:nil setNavigationController:nil];
-    
-    self.tabBarController.tabBar.hidden = NO;
-    self.tabBarController.tabBar.frame = tabBarSize;
     
     [[PFUser currentUser] setObject:[NSNumber numberWithInt:totalBadgeNumber] forKey:@"messagingBadge"];
     [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {

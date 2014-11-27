@@ -22,7 +22,6 @@
 #define APP ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 
 @interface PAPMessagingViewController () {
-    CGRect tabBarSize;
     double keyboardDuration;
     float keyboardHeight;
     int _currentPage;
@@ -47,10 +46,6 @@
     self.messageQuery = [[NSMutableArray alloc] init];
     [self registerForNotifications];
     
-    self.tabBarController.tabBar.hidden = YES;
-    tabBarSize = self.tabBarController.tabBar.frame;
-    self.tabBarController.tabBar.frame = CGRectZero;
-    
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:@"messagingScreen" setTargetRoom:self.targetChatRoom setTargetUser:self.recipient setNavigationController:self.navigationController];
     
     [self loadMessageQuery];
@@ -59,9 +54,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:YES];
-    self.tabBarController.tabBar.hidden = NO;
-    self.tabBarController.tabBar.frame = tabBarSize;
-    
+   
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:nil setTargetRoom:nil setTargetUser:nil setNavigationController:nil];
 }
 
