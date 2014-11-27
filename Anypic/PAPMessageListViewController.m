@@ -30,6 +30,7 @@
 @property (nonatomic, strong) TTTTimeIntervalFormatter *timeIntervalFormatter;
 @property (nonatomic, strong) NSNumber *messageNotificationCount;
 @property (nonatomic, strong) UILabel *badgeLabel;
+@property (nonatomic, strong) UIView *placeHolder;
 
 @end
 
@@ -75,10 +76,17 @@
     [messageListQuery includeKey:@"userOne.User"];
     [messageListQuery includeKey:@"userTwo.User"];
     [messageListQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        [self.userNumberList removeAllObjects];
-        [self.messageList removeAllObjects];
-        [self.messageList addObjectsFromArray:objects];
-        [self.messageListTV reloadData];
+        if (!error && [objects count] > 0) {
+            self.placeHolder.hidden = YES;
+            self.messageListTV.hidden = NO;
+            [self.userNumberList removeAllObjects];
+            [self.messageList removeAllObjects];
+            [self.messageList addObjectsFromArray:objects];
+            [self.messageListTV reloadData];
+        } else {
+            self.placeHolder.hidden = NO;
+            self.messageListTV.hidden = YES;
+        }
     }];
 }
 
@@ -155,7 +163,17 @@
     self.messageListTV.dataSource = self;
     self.messageListTV.delegate = self;
     self.messageListTV.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.messageListTV.hidden = YES;
     [self.view addSubview:self.messageListTV];
+    
+    UIImage *placeHolderImage = [UIImage imageNamed:@"ic_empty_list.png"];
+    self.placeHolder = [[UIView alloc] initWithFrame:self.messageListTV.frame];
+    self.placeHolder.hidden = YES;
+    [self.view addSubview:self.placeHolder];
+    
+    UIImageView *placeHolderImageView = [[UIImageView alloc] initWithFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width - placeHolderImage.size.width) / 2, 100.0f, placeHolderImage.size.width, placeHolderImage.size.height)];
+    [placeHolderImageView setImage:placeHolderImage];
+    [self.placeHolder addSubview:placeHolderImageView];
     
 }
 
@@ -290,6 +308,11 @@
         
         [self.messageList removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+        if ([self.messageList count] == 0) {
+            self.placeHolder.hidden = NO;
+            self.messageListTV.hidden = YES;
+        }
     }];
     
     return @[deleteAction, moreAction];
@@ -307,6 +330,11 @@
         
         [self.messageList removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+        if ([self.messageList count] == 0) {
+            self.placeHolder.hidden = NO;
+            self.messageListTV.hidden = YES;
+        }
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
     }
