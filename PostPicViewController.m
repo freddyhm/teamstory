@@ -105,6 +105,7 @@
     self.descriptionTextView = [[UITextView alloc]initWithFrame:CGRectMake(0, self.cropScrollView.frame.origin.y + self.cropScrollView.frame.size.height, [UIScreen mainScreen].bounds.size.width, 180.0)];
     [self.descriptionTextView setDelegate:self];
     [self.descriptionTextView setBackgroundColor:[UIColor redColor]];
+    [self.descriptionTextView setText:@"Add a description to your moment..."];
     
     [self.view addSubview:self.descriptionTextView];
 }
