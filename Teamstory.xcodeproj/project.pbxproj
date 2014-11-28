@@ -249,6 +249,7 @@
 		D5144B1C195951D100650061 /* button-feedback-notify.png in Resources */ = {isa = PBXBuildFile; fileRef = D5144B1A195951D100650061 /* button-feedback-notify.png */; };
 		D5144B1D195951D100650061 /* button-feedback-notify@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5144B1B195951D100650061 /* button-feedback-notify@2x.png */; };
 		D5182C93193E1FDE00DD578C /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5182C92193E1FDE00DD578C /* Default@2x.png */; };
+		D51C02331A2830CD00A663CD /* NavWrapperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D51C02321A2830CD00A663CD /* NavWrapperViewController.m */; };
 		D51C98A218E28D16001230DA /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D51C98A118E28D16001230DA /* libGoogleAnalyticsServices.a */; };
 		D527D3AF1A2405C40072766E /* PostPicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D527D3AD1A2405C40072766E /* PostPicViewController.m */; };
 		D527D3B81A2419180072766E /* ImageCropper.m in Sources */ = {isa = PBXBuildFile; fileRef = D527D3B71A2419180072766E /* ImageCropper.m */; };
@@ -760,6 +761,8 @@
 		D5144B1A195951D100650061 /* button-feedback-notify.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback-notify.png"; sourceTree = "<group>"; };
 		D5144B1B195951D100650061 /* button-feedback-notify@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback-notify@2x.png"; sourceTree = "<group>"; };
 		D5182C92193E1FDE00DD578C /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		D51C02311A2830CD00A663CD /* NavWrapperViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavWrapperViewController.h; sourceTree = SOURCE_ROOT; };
+		D51C02321A2830CD00A663CD /* NavWrapperViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavWrapperViewController.m; sourceTree = SOURCE_ROOT; };
 		D51C989B18E28D16001230DA /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
 		D51C989C18E28D16001230DA /* GAIDictionaryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIDictionaryBuilder.h; sourceTree = "<group>"; };
 		D51C989D18E28D16001230DA /* GAIFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIFields.h; sourceTree = "<group>"; };
@@ -1610,6 +1613,8 @@
 				C4A894931558796400DC57D3 /* Settings */,
 				C4F102BA156C57CD0061BC3E /* PAPTabBarController.h */,
 				C4F102BB156C57CD0061BC3E /* PAPTabBarController.m */,
+				D51C02311A2830CD00A663CD /* NavWrapperViewController.h */,
+				D51C02321A2830CD00A663CD /* NavWrapperViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -2491,6 +2496,7 @@
 				C4F102D9156C580C0061BC3E /* PAPSettingsActionSheetDelegate.m in Sources */,
 				D530C3F318FB22FC00739027 /* iRate.m in Sources */,
 				C4F102DC156C58170061BC3E /* PAPEditPhotoViewController.m in Sources */,
+				D51C02331A2830CD00A663CD /* NavWrapperViewController.m in Sources */,
 				46DC23BF19AA1F0400E8FCDF /* PAPdiscoverTileView.m in Sources */,
 				C4F102EF156C58E00061BC3E /* main.m in Sources */,
 				C4A0B505156C5B9F00E48554 /* TTTTimeIntervalFormatter.m in Sources */,

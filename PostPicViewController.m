@@ -81,6 +81,7 @@
     // scrollview set up
     self.cropScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0, 0.0, [UIScreen mainScreen].bounds.size.width, cropScrollHeight)];
     [self.cropScrollView setDelegate:self];
+    [self.cropScrollView setBackgroundColor:[UIColor blackColor]];
     [self.cropScrollView setShowsHorizontalScrollIndicator:NO];
     [self.cropScrollView setShowsVerticalScrollIndicator:NO];
     [self.cropScrollView setMaximumZoomScale:2.0];
