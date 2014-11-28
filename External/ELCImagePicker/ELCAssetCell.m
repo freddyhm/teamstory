@@ -63,17 +63,7 @@
             if(!asset.isCam){
                 imageView.image = [UIImage imageWithCGImage:asset.asset.thumbnail];
             }else{
-                
-                
-                // mixpanel ab test for camera button
-                if( MPTweakValue(@"show new camera button", NO) ) {
-                    // Show alternate view with new camera button
-                    imageView.image = [UIImage imageNamed:@"btn_camera_bright.png"];
-                } else {
-                    // Show original view
-                    imageView.image = [UIImage imageNamed:@"btn_camera.png"];
-                    
-                }
+                imageView.image = [UIImage imageNamed:@"btn_camera_bright.png"];
             }
         } else {
             
@@ -83,17 +73,8 @@
             if(!asset.isCam){
                 imageView = [[UIImageView alloc] initWithImage:[UIImage imageWithCGImage:asset.asset.thumbnail]];
             }else{
-                
                 imageView = [[UIImageView alloc] init];
-                
-                // mixpanel ab test for camera button
-                if( MPTweakValue(@"show new camera button", NO) ) {
-                    // Show alternate view with new camera button
-                    imageView.image = [UIImage imageNamed:@"btn_camera_bright.png"];
-                } else {
-                    // Show original view
-                    imageView.image = [UIImage imageNamed:@"btn_camera.png"];
-                }
+                imageView.image = [UIImage imageNamed:@"btn_camera_bright.png"];
             }
             
             [_imageViewArray addObject:imageView];

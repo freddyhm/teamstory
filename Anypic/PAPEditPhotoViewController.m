@@ -183,7 +183,6 @@
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Edit Photo"}];
-
 }
 
 #pragma mark - UITextFieldDelegate
@@ -608,9 +607,6 @@
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Moment"}];
-    
-    // mixpanel ab test no filter goal
-    [[Mixpanel sharedInstance] track:@"Goal: Uploaded Picture" properties:@{@"Type": @"Experiment"}];
     
     // increment user photo count by one
     [[Mixpanel sharedInstance].people increment:@"Photo Count" by:[NSNumber numberWithInt:1]];

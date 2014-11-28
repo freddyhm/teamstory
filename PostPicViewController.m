@@ -13,6 +13,7 @@
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
 #import "PAPAccountViewController.h"
+#import "Mixpanel.h"
 
 @interface PostPicViewController ()
 
@@ -66,6 +67,11 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     
+    [PAPUtility captureScreenGA:@"Edit Photo"];
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Edit Photo"}];
+
     // change proportions based on iphone height
     float cropScrollHeight;
     float descriptionTextViewHeight;
@@ -113,6 +119,7 @@
     self.descriptionTextView = [[UITextView alloc]initWithFrame:CGRectMake(0, self.cropScrollView.frame.origin.y + self.cropScrollView.frame.size.height, [UIScreen mainScreen].bounds.size.width, descriptionTextViewHeight)];
     [self.descriptionTextView setDelegate:self];
     [self.descriptionTextView setText:self.placeholderText];
+    [self.descriptionTextView setFont:[UIFont systemFontOfSize:15.0f]];
     [self.view addSubview:self.descriptionTextView];
     
     /*
@@ -193,10 +200,18 @@
 
 - (void)cropPressed {
     
-    //[self shouldUploadImage:self.croppedImg];
-    
     // show spinning indicator
     [SVProgressHUD show];
+    
+    // analytics
+    [PAPUtility captureEventGA:@"Engagement" action:@"Upload Picture" label:@"Photo"];
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Moment"}];
+    
+    // increment user photo count by one
+    [[Mixpanel sharedInstance].people increment:@"Photo Count" by:[NSNumber numberWithInt:1]];
+    
     //resize cropped image and send to filter controller (work on background thread)
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         
@@ -375,10 +390,16 @@
     }
 }
 
+static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCurve curve) {
+    return (UIViewAnimationOptions)curve << 16;
+}
+
 - (void)keyboardWillShow:(NSNotification *)note {
     CGRect keyboardFrameEnd = [[note.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGRect keyboardFrameBegin = [[note.userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-    self.kbPosY = keyboardFrameBegin.origin.y;
+    NSNumber *number = [[note userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    UIViewAnimationCurve animationCurve = [[[note userInfo] objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    float keyboardDuration = [number doubleValue];
+
     
     CGFloat offset = keyboardFrameEnd.size.height;
     
@@ -388,21 +409,37 @@
         offset += 20;
     }
     
-    [self.view setBounds:CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + offset, self.view.bounds.size.width,self.view.bounds.size.height)];
+
+    // ---------- Animation in sync with keyboard moving up
+    [UIView animateWithDuration:keyboardDuration delay:0 options:animationOptionsWithCurve(animationCurve) animations:^{
+        [self.view setBounds:CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + offset, self.view.bounds.size.width,self.view.bounds.size.height)];
+        
+    } completion:^(BOOL finished) {
+    }];
+
 }
 
 - (void)keyboardWillHide:(NSNotification *)note {
     
     CGRect keyboardFrameEnd = [[note.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGFloat offset = keyboardFrameEnd.size.height;
-    
+    NSNumber *number = [[note userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    UIViewAnimationCurve animationCurve = [[[note userInfo] objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    float keyboardDuration = [number doubleValue];
+
     // Check system version for keyboard offset, ios8 added suggestion bar
     // Align the bottom edge of the photo with the keyboardr
     if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
         offset += 20;
     }
     
-    [self.view setBounds:CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y - offset, self.view.bounds.size.width,self.view.bounds.size.height)];
+    // ---------- Animation in sync with keyboard moving up
+    [UIView animateWithDuration:keyboardDuration delay:0 options:animationOptionsWithCurve(animationCurve) animations:^{
+        [self.view setBounds:CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y - offset, self.view.bounds.size.width,self.view.bounds.size.height)];
+    
+    } completion:^(BOOL finished) {
+    }];
+    
 }
 
 #pragma mark - Mention Method
