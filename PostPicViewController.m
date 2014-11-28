@@ -87,6 +87,9 @@
          descriptionTextViewHeight = 120;
      }
     
+    // set view's background
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+    
     // scrollview set up
     self.cropScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0, 0.0, [UIScreen mainScreen].bounds.size.width, cropScrollHeight)];
     [self.cropScrollView setDelegate:self];
