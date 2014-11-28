@@ -10,6 +10,6 @@
 
 @interface PostPicViewController : UIViewController <UIScrollViewDelegate, UITextViewDelegate, UITableViewDelegate>
 
-- (id)initWithImage:(UIImage *)originalImg;
+- (id)initWithImage:(UIImage *)originalImg source:(NSString *)source;
 
 @end

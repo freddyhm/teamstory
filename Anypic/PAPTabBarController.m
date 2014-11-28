@@ -325,7 +325,7 @@
     // Fix rotation
     UIImage *fixedImg = [self fixrotation:image];
     
-    PostPicViewController *postPicController = [[PostPicViewController alloc]initWithImage:fixedImg];
+    PostPicViewController *postPicController = [[PostPicViewController alloc]initWithImage:fixedImg source:self.imageSource];
     [self.navigationController pushViewController:postPicController animated:NO];
     
     [self dismissViewControllerAnimated:YES completion:nil];

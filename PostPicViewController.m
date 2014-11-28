@@ -6,6 +6,7 @@
 //
 //
 
+#import "ALAssetsLibrary+CustomPhotoAlbum.h"
 #import "PostPicViewController.h"
 #import "PAPUtility.h"
 #import "SVProgressHUD.h"
@@ -43,12 +44,14 @@
 @property (nonatomic, strong) PFFile *thumbnailFile;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier fileUploadBackgroundTaskId;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier photoPostBackgroundTaskId;
+@property (nonatomic, strong) ALAssetsLibrary *assetsLibrary;
+@property (nonatomic, strong) NSString *source;
 
 @end
 
 @implementation PostPicViewController
 
-- (id)initWithImage:(UIImage *)originalImg
+- (id)initWithImage:(UIImage *)originalImg source:(NSString *)source
 {
     self = [super init];
     if (self) {
@@ -56,7 +59,8 @@
         if (!originalImg) {
             return nil;
         }
-        
+
+        self.source = source;
         self.originalImg = originalImg;
         self.fileUploadBackgroundTaskId = UIBackgroundTaskInvalid;
         self.photoPostBackgroundTaskId = UIBackgroundTaskInvalid;
@@ -215,7 +219,7 @@
     // increment user photo count by one
     [[Mixpanel sharedInstance].people increment:@"Photo Count" by:[NSNumber numberWithInt:1]];
     
-    //resize cropped image and send to filter controller (work on background thread)
+    //resize cropped image (work on background thread)
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         
         // crop and resize image from scroll view
@@ -223,6 +227,12 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
+            // save to folder
+            if([self.source isEqualToString:@"Camera"]){
+                [self saveImageToCustomFolder:self.croppedImg];
+            }
+            
+            // upload pic to server
             [self startUploadProcess:self.croppedImg];
         });
     });
@@ -233,6 +243,26 @@
 }
 
 #pragma mark - Upload Methods
+
+- (void)saveImageToCustomFolder:(UIImage *)anImage{
+    
+    // Save image to custom photo album
+    void (^failure)(NSError *) = ^(NSError *error) {
+        if (error == nil) return;
+        
+        NSLog(@"Photo failed to save in album: %@", error);
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't save photo in album :( Check your internet connection or contact us at info@teamstoryapp.com" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+        [alert show];
+        
+    };
+    
+    self.assetsLibrary = [[ALAssetsLibrary alloc] init];
+    
+    [self.assetsLibrary saveImage:anImage
+                          toAlbum:@"Teamstory"
+                       completion:nil
+                          failure:failure];
+}
 
 - (void)startUploadProcess:(UIImage *)anImage {
     
@@ -319,7 +349,7 @@
         [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
     }];
     
-    // save
+    // upload to server
     [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             NSLog(@"Photo uploaded");
@@ -379,7 +409,7 @@
     [self.navigationController popToViewController:tabBarController animated:YES];
 }
 
-#pragma mark - UIKeyboard
+#pragma mark - UITextView Delegate
 
 - (void)textViewDidBeginEditing:(UITextView *)textView{
     if ([[textView text] isEqualToString:self.placeholderText]) {
@@ -394,6 +424,8 @@
         [textView setTextColor:self.placeholderTextColor];
     }
 }
+
+#pragma mark - UIKeyboard
 
 static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCurve curve) {
     return (UIViewAnimationOptions)curve << 16;
@@ -621,5 +653,10 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
     // Pass the selected object to the new view controller.
 }
 */
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
 
 @end
