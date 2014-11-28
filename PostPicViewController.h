@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PostPicViewController : UIViewController <UIScrollViewDelegate, UITextViewDelegate>
+@interface PostPicViewController : UIViewController <UIScrollViewDelegate, UITextViewDelegate, UITableViewDelegate>
 
-- (id)initWithNibName:(NSString *)nibNameOrNil originalImg:(UIImage *)originalImg bundle:(NSBundle *)nibBundleOrNil;
+- (id)initWithImage:(UIImage *)originalImg;
 
 @end

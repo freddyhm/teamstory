@@ -601,25 +601,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 #pragma mark - PAPBaseTextCellDelegate
 
-- (void)cell:(PAPBaseTextCell *)cellView didTapUserButton:(PFUser *)aUser cellType:(NSString *)acellType{
-    if ([acellType isEqualToString:@"atmentionCell"]) {
-        cellType = acellType;
-        text_location = 0;
-        
-        if (atmentionRange.location != NSNotFound) {
-            [self keyboardShouldChangeTextInRange:atmentionRange replacementText:[aUser objectForKey:@"displayName"]];
-        }
-        
-        self.autocompleteTableView.hidden = YES;
-        self.dimView.hidden = YES;
-        self.postDetails.scrollEnabled = YES;
-        
-        [self.atmentionUserArray addObject:aUser];
-    } else {
-        [self shouldPresentAccountViewForUser:aUser];
-    }
-}
-
 - (void)didTapCommentLikeButton:(PAPBaseTextCell *)cellView{
     
     // set button as liked

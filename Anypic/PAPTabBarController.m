@@ -253,7 +253,6 @@
     // Move me
     tablePicker.assetGroup = group;
     
-    
     [tablePicker.assetGroup setAssetsFilter:[ALAssetsFilter allAssets]];
     
     [self presentViewController:elcPicker animated:YES completion:nil];
@@ -330,13 +329,7 @@
     // Fix rotation
     UIImage *fixedImg = [self fixrotation:image];
     
-    PostPicViewController *postPicController = [[PostPicViewController alloc]initWithNibName:nil originalImg:fixedImg bundle:nil];
-    
-   // CropResizeViewController *cropViewController = [[CropResizeViewController alloc] initWithImage:fixedImg nib:nil source:self.imageSource];
-    
-   // ImageCropper *cropper = [[ImageCropper alloc] initWithImage:fixedImg];
-   // [cropper setDelegate:self];
-    
+    PostPicViewController *postPicController = [[PostPicViewController alloc]initWithImage:fixedImg];
     [self.navigationController pushViewController:postPicController animated:NO];
     
     [self dismissViewControllerAnimated:YES completion:nil];

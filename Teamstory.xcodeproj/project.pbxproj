@@ -251,7 +251,6 @@
 		D5182C93193E1FDE00DD578C /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5182C92193E1FDE00DD578C /* Default@2x.png */; };
 		D51C98A218E28D16001230DA /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D51C98A118E28D16001230DA /* libGoogleAnalyticsServices.a */; };
 		D527D3AF1A2405C40072766E /* PostPicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D527D3AD1A2405C40072766E /* PostPicViewController.m */; };
-		D527D3B01A2405C40072766E /* PostPicViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D527D3AE1A2405C40072766E /* PostPicViewController.xib */; };
 		D527D3B81A2419180072766E /* ImageCropper.m in Sources */ = {isa = PBXBuildFile; fileRef = D527D3B71A2419180072766E /* ImageCropper.m */; };
 		D528C37F191034DE00CEEA35 /* ButtonLikeComment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D528C37C191034DE00CEEA35 /* ButtonLikeComment@2x.png */; };
 		D528C380191034DE00CEEA35 /* ButtonLikeCommentSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = D528C37D191034DE00CEEA35 /* ButtonLikeCommentSelected.png */; };
@@ -770,7 +769,6 @@
 		D51C98A118E28D16001230DA /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
 		D527D3AC1A2405C40072766E /* PostPicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostPicViewController.h; sourceTree = SOURCE_ROOT; };
 		D527D3AD1A2405C40072766E /* PostPicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostPicViewController.m; sourceTree = SOURCE_ROOT; };
-		D527D3AE1A2405C40072766E /* PostPicViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PostPicViewController.xib; sourceTree = SOURCE_ROOT; };
 		D527D3B61A2419180072766E /* ImageCropper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCropper.h; sourceTree = SOURCE_ROOT; };
 		D527D3B71A2419180072766E /* ImageCropper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCropper.m; sourceTree = SOURCE_ROOT; };
 		D528C37C191034DE00CEEA35 /* ButtonLikeComment@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonLikeComment@2x.png"; sourceTree = "<group>"; };
@@ -1593,7 +1591,6 @@
 				46A1DCAC195BB6F100729FD0 /* PAPlinkPostViewController.m */,
 				D527D3AC1A2405C40072766E /* PostPicViewController.h */,
 				D527D3AD1A2405C40072766E /* PostPicViewController.m */,
-				D527D3AE1A2405C40072766E /* PostPicViewController.xib */,
 			);
 			name = "Photo & Post";
 			sourceTree = "<group>";
@@ -2350,7 +2347,6 @@
 				46839E9F18E1E8C100BD60DB /* icon-upload@2x.png in Resources */,
 				D552B0EC19C7D3EB009F2862 /* arrows_right.png in Resources */,
 				467A40AC198FF1B200D4C693 /* profile_header_2.png in Resources */,
-				D527D3B01A2405C40072766E /* PostPicViewController.xib in Resources */,
 				C47DDDE915927631002114F6 /* iTunesArtwork@2x in Resources */,
 				C42500DC159939940087C4F4 /* Icon-Small-50@2x.png in Resources */,
 				460997601938119A00C5AD96 /* icon-twitter@2x.png in Resources */,

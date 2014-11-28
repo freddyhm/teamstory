@@ -12,6 +12,7 @@
 #import "PAPEditPhotoViewController.h"
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
+#import "PAPAccountViewController.h"
 
 @interface PostPicViewController ()
 
@@ -22,6 +23,19 @@
 @property (nonatomic, strong) UIImage *originalImg;
 @property (nonatomic, strong) UIImage *croppedImg;
 @property (nonatomic, strong) UIBarButtonItem *rightNavButton;
+@property (nonatomic, strong) NSString *placeholderText;
+@property (nonatomic, strong) NSMutableArray *userArray;
+@property (nonatomic, strong) NSString *atmentionSearchString;
+@property (nonatomic, strong) UITableView *autocompleteTableView;
+@property (nonatomic, strong) NSArray *filteredArray;
+@property (nonatomic, strong) NSString *cellType;
+@property (nonatomic, strong) PFQuery *userQuery;
+@property (nonatomic, strong) NSMutableArray *atmentionUserArray;
+@property (nonatomic, strong) UIView *dimView;
+@property NSInteger text_location;
+@property NSInteger atmentionLength;
+@property NSRange atmentionRange;
+@property float kbPosY;
 
 // upload variables
 @property (nonatomic, strong) PFFile *photoFile;
@@ -33,9 +47,9 @@
 
 @implementation PostPicViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil originalImg:(UIImage *)originalImg bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithImage:(UIImage *)originalImg
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super init];
     if (self) {
         
         if (!originalImg) {
@@ -45,34 +59,27 @@
         self.originalImg = originalImg;
         self.fileUploadBackgroundTaskId = UIBackgroundTaskInvalid;
         self.photoPostBackgroundTaskId = UIBackgroundTaskInvalid;
+        self.placeholderText = @"Add a description to your moment...";
     }
     return self;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
+    // change proportions based on iphone height
+    float cropScrollHeight;
+    float descriptionTextViewHeight;
     
-    // init nav bar
-    [[self navigationController] setNavigationBarHidden:NO animated:YES];
-    
-    // set logo and nav bar buttons
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonAction)];
-    [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
-    
-    // set color of nav bar to custom grey
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(79/255.0) green:(91/255.0) blue:(100/255.0) alpha:(0.0/255.0)];
-    
-    self.rightNavButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_done.png"] style:UIBarButtonItemStylePlain target:self action:@selector(cropPressed)];
-    self.rightNavButton.tintColor = [UIColor whiteColor];
-    self.navigationItem.rightBarButtonItem = self.rightNavButton;
+     if ([UIScreen mainScreen].bounds.size.height > 480) {
+         cropScrollHeight = 320;
+         descriptionTextViewHeight = 180;
+     }else{
+         cropScrollHeight = 290;
+         descriptionTextViewHeight = 120;
+     }
     
     // scrollview set up
-    self.cropScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0, 0.0, [UIScreen mainScreen].bounds.size.width, 400.0)];
+    self.cropScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0, 0.0, [UIScreen mainScreen].bounds.size.width, cropScrollHeight)];
     [self.cropScrollView setDelegate:self];
     [self.cropScrollView setShowsHorizontalScrollIndicator:NO];
     [self.cropScrollView setShowsVerticalScrollIndicator:NO];
@@ -98,22 +105,64 @@
     // center image by manipulting scrollview's offset
     CGFloat newContentOffsetX = (self.cropScrollView.contentSize.width/2) - (self.cropScrollView.bounds.size.width/2);
     [self.cropScrollView setContentOffset:CGPointMake(newContentOffsetX, 0)];
-
+    
     [self.view addSubview:self.cropScrollView];
     
     // create text view placed below crop area
-    self.descriptionTextView = [[UITextView alloc]initWithFrame:CGRectMake(0, self.cropScrollView.frame.origin.y + self.cropScrollView.frame.size.height, [UIScreen mainScreen].bounds.size.width, 180.0)];
+    self.descriptionTextView = [[UITextView alloc]initWithFrame:CGRectMake(0, self.cropScrollView.frame.origin.y + self.cropScrollView.frame.size.height, [UIScreen mainScreen].bounds.size.width, descriptionTextViewHeight)];
     [self.descriptionTextView setDelegate:self];
-    [self.descriptionTextView setBackgroundColor:[UIColor redColor]];
-    [self.descriptionTextView setText:@"Add a description to your moment..."];
-    
+    [self.descriptionTextView setText:self.placeholderText];
     [self.view addSubview:self.descriptionTextView];
+    
+    /*
+    self.dimView = [[UIView alloc] init];
+    self.dimView.hidden = YES;
+    self.dimView.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.8f];
+    [self.view addSubview:self.dimView];
+    
+    self.autocompleteTableView = [[UITableView alloc] init];
+    self.autocompleteTableView.delegate = self;
+    self.autocompleteTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.autocompleteTableView.dataSource = self;
+    self.autocompleteTableView.scrollEnabled = YES;
+    self.autocompleteTableView.hidden = YES;
+    [self.view addSubview:self.autocompleteTableView];
+     */
+
 }
 
-- (void)backButtonAction{
-    [[self navigationController] setNavigationBarHidden:YES animated:YES];
-    [self.navigationController popViewControllerAnimated:YES];
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    // init nav bar
+    [[self navigationController] setNavigationBarHidden:NO animated:YES];
+    
+    // set color of nav bar to custom grey
+    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(79/255.0) green:(91/255.0) blue:(100/255.0) alpha:(0.0/255.0)];
+    
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationItem.title = @"Update Moment";
+
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_cancel.png"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonAction)];
+    [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
+        
+    self.rightNavButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_done.png"] style:UIBarButtonItemStylePlain target:self action:@selector(cropPressed)];
+    self.rightNavButton.tintColor = [UIColor whiteColor];
+    self.navigationItem.rightBarButtonItem = self.rightNavButton;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    
+    UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
+                                          initWithTarget:self
+                                          action:@selector(dismissKeyboard)];
+    
+    [self.view addGestureRecognizer:tapOutside];
+
 }
+
+#pragma mark - Crop Methods
 
 - (UIImage *)cropImage:(UIImage *)aImage {
     float zoomScale = 1.0 / [self.cropScrollView zoomScale];
@@ -160,6 +209,12 @@
     });
 }
 
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    return self.cropImgView;
+}
+
+#pragma mark - Upload Methods
+
 - (void)startUploadProcess:(UIImage *)anImage {
     
     UIImage *thumbnailImage = [PAPUtility resizeImage:anImage width:86.0f height:86.0f];
@@ -201,6 +256,15 @@
 }
 
 - (void)uploadFinishedImage:(UIImage *)anImage {
+    
+    // prepare comment for saving
+    NSDictionary *userInfo = [NSDictionary dictionary];
+    NSString *trimmedComment = [self.descriptionTextView.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    if (trimmedComment.length != 0) {
+        userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                    trimmedComment,kPAPEditPhotoViewControllerUserInfoCommentKey,
+                    nil];
+    }
 
     if (!self.photoFile || !self.thumbnailFile) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
@@ -218,7 +282,14 @@
     [photo setObject:@"picture" forKey:kPAPPhotoType];
     [photo setObject:[NSNumber numberWithInt:0] forKey:@"discoverCount"];
     
-
+    // set comment to photo
+    if (userInfo) {
+        NSString *commentText = [userInfo objectForKey:kPAPEditPhotoViewControllerUserInfoCommentKey];
+        if (commentText && commentText.length != 0 && ![commentText isEqualToString:self.placeholderText]) {
+            [photo setObject:commentText forKey:@"caption"];
+        }
+    }
+    
     // photos are public, but may only be modified by the user who uploaded them
     PFACL *photoACL = [PFACL ACLWithUser:[PFUser currentUser]];
     [photoACL setPublicReadAccess:YES];
@@ -246,6 +317,19 @@
         [SVProgressHUD dismiss];
         [self exitPhoto];
     }];
+}
+
+#pragma mark - Nav Methods
+
+-(void)dismissKeyboard {
+    [self.view endEditing:YES];
+    self.autocompleteTableView.hidden = YES;
+    self.dimView.hidden = YES;
+}
+
+- (void)backButtonAction{
+    [[self navigationController] setNavigationBarHidden:YES animated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)exitPhoto{
@@ -276,16 +360,213 @@
     [self.navigationController popToViewController:tabBarController animated:YES];
 }
 
+#pragma mark - UIKeyboard
+
+- (void)textViewDidBeginEditing:(UITextView *)textView{
+    if ([[textView text] isEqualToString:self.placeholderText]) {
+        [textView setText:@""];
+    }
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    if ([textView.text length] == 0) {
+        [textView setText:self.placeholderText];
+    }
+}
+
+- (void)keyboardWillShow:(NSNotification *)note {
+    CGRect keyboardFrameEnd = [[note.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect keyboardFrameBegin = [[note.userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    self.kbPosY = keyboardFrameBegin.origin.y;
+    
+    CGFloat offset = keyboardFrameEnd.size.height;
+    
+    // Check system version for keyboard offset, ios8 added suggestion bar
+    // Align the bottom edge of the photo with the keyboardr
+    if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
+        offset += 20;
+    }
+    
+    [self.view setBounds:CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y + offset, self.view.bounds.size.width,self.view.bounds.size.height)];
+}
+
+- (void)keyboardWillHide:(NSNotification *)note {
+    
+    CGRect keyboardFrameEnd = [[note.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGFloat offset = keyboardFrameEnd.size.height;
+    
+    // Check system version for keyboard offset, ios8 added suggestion bar
+    // Align the bottom edge of the photo with the keyboardr
+    if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
+        offset += 20;
+    }
+    
+    [self.view setBounds:CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y - offset, self.view.bounds.size.width,self.view.bounds.size.height)];
+}
+
+#pragma mark - Mention Method
+
+/*
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    static NSString *cellID = @"atmentionCell";
+    // Try to dequeue a cell and create one if necessary
+    PAPBaseTextCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    if (cell == nil) {
+        cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        cell.delegate = self;
+    }
+    [cell setUser:[self.filteredArray objectAtIndex:indexPath.row]];
+    [cell setContentText:@" "];
+    return cell;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self.filteredArray count];
+}
+
+- (void)shouldPresentAccountViewForUser:(PFUser *)user {
+    PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
+    [accountViewController setUser:user];
+    [self.navigationController pushViewController:accountViewController animated:YES];
+}
+
+- (void)cell:(PAPBaseTextCell *)cellView didTapUserButton:(PFUser *)aUser cellType:(NSString *)acellType{
+   
+    self.cellType = acellType;
+    self.text_location = 0;
+    
+    if (self.atmentionRange.location != NSNotFound) {
+        [self textView:self.descriptionTextView shouldChangeTextInRange:self.atmentionRange replacementText:[aUser objectForKey:@"displayName"]];
+    }
+    
+    self.autocompleteTableView.hidden = YES;
+    self.dimView.hidden = YES;
+  
+    [self.atmentionUserArray addObject:aUser];
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+    
+    if ([self.cellType isEqualToString:@"atmentionCell"]) {
+        text = [text stringByAppendingString:@" "];
+        
+        if (range.location != NSNotFound) {
+            
+            
+             If the user presses the Delete key, the length of the range is 1 and an empty string object replaces that single character. Goes out of bounds when user presses delete and selects display name at the start of message.
+            
+            long replacementRange = range.length + 1;
+            
+            // Check if new range is in bounds of current text, accounting for extra key when deleting
+            if(replacementRange < self.descriptionTextView.text.length){
+                self.descriptionTextView.text = [self.descriptionTextView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, replacementRange) withString:text];
+            }else{
+                self.descriptionTextView.text = [self.descriptionTextView.text stringByReplacingCharactersInRange:NSMakeRange(range.location, range.length) withString:text];
+            }
+        }
+        
+        self.cellType = nil;
+        return YES;
+    }
+    
+    if ([text isEqualToString:@"@"]){
+        [SVProgressHUD show];
+        
+        
+        CGPoint cursorPosition = [textView caretRectForPosition:textView.selectedTextRange.start].origin;
+        
+        float offsetEmptyTextViewToKb = self.descriptionTextView.frame.size.height - cursorPosition.y;
+        
+        [self.view setBounds:CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y - offsetEmptyTextViewToKb, self.view.bounds.size.width,self.view.bounds.size.height)];
+        
+        
+        NSLog(@"offsetToKb %f", offsetEmptyTextViewToKb);
+        
+        if ([self.userArray count] < 1) {
+            self.userQuery = [PFUser query];
+            self.userQuery.limit = MAXFLOAT;
+            [self.userQuery whereKeyExists:@"displayName"];
+            [self.userQuery orderByAscending:@"displayName"];
+            [self.userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                [SVProgressHUD dismiss];
+                if (!error) {
+                    self.userArray = [[NSMutableArray alloc] initWithArray:objects];
+                    self.atmentionUserArray = [[NSMutableArray alloc] init];
+                    self.filteredArray = objects;
+                    self.autocompleteTableView.backgroundColor = [UIColor clearColor];
+                } else {
+                    NSLog(@"%@", error);
+                }
+            }]; } else {
+              
+                [SVProgressHUD dismiss];
+            }
+        
+    }
+    
+    if ([self.userArray count] > 0) {
+        NSMutableString *updatedText = [[NSMutableString alloc] initWithString:self.descriptionTextView.text];
+        if (range.location == 0 || range.location == self.text_location) {
+            self.autocompleteTableView.hidden = YES;
+            self.dimView.hidden = YES;
+            self.text_location = 0;
+        } else if (range.location > 0 && [[updatedText substringWithRange:NSMakeRange(range.location - 1, 1)] isEqualToString:@"@"]) {
+            self.text_location = range.location;
+        }
+        
+        if ([text isEqualToString:@""] && self.text_location > 1) {
+            range.location -=1;
+            
+            if (self.text_location > range.location) {
+                self.text_location -= 1;
+            }
+        }
+        
+        if (self.text_location > 0) {
+            if (range.location == NSNotFound) {
+                NSLog(@"range location not found");
+            } else {
+                self.atmentionRange = NSMakeRange(self.text_location, range.location - self.text_location);
+                self.atmentionSearchString = [updatedText substringWithRange:self.atmentionRange];
+                self.atmentionSearchString = [self.atmentionSearchString stringByAppendingString:text];
+            }
+            
+            self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", self.atmentionSearchString]];
+            
+            // Check system version for keyboard offset, ios8 added suggestion bar
+            // Align the mention table view
+            self.dimView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 9999.0f);
+            
+            if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0")){
+                self.autocompleteTableView.frame = CGRectMake(0, 64, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height - self.navigationController.navigationBar.frame.size.height - self.descriptionTextView.frame.size.height - 273);
+            }else{
+                self.autocompleteTableView.frame = CGRectMake(0, 64, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height - self.navigationController.navigationBar.frame.size.height - self.descriptionTextView.frame.size.height - 273 + 37);
+            }
+            
+            if ([self.filteredArray count] < 1) {
+                self.dimView.hidden = YES;
+            } else {
+                self.dimView.hidden = NO;
+            }
+            
+            self.autocompleteTableView.hidden = NO;
+            [self.autocompleteTableView reloadData];
+        }
+    }
+    
+    return YES;
+}
+
+
 
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+*/
 
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    return self.cropImgView;
-}
 
 
 /*
