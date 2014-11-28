@@ -119,7 +119,7 @@
     [self.view addSubview:self.cropScrollView];
     
     // create text view placed below crop area
-    self.descriptionTextView = [[UITextView alloc]initWithFrame:CGRectMake(16, self.cropScrollView.frame.origin.y + self.cropScrollView.frame.size.height, [UIScreen mainScreen].bounds.size.width - 24, descriptionTextViewHeight)];
+    self.descriptionTextView = [[UITextView alloc]initWithFrame:CGRectMake(10, self.cropScrollView.frame.origin.y + self.cropScrollView.frame.size.height + 8, [UIScreen mainScreen].bounds.size.width - 20, descriptionTextViewHeight)];
     [self.descriptionTextView setDelegate:self];
     [self.descriptionTextView setText:self.placeholderText];
     [self.descriptionTextView setFont:[UIFont systemFontOfSize:15.0f]];
