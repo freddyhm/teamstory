@@ -227,11 +227,9 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            // save to folder
-            if([self.source isEqualToString:@"Camera"]){
-                [self saveImageToCustomFolder:self.croppedImg];
-            }
-            
+            // save image to teamstory folder    
+            [self saveImageToCustomFolder:self.croppedImg];
+        
             // upload pic to server
             [self startUploadProcess:self.croppedImg];
         });
