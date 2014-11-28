@@ -6,7 +6,6 @@
 
 #import "PAPTabBarController.h"
 #import "MBProgressHUD.h"
-#import "CropResizeViewController.h"
 #import "ThoughtPostViewController.h"
 #import "PAPlinkPostViewController.h"
 #import "PostPicViewController.h"
@@ -412,20 +411,6 @@
     CGContextRelease(ctx);
     CGImageRelease(cgimg);
     return img;
-}
-
-- (void)imageCropper:(ImageCropper *)cropper didFinishCroppingWithImage:(UIImage *)image {
-   // [imageView setImage:image];
-    
-   // [self dismissModalViewControllerAnimated:YES];
-    
-    //[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
-}
-
-- (void)imageCropperDidCancel:(ImageCropper *)cropper {
-   // [self dismissModalViewControllerAnimated:YES];
-    
-    //[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
 }
 
 

@@ -8,7 +8,6 @@
 
 #import "ThoughtPostViewController.h"
 #import "SVProgressHUD.h"
-#import "PAPEditPhotoViewController.h"
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
 #import "Mixpanel.h"

@@ -9,7 +9,6 @@
 #import "PostPicViewController.h"
 #import "PAPUtility.h"
 #import "SVProgressHUD.h"
-#import "PAPEditPhotoViewController.h"
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
 #import "PAPAccountViewController.h"
@@ -25,18 +24,19 @@
 @property (nonatomic, strong) UIImage *croppedImg;
 @property (nonatomic, strong) UIBarButtonItem *rightNavButton;
 @property (nonatomic, strong) NSString *placeholderText;
-@property (nonatomic, strong) NSMutableArray *userArray;
-@property (nonatomic, strong) NSString *atmentionSearchString;
-@property (nonatomic, strong) UITableView *autocompleteTableView;
-@property (nonatomic, strong) NSArray *filteredArray;
-@property (nonatomic, strong) NSString *cellType;
-@property (nonatomic, strong) PFQuery *userQuery;
-@property (nonatomic, strong) NSMutableArray *atmentionUserArray;
-@property (nonatomic, strong) UIView *dimView;
-@property NSInteger text_location;
-@property NSInteger atmentionLength;
-@property NSRange atmentionRange;
-@property float kbPosY;
+@property (nonatomic, strong) UIColor *placeholderTextColor;
+//@property (nonatomic, strong) NSMutableArray *userArray;
+//@property (nonatomic, strong) NSString *atmentionSearchString;
+//@property (nonatomic, strong) UITableView *autocompleteTableView;
+//@property (nonatomic, strong) NSArray *filteredArray;
+//@property (nonatomic, strong) NSString *cellType;
+//@property (nonatomic, strong) PFQuery *userQuery;
+//@property (nonatomic, strong) NSMutableArray *atmentionUserArray;
+//@property (nonatomic, strong) UIView *dimView;
+//@property NSInteger text_location;
+//@property NSInteger atmentionLength;
+//@property NSRange atmentionRange;
+
 
 // upload variables
 @property (nonatomic, strong) PFFile *photoFile;
@@ -61,16 +61,15 @@
         self.fileUploadBackgroundTaskId = UIBackgroundTaskInvalid;
         self.photoPostBackgroundTaskId = UIBackgroundTaskInvalid;
         self.placeholderText = @"Add a description to your moment...";
+        self.placeholderTextColor = [UIColor colorWithRed:174.0/255.0 green:174.0/255.0 blue:174.0/255.0 alpha:1];
     }
     return self;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     
-    [PAPUtility captureScreenGA:@"Edit Photo"];
-    
     // mixpanel analytics
-    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Edit Photo"}];
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Post Photo"}];
 
     // change proportions based on iphone height
     float cropScrollHeight;
@@ -116,10 +115,11 @@
     [self.view addSubview:self.cropScrollView];
     
     // create text view placed below crop area
-    self.descriptionTextView = [[UITextView alloc]initWithFrame:CGRectMake(0, self.cropScrollView.frame.origin.y + self.cropScrollView.frame.size.height, [UIScreen mainScreen].bounds.size.width, descriptionTextViewHeight)];
+    self.descriptionTextView = [[UITextView alloc]initWithFrame:CGRectMake(16, self.cropScrollView.frame.origin.y + self.cropScrollView.frame.size.height, [UIScreen mainScreen].bounds.size.width - 24, descriptionTextViewHeight)];
     [self.descriptionTextView setDelegate:self];
     [self.descriptionTextView setText:self.placeholderText];
     [self.descriptionTextView setFont:[UIFont systemFontOfSize:15.0f]];
+    [self.descriptionTextView setTextColor:self.placeholderTextColor];
     [self.view addSubview:self.descriptionTextView];
     
     /*
@@ -172,7 +172,7 @@
 
 #pragma mark - Crop Methods
 
-- (UIImage *)cropImage:(UIImage *)aImage {
+- (UIImage *)cropImage{
     float zoomScale = 1.0 / [self.cropScrollView zoomScale];
     
     CGRect rect;
@@ -187,13 +187,19 @@
     
     CGImageRelease(cr);
     
+    // check if crop has been used
+    if(self.cropScrollView.contentOffset.y > 0){
+        // Mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Used photo crop" properties:@{}];
+    }
+    
     return cropped;
 }
 
-- (UIImage *)processImage:(UIImage *)aImage {
+- (UIImage *)processImage{
     
     // Cropping & resizing picture
-    UIImage *resizedCroppedPic = [PAPUtility resizeImage:[self cropImage:aImage] width:640 height:640];
+    UIImage *resizedCroppedPic = [PAPUtility resizeImage:[self cropImage] width:640 height:640];
     
     return resizedCroppedPic;
 }
@@ -202,9 +208,6 @@
     
     // show spinning indicator
     [SVProgressHUD show];
-    
-    // analytics
-    [PAPUtility captureEventGA:@"Engagement" action:@"Upload Picture" label:@"Photo"];
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Moment"}];
@@ -216,7 +219,7 @@
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         
         // crop and resize image from scroll view
-        self.croppedImg = [self processImage:self.croppedImg];
+        self.croppedImg = [self processImage];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -339,8 +342,8 @@
 
 -(void)dismissKeyboard {
     [self.view endEditing:YES];
-    self.autocompleteTableView.hidden = YES;
-    self.dimView.hidden = YES;
+ //   self.autocompleteTableView.hidden = YES;
+  //  self.dimView.hidden = YES;
 }
 
 - (void)backButtonAction{
@@ -381,12 +384,14 @@
 - (void)textViewDidBeginEditing:(UITextView *)textView{
     if ([[textView text] isEqualToString:self.placeholderText]) {
         [textView setText:@""];
+        [textView setTextColor:[UIColor blackColor]];
     }
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
     if ([textView.text length] == 0) {
         [textView setText:self.placeholderText];
+        [textView setTextColor:self.placeholderTextColor];
     }
 }
 

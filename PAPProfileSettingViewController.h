@@ -9,7 +9,6 @@
 # import <Parse/Parse.h>
 # import "SVProgressHUD.h"
 # include <stdlib.h>
-#import "PAPEditPhotoViewController.h"
 
 
 @interface PAPProfileSettingViewController : UIViewController <UINavigationControllerDelegate, UIAlertViewDelegate, UIImagePickerControllerDelegate, UITextFieldDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate> {

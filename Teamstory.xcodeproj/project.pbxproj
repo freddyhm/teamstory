@@ -233,7 +233,6 @@
 		C4F102D2156C57FD0061BC3E /* PAPAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102CF156C57FD0061BC3E /* PAPAccountViewController.m */; };
 		C4F102D3156C57FD0061BC3E /* PAPPhotoDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102D1156C57FD0061BC3E /* PAPPhotoDetailsViewController.m */; };
 		C4F102D9156C580C0061BC3E /* PAPSettingsActionSheetDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102D7156C580C0061BC3E /* PAPSettingsActionSheetDelegate.m */; };
-		C4F102DC156C58170061BC3E /* PAPEditPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102DB156C58170061BC3E /* PAPEditPhotoViewController.m */; };
 		C4F102E2156C58440061BC3E /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4F102DF156C58440061BC3E /* Entitlements.plist */; };
 		C4F102E7156C58570061BC3E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C4F102E5156C58570061BC3E /* InfoPlist.strings */; };
 		C4F102EF156C58E00061BC3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102EC156C58E00061BC3E /* main.m */; };
@@ -252,7 +251,6 @@
 		D51C02331A2830CD00A663CD /* NavWrapperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D51C02321A2830CD00A663CD /* NavWrapperViewController.m */; };
 		D51C98A218E28D16001230DA /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D51C98A118E28D16001230DA /* libGoogleAnalyticsServices.a */; };
 		D527D3AF1A2405C40072766E /* PostPicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D527D3AD1A2405C40072766E /* PostPicViewController.m */; };
-		D527D3B81A2419180072766E /* ImageCropper.m in Sources */ = {isa = PBXBuildFile; fileRef = D527D3B71A2419180072766E /* ImageCropper.m */; };
 		D528C37F191034DE00CEEA35 /* ButtonLikeComment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D528C37C191034DE00CEEA35 /* ButtonLikeComment@2x.png */; };
 		D528C380191034DE00CEEA35 /* ButtonLikeCommentSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = D528C37D191034DE00CEEA35 /* ButtonLikeCommentSelected.png */; };
 		D528C381191034DE00CEEA35 /* ButtonLikeCommentSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D528C37E191034DE00CEEA35 /* ButtonLikeCommentSelected@2x.png */; };
@@ -408,7 +406,6 @@
 		D5F45B03196CE6DE001C2875 /* select_overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = D5F45B01196CE6DE001C2875 /* select_overlay.png */; };
 		D5F45B04196CE6DE001C2875 /* select_overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5F45B02196CE6DE001C2875 /* select_overlay@2x.png */; };
 		D5FB8E6C18F79E2D0034CAE6 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FB8E6B18F79E2D0034CAE6 /* Crashlytics.framework */; };
-		D5FC095218A9B518000D85F1 /* CropResizeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095018A9B518000D85F1 /* CropResizeViewController.m */; };
 		D5FC095818A9B552000D85F1 /* FilterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095718A9B552000D85F1 /* FilterCell.m */; };
 		D5FC095C18A9B586000D85F1 /* CameraFilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5FC095918A9B586000D85F1 /* CameraFilterViewController.xib */; };
 		D5FC09C618A9C267000D85F1 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FC09C518A9C267000D85F1 /* CoreMedia.framework */; };
@@ -741,8 +738,6 @@
 		C4F102D1156C57FD0061BC3E /* PAPPhotoDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = PAPPhotoDetailsViewController.m; path = Anypic/PAPPhotoDetailsViewController.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C4F102D6156C580C0061BC3E /* PAPSettingsActionSheetDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPSettingsActionSheetDelegate.h; path = Anypic/PAPSettingsActionSheetDelegate.h; sourceTree = SOURCE_ROOT; };
 		C4F102D7156C580C0061BC3E /* PAPSettingsActionSheetDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPSettingsActionSheetDelegate.m; path = Anypic/PAPSettingsActionSheetDelegate.m; sourceTree = SOURCE_ROOT; };
-		C4F102DA156C58170061BC3E /* PAPEditPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPEditPhotoViewController.h; path = Anypic/PAPEditPhotoViewController.h; sourceTree = SOURCE_ROOT; };
-		C4F102DB156C58170061BC3E /* PAPEditPhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPEditPhotoViewController.m; path = Anypic/PAPEditPhotoViewController.m; sourceTree = SOURCE_ROOT; };
 		C4F102DF156C58440061BC3E /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Entitlements.plist; path = Anypic/Entitlements.plist; sourceTree = SOURCE_ROOT; };
 		C4F102E6156C58570061BC3E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Anypic/en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
 		C4F102EB156C58E00061BC3E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
@@ -772,8 +767,6 @@
 		D51C98A118E28D16001230DA /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
 		D527D3AC1A2405C40072766E /* PostPicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostPicViewController.h; sourceTree = SOURCE_ROOT; };
 		D527D3AD1A2405C40072766E /* PostPicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostPicViewController.m; sourceTree = SOURCE_ROOT; };
-		D527D3B61A2419180072766E /* ImageCropper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCropper.h; sourceTree = SOURCE_ROOT; };
-		D527D3B71A2419180072766E /* ImageCropper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCropper.m; sourceTree = SOURCE_ROOT; };
 		D528C37C191034DE00CEEA35 /* ButtonLikeComment@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonLikeComment@2x.png"; sourceTree = "<group>"; };
 		D528C37D191034DE00CEEA35 /* ButtonLikeCommentSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonLikeCommentSelected.png; sourceTree = "<group>"; };
 		D528C37E191034DE00CEEA35 /* ButtonLikeCommentSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonLikeCommentSelected@2x.png"; sourceTree = "<group>"; };
@@ -973,8 +966,6 @@
 		D5F45B01196CE6DE001C2875 /* select_overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select_overlay.png; sourceTree = "<group>"; };
 		D5F45B02196CE6DE001C2875 /* select_overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "select_overlay@2x.png"; sourceTree = "<group>"; };
 		D5FB8E6B18F79E2D0034CAE6 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
-		D5FC094F18A9B518000D85F1 /* CropResizeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CropResizeViewController.h; sourceTree = SOURCE_ROOT; };
-		D5FC095018A9B518000D85F1 /* CropResizeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CropResizeViewController.m; sourceTree = SOURCE_ROOT; };
 		D5FC095618A9B552000D85F1 /* FilterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterCell.h; sourceTree = SOURCE_ROOT; };
 		D5FC095718A9B552000D85F1 /* FilterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterCell.m; sourceTree = SOURCE_ROOT; };
 		D5FC095918A9B586000D85F1 /* CameraFilterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraFilterViewController.xib; sourceTree = SOURCE_ROOT; };
@@ -1582,12 +1573,6 @@
 		C4A894941558796C00DC57D3 /* Photo & Post */ = {
 			isa = PBXGroup;
 			children = (
-				D527D3B61A2419180072766E /* ImageCropper.h */,
-				D527D3B71A2419180072766E /* ImageCropper.m */,
-				D5FC094F18A9B518000D85F1 /* CropResizeViewController.h */,
-				D5FC095018A9B518000D85F1 /* CropResizeViewController.m */,
-				C4F102DA156C58170061BC3E /* PAPEditPhotoViewController.h */,
-				C4F102DB156C58170061BC3E /* PAPEditPhotoViewController.m */,
 				D5903C72192EBBF900DC9896 /* ThoughtPostViewController.h */,
 				D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */,
 				46A1DCAB195BB6F100729FD0 /* PAPlinkPostViewController.h */,
@@ -2472,14 +2457,12 @@
 				D5856F8E19F87E2500D0086F /* KonotorConversationViewController.m in Sources */,
 				C4F102B3156C57820061BC3E /* PAPActivityCell.m in Sources */,
 				D5856F9019F87E2500D0086F /* KonotorEventHandler.m in Sources */,
-				D5FC095218A9B518000D85F1 /* CropResizeViewController.m in Sources */,
 				C4F102B4156C57820061BC3E /* PAPBaseTextCell.m in Sources */,
 				D5856FB319F87E2600D0086F /* KonotorTextInputOverlay.m in Sources */,
 				C4F102B5156C57820061BC3E /* PAPLoadMoreCell.m in Sources */,
 				C4F102B6156C57820061BC3E /* PAPPhotoCell.m in Sources */,
 				C4F102B9156C57B90061BC3E /* PAPSettingsButtonItem.m in Sources */,
 				C4F102BC156C57CD0061BC3E /* PAPTabBarController.m in Sources */,
-				D527D3B81A2419180072766E /* ImageCropper.m in Sources */,
 				C4F102C2156C57DA0061BC3E /* PAPLogInViewController.m in Sources */,
 				C4F102C3156C57DA0061BC3E /* PAPWelcomeViewController.m in Sources */,
 				D5856FB419F87E2600D0086F /* KonotorUITextView.m in Sources */,
@@ -2495,7 +2478,6 @@
 				D5856FB619F87E2600D0086F /* KonotorVoiceInputOverlay.m in Sources */,
 				C4F102D9156C580C0061BC3E /* PAPSettingsActionSheetDelegate.m in Sources */,
 				D530C3F318FB22FC00739027 /* iRate.m in Sources */,
-				C4F102DC156C58170061BC3E /* PAPEditPhotoViewController.m in Sources */,
 				D51C02331A2830CD00A663CD /* NavWrapperViewController.m in Sources */,
 				46DC23BF19AA1F0400E8FCDF /* PAPdiscoverTileView.m in Sources */,
 				C4F102EF156C58E00061BC3E /* main.m in Sources */,

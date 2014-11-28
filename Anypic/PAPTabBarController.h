@@ -4,15 +4,13 @@
 //
 //
 
-#import "PAPEditPhotoViewController.h"
 #import "ELCImagePickerController.h"
 #import "ELCAlbumPickerController.h"
 #import "ELCAssetTablePicker.h"
-#import "ImageCropper.h"
 
 @protocol PAPTabBarControllerDelegate;
 
-@interface PAPTabBarController : UITabBarController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, ELCImagePickerControllerDelegate, ImageCropperDelegate>
+@interface PAPTabBarController : UITabBarController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, ELCImagePickerControllerDelegate>
 
 @property (nonatomic, strong) UIView *postMenu;
 @property (nonatomic, strong) UIButton *postButton;
