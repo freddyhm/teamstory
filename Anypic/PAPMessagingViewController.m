@@ -43,6 +43,7 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
+    
     self.messageQuery = [[NSMutableArray alloc] init];
     [self registerForNotifications];
     
@@ -222,12 +223,18 @@
 }
 
 -(void) loadMessageQuery {
+    
+    [SVProgressHUD show];
+    
     PFQuery *messageQuery = [PFQuery queryWithClassName:@"Message"];
     [messageQuery whereKey:@"chatRoom" equalTo:self.targetChatRoom];
     [messageQuery orderByDescending:@"createdAt"];
     [messageQuery setLimit:200];
     [messageQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error && [objects count] > 0) {
+            
+            [SVProgressHUD dismiss];
+            
             self.messageList.hidden = NO;
             self.placeHolder.hidden = YES;
             [self.messageQuery removeAllObjects];
