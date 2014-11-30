@@ -39,6 +39,8 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     
+    [self.navigationController setToolbarHidden:YES animated:NO];
+    
     totalBadgeNumber = 0;
     
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:@"messagingListViewScreen" setTargetRoom:nil setTargetUser:nil setNavigationController:self.navigationController];

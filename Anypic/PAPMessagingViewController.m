@@ -44,6 +44,8 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     
+    [self.navigationController setToolbarHidden:YES animated:NO];
+    
     self.messageQuery = [[NSMutableArray alloc] init];
     [self registerForNotifications];
     

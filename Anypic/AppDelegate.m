@@ -848,6 +848,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
         homeNavigationController.hidesBottomBarWhenPushed = YES;
         [homeNavigationController pushViewController:messageListViewController animated:NO];
         [CATransaction setCompletionBlock:^{
+            homeNavigationController.hidesBottomBarWhenPushed = YES;
             [homeNavigationController pushViewController:messagingViewController animated:NO];
         }];
         [CATransaction commit];
