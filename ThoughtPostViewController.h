@@ -20,7 +20,6 @@
 
 - (IBAction)rightNav:(id)sender;
 - (IBAction)leftNav:(id)sender;
-- (void)exitPost;
 
 
 

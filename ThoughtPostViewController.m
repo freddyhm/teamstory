@@ -41,12 +41,9 @@
     
     [super viewDidLoad];
     
-    // init nav bar
-    [[self navigationController] setNavigationBarHidden:NO animated:YES];
-    
     // set logo and nav bar buttons
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonAction:)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_cancel.png"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonAction:)];
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
     
     self.rightNavButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_done.png"] style:UIBarButtonItemStylePlain target:self action:@selector(saveEdit:)];
@@ -336,10 +333,7 @@
 }
 
 - (void)exitPost{
-    
-    // hide bar and pop to home 
-    [[self navigationController] setNavigationBarHidden:YES animated:YES];
-    
+       
     // get tab bar and home controller from stack
     PAPTabBarController *tabBarController =[[self.navigationController viewControllers] objectAtIndex:1];
     NSArray *tabBarViewControllers = [tabBarController viewControllers];
@@ -364,9 +358,7 @@
 
 
 - (void)backButtonAction:(id)sender {
-    
-    [[self navigationController] setNavigationBarHidden:YES animated:YES];
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
