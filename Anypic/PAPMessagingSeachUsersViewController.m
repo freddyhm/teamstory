@@ -46,11 +46,6 @@
     [super viewWillAppear:YES];
     [SVProgressHUD show];
     
-    self.filterFollowUserList = [[NSMutableArray alloc] init];
-    self.userList = [[NSMutableArray alloc] init];
-    self.followUserList = [[NSMutableArray alloc] init];
-    self.filterUserList = [[NSMutableArray alloc] init];
-    
     PFQuery *followerQuery = [PFQuery queryWithClassName:@"Activity"];
     [followerQuery whereKey:@"fromUser" equalTo:[PFUser currentUser]];
     [followerQuery whereKeyExists:@"toUser"];
@@ -62,6 +57,7 @@
     [followingQuery whereKey:@"type" equalTo:@"follow"];
     
     PFQuery *finalQuery = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:followerQuery, followingQuery, nil]];
+    [finalQuery setLimit:1000];
     [finalQuery includeKey:@"fromUser.User"];
     [finalQuery includeKey:@"toUser.User"];
     [finalQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -88,13 +84,12 @@
     
     limit = 1000;
     skip = 0;
+    [self.userList removeAllObjects];
     [self userQueryPagination];
     
 }
 
 -(void) userQueryPagination {
-    [self.userList removeAllObjects];
-    
     PFQuery *userQuery = [PFUser query];
     [userQuery whereKeyExists:@"displayName"];
     [userQuery whereKey:@"displayName" notEqualTo:[[PFUser currentUser] objectForKey:@"displayName"]];
@@ -106,8 +101,7 @@
             [self.userList addObjectsFromArray:objects];
             if (objects.count == limit) {
                 skip += limit;
-                [userQuery setSkip:skip];
-                [userQuery findObjectsInBackgroundWithTarget:self selector:@selector(userQueryPagination)];
+                [self userQueryPagination];
             } else if ([self.querySelectionString isEqualToString:@"Everyone"]) {
                 [self.followerTV reloadData];
             }
@@ -121,6 +115,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.filterFollowUserList = [[NSMutableArray alloc] init];
+    self.userList = [[NSMutableArray alloc] init];
+    self.followUserList = [[NSMutableArray alloc] init];
+    self.filterUserList = [[NSMutableArray alloc] init];
+    
     self.view.backgroundColor = [UIColor whiteColor];
     isSearchString = NO;
     UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
@@ -388,6 +388,7 @@
     
     if ([self.querySelectionString isEqualToString:@"Follower"]){
         [self.filterFollowUserList addObjectsFromArray:[self.followUserList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"toUser.displayName contains[c] %@", searchString]]];
+        [self.filterFollowUserList addObjectsFromArray:[self.followUserList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"fromUser.displayName contains[c] %@", searchString]]];
     } else {
         [self.filterFollowUserList addObjectsFromArray:[self.userList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", searchString]]];
     }
