@@ -287,9 +287,6 @@
                 [self.targetChatRoom setObject:[NSNumber numberWithInt:1] forKey:@"userOneBadge"];
             }
             
-            // Update User ChatRoom showing.
-            [self.targetChatRoom setValue:[NSNumber numberWithBool:YES] forKey:@"userTwoShowChatRoom"];
-            
         } else {
             
             // Update Badge for usertwo.
@@ -298,10 +295,12 @@
             } else {
                 [self.targetChatRoom setObject:[NSNumber numberWithInt:1] forKey:@"userTwoBadge"];
             }
-            
-            // Update User ChatRoom showing.
-            [self.targetChatRoom setValue:[NSNumber numberWithBool:YES] forKey:@"userOneShowChatRoom"];
         }
+        
+        // Update User ChatRoom showing.
+        [self.targetChatRoom setValue:[NSNumber numberWithBool:YES] forKey:@"userTwoShowChatRoom"];
+        [self.targetChatRoom setValue:[NSNumber numberWithBool:YES] forKey:@"userOneShowChatRoom"];
+        
         [self.targetChatRoom saveInBackground];
         
         textViewHeight = messageTextViewHeight;

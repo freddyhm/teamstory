@@ -123,7 +123,7 @@
 
 -(void)textViewDidChange:(UITextView *)textView {
     // with keyboard
-    if (self.view.frame.origin.y < 300) {
+    if (self.view.frame.origin.y < 400) {
         NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:textSize]};
         CGRect textViewSize = [textView.text boundingRectWithSize:CGSizeMake(self.messageTextView.bounds.size.width - 10.0f, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
         
