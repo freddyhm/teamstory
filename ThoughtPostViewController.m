@@ -12,6 +12,7 @@
 #import "PAPHomeViewController.h"
 #import "Mixpanel.h"
 #import "ParseFacebookUtils/PFFacebookUtils.h"
+#include <stdlib.h>
 
 @interface ThoughtPostViewController ()
 
@@ -20,7 +21,9 @@
 @property (nonatomic, assign) UIBackgroundTaskIdentifier fileUploadBackgroundTaskId;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier photoPostBackgroundTaskId;
 @property (nonatomic, strong) NSMutableArray *bkgdOptions;
+@property (nonatomic, strong) NSMutableArray *suggOptions;
 @property (nonatomic, strong) UIBarButtonItem *rightNavButton;
+@property (nonatomic, strong) NSString *placeholderSuggestion;
 @property int prevBkgdIndex;
 
 @end
@@ -61,11 +64,27 @@
     UIColor *blueGrey = [UIColor colorWithRed:89.0f/255.0f green:94.0f/255.0f blue:100.0f/255.0f alpha:1];
     UIColor *darkGrey = [UIColor colorWithRed:41.0f/255.0f green:41.0f/255.0f blue:41.0f/255.0f alpha:1];
     
+    // set suggestions
+    NSString *defaultSuggestion = @"What's on your mind?";
+    NSString *sugg2 = @"your mind2?";
+    NSString *sugg3 = @"your mind3?";
+    NSString *sugg4 = @"your mind4?";
+    NSString *sugg5 = @"your mind5?";
+    NSString *sugg6 = @"your mind6?";
+    
+    // suggestion selection
+    self.suggOptions = [[NSMutableArray alloc]initWithObjects:defaultSuggestion, sugg2, sugg3, sugg4, sugg5, sugg6, nil];
+    
     // color selection
     self.bkgdOptions = [[NSMutableArray alloc]initWithObjects:original, green, blue, deepPurple, pink, pinkRed, yellow, orange, blueGrey, darkGrey, nil];
-    self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:0];
-    self.prevBkgdIndex = 0;
     
+    // random suggestion within selection bounds
+    int randomSuggOption = arc4random_uniform((int)self.suggOptions.count);
+    int randomBkgdOption = arc4random_uniform((int)self.bkgdOptions.count);
+    
+    
+    self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:randomBkgdOption];
+    self.prevBkgdIndex = randomBkgdOption;
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
@@ -74,9 +93,11 @@
     [self.leftSwipe addTarget:self action:@selector(leftNav:)];
     [self.rightSwipe addTarget:self action:@selector(rightNav:)];
     
-    
     [self.thoughtTextView setAutocorrectionType:UITextAutocorrectionTypeNo];
     [self.thoughtTextView setReturnKeyType:UIReturnKeyDone];
+    
+    // default placeholder suggestion
+    [self.placeholder setText:[self.suggOptions objectAtIndex:randomSuggOption]];
     
     [self.view addGestureRecognizer:tapOutside];
 
@@ -157,12 +178,12 @@
         self.thoughtTextView.textColor = [UIColor whiteColor];
         [self.leftNavSelector setImage:[UIImage imageNamed:@"arrows_left_white.png"] forState:UIControlStateNormal];
         [self.rightNavSelector setImage:[UIImage imageNamed:@"arrows_right_white.png"] forState:UIControlStateNormal];
-        [self.placeholderSign setImage:[UIImage imageNamed:@"share_thought_white.png"]];
+        [self.placeholder setTextColor:[UIColor whiteColor]];
     }else{
         self.thoughtTextView.textColor = [UIColor blackColor];
         [self.leftNavSelector setImage:[UIImage imageNamed:@"arrows_left.png"] forState:UIControlStateNormal];
         [self.rightNavSelector setImage:[UIImage imageNamed:@"arrows_right.png"] forState:UIControlStateNormal];
-        [self.placeholderSign setImage:[UIImage imageNamed:@"share_thought_grey.png"]];
+        [self.placeholder setTextColor:[UIColor grayColor]];
     }
 }
 

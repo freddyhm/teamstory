@@ -15,13 +15,12 @@
 @interface ThoughtPostViewController : UIViewController <UITextViewDelegate>
 @property (nonatomic, weak) id<ThoughtPostViewControllerDelegate> delegate;
 @property (strong, nonatomic) IBOutlet UIImageView *backgroundImg;
-@property (strong, nonatomic) IBOutlet UIImageView *placeholder;
 @property (strong, nonatomic) IBOutlet UITextView *thoughtTextView;
 @property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *leftSwipe;
 @property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *rightSwipe;
 @property (strong, nonatomic) IBOutlet UIButton *rightNavSelector;
 @property (strong, nonatomic) IBOutlet UIButton *leftNavSelector;
-@property (strong, nonatomic) IBOutlet UIImageView *placeholderSign;
+@property (strong, nonatomic) IBOutlet UILabel *placeholder;
 
 - (IBAction)rightNav:(id)sender;
 - (IBAction)leftNav:(id)sender;
