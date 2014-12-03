@@ -8,7 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol ThoughtPostViewControllerDelegate <NSObject>;
+- (void)didUploadThought;
+@end
+
 @interface ThoughtPostViewController : UIViewController <UITextViewDelegate>
+@property (nonatomic, weak) id<ThoughtPostViewControllerDelegate> delegate;
 @property (strong, nonatomic) IBOutlet UIImageView *backgroundImg;
 @property (strong, nonatomic) IBOutlet UIImageView *placeholder;
 @property (strong, nonatomic) IBOutlet UITextView *thoughtTextView;
@@ -20,7 +25,6 @@
 
 - (IBAction)rightNav:(id)sender;
 - (IBAction)leftNav:(id)sender;
-
-
-
 @end
+
+

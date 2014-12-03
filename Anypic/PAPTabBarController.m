@@ -268,11 +268,21 @@
     
     postButton.selected = self.postButton.selected ? NO : YES;
     self.postMenu.hidden = YES;
-    ThoughtPostViewController *thoughtPostViewController = [[ThoughtPostViewController alloc] init];
     
+    ThoughtPostViewController *thoughtPostViewController = [[ThoughtPostViewController alloc] init];
+    thoughtPostViewController.delegate = self;
+    
+    // nav controller here serves to display nav bar easily
     UINavigationController *thoughtNavController = [[UINavigationController alloc]initWithRootViewController:thoughtPostViewController];
     
     [self.navigationController presentViewController:thoughtNavController animated:YES completion:nil];
+}
+
+-(void)didUploadThought{
+    
+    // move to home view controller
+    [self setSelectedIndex:0];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
