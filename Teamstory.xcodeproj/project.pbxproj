@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0605739F1A2EBF6D00A9F2C6 /* bg_thought@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0605739C1A2EBF6D00A9F2C6 /* bg_thought@3x.png */; };
+		060573A01A2EBF6D00A9F2C6 /* bg_thought@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0605739D1A2EBF6D00A9F2C6 /* bg_thought@2x.png */; };
+		060573A11A2EBF6D00A9F2C6 /* bg_thought.png in Resources */ = {isa = PBXBuildFile; fileRef = 0605739E1A2EBF6D00A9F2C6 /* bg_thought.png */; };
 		092354B513A1D7F000DA740F /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 092354B413A1D7F000DA740F /* SystemConfiguration.framework */; };
 		092354B713A1D83C00DA740F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 092354B613A1D83C00DA740F /* MobileCoreServices.framework */; };
 		095ACE8613C68EA300566243 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 095ACE8513C68EA300566243 /* AudioToolbox.framework */; };
@@ -468,6 +471,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0605739C1A2EBF6D00A9F2C6 /* bg_thought@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_thought@3x.png"; path = "../../../bg_thought@3x.png"; sourceTree = "<group>"; };
+		0605739D1A2EBF6D00A9F2C6 /* bg_thought@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_thought@2x.png"; path = "../../../bg_thought@2x.png"; sourceTree = "<group>"; };
+		0605739E1A2EBF6D00A9F2C6 /* bg_thought.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bg_thought.png; path = ../../../bg_thought.png; sourceTree = "<group>"; };
 		092354AF13A1D7E200DA740F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		092354B213A1D7EB00DA740F /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		092354B413A1D7F000DA740F /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -1343,6 +1349,9 @@
 				465B19A518B81FE500EDBCFC /* browser-button-forward-normal.png */,
 				465B19A618B81FE500EDBCFC /* browser-button-forward-normal@2x.png */,
 				465B19A718B81FE500EDBCFC /* browser-button-no.png */,
+				0605739C1A2EBF6D00A9F2C6 /* bg_thought@3x.png */,
+				0605739D1A2EBF6D00A9F2C6 /* bg_thought@2x.png */,
+				0605739E1A2EBF6D00A9F2C6 /* bg_thought.png */,
 				465B19A818B81FE500EDBCFC /* browser-button-no@2x.png */,
 				465B19A918B81FE500EDBCFC /* browser-button-normal.png */,
 				465B19AA18B81FE500EDBCFC /* browser-button-normal@2x.png */,
@@ -2059,6 +2068,7 @@
 			files = (
 				46ABD74E18B147FC008F5AAB /* button_cancel_selected.png in Resources */,
 				D552B0ED19C7D3EB009F2862 /* arrows_right@2x.png in Resources */,
+				0605739F1A2EBF6D00A9F2C6 /* bg_thought@3x.png in Resources */,
 				D5B1E6F71A1417130096D5EC /* CustomKeyboardViewController.xib in Resources */,
 				D575A0701947834C00C6BCC2 /* btn_editprofile@2x.png in Resources */,
 				46839E9E18E1E8C100BD60DB /* icon-upload.png in Resources */,
@@ -2100,6 +2110,7 @@
 				469CF3741996FB4D0081FCED /* btn_facebook_select.png in Resources */,
 				D57684031933EBA3008BAA2C /* nav_profile@2x.png in Resources */,
 				46A2FE521963572E00D8ED12 /* Thought Popup_selected.png in Resources */,
+				060573A01A2EBF6D00A9F2C6 /* bg_thought@2x.png in Resources */,
 				D576840F1933F910008BAA2C /* IconDiscoverSelected@2x.png in Resources */,
 				462FCB83188C8533005059F3 /* button_back_selected.png in Resources */,
 				467A40C21990227700D4C693 /* btn_dropdown.png in Resources */,
@@ -2261,6 +2272,7 @@
 				463B0CEB1985A8C80075E496 /* intro_moment_2@2x.png in Resources */,
 				46DC23C519AAC7F300E8FCDF /* icon_search@2x.png in Resources */,
 				C4BE67A5157FC7F700A291C2 /* IconComment.png in Resources */,
+				060573A11A2EBF6D00A9F2C6 /* bg_thought.png in Resources */,
 				46A2FE5919635A7000D8ED12 /* btn_close_timeline.png in Resources */,
 				C4BE67A6157FC7F700A291C2 /* IconComment@2x.png in Resources */,
 				465A4EDA18A8222A00E43DC6 /* iconlocation@2x.png in Resources */,
