@@ -58,31 +58,52 @@
     self.rightNavButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_done.png"] style:UIBarButtonItemStylePlain target:self action:@selector(saveEdit:)];
     self.rightNavButton.tintColor = [UIColor whiteColor];
     
+    
+    
     // set colors
-    UIColor *original = [UIColor colorWithRed:249.0f/255.0f green:249.0f/255.0f blue:249.0f/255.0f alpha:1];
-    UIColor *green = [UIColor colorWithRed:156.0f/255.0f green:209.0f/255.0f blue:105.0f/255.0f alpha:1];
-    UIColor *blue = [UIColor colorWithRed:19.0f/255.0f green:149.0f/255.0f blue:217.0f/255.0f alpha:1];
-    UIColor *deepPurple = [UIColor colorWithRed:166.0f/255.0f green:109.0f/255.0f blue:170.0f/255.0f alpha:1];
-    UIColor *pink = [UIColor colorWithRed:234.0f/255.0f green:108.0f/255.0f blue:135.0f/255.0f alpha:1];
-    UIColor *pinkRed = [UIColor colorWithRed:253.0f/255.0f green:89.0f/255.0f blue:89.0f/255.0f alpha:1];
-    UIColor *yellow = [UIColor colorWithRed:236.0f/255.0f green:198.0f/255.0f blue:84.0f/255.0f alpha:1];
-    UIColor *orange = [UIColor colorWithRed:249.0f/255.0f green:155.0f/255.0f blue:72.0f/255.0f alpha:1];
-    UIColor *blueGrey = [UIColor colorWithRed:89.0f/255.0f green:94.0f/255.0f blue:100.0f/255.0f alpha:1];
-    UIColor *darkGrey = [UIColor colorWithRed:41.0f/255.0f green:41.0f/255.0f blue:41.0f/255.0f alpha:1];
+    UIColor *black = [UIColor colorWithRed:255.0f/255.0f green:255.0f/255.0f blue:255.0f/255.0f alpha:1];
+    UIColor *gray = [UIColor colorWithRed:42.0f/255.0f green:42.0f/255.0f blue:42.0f/255.0f alpha:1];
+    UIColor *green = [UIColor colorWithRed:75.0f/255.0f green:82.0f/255.0f blue:95.0f/255.0f alpha:1];
+    UIColor *teal = [UIColor colorWithRed:98.0f/255.0f green:195.0f/255.0f blue:112.0f/255.0f alpha:1];
+    UIColor *orange = [UIColor colorWithRed:132.0f/255.0f green:198.0f/255.0f blue:201.0f/255.0f alpha:1];
+    UIColor *redOrange = [UIColor colorWithRed:249.0f/255.0f green:175.0f/255.0f blue:54.0f/255.0f alpha:1];
+    UIColor *purple = [UIColor colorWithRed:243.0f/255.0f green:137.0f/255.0f blue:100.0f/255.0f alpha:1];
+    UIColor *pink = [UIColor colorWithRed:125.0f/255.0f green:112.0f/255.0f blue:186.0f/255.0f alpha:1];
+    UIColor *blue = [UIColor colorWithRed:237.0f/255.0f green:86.0f/255.0f blue:118.0f/255.0f alpha:1];
+    UIColor *brown = [UIColor colorWithRed:144.0f/255.0f green:190.0f/255.0f blue:222.0f/255.0f alpha:1];
+    UIColor *olive = [UIColor colorWithRed:85.0f/255.0f green:67.0f/255.0f blue:72.0f/255.0f alpha:1];
+    UIColor *white = [UIColor colorWithRed:107.0f/255.0f green:163.0f/255.0f blue:104.0f/255.0f alpha:1];
+    
+    // personalize suggestion, check if name is not empty
+    NSString *userName = ![[[PFUser currentUser] objectForKey:@"displayName"] isEqualToString:@" "] ? [[PFUser currentUser] objectForKey:@"displayName"] : @"You";
     
     // set suggestions
-    NSString *defaultSuggestion = @"What's on your mind?";
-    NSString *sugg2 = @"your mind2?";
-    NSString *sugg3 = @"your mind3?";
-    NSString *sugg4 = @"your mind4?";
-    NSString *sugg5 = @"your mind5?";
-    NSString *sugg6 = @"your mind6?";
+    NSString *sugg1 = [userName stringByAppendingString:@", you are freakin' awesome."];
+    NSString *sugg2 = [userName stringByAppendingString:@" for president."];
+    NSString *sugg3 = @"Always pass on what you have learned.";
+    NSString *sugg4 = @"Do or do not. There is no try.";
+    NSString *sugg5 = @"Zuck ain’t got nothing on you.";
+    NSString *sugg6 = @"What you do in life, echoes in eternity.";
+    NSString *sugg7 = @"How was your day?";
+    NSString *sugg8 = @"What's new?";
+    NSString *sugg9 = @"Share something with the community!";
+    NSString *sugg10 = @"How's work?";
+    NSString *sugg11 = @"What did you learn today?";
+    NSString *sugg12 = @"What are you grateful for?";
+    NSString *sugg13 = @"Run, Forest, run.";
+    NSString *sugg14 = @"Only at the end do you realize the power of the Dark Side.";
+    NSString *sugg15 = @"Keep calm and keep coding.";
+    NSString *sugg16 = @"This is a bullshit free zone.";
+    NSString *sugg17 = @"This is where you vent.";
+    NSString *sugg18 = @"Ready. Set. Go!";
+    NSString *sugg19 = @"[insert rant]";
+    
     
     // suggestion selection
-    self.suggOptions = [[NSMutableArray alloc]initWithObjects:defaultSuggestion, sugg2, sugg3, sugg4, sugg5, sugg6, nil];
+    self.suggOptions = [[NSMutableArray alloc]initWithObjects:sugg1, sugg2, sugg3, sugg4, sugg5, sugg6, sugg7, sugg8, sugg9, sugg10, sugg11, sugg12, sugg13, sugg14, sugg15, sugg16, sugg17, sugg18, sugg19, nil];
     
     // color selection
-    self.bkgdOptions = [[NSMutableArray alloc]initWithObjects:original, green, blue, deepPurple, pink, pinkRed, yellow, orange, blueGrey, darkGrey, nil];
+    self.bkgdOptions = [[NSMutableArray alloc]initWithObjects:black, gray, green, teal, orange, redOrange, purple, pink, blue, brown, olive, white, nil];
     
     // random suggestion within selection bounds
     int randomSuggOption = arc4random_uniform((int)self.suggOptions.count);
@@ -106,7 +127,8 @@
     [self.placeholder setText:[self.suggOptions objectAtIndex:randomSuggOption]];
     
     [self.view addGestureRecognizer:tapOutside];
-
+    
+    [self updateTextColor];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
