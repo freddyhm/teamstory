@@ -26,6 +26,7 @@
 #import "PAPprofileSetupViewController.h"
 #import "Mixpanel.h"
 #import "ParseFacebookUtils/PFFacebookUtils.h"
+#import "Intercom.h"
 
 
 @interface AppDelegate () {
@@ -89,6 +90,7 @@ static NSString *const PARSE_CLIENT_KEY = @"ZRnM7JXOlbSyOQuosXWG6SlrDNCY22C84hpq
 static NSString *const TWITTER_KEY = @"VGiCnk6P01PjqV13rm34Bw";
 static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0z9Q";
 static NSString *const MIXPANEL_TOKEN = @"093959a404024512d35ec784652d01fc";
+static NSString *const INTERCOM_APP_ID = @"wegcp2zo";
 #else
 static NSString *const GOOGLE_TRACKING_ID = @"UA-49381420-1";
 static NSString *const KONOTOR_APP_ID = @"ab785be6-9398-4b6a-8ae6-4d83431edad9";
@@ -98,6 +100,7 @@ static NSString *const PARSE_CLIENT_KEY = @"WtgkZLYZ1UOlsbGMnfYtKCD6dQLMfy3tBsN2
 static NSString *const TWITTER_KEY = @"VGiCnk6P01PjqV13rm34Bw";
 static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0z9Q";
 static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
+static NSString *const INTERCOM_APP_ID = @"rtntztae";
 #endif
 
 #pragma mark - UIApplicationDelegate
@@ -121,6 +124,9 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     [Konotor InitWithAppID:KONOTOR_APP_ID AppKey:KONOTOR_APP_KEY withDelegate:[KonotorEventHandler sharedInstance]];
     
     [Konotor setWelcomeMessage:@"Welcome to Teamstory! Thoughts or feedback? Chat with us here anytime"];
+    
+    // Intercom setup
+    [Intercom setApiKey:@"ios_sdk-7bcd17d996532a8658cd72694ad1a7fb37479039" forAppId:INTERCOM_APP_ID];
     
     // Register for Push Notitications, if running iOS 8
     if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
@@ -327,7 +333,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     
     // check if tab bar post menu is present, do not change tabs if so
     
-    /* This is a fail-safe: PAPTabBarController's "Handle outside tap gesture" should handle this before it reaches this method. Hiding and showing the tabbar is affecting this function so fail-safe is used. */  
+    /* This is a fail-safe: PAPTabBarController's "Handle outside tap gesture" should handle this before it reaches this method. Hiding and showing the tabbar is affecting this function so fail-safe is used. */
     
     PAPTabBarController *tabBar = (PAPTabBarController *)aTabBarController;
     

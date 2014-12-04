@@ -14,6 +14,7 @@
 #import "PAPCache.h"
 #import "PAPTabBarController.h"
 #import "Mixpanel.h"
+#import "Intercom.h"
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
@@ -187,6 +188,10 @@
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Home"}];
+    
+    // intercom analytics
+    [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"home"}
+                    completion:^(NSError *error) {}];
     
     // fetch unread messages, show feedback screen
     self.konotorCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
@@ -368,6 +373,8 @@
     NSString *industry = [[PFUser currentUser] objectForKey:@"industry"] != nil ? [[PFUser currentUser] objectForKey:@"industry"] : @"";
     NSDate *createdAt = [[PFUser currentUser] createdAt];
     
+    NSString *isAdmin = @"No";
+    
     // Mxpanel analytics identify: must be called before
     // people properties can be set
     [[Mixpanel sharedInstance] identify:currentUserObjectId];
@@ -388,14 +395,27 @@
     
     // add admin property if one of us
     if([currentUserObjectId isEqualToString:@"3KiW2NoGuT"] || [currentUserObjectId isEqualToString:@"rblDQcdZcY"] || [currentUserObjectId isEqualToString:@"vB648p1bT1"] || [currentUserObjectId isEqualToString:@"EFGqHAIxLm"]){
-        
-        [[Mixpanel sharedInstance] registerSuperProperties:@{@"Admin": @"Yes"}];
+        isAdmin = @"Yes";
     }
+    
+    // set admin property
+    [[Mixpanel sharedInstance] registerSuperProperties:@{@"Admin": isAdmin}];
     
     /* Following three methods are to identify a user. These user properties will be viewable on the konotor web dashboard */
     [Konotor setUserName:displayName]; // To set an identifiable name for the user
     [Konotor setUserEmail:email]; //To set user's email id
     [Konotor setUserIdentifier:currentUserObjectId]; // To set the user's identifier unique to your system
+    
+    // set intercom properties
+    [Intercom beginSessionForUserWithUserId:currentUserObjectId completion:^(NSError *error) {
+        [Intercom updateUserWithAttributes:@{
+                                             @"type": isAdmin,
+                                             @"name": displayName,
+                                             @"email": email,
+                                             @"createdAt": createdAt,
+                                             @"custom_attributes":@{@"industry": industry},
+                                             } completion:^(NSError *error) {}];
+    }];
 }
 
 - (void)inviteFriendsButtonAction:(id)sender {

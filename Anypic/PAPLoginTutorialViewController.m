@@ -10,6 +10,7 @@
 #import "PAPLogInViewController.h"
 #import "AppDelegate.h"
 #import "Mixpanel.h"
+#import "Intercom.h"
 
 @interface PAPLoginTutorialViewController () {
     float screenOffset;
@@ -33,6 +34,10 @@
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Intro"}];
+    
+    // intercom analytics
+    [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"intro"}
+                    completion:^(NSError *error) {}];
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"intro_bg.png"]]];
     

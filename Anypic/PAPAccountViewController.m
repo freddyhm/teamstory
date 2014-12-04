@@ -13,6 +13,7 @@
 #import "PAPwebviewViewController.h"
 #import "FollowersFollowingViewController.h"
 #import "Mixpanel.h"
+#import "Intercom.h"
 
 @interface PAPAccountViewController() {
     float alphaValue_twitter;
@@ -589,6 +590,10 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Account"}];
+    
+    // intercom analytics
+    [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"account"}
+                    completion:^(NSError *error) {}];
     
     // edge case, if multiaction button frozen because of network problems
     if (self.user == [PFUser currentUser] && !self.multiActionButton.enabled){

@@ -10,6 +10,7 @@
 #import "SVProgressHUD.h"
 #import "PAPprofileSetupViewController.h"
 #import "Mixpanel.h"
+#import "Intercom.h"
 
 @interface PAPLogInViewController()
 @property (nonatomic, strong) UITextField *user_email;
@@ -51,6 +52,10 @@
         
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Sign In"}];
+        
+        // intercom analytics
+        [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"sign in"}
+                        completion:^(NSError *error) {}];
         
         UIImage *dividerImage = [UIImage imageNamed:@"intro_divider.png"];
         UIImageView *divider = [[UIImageView alloc] initWithFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - 190.0f, dividerImage.size.width, dividerImage.size.height)];
@@ -121,6 +126,10 @@
         
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Register"}];
+        
+        // intercom analytics
+        [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"register"}
+                        completion:^(NSError *error) {}];
         
         float screenOffset;
         if ([UIScreen mainScreen].bounds.size.height == 480) {
