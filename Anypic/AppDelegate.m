@@ -126,7 +126,7 @@ static NSString *const INTERCOM_APP_ID = @"rtntztae";
     [Konotor setWelcomeMessage:@"Welcome to Teamstory! Thoughts or feedback? Chat with us here anytime"];
     
     // Intercom setup
-    [Intercom setApiKey:@"ios_sdk-7bcd17d996532a8658cd72694ad1a7fb37479039" forAppId:INTERCOM_APP_ID];
+    
     
     // Register for Push Notitications, if running iOS 8
     if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
