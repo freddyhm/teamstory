@@ -256,12 +256,13 @@
         // dismiss keyboard before taking picture
         [self dismissKeyboard];
         
-        // analytics for upload and background
-        [PAPUtility captureEventGA:@"Engagement" action:@"Upload Thought" label:@"Photo"];
-        [PAPUtility captureEventGA:@"Thought Bkgd" action:[[NSNumber numberWithInt:self.prevBkgdIndex] stringValue] label:@"Photo"];
-        
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Thought"}];
+        
+        // track selected color and current suggestion   
+        [[Mixpanel sharedInstance] track:@"Uploaded Color Index" properties:@{@"Type": [[NSNumber numberWithInt:self.prevBkgdIndex] stringValue]}];
+        
+        [[Mixpanel sharedInstance] track:@"Uploaded Suggestion" properties:@{@"Type": self.placeholder.text}];
         
         // increment user thought count by one
         [[Mixpanel sharedInstance].people increment:@"Thought Count" by:[NSNumber numberWithInt:1]];
