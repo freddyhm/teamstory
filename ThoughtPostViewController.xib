@@ -34,11 +34,8 @@
                         <outletCollection property="gestureRecognizers" destination="YP5-J5-ut2" appends="YES" id="cWc-7j-0aj"/>
                     </connections>
                 </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What's on your mind?" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tP7-Wz-ex0">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="What's on your mind?" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tP7-Wz-ex0">
                     <rect key="frame" x="76" y="128" width="168" height="50"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="50" id="Qt0-uL-9c2"/>
-                    </constraints>
                     <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="16"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
@@ -64,7 +61,7 @@
                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hse-na-Kmj" userLabel="Right Button - Button">
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hse-na-Kmj" userLabel="Right Button - Button">
                     <rect key="frame" x="288" y="141" width="27" height="25"/>
                     <state key="normal" image="arrows_right.png">
                         <color key="titleColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -74,7 +71,7 @@
                         <action selector="rightNav:" destination="-1" eventType="touchUpInside" id="tnT-MV-mKw"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L3r-dl-eFg" userLabel="Left Button - Button">
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L3r-dl-eFg" userLabel="Left Button - Button">
                     <rect key="frame" x="3" y="141" width="25" height="25"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="25" id="auy-iq-bea"/>
