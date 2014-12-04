@@ -325,13 +325,18 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 
 - (BOOL)tabBarController:(UITabBarController *)aTabBarController shouldSelectViewController:(UIViewController *)viewController {
     
-    // check if tab bar post menu is present, hide if so
+    // check if tab bar post menu is present, do not change tabs if so
+    
+    /* This is a fail-safe: PAPTabBarController's "Handle outside tap gesture" should handle this before it reaches this method. Hiding and showing the tabbar is affecting this function so fail-safe is used. */  
+    
     PAPTabBarController *tabBar = (PAPTabBarController *)aTabBarController;
+    
     if(!tabBar.postMenu.hidden){
-        tabBar.postMenu.hidden = YES;
+        return false;
+    }else{
+        // The empty UITabBarItem behind our Camera button should not load a view controller
+        return ![viewController isEqual:aTabBarController.viewControllers[PAPEmptyTabBarItemIndex]];
     }
-    // The empty UITabBarItem behind our Camera button should not load a view controller
-    return ![viewController isEqual:aTabBarController.viewControllers[PAPEmptyTabBarItemIndex]];
 }
 
 

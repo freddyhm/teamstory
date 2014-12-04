@@ -11,7 +11,7 @@
 
 @protocol PAPTabBarControllerDelegate;
 
-@interface PAPTabBarController : UITabBarController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, ELCImagePickerControllerDelegate, ThoughtPostViewControllerDelegate>
+@interface PAPTabBarController : UITabBarController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, ELCImagePickerControllerDelegate, ThoughtPostViewControllerDelegate, UITabBarControllerDelegate>
 
 @property (nonatomic, strong) UIView *postMenu;
 @property (nonatomic, strong) UIButton *postButton;
