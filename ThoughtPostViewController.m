@@ -107,7 +107,7 @@
     self.bkgdOptions = [[NSMutableArray alloc]initWithObjects:black, gray, green, teal, orange, redOrange, purple, pink, blue, brown, olive, white, nil];
     
     // random suggestion within selection bounds
-    int randomSuggOption = arc4random_uniform((int)self.suggOptions.count);
+   // int randomSuggOption = arc4random_uniform((int)self.suggOptions.count);
     int randomBkgdOption = arc4random_uniform((int)self.bkgdOptions.count);
     
     
@@ -125,7 +125,7 @@
     [self.thoughtTextView setReturnKeyType:UIReturnKeyDone];
     
     // default placeholder suggestion
-    [self.placeholder setText:[self.suggOptions objectAtIndex:randomSuggOption]];
+    [self.placeholder setText:@"fdasfk"];
     
     [self.view addGestureRecognizer:tapOutside];
     

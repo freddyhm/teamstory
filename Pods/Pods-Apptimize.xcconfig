@@ -1,2 +1,0 @@
-PODS_APPTIMIZE_FRAMEWORK_SEARCH_PATHS = "$(PODS_ROOT)/Apptimize/apptimize-ios-2.7.3" "$(PODS_ROOT)/Apptimize/apptimize-ios-2.7.3"
-PODS_APPTIMIZE_OTHER_LDFLAGS = -ObjC -framework Apptimize -framework CFNetwork -framework CoreGraphics -framework Foundation -framework Security -framework UIKit

@@ -406,16 +406,21 @@
     [Konotor setUserEmail:email]; //To set user's email id
     [Konotor setUserIdentifier:currentUserObjectId]; // To set the user's identifier unique to your system
     
+    /*
+    
     // set intercom properties
     [Intercom beginSessionForUserWithUserId:currentUserObjectId completion:^(NSError *error) {
-        [Intercom updateUserWithAttributes:@{
-                                             @"type": isAdmin,
-                                             @"name": displayName,
-                                             @"email": email,
-                                             @"createdAt": createdAt,
-                                             @"custom_attributes":@{@"industry": industry},
-                                             } completion:^(NSError *error) {}];
-    }];
+            }];
+    
+    [Intercom updateUserWithAttributes:@{
+                                         @"type": isAdmin,
+                                         @"name": displayName,
+                                         @"email": email,
+                                         @"createdAt": createdAt,
+                                         @"custom_attributes":@{@"industry": industry},
+                                         } completion:^(NSError *error) {}];
+     */
+
 }
 
 - (void)inviteFriendsButtonAction:(id)sender {
