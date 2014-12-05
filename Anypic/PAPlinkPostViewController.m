@@ -12,7 +12,7 @@
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
 #import "Mixpanel.h"
-#import "Intercom.h"
+//#import "Intercom.h"
 #import "ParseFacebookUtils/PFFacebookUtils.h"
 
 
@@ -74,8 +74,8 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Link"}];
     
     // intercom analytics
-    [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"link"}
-                    completion:^(NSError *error) {}];
+  //  [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"link"}
+    //                completion:^(NSError *error) {}];
     
     // init nav bar
     [[self navigationController] setNavigationBarHidden:NO animated:YES];

@@ -26,7 +26,7 @@
 #import "PAPprofileSetupViewController.h"
 #import "Mixpanel.h"
 #import "ParseFacebookUtils/PFFacebookUtils.h"
-#import "Intercom.h"
+//#import "Intercom.h"
 
 
 @interface AppDelegate () {
@@ -128,7 +128,7 @@ static NSString *const INTERCOM_APP_KEY = @"ios_sdk-7bcd17d996532a8658cd72694ad1
     [Konotor setWelcomeMessage:@"Welcome to Teamstory! Thoughts or feedback? Chat with us here anytime"];
     
     // Intercom setup
-    [Intercom setApiKey:@"ios_sdk-7bcd17d996532a8658cd72694ad1a7fb37479039" forAppId:@"rtntztae"];
+  //  [Intercom setApiKey:@"ios_sdk-7bcd17d996532a8658cd72694ad1a7fb37479039" forAppId:@"rtntztae"];
     
     
     // Register for Push Notitications, if running iOS 8

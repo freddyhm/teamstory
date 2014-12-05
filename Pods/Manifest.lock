@@ -22,18 +22,15 @@ PODS:
     - AFNetworking/NSURLSession
   - embedly-ios (1.0.0):
     - AFNetworking (~> 2.0)
-  - Intercom (2.0.6)
   - Mixpanel (2.5.0)
 
 DEPENDENCIES:
   - embedly-ios
-  - Intercom
   - Mixpanel
 
 SPEC CHECKSUMS:
   AFNetworking: 0f54cb5d16ce38c1b76948faffb8d5fb705021c7
   embedly-ios: 82d9defde04172d5edbdbae36cd033d9fd18e4ac
-  Intercom: e3da0bc01c5aa31a01c215baebba6c3bb7705af5
   Mixpanel: e2cbef6022acff6e0182c994ed69b18613209611
 
 COCOAPODS: 0.35.0

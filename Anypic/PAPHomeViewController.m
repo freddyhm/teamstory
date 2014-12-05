@@ -14,7 +14,7 @@
 #import "PAPCache.h"
 #import "PAPTabBarController.h"
 #import "Mixpanel.h"
-#import "Intercom.h"
+//#import "Intercom.h"
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
@@ -190,8 +190,8 @@
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Home"}];
     
     // intercom analytics
-    [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"home"}
-                    completion:^(NSError *error) {}];
+ //   [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"home"}
+   //                 completion:^(NSError *error) {}];
     
     // fetch unread messages, show feedback screen
     self.konotorCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];

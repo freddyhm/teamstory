@@ -11,7 +11,7 @@
 #import "PAPTabBarController.h"
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
-#import "Intercom.h"
+//#import "Intercom.h"
 
 
 @interface ELCAssetTablePicker ()
@@ -47,8 +47,8 @@
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Photo Album"}];
     
     // intercome analytics
-    [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"photo-album"}
-                    completion:^(NSError *error) {}];
+   // [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"photo-album"}
+      //              completion:^(NSError *error) {}];
 
     
     // set color of nav bar to custom grey

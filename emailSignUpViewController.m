@@ -12,7 +12,7 @@
 #import "PAPProfileSettingViewController.h"
 #import "PAPprofileSetupViewController.h"
 #import "Mixpanel.h"
-#import "Intercom.h"
+//#import "Intercom.h"
 
 #define SUCCESSFUL 1
 
@@ -40,8 +40,8 @@
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Email Sign Up"}];
     
     // intercom analytics
-    [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"email-sign-up"}
-                    completion:^(NSError *error) {}];
+  //  [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"email-sign-up"}
+    //                completion:^(NSError *error) {}];
 
     
     cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];

@@ -8,7 +8,7 @@
 
 #import "discoverPageViewController.h"
 #import "Mixpanel.h"
-#import "Intercom.h"
+//#import "Intercom.h"
 #import "PAPFindFriendsCell.h"
 #import "PAPAccountViewController.h"
 #import "PAPdiscoverTileView.h"
@@ -155,8 +155,8 @@ NSInteger selection = 1;
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Discover"}];
     
     // intercome analytics
-    [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"discover"}
-                    completion:^(NSError *error) {}];
+    //[Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"discover"}
+      //              completion:^(NSError *error) {}];
 
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     self.navigationController.navigationBar.hidden = YES;
