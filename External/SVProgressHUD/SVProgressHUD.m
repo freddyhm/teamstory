@@ -255,6 +255,39 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
             
             break;
         }
+            
+        case SVProgressHUDMaskTypeCustom: {
+            [[UIColor colorWithWhite:0.5 alpha:0.5] set];
+            CGContextFillRect(context, self.bounds);
+            
+            UIImage *hudImage = [UIImage imageNamed:@"loading_msg_list.png"];
+            
+            float backgroundViewWidth = hudImage.size.width + 30.0f;
+            float backgroundViewHeight = hudImage.size.height + 70.0f;
+            
+            UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width - backgroundViewWidth) / 2, ([UIScreen mainScreen].bounds.size.height - backgroundViewHeight) / 2, backgroundViewWidth, backgroundViewHeight)];
+            backgroundView.layer.cornerRadius = 5.0f;
+            backgroundView.clipsToBounds = YES;
+            [backgroundView setBackgroundColor:[UIColor whiteColor]];
+            [self addSubview:backgroundView];
+            
+            UIImageView *hudImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15.0f, 50.0f, hudImage.size.width, hudImage.size.height)];
+            [hudImageView setImage:hudImage];
+            [backgroundView addSubview:hudImageView];
+            
+            float hudHeight;
+            
+            if ([UIScreen mainScreen].bounds.size.height == 480) {
+                hudHeight = 115;
+            } else {
+                hudHeight = 160;
+            }
+            
+            self.hudView.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width - self.hudView.frame.size.width) / 2, hudHeight, self.hudView.frame.size.width, self.hudView.frame.size.height);
+            
+            [self sendSubviewToBack:backgroundView];
+            break;
+        }
     }
 }
 

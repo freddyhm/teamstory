@@ -219,12 +219,15 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 }
             
                 profilePictureBackgroundView = [[UIView alloc] initWithFrame:CGRectMake( 10.0f, 10.0f, 70.0f, 70.0f)];
-                [profilePictureBackgroundView setBackgroundColor:[UIColor darkGrayColor]];
+                [profilePictureBackgroundView setBackgroundColor:[UIColor whiteColor]];
                 profilePictureBackgroundView.alpha = 0.0f;
                 CALayer *layer = [profilePictureBackgroundView layer];
                 layer.cornerRadius = 0.0f;
                 layer.masksToBounds = YES;
                 [self.headerView addSubview:profilePictureBackgroundView];
+                
+                profilePictureBackgroundView.layer.cornerRadius = profilePictureBackgroundView.frame.size.width / 2;
+                profilePictureBackgroundView.clipsToBounds = YES;
 
                 profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 10.0f, 10.0f, 70.0f, 70.0f)];
                 [self.headerView addSubview:profilePictureImageView];
@@ -233,6 +236,9 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 layer.cornerRadius = 0.0f;
                 layer.masksToBounds = YES;
                 profilePictureImageView.alpha = 0.0f;
+                
+                profilePictureImageView.layer.cornerRadius = profilePictureImageView.frame.size.width / 2;
+                profilePictureImageView.clipsToBounds = YES;
                 
                 currentUser = [PFUser currentUser];
                 
@@ -529,13 +535,18 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 }];
                 
                 if (![[self.user objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
-                    
                     UIImage *messageButtonImage = [UIImage imageNamed:@"btn_message_empty.png"];
+                    
+                    UIView *messageButtonView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, messageButtonImage.size.width, messageButtonImage.size.height)];
+                    
                     UIButton *messageButton = [UIButton buttonWithType:UIButtonTypeCustom];
-                    [messageButton setFrame:CGRectMake(0, 0, messageButtonImage.size.width, messageButtonImage.size.height)];
+                    [messageButton setFrame:CGRectMake(10, 0, messageButtonImage.size.width, messageButtonImage.size.height)];
                     [messageButton addTarget:self action:@selector(messageButtonAction:) forControlEvents:UIControlEventTouchUpInside];
                     [messageButton setBackgroundImage:messageButtonImage forState:UIControlStateNormal];
-                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:messageButton];
+                    
+                    [messageButtonView addSubview:messageButton];
+                    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:messageButtonView];
+                    
                     
                     // check if the currentUser is following this user
                     PFQuery *queryIsFollowing = [PFQuery queryWithClassName:kPAPActivityClassKey];

@@ -14,6 +14,7 @@
 @property (nonatomic, strong) PAPProfileImageView *avatarImageView;
 @property (nonatomic, strong) UIImageView *separatorImage;
 @property (nonatomic, strong) UIImage *followButtonImage;
+@property (nonatomic, strong) NSString *cellIdentifier;
 
 @end
 
@@ -33,6 +34,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         [self.contentView setBackgroundColor:[UIColor whiteColor]];
+        self.cellIdentifier = reuseIdentifier;
         
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
         
@@ -96,8 +98,13 @@
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
     
-
-    CGSize nameSize = ([nameString boundingRectWithSize:CGSizeMake(144.0f, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:16.0f], NSParagraphStyleAttributeName: paragraphStyle.copy} context:nil]).size;
+    CGSize nameSize;
+    
+    if ([self.cellIdentifier isEqualToString:@"MessageUserListCell"]) {
+        nameSize = ([nameString boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 80.0f, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:16.0f], NSParagraphStyleAttributeName: paragraphStyle.copy} context:nil]).size;
+    } else {
+        nameSize = ([nameString boundingRectWithSize:CGSizeMake(144.0f, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:16.0f], NSParagraphStyleAttributeName: paragraphStyle.copy} context:nil]).size;
+    }
 
     [nameButton setTitle:[self.user objectForKey:kPAPUserDisplayNameKey] forState:UIControlStateNormal];
     [nameButton setTitle:[self.user objectForKey:kPAPUserDisplayNameKey] forState:UIControlStateHighlighted];
