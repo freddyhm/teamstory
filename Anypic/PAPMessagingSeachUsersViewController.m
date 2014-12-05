@@ -62,7 +62,7 @@
     [finalQuery includeKey:@"toUser.User"];
     [finalQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
-            //[SVProgressHUD dismiss];
+            [SVProgressHUD dismiss];
             for (int i = 0; i < objects.count; i++) {
                 if ([[[objects[i] objectForKey:@"fromUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
                     if ([self.filterUserList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", [[objects[i] objectForKey:@"toUser"] objectForKey:@"displayName"]]].count <= 0) {
