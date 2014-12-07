@@ -102,7 +102,7 @@ static NSString *const TWITTER_KEY = @"VGiCnk6P01PjqV13rm34Bw";
 static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0z9Q";
 static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 static NSString *const INTERCOM_APP_ID = @"rtntztae";
-static NSString *const INTERCOM_API_KEY = @"ios_sdk-7bcd17d996532a8658cd72694ad1a7fb37479039"
+static NSString *const INTERCOM_API_KEY = @"ios_sdk-7bcd17d996532a8658cd72694ad1a7fb37479039";
 #endif
 
 #pragma mark - UIApplicationDelegate
