@@ -14,7 +14,7 @@
 #import "PAPCache.h"
 #import "PAPTabBarController.h"
 #import "Mixpanel.h"
-//#import "Intercom.h"
+#import "Intercom.h"
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
@@ -188,10 +188,6 @@
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Home"}];
-    
-    // intercom analytics
- //   [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"home"}
-   //                 completion:^(NSError *error) {}];
     
     // fetch unread messages, show feedback screen
     self.konotorCount = [NSNumber numberWithInt:[Konotor getUnreadMessagesCount]];
@@ -406,21 +402,15 @@
     [Konotor setUserEmail:email]; //To set user's email id
     [Konotor setUserIdentifier:currentUserObjectId]; // To set the user's identifier unique to your system
     
-    /*
-    
     // set intercom properties
     [Intercom beginSessionForUserWithUserId:currentUserObjectId completion:^(NSError *error) {
-            }];
-    
-    [Intercom updateUserWithAttributes:@{
-                                         @"type": isAdmin,
-                                         @"name": displayName,
-                                         @"email": email,
-                                         @"createdAt": createdAt,
-                                         @"custom_attributes":@{@"industry": industry},
-                                         } completion:^(NSError *error) {}];
-     */
-
+        [Intercom updateUserWithAttributes:@{
+                                             @"name": displayName,
+                                             @"email": email,
+                                             @"custom_attributes":@{@"industry": industry, @"admin": isAdmin},
+                                             } completion:^(NSError *error) {}];
+        
+    }];
 }
 
 - (void)inviteFriendsButtonAction:(id)sender {

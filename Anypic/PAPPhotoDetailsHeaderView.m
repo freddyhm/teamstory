@@ -10,6 +10,7 @@
 #import "MBProgressHUD.h"
 #import "PAPwebviewViewController.h"
 #import "Mixpanel.h"
+#import "Intercom.h"
 
 #define baseHorizontalOffset 0.0f
 #define baseWidth 320.0f
@@ -591,6 +592,11 @@ static TTTTimeIntervalFormatter *timeFormatter;
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Liked Post", @"Source": @"Details", @"Post Type": postType}];
         
+        // intercome analytics
+        [Intercom logEventWithName:@"liked-post" optionalMetaData:@{@"source": @"details"}
+                        completion:^(NSError *error) {}];
+
+        
         // increment user like count by one
         [[Mixpanel sharedInstance].people increment:@"Like Count" by:[NSNumber numberWithInt:1]];
         
@@ -647,6 +653,11 @@ static TTTTimeIntervalFormatter *timeFormatter;
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Viewed Link"}];
+    
+    // intercome analytics
+    [Intercom logEventWithName:@"viewed-link" optionalMetaData:nil
+                    completion:^(NSError *error) {}];
+
     
     if ([self.website rangeOfString:@"(?i)http" options:NSRegularExpressionSearch].location == NSNotFound) {
         NSString *http = @"http://";

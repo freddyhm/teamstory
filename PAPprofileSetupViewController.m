@@ -12,7 +12,7 @@
 #import "AppDelegate.h"
 #import "PAPUtility.h"
 #import "Mixpanel.h"
-//#import "Intercom.h"
+#import "Intercom.h"
 
 #define SUCCESSFUL 1
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
@@ -70,10 +70,6 @@
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"New Profile Screen 1"}];
-    
-    // intercom analytics
-   // [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"new-profile-screen-1"}
-     //               completion:^(NSError *error) {}];
     
     UIView *statusBarBackground = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, [UIApplication sharedApplication].statusBarFrame.size.height)];
     [statusBarBackground setBackgroundColor:[UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
@@ -392,10 +388,6 @@
                             // mixpanel analytics
                             [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"New Profile Screen 2"}];
                             
-                            // intercom analytics
-                           // [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"new-profile-screen-2"}
-                      //                      completion:^(NSError *error) {}];
-                            
                             [self.mainSV setContentOffset:CGPointMake(320.0f, 0.0f) animated:YES];
                             if ([UIScreen mainScreen].bounds.size.height == 480)
                                 [self.contentSV setContentOffset:CGPointMake(320.0f, 0.0f) animated:YES];
@@ -432,10 +424,6 @@
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"New Profile Screen 3"}];
-    
-    // intercom analytics
-   // [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"new-profile-screen-3"}
-     //               completion:^(NSError *error) {}];
     
     [self.mainSV setContentOffset:CGPointMake(640.0f, 0.0f) animated:YES];
     
@@ -493,8 +481,6 @@
     NSString* email_current_input = self.user[@"email"];
     
     [[Mixpanel sharedInstance] track:@"Pressed Done In Profile Screen" properties:@{@"New user email":email_input}];
-    
-    
     
     self.user[@"username"] = email_input;
     
@@ -886,6 +872,11 @@
         
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Signed Up" properties:@{}];
+        
+        // intercom analytics
+        [Intercom logEventWithName:@"signed-up" optionalMetaData:nil
+                        completion:^(NSError *error) {}];
+
         
         NSLog(@"login Sucessful");
         [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];

@@ -26,7 +26,7 @@
 #import "PAPprofileSetupViewController.h"
 #import "Mixpanel.h"
 #import "ParseFacebookUtils/PFFacebookUtils.h"
-//#import "Intercom.h"
+#import "Intercom.h"
 
 
 @interface AppDelegate () {
@@ -91,7 +91,7 @@ static NSString *const TWITTER_KEY = @"VGiCnk6P01PjqV13rm34Bw";
 static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0z9Q";
 static NSString *const MIXPANEL_TOKEN = @"093959a404024512d35ec784652d01fc";
 static NSString *const INTERCOM_APP_ID = @"wegcp2zo";
-static NSString *const INTERCOM_APP_KEY = @"ios_sdk-3d95ebf6dd46972ddd320f375dde491b6a8bd768";
+static NSString *const INTERCOM_API_KEY = @"ios_sdk-3d95ebf6dd46972ddd320f375dde491b6a8bd768";
 #else
 static NSString *const GOOGLE_TRACKING_ID = @"UA-49381420-1";
 static NSString *const KONOTOR_APP_ID = @"ab785be6-9398-4b6a-8ae6-4d83431edad9";
@@ -102,7 +102,7 @@ static NSString *const TWITTER_KEY = @"VGiCnk6P01PjqV13rm34Bw";
 static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0z9Q";
 static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 static NSString *const INTERCOM_APP_ID = @"rtntztae";
-static NSString *const INTERCOM_APP_KEY = @"ios_sdk-7bcd17d996532a8658cd72694ad1a7fb37479039"
+static NSString *const INTERCOM_API_KEY = @"ios_sdk-7bcd17d996532a8658cd72694ad1a7fb37479039"
 #endif
 
 #pragma mark - UIApplicationDelegate
@@ -127,10 +127,6 @@ static NSString *const INTERCOM_APP_KEY = @"ios_sdk-7bcd17d996532a8658cd72694ad1
     
     [Konotor setWelcomeMessage:@"Welcome to Teamstory! Thoughts or feedback? Chat with us here anytime"];
     
-    // Intercom setup
-  //  [Intercom setApiKey:@"ios_sdk-7bcd17d996532a8658cd72694ad1a7fb37479039" forAppId:@"rtntztae"];
-    
-    
     // Register for Push Notitications, if running iOS 8
     if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
         UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
@@ -146,6 +142,7 @@ static NSString *const INTERCOM_APP_KEY = @"ios_sdk-7bcd17d996532a8658cd72694ad1
                                                          UIRemoteNotificationTypeAlert |
                                                          UIRemoteNotificationTypeSound)];
     }
+    
     
     // ****************************************************************************
     // Parse initialization
@@ -163,6 +160,12 @@ static NSString *const INTERCOM_APP_KEY = @"ios_sdk-7bcd17d996532a8658cd72694ad1
     
     // Crash analytics
     [Crashlytics startWithAPIKey:@"9075de9af4f252529090970cd8c2f7e426771d92"];
+
+    // Intercom setup
+    [Intercom setApiKey:INTERCOM_API_KEY forAppId:INTERCOM_APP_ID];
+    
+    // Intercom push notifications
+    [Intercom registerForRemoteNotifications];
     
     // Set installation id for mixpanel and crashlytics analytics
     NSString *installationId = [[PFInstallation currentInstallation] objectId];
@@ -173,6 +176,7 @@ static NSString *const INTERCOM_APP_KEY = @"ios_sdk-7bcd17d996532a8658cd72694ad1
     }
     
     PFACL *defaultACL = [PFACL ACL];
+    
     // Enable public read access by default, with any newly created PFObjects belonging to the current user
     [defaultACL setPublicReadAccess:YES];
     [PFACL setDefaultACL:defaultACL withAccessForCurrentUser:YES];
@@ -191,8 +195,6 @@ static NSString *const INTERCOM_APP_KEY = @"ios_sdk-7bcd17d996532a8658cd72694ad1
     self.window.rootViewController = self.navController;
     
     [self.window makeKeyAndVisible];
-    
-
     
     // handle push notifications
     [self handlePush:launchOptions userInfo:nil source:@"launch"];

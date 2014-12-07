@@ -8,7 +8,7 @@
 
 #import "discoverPageViewController.h"
 #import "Mixpanel.h"
-//#import "Intercom.h"
+#import "Intercom.h"
 #import "PAPFindFriendsCell.h"
 #import "PAPAccountViewController.h"
 #import "PAPdiscoverTileView.h"
@@ -154,10 +154,7 @@ NSInteger selection = 1;
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Discover"}];
     
-    // intercome analytics
-    //[Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"discover"}
-      //              completion:^(NSError *error) {}];
-
+    
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     self.navigationController.navigationBar.hidden = YES;
     
@@ -582,6 +579,11 @@ NSInteger selection = 1;
     [[Mixpanel sharedInstance] track:@"Selected From Discover" properties:@{@"Type": @"Followed", @"Selected":selectedUser}];
     
     [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Followed User", @"Source": @"Discover", @"Followed User": selectedUser}];
+    
+    // intercome analytics
+    [Intercom logEventWithName:@"followed-user" optionalMetaData:@{@"followed": selectedUser, @"source": @"discover"}
+                    completion:^(NSError *error) {}];
+
     
     [self shouldToggleFollowFriendForCell:cellView];
 }

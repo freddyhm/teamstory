@@ -15,6 +15,7 @@
 #import "SVProgressHUD.h"
 #import "MBProgressHUD.h"
 #import "Mixpanel.h"
+#import "Intercom.h"
 
 enum ActionSheetTags {
     MainActionSheetTag = 0,
@@ -559,6 +560,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Commented", @"Post Type" : postType}];
         
+        // intercome analytics
+        [Intercom logEventWithName:@"commented" optionalMetaData:nil
+                        completion:^(NSError *error) {}];
+
+        
         // Show HUD view
         [SVProgressHUD show];
         
@@ -651,9 +657,14 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Liked Comment", @"Post Type": postType}];
-        
+    
         // increment user like comment count by one
         [[Mixpanel sharedInstance].people increment:@"Like Comment Count" by:[NSNumber numberWithInt:1]];
+        
+        // intercom analytics
+        [Intercom logEventWithName:@"liked-comment" optionalMetaData:nil
+                        completion:^(NSError *error) {}];
+        
         
         likeCommentCount = [NSNumber numberWithInt:[likeCommentCount intValue] + 1];
         

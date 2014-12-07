@@ -14,7 +14,7 @@
 #import "PAPHomeViewController.h"
 #import "PAPAccountViewController.h"
 #import "Mixpanel.h"
-//#import "Intercom.h"
+#import "Intercom.h"
 
 @interface PostPicViewController ()
 
@@ -76,10 +76,6 @@
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Post Photo"}];
     
-    // intercom analytics
-   // [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"post-photo"}
-     //               completion:^(NSError *error) {}];
-
     // change proportions based on iphone height
     float cropScrollHeight;
     float descriptionTextViewHeight;
@@ -223,6 +219,11 @@
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Moment"}];
+    
+    // intercom analytics
+    [Intercom logEventWithName:@"posted-moment" optionalMetaData:nil
+                    completion:^(NSError *error) {}];
+
     
     // increment user photo count by one
     [[Mixpanel sharedInstance].people increment:@"Photo Count" by:[NSNumber numberWithInt:1]];

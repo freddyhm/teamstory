@@ -13,7 +13,7 @@
 #import "PAPwebviewViewController.h"
 #import "FollowersFollowingViewController.h"
 #import "Mixpanel.h"
-//#import "Intercom.h"
+#import "Intercom.h"
 
 @interface PAPAccountViewController() {
     float alphaValue_twitter;
@@ -591,10 +591,6 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Account"}];
     
-    // intercom analytics
- //   [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"account"}
-   //                 completion:^(NSError *error) {}];
-    
     // edge case, if multiaction button frozen because of network problems
     if (self.user == [PFUser currentUser] && !self.multiActionButton.enabled){
         self.multiActionButton.enabled = YES;
@@ -868,6 +864,11 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Followed User", @"Source": @"Profile", @"Followed User" : followedUserDisplayName}];
+    
+    // intercome analytics
+    [Intercom logEventWithName:@"followed-user" optionalMetaData:@{@"followed": followedUserDisplayName, @"source": @"accountview"}
+                    completion:^(NSError *error) {}];
+
     
     // increment user follow count by one
     [[Mixpanel sharedInstance].people increment:@"Follow Count" by:[NSNumber numberWithInt:1]];

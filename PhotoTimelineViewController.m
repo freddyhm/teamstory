@@ -18,6 +18,7 @@
 #import "MBProgressHUD.h"
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
+#import "Intercom.h"
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
@@ -205,6 +206,12 @@ enum ActionSheetTags {
         
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Viewed Post", @"Post Type":type}];
+        
+        
+        // intercom analytics
+        [Intercom logEventWithName:@"viewed-post" optionalMetaData:nil
+                        completion:^(NSError *error) {}];
+
         
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
         
@@ -686,6 +693,11 @@ enum ActionSheetTags {
         
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Liked Post", @"Source":@"Timeline", @"Post Type": postType}];
+        
+        // intercom analytics
+        [Intercom logEventWithName:@"liked-post" optionalMetaData:@{@"source":@"timeline"}
+                        completion:^(NSError *error) {}];
+
         
         // increment user like count by one
         [[Mixpanel sharedInstance].people increment:@"Like Count" by:[NSNumber numberWithInt:1]];

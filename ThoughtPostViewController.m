@@ -11,7 +11,7 @@
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
 #import "Mixpanel.h"
-//#import "Intercom.h"
+#import "Intercom.h"
 #import "ParseFacebookUtils/PFFacebookUtils.h"
 #include <stdlib.h>
 
@@ -139,10 +139,6 @@
         
     // new analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Thought"}];
-    
-    // intercom analytics
-  //  [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"thought"}
-    //                completion:^(NSError *error) {}];
 }
 
 #pragma mark - UITextViewDelegate & TextView related methods
@@ -263,6 +259,11 @@
         
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Thought"}];
+        
+        // intercom analytics
+        [Intercom logEventWithName:@"posted-thought" optionalMetaData:nil
+                        completion:^(NSError *error) {}];
+
         
         // track selected color and current suggestion   
         [[Mixpanel sharedInstance] track:@"Uploaded Color Index" properties:@{@"Type": [[NSNumber numberWithInt:self.prevBkgdIndex] stringValue]}];

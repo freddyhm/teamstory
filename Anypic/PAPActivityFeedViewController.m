@@ -13,7 +13,6 @@
 #import "PAPSettingsButtonItem.h"
 #import "FollowersFollowingViewController.h"
 #import "Mixpanel.h"
-//#import "Intercom.h"
 #import "SVProgressHUD.h"
 
 @interface PAPActivityFeedViewController ()
@@ -120,10 +119,6 @@
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Activity"}];
-    
-    // intercom analytics
-   // [Intercom logEventWithName:@"viewed-screen" optionalMetaData:@{@"type": @"activity"}
-     //               completion:^(NSError *error) {}];
 
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     
