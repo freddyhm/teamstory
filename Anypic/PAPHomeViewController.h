@@ -10,6 +10,7 @@
 @interface PAPHomeViewController : PhotoTimelineViewController <UIScrollViewDelegate>
 
 @property (nonatomic, assign, getter = isFirstLaunch) BOOL firstLaunch;
+- (void)refreshCurrentFeed;
 
 
 @end

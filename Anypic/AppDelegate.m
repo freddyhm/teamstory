@@ -336,12 +336,21 @@ static NSString *const INTERCOM_API_KEY = @"ios_sdk-7bcd17d996532a8658cd72694ad1
 
 - (BOOL)tabBarController:(UITabBarController *)aTabBarController shouldSelectViewController:(UIViewController *)viewController {
     
-    // check if tab bar post menu is present, do not change tabs if so
+    PAPTabBarController *tabBar = (PAPTabBarController *)aTabBarController;
+    UINavigationController *selectedNav = (UINavigationController *)viewController;
     
+    // get selected controller and current controller
+    BOOL isHomeViewSelected = [[[selectedNav viewControllers] objectAtIndex:0] isKindOfClass:[PAPHomeViewController class]];
+    BOOL isCurrentViewHome = (int)self.tabBarController.selectedIndex == 0 ? YES : NO;
+    
+    // scroll to top and refresh if source and destination are the same
+    if(isHomeViewSelected && isCurrentViewHome){
+        [[[selectedNav viewControllers] objectAtIndex:0] refreshCurrentFeed];
+    }
+
     /* This is a fail-safe: PAPTabBarController's "Handle outside tap gesture" should handle this before it reaches this method. Hiding and showing the tabbar is affecting this function so fail-safe is used. */
     
-    PAPTabBarController *tabBar = (PAPTabBarController *)aTabBarController;
-    
+    // check if tab bar post menu is present, do not change tabs if so
     if(!tabBar.postMenu.hidden){
         return false;
     }else{
