@@ -121,6 +121,7 @@
 	<false/>
 	<key>VersionChanges</key>
 	<string>• New! Thought suggestions and colors 
-• Fixed tabbar bug </string>
+• New! Tap home to scroll up and refresh  
+• Fixed tabbar bug</string>
 </dict>
 </plist>
