@@ -104,6 +104,8 @@ static NSString *const PARSE_CLIENT_KEY = @"ZRnM7JXOlbSyOQuosXWG6SlrDNCY22C84hpq
 static NSString *const TWITTER_KEY = @"VGiCnk6P01PjqV13rm34Bw";
 static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0z9Q";
 static NSString *const MIXPANEL_TOKEN = @"093959a404024512d35ec784652d01fc";
+static NSString *const INTERCOM_APP_ID = @"wegcp2zo";
+static NSString *const INTERCOM_API_KEY = @"ios_sdk-3d95ebf6dd46972ddd320f375dde491b6a8bd768";
 #else
 static NSString *const GOOGLE_TRACKING_ID = @"UA-49381420-1";
 static NSString *const KONOTOR_APP_ID = @"ab785be6-9398-4b6a-8ae6-4d83431edad9";
@@ -113,6 +115,8 @@ static NSString *const PARSE_CLIENT_KEY = @"WtgkZLYZ1UOlsbGMnfYtKCD6dQLMfy3tBsN2
 static NSString *const TWITTER_KEY = @"VGiCnk6P01PjqV13rm34Bw";
 static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0z9Q";
 static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
+static NSString *const INTERCOM_APP_ID = @"rtntztae";
+static NSString *const INTERCOM_API_KEY = @"ios_sdk-7bcd17d996532a8658cd72694ad1a7fb37479039";
 #endif
 
 #pragma mark - UIApplicationDelegate
@@ -154,6 +158,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
                                                          UIRemoteNotificationTypeSound)];
     }
     
+    
     // ****************************************************************************
     // Parse initialization
         [Parse setApplicationId:PARSE_APP_ID
@@ -170,6 +175,12 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     
     // Crash analytics
     [Crashlytics startWithAPIKey:@"9075de9af4f252529090970cd8c2f7e426771d92"];
+
+    // Intercom setup
+    [Intercom setApiKey:INTERCOM_API_KEY forAppId:INTERCOM_APP_ID];
+    
+    // Intercom push notifications
+    [Intercom registerForRemoteNotifications];
     
     // Set installation id for mixpanel and crashlytics analytics
     NSString *installationId = [[PFInstallation currentInstallation] objectId];
@@ -180,6 +191,7 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
     }
     
     PFACL *defaultACL = [PFACL ACL];
+    
     // Enable public read access by default, with any newly created PFObjects belonging to the current user
     [defaultACL setPublicReadAccess:YES];
     [PFACL setDefaultACL:defaultACL withAccessForCurrentUser:YES];
@@ -397,13 +409,27 @@ static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 
 - (BOOL)tabBarController:(UITabBarController *)aTabBarController shouldSelectViewController:(UIViewController *)viewController {
     
-    // check if tab bar post menu is present, hide if so
     PAPTabBarController *tabBar = (PAPTabBarController *)aTabBarController;
-    if(!tabBar.postMenu.hidden){
-        tabBar.postMenu.hidden = YES;
+    UINavigationController *selectedNav = (UINavigationController *)viewController;
+    
+    // get selected controller and current controller
+    BOOL isHomeViewSelected = [[[selectedNav viewControllers] objectAtIndex:0] isKindOfClass:[PAPHomeViewController class]];
+    BOOL isCurrentViewHome = (int)self.tabBarController.selectedIndex == 0 ? YES : NO;
+    
+    // scroll to top and refresh if source and destination are the same
+    if(isHomeViewSelected && isCurrentViewHome){
+        [[[selectedNav viewControllers] objectAtIndex:0] refreshCurrentFeed];
     }
-    // The empty UITabBarItem behind our Camera button should not load a view controller
-    return ![viewController isEqual:aTabBarController.viewControllers[PAPEmptyTabBarItemIndex]];
+
+    /* This is a fail-safe: PAPTabBarController's "Handle outside tap gesture" should handle this before it reaches this method. Hiding and showing the tabbar is affecting this function so fail-safe is used. */
+    
+    // check if tab bar post menu is present, do not change tabs if so
+    if(!tabBar.postMenu.hidden){
+        return false;
+    }else{
+        // The empty UITabBarItem behind our Camera button should not load a view controller
+        return ![viewController isEqual:aTabBarController.viewControllers[PAPEmptyTabBarItemIndex]];
+    }
 }
 
 

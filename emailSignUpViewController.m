@@ -37,7 +37,6 @@
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Email Sign Up"}];
-
     
     cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
     signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];

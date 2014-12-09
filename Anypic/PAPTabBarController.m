@@ -5,11 +5,10 @@
 //
 
 #import "PAPTabBarController.h"
-#import  "CameraFilterViewController.h"
 #import "MBProgressHUD.h"
-#import "CropResizeViewController.h"
 #import "ThoughtPostViewController.h"
 #import "PAPlinkPostViewController.h"
+#import "PostPicViewController.h"
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
 
@@ -259,7 +258,6 @@
     // Move me
     tablePicker.assetGroup = group;
     
-    
     [tablePicker.assetGroup setAssetsFilter:[ALAssetsFilter allAssets]];
     
     [self presentViewController:elcPicker animated:YES completion:nil];
@@ -278,7 +276,19 @@
     self.postMenu.hidden = YES;
     
     ThoughtPostViewController *thoughtPostViewController = [[ThoughtPostViewController alloc] init];
-    [self.navigationController pushViewController:thoughtPostViewController animated:YES];
+    thoughtPostViewController.delegate = self;
+    
+    // nav controller here serves to display nav bar easily
+    UINavigationController *thoughtNavController = [[UINavigationController alloc]initWithRootViewController:thoughtPostViewController];
+    
+    [self.navigationController presentViewController:thoughtNavController animated:YES completion:nil];
+}
+
+-(void)didUploadThought{
+    
+    // move to home view controller
+    [self setSelectedIndex:0];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -288,10 +298,7 @@
     [PAPUtility captureEventGA:@"Camera & Album" action:@"Picked Camera" label:@"Photo"];
 
     [[Mixpanel sharedInstance] track:@"Took Camera Picture" properties:@{}];
-    
-    // mixpanel ab test new camera button goal
-    [[Mixpanel sharedInstance] track:@"Goal: Tapped New Camera Button" properties:@{@"Type": @"Experiment"}];
-    
+        
     /* starts camera, sets tabbarcontroller as delegate, and returns image picker */
     
     self.camera = [[UIImagePickerController alloc] init];
@@ -336,9 +343,8 @@
     // Fix rotation
     UIImage *fixedImg = [self fixrotation:image];
     
-    CropResizeViewController *cropViewController = [[CropResizeViewController alloc] initWithImage:fixedImg nib:nil source:self.imageSource];
-    
-    [self.navigationController pushViewController:cropViewController animated:NO];
+    PostPicViewController *postPicController = [[PostPicViewController alloc]initWithImage:fixedImg source:self.imageSource];
+    [self.navigationController pushViewController:postPicController animated:NO];
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }

@@ -942,6 +942,11 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Followed User", @"Source": @"Profile", @"Followed User" : followedUserDisplayName}];
     
+    // intercome analytics
+    [Intercom logEventWithName:@"followed-user" optionalMetaData:@{@"followed": followedUserDisplayName, @"source": @"accountview"}
+                    completion:^(NSError *error) {}];
+
+    
     // increment user follow count by one
     [[Mixpanel sharedInstance].people increment:@"Follow Count" by:[NSNumber numberWithInt:1]];
     

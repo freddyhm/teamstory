@@ -12,6 +12,7 @@
 #import "AppDelegate.h"
 #import "PAPUtility.h"
 #import "Mixpanel.h"
+#import "Intercom.h"
 
 #define SUCCESSFUL 1
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
@@ -481,8 +482,6 @@
     
     [[Mixpanel sharedInstance] track:@"Pressed Done In Profile Screen" properties:@{@"New user email":email_input}];
     
-    
-    
     self.user[@"username"] = email_input;
     
     self.navDone.userInteractionEnabled = NO;
@@ -873,6 +872,11 @@
         
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Signed Up" properties:@{}];
+        
+        // intercom analytics
+        [Intercom logEventWithName:@"signed-up" optionalMetaData:nil
+                        completion:^(NSError *error) {}];
+
         
         NSLog(@"login Sucessful");
         [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];

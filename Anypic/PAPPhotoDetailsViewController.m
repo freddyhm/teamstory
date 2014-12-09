@@ -78,7 +78,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 - (id)initWithPhoto:(PFObject *)aPhoto source:(NSString *)source{
     
     self = [super init];
-
+    
     if (self) {
         
         self.photo = aPhoto;
@@ -105,7 +105,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.postDetails.frame = self.view.frame;
     [self.postDetails setContentInset:UIEdgeInsetsMake(0, 0, 50, 0)];
     [self.view addSubview:self.postDetails];
- 
+    
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     [self.navigationItem.titleView setUserInteractionEnabled:YES];
@@ -160,7 +160,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.dimView.hidden = YES;
     self.dimView.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.8f];
     [self.view addSubview:self.dimView];
-
+    
     self.autocompleteTableView = [[UITableView alloc] init];
     self.autocompleteTableView.delegate = self;
     self.autocompleteTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -178,7 +178,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     [self.view addGestureRecognizer:tapOutside];
     
-
+    
     // set comment block view for spinner
     float tableCommentVerticalPos = self.postDetails.tableHeaderView.frame.origin.y + self.postDetails.tableHeaderView.frame.size.height;
     
@@ -199,7 +199,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self loadObjects];
     
     NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
-   
+    
     self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
     self.customKeyboard.delegate = self;
     [self.customKeyboard setTextViewPosition:64];
@@ -208,7 +208,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.customKeyboard.view.layer.zPosition = 100;
     [self.customKeyboard setBackgroundTable:self.postDetails];
     [self.view addSubview:self.customKeyboard.view];
-     
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -296,7 +296,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                         [self.customKeyboard setObjCount:[loadedObjects count]];
                         [self.customKeyboard.messageTextView becomeFirstResponder];
                     }
-                
+                    
                 }
             }
         }];
@@ -414,7 +414,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 
 - (void)keyboardDidBeginEditing{
-
+    
     // get post type
     NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
     
@@ -423,7 +423,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 - (BOOL)keyboardShouldChangeTextInRange:(NSRange)range replacementText:(NSString*)text{
-
+    
     if ([cellType isEqualToString:@"atmentionCell"]) {
         text = [text stringByAppendingString:@" "];
         
@@ -521,7 +521,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             [self.autocompleteTableView reloadData];
         }
     }
-
+    
     return YES;
 }
 
@@ -561,6 +561,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Commented", @"Post Type" : postType}];
+        
+        // intercome analytics
+        [Intercom logEventWithName:@"commented" optionalMetaData:nil
+                        completion:^(NSError *error) {}];
+
         
         // Show HUD view
         [SVProgressHUD show];
@@ -654,9 +659,14 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Liked Comment", @"Post Type": postType}];
-        
+    
         // increment user like comment count by one
         [[Mixpanel sharedInstance].people increment:@"Like Comment Count" by:[NSNumber numberWithInt:1]];
+        
+        // intercom analytics
+        [Intercom logEventWithName:@"liked-comment" optionalMetaData:nil
+                        completion:^(NSError *error) {}];
+        
         
         likeCommentCount = [NSNumber numberWithInt:[likeCommentCount intValue] + 1];
         

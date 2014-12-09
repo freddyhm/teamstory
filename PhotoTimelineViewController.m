@@ -208,6 +208,12 @@ enum ActionSheetTags {
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Viewed Post", @"Post Type":type}];
         
+        
+        // intercom analytics
+        [Intercom logEventWithName:@"viewed-post" optionalMetaData:nil
+                        completion:^(NSError *error) {}];
+
+        
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
         
         // hides tab bar so we can add custom keyboard
@@ -688,6 +694,11 @@ enum ActionSheetTags {
         
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Liked Post", @"Source":@"Timeline", @"Post Type": postType}];
+        
+        // intercom analytics
+        [Intercom logEventWithName:@"liked-post" optionalMetaData:@{@"source":@"timeline"}
+                        completion:^(NSError *error) {}];
+
         
         // increment user like count by one
         [[Mixpanel sharedInstance].people increment:@"Like Count" by:[NSNumber numberWithInt:1]];

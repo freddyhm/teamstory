@@ -8,12 +8,12 @@
 
 #import "ThoughtPostViewController.h"
 #import "SVProgressHUD.h"
-#import "CameraFilterViewController.h"
-#import "PAPEditPhotoViewController.h"
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
 #import "Mixpanel.h"
+#import "Intercom.h"
 #import "ParseFacebookUtils/PFFacebookUtils.h"
+#include <stdlib.h>
 
 @interface ThoughtPostViewController ()
 
@@ -22,7 +22,9 @@
 @property (nonatomic, assign) UIBackgroundTaskIdentifier fileUploadBackgroundTaskId;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier photoPostBackgroundTaskId;
 @property (nonatomic, strong) NSMutableArray *bkgdOptions;
+@property (nonatomic, strong) NSMutableArray *suggOptions;
 @property (nonatomic, strong) UIBarButtonItem *rightNavButton;
+@property (nonatomic, strong) NSString *placeholderSuggestion;
 @property int prevBkgdIndex;
 
 @end
@@ -43,34 +45,74 @@
     
     [super viewDidLoad];
     
-    // init nav bar
-    [[self navigationController] setNavigationBarHidden:NO animated:YES];
+    // set color of nav bar to custom grey
+    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(79/255.0) green:(91/255.0) blue:(100/255.0) alpha:(0.0/255.0)];
     
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationItem.title = @"Update Thought";
+
     // set logo and nav bar buttons
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonAction:)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_cancel.png"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonAction:)];
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
     
     self.rightNavButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_done.png"] style:UIBarButtonItemStylePlain target:self action:@selector(saveEdit:)];
     self.rightNavButton.tintColor = [UIColor whiteColor];
     
+    
+    
     // set colors
-    UIColor *original = [UIColor colorWithRed:249.0f/255.0f green:249.0f/255.0f blue:249.0f/255.0f alpha:1];
-    UIColor *green = [UIColor colorWithRed:156.0f/255.0f green:209.0f/255.0f blue:105.0f/255.0f alpha:1];
-    UIColor *blue = [UIColor colorWithRed:19.0f/255.0f green:149.0f/255.0f blue:217.0f/255.0f alpha:1];
-    UIColor *deepPurple = [UIColor colorWithRed:166.0f/255.0f green:109.0f/255.0f blue:170.0f/255.0f alpha:1];
-    UIColor *pink = [UIColor colorWithRed:234.0f/255.0f green:108.0f/255.0f blue:135.0f/255.0f alpha:1];
-    UIColor *pinkRed = [UIColor colorWithRed:253.0f/255.0f green:89.0f/255.0f blue:89.0f/255.0f alpha:1];
-    UIColor *yellow = [UIColor colorWithRed:236.0f/255.0f green:198.0f/255.0f blue:84.0f/255.0f alpha:1];
-    UIColor *orange = [UIColor colorWithRed:249.0f/255.0f green:155.0f/255.0f blue:72.0f/255.0f alpha:1];
-    UIColor *blueGrey = [UIColor colorWithRed:89.0f/255.0f green:94.0f/255.0f blue:100.0f/255.0f alpha:1];
-    UIColor *darkGrey = [UIColor colorWithRed:41.0f/255.0f green:41.0f/255.0f blue:41.0f/255.0f alpha:1];
+    UIColor *black = [UIColor colorWithRed:255.0f/255.0f green:255.0f/255.0f blue:255.0f/255.0f alpha:1];
+    UIColor *gray = [UIColor colorWithRed:42.0f/255.0f green:42.0f/255.0f blue:42.0f/255.0f alpha:1];
+    UIColor *green = [UIColor colorWithRed:75.0f/255.0f green:82.0f/255.0f blue:95.0f/255.0f alpha:1];
+    UIColor *teal = [UIColor colorWithRed:98.0f/255.0f green:195.0f/255.0f blue:112.0f/255.0f alpha:1];
+    UIColor *orange = [UIColor colorWithRed:132.0f/255.0f green:198.0f/255.0f blue:201.0f/255.0f alpha:1];
+    UIColor *redOrange = [UIColor colorWithRed:249.0f/255.0f green:175.0f/255.0f blue:54.0f/255.0f alpha:1];
+    UIColor *purple = [UIColor colorWithRed:243.0f/255.0f green:137.0f/255.0f blue:100.0f/255.0f alpha:1];
+    UIColor *pink = [UIColor colorWithRed:125.0f/255.0f green:112.0f/255.0f blue:186.0f/255.0f alpha:1];
+    UIColor *blue = [UIColor colorWithRed:237.0f/255.0f green:86.0f/255.0f blue:118.0f/255.0f alpha:1];
+    UIColor *brown = [UIColor colorWithRed:144.0f/255.0f green:190.0f/255.0f blue:222.0f/255.0f alpha:1];
+    UIColor *olive = [UIColor colorWithRed:85.0f/255.0f green:67.0f/255.0f blue:72.0f/255.0f alpha:1];
+    UIColor *white = [UIColor colorWithRed:107.0f/255.0f green:163.0f/255.0f blue:104.0f/255.0f alpha:1];
+    
+    // personalize suggestion, check if name is not empty
+    NSString *userName = ![[[PFUser currentUser] objectForKey:@"displayName"] isEqualToString:@" "] ? [[PFUser currentUser] objectForKey:@"displayName"] : @"You";
+    
+    // set suggestions
+    NSString *sugg1 = [userName stringByAppendingString:@", you are freakin' awesome."];
+    NSString *sugg2 = [userName stringByAppendingString:@" for president."];
+    NSString *sugg3 = @"Always pass on what you have learned.";
+    NSString *sugg4 = @"Do or do not. There is no try.";
+    NSString *sugg5 = @"Zuck ain’t got nothing on you.";
+    NSString *sugg6 = @"What you do in life, echoes in eternity.";
+    NSString *sugg7 = @"How was your day?";
+    NSString *sugg8 = @"What's new?";
+    NSString *sugg9 = @"Share something with the community!";
+    NSString *sugg10 = @"How's work?";
+    NSString *sugg11 = @"What did you learn today?";
+    NSString *sugg12 = @"What are you grateful for?";
+    NSString *sugg13 = @"Run, Forest, run.";
+    NSString *sugg14 = @"Only at the end do you realize the power of the Dark Side.";
+    NSString *sugg15 = @"Keep calm and keep coding.";
+    NSString *sugg16 = @"This is a bullshit free zone.";
+    NSString *sugg17 = @"This is where you vent.";
+    NSString *sugg18 = @"Ready. Set. Go!";
+    NSString *sugg19 = @"[insert rant]";
+    
+    
+    // suggestion selection
+    self.suggOptions = [[NSMutableArray alloc]initWithObjects:sugg1, sugg2, sugg3, sugg4, sugg5, sugg6, sugg7, sugg8, sugg9, sugg10, sugg11, sugg12, sugg13, sugg14, sugg15, sugg16, sugg17, sugg18, sugg19, nil];
     
     // color selection
-    self.bkgdOptions = [[NSMutableArray alloc]initWithObjects:original, green, blue, deepPurple, pink, pinkRed, yellow, orange, blueGrey, darkGrey, nil];
-    self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:0];
-    self.prevBkgdIndex = 0;
+    self.bkgdOptions = [[NSMutableArray alloc]initWithObjects:black, gray, green, teal, orange, redOrange, purple, pink, blue, brown, olive, white, nil];
     
+    // random suggestion within selection bounds
+    int randomSuggOption = arc4random_uniform((int)self.suggOptions.count);
+    int randomBkgdOption = arc4random_uniform((int)self.bkgdOptions.count);
+    
+    
+    self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:randomBkgdOption];
+    self.prevBkgdIndex = randomBkgdOption;
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
@@ -79,12 +121,15 @@
     [self.leftSwipe addTarget:self action:@selector(leftNav:)];
     [self.rightSwipe addTarget:self action:@selector(rightNav:)];
     
-    
     [self.thoughtTextView setAutocorrectionType:UITextAutocorrectionTypeNo];
     [self.thoughtTextView setReturnKeyType:UIReturnKeyDone];
     
-    [self.view addGestureRecognizer:tapOutside];
+    // default placeholder suggestion
+    [self.placeholder setText:[self.suggOptions objectAtIndex:randomSuggOption]];
 
+    [self.view addGestureRecognizer:tapOutside];
+    
+    [self updateTextColor];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -94,11 +139,6 @@
         
     // new analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Thought"}];
-
-    // set color of nav bar to teal
-    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
-    self.navigationController.navigationBar.translucent = NO;
 }
 
 #pragma mark - UITextViewDelegate & TextView related methods
@@ -162,12 +202,12 @@
         self.thoughtTextView.textColor = [UIColor whiteColor];
         [self.leftNavSelector setImage:[UIImage imageNamed:@"arrows_left_white.png"] forState:UIControlStateNormal];
         [self.rightNavSelector setImage:[UIImage imageNamed:@"arrows_right_white.png"] forState:UIControlStateNormal];
-        [self.placeholderSign setImage:[UIImage imageNamed:@"share_thought_white.png"]];
+        [self.placeholder setTextColor:[UIColor whiteColor]];
     }else{
         self.thoughtTextView.textColor = [UIColor blackColor];
         [self.leftNavSelector setImage:[UIImage imageNamed:@"arrows_left.png"] forState:UIControlStateNormal];
         [self.rightNavSelector setImage:[UIImage imageNamed:@"arrows_right.png"] forState:UIControlStateNormal];
-        [self.placeholderSign setImage:[UIImage imageNamed:@"share_thought_grey.png"]];
+        [self.placeholder setTextColor:[UIColor grayColor]];
     }
 }
 
@@ -217,12 +257,18 @@
         // dismiss keyboard before taking picture
         [self dismissKeyboard];
         
-        // analytics for upload and background
-        [PAPUtility captureEventGA:@"Engagement" action:@"Upload Thought" label:@"Photo"];
-        [PAPUtility captureEventGA:@"Thought Bkgd" action:[[NSNumber numberWithInt:self.prevBkgdIndex] stringValue] label:@"Photo"];
-        
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Thought"}];
+        
+        // intercom analytics
+        [Intercom logEventWithName:@"posted-thought" optionalMetaData:nil
+                        completion:^(NSError *error) {}];
+
+        
+        // track selected color and current suggestion   
+        [[Mixpanel sharedInstance] track:@"Uploaded Color Index" properties:@{@"Type": [[NSNumber numberWithInt:self.prevBkgdIndex] stringValue]}];
+        
+        [[Mixpanel sharedInstance] track:@"Uploaded Suggestion" properties:@{@"Type": self.placeholder.text}];
         
         // increment user thought count by one
         [[Mixpanel sharedInstance].people increment:@"Thought Count" by:[NSNumber numberWithInt:1]];
@@ -338,37 +384,12 @@
 }
 
 - (void)exitPost{
-    
-    // hide bar and pop to home 
-    [[self navigationController] setNavigationBarHidden:YES animated:YES];
-    
-    // get tab bar and home controller from stack
-    PAPTabBarController *tabBarController =[[self.navigationController viewControllers] objectAtIndex:1];
-    NSArray *tabBarViewControllers = [tabBarController viewControllers];
-    
-    // get home and phototimeline, if there are children pop 'em to get back to timeline
-    PAPHomeViewController *homeViewController = [tabBarViewControllers objectAtIndex:0];
-    PhotoTimelineViewController *photoViewController = [homeViewController.childViewControllers objectAtIndex:0];
-    
-    if([homeViewController.childViewControllers count] > 1){
-        [photoViewController.navigationController popViewControllerAnimated:NO];
-    }
-    
-    [tabBarController setSelectedViewController:homeViewController];
-    
-    NSArray *m = homeViewController.childViewControllers;
-    
-    [m objectAtIndex:0];
-    
-    // push tab bar with home controller now selected
-    [self.navigationController popToViewController:tabBarController animated:YES];
+    [self.delegate didUploadThought];
 }
 
 
 - (void)backButtonAction:(id)sender {
-    
-    [[self navigationController] setNavigationBarHidden:YES animated:YES];
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
