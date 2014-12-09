@@ -19,6 +19,7 @@
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
 #import "AppDelegate.h"
+#import "Intercom.h"
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 #define APP ((AppDelegate *)[[UIApplication sharedApplication] delegate])

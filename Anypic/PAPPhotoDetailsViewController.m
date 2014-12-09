@@ -16,6 +16,7 @@
 #import "MBProgressHUD.h"
 #import "Mixpanel.h"
 #import "AppDelegate.h"
+#import "Intercom.h"
 
 #define APP ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 

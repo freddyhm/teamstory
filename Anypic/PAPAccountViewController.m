@@ -14,6 +14,7 @@
 #import "FollowersFollowingViewController.h"
 #import "Mixpanel.h"
 #import "PAPMessagingViewController.h"
+#import "Intercom.h"
 
 @interface PAPAccountViewController() {
     float alphaValue_twitter;

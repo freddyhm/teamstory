@@ -1332,6 +1332,9 @@
 			isa = PBXGroup;
 			children = (
 				464AE4861A310721009835CD /* Custom HUD */,
+				D5A284931A2EE84200EF01A9 /* bg_thought.png */,
+				D5A284911A2EE83E00EF01A9 /* bg_thought@3x.png */,
+				D5A2848A1A2EE83700EF01A9 /* bg_thought@2x.png */,
 				D510B61E1A0897ED00BED420 /* nav_activity@2x.png */,
 				D510B61F1A0897ED00BED420 /* nav_activity.png */,
 				463CE62B19E9987D001F607C /* Message Asset */,
@@ -1698,6 +1701,8 @@
 			isa = PBXGroup;
 			children = (
 				4611EE9C19DF427C00B319C0 /* ParseFacebookUtils.framework */,
+				D503B6151A32904E00CF225B /* Intercom.h */,
+				D503B6161A32904E00CF225B /* libIntercom.a */,
 				D5856F5319F87E2500D0086F /* Konotor */,
 				D5654174196F64D400E74164 /* ALAssetsLibrary-CustomPhotoAlbum */,
 				D542D8AB196A6F4700A0384F /* ELCImagePicker */,
@@ -2244,6 +2249,7 @@
 				463CE64519E9987D001F607C /* btn_new_message@2x.png in Resources */,
 				46ABD74E18B147FC008F5AAB /* button_cancel_selected.png in Resources */,
 				D552B0ED19C7D3EB009F2862 /* arrows_right@2x.png in Resources */,
+				D5A284921A2EE83E00EF01A9 /* bg_thought@3x.png in Resources */,
 				D575A0701947834C00C6BCC2 /* btn_editprofile@2x.png in Resources */,
 				46839E9E18E1E8C100BD60DB /* icon-upload.png in Resources */,
 				467A40DD1993059300D4C693 /* join_teamstory@2x.png in Resources */,
@@ -2362,7 +2368,6 @@
 				D5856FA219F87E2600D0086F /* konotor_profile.png in Resources */,
 				D54627601A16E1B400EA739C /* OriginalBackgroundNavigationBar.png in Resources */,
 				467A40B2199000B100D4C693 /* btn_image_upload.png in Resources */,
-				D5FC095C18A9B586000D85F1 /* CameraFilterViewController.xib in Resources */,
 				463CE63C19E9987D001F607C /* btn_message_count@2x.png in Resources */,
 				C4BE6777157FC7F700A291C2 /* BackgroundNavigationBar.png in Resources */,
 				460997551938119A00C5AD96 /* icon-angel.png in Resources */,
@@ -2474,6 +2479,7 @@
 				463CE65A19E99DD9001F607C /* bubble_triangle_right@3x.png in Resources */,
 				D575A0721947834C00C6BCC2 /* btn_follow@2x.png in Resources */,
 				463CE65819E99DD9001F607C /* bubble_triangle_right.png in Resources */,
+				D5A2848B1A2EE83700EF01A9 /* bg_thought@2x.png in Resources */,
 				D576840E1933F910008BAA2C /* IconDiscoverSelected.png in Resources */,
 				467154A718835E470000C0CA /* privacy@2x.png in Resources */,
 				465A4EE618A83D5100E43DC6 /* share@2x.png in Resources */,
@@ -2897,7 +2903,7 @@
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ca3c2edb-2f3c-49c9-a626-9f65f907191b";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2970,7 +2976,7 @@
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ca3c2edb-2f3c-49c9-a626-9f65f907191b";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -3016,7 +3022,7 @@
 				BUNDLE_DISPLAY_NAME_SUFFIX = "";
 				BUNDLE_ID_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Tobok Lee (J6C82HHGJA)";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Distribution: Growple, inc. (NJ5SX3QK2K)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
@@ -3045,8 +3051,8 @@
 					"$(PROJECT_DIR)/External",
 				);
 				PRODUCT_NAME = Teamstory;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ca3c2edb-2f3c-49c9-a626-9f65f907191b";
+				PROVISIONING_PROFILE = "c3fd3e4a-c30b-49e0-82d1-9b363a18117f";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "c3fd3e4a-c30b-49e0-82d1-9b363a18117f";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};

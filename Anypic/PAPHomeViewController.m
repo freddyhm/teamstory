@@ -15,6 +15,7 @@
 #import "PAPTabBarController.h"
 #import "Mixpanel.h"
 #import "PAPMessageListViewController.h"
+#import "Intercom.h"
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 

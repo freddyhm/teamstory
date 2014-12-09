@@ -29,6 +29,8 @@
 #import "PAPMessagingViewController.h"
 #import "PAPMessageListCell.h"
 #import <ParseFacebookUtils/PFFacebookUtils.h>
+#import "ParseFacebookUtils/PFFacebookUtils.h"
+#import "Intercom.h"
 
 
 @interface AppDelegate () {
