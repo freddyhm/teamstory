@@ -129,16 +129,16 @@
     headerView.backgroundColor = teamStoryColor;
     [self.view addSubview:headerView];
     
-    UILabel *navLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, (headerView.bounds.size.height - 20) / 2, [UIScreen mainScreen].bounds.size.width, 30.0f)];
+    UILabel *navLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, (headerView.bounds.size.height - 15) / 2, [UIScreen mainScreen].bounds.size.width, 30.0f)];
     [navLabel setText:@"Choose User"];
     navLabel.textColor = [UIColor whiteColor];
     navLabel.textAlignment = NSTextAlignmentCenter;
     navLabel.font = [UIFont boldSystemFontOfSize:18.0f];
     [headerView addSubview:navLabel];
     
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0f, (headerView.bounds.size.height - 11) / 2, 22.0f, 22.0f)];
-    [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
-    [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(14.0f, (headerView.bounds.size.height - 10) / 2, 22.0f, 22.0f)];
+    [backButton setBackgroundImage:[UIImage imageNamed:@"button_cancel.png"] forState:UIControlStateNormal];
+    [backButton setBackgroundImage:[UIImage imageNamed:@"button_cancel_selected.png"] forState:UIControlStateHighlighted];
     [backButton addTarget:self action:@selector(cancelButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [headerView addSubview:backButton];
     

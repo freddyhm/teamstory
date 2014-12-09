@@ -51,6 +51,8 @@
     
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:@"messagingScreen" setTargetRoom:self.targetChatRoom setTargetUser:self.recipient setNavigationController:self.navigationController];
     
+    [self.customKeyboard setLocation:@"messaging"];
+    
     [self loadMessageQuery];
     [self updateRoomBadge];
 }
@@ -59,6 +61,7 @@
     [super viewWillDisappear:YES];
    
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:nil setTargetRoom:nil setTargetUser:nil setNavigationController:nil];
+    [self.customKeyboard setLocation:nil];
 }
 
 - (void)viewDidLoad

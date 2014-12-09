@@ -29,6 +29,7 @@
 @property (nonatomic, strong) NSMutableArray *atmentionUserArray;
 @property (nonatomic, strong) UIView *dimView;
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSString *screenLocation;
 
 @end
 
@@ -63,6 +64,10 @@
     
     self.postType = @"";
     self.objCount = 0;
+}
+
+- (void)setLocation:(NSString *)screenLocation {
+    self.screenLocation = screenLocation;
 }
 
 - (void)changeSendButtonState:(BOOL)state {
@@ -122,17 +127,34 @@
 #pragma mark - TextView Methods
 
 -(void)textViewDidChange:(UITextView *)textView {
-    
-    NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:textSize]};
-    CGRect textViewSize = [textView.text boundingRectWithSize:CGSizeMake(self.messageTextView.bounds.size.width - 10.0f, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
-    
-    if (textViewSize.size.height > 20.0f) {
-        self.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (64.0f + textViewSize.size.height + self.keyboardHeight + 30.0f), [UIScreen mainScreen].bounds.size.width, textViewSize.size.height + 30.0f);
+    if ([self.screenLocation isEqualToString:@"messaging"]) {
+        if (self.view.frame.origin.y < 300) {
+            NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:textSize]};
+            CGRect textViewSize = [textView.text boundingRectWithSize:CGSizeMake(self.messageTextView.bounds.size.width - 10.0f, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
+            
+            if (textViewSize.size.height > 20.0f) {
+                self.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (64.0f + textViewSize.size.height + self.keyboardHeight + 30.0f), [UIScreen mainScreen].bounds.size.width, textViewSize.size.height + 30.0f);
+            } else {
+                self.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (64.0f + messageTextViewHeight + self.keyboardHeight), [UIScreen mainScreen].bounds.size.width, messageTextViewHeight);
+            }
+            
+            self.messageTextView.frame = CGRectMake(5.0f, 5.0f, self.view.bounds.size.width - 10.0f - sendButtonWidth, self.view.bounds.size.height - 10.0f);
+        } else {
+            [self.view setFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (64.0f + messageTextViewHeight), [UIScreen mainScreen].bounds.size.width, messageTextViewHeight)];
+            self.messageTextView.frame = CGRectMake(5.0f, 5.0f, self.view.bounds.size.width - 10.0f - sendButtonWidth, self.view.bounds.size.height - 10.0f);
+        }
     } else {
-        self.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (64.0f + messageTextViewHeight + self.keyboardHeight), [UIScreen mainScreen].bounds.size.width, messageTextViewHeight);
+        NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:textSize]};
+        CGRect textViewSize = [textView.text boundingRectWithSize:CGSizeMake(self.messageTextView.bounds.size.width - 10.0f, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
+        
+        if (textViewSize.size.height > 20.0f) {
+            self.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (64.0f + textViewSize.size.height + self.keyboardHeight + 30.0f), [UIScreen mainScreen].bounds.size.width, textViewSize.size.height + 30.0f);
+        } else {
+            self.view.frame = CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (64.0f + messageTextViewHeight + self.keyboardHeight), [UIScreen mainScreen].bounds.size.width, messageTextViewHeight);
+        }
+        
+        self.messageTextView.frame = CGRectMake(5.0f, 5.0f, self.view.bounds.size.width - 10.0f - sendButtonWidth, self.view.bounds.size.height - 10.0f);
     }
-    
-    self.messageTextView.frame = CGRectMake(5.0f, 5.0f, self.view.bounds.size.width - 10.0f - sendButtonWidth, self.view.bounds.size.height - 10.0f);
     
     [self changeTableViewHeight];
     

@@ -53,6 +53,8 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
 @property (nonatomic, readonly) CGFloat visibleKeyboardHeight;
 @property (nonatomic, assign) UIOffset offsetFromCenter;
 
+@property (nonatomic, strong) UIView *backgroundView;
+
 
 - (void)showProgress:(float)progress
               status:(NSString*)string
@@ -265,15 +267,15 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
             float backgroundViewWidth = hudImage.size.width + 30.0f;
             float backgroundViewHeight = hudImage.size.height + 70.0f;
             
-            UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width - backgroundViewWidth) / 2, ([UIScreen mainScreen].bounds.size.height - backgroundViewHeight) / 2, backgroundViewWidth, backgroundViewHeight)];
-            backgroundView.layer.cornerRadius = 5.0f;
-            backgroundView.clipsToBounds = YES;
-            [backgroundView setBackgroundColor:[UIColor whiteColor]];
-            [self addSubview:backgroundView];
+            self.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width - backgroundViewWidth) / 2, ([UIScreen mainScreen].bounds.size.height - backgroundViewHeight) / 2, backgroundViewWidth, backgroundViewHeight)];
+            self.backgroundView.layer.cornerRadius = 5.0f;
+            self.backgroundView.clipsToBounds = YES;
+            [self.backgroundView setBackgroundColor:[UIColor whiteColor]];
+            [self addSubview:self.backgroundView];
             
             UIImageView *hudImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15.0f, 50.0f, hudImage.size.width, hudImage.size.height)];
             [hudImageView setImage:hudImage];
-            [backgroundView addSubview:hudImageView];
+            [self.backgroundView addSubview:hudImageView];
             
             float hudHeight;
             
@@ -285,7 +287,7 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
             
             self.hudView.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width - self.hudView.frame.size.width) / 2, hudHeight, self.hudView.frame.size.width, self.hudView.frame.size.height);
             
-            [self sendSubviewToBack:backgroundView];
+            [self sendSubviewToBack:self.backgroundView];
             break;
         }
     }
@@ -733,6 +735,8 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
                              self.hudView.alpha = 0;
                          else
                              self.alpha = 0;
+                         
+                         [self.backgroundView removeFromSuperview];
                      }
                      completion:^(BOOL finished){
                          if(self.alpha == 0 || self.hudView.alpha == 0) {
@@ -778,6 +782,7 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
     self.activityCount = 0;
    
      self.hudView.transform = CGAffineTransformScale(self.hudView.transform, 0.8, 0.8);
+    [self.backgroundView removeFromSuperview];
 
      self.alpha = 0;
      self.hudView.alpha = 0;

@@ -28,6 +28,8 @@
 - (void)resetTextViewHeight;
 - (void)dismissKeyboard;
 
+- (void)setLocation:(NSString *)screenLocation;
+
 @end
 
 @protocol CustomKeyboardViewControllerDelegate <NSObject>
