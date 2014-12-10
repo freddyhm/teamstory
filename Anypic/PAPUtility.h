@@ -6,6 +6,7 @@
 
 @interface PAPUtility : NSObject
 
++ (void)posted:(id)post;
 + (UIImage *)resizeImage:(UIImage *)image width:(int)w height:(int)h;
 + (void)captureEventGA:(NSString *)eventCategory action:(NSString *)eventAction label:(NSString *)eventLabel;
 + (void)captureScreenGA:(NSString *)screen;

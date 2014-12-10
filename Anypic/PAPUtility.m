@@ -210,6 +210,18 @@
 
 }
 
+#pragma mark Post Uploads
+
++ (void)posted:(id)post{
+    
+    // proceed to creating new post activity
+    PFObject *postedActivity = [PFObject objectWithClassName:kPAPActivityClassKey];
+    [postedActivity setObject:kPAPActivityTypePosted forKey:kPAPActivityTypeKey];
+    [postedActivity setObject:[PFUser currentUser] forKey:kPAPActivityFromUserKey];
+    [postedActivity setObject:post forKey:kPAPActivityPhotoKey];
+    [postedActivity saveInBackground];
+}
+
 + (void)unlikePhotoInBackground:(id)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
     PFQuery *queryExistingLikes = [PFQuery queryWithClassName:kPAPActivityClassKey];
     [queryExistingLikes whereKey:kPAPActivityPhotoKey equalTo:photo];

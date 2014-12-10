@@ -232,13 +232,18 @@
     PFQuery *personalQuery = [PFQuery queryWithClassName:self.parseClassName];
     [personalQuery whereKey:kPAPActivityToUserKey equalTo:[PFUser currentUser]];
     
+    // pull newest updates from follower table
+    PFQuery *followersQuery = [PFQuery queryWithClassName:@"Followers"];
+    [followersQuery whereKey:@"follower" equalTo:[PFUser currentUser]];
+    [followersQuery orderByDescending:@"createdAt"];
+    
     NSMutableArray *array = [[NSMutableArray alloc] init];
     [array addObject:[PFUser currentUser]];
     //NSPredicate *prediate = [NSPredicate predicateWithFormat:@"atmention.objectId contains %@", [PFUser currentUser].objectId];
     PFQuery *atmentionQuery = [PFQuery queryWithClassName:self.parseClassName];
     [atmentionQuery whereKey:@"atmention" containsAllObjectsInArray:array];
     
-    PFQuery *finalQuery = [PFQuery orQueryWithSubqueries:@[personalQuery, atmentionQuery, activitiesFromSubs]];
+    PFQuery *finalQuery = [PFQuery orQueryWithSubqueries:@[personalQuery, atmentionQuery, activitiesFromSubs, followersQuery]];
     [finalQuery whereKey:kPAPActivityFromUserKey notEqualTo:[PFUser currentUser]];
     [finalQuery whereKeyExists:kPAPActivityFromUserKey];
     

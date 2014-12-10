@@ -319,6 +319,8 @@
                     if (succeeded) {
                         NSLog(@"Photo uploaded");
                         
+                        [PAPUtility posted:photo];
+                        
                         [[PAPCache sharedCache] setAttributesForPhoto:photo likers:[NSArray array] commenters:[NSArray array] likedByCurrentUser:NO];
                         [[NSNotificationCenter defaultCenter] postNotificationName:PAPTabBarControllerDidFinishEditingPhotoNotification object:photo];
                     } else {

@@ -81,6 +81,7 @@ extern NSString *const kPAPActivityPhotoKey;
 
 // Type values
 extern NSString *const kPAPActivityTypeLike;
+extern NSString *const kPAPActivityTypePosted;
 extern NSString *const kPAPActivityTypeLikeComment;
 extern NSString *const kPAPActivityTypeFollow;
 extern NSString *const kPAPActivityTypeComment;
