@@ -352,8 +352,8 @@ static NSString *const INTERCOM_API_KEY = @"ios_sdk-7bcd17d996532a8658cd72694ad1
                         [[PFUser currentUser] setObject:[NSNumber numberWithInt:1] forKey:@"activityBadge"];
                         [[PFUser currentUser] saveInBackground];
                     }
-                }
-            }
+                 }
+             }
         }else{
             [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
             [self handlePush:nil userInfo:userInfo source:@"background"];
@@ -971,14 +971,19 @@ static NSString *const INTERCOM_API_KEY = @"ios_sdk-7bcd17d996532a8658cd72694ad1
             [self.tabBarController setSelectedViewController:homeNavigationController];
             
             PAPPhotoDetailsViewController *detailViewController;
+            NSString *sourceType;
             
             if([type isEqualToString:kPAPPushPayloadActivityCommentKey]){
-                detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notificationComment"];
+                sourceType = @"notificationComment";
             }else if([type isEqualToString:kPAPPushPayloadActivityLikeCommentKey]){
-                detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notificationLikeComment"];
+                sourceType = @"notificationLikeComment";
             }else if ([type isEqualToString:kPAPPushPayloadActivityLikeKey]){
-                detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:@"notificationLike"];
+                sourceType = @"notificationLike";
+            }else if([type isEqualToString:kPAPPushPayloadActivityPostKey]){
+                sourceType = @"notificationPost";
             }
+            
+            detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:sourceType];
             
             // hides tab bar so we can add custom keyboard
             detailViewController.hidesBottomBarWhenPushed = YES;

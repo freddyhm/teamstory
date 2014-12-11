@@ -296,6 +296,9 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
                 if (succeeded) {
                     NSLog(@"Photo uploaded");
                     
+                    // create activity for posted
+                    [PAPUtility posted:photo];
+                    
                     [[PAPCache sharedCache] setAttributesForPhoto:photo likers:[NSArray array] commenters:[NSArray array] likedByCurrentUser:NO];
                     [[NSNotificationCenter defaultCenter] postNotificationName:PAPTabBarControllerDidFinishEditingPhotoNotification object:photo];
                 } else {

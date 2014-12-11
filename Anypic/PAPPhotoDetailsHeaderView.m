@@ -413,7 +413,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         if (imageFile) {
             self.photoImageView.file = imageFile;
             
-            if([self.photoImageView.file isDataAvailable]){
+            if(![self.photoImageView.file isDataAvailable]){
                 [self.photoImageView loadInBackground];
             }
         }

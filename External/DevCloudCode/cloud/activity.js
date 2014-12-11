@@ -319,7 +319,7 @@ Parse.Cloud.afterSave('Activity', function(request) {
                                              }
                             });
                             
-                            /*
+                            
                              Parse.Push.send({
                              where: installationQuery,
                              data: alertPayload(request)
@@ -328,8 +328,6 @@ Parse.Cloud.afterSave('Activity', function(request) {
                              }, function(error) {
                              throw "Push Error" + error.code + " : " + error.message;
                              });
-                             
-                             */
                             }
                             
                             
@@ -446,10 +444,11 @@ var alertPayload = function(request) {
         alert: alertMessage(request), // Set our alert message.
         badge: 'Increment', // Increment the target device's badge count.
             // The following keys help load the correct data in response to this push notification.
-        p: 'a', // Payload Type: Photo
-        t: 'p', // Post Type
+        p: 'a', // Payload Type: Activity
+        t: 'po', // Post Type: post
         fu: request.object.get('fromUser').id, // From User
-        pid: request.object.id // Photo Id
+        pid: request.object.get('photo').id, // Photo Id
+        aid: request.object.id // Activity Id
         };
     }
 }

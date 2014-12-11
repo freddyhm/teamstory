@@ -139,6 +139,7 @@ extern NSString *const kAPNSSoundKey;
 extern NSString *const kPAPPushPayloadPayloadTypeKey;
 extern NSString *const kPAPPushPayloadPayloadTypeActivityKey;
 
+extern NSString *const kPAPPushPayloadActivityPostKey;
 extern NSString *const kPAPPushPayloadActivityTypeKey;
 extern NSString *const kPAPPushPayloadActivityLikeKey;
 extern NSString *const kPAPPushPayloadActivityLikeCommentKey;
