@@ -142,9 +142,19 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row < self.objects.count) {
-        PFObject *object = [self.objects objectAtIndex:indexPath.row];
         
-        NSString *activityString = [[[object objectForKey:@"toUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]] ? [PAPActivityFeedViewController stringForActivityType:(NSString*)[object objectForKey:kPAPActivityTypeKey] object:object] : NSLocalizedString(@"commented on your followed photo", nil);
+        PFObject *object = [self.objects objectAtIndex:indexPath.row];
+        NSString *activityString;
+        
+        BOOL hasToUser = [[[object objectForKey:@"toUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]];
+        BOOL isPostType = [[object objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypePosted];
+        
+        // check if subscription (no toUser) and if it's of type post or not (follower vs comment)
+        if(!hasToUser && !isPostType){
+            activityString = NSLocalizedString(@"commented on your followed photo", nil);
+        }else{
+            activityString = [PAPActivityFeedViewController stringForActivityType:(NSString*)[object objectForKey:kPAPActivityTypeKey] object:object];
+        }
         
         if ([[object objectForKey:@"atmention"] count] > 0) {
             for (int i = 0; i < [[object objectForKey:@"atmention"] count]; i++) {
@@ -218,6 +228,15 @@
         return query;
     }
     
+    /* Personal */
+    
+    // pull all activities to user
+    PFQuery *personalQuery = [PFQuery queryWithClassName:self.parseClassName];
+    [personalQuery whereKey:kPAPActivityToUserKey equalTo:[PFUser currentUser]];
+    
+    
+    /* Comment Subscriptions */
+    
     // pull all subscriptions from current user, fetch most recent
     PFQuery *getSubsQuery = [PFQuery queryWithClassName:@"Subscription"];
     [getSubsQuery whereKey:@"subscriber" equalTo:[PFUser currentUser]];
@@ -228,14 +247,20 @@
     [activitiesFromSubs whereKey:@"type" equalTo:kPAPActivityTypeComment];
     [activitiesFromSubs whereKey:@"subscribers" matchesQuery:getSubsQuery];
     
-    // pull all activities to user
-    PFQuery *personalQuery = [PFQuery queryWithClassName:self.parseClassName];
-    [personalQuery whereKey:kPAPActivityToUserKey equalTo:[PFUser currentUser]];
+    
+    /* Following Subscriptions */
     
     // pull newest updates from follower table
-    PFQuery *followersQuery = [PFQuery queryWithClassName:@"Followers"];
-    [followersQuery whereKey:@"follower" equalTo:[PFUser currentUser]];
-    [followersQuery orderByDescending:@"createdAt"];
+    PFQuery *getFollowingSubQuery = [PFQuery queryWithClassName:@"Follower"];
+    [getFollowingSubQuery whereKey:@"follower" equalTo:[PFUser currentUser]];
+    [getFollowingSubQuery orderByDescending:@"createdAt"];
+    
+    // pull all activties from following
+    PFQuery *activitiesFromFollowing = [PFQuery queryWithClassName:self.parseClassName];
+    [activitiesFromFollowing whereKey:@"type" equalTo:kPAPActivityTypePosted];
+    [activitiesFromFollowing whereKey:@"subscribers" matchesQuery:getFollowingSubQuery];
+    
+    /* Mentions */
     
     NSMutableArray *array = [[NSMutableArray alloc] init];
     [array addObject:[PFUser currentUser]];
@@ -243,7 +268,7 @@
     PFQuery *atmentionQuery = [PFQuery queryWithClassName:self.parseClassName];
     [atmentionQuery whereKey:@"atmention" containsAllObjectsInArray:array];
     
-    PFQuery *finalQuery = [PFQuery orQueryWithSubqueries:@[personalQuery, atmentionQuery, activitiesFromSubs, followersQuery]];
+    PFQuery *finalQuery = [PFQuery orQueryWithSubqueries:@[personalQuery, atmentionQuery, activitiesFromFollowing, activitiesFromSubs]];
     [finalQuery whereKey:kPAPActivityFromUserKey notEqualTo:[PFUser currentUser]];
     [finalQuery whereKeyExists:kPAPActivityFromUserKey];
     
@@ -456,6 +481,16 @@
         }
     } else if ([activityType isEqualToString:kPAPActivityTypeJoined]) {
         return NSLocalizedString(@"joined Teamstory", nil);
+    
+    }else if([activityType isEqualToString:kPAPActivityTypePosted]) {
+        
+        PFObject *post = [object objectForKey:@"photo"];
+        
+        // add post type to item in title
+        NSString *begTitle = @"posted a ";
+        NSString *fullTitle = [begTitle stringByAppendingString: [post objectForKey:@"type"]];
+    
+        return NSLocalizedString(fullTitle, nil);
     } else {
         return nil;
     }

@@ -120,13 +120,21 @@ static TTTTimeIntervalFormatter *timeFormatter;
     // Set the activity property
     _activity = activity;
     
-    if ([[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeFollow] || [[activity objectForKey:kPAPActivityTypeKey] isEqualToString:kPAPActivityTypeJoined]) {
+    NSString *activityType = [activity objectForKey:kPAPActivityTypeKey];
+    NSString *activityString;
+    
+    if ([activityType isEqualToString:kPAPActivityTypeFollow] || [activityType isEqualToString:kPAPActivityTypeJoined]) {
         [self setActivityImageFile:nil];
     } else {
         [self setActivityImageFile:(PFFile*)[[activity objectForKey:kPAPActivityPhotoKey] objectForKey:kPAPPhotoThumbnailKey]];
     }
     
-    NSString *activityString = isSubscription ? @"commented on a followed post" : [PAPActivityFeedViewController stringForActivityType:(NSString*)[activity objectForKey:kPAPActivityTypeKey] object:activity];
+    // check if subscription is of type post or comment (followers push or comments)
+    if(isSubscription && ![activityType isEqualToString:@"post"]){
+        activityString = @"commented on a followed post";
+    }else{
+        activityString = [PAPActivityFeedViewController stringForActivityType:(NSString*)activityType object:activity];
+    }
     
     if ([[activity objectForKey:@"atmention"] count] > 0) {
         for (int i = 0; i < [[activity objectForKey:@"atmention"] count]; i++) {
@@ -137,7 +145,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         }
     }
     
-    if ([[activity objectForKey:@"type"] isEqualToString:@"like comment"]) {
+    if ([activityType isEqualToString:@"like comment"]) {
         activityString = NSLocalizedString(@"liked your comment", nil);
     }
     

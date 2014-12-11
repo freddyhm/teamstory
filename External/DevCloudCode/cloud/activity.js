@@ -150,7 +150,10 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       return;
                       }
                       
-                      if (!toUser) {
+                      if(!toUser && request.object.get("type") === "post"){
+                        notifyFollowers(request);
+                        return;
+                      }else if(!toUser) {
                       throw "Undefined toUser. Skipping push for Activity " + request.object.get('type') + " : " + request.object.id;
                       return;
                       }
@@ -260,6 +263,84 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       }
                       
                       });
+                      
+                      
+  // find the author's followers and send them a push
+  var notifyFollowers = function(request){
+  
+  var notifyFollowersQuery = new Parse.Query("Activity");
+  var postAuthor = request.object.get("fromUser");
+  
+  var Post = Parse.Object.extend("Photo");
+  var postPointer = new Post();
+  postPointer.id = request.object.id;
+      
+  
+  notifyFollowersQuery.equalTo("type", "follow");
+  notifyFollowersQuery.equalTo("toUser", postAuthor);
+      
+      
+  notifyFollowersQuery.find({
+                            
+                            success: function(results) {
+                            
+                            
+                            
+                            // loop through all followers
+                            for (var i = 0; i < results.length; i++) {
+                            console.log(results[i]);
+                            var follower = results[i].get("fromUser");
+                            
+                            // notify follower
+                            var installationQuery = new Parse.Query(Parse.Installation);
+                            installationQuery.equalTo("user", follower);
+                            
+                            // save notice in follower table
+                            var FollowerObj = Parse.Object.extend("Follower");
+                            var followerObj = new FollowerObj();
+                            
+                            followerObj.set("follower", follower);
+                            followerObj.set("following", postAuthor);
+                            followerObj.set("post", postPointer);
+                            followerObj.save(null, {
+                                             success: function(newFollowerObj) {
+                                                
+                                             /* add follower as a subscriber in post activity.
+                                              This is so we can pull in activity feed from
+                                              client side. Similar to comment subscription. */
+                                             
+                                                request.object.add("subscribers", newFollowerObj);
+                                                request.object.save();
+                                             },
+                                             error: function(newFollowerObj, error) {
+                                             // Execute any logic that should take place if the save fails.
+                                             // error is a Parse.Error with an error code and message.
+                                             alert('Failed to create new object, with error code: ' + error.message);
+                                             }
+                            });
+                            
+                            /*
+                             Parse.Push.send({
+                             where: installationQuery,
+                             data: alertPayload(request)
+                             }).then(function() {
+                             console.log('Sent follower push');
+                             }, function(error) {
+                             throw "Push Error" + error.code + " : " + error.message;
+                             });
+                             
+                             */
+                            }
+                            
+                            
+                            },
+                            error: function(error) {
+                            console.error("Error: " + error.code + " " + error.message);
+                            }
+                            });
+  }
+                      
+
 
 var alertMessage = function(request) {
     var message = "";
@@ -295,6 +376,12 @@ var alertMessage = function(request) {
     } else if (request.object.get("type") === "follow") {
         if (request.user.get('displayName')) {
             message = request.user.get('displayName') + ' is now following you';
+        }
+    }else if (request.object.get("type") === "post") {
+        if (request.user.get('displayName')) {
+            message = request.user.get('displayName') + ' posted a ' + request.object.get("type");
+        } else {
+            message = 'Someone you are following posted a ' + request.object.get("type");
         }
     }else{
         message = "You have a new follower.";
@@ -354,9 +441,17 @@ var alertPayload = function(request) {
         fu: request.object.get('fromUser').id, // From User
         aid: request.object.id // Activity Id
         };
+    } else if (request.object.get("type") === "post") {
+        return {
+        alert: alertMessage(request), // Set our alert message.
+        badge: 'Increment', // Increment the target device's badge count.
+            // The following keys help load the correct data in response to this push notification.
+        p: 'a', // Payload Type: Photo
+        t: 'p', // Post Type
+        fu: request.object.get('fromUser').id, // From User
+        pid: request.object.id // Photo Id
+        };
     }
-    
-    
 }
 
 

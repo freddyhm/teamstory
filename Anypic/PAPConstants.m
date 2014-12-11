@@ -56,6 +56,7 @@ NSString *const kPAPActivityForCommentKey     = @"forComment";
 
 // Type values
 NSString *const kPAPActivityTypeLike       = @"like";
+NSString *const kPAPActivityTypePosted     = @"post";
 NSString *const kPAPActivityTypeLikeComment = @"like comment";
 NSString *const kPAPActivityTypeFollow     = @"follow";
 NSString *const kPAPActivityTypeComment    = @"comment";
