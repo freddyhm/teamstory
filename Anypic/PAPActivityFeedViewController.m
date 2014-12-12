@@ -488,7 +488,11 @@
         
         // add post type to item in title
         NSString *begTitle = @"posted a ";
-        NSString *fullTitle = [begTitle stringByAppendingString: [post objectForKey:@"type"]];
+        
+        // change wording "picture" to "moment" 
+        NSString *postType = [[post objectForKey:@"type"] isEqualToString:@"picture"] ? @"moment": [post objectForKey:@"type"];
+        
+        NSString *fullTitle = [begTitle stringByAppendingString:postType];
     
         return NSLocalizedString(fullTitle, nil);
     } else {

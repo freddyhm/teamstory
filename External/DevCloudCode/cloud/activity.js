@@ -140,6 +140,7 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       var toUser = request.object.get("toUser");
                       var toUserId = toUser != undefined ? request.object.get("toUser").id : "";
                       var photoId = request.object.get("photo") != undefined ? request.object.get("photo").id : "";
+                      
                       var isSelfie = toUserId == fromUserId;
                       var atmentionUserArray = new Array();
                       
@@ -150,12 +151,26 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       return;
                       }
                       
+                      // when something is posted, notify followers
                       if(!toUser && request.object.get("type") === "post"){
-                        notifyFollowers(request);
-                        return;
+                      
+                           // get picture object so we can find type of picture
+                           var post = request.object.get("photo");
+                           post.fetch({
+                                     success: function(post) {
+                                      
+                                      // change wording "picture" to "moment"
+                                      var postType = post.get("type") == "picture" ? "moment" : post.get("type");
+                                      
+                                      // send request and type of pic to notification method
+                                      notifyFollowers(request, postType);
+                                     }
+                            });
+
+                            return;
                       }else if(!toUser) {
-                      throw "Undefined toUser. Skipping push for Activity " + request.object.get('type') + " : " + request.object.id;
-                      return;
+                          throw "Undefined toUser. Skipping push for Activity " + request.object.get('type') + " : " + request.object.id;
+                          return;
                       }
                       
                       if (atmentionUserArray.length > 0) {
@@ -266,81 +281,82 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       
                       
   // find the author's followers and send them a push
-  var notifyFollowers = function(request){
-  
-  var notifyFollowersQuery = new Parse.Query("Activity");
-  var postAuthor = request.object.get("fromUser");
-  
-  var Post = Parse.Object.extend("Photo");
-  var postPointer = new Post();
-  postPointer.id = request.object.id;
+  var notifyFollowers = function(request, postType){
       
-  
-  notifyFollowersQuery.equalTo("type", "follow");
-  notifyFollowersQuery.equalTo("toUser", postAuthor);
+      // get author and prepare activity query
+      var postAuthor = request.object.get("fromUser");
+      var notifyFollowersQuery = new Parse.Query("Activity");
       
+      // create pointer to post activity to save in query
+      var Activity  = Parse.Object.extend("Activity");
+      var postActivity = new Activity();
+      postActivity.id = request.object.id;
+    
+      // get all follow activities related to the author
+      notifyFollowersQuery.equalTo("type", "follow");
+      notifyFollowersQuery.equalTo("toUser", postAuthor);
       
-  notifyFollowersQuery.find({
-                            
-                            success: function(results) {
-                            
-                            
-                            
-                            // loop through all followers
-                            for (var i = 0; i < results.length; i++) {
-                            console.log(results[i]);
-                            var follower = results[i].get("fromUser");
-                            
-                            // notify follower
-                            var installationQuery = new Parse.Query(Parse.Installation);
-                            installationQuery.equalTo("user", follower);
-                            
-                            // save notice in follower table
-                            var FollowerObj = Parse.Object.extend("Follower");
-                            var followerObj = new FollowerObj();
-                            
-                            followerObj.set("follower", follower);
-                            followerObj.set("following", postAuthor);
-                            followerObj.set("post", postPointer);
-                            followerObj.save(null, {
-                                             success: function(newFollowerObj) {
-                                                
-                                             /* add follower as a subscriber in post activity.
-                                              This is so we can pull in activity feed from
-                                              client side. Similar to comment subscription. */
-                                             
-                                                request.object.add("subscribers", newFollowerObj);
-                                                request.object.save();
-                                             },
-                                             error: function(newFollowerObj, error) {
-                                             // Execute any logic that should take place if the save fails.
-                                             // error is a Parse.Error with an error code and message.
-                                             alert('Failed to create new object, with error code: ' + error.message);
-                                             }
-                            });
-                            
-                            
-                             Parse.Push.send({
-                             where: installationQuery,
-                             data: alertPayload(request)
-                             }).then(function() {
-                             console.log('Sent follower push');
-                             }, function(error) {
-                             throw "Push Error" + error.code + " : " + error.message;
-                             });
-                            }
-                            
-                            
-                            },
-                            error: function(error) {
-                            console.error("Error: " + error.code + " " + error.message);
-                            }
-                            });
+      notifyFollowersQuery.find({
+                                
+            success: function(results) {
+                                
+                // loop through all followers
+                for (var i = 0; i < results.length; i++) {
+                console.log(results[i]);
+                var follower = results[i].get("fromUser");
+                
+                // notify follower
+                var installationQuery = new Parse.Query(Parse.Installation);
+                installationQuery.equalTo("user", follower);
+                
+                // save notice in follower table
+                var FollowerObj = Parse.Object.extend("Follower");
+                var followerObj = new FollowerObj();
+                
+                // set and save the new follower object
+                followerObj.set("follower", follower);
+                followerObj.set("following", postAuthor);
+                followerObj.set("postActivity", postActivity);
+                followerObj.save(null, {
+                                 success: function(newFollowerObj) {
+                                    
+                                 /* add follower as a subscriber in post activity.
+                                  This is so we can pull in activity feed from
+                                  client side. Similar to comment subscription. */
+                                 
+                                    request.object.add("subscribers", newFollowerObj);
+                                    request.object.save();
+                                 },
+                                 error: function(newFollowerObj, error) {
+                                 // Execute any logic that should take place if the save fails.
+                                 // error is a Parse.Error with an error code and message.
+                                 alert('Failed to create new object, with error code: ' + error.message);
+                                 }
+                });
+                
+                
+                 // send push notification with proper message
+                 Parse.Push.send({
+                 where: installationQuery,
+                 data: alertPayload(request, postType)
+                 }).then(function() {
+                 console.log('Sent follower push');
+                 }, function(error) {
+                 throw "Push Error" + error.code + " : " + error.message;
+                 });
+                }
+                
+                
+                },
+                error: function(error) {
+                console.error("Error: " + error.code + " " + error.message);
+            }
+    });
   }
                       
 
 
-var alertMessage = function(request) {
+var alertMessage = function(request, postType) {
     var message = "";
     
     var atmentionUserArray = new Array();
@@ -377,9 +393,9 @@ var alertMessage = function(request) {
         }
     }else if (request.object.get("type") === "post") {
         if (request.user.get('displayName')) {
-            message = request.user.get('displayName') + ' posted a ' + request.object.get("type");
+            message = request.user.get('displayName') + ' posted a ' + postType;
         } else {
-            message = 'Someone you are following posted a ' + request.object.get("type");
+            message = 'Someone you are following posted a ' + postType;
         }
     }else{
         message = "You have a new follower.";
@@ -393,7 +409,7 @@ var alertMessage = function(request) {
     return message;
 }
 
-var alertPayload = function(request) {
+var alertPayload = function(request, postType) {
     var payload = {};
     
     if (request.object.get("type") === "comment") {
@@ -441,7 +457,7 @@ var alertPayload = function(request) {
         };
     } else if (request.object.get("type") === "post") {
         return {
-        alert: alertMessage(request), // Set our alert message.
+        alert: alertMessage(request, postType), // Set our alert message.
         badge: 'Increment', // Increment the target device's badge count.
             // The following keys help load the correct data in response to this push notification.
         p: 'a', // Payload Type: Activity
