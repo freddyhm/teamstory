@@ -143,6 +143,9 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       var photoId = request.object.get("photo") != undefined ? request.object.get("photo").id : "";
                       var isSelfie = toUserId == fromUserId;
                       var atmentionUserArray = new Array();
+
+                      toUser.increment('activityBadge', 1);
+                      toUser.save();
                       
                       atmentionUserArray = request.object.get("atmention") != undefined ? request.object.get("atmention") : "";
                       
@@ -241,12 +244,6 @@ Parse.Cloud.afterSave('Activity', function(request) {
 
                         
                       }
-
-                      toUser.increment('activityBadge', 1);
-                      toUser.save();
-                      
-                      toUser.increment('activityBadge', 1);
-                      toUser.save();
                       
                       // Only send push notifications for new activities
                       

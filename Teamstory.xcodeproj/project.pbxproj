@@ -3022,7 +3022,7 @@
 				BUNDLE_DISPLAY_NAME_SUFFIX = "";
 				BUNDLE_ID_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Tobok Lee (J6C82HHGJA)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Distribution: Growple, inc. (NJ5SX3QK2K)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
@@ -3051,7 +3051,7 @@
 					"$(PROJECT_DIR)/External",
 				);
 				PRODUCT_NAME = Teamstory;
-				PROVISIONING_PROFILE = "c3fd3e4a-c30b-49e0-82d1-9b363a18117f";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "c3fd3e4a-c30b-49e0-82d1-9b363a18117f";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;

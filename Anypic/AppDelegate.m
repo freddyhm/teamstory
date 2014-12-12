@@ -31,6 +31,7 @@
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import "ParseFacebookUtils/PFFacebookUtils.h"
 #import "Intercom.h"
+#import "SVProgressHUD.h"
 
 
 @interface AppDelegate () {
@@ -300,6 +301,7 @@ static NSString *const INTERCOM_API_KEY = @"ios_sdk-7bcd17d996532a8658cd72694ad1
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageButton" object:nil];
                 
                 if ([self.userView isEqual:@"messagingScreen"] && [[self.targetChatRoomUser objectId] isEqualToString:targetUserObjectId]) {
+                    [SVProgressHUD dismiss];
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"updateTableView" object:currentObjectId];
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageListView" object:nil];
                 } else if ([self.userView isEqualToString:@"messagingListViewScreen"]){
@@ -603,53 +605,27 @@ static NSString *const INTERCOM_API_KEY = @"ios_sdk-7bcd17d996532a8658cd72694ad1
     [NSURLConnection connectionWithRequest:profilePictureURLRequest delegate:self];
     
     // syncs icon badge with tab bar badge if value is not 0 and controllers present (only on launch)
-    NSNumber *messagingBadgeNumber = [[PFUser currentUser] objectForKey:@"messagingBadge"];
-    UIApplication *application = [UIApplication sharedApplication];
     // syncs icon badge with tab bar badge, resets icon badge back to 0
-    if (application.applicationIconBadgeNumber != 0 && messagingBadgeNumber == 0) {
         
-        // check if tab controllers and activity tab exist
-        if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
-            
-            UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
-            
-            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-            NSNumber *newBadgeValue = [NSNumber numberWithInteger:application.applicationIconBadgeNumber];
+    // check if tab controllers and activity tab exist
+    if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
+        
+        UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
+        
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        NSNumber *newBadgeValue = [[PFUser currentUser] objectForKey:@"activityBadge"];
+        if ([newBadgeValue integerValue] > 0) {
             tabBarItem.badgeValue = [numberFormatter stringFromNumber:newBadgeValue];
-            
-            // get current selected tab
-            NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
-            
-            // current view is activity, clear the badge
-            if(selectedtabIndex == PAPActivityTabBarItemIndex){
-                [self.activityViewController setActivityBadge:nil];
-                [self.activityViewController loadObjects];
-            }
         }
-    } else if (application.applicationIconBadgeNumber != 0 && messagingBadgeNumber != 0) {
-        if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {
-            
-            UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPActivityTabBarItemIndex] tabBarItem];
-            
-            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-            NSNumber *newBadgeValue = [NSNumber numberWithInteger:application.applicationIconBadgeNumber];
-            NSNumber *activityBadgeNumber = [NSNumber numberWithInt:[newBadgeValue intValue] - [messagingBadgeNumber intValue]];
-            
-            if ([activityBadgeNumber intValue] > 0) {
-                tabBarItem.badgeValue = [numberFormatter stringFromNumber:activityBadgeNumber];
-            } else {
-                tabBarItem.badgeValue = nil;
-            }
-            
-            // get current selected tab
-            NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageButton" object:nil];
-            
-            if(selectedtabIndex != PAPActivityTabBarItemIndex){
-                [self.activityViewController setActivityBadge:nil];
-                [self.activityViewController loadObjects];
-            }
+        
+        // get current selected tab
+        NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageButton" object:nil];
+        
+        // current view is activity, clear the badge
+        if(selectedtabIndex == PAPActivityTabBarItemIndex){
+            [self.activityViewController setActivityBadge:nil];
+            [self.activityViewController loadObjects];
         }
     }
 }
@@ -875,10 +851,10 @@ static NSString *const INTERCOM_API_KEY = @"ios_sdk-7bcd17d996532a8658cd72694ad1
         messagingViewController.hidesBottomBarWhenPushed = YES;
         
         [CATransaction begin];
-        
         [homeNavigationController pushViewController:messageListViewController animated:NO];
+        [SVProgressHUD dismiss];
         [CATransaction setCompletionBlock:^{
-            
+            [SVProgressHUD dismiss];
             [homeNavigationController pushViewController:messagingViewController animated:NO];
         }];
         [CATransaction commit];
