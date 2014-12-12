@@ -2,18 +2,7 @@ Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
                 
                 // Set up to modify user data
                 Parse.Cloud.useMasterKey();
-                
-                // Query for all users, used only to break down large +1000 plus query into queries for each user with follows
-                var queryUser = new Parse.Query(Parse.User);
-                queryUser.limit("1000");
-                
-                var allFollowingEntries = [];
-                var followingQuery = new Parse.Query('Activity');
-                var count = 0;
-                
-                // Set up to modify user data
-                Parse.Cloud.useMasterKey();
-                
+                                
                 // Query for all users, used only to break down large +1000 plus query into queries for each user with follows
                 var queryUser = new Parse.Query(Parse.User);
                 queryUser.limit("1000");
