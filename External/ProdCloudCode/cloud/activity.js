@@ -133,9 +133,6 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       var isSelfie = toUserId == fromUserId;
                       var atmentionUserArray = new Array();
                       
-                      toUser.increment('activityBadge', 1);
-                      toUser.save();
-                      
                       atmentionUserArray = request.object.get("atmention") != undefined ? request.object.get("atmention") : "";
                       
                       // Only send push notifications for new activities
