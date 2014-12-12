@@ -265,7 +265,7 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       return;
                       }
                       
-                      if(request.object.get('photo').id != undefined && request.object.get('type') != undefined){
+                      if(request.object.get('photo') != undefined && request.object.get('type') != undefined){
                       Parse.Cloud.run("incrementCounter", {currentObjectId: request.object.get('photo').id, type: request.object.get('type')});
                       }
                       
