@@ -1,97 +1,96 @@
-
- Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
-   
- // Set up to modify user data
- Parse.Cloud.useMasterKey();
-   
- // Query for all users, used only to break down large +1000 plus query into queries for each user with follows
- var queryUser = new Parse.Query(Parse.User);
- queryUser.limit("1000");
-   
- var allFollowingEntries = [];
- var followingQuery = new Parse.Query('Activity');
- var count = 0;
- 
- // Set up to modify user data
- Parse.Cloud.useMasterKey();
- 
- // Query for all users, used only to break down large +1000 plus query into queries for each user with follows
- var queryUser = new Parse.Query(Parse.User);
- queryUser.limit("1000");
- 
- var allFollowingEntries = [];
- var followingQuery = new Parse.Query('Activity');
- var count = 0;
- 
- // get all follow activities and include user field
- followingQuery.equalTo("type", "follow");
- followingQuery.include("toUser");
- followingQuery.include("fromUser");
-   
- queryUser.find({
-   
- success: function(results){
-   
- for(var i = 0; i < results.length; i++){
-   
- // followings for user
- followingQuery.equalTo("fromUser", results[i]);
-   
- followingQuery.each(function(following){
-   
- // get following user display name and follower
- var toUser = following.get("toUser");
- var fromUser = following.get("fromUser");
-   
-   
-   
- // make sure the user exists
- if(typeof toUser !== "undefined"){
-   
- // create unique combo to check for duplicates through whole db
- var comboUnique = toUser.id + fromUser.id;
-   
- var displayName = fromUser.get("displayName");
-   
- //console.log(allFollowingEntries);
-
- // if not already in array, push else destroy duplicate
- if(allFollowingEntries.indexOf(comboUnique) == -1){
- allFollowingEntries.push(comboUnique);
- }else{
-
- //console.log("GOING TO DELETE COMBO: " + comboUnique);
- //console.log("FOR USER: " + displayName);
- 
- following.destroy({
- success: function(result) {
- //console.log("DELETED FOLLOWING ID: " + following.id);
- //console.log("FOR USER: " + displayName);
-
- }, error: function(result, error){
- console.log(error);
- }
- });
- }
- }else{
-
- console.log(count);
- count++;
- following.destroy({
- success: function(result) {
- //console.log("GOING TO DELETE COMBO: " + comboUnique);
- //console.log("FOR USER: " + displayName);
- }, error: function(result, error){
- console.log(error);
- }
- });
-
- }
- });
- }
- }
- });
- });
+Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
+                
+                // Set up to modify user data
+                Parse.Cloud.useMasterKey();
+                
+                // Query for all users, used only to break down large +1000 plus query into queries for each user with follows
+                var queryUser = new Parse.Query(Parse.User);
+                queryUser.limit("1000");
+                
+                var allFollowingEntries = [];
+                var followingQuery = new Parse.Query('Activity');
+                var count = 0;
+                
+                // Set up to modify user data
+                Parse.Cloud.useMasterKey();
+                
+                // Query for all users, used only to break down large +1000 plus query into queries for each user with follows
+                var queryUser = new Parse.Query(Parse.User);
+                queryUser.limit("1000");
+                
+                var allFollowingEntries = [];
+                var followingQuery = new Parse.Query('Activity');
+                var count = 0;
+                
+                // get all follow activities and include user field
+                followingQuery.equalTo("type", "follow");
+                followingQuery.include("toUser");
+                followingQuery.include("fromUser");
+                
+                queryUser.find({
+                               
+                               success: function(results){
+                               
+                               for(var i = 0; i < results.length; i++){
+                               
+                               // followings for user
+                               followingQuery.equalTo("fromUser", results[i]);
+                               
+                               followingQuery.each(function(following){
+                                                   
+                                                   // get following user display name and follower
+                                                   var toUser = following.get("toUser");
+                                                   var fromUser = following.get("fromUser");
+                                                   
+                                                   
+                                                   
+                                                   // make sure the user exists
+                                                   if(typeof toUser !== "undefined"){
+                                                   
+                                                   // create unique combo to check for duplicates through whole db
+                                                   var comboUnique = toUser.id + fromUser.id;
+                                                   
+                                                   var displayName = fromUser.get("displayName");
+                                                   
+                                                   //console.log(allFollowingEntries);
+                                                   
+                                                   // if not already in array, push else destroy duplicate
+                                                   if(allFollowingEntries.indexOf(comboUnique) == -1){
+                                                   allFollowingEntries.push(comboUnique);
+                                                   }else{
+                                                   
+                                                   //console.log("GOING TO DELETE COMBO: " + comboUnique);
+                                                   //console.log("FOR USER: " + displayName);
+                                                   
+                                                   following.destroy({
+                                                                     success: function(result) {
+                                                                     //console.log("DELETED FOLLOWING ID: " + following.id);
+                                                                     //console.log("FOR USER: " + displayName);
+                                                                     
+                                                                     }, error: function(result, error){
+                                                                     console.log(error);
+                                                                     }
+                                                                     });
+                                                   }
+                                                   }else{
+                                                   
+                                                   console.log(count);
+                                                   count++;
+                                                   following.destroy({
+                                                                     success: function(result) {
+                                                                     //console.log("GOING TO DELETE COMBO: " + comboUnique);
+                                                                     //console.log("FOR USER: " + displayName);
+                                                                     }, error: function(result, error){
+                                                                     console.log(error);
+                                                                     }
+                                                                     });
+                                                   
+                                                   }
+                                                   });
+                               }
+                               }
+                               });
+                });
 
 
 Parse.Cloud.beforeSave('Activity', function(request, response) {
@@ -109,11 +108,9 @@ Parse.Cloud.beforeSave('Activity', function(request, response) {
                        });
 
 Parse.Cloud.afterSave('Activity', function(request) {
-                      Parse.Cloud.useMasterKey();
                       var fromUser = request.object.get("fromUser");
                       var fromUserId = fromUser != undefined ? request.object.get("fromUser").id : "";
                       var fromUserEmail = fromUser != undefined ? request.user.get("email") : "";
-                      
                       
                       if (request.object.get("type") === "membership") {
                       var Mailgun = require('mailgun');
@@ -136,14 +133,15 @@ Parse.Cloud.afterSave('Activity', function(request) {
                                         });
                       return;
                       }
-
+                      
                       
                       var toUser = request.object.get("toUser");
                       var toUserId = toUser != undefined ? request.object.get("toUser").id : "";
                       var photoId = request.object.get("photo") != undefined ? request.object.get("photo").id : "";
+                      
                       var isSelfie = toUserId == fromUserId;
                       var atmentionUserArray = new Array();
-
+                      
                       toUser.increment('activityBadge', 1);
                       toUser.save();
                       
@@ -153,18 +151,35 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       if (request.object.existed()) {
                       return;
                       }
-
-                      if (!toUser) {
+                      
+                      // when something is posted, notify followers
+                      if(!toUser && request.object.get("type") === "post"){
+                      
+                      // get picture object so we can find type of picture
+                      var post = request.object.get("photo");
+                      post.fetch({
+                                 success: function(post) {
+                                 
+                                 // change wording "picture" to "moment"
+                                 var postType = post.get("type") == "picture" ? "moment" : post.get("type");
+                                 
+                                 // send request and type of pic to notification method
+                                 notifyFollowers(request, postType);
+                                 }
+                                 });
+                      
+                      return;
+                      }else if(!toUser) {
                       throw "Undefined toUser. Skipping push for Activity " + request.object.get('type') + " : " + request.object.id;
                       return;
                       }
-
+                      
                       if (atmentionUserArray.length > 0) {
                       for (i = 0; i < atmentionUserArray.length; i++) {
                       var atmetionUserQuery = new Parse.Query(Parse.Installation);
                       console.log("atmention array loop");
                       atmetionUserQuery.equalTo("user", atmentionUserArray[i]);
-
+                      
                       Parse.Push.send({
                                       where: atmetionUserQuery,
                                       data: alertPayload(request)
@@ -175,7 +190,7 @@ Parse.Cloud.afterSave('Activity', function(request) {
                                               });
                       }
                       }
-  
+                      
                       // notify all users except fromUser who are subscribed to post when new comment is sent
                       if(request.object.get("type") === "comment" && atmentionUserArray.length == 0){
                       
@@ -183,7 +198,7 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       var Photo = Parse.Object.extend("Photo");
                       var photoPointer = new Photo();
                       photoPointer.id = photoId;
-          
+                      
                       // find all the subscriptions with this post
                       subscriptionQuery.equalTo("post", photoPointer);
                       
@@ -241,36 +256,114 @@ Parse.Cloud.afterSave('Activity', function(request) {
                                               }, function(error) {
                                               throw "Push Error " + error.code + " : " + error.message;
                                               });
-
-                        
+                      
+                      
                       }
+                      
+                      toUser.increment('activityBadge', 1);
+                      toUser.save();
                       
                       // Only send push notifications for new activities
                       
                       if (request.object.existed()) {
-                        return;
+                      return;
                       }
                       
                       if (!toUser) {
-                        throw "Undefined toUser. Skipping push for Activity " + request.object.get('type') + " : " + request.object.id;
-                        return;
+                      throw "Undefined toUser. Skipping push for Activity " + request.object.get('type') + " : " + request.object.id;
+                      return;
                       }
-                        
+                      
                       if(request.object.get('photo').id != undefined && request.object.get('type') != undefined){
-                        Parse.Cloud.run("incrementCounter", {currentObjectId: request.object.get('photo').id, type: request.object.get('type')});
+                      Parse.Cloud.run("incrementCounter", {currentObjectId: request.object.get('photo').id, type: request.object.get('type')});
                       }
-
+                      
                       });
-  
-  
-  
-var alertMessage = function(request) {
+
+
+// find the author's followers and send them a push
+var notifyFollowers = function(request, postType){
+    
+    // get author and prepare activity query
+    var postAuthor = request.object.get("fromUser");
+    var notifyFollowersQuery = new Parse.Query("Activity");
+    
+    // create pointer to post activity to save in query
+    var Activity  = Parse.Object.extend("Activity");
+    var postActivity = new Activity();
+    postActivity.id = request.object.id;
+    
+    // get all follow activities related to the author
+    notifyFollowersQuery.equalTo("type", "follow");
+    notifyFollowersQuery.equalTo("toUser", postAuthor);
+    
+    notifyFollowersQuery.find({
+                              
+                              success: function(results) {
+                              
+                              // loop through all followers
+                              for (var i = 0; i < results.length; i++) {
+                              console.log(results[i]);
+                              var follower = results[i].get("fromUser");
+                              
+                              // notify follower
+                              var installationQuery = new Parse.Query(Parse.Installation);
+                              installationQuery.equalTo("user", follower);
+                              
+                              // save notice in follower table
+                              var FollowerObj = Parse.Object.extend("Follower");
+                              var followerObj = new FollowerObj();
+                              
+                              // set and save the new follower object
+                              followerObj.set("follower", follower);
+                              followerObj.set("following", postAuthor);
+                              followerObj.set("postActivity", postActivity);
+                              followerObj.save(null, {
+                                               success: function(newFollowerObj) {
+                                               
+                                               /* add follower as a subscriber in post activity.
+                                                This is so we can pull in activity feed from
+                                                client side. Similar to comment subscription. */
+                                               
+                                               request.object.add("subscribers", newFollowerObj);
+                                               request.object.save();
+                                               },
+                                               error: function(newFollowerObj, error) {
+                                               // Execute any logic that should take place if the save fails.
+                                               // error is a Parse.Error with an error code and message.
+                                               alert('Failed to create new object, with error code: ' + error.message);
+                                               }
+                                               });
+                              
+                              
+                              // send push notification with proper message
+                              Parse.Push.send({
+                                              where: installationQuery,
+                                              data: alertPayload(request, postType)
+                                              }).then(function() {
+                                                      console.log('Sent follower push');
+                                                      }, function(error) {
+                                                      throw "Push Error" + error.code + " : " + error.message;
+                                                      });
+                              }
+                              
+                              
+                              },
+                              error: function(error) {
+                              console.error("Error: " + error.code + " " + error.message);
+                              }
+                              });
+}
+
+
+
+var alertMessage = function(request, postType) {
     var message = "";
-      
+    
     var atmentionUserArray = new Array();
-      
+    
     atmentionUserArray = request.object.get("atmention") != undefined ? request.object.get("atmention") : "";
-      
+    
     if (request.object.get("type") === "comment" && atmentionUserArray.length == 0) {
         if (request.user.get('displayName')) {
             message = request.user.get('displayName') + ': ' + request.object.get('content').trim();
@@ -299,10 +392,16 @@ var alertMessage = function(request) {
         if (request.user.get('displayName')) {
             message = request.user.get('displayName') + ' is now following you';
         }
-    } else {
+    }else if (request.object.get("type") === "post") {
+        if (request.user.get('displayName')) {
+            message = request.user.get('displayName') + ' posted a ' + postType;
+        } else {
+            message = 'Someone you are following posted a ' + postType;
+        }
+    }else{
         message = "You have a new follower.";
     }
-
+    
     // Trim our message to 140 characters.
     if (message.length > 140) {
         message = message.substring(0, 140);
@@ -311,7 +410,7 @@ var alertMessage = function(request) {
     return message;
 }
 
-var alertPayload = function(request) {
+var alertPayload = function(request, postType) {
     var payload = {};
     
     if (request.object.get("type") === "comment") {
@@ -357,9 +456,18 @@ var alertPayload = function(request) {
         fu: request.object.get('fromUser').id, // From User
         aid: request.object.id // Activity Id
         };
+    } else if (request.object.get("type") === "post") {
+        return {
+        alert: alertMessage(request, postType), // Set our alert message.
+        badge: 'Increment', // Increment the target device's badge count.
+            // The following keys help load the correct data in response to this push notification.
+        p: 'a', // Payload Type: Activity
+        t: 'po', // Post Type: post
+        fu: request.object.get('fromUser').id, // From User
+        pid: request.object.get('photo').id, // Photo Id
+        aid: request.object.id // Activity Id
+        };
     }
-    
-    
 }
 
 
@@ -375,7 +483,7 @@ Parse.Cloud.define ('incrementCounter', function(request, response) {
                               } else {
                               points = 1;
                               }
-
+                              
                               if (counter.get('discoverCount') === undefined) {
                               counter.set('discoverCount', points);
                               } else {

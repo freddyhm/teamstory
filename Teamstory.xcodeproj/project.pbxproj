@@ -296,6 +296,8 @@
 		D530C3F218FB22FC00739027 /* iRate.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D530C3EF18FB22FC00739027 /* iRate.bundle */; };
 		D530C3F318FB22FC00739027 /* iRate.m in Sources */ = {isa = PBXBuildFile; fileRef = D530C3F118FB22FC00739027 /* iRate.m */; };
 		D531F7CC18B5DE11008AE73F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D531F7CB18B5DE11008AE73F /* CoreVideo.framework */; };
+		D540AD2C1A3A8E7E00FB6DFD /* message.js in Resources */ = {isa = PBXBuildFile; fileRef = D540AD2B1A3A8E7E00FB6DFD /* message.js */; };
+		D540AD321A3A8E9200FB6DFD /* message.js in Resources */ = {isa = PBXBuildFile; fileRef = D540AD311A3A8E9200FB6DFD /* message.js */; };
 		D542D8BE196A6F4700A0384F /* ELCAlbumPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = D542D8AD196A6F4700A0384F /* ELCAlbumPickerController.m */; };
 		D542D8BF196A6F4700A0384F /* ELCAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = D542D8AF196A6F4700A0384F /* ELCAsset.m */; };
 		D542D8C0196A6F4700A0384F /* ELCAssetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D542D8B1196A6F4700A0384F /* ELCAssetCell.m */; };
@@ -859,6 +861,8 @@
 		D530C3F018FB22FC00739027 /* iRate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iRate.h; sourceTree = "<group>"; };
 		D530C3F118FB22FC00739027 /* iRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iRate.m; sourceTree = "<group>"; };
 		D531F7CB18B5DE11008AE73F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		D540AD2B1A3A8E7E00FB6DFD /* message.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = message.js; sourceTree = "<group>"; };
+		D540AD311A3A8E9200FB6DFD /* message.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = message.js; sourceTree = "<group>"; };
 		D542D8AC196A6F4700A0384F /* ELCAlbumPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELCAlbumPickerController.h; sourceTree = "<group>"; };
 		D542D8AD196A6F4700A0384F /* ELCAlbumPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELCAlbumPickerController.m; sourceTree = "<group>"; };
 		D542D8AE196A6F4700A0384F /* ELCAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELCAsset.h; sourceTree = "<group>"; };
@@ -2064,6 +2068,7 @@
 		D5D659F019155A1E00FAC142 /* cloud */ = {
 			isa = PBXGroup;
 			children = (
+				D540AD2B1A3A8E7E00FB6DFD /* message.js */,
 				D5D659F119155A1E00FAC142 /* activity.js */,
 				D5D659F219155A1E00FAC142 /* app.js */,
 				D5D659F319155A1E00FAC142 /* installation.js */,
@@ -2102,6 +2107,7 @@
 		D5D65A0219155E6F00FAC142 /* cloud */ = {
 			isa = PBXGroup;
 			children = (
+				D540AD311A3A8E9200FB6DFD /* message.js */,
 				D5D65A0319155E6F00FAC142 /* activity.js */,
 				D5D65A0419155E6F00FAC142 /* app.js */,
 				D5D65A0519155E6F00FAC142 /* installation.js */,
@@ -2357,6 +2363,7 @@
 				D5BFDEE118CC84A5004FEC42 /* vancity.png in Resources */,
 				D5D571151947F8E900354340 /* btn_following_user.png in Resources */,
 				D59B998E18C5A902002D6EFE /* Default-568h@2x.png in Resources */,
+				D540AD2C1A3A8E7E00FB6DFD /* message.js in Resources */,
 				469CF3731996FB4D0081FCED /* btn_email_select@2x.png in Resources */,
 				D5D1042B18B5CF4E0084C901 /* button-feedback.png in Resources */,
 				D5182C93193E1FDE00DD578C /* Default@2x.png in Resources */,
@@ -2495,6 +2502,7 @@
 				462FCB7D188C806C005059F3 /* button_setting.png in Resources */,
 				D5F45B03196CE6DE001C2875 /* select_overlay.png in Resources */,
 				D5BFDEDE18CC84A5004FEC42 /* paris@2x.png in Resources */,
+				D540AD321A3A8E9200FB6DFD /* message.js in Resources */,
 				D55AEF3619BA7B9C00ECF342 /* btn_following_discover.png in Resources */,
 				46B31EEB184E35150028D11C /* profileWebsite@2x.png in Resources */,
 				D560FADC19B916F100D14D16 /* LogoNavigationBar.png in Resources */,
