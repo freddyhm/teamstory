@@ -228,7 +228,6 @@
 }
 
 -(void) loadMessageQuery {
-    
     [SVProgressHUD show];
     
     PFQuery *messageQuery = [PFQuery queryWithClassName:@"Message"];
@@ -236,10 +235,9 @@
     [messageQuery orderByDescending:@"createdAt"];
     [messageQuery setLimit:200];
     [messageQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        [SVProgressHUD dismiss];
+        
         if (!error && [objects count] > 0) {
-            
-            [SVProgressHUD dismiss];
-            
             self.messageList.hidden = NO;
             self.placeHolder.hidden = YES;
             [self.messageQuery removeAllObjects];
