@@ -273,6 +273,9 @@ Parse.Cloud.afterSave('Activity', function(request) {
 // find the author's followers and send them a push
 var notifyFollowers = function(request, postType){
     
+    
+    alert("in notify");
+    
     // get author and prepare activity query
     var postAuthor = request.object.get("fromUser");
     var notifyFollowersQuery = new Parse.Query("Activity");
@@ -303,12 +306,16 @@ var notifyFollowers = function(request, postType){
                               var FollowerObj = Parse.Object.extend("Follower");
                               var followerObj = new FollowerObj();
                               
+                              alert("creating follower");
+                              
                               // set and save the new follower object
                               followerObj.set("follower", follower);
                               followerObj.set("following", postAuthor);
                               followerObj.set("postActivity", postActivity);
                               followerObj.save(null, {
                                                success: function(newFollowerObj) {
+                                               
+                                               alert("created follower");
                                                
                                                /* add follower as a subscriber in post activity.
                                                 This is so we can pull in activity feed from
@@ -325,6 +332,7 @@ var notifyFollowers = function(request, postType){
                                                });
                               
                               
+                              /*
                               // send push notification with proper message
                               Parse.Push.send({
                                               where: installationQuery,
@@ -333,7 +341,7 @@ var notifyFollowers = function(request, postType){
                                                       console.log('Sent follower push');
                                                       }, function(error) {
                                                       throw "Push Error" + error.code + " : " + error.message;
-                                                      });
+                                                      });*/
                               }
                               
                               
