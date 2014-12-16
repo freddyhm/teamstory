@@ -11,6 +11,7 @@
 #import "KonotorUI.h"
 #import "PAPAccountViewController.h"
 #import "AppDelegate.h"
+#import "Mixpanel.h"
 
 
 #define APP ((AppDelegate *)[[UIApplication sharedApplication] delegate])
@@ -39,6 +40,10 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Message List"}];
+    
     [self.navigationController setToolbarHidden:YES animated:NO];
     
     totalBadgeNumber = 0;
@@ -60,6 +65,7 @@
     }
     
     [self updateListViewQuery];
+    
 }
 
 - (void) updateListViewQuery {

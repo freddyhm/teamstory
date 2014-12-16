@@ -1,0 +1,2 @@
+PODS_FLIGHTRECORDER_FRAMEWORK_SEARCH_PATHS = "$(PODS_ROOT)/FlightRecorder/FlightRecorder.embeddedframework"
+PODS_FLIGHTRECORDER_OTHER_LDFLAGS = -l"sqlite3" -l"z" -framework "AVFoundation" -framework "CoreData" -framework "CoreGraphics" -framework "CoreLocation" -framework "CoreMedia" -framework "CoreTelephony" -framework "CoreVideo" -framework "FlightRecorder" -framework "MobileCoreServices" -framework "SystemConfiguration"

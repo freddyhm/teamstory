@@ -8,6 +8,7 @@
 
 #import "PAPMessagingSeachUsersViewController.h"
 #import "SVProgressHUD.h"
+#import "Mixpanel.h"
 
 #define headerViewHeight 64.0f
 #define querySelectionViewheight 37.5f
@@ -44,6 +45,10 @@
 
 -(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Message Search Users"}];
+    
     [SVProgressHUD showWithStatus:nil maskType:SVProgressHUDMaskTypeCustom];
     
     PFQuery *followerQuery = [PFQuery queryWithClassName:@"Activity"];
@@ -223,6 +228,10 @@
 }
 
 -(void) allUserButtonAction:(id)sender {
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type" : @"Core", @"Action": @"Tapped Everyone Button"}];
+    
     self.querySelectionString = @"Everyone";
     [self.followerTV reloadData];
     
@@ -291,6 +300,10 @@
 
 # pragma PAPFindFriendsCellDelegate 
 - (void)cell:(PAPFindFriendsCell *)cellView didTapUserButton:(PFUser *)aUser {
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type" : @"Core", @"Action": @"Selected User In Message"}];
+    
     [SVProgressHUD show];
     
     PFQuery *userOneQuery = [PFQuery queryWithClassName:@"ChatRoom"];
@@ -363,6 +376,10 @@
 }
 
 -(void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type" : @"Core", @"Action": @"Searched For User"}];
+    
     self.followerTV.frame = CGRectMake(0.0f, headerViewHeight + querySelectionViewheight + self.searchBar.bounds.size.height, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.height - headerViewHeight - querySelectionViewheight - self.searchBar.bounds.size.height);
 }
 
