@@ -24,6 +24,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
+## FlightRecorder
+
+All text and design is copyright © 2013-2014 FlightRecorder, Inc.
+
+
 ## Mixpanel
 
 Copyright 2013 Mixpanel, Inc.

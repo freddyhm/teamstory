@@ -48,6 +48,12 @@
 #define COCOAPODS_VERSION_MINOR_AFNetworking_UIKit 5
 #define COCOAPODS_VERSION_PATCH_AFNetworking_UIKit 0
 
+// FlightRecorder
+#define COCOAPODS_POD_AVAILABLE_FlightRecorder
+#define COCOAPODS_VERSION_MAJOR_FlightRecorder 1
+#define COCOAPODS_VERSION_MINOR_FlightRecorder 5
+#define COCOAPODS_VERSION_PATCH_FlightRecorder 8
+
 // Mixpanel
 #define COCOAPODS_POD_AVAILABLE_Mixpanel
 #define COCOAPODS_VERSION_MAJOR_Mixpanel 2

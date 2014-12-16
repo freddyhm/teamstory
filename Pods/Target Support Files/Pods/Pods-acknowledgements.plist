@@ -41,6 +41,15 @@ THE SOFTWARE.
 		</dict>
 		<dict>
 			<key>FooterText</key>
+			<string>All text and design is copyright © 2013-2014 FlightRecorder, Inc.
+</string>
+			<key>Title</key>
+			<string>FlightRecorder</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>FooterText</key>
 			<string>Copyright 2013 Mixpanel, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");

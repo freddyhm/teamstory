@@ -31,6 +31,7 @@
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import "ParseFacebookUtils/PFFacebookUtils.h"
 #import "Intercom.h"
+#import <FlightRecorder/FlightRecorder.h>
 #import "SVProgressHUD.h"
 
 
@@ -109,6 +110,8 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 static NSString *const MIXPANEL_TOKEN = @"093959a404024512d35ec784652d01fc";
 static NSString *const INTERCOM_APP_ID = @"wegcp2zo";
 static NSString *const INTERCOM_API_KEY = @"ios_sdk-3d95ebf6dd46972ddd320f375dde491b6a8bd768";
+static NSString *const FLIGHT_RECORDER_ACCESS_KEY = @"dc3a7ccf-2213-4a39-8051-6c3e17edd816";
+static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"687ad781-d396-495b-8349-b44b22631327";
 #else
 static NSString *const GOOGLE_TRACKING_ID = @"UA-49381420-1";
 static NSString *const KONOTOR_APP_ID = @"ab785be6-9398-4b6a-8ae6-4d83431edad9";
@@ -120,6 +123,8 @@ static NSString *const TWITTER_SECRET = @"agzbVGDyyuFvpZ4kJecoXoJYC4cTOZEVGjJIO0
 static NSString *const MIXPANEL_TOKEN = @"bdd5714ea8e6eccea911feb0a97e1b82";
 static NSString *const INTERCOM_APP_ID = @"rtntztae";
 static NSString *const INTERCOM_API_KEY = @"ios_sdk-7bcd17d996532a8658cd72694ad1a7fb37479039";
+static NSString *const FLIGHT_RECORDER_ACCESS_KEY = @"491e25ad-4e58-4a7d-bee1-56be847ba74b";
+static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17545f746ff3";
 #endif
 
 #pragma mark - UIApplicationDelegate
@@ -219,6 +224,12 @@ static NSString *const INTERCOM_API_KEY = @"ios_sdk-7bcd17d996532a8658cd72694ad1
     
     // handle push notifications
     [self handlePush:launchOptions userInfo:nil source:@"launch"];
+    
+    
+    // Flight recorder
+    [[FlightRecorder sharedInstance] setAccessKey:FLIGHT_RECORDER_ACCESS_KEY secretKey:FLIGHT_RECORDER_SECRET_KEY];
+    [[FlightRecorder sharedInstance] setShouldStartLocationManager:YES];
+    [[FlightRecorder sharedInstance] startFlight];
 
     return YES;
 }
