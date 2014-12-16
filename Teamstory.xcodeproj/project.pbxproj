@@ -297,7 +297,6 @@
 		D530C3F318FB22FC00739027 /* iRate.m in Sources */ = {isa = PBXBuildFile; fileRef = D530C3F118FB22FC00739027 /* iRate.m */; };
 		D531F7CC18B5DE11008AE73F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D531F7CB18B5DE11008AE73F /* CoreVideo.framework */; };
 		D540AD2C1A3A8E7E00FB6DFD /* message.js in Resources */ = {isa = PBXBuildFile; fileRef = D540AD2B1A3A8E7E00FB6DFD /* message.js */; };
-		D540AD321A3A8E9200FB6DFD /* message.js in Resources */ = {isa = PBXBuildFile; fileRef = D540AD311A3A8E9200FB6DFD /* message.js */; };
 		D542D8BE196A6F4700A0384F /* ELCAlbumPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = D542D8AD196A6F4700A0384F /* ELCAlbumPickerController.m */; };
 		D542D8BF196A6F4700A0384F /* ELCAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = D542D8AF196A6F4700A0384F /* ELCAsset.m */; };
 		D542D8C0196A6F4700A0384F /* ELCAssetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D542D8B1196A6F4700A0384F /* ELCAssetCell.m */; };
@@ -500,6 +499,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 08FB29EE78154B818E6BF905;
 			remoteInfo = "Pods-embedly-ios";
+		};
+		D56CD4341A3FD6350051DF8A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D56A714119B78416006F25FA /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9688380B5797AEF0C665E697;
+			remoteInfo = "Pods-FlightRecorder";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -1945,6 +1951,7 @@
 			children = (
 				D537882119B91B0100E40DC9 /* libPods.a */,
 				D56A714C19B78417006F25FA /* libPods-AFNetworking.a */,
+				D56CD4351A3FD6350051DF8A /* libPods-FlightRecorder.a */,
 				D56A714E19B78417006F25FA /* libPods-Mixpanel.a */,
 				D56A715219B78417006F25FA /* libPods-embedly-ios.a */,
 			);
@@ -2245,6 +2252,13 @@
 			remoteRef = D56A715119B78417006F25FA /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		D56CD4351A3FD6350051DF8A /* libPods-FlightRecorder.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libPods-FlightRecorder.a";
+			remoteRef = D56CD4341A3FD6350051DF8A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -2502,7 +2516,6 @@
 				462FCB7D188C806C005059F3 /* button_setting.png in Resources */,
 				D5F45B03196CE6DE001C2875 /* select_overlay.png in Resources */,
 				D5BFDEDE18CC84A5004FEC42 /* paris@2x.png in Resources */,
-				D540AD321A3A8E9200FB6DFD /* message.js in Resources */,
 				D55AEF3619BA7B9C00ECF342 /* btn_following_discover.png in Resources */,
 				46B31EEB184E35150028D11C /* profileWebsite@2x.png in Resources */,
 				D560FADC19B916F100D14D16 /* LogoNavigationBar.png in Resources */,
