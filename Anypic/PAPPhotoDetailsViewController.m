@@ -17,6 +17,7 @@
 #import "Mixpanel.h"
 #import "AppDelegate.h"
 #import "Intercom.h"
+#import "AtMention.h"
 
 #define APP ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 
@@ -448,26 +449,20 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
     
     if ([text isEqualToString:@"@"]){
-        [SVProgressHUD show];
+        self.userArray = [[AtMention sharedAtMention] userArray];
+        self.filteredArray = self.userArray;
         
-        if ([self.userArray count] < 1) {
-            userQuery = [PFUser query];
-            userQuery.limit = MAXFLOAT;
-            [userQuery whereKeyExists:@"displayName"];
-            [userQuery orderByAscending:@"displayName"];
-            [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                [SVProgressHUD dismiss];
-                if (!error) {
-                    self.userArray = [[NSMutableArray alloc] initWithArray:objects];
-                    self.atmentionUserArray = [[NSMutableArray alloc] init];
-                    self.filteredArray = objects;
-                    self.autocompleteTableView.backgroundColor = [UIColor clearColor];
-                } else {
-                    NSLog(@"%@", error);
-                }
-            }]; } else {
-                [SVProgressHUD dismiss];
-            }
+        if(!self.filteredArray){
+            self.filteredArray = [[NSMutableArray alloc]init];
+        }
+        
+        if(!self.atmentionUserArray){
+            self.atmentionUserArray = [[NSMutableArray alloc] init];
+        }
+        
+        
+        
+        self.autocompleteTableView.backgroundColor = [UIColor clearColor];
         
     }
     

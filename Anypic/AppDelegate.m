@@ -33,6 +33,7 @@
 #import "Intercom.h"
 #import <FlightRecorder/FlightRecorder.h>
 #import "SVProgressHUD.h"
+#import "AtMention.h"
 
 
 @interface AppDelegate () {
@@ -221,9 +222,16 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     
     [self cycleTheGlobalMailComposer];
 
-    
     // handle push notifications
     [self handlePush:launchOptions userInfo:nil source:@"launch"];
+    
+    AtMention *one = [AtMention sharedAtMention];
+    [one getAllUsers:^(NSArray *objects, BOOL succeeded, NSError *error) {
+        if(succeeded){
+            NSLog(@"objects %@", objects);
+        }
+    }];
+    
     
     
     // Flight recorder

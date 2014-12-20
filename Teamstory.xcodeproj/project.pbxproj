@@ -404,6 +404,7 @@
 		D5856FB619F87E2600D0086F /* KonotorVoiceInputOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = D5856F8B19F87E2500D0086F /* KonotorVoiceInputOverlay.m */; };
 		D5856FB719F87E2600D0086F /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D5856F8C19F87E2500D0086F /* KonotorModels.bundle */; };
 		D5856FB819F87E2600D0086F /* libKonotorCombined.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D5856F8D19F87E2500D0086F /* libKonotorCombined.a */; };
+		D58FD92B1A4501D3008912C8 /* AtMention.m in Sources */ = {isa = PBXBuildFile; fileRef = D58FD92A1A4501D3008912C8 /* AtMention.m */; };
 		D5903C75192EBBF900DC9896 /* ThoughtPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */; };
 		D5903C76192EBBF900DC9896 /* ThoughtPostViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5903C74192EBBF900DC9896 /* ThoughtPostViewController.xib */; };
 		D594C20418EFEBAD0008F5DF /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D594C20118EFEBAD0008F5DF /* SVProgressHUD.bundle */; };
@@ -1001,6 +1002,8 @@
 		D5856F8B19F87E2500D0086F /* KonotorVoiceInputOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorVoiceInputOverlay.m; sourceTree = "<group>"; };
 		D5856F8C19F87E2500D0086F /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		D5856F8D19F87E2500D0086F /* libKonotorCombined.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libKonotorCombined.a; sourceTree = "<group>"; };
+		D58FD9291A4501D3008912C8 /* AtMention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AtMention.h; sourceTree = SOURCE_ROOT; };
+		D58FD92A1A4501D3008912C8 /* AtMention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AtMention.m; sourceTree = SOURCE_ROOT; };
 		D5903C72192EBBF900DC9896 /* ThoughtPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThoughtPostViewController.h; sourceTree = SOURCE_ROOT; };
 		D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThoughtPostViewController.m; sourceTree = SOURCE_ROOT; };
 		D5903C74192EBBF900DC9896 /* ThoughtPostViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ThoughtPostViewController.xib; sourceTree = SOURCE_ROOT; };
@@ -1203,6 +1206,8 @@
 				C4A6D87B157859AA009FE621 /* PAPCache.m */,
 				C4B60864155B085600EFA90C /* Resources */,
 				09ABC07813A1D52D009C3FCF /* Supporting Files */,
+				D58FD9291A4501D3008912C8 /* AtMention.h */,
+				D58FD92A1A4501D3008912C8 /* AtMention.m */,
 			);
 			name = Teamstory;
 			path = ParseStarterProject;
@@ -2723,6 +2728,7 @@
 				C4F102D9156C580C0061BC3E /* PAPSettingsActionSheetDelegate.m in Sources */,
 				D530C3F318FB22FC00739027 /* iRate.m in Sources */,
 				D51C02331A2830CD00A663CD /* NavWrapperViewController.m in Sources */,
+				D58FD92B1A4501D3008912C8 /* AtMention.m in Sources */,
 				46DC23BF19AA1F0400E8FCDF /* PAPdiscoverTileView.m in Sources */,
 				4658CEF619BE82250057AFA4 /* PAPMessagingViewController.m in Sources */,
 				C4F102EF156C58E00061BC3E /* main.m in Sources */,
