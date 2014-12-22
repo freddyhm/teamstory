@@ -163,16 +163,17 @@ NSInteger selection = 1;
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     self.navigationController.navigationBar.hidden = YES;
     
-    NSDate *currentDate = [NSDate date];
-    NSDate *twoWeeks = [currentDate dateByAddingTimeInterval:-14*24*60*60];
+    //NSDate *currentDate = [NSDate date];
+    //NSDate *twoWeeks = [currentDate dateByAddingTimeInterval:-14*24*60*60];
     
     self.postThoughtQueryResults = nil;
     self.postPicQueryResults = nil;
     
     PFQuery *postQuery_pic = [PFQuery queryWithClassName:@"Photo"];
-    [postQuery_pic setLimit:1000];
+    [postQuery_pic setLimit:30];
     [postQuery_pic whereKey:@"type" equalTo:@"picture"];
-    [postQuery_pic whereKey:@"createdAt" greaterThanOrEqualTo:twoWeeks];
+    [postQuery_pic orderByDescending:@"createdAt"];
+    //[postQuery_pic whereKey:@"createdAt" greaterThanOrEqualTo:twoWeeks];
     [postQuery_pic findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
             self.postPicQueryResults = objects;
@@ -183,9 +184,10 @@ NSInteger selection = 1;
     }];
     
     PFQuery *postQuery_thoughts = [PFQuery queryWithClassName:@"Photo"];
-    [postQuery_thoughts setLimit:1000];
+    [postQuery_thoughts setLimit:30];
     [postQuery_thoughts whereKey:@"type" equalTo:@"thought"];
-    [postQuery_thoughts whereKey:@"createdAt" greaterThanOrEqualTo:twoWeeks];
+    //[postQuery_thoughts whereKey:@"createdAt" greaterThanOrEqualTo:twoWeeks];
+    [postQuery_thoughts orderByDescending:@"createdAt"];
     [postQuery_thoughts findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
             self.postThoughtQueryResults = objects;
@@ -290,7 +292,18 @@ NSInteger selection = 1;
             return [rating2 compare:rating1];
         }];
         
-        [self.discoverTileView setPictureQuery:finalPictureArray setThoughtQuery:finalThoughtArray];
+        NSUInteger count = [finalPictureArray count];
+        NSMutableArray *finalPictureArray_MT = [[NSMutableArray alloc] initWithArray:finalPictureArray];
+        NSMutableArray *finalThoughtArray_MT = [[NSMutableArray alloc] initWithArray:finalThoughtArray];
+        
+        for (int i = 0; i < [finalPictureArray count]; i++) {
+            NSInteger remainingCount = count - i;
+            NSInteger exchangeIndex = i + arc4random_uniform((u_int32_t )remainingCount);
+            [finalPictureArray_MT exchangeObjectAtIndex:i withObjectAtIndex:exchangeIndex];
+            [finalThoughtArray_MT exchangeObjectAtIndex:i withObjectAtIndex:exchangeIndex];
+        }
+        
+        [self.discoverTileView setPictureQuery:finalPictureArray_MT setThoughtQuery:finalThoughtArray_MT];
         
     }
 }

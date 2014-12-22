@@ -12,7 +12,8 @@
 #import "Mixpanel.h"
 
 @interface PAPdiscoverTileView() {
-
+    NSUInteger *skipQueryCountPic;
+    NSUInteger *skipQueryCountThought;
 }
 @property (nonatomic, strong) UIView *mainMenuView;
 @property (nonatomic, strong) UIButton *momentsMenu;
@@ -20,10 +21,11 @@
 @property (nonatomic, strong) UIView *highlightBar;
 @property (nonatomic, strong) UIColor *teamstoryColor;
 @property (nonatomic, strong) UITableView *mainTileView;
-@property (nonatomic, strong) NSArray *pictureQuery;
-@property (nonatomic, strong) NSArray *thoughtQuery;
+@property (nonatomic, strong) NSMutableArray *pictureQuery;
+@property (nonatomic, strong) NSMutableArray *thoughtQuery;
 @property (nonatomic, strong) NSString *menuSelection;
 @property (nonatomic, strong) UINavigationController *navController;
+@property (nonatomic, assign) BOOL tableReload;
 
 @end
 
@@ -34,6 +36,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.teamstoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
+        _tableReload = YES;
         
         // ----------------- initiate menues
         self.mainMenuView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 44.0f)];
@@ -76,8 +79,8 @@
 }
 
 -(void)setPictureQuery:(NSArray *)pictureQueryResults setThoughtQuery:(NSArray *)thoughtQueryResults {
-    self.pictureQuery = pictureQueryResults;
-    self.thoughtQuery = thoughtQueryResults;
+    self.pictureQuery = [[NSMutableArray alloc] initWithArray:pictureQueryResults];
+    self.thoughtQuery = [[NSMutableArray alloc] initWithArray:thoughtQueryResults];
     [self.mainTileView reloadData];
 }
 
@@ -134,6 +137,26 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Calculating the total_number of rows.
+    NSNumber *rowCount;
+    
+    if ([self.menuSelection isEqualToString:@"Moments"]) {
+        rowCount = [NSNumber numberWithLong:[self.pictureQuery count] / 3 - 1];
+    } else {
+        rowCount = [NSNumber numberWithLong:[self.thoughtQuery count] / 3 - 1];
+    }
+    
+    if ([rowCount intValue] == indexPath.row && _tableReload == YES) {
+        _tableReload = NO;
+        if ([self.menuSelection isEqualToString:@"Moments"]) {
+            skipQueryCountPic = (NSUInteger *)[self.pictureQuery count];
+            [self loadMoreCellforPic];
+        } else {
+            skipQueryCountThought = (NSUInteger *)[self.thoughtQuery count];
+            [self loadMoreCellforThought];
+        }
+    }
+    
     static NSString *CellIdentifier = @"Discover Cell";
     
     PAPdiscoverCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -196,5 +219,58 @@
     }
 }
 
+
+-(void) loadMoreCellforPic {
+    PFQuery *postQuery_pic = [PFQuery queryWithClassName:@"Photo"];
+    [postQuery_pic setLimit:30];
+    [postQuery_pic setSkip:(int)skipQueryCountPic];
+    [postQuery_pic whereKey:@"type" equalTo:@"picture"];
+    [postQuery_pic orderByDescending:@"createdAt"];
+    [postQuery_pic findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            _tableReload = YES;
+            NSUInteger count = [objects count];
+            NSMutableArray *randomArray = [[NSMutableArray alloc] initWithArray:objects];
+            
+            for (int i = 0; i < count; i++) {
+                NSInteger remainingCount = count - i;
+                NSInteger exchangeIndex = i + arc4random_uniform((u_int32_t )remainingCount);
+                [randomArray exchangeObjectAtIndex:i withObjectAtIndex:exchangeIndex];
+            }
+            
+            [self.pictureQuery addObjectsFromArray:randomArray];
+            [self.mainTileView reloadData];
+        } else {
+            NSLog(@"PostQuery Picture Error: %@", error);
+        }
+    }];
+}
+
+-(void) loadMoreCellforThought {
+    PFQuery *postQuery_thoughts = [PFQuery queryWithClassName:@"Photo"];
+    [postQuery_thoughts setLimit:30];
+    [postQuery_thoughts setSkip:(int)skipQueryCountThought];
+    [postQuery_thoughts whereKey:@"type" equalTo:@"thought"];
+    [postQuery_thoughts orderByDescending:@"createdAt"];
+    [postQuery_thoughts findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            _tableReload = YES;
+            
+            NSUInteger count = [objects count];
+            NSMutableArray *randomArray = [[NSMutableArray alloc] initWithArray:objects];
+            
+            for (int i = 0; i < count; i++) {
+                NSInteger remainingCount = count - i;
+                NSInteger exchangeIndex = i + arc4random_uniform((u_int32_t )remainingCount);
+                [randomArray exchangeObjectAtIndex:i withObjectAtIndex:exchangeIndex];
+            }
+            
+            [self.thoughtQuery addObjectsFromArray:objects];
+            [self.mainTileView reloadData];
+        } else {
+            NSLog(@"PostQuery Picture Error: %@", error);
+        }
+    }];
+}
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "PAPdiscoverCell.h"
+#import "SVProgressHUD.h"
 
 @implementation PAPdiscoverCell
 
@@ -61,6 +62,12 @@
         
     }];
      */
+    
+    UIImage *placeHolderImage = [UIImage imageNamed:@"PlaceholderPhoto"];
+    self.PFimageViewForButton1.image = placeHolderImage;
+    self.PFimageViewForButton2.image = placeHolderImage;
+    self.PFimageViewForButton3.image = placeHolderImage;
+    
     self.PFimageViewForButton1.file = image1;
     self.PFimageViewForButton2.file = image2;
     self.PFimageViewForButton3.file = image3;
