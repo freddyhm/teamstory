@@ -65,9 +65,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
+    // Bar hides on scroll
     [self.navigationController setHidesBarsOnSwipe:YES];
     //[self.navigationController.bar]
+    
+    UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
+    
+    // height 20 is the status bar's height.
+    UIView *statusBarOverlay = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 20)];
+    [statusBarOverlay setBackgroundColor:teamStoryColor];
+    [self.view addSubview:statusBarOverlay];
     
     // set analytics and first run flag
     [self setUserInfoAnalytics];
