@@ -28,6 +28,7 @@ static CGFloat SVProgressHUDRingThickness;
 static UIFont *SVProgressHUDFont;
 static UIImage *SVProgressHUDSuccessImage;
 static UIImage *SVProgressHUDErrorImage;
+static NSString *SVProgressHUDImageName;
 
 static const CGFloat SVProgressHUDRingRadius = 9;
 static const CGFloat SVProgressHUDRingNoTextRadius = 12;
@@ -94,6 +95,10 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
 + (void)setBackgroundColor:(UIColor *)color {
     [self sharedView].hudView.backgroundColor = color;
     SVProgressHUDBackgroundColor = color;
+}
+
++ (void)setImageName:(NSString *)imageName {
+    SVProgressHUDImageName = imageName;
 }
 
 + (void)setForegroundColor:(UIColor *)color {
@@ -227,7 +232,7 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
     return self;
 }
 
-- (void)drawRect:(CGRect)rect {
+- (void)drawRect:(CGRect)rect{
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
@@ -262,7 +267,7 @@ static const CGFloat SVProgressHUDParallaxDepthPoints = 10;
             [[UIColor colorWithWhite:0.5 alpha:0.5] set];
             CGContextFillRect(context, self.bounds);
             
-            UIImage *hudImage = [UIImage imageNamed:@"loading_msg_list.png"];
+            UIImage *hudImage = [UIImage imageNamed:SVProgressHUDImageName];
             
             float backgroundViewWidth = hudImage.size.width + 30.0f;
             float backgroundViewHeight = hudImage.size.height + 70.0f;

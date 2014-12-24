@@ -163,6 +163,7 @@ NSInteger selection = 1;
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Discover"}];
     
+    [SVProgressHUD setImageName:@"loading_discover.png"];
     [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeCustom];
     
     [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(dismissHUD) userInfo:nil repeats:NO];

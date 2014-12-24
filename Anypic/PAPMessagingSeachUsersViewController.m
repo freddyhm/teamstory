@@ -49,6 +49,7 @@
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Message Search Users"}];
     
+    [SVProgressHUD setImageName:@"loading_msg_list.png"];
     [SVProgressHUD showWithStatus:nil maskType:SVProgressHUDMaskTypeCustom];
     
     PFQuery *followerQuery = [PFQuery queryWithClassName:@"Activity"];

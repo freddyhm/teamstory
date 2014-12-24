@@ -23,7 +23,7 @@ enum {
     SVProgressHUDMaskTypeClear, // don't allow
     SVProgressHUDMaskTypeBlack, // don't allow and dim the UI in the back of the HUD
     SVProgressHUDMaskTypeGradient, // don't allow and dim the UI with a a-la-alert-view bg gradient
-    SVProgressHUDMaskTypeCustom // represents a square box
+    SVProgressHUDMaskTypeCustom // represents a square box with custom image
 };
 
 typedef NSUInteger SVProgressHUDMaskType;
@@ -38,6 +38,7 @@ typedef NSUInteger SVProgressHUDMaskType;
 + (void)setFont:(UIFont*)font; // default is [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]
 + (void)setSuccessImage:(UIImage*)image; // default is bundled success image from Glyphish
 + (void)setErrorImage:(UIImage*)image; // default is bundled error image from Glyphish
++ (void)setImageName:(NSString *)imageName;
 
 #pragma mark - Show Methods
 
