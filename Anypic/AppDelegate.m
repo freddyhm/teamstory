@@ -549,8 +549,6 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     self.accountViewController_tabBar = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
 
     self.discoverViewController = [[discoverPageViewController alloc] init];
-   
-
     
     // special user setting function for accountviewcontroller.
     [accountViewController_tabBar setUser:[PFUser currentUser]];
@@ -558,7 +556,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     UINavigationController *homeNavigationController = [[UINavigationController alloc] initWithRootViewController:self.homeViewController];
     UINavigationController *emptyNavigationController = [[UINavigationController alloc] init];
     UINavigationController *activityFeedNavigationController = [[UINavigationController alloc] initWithRootViewController:self.activityViewController];
-    UINavigationController *perksNavigationController = [[UINavigationController alloc] initWithRootViewController:self.discoverViewController];
+    UINavigationController *discoverNavigationController = [[UINavigationController alloc] initWithRootViewController:self.discoverViewController];
     UINavigationController *accountNavigationController = [[UINavigationController alloc] initWithRootViewController:self.accountViewController_tabBar];
 
     
@@ -580,14 +578,29 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     activityFeedTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
 
     
-    UITabBarItem *perksTabBarItem = [[UITabBarItem alloc] init];
+    UITabBarItem *discoverTabbarItem = [[UITabBarItem alloc] init];
     
-    [perksTabBarItem setImage:[[UIImage imageNamed:@"nav_discover.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    NSDate *discoverUpdateDate = [[PFUser currentUser] objectForKey:@"discoverUpdate"];
+    NSDate *currentDate = [NSDate date];
     
-    [perksTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconDiscoverSelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-   
-    perksTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
+    NSTimeInterval distanceBetweenDates = [currentDate timeIntervalSinceDate:discoverUpdateDate];
+    float discoverGlowTimeFrame = 2*24*60*60;
 
+    UIImage *discoverTabBarImage = [UIImage imageNamed:@"nav_discover.png"];
+    UIImage *discoverTabBarImage_Glow = [UIImage imageNamed:@"IconDiscover_Glow.png"];
+    UIImage *discoverTabBarImage_selected = [UIImage imageNamed:@"IconDiscoverSelected.png"];
+    UIImage *discoverImage;
+
+    if (distanceBetweenDates > discoverGlowTimeFrame) {
+        discoverImage = discoverTabBarImage_Glow;
+    } else {
+        discoverImage = discoverTabBarImage;
+    }
+    
+    [discoverTabbarItem setImage:[discoverImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [discoverTabbarItem setSelectedImage:[discoverTabBarImage_selected imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+   
+    discoverTabbarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
     
     UITabBarItem *accountTabBarItem = [[UITabBarItem alloc] init];
 
@@ -600,12 +613,12 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     
     [homeNavigationController setTabBarItem:homeTabBarItem];
     [activityFeedNavigationController setTabBarItem:activityFeedTabBarItem];
-    [perksNavigationController setTabBarItem:perksTabBarItem];
+    [discoverNavigationController setTabBarItem:discoverTabbarItem];
     [accountNavigationController setTabBarItem:accountTabBarItem];
 
 
     self.tabBarController.delegate = self;
-    self.tabBarController.viewControllers = @[ homeNavigationController, perksNavigationController, emptyNavigationController, activityFeedNavigationController, accountNavigationController ];
+    self.tabBarController.viewControllers = @[ homeNavigationController, discoverNavigationController, emptyNavigationController, activityFeedNavigationController, accountNavigationController ];
     
     
     [self.navController setViewControllers:@[ self.welcomeViewController, self.tabBarController ] animated:NO];

@@ -171,8 +171,16 @@ NSInteger selection = 1;
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     self.navigationController.navigationBar.hidden = YES;
     
-    //NSDate *currentDate = [NSDate date];
-    //NSDate *twoWeeks = [currentDate dateByAddingTimeInterval:-14*24*60*60];
+    [[PFUser currentUser] setObject:[NSDate date]  forKey:@"discoverUpdate"];
+    [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            NSLog(@"Saved successfully current Date:%@", [[PFUser currentUser] objectForKey:@"discoverUpdate"]);
+        } else {
+            NSLog(@"error: %@", error);
+        }
+    }];
+    
+    [[self.navigationController.tabBarController.viewControllers objectAtIndex:1] tabBarItem].image = [UIImage imageNamed:@"nav_discover.png"];
     
     self.postThoughtQueryResults = nil;
     self.postPicQueryResults = nil;
