@@ -65,6 +65,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    /*
     // Bar hides on scroll
     [self.navigationController setHidesBarsOnSwipe:YES];
     //[self.navigationController.bar]
@@ -75,7 +76,7 @@
     UIView *statusBarOverlay = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 20)];
     [statusBarOverlay setBackgroundColor:teamStoryColor];
     [self.view addSubview:statusBarOverlay];
-    
+    */
     // set analytics and first run flag
     [self setUserInfoAnalytics];
     self.firstRun = YES;
