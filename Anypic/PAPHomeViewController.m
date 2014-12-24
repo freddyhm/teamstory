@@ -65,6 +65,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
+    [self.navigationController setHidesBarsOnSwipe:YES];
+    //[self.navigationController.bar]
+    
     // set analytics and first run flag
     [self setUserInfoAnalytics];
     self.firstRun = YES;

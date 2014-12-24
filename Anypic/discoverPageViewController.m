@@ -150,6 +150,10 @@ NSInteger selection = 1;
 	   
 }
 
+- (void)dismissHUD {
+    [SVProgressHUD dismiss];
+}
+
 - (void)viewWillAppear:(BOOL)animated{
     // analytics
     [PAPUtility captureScreenGA:@"Discover"];
@@ -159,6 +163,9 @@ NSInteger selection = 1;
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Discover"}];
     
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeCustom];
+    
+    [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(dismissHUD) userInfo:nil repeats:NO];
     
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     self.navigationController.navigationBar.hidden = YES;
@@ -254,7 +261,6 @@ NSInteger selection = 1;
 
 -(void)loadContents {
     if ([self.postPicQueryResults count] > 0 && [self.postThoughtQueryResults count] > 0) {
-        [SVProgressHUD dismiss];
         
         NSMutableArray *filterEmptyPicResult = [[NSMutableArray alloc] init];
         NSMutableArray *filterEmptyThoughtResult = [[NSMutableArray alloc] init];
