@@ -165,7 +165,7 @@ NSInteger selection = 1;
     
     [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeCustom];
     
-    [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(dismissHUD) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(dismissHUD) userInfo:nil repeats:NO];
     
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     self.navigationController.navigationBar.hidden = YES;
