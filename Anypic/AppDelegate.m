@@ -591,7 +591,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     UIImage *discoverTabBarImage_selected = [UIImage imageNamed:@"IconDiscoverSelected.png"];
     UIImage *discoverImage;
 
-    if (distanceBetweenDates > discoverGlowTimeFrame) {
+    if (distanceBetweenDates > discoverGlowTimeFrame || discoverUpdateDate == nil) {
         discoverImage = discoverTabBarImage_Glow;
     } else {
         discoverImage = discoverTabBarImage;
