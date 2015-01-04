@@ -225,14 +225,9 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     // handle push notifications
     [self handlePush:launchOptions userInfo:nil source:@"launch"];
     
+    // load users for mention
     AtMention *one = [AtMention sharedAtMention];
-    [one getAllUsers:^(NSArray *objects, BOOL succeeded, NSError *error) {
-        if(succeeded){
-            NSLog(@"objects %@", objects);
-        }
-    }];
-    
-    
+    [one getAllUsers:^(NSArray *objects, BOOL succeeded, NSError *error) {}];
     
     // Flight recorder
     [[FlightRecorder sharedInstance] setAccessKey:FLIGHT_RECORDER_ACCESS_KEY secretKey:FLIGHT_RECORDER_SECRET_KEY];

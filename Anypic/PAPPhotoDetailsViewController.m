@@ -41,7 +41,7 @@ enum ActionSheetTags {
 @property (nonatomic, strong) PFObject *current_photo;
 @property (nonatomic, strong) PFUser *reported_user;
 @property (nonatomic, strong) NSString *source;
-@property (nonatomic, strong) NSMutableArray *userArray;
+@property (nonatomic, strong) NSMutableArray *userList;
 @property (nonatomic, strong) NSString *atmentionSearchString;
 @property (nonatomic, strong) UITableView *autocompleteTableView;
 @property (nonatomic, strong) NSArray *filteredArray;
@@ -61,7 +61,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 @synthesize photoID;
 @synthesize current_photo;
 @synthesize reported_user;
-@synthesize userArray;
 @synthesize autocompleteTableView;
 @synthesize atmentionSearchString;
 @synthesize filteredArray;
@@ -210,6 +209,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.customKeyboard.view.layer.zPosition = 100;
     [self.customKeyboard setBackgroundTable:self.postDetails];
     [self.view addSubview:self.customKeyboard.view];
+    
+    // at mention
+    self.filteredArray = [[NSMutableArray alloc]init];
+    self.atmentionUserArray = [[NSMutableArray alloc] init];
+    self.autocompleteTableView.backgroundColor = [UIColor clearColor];
     
 }
 
@@ -448,25 +452,13 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         return YES;
     }
     
+    // at mention, setting users
     if ([text isEqualToString:@"@"]){
-        self.userArray = [[AtMention sharedAtMention] userArray];
-        self.filteredArray = self.userArray;
-        
-        if(!self.filteredArray){
-            self.filteredArray = [[NSMutableArray alloc]init];
-        }
-        
-        if(!self.atmentionUserArray){
-            self.atmentionUserArray = [[NSMutableArray alloc] init];
-        }
-        
-        
-        
-        self.autocompleteTableView.backgroundColor = [UIColor clearColor];
-        
+        self.userList = [[AtMention sharedAtMention] userList];
+        self.filteredArray = self.userList;
     }
     
-    if ([self.userArray count] > 0) {
+    if ([self.userList count] > 0) {
         NSMutableString *updatedText = [[NSMutableString alloc] initWithString:self.customKeyboard.messageTextView.text];
         if (range.location == 0 || range.location == text_location) {
             self.autocompleteTableView.hidden = YES;
@@ -494,7 +486,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 atmentionSearchString = [atmentionSearchString stringByAppendingString:text];
             }
             
-            self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
+            self.filteredArray = [self.userList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
             
             // Check system version for keyboard offset, ios8 added suggestion bar
             // Align the mention table view

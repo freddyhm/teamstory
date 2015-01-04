@@ -34,7 +34,7 @@
     if (self = [super init]) {
         
         self.userQuery = [PFUser query];
-        self.userQuery.limit = MAXFLOAT;
+        self.userQuery.limit = 1000;
         [self.userQuery whereKeyExists:@"displayName"];
         [self.userQuery orderByAscending:@"displayName"];
     }
@@ -45,34 +45,24 @@
     
     [self.userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
-            self.userArray = [[NSMutableArray alloc] initWithArray:objects];
-            return completionBlock(objects, YES, nil);
+            
+            self.userList = [[NSMutableArray alloc]initWithArray:objects];
+            self.userQuery.skip = 1000;
+            
+            [self.userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                if(!error){
+                    [self.userList addObjectsFromArray:objects];
+                    return completionBlock(objects, YES, nil);
+                }else{
+                    return completionBlock(nil, NO, error);
+                }
+            }];
+            
         }else{
             return completionBlock(nil, NO, error);
         }
     }];
 }
-
-
-
-/*
- 
-
- [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
- [SVProgressHUD dismiss];
- if (!error) {
- self.userArray = [[NSMutableArray alloc] initWithArray:objects];
- self.atmentionUserArray = [[NSMutableArray alloc] init];
- self.filteredArray = objects;
- self.autocompleteTableView.backgroundColor = [UIColor clearColor];
- } else {
- NSLog(@"%@", error);
- }
- }]; } else {
- [SVProgressHUD dismiss];
- */
-
-
 
 
 @end

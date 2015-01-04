@@ -10,7 +10,7 @@
 
 @interface AtMention : NSObject
 
-@property NSMutableArray *userArray;
+@property NSMutableArray *userList;
 + (id)sharedAtMention;
 
 - (void)getAllUsers:(void (^)(NSArray *objectsm, BOOL succeeded, NSError *error))completionBlock;
