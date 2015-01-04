@@ -388,24 +388,26 @@ static TTTTimeIntervalFormatter *timeFormatter;
             CGSize nameSize = ([self.nameButton.titleLabel.text boundingRectWithSize:CGSizeMake(nameMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:13], NSParagraphStyleAttributeName: paragraphStyle.copy} context:nil]).size;
             
             NSString *paddedString = [PAPBaseTextCell padString:contentString withFont:[UIFont systemFontOfSize:13] toWidth:nameSize.width];
-            NSRange range = [paddedString rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
+         
             
-            if (range.location != NSNotFound) {
-                NSString *lowerCaseString = [[paddedString substringWithRange:range] lowercaseString];
-                paddedString = [paddedString stringByReplacingCharactersInRange:range withString:lowerCaseString];
+            NSRange urlRange = [paddedString rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
+                        
+            if (urlRange.location != NSNotFound) {
+                NSString *lowerCaseString = [[paddedString substringWithRange:urlRange] lowercaseString];
+                paddedString = [paddedString stringByReplacingCharactersInRange:urlRange withString:lowerCaseString];
             }
             
             NSMutableAttributedString *commentText = [[NSMutableAttributedString alloc] initWithString:paddedString];
-            [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
+            [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:urlRange];
             
-            if (range.length > 0) {
-                self.website = [paddedString substringWithRange:range];
+            if (urlRange.length > 0) {
+                self.website = [paddedString substringWithRange:urlRange];
             }
 
             [self.contentLabel setAttributedText:commentText];
             [self.contentLabel setUserInteractionEnabled:YES];
             
-            if (range.length > 0 && [[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]] && [self.cellType isEqualToString:@"CommentCellCurrentUser"]) {
+            if (urlRange.length > 0 && [[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]] && [self.cellType isEqualToString:@"CommentCellCurrentUser"]) {
                 [self.editButton addTarget:self action:@selector(commentInflatorActionWithUrl:) forControlEvents:UIControlEventTouchUpInside];
                 
                 UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentInflatorActionWithUrl:)];
@@ -419,7 +421,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
                 gestureRec.numberOfTouchesRequired = 1;
                 gestureRec.numberOfTapsRequired = 1;
                 [self.contentLabel addGestureRecognizer:gestureRec];
-            }else if (range.length > 0) {
+            }else if (urlRange.length > 0) {
                 UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openUrl:)];
                 gestureRec.numberOfTouchesRequired = 1;
                 gestureRec.numberOfTapsRequired = 1;

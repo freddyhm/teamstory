@@ -48,6 +48,7 @@ enum ActionSheetTags {
 @property (nonatomic, strong) NSString *cellType;
 @property (nonatomic, strong) PFQuery *userQuery;
 @property (nonatomic, strong) NSMutableArray *atmentionUserArray;
+@property (nonatomic, strong) NSMutableArray *atmentionUserNames;
 @property (nonatomic, strong) UIView *dimView;
 @property (nonatomic, strong) UIView *hideCommentsView;
 @property CGFloat previousKbHeight;
@@ -213,8 +214,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     // at mention
     self.filteredArray = [[NSMutableArray alloc]init];
     self.atmentionUserArray = [[NSMutableArray alloc] init];
+    self.atmentionUserNames = [[NSMutableArray alloc] init];
     self.autocompleteTableView.backgroundColor = [UIColor clearColor];
-    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -259,11 +260,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     PFQuery *commentQuery = [PFQuery queryWithClassName:@"Activity"];
     [commentQuery whereKey:kPAPActivityPhotoKey equalTo:self.photo];
     [commentQuery includeKey:kPAPActivityFromUserKey];
+    [commentQuery includeKey:@"User"];
     [commentQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeComment];
     [commentQuery orderByAscending:@"createdAt"];
-    
     [commentQuery setCachePolicy:kPFCachePolicyNetworkOnly];
-    
+
     [commentQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if(!error){
             self.objects = [NSMutableArray arrayWithArray:objects];
@@ -341,6 +342,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         }
         [cell navigationController:self.navigationController];
         [cell object:[self.objects objectAtIndex:indexPath.row]];
+        
+        NSLog(@"%@", [[self.objects objectAtIndex:indexPath.row] objectForKey:@"atmention_names"]);
+        
         [cell setParentView:self.view];
         [cell photo:self.photo];
         
@@ -533,7 +537,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         // storing atmention user list to the array (only filtered cases).
         if ([self.atmentionUserArray count] > 0) {
             NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", self.customKeyboard.messageTextView.text]];
+            
+            NSArray *mod_atmentionUserNames = [self.atmentionUserNames filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"MATCHES %@", self.customKeyboard.messageTextView.text]];
+            
             [comment setObject:mod_atmentionUserArray forKey:@"atmention"];
+            [comment setObject:mod_atmentionUserNames forKey:@"atmention_names"];
         }
         
         
@@ -575,6 +583,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             
             self.atmentionUserArray = nil;
             self.atmentionUserArray = [[NSMutableArray alloc] init];
+            self.atmentionUserNames = [[NSMutableArray alloc]init];
+            
             [SVProgressHUD dismiss];
             [self loadObjects];
             
@@ -611,6 +621,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         self.postDetails.scrollEnabled = YES;
         
         [self.atmentionUserArray addObject:aUser];
+        [self.atmentionUserNames addObject:[@"@" stringByAppendingString:[aUser objectForKey:@"displayName"]]];
     } else {
         [self shouldPresentAccountViewForUser:aUser];
     }
