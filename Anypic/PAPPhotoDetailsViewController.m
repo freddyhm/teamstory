@@ -260,7 +260,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     PFQuery *commentQuery = [PFQuery queryWithClassName:@"Activity"];
     [commentQuery whereKey:kPAPActivityPhotoKey equalTo:self.photo];
     [commentQuery includeKey:kPAPActivityFromUserKey];
-    [commentQuery includeKey:@"User"];
+    [commentQuery includeKey:@"atmention"];
     [commentQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeComment];
     [commentQuery orderByAscending:@"createdAt"];
     [commentQuery setCachePolicy:kPFCachePolicyNetworkOnly];
@@ -340,13 +340,16 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             cell.cellInsetWidth = kPAPCellInsetWidth;
             cell.delegate = self;
         }
-        [cell navigationController:self.navigationController];
-        [cell object:[self.objects objectAtIndex:indexPath.row]];
+        [cell setNavController:self.navigationController];
+        [cell setIh_object:[self.objects objectAtIndex:indexPath.row]];
         
-        NSLog(@"%@", [[self.objects objectAtIndex:indexPath.row] objectForKey:@"atmention_names"]);
+        
+        NSLog(@"%@", [[[self.objects objectAtIndex:indexPath.row] objectForKey:@"atmention"] objectAtIndex:0]);
+        
+        [cell setMentionNames:[[self.objects objectAtIndex:indexPath.row] objectForKey:@"atmention_names"]];
         
         [cell setParentView:self.view];
-        [cell photo:self.photo];
+        [cell setIh_photo:self.photo];
         
         [cell setUser:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityFromUserKey]];
         [cell setContentText:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityContentKey]];
@@ -537,8 +540,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         // storing atmention user list to the array (only filtered cases).
         if ([self.atmentionUserArray count] > 0) {
             NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", self.customKeyboard.messageTextView.text]];
-            
-            NSArray *mod_atmentionUserNames = [self.atmentionUserNames filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"MATCHES %@", self.customKeyboard.messageTextView.text]];
+            NSArray *mod_atmentionUserNames = [self.atmentionUserNames filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF IN %@", self.customKeyboard.messageTextView.text]];
             
             [comment setObject:mod_atmentionUserArray forKey:@"atmention"];
             [comment setObject:mod_atmentionUserNames forKey:@"atmention_names"];

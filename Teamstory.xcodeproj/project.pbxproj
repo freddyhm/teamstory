@@ -331,6 +331,7 @@
 		D55AEF3719BA7B9C00ECF342 /* btn_following_discover@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D55AEF3519BA7B9C00ECF342 /* btn_following_discover@2x.png */; };
 		D560FADC19B916F100D14D16 /* LogoNavigationBar.png in Resources */ = {isa = PBXBuildFile; fileRef = D560FADA19B916F100D14D16 /* LogoNavigationBar.png */; };
 		D5654177196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = D5654176196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.m */; };
+		D56D17D31A5A2BB30090615A /* VSWordDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = D56D17D21A5A2BB30090615A /* VSWordDetector.m */; };
 		D56D466519884C33001FAA76 /* PhotoTimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D56D466319884C33001FAA76 /* PhotoTimelineViewController.m */; };
 		D56D466619884C33001FAA76 /* PhotoTimelineViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D56D466419884C33001FAA76 /* PhotoTimelineViewController.xib */; };
 		D5743808194629280040C96A /* followersFollowingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5743807194629280040C96A /* followersFollowingViewController.m */; };
@@ -916,6 +917,8 @@
 		D5654175196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALAssetsLibrary+CustomPhotoAlbum.h"; sourceTree = "<group>"; };
 		D5654176196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALAssetsLibrary+CustomPhotoAlbum.m"; sourceTree = "<group>"; };
 		D56A714119B78416006F25FA /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = Pods/Pods.xcodeproj; sourceTree = "<group>"; };
+		D56D17D11A5A2BB30090615A /* VSWordDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSWordDetector.h; sourceTree = SOURCE_ROOT; };
+		D56D17D21A5A2BB30090615A /* VSWordDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSWordDetector.m; sourceTree = SOURCE_ROOT; };
 		D56D466219884C33001FAA76 /* PhotoTimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoTimelineViewController.h; sourceTree = SOURCE_ROOT; };
 		D56D466319884C33001FAA76 /* PhotoTimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoTimelineViewController.m; sourceTree = SOURCE_ROOT; };
 		D56D466419884C33001FAA76 /* PhotoTimelineViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoTimelineViewController.xib; sourceTree = SOURCE_ROOT; };
@@ -1715,6 +1718,8 @@
 		C4A0B4FF156C5B9F00E48554 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				D56D17D11A5A2BB30090615A /* VSWordDetector.h */,
+				D56D17D21A5A2BB30090615A /* VSWordDetector.m */,
 				4611EE9C19DF427C00B319C0 /* ParseFacebookUtils.framework */,
 				D503B6151A32904E00CF225B /* Intercom.h */,
 				D503B6161A32904E00CF225B /* libIntercom.a */,
@@ -2743,6 +2748,7 @@
 				46E1EB6F183BCA6300F64274 /* PAPProfileSettingViewController.m in Sources */,
 				D542D8C0196A6F4700A0384F /* ELCAssetCell.m in Sources */,
 				D5903C75192EBBF900DC9896 /* ThoughtPostViewController.m in Sources */,
+				D56D17D31A5A2BB30090615A /* VSWordDetector.m in Sources */,
 				46C6FC0E198AA62900BC99D5 /* PAPprofileSetupViewController.m in Sources */,
 				D54E0FF819A7B75C000B1F9D /* PAPwebviewViewController.m in Sources */,
 				D5856F9119F87E2500D0086F /* KonotorFeedbackScreen.m in Sources */,

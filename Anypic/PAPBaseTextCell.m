@@ -13,6 +13,7 @@
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
 
+
 #define unlikeButtonDimHeight 15.0f
 #define unlikeButtonDimWidth 50.0f
 #define likeCounterAndHeartButtonDim 10.0f
@@ -30,9 +31,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
     BOOL hideSeparator; // True if the separator shouldn't be shown
 }
 
-@property (nonatomic, strong) PFObject *ih_object;
-@property (nonatomic, strong) PFObject *ih_photo;
 @property (nonatomic, strong) UIButton *editButton;
+@property (strong, nonatomic) VSWordDetector *wordDetector;
 
 /* Private static helper to obtain the horizontal space left for name and content after taking the inset and image in consideration */
 + (CGFloat)horizontalTextSpaceForInsetWidth:(CGFloat)insetWidth;
@@ -92,6 +92,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [self.contentLabel setNumberOfLines:0];
         [self.contentLabel setLineBreakMode:NSLineBreakByWordWrapping];
         [self.contentLabel setBackgroundColor:[UIColor clearColor]];
+        
+        self.wordDetector = [[VSWordDetector alloc] initWithDelegate:self];
+        [self.wordDetector addOnView:self.contentLabel];
         
         self.timeLabel = [[UILabel alloc] init];
         [self.timeLabel setFont:[UIFont systemFontOfSize:11]];
@@ -172,9 +175,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
         [mainView addSubview:self.avatarImageButton];
         
-
-        
         [self.contentView addSubview:mainView];
+        
+        self.mentionNames = [[NSArray alloc]init];
     }
     
     return self;
@@ -367,16 +370,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 
-- (void)navigationController:(UINavigationController *)anavController {
-    self.navController = anavController;
-}
 
--(void)object:(PFObject *)object {
-    self.ih_object = object;
-}
--(void)photo:(PFObject *)photo {
-    self.ih_photo = photo;
-}
 
 - (void)setContentText:(NSString *)contentString {
     // If we have a user we pad the content with spaces to make room for the name
@@ -391,7 +385,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
          
             
             NSRange urlRange = [paddedString rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
-                        
+            
             if (urlRange.location != NSNotFound) {
                 NSString *lowerCaseString = [[paddedString substringWithRange:urlRange] lowercaseString];
                 paddedString = [paddedString stringByReplacingCharactersInRange:urlRange withString:lowerCaseString];
@@ -403,36 +397,48 @@ static TTTTimeIntervalFormatter *timeFormatter;
             if (urlRange.length > 0) {
                 self.website = [paddedString substringWithRange:urlRange];
             }
-
+            
+            // make mention names into  
+            [self addLinkToMentionNames:commentText];
+            
             [self.contentLabel setAttributedText:commentText];
             [self.contentLabel setUserInteractionEnabled:YES];
             
-            if (urlRange.length > 0 && [[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]] && [self.cellType isEqualToString:@"CommentCellCurrentUser"]) {
-                [self.editButton addTarget:self action:@selector(commentInflatorActionWithUrl:) forControlEvents:UIControlEventTouchUpInside];
-                
-                UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentInflatorActionWithUrl:)];
-                gestureRec.numberOfTouchesRequired = 1;
-                gestureRec.numberOfTapsRequired = 1;
-                [self.contentLabel addGestureRecognizer:gestureRec];
-            } else if ([[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]]&& [self.cellType isEqualToString:@"CommentCellCurrentUser"]){
-                [self.editButton addTarget:self action:@selector(commentInflatorAction:) forControlEvents:UIControlEventTouchUpInside];
-                
-                UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentInflatorAction:)];
-                gestureRec.numberOfTouchesRequired = 1;
-                gestureRec.numberOfTapsRequired = 1;
-                [self.contentLabel addGestureRecognizer:gestureRec];
-            }else if (urlRange.length > 0) {
-                UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openUrl:)];
-                gestureRec.numberOfTouchesRequired = 1;
-                gestureRec.numberOfTapsRequired = 1;
-                [self.contentLabel addGestureRecognizer:gestureRec];
-            }
         } else { // Otherwise we ignore the padding and we'll add it after we set the user
             [self.contentLabel setText:contentString];
         }
     
     [self setNeedsDisplay];
 
+}
+
+- (void)addLinkToMentionNames:(NSMutableAttributedString *)commentText{
+    
+    if(self.mentionNames.count > 0){
+        for (NSString *name in self.mentionNames) {
+            NSRange range = [[commentText string] rangeOfString:name];
+            if(range.location != NSNotFound){
+                [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
+            }
+        }
+    }
+}
+
+-(void)wordDetector:(VSWordDetector *)wordDetector detectWord:(NSString *)word
+{
+    
+    NSRange urlRange = [word rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
+    NSRange mentionRange = [word rangeOfString:@"@"];
+    
+    if(urlRange.location != NSNotFound){
+        [self commentInflatorActionWithUrl:word];
+    }else if(mentionRange.location != NSNotFound && mentionRange.location == 0){
+        
+        
+        
+    }else if ([[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]]&& [self.cellType isEqualToString:@"CommentCellCurrentUser"]){
+        [self commentInflatorAction];
+    }
 }
 
 - (void)commentInflatorActionWithUrl:(id)sender {
@@ -455,7 +461,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     }
 }
 
-- (void)commentInflatorAction:(id)sender {
+- (void)commentInflatorAction{
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Comment Menu" properties:@{}];
