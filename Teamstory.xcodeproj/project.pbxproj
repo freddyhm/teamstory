@@ -281,7 +281,6 @@
 		D51072D41937F33F00B1FF0E /* share_thought_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D51072D01937F33F00B1FF0E /* share_thought_white@2x.png */; };
 		D510B6201A0897ED00BED420 /* nav_activity@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D510B61E1A0897ED00BED420 /* nav_activity@2x.png */; };
 		D510B6211A0897ED00BED420 /* nav_activity.png in Resources */ = {isa = PBXBuildFile; fileRef = D510B61F1A0897ED00BED420 /* nav_activity.png */; };
-		D5135AF719EEDA78001F274A /* PAPActivityFeedViewController_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D5135AF619EEDA78001F274A /* PAPActivityFeedViewController_Tests.m */; };
 		D5135B0719EEDADE001F274A /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A5F51F18D2C3CD000BB243 /* Parse.framework */; };
 		D5144B1C195951D100650061 /* button-feedback-notify.png in Resources */ = {isa = PBXBuildFile; fileRef = D5144B1A195951D100650061 /* button-feedback-notify.png */; };
 		D5144B1D195951D100650061 /* button-feedback-notify@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5144B1B195951D100650061 /* button-feedback-notify@2x.png */; };
@@ -846,7 +845,6 @@
 		D510B61F1A0897ED00BED420 /* nav_activity.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nav_activity.png; sourceTree = "<group>"; };
 		D5135AF219EEDA77001F274A /* Teamstory Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Teamstory Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5135AF519EEDA78001F274A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D5135AF619EEDA78001F274A /* PAPActivityFeedViewController_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PAPActivityFeedViewController_Tests.m; sourceTree = "<group>"; };
 		D5144B1A195951D100650061 /* button-feedback-notify.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback-notify.png"; sourceTree = "<group>"; };
 		D5144B1B195951D100650061 /* button-feedback-notify@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback-notify@2x.png"; sourceTree = "<group>"; };
 		D5182C92193E1FDE00DD578C /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
@@ -1869,7 +1867,6 @@
 		D5135AF319EEDA78001F274A /* Teamstory Tests */ = {
 			isa = PBXGroup;
 			children = (
-				D5135AF619EEDA78001F274A /* PAPActivityFeedViewController_Tests.m */,
 				D5135AF419EEDA78001F274A /* Supporting Files */,
 			);
 			path = "Teamstory Tests";
@@ -2760,7 +2757,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D5135AF719EEDA78001F274A /* PAPActivityFeedViewController_Tests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3056,7 +3052,7 @@
 				BUNDLE_ID_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Distribution: Growple, inc. (NJ5SX3QK2K)";
+				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FACEBOOK_ID = 533792813373044;
@@ -3085,7 +3081,7 @@
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "c3fd3e4a-c30b-49e0-82d1-9b363a18117f";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};

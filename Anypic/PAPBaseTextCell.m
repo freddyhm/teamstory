@@ -420,18 +420,24 @@ static TTTTimeIntervalFormatter *timeFormatter;
     NSRange urlRange = [word rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
     NSRange mentionRange = [word rangeOfString:@"@"];
     
-    if(urlRange.location != NSNotFound){
-        
-        // open inflator if url
-        [self commentInflatorActionWithUrl:word];
-        
-    }else if(mentionRange.location != NSNotFound && mentionRange.location == 0){
+    BOOL isAuthor = [[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]];
+    BOOL selectedWordIsUrl = urlRange.location != NSNotFound;
+    BOOL selectedWordIsMention = mentionRange.location != NSNotFound && mentionRange.location == 0;
     
-        [self goToSelectedMentionUser:word];
-
-    }else if ([[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]]&& [self.cellType isEqualToString:@"CommentCellCurrentUser"]){
+    if(isAuthor && selectedWordIsUrl){
         
         // edit/delete menu if current user is author of comment
+        [self commentInflatorActionWithUrl:word];
+    }else if(!isAuthor && selectedWordIsUrl){
+        
+        [self openUrl:word];
+        
+    }else if(selectedWordIsMention){
+    
+        [self goToSelectedMentionUser:word];
+        
+    }else if(isAuthor){
+        
         [self commentInflatorAction];
     }
 }
@@ -459,7 +465,12 @@ static TTTTimeIntervalFormatter *timeFormatter;
     // go through all mentions in the comment and go to selected user's profile
     for(PFUser *obj in self.mentionNames){
         NSString *formatedDisplayName = [@"@" stringByAppendingString:[obj objectForKey:@"displayName"]];
-        if([formatedDisplayName isEqualToString:selectedUser]){
+        
+        // range is used when the username has more than one word, check if that word is part of composite
+        NSRange selectedUserRange = [formatedDisplayName rangeOfString:selectedUser];
+        BOOL isTappedWordSameAsUser = [formatedDisplayName isEqualToString:selectedUser];
+        
+        if(isTappedWordSameAsUser || selectedUserRange.location != NSNotFound){
             [self.delegate cell:self didTapUserButton:obj cellType:self.cellType];
         }
     }
