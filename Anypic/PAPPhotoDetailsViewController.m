@@ -48,7 +48,6 @@ enum ActionSheetTags {
 @property (nonatomic, strong) NSString *cellType;
 @property (nonatomic, strong) PFQuery *userQuery;
 @property (nonatomic, strong) NSMutableArray *atmentionUserArray;
-@property (nonatomic, strong) NSMutableArray *atmentionUserNames;
 @property (nonatomic, strong) UIView *dimView;
 @property (nonatomic, strong) UIView *hideCommentsView;
 @property CGFloat previousKbHeight;
@@ -214,7 +213,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     // at mention
     self.filteredArray = [[NSMutableArray alloc]init];
     self.atmentionUserArray = [[NSMutableArray alloc] init];
-    self.atmentionUserNames = [[NSMutableArray alloc] init];
     self.autocompleteTableView.backgroundColor = [UIColor clearColor];
 }
 
@@ -342,15 +340,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         }
         [cell setNavController:self.navigationController];
         [cell setIh_object:[self.objects objectAtIndex:indexPath.row]];
-        
-        
-        NSLog(@"%@", [[[self.objects objectAtIndex:indexPath.row] objectForKey:@"atmention"] objectAtIndex:0]);
-        
-        [cell setMentionNames:[[self.objects objectAtIndex:indexPath.row] objectForKey:@"atmention_names"]];
-        
+        [cell setMentionNames:[[self.objects objectAtIndex:indexPath.row] objectForKey:@"atmention"]];
         [cell setParentView:self.view];
         [cell setIh_photo:self.photo];
-        
         [cell setUser:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityFromUserKey]];
         [cell setContentText:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityContentKey]];
         [cell setDate:[[self.objects objectAtIndex:indexPath.row] createdAt]];
@@ -540,10 +532,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         // storing atmention user list to the array (only filtered cases).
         if ([self.atmentionUserArray count] > 0) {
             NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", self.customKeyboard.messageTextView.text]];
-            NSArray *mod_atmentionUserNames = [self.atmentionUserNames filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF IN %@", self.customKeyboard.messageTextView.text]];
             
             [comment setObject:mod_atmentionUserArray forKey:@"atmention"];
-            [comment setObject:mod_atmentionUserNames forKey:@"atmention_names"];
         }
         
         
@@ -585,7 +575,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             
             self.atmentionUserArray = nil;
             self.atmentionUserArray = [[NSMutableArray alloc] init];
-            self.atmentionUserNames = [[NSMutableArray alloc]init];
             
             [SVProgressHUD dismiss];
             [self loadObjects];
@@ -623,7 +612,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         self.postDetails.scrollEnabled = YES;
         
         [self.atmentionUserArray addObject:aUser];
-        [self.atmentionUserNames addObject:[@"@" stringByAppendingString:[aUser objectForKey:@"displayName"]]];
     } else {
         [self shouldPresentAccountViewForUser:aUser];
     }

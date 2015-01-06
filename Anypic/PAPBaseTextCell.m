@@ -383,7 +383,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
             
             NSString *paddedString = [PAPBaseTextCell padString:contentString withFont:[UIFont systemFontOfSize:13] toWidth:nameSize.width];
          
-            
             NSRange urlRange = [paddedString rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
             
             if (urlRange.location != NSNotFound) {
@@ -392,13 +391,14 @@ static TTTTimeIntervalFormatter *timeFormatter;
             }
             
             NSMutableAttributedString *commentText = [[NSMutableAttributedString alloc] initWithString:paddedString];
+            
             [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:urlRange];
             
             if (urlRange.length > 0) {
                 self.website = [paddedString substringWithRange:urlRange];
             }
             
-            // make mention names into  
+            // add links to mention and change color
             [self addLinkToMentionNames:commentText];
             
             [self.contentLabel setAttributedText:commentText];
@@ -412,11 +412,41 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 }
 
+
+-(void)wordDetector:(VSWordDetector *)wordDetector detectWord:(NSString *)word
+{
+    
+    // get range for url and mentions
+    NSRange urlRange = [word rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
+    NSRange mentionRange = [word rangeOfString:@"@"];
+    
+    if(urlRange.location != NSNotFound){
+        
+        // open inflator if url
+        [self commentInflatorActionWithUrl:word];
+        
+    }else if(mentionRange.location != NSNotFound && mentionRange.location == 0){
+    
+        [self goToSelectedMentionUser:word];
+
+    }else if ([[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]]&& [self.cellType isEqualToString:@"CommentCellCurrentUser"]){
+        
+        // edit/delete menu if current user is author of comment
+        [self commentInflatorAction];
+    }
+}
+
 - (void)addLinkToMentionNames:(NSMutableAttributedString *)commentText{
     
+    // go through mention array of user objects
     if(self.mentionNames.count > 0){
-        for (NSString *name in self.mentionNames) {
-            NSRange range = [[commentText string] rangeOfString:name];
+        for (PFObject *userObject in self.mentionNames) {
+            
+            // get range for user name in comment
+            NSString *formatedDisplayName = [@"@" stringByAppendingString:[userObject objectForKey:@"displayName"]];
+            NSRange range = [[commentText string] rangeOfString:formatedDisplayName];
+            
+            // change color if present
             if(range.location != NSNotFound){
                 [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
             }
@@ -424,20 +454,14 @@ static TTTTimeIntervalFormatter *timeFormatter;
     }
 }
 
--(void)wordDetector:(VSWordDetector *)wordDetector detectWord:(NSString *)word
+- (void)goToSelectedMentionUser:(NSString *)selectedUser
 {
-    
-    NSRange urlRange = [word rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
-    NSRange mentionRange = [word rangeOfString:@"@"];
-    
-    if(urlRange.location != NSNotFound){
-        [self commentInflatorActionWithUrl:word];
-    }else if(mentionRange.location != NSNotFound && mentionRange.location == 0){
-        
-        
-        
-    }else if ([[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]]&& [self.cellType isEqualToString:@"CommentCellCurrentUser"]){
-        [self commentInflatorAction];
+    // go through all mentions in the comment and go to selected user's profile
+    for(PFUser *obj in self.mentionNames){
+        NSString *formatedDisplayName = [@"@" stringByAppendingString:[obj objectForKey:@"displayName"]];
+        if([formatedDisplayName isEqualToString:selectedUser]){
+            [self.delegate cell:self didTapUserButton:obj cellType:self.cellType];
+        }
     }
 }
 
@@ -488,7 +512,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.website = [NSString stringWithFormat:@"%@%@", http, self.website];
     }
     
-    NSLog(@"%@", self.website);
     //self.website = [self.website stringWithFormat:@"%@/%@/%@", ];
     PAPwebviewViewController *webViewController = [[PAPwebviewViewController alloc] initWithWebsite:self.website];
     webViewController.hidesBottomBarWhenPushed = YES;
