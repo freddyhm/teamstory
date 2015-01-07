@@ -33,6 +33,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 @property (nonatomic, strong) UIButton *editButton;
 @property (strong, nonatomic) VSWordDetector *wordDetector;
+@property (strong, nonatomic) NSDictionary *mentionNamesWithRanges;
 
 /* Private static helper to obtain the horizontal space left for name and content after taking the inset and image in consideration */
 + (CGFloat)horizontalTextSpaceForInsetWidth:(CGFloat)insetWidth;
@@ -415,30 +416,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 -(void)wordDetector:(VSWordDetector *)wordDetector detectWord:(NSString *)word
 {
-    
-    // get range for url and mentions
-    NSRange urlRange = [word rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
-    NSRange mentionRange = [word rangeOfString:@"@"];
-    
-    BOOL isAuthor = [[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]];
-    BOOL selectedWordIsUrl = urlRange.location != NSNotFound;
-    BOOL selectedWordIsMention = mentionRange.location != NSNotFound && mentionRange.location == 0;
-    
-    if(isAuthor && selectedWordIsUrl){
-        
-        // edit/delete menu if current user is author of comment
-        [self commentInflatorActionWithUrl:word];
-    }else if(!isAuthor && selectedWordIsUrl){
-        
-        [self openUrl:word];
-        
-    }else if(selectedWordIsMention){
-    
-        [self goToSelectedMentionUser:word];
-        
-    }else if(isAuthor){
-        
-        [self commentInflatorAction];
+    if(![self foundMentionName:word]){
+        [self foundURL:word];
     }
 }
 
@@ -446,12 +425,20 @@ static TTTTimeIntervalFormatter *timeFormatter;
     
     // go through mention array of user objects
     if(self.mentionNames.count > 0){
+        
+        // initialize range dictionary
+        self.mentionNamesWithRanges = [[NSMutableDictionary alloc]init];
+        
         for (PFObject *userObject in self.mentionNames) {
             
             // get range for user name in comment
             NSString *formatedDisplayName = [@"@" stringByAppendingString:[userObject objectForKey:@"displayName"]];
             NSRange range = [[commentText string] rangeOfString:formatedDisplayName];
             
+            // add location, length, and object to dict, will need to determine if user selected mention
+            NSMutableArray *mentionRange = [[NSMutableArray alloc]initWithObjects:@(range.location),@(range.length), userObject, nil];
+            [self.mentionNamesWithRanges setValue:mentionRange forKey:[userObject objectForKey:@"displayName"]];
+        
             // change color if present
             if(range.location != NSNotFound){
                 [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
@@ -460,20 +447,48 @@ static TTTTimeIntervalFormatter *timeFormatter;
     }
 }
 
-- (void)goToSelectedMentionUser:(NSString *)selectedUser
+- (void)foundURL:(NSString *)word{
+    
+    NSLog(@"%@", word);
+    
+    // get range for url and mentions
+    NSRange urlRange = [word rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
+    
+    // check if user matches current user
+    BOOL isAuthor = [[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]];
+    BOOL selectedWordIsUrl = urlRange.location != NSNotFound;
+    
+    if(isAuthor && selectedWordIsUrl){
+        // edit/delete menu with url option if current user is author of comment
+        [self commentInflatorActionWithUrl:word];
+    }else if(!isAuthor && selectedWordIsUrl){
+        // open url right away if not author
+        [self openUrl:word];
+    }else if(isAuthor){
+        // open edit/delete menu
+        [self commentInflatorAction];
+    }
+}
+
+- (BOOL)foundMentionName:(NSString *)word
 {
-    // go through all mentions in the comment and go to selected user's profile
-    for(PFUser *obj in self.mentionNames){
-        NSString *formatedDisplayName = [@"@" stringByAppendingString:[obj objectForKey:@"displayName"]];
+    NSRange wordRangeInComment = [[self.contentLabel text] rangeOfString:word];
+    
+    for (id key in self.mentionNamesWithRanges) {
         
-        // range is used when the username has more than one word, check if that word is part of composite
-        NSRange selectedUserRange = [formatedDisplayName rangeOfString:selectedUser];
-        BOOL isTappedWordSameAsUser = [formatedDisplayName isEqualToString:selectedUser];
+        NSMutableArray *mentionRange = [self.mentionNamesWithRanges objectForKey:key];
         
-        if(isTappedWordSameAsUser || selectedUserRange.location != NSNotFound){
-            [self.delegate cell:self didTapUserButton:obj cellType:self.cellType];
+        int startLocation = (int)[[mentionRange objectAtIndex:0] integerValue];
+        int length = (int)[[mentionRange objectAtIndex:1] integerValue];
+        int endLocation = (startLocation + length) - 1;
+        
+        if(wordRangeInComment.location == startLocation || (wordRangeInComment.location > startLocation && wordRangeInComment.location < endLocation)){
+            [self.delegate cell:self didTapUserButton:[mentionRange objectAtIndex:2] cellType:self.cellType];
+            return YES;
         }
     }
+    
+    return NO;
 }
 
 - (void)commentInflatorActionWithUrl:(id)sender {
