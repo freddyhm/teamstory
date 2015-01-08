@@ -154,6 +154,10 @@ NSInteger selection = 1;
     [SVProgressHUD dismiss];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [[self.navigationController.tabBarController.viewControllers objectAtIndex:1] tabBarItem].image = [[UIImage imageNamed:@"nav_discover.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+}
+
 - (void)viewWillAppear:(BOOL)animated{
     // analytics
     [PAPUtility captureScreenGA:@"Discover"];
@@ -166,7 +170,7 @@ NSInteger selection = 1;
     [SVProgressHUD setImageName:@"loading_discover.png"];
     [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeCustom];
     
-    [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(dismissHUD) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(dismissHUD) userInfo:nil repeats:NO];
     
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     self.navigationController.navigationBar.hidden = YES;
@@ -179,8 +183,6 @@ NSInteger selection = 1;
             NSLog(@"error: %@", error);
         }
     }];
-    
-    [[self.navigationController.tabBarController.viewControllers objectAtIndex:1] tabBarItem].image = [UIImage imageNamed:@"nav_discover.png"];
     
     self.postThoughtQueryResults = nil;
     self.postPicQueryResults = nil;
