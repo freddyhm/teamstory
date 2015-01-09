@@ -150,39 +150,44 @@
         
         //handling cases of link post
         if ([[self.ih_object objectForKey:@"type"] isEqualToString:@"link"]) {
-            [self.linkBackgroundView setFrame:CGRectMake(0.0f, 0.0f, 320.0f, 100.0f)];
-            [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
-            [self.contentView addSubview:self.linkBackgroundView];
-            [self.contentView sendSubviewToBack:self.linkBackgroundView];
-            
-            
-            [self.linkBackgroundView_gray setFrame:CGRectMake(5.0f, 5.0f , 311.0f, 90.0f)];
-            [self.linkBackgroundView_gray setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
-            [self.contentView addSubview:self.linkBackgroundView_gray];
-            
-            [self.linkTitleLabel setFrame:CGRectMake(105.0f,0.0f, 190.0f, 40.0f)];
-            self.linkTitleLabel.text = [self.ih_object objectForKey:@"linkTitle"];
-            self.linkTitleLabel.numberOfLines = 2;
-            
-            self.imageView.frame = CGRectMake( 10.5f, 10.0f, 80.0f, 80.0f);
-            self.captionLabel.frame = CGRectMake(12.5f, self.imageView.frame.size.height + 25.0f, 295.0f, expectedSize.height);
-            self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 320.0f, 25.0f + expectedSize.height + 100.0f);
-            self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.imageView.frame.size.height + self.captionLabel.frame.size.height + 45.0f);
-    
-            [self.linkTitleLabel setFrame:CGRectMake(99.0f, 10.0f, 190.0f, 30.0f)];
-            self.linkTitleLabel.text = [self.ih_object objectForKey:@"linkTitle"];
-            
-            [self.linkDescription setFrame:CGRectMake(99.0f, 40.0f, 190.0f, 30.0f)];
-            self.linkDescription.text = [self.ih_object objectForKey:@"linkDesc"];
-            
-            [self.linkUrlLabel setFrame:CGRectMake(99.0f, 70.0f, 190.0f, 15.0f)];
-            self.linkUrlLabel.text = [self.ih_object objectForKey:@"link"];
-            
-            [self.contentView bringSubviewToFront:self.linkUrlLabel];
-            [self.contentView bringSubviewToFront:self.linkTitleLabel];
-            [self.contentView bringSubviewToFront:self.linkDescription];
-            [self.contentView bringSubviewToFront:self.imageView];
-            [self.contentView bringSubviewToFront:self.photoButton];
+            if ([[self.ih_object objectForKey:@"link"] containsString:@"www.youtube.com"]) {
+                // When post is a youtube link
+                NSLog(@"here! youtubelink");
+            } else {
+                // When post is not a youtube link (Normal Links)
+                [self.linkBackgroundView setFrame:CGRectMake(0.0f, 0.0f, 320.0f, 100.0f)];
+                [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
+                [self.contentView addSubview:self.linkBackgroundView];
+                [self.contentView sendSubviewToBack:self.linkBackgroundView];
+                
+                [self.linkBackgroundView_gray setFrame:CGRectMake(5.0f, 5.0f , 311.0f, 90.0f)];
+                [self.linkBackgroundView_gray setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
+                [self.contentView addSubview:self.linkBackgroundView_gray];
+                
+                [self.linkTitleLabel setFrame:CGRectMake(105.0f,0.0f, 190.0f, 40.0f)];
+                self.linkTitleLabel.text = [self.ih_object objectForKey:@"linkTitle"];
+                self.linkTitleLabel.numberOfLines = 2;
+                
+                self.imageView.frame = CGRectMake( 10.5f, 10.0f, 80.0f, 80.0f);
+                self.captionLabel.frame = CGRectMake(12.5f, self.imageView.frame.size.height + 25.0f, 295.0f, expectedSize.height);
+                self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 320.0f, 25.0f + expectedSize.height + 100.0f);
+                self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.imageView.frame.size.height + self.captionLabel.frame.size.height + 45.0f);
+        
+                [self.linkTitleLabel setFrame:CGRectMake(99.0f, 10.0f, 190.0f, 30.0f)];
+                self.linkTitleLabel.text = [self.ih_object objectForKey:@"linkTitle"];
+                
+                [self.linkDescription setFrame:CGRectMake(99.0f, 40.0f, 190.0f, 30.0f)];
+                self.linkDescription.text = [self.ih_object objectForKey:@"linkDesc"];
+                
+                [self.linkUrlLabel setFrame:CGRectMake(99.0f, 70.0f, 190.0f, 15.0f)];
+                self.linkUrlLabel.text = [self.ih_object objectForKey:@"link"];
+                
+                [self.contentView bringSubviewToFront:self.linkUrlLabel];
+                [self.contentView bringSubviewToFront:self.linkTitleLabel];
+                [self.contentView bringSubviewToFront:self.linkDescription];
+                [self.contentView bringSubviewToFront:self.imageView];
+                [self.contentView bringSubviewToFront:self.photoButton];
+            }
         }
         
         [self.footerView setFrame:CGRectMake(0.0f, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height, self.bounds.size.width, 44.0f)];
