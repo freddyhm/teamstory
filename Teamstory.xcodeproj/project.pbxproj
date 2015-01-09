@@ -3080,7 +3080,7 @@
 					"$(PROJECT_DIR)/External",
 				);
 				PRODUCT_NAME = Teamstory;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "51471809-0f95-4da1-b9fb-dcdfc924dc94";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
