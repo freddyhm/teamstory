@@ -293,7 +293,6 @@
 		D51072D41937F33F00B1FF0E /* share_thought_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D51072D01937F33F00B1FF0E /* share_thought_white@2x.png */; };
 		D510B6201A0897ED00BED420 /* nav_activity@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D510B61E1A0897ED00BED420 /* nav_activity@2x.png */; };
 		D510B6211A0897ED00BED420 /* nav_activity.png in Resources */ = {isa = PBXBuildFile; fileRef = D510B61F1A0897ED00BED420 /* nav_activity.png */; };
-		D5135AF719EEDA78001F274A /* PAPActivityFeedViewController_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D5135AF619EEDA78001F274A /* PAPActivityFeedViewController_Tests.m */; };
 		D5135B0719EEDADE001F274A /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A5F51F18D2C3CD000BB243 /* Parse.framework */; };
 		D5144B1C195951D100650061 /* button-feedback-notify.png in Resources */ = {isa = PBXBuildFile; fileRef = D5144B1A195951D100650061 /* button-feedback-notify.png */; };
 		D5144B1D195951D100650061 /* button-feedback-notify@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5144B1B195951D100650061 /* button-feedback-notify@2x.png */; };
@@ -343,6 +342,7 @@
 		D55AEF3719BA7B9C00ECF342 /* btn_following_discover@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D55AEF3519BA7B9C00ECF342 /* btn_following_discover@2x.png */; };
 		D560FADC19B916F100D14D16 /* LogoNavigationBar.png in Resources */ = {isa = PBXBuildFile; fileRef = D560FADA19B916F100D14D16 /* LogoNavigationBar.png */; };
 		D5654177196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = D5654176196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.m */; };
+		D56D17D31A5A2BB30090615A /* VSWordDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = D56D17D21A5A2BB30090615A /* VSWordDetector.m */; };
 		D56D466519884C33001FAA76 /* PhotoTimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D56D466319884C33001FAA76 /* PhotoTimelineViewController.m */; };
 		D56D466619884C33001FAA76 /* PhotoTimelineViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D56D466419884C33001FAA76 /* PhotoTimelineViewController.xib */; };
 		D5743808194629280040C96A /* followersFollowingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5743807194629280040C96A /* followersFollowingViewController.m */; };
@@ -416,6 +416,7 @@
 		D5856FB619F87E2600D0086F /* KonotorVoiceInputOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = D5856F8B19F87E2500D0086F /* KonotorVoiceInputOverlay.m */; };
 		D5856FB719F87E2600D0086F /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D5856F8C19F87E2500D0086F /* KonotorModels.bundle */; };
 		D5856FB819F87E2600D0086F /* libKonotorCombined.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D5856F8D19F87E2500D0086F /* libKonotorCombined.a */; };
+		D58FD92B1A4501D3008912C8 /* AtMention.m in Sources */ = {isa = PBXBuildFile; fileRef = D58FD92A1A4501D3008912C8 /* AtMention.m */; };
 		D5903C75192EBBF900DC9896 /* ThoughtPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */; };
 		D5903C76192EBBF900DC9896 /* ThoughtPostViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5903C74192EBBF900DC9896 /* ThoughtPostViewController.xib */; };
 		D594C20418EFEBAD0008F5DF /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D594C20118EFEBAD0008F5DF /* SVProgressHUD.bundle */; };
@@ -880,7 +881,6 @@
 		D510B61F1A0897ED00BED420 /* nav_activity.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nav_activity.png; sourceTree = "<group>"; };
 		D5135AF219EEDA77001F274A /* Teamstory Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Teamstory Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5135AF519EEDA78001F274A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D5135AF619EEDA78001F274A /* PAPActivityFeedViewController_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PAPActivityFeedViewController_Tests.m; sourceTree = "<group>"; };
 		D5144B1A195951D100650061 /* button-feedback-notify.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback-notify.png"; sourceTree = "<group>"; };
 		D5144B1B195951D100650061 /* button-feedback-notify@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback-notify@2x.png"; sourceTree = "<group>"; };
 		D5182C92193E1FDE00DD578C /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
@@ -951,6 +951,8 @@
 		D5654175196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALAssetsLibrary+CustomPhotoAlbum.h"; sourceTree = "<group>"; };
 		D5654176196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALAssetsLibrary+CustomPhotoAlbum.m"; sourceTree = "<group>"; };
 		D56A714119B78416006F25FA /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = Pods/Pods.xcodeproj; sourceTree = "<group>"; };
+		D56D17D11A5A2BB30090615A /* VSWordDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSWordDetector.h; sourceTree = SOURCE_ROOT; };
+		D56D17D21A5A2BB30090615A /* VSWordDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSWordDetector.m; sourceTree = SOURCE_ROOT; };
 		D56D466219884C33001FAA76 /* PhotoTimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoTimelineViewController.h; sourceTree = SOURCE_ROOT; };
 		D56D466319884C33001FAA76 /* PhotoTimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoTimelineViewController.m; sourceTree = SOURCE_ROOT; };
 		D56D466419884C33001FAA76 /* PhotoTimelineViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoTimelineViewController.xib; sourceTree = SOURCE_ROOT; };
@@ -1037,6 +1039,8 @@
 		D5856F8B19F87E2500D0086F /* KonotorVoiceInputOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorVoiceInputOverlay.m; sourceTree = "<group>"; };
 		D5856F8C19F87E2500D0086F /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		D5856F8D19F87E2500D0086F /* libKonotorCombined.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libKonotorCombined.a; sourceTree = "<group>"; };
+		D58FD9291A4501D3008912C8 /* AtMention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AtMention.h; sourceTree = SOURCE_ROOT; };
+		D58FD92A1A4501D3008912C8 /* AtMention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AtMention.m; sourceTree = SOURCE_ROOT; };
 		D5903C72192EBBF900DC9896 /* ThoughtPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThoughtPostViewController.h; sourceTree = SOURCE_ROOT; };
 		D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThoughtPostViewController.m; sourceTree = SOURCE_ROOT; };
 		D5903C74192EBBF900DC9896 /* ThoughtPostViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ThoughtPostViewController.xib; sourceTree = SOURCE_ROOT; };
@@ -1239,6 +1243,8 @@
 				C4A6D87B157859AA009FE621 /* PAPCache.m */,
 				C4B60864155B085600EFA90C /* Resources */,
 				09ABC07813A1D52D009C3FCF /* Supporting Files */,
+				D58FD9291A4501D3008912C8 /* AtMention.h */,
+				D58FD92A1A4501D3008912C8 /* AtMention.m */,
 			);
 			name = Teamstory;
 			path = ParseStarterProject;
@@ -1778,6 +1784,8 @@
 		C4A0B4FF156C5B9F00E48554 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				D56D17D11A5A2BB30090615A /* VSWordDetector.h */,
+				D56D17D21A5A2BB30090615A /* VSWordDetector.m */,
 				4611EE9C19DF427C00B319C0 /* ParseFacebookUtils.framework */,
 				D503B6151A32904E00CF225B /* Intercom.h */,
 				D503B6161A32904E00CF225B /* libIntercom.a */,
@@ -1927,7 +1935,6 @@
 		D5135AF319EEDA78001F274A /* Teamstory Tests */ = {
 			isa = PBXGroup;
 			children = (
-				D5135AF619EEDA78001F274A /* PAPActivityFeedViewController_Tests.m */,
 				D5135AF419EEDA78001F274A /* Supporting Files */,
 			);
 			path = "Teamstory Tests";
@@ -2803,6 +2810,7 @@
 				C4F102D9156C580C0061BC3E /* PAPSettingsActionSheetDelegate.m in Sources */,
 				D530C3F318FB22FC00739027 /* iRate.m in Sources */,
 				D51C02331A2830CD00A663CD /* NavWrapperViewController.m in Sources */,
+				D58FD92B1A4501D3008912C8 /* AtMention.m in Sources */,
 				46DC23BF19AA1F0400E8FCDF /* PAPdiscoverTileView.m in Sources */,
 				4658CEF619BE82250057AFA4 /* PAPMessagingViewController.m in Sources */,
 				C4F102EF156C58E00061BC3E /* main.m in Sources */,
@@ -2817,6 +2825,7 @@
 				46E1EB6F183BCA6300F64274 /* PAPProfileSettingViewController.m in Sources */,
 				D542D8C0196A6F4700A0384F /* ELCAssetCell.m in Sources */,
 				D5903C75192EBBF900DC9896 /* ThoughtPostViewController.m in Sources */,
+				D56D17D31A5A2BB30090615A /* VSWordDetector.m in Sources */,
 				46C6FC0E198AA62900BC99D5 /* PAPprofileSetupViewController.m in Sources */,
 				D54E0FF819A7B75C000B1F9D /* PAPwebviewViewController.m in Sources */,
 				D5856F9119F87E2500D0086F /* KonotorFeedbackScreen.m in Sources */,
@@ -2828,7 +2837,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D5135AF719EEDA78001F274A /* PAPActivityFeedViewController_Tests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3124,7 +3132,7 @@
 				BUNDLE_ID_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Distribution: Growple, inc. (NJ5SX3QK2K)";
+				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FACEBOOK_ID = 533792813373044;
@@ -3152,8 +3160,8 @@
 					"$(PROJECT_DIR)/External",
 				);
 				PRODUCT_NAME = Teamstory;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "c3fd3e4a-c30b-49e0-82d1-9b363a18117f";
+				PROVISIONING_PROFILE = "51471809-0f95-4da1-b9fb-dcdfc924dc94";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};

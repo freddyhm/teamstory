@@ -17,6 +17,7 @@
 #import "Mixpanel.h"
 #import "AppDelegate.h"
 #import "Intercom.h"
+#import "AtMention.h"
 
 #define APP ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 
@@ -40,7 +41,7 @@ enum ActionSheetTags {
 @property (nonatomic, strong) PFObject *current_photo;
 @property (nonatomic, strong) PFUser *reported_user;
 @property (nonatomic, strong) NSString *source;
-@property (nonatomic, strong) NSMutableArray *userArray;
+@property (nonatomic, strong) NSMutableArray *userList;
 @property (nonatomic, strong) NSString *atmentionSearchString;
 @property (nonatomic, strong) UITableView *autocompleteTableView;
 @property (nonatomic, strong) NSArray *filteredArray;
@@ -60,7 +61,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 @synthesize photoID;
 @synthesize current_photo;
 @synthesize reported_user;
-@synthesize userArray;
 @synthesize autocompleteTableView;
 @synthesize atmentionSearchString;
 @synthesize filteredArray;
@@ -210,6 +210,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self.customKeyboard setBackgroundTable:self.postDetails];
     [self.view addSubview:self.customKeyboard.view];
     
+    // at mention
+    self.filteredArray = [[NSMutableArray alloc]init];
+    self.atmentionUserArray = [[NSMutableArray alloc] init];
+    self.autocompleteTableView.backgroundColor = [UIColor clearColor];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -254,11 +258,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     PFQuery *commentQuery = [PFQuery queryWithClassName:@"Activity"];
     [commentQuery whereKey:kPAPActivityPhotoKey equalTo:self.photo];
     [commentQuery includeKey:kPAPActivityFromUserKey];
+    [commentQuery includeKey:@"atmention"];
     [commentQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeComment];
     [commentQuery orderByAscending:@"createdAt"];
-    
     [commentQuery setCachePolicy:kPFCachePolicyNetworkOnly];
-    
+
     [commentQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if(!error){
             self.objects = [NSMutableArray arrayWithArray:objects];
@@ -334,11 +338,11 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             cell.cellInsetWidth = kPAPCellInsetWidth;
             cell.delegate = self;
         }
-        [cell navigationController:self.navigationController];
-        [cell object:[self.objects objectAtIndex:indexPath.row]];
+        [cell setNavController:self.navigationController];
+        [cell setIh_object:[self.objects objectAtIndex:indexPath.row]];
+        [cell setMentionNames:[[self.objects objectAtIndex:indexPath.row] objectForKey:@"atmention"]];
         [cell setParentView:self.view];
-        [cell photo:self.photo];
-        
+        [cell setIh_photo:self.photo];
         [cell setUser:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityFromUserKey]];
         [cell setContentText:[[self.objects objectAtIndex:indexPath.row] objectForKey:kPAPActivityContentKey]];
         [cell setDate:[[self.objects objectAtIndex:indexPath.row] createdAt]];
@@ -447,31 +451,13 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         return YES;
     }
     
+    // at mention, setting users
     if ([text isEqualToString:@"@"]){
-        [SVProgressHUD show];
-        
-        if ([self.userArray count] < 1) {
-            userQuery = [PFUser query];
-            userQuery.limit = MAXFLOAT;
-            [userQuery whereKeyExists:@"displayName"];
-            [userQuery orderByAscending:@"displayName"];
-            [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                [SVProgressHUD dismiss];
-                if (!error) {
-                    self.userArray = [[NSMutableArray alloc] initWithArray:objects];
-                    self.atmentionUserArray = [[NSMutableArray alloc] init];
-                    self.filteredArray = objects;
-                    self.autocompleteTableView.backgroundColor = [UIColor clearColor];
-                } else {
-                    NSLog(@"%@", error);
-                }
-            }]; } else {
-                [SVProgressHUD dismiss];
-            }
-        
+        self.userList = [[AtMention sharedAtMention] userList];
+        self.filteredArray = self.userList;
     }
     
-    if ([self.userArray count] > 0) {
+    if ([self.userList count] > 0) {
         NSMutableString *updatedText = [[NSMutableString alloc] initWithString:self.customKeyboard.messageTextView.text];
         if (range.location == 0 || range.location == text_location) {
             self.autocompleteTableView.hidden = YES;
@@ -499,7 +485,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 atmentionSearchString = [atmentionSearchString stringByAppendingString:text];
             }
             
-            self.filteredArray = [self.userArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
+            self.filteredArray = [self.userList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
             
             // Check system version for keyboard offset, ios8 added suggestion bar
             // Align the mention table view
@@ -546,6 +532,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         // storing atmention user list to the array (only filtered cases).
         if ([self.atmentionUserArray count] > 0) {
             NSArray *mod_atmentionUserArray = [self.atmentionUserArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName IN %@", self.customKeyboard.messageTextView.text]];
+            
             [comment setObject:mod_atmentionUserArray forKey:@"atmention"];
         }
         
@@ -588,6 +575,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             
             self.atmentionUserArray = nil;
             self.atmentionUserArray = [[NSMutableArray alloc] init];
+            
             [SVProgressHUD dismiss];
             [self loadObjects];
             

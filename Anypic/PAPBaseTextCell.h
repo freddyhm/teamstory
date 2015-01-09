@@ -4,10 +4,12 @@
 //
 //
 
+#import "VSWordDetector.h"
+
 @class PAPProfileImageView;
 @protocol PAPBaseTextCellDelegate;
 
-@interface PAPBaseTextCell : UITableViewCell <UIActionSheetDelegate, UIAlertViewDelegate>{
+@interface PAPBaseTextCell : UITableViewCell <UIActionSheetDelegate, UIAlertViewDelegate, VSWordDetectorDelegate>{
     NSUInteger horizontalTextSpace;
     id _delegate;
 }
@@ -35,16 +37,15 @@
 @property (nonatomic, strong) UIImageView *separatorImage;
 @property (nonatomic, strong) NSString *website;
 @property (nonatomic, strong) UINavigationController *navController;
+@property (nonatomic, strong) NSArray *mentionNames;
 @property (nonatomic, strong) NSString *cellType;
 @property (nonatomic, strong) UIView *parentView;
 @property (nonatomic, strong) UITabBarController *tabBarController;
+@property (nonatomic, strong) PFObject *ih_object;
+@property (nonatomic, strong) PFObject *ih_photo;
 
 /*! The horizontal inset of the cell */
 @property (nonatomic) CGFloat cellInsetWidth;
-
-
--(void)object:(PFObject *)object;
--(void)photo:(PFObject *)photo;
 
 /*! Like comment */
 - (void)setLikeCommentButtonState:(BOOL)selected forCurrentUser:(BOOL)forCurrentUser;
@@ -55,7 +56,6 @@
 /*! Setters for the cell's content */
 - (void)setContentText:(NSString *)contentString;
 - (void)setDate:(NSDate *)date;
-- (void)navigationController:(UINavigationController *)anavController;
 
 - (void)setCellInsetWidth:(CGFloat)insetWidth;
 - (void)hideSeparator:(BOOL)hide;

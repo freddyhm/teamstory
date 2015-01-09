@@ -13,6 +13,7 @@
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
 
+
 #define unlikeButtonDimHeight 15.0f
 #define unlikeButtonDimWidth 50.0f
 #define likeCounterAndHeartButtonDim 10.0f
@@ -30,9 +31,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
     BOOL hideSeparator; // True if the separator shouldn't be shown
 }
 
-@property (nonatomic, strong) PFObject *ih_object;
-@property (nonatomic, strong) PFObject *ih_photo;
 @property (nonatomic, strong) UIButton *editButton;
+@property (strong, nonatomic) VSWordDetector *wordDetector;
+@property (strong, nonatomic) NSDictionary *mentionNamesWithRanges;
 
 /* Private static helper to obtain the horizontal space left for name and content after taking the inset and image in consideration */
 + (CGFloat)horizontalTextSpaceForInsetWidth:(CGFloat)insetWidth;
@@ -92,6 +93,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [self.contentLabel setNumberOfLines:0];
         [self.contentLabel setLineBreakMode:NSLineBreakByWordWrapping];
         [self.contentLabel setBackgroundColor:[UIColor clearColor]];
+        
+        self.wordDetector = [[VSWordDetector alloc] initWithDelegate:self];
+        [self.wordDetector addOnView:self.contentLabel];
         
         self.timeLabel = [[UILabel alloc] init];
         [self.timeLabel setFont:[UIFont systemFontOfSize:11]];
@@ -172,9 +176,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
         [mainView addSubview:self.avatarImageButton];
         
-
-        
         [self.contentView addSubview:mainView];
+        
+        self.mentionNames = [[NSArray alloc]init];
     }
     
     return self;
@@ -367,16 +371,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 
-- (void)navigationController:(UINavigationController *)anavController {
-    self.navController = anavController;
-}
 
--(void)object:(PFObject *)object {
-    self.ih_object = object;
-}
--(void)photo:(PFObject *)photo {
-    self.ih_photo = photo;
-}
 
 - (void)setContentText:(NSString *)contentString {
     // If we have a user we pad the content with spaces to make room for the name
@@ -388,49 +383,112 @@ static TTTTimeIntervalFormatter *timeFormatter;
             CGSize nameSize = ([self.nameButton.titleLabel.text boundingRectWithSize:CGSizeMake(nameMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont boldSystemFontOfSize:13], NSParagraphStyleAttributeName: paragraphStyle.copy} context:nil]).size;
             
             NSString *paddedString = [PAPBaseTextCell padString:contentString withFont:[UIFont systemFontOfSize:13] toWidth:nameSize.width];
-            NSRange range = [paddedString rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
+         
+            NSRange urlRange = [paddedString rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
             
-            if (range.location != NSNotFound) {
-                NSString *lowerCaseString = [[paddedString substringWithRange:range] lowercaseString];
-                paddedString = [paddedString stringByReplacingCharactersInRange:range withString:lowerCaseString];
+            if (urlRange.location != NSNotFound) {
+                NSString *lowerCaseString = [[paddedString substringWithRange:urlRange] lowercaseString];
+                paddedString = [paddedString stringByReplacingCharactersInRange:urlRange withString:lowerCaseString];
             }
             
             NSMutableAttributedString *commentText = [[NSMutableAttributedString alloc] initWithString:paddedString];
-            [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
             
-            if (range.length > 0) {
-                self.website = [paddedString substringWithRange:range];
+            [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:urlRange];
+            
+            if (urlRange.length > 0) {
+                self.website = [paddedString substringWithRange:urlRange];
             }
-
+            
+            // add links to mention and change color
+            [self addLinkToMentionNames:commentText];
+            
             [self.contentLabel setAttributedText:commentText];
             [self.contentLabel setUserInteractionEnabled:YES];
             
-            if (range.length > 0 && [[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]] && [self.cellType isEqualToString:@"CommentCellCurrentUser"]) {
-                [self.editButton addTarget:self action:@selector(commentInflatorActionWithUrl:) forControlEvents:UIControlEventTouchUpInside];
-                
-                UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentInflatorActionWithUrl:)];
-                gestureRec.numberOfTouchesRequired = 1;
-                gestureRec.numberOfTapsRequired = 1;
-                [self.contentLabel addGestureRecognizer:gestureRec];
-            } else if ([[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]]&& [self.cellType isEqualToString:@"CommentCellCurrentUser"]){
-                [self.editButton addTarget:self action:@selector(commentInflatorAction:) forControlEvents:UIControlEventTouchUpInside];
-                
-                UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(commentInflatorAction:)];
-                gestureRec.numberOfTouchesRequired = 1;
-                gestureRec.numberOfTapsRequired = 1;
-                [self.contentLabel addGestureRecognizer:gestureRec];
-            }else if (range.length > 0) {
-                UITapGestureRecognizer *gestureRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openUrl:)];
-                gestureRec.numberOfTouchesRequired = 1;
-                gestureRec.numberOfTapsRequired = 1;
-                [self.contentLabel addGestureRecognizer:gestureRec];
-            }
         } else { // Otherwise we ignore the padding and we'll add it after we set the user
             [self.contentLabel setText:contentString];
         }
     
     [self setNeedsDisplay];
 
+}
+
+
+-(void)wordDetector:(VSWordDetector *)wordDetector detectWord:(NSString *)word
+{
+    if(![self foundMentionName:word]){
+        [self foundURL:word];
+    }
+}
+
+- (void)addLinkToMentionNames:(NSMutableAttributedString *)commentText{
+    
+    // go through mention array of user objects
+    if(self.mentionNames.count > 0){
+        
+        // initialize range dictionary
+        self.mentionNamesWithRanges = [[NSMutableDictionary alloc]init];
+        
+        for (PFObject *userObject in self.mentionNames) {
+            
+            // get range for user name in comment
+            NSString *formatedDisplayName = [@"@" stringByAppendingString:[userObject objectForKey:@"displayName"]];
+            NSRange range = [[commentText string] rangeOfString:formatedDisplayName];
+            
+            // add location, length, and object to dict, will need to determine if user selected mention
+            NSMutableArray *mentionRange = [[NSMutableArray alloc]initWithObjects:@(range.location),@(range.length), userObject, nil];
+            [self.mentionNamesWithRanges setValue:mentionRange forKey:[userObject objectForKey:@"displayName"]];
+        
+            // change color if present
+            if(range.location != NSNotFound){
+                [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
+            }
+        }
+    }
+}
+
+- (void)foundURL:(NSString *)word{
+    
+    NSLog(@"%@", word);
+    
+    // get range for url and mentions
+    NSRange urlRange = [word rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
+    
+    // check if user matches current user
+    BOOL isAuthor = [[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]];
+    BOOL selectedWordIsUrl = urlRange.location != NSNotFound;
+    
+    if(isAuthor && selectedWordIsUrl){
+        // edit/delete menu with url option if current user is author of comment
+        [self commentInflatorActionWithUrl:word];
+    }else if(!isAuthor && selectedWordIsUrl){
+        // open url right away if not author
+        [self openUrl:word];
+    }else if(isAuthor){
+        // open edit/delete menu
+        [self commentInflatorAction];
+    }
+}
+
+- (BOOL)foundMentionName:(NSString *)word
+{
+    NSRange wordRangeInComment = [[self.contentLabel text] rangeOfString:word];
+    
+    for (id key in self.mentionNamesWithRanges) {
+        
+        NSMutableArray *mentionRange = [self.mentionNamesWithRanges objectForKey:key];
+        
+        int startLocation = (int)[[mentionRange objectAtIndex:0] integerValue];
+        int length = (int)[[mentionRange objectAtIndex:1] integerValue];
+        int endLocation = (startLocation + length) - 1;
+        
+        if(wordRangeInComment.location == startLocation || (wordRangeInComment.location > startLocation && wordRangeInComment.location < endLocation)){
+            [self.delegate cell:self didTapUserButton:[mentionRange objectAtIndex:2] cellType:self.cellType];
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 - (void)commentInflatorActionWithUrl:(id)sender {
@@ -453,7 +511,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     }
 }
 
-- (void)commentInflatorAction:(id)sender {
+- (void)commentInflatorAction{
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Comment Menu" properties:@{}];
@@ -480,7 +538,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.website = [NSString stringWithFormat:@"%@%@", http, self.website];
     }
     
-    NSLog(@"%@", self.website);
     //self.website = [self.website stringWithFormat:@"%@/%@/%@", ];
     PAPwebviewViewController *webViewController = [[PAPwebviewViewController alloc] initWithWebsite:self.website];
     webViewController.hidesBottomBarWhenPushed = YES;
