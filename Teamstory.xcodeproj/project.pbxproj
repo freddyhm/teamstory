@@ -1241,10 +1241,10 @@
 				C4F10290156C571C0061BC3E /* PAPUtility.m */,
 				C4A6D87A157859AA009FE621 /* PAPCache.h */,
 				C4A6D87B157859AA009FE621 /* PAPCache.m */,
-				C4B60864155B085600EFA90C /* Resources */,
-				09ABC07813A1D52D009C3FCF /* Supporting Files */,
 				D58FD9291A4501D3008912C8 /* AtMention.h */,
 				D58FD92A1A4501D3008912C8 /* AtMention.m */,
+				C4B60864155B085600EFA90C /* Resources */,
+				09ABC07813A1D52D009C3FCF /* Supporting Files */,
 			);
 			name = Teamstory;
 			path = ParseStarterProject;
