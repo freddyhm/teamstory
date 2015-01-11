@@ -8,6 +8,7 @@
 
 #import "PAPMessagingViewController.h"
 #import "SVProgressHUD.h"
+#import "Mixpanel.h"
 
 
 #define messageTextViewHeight 45.0f
@@ -256,6 +257,10 @@
 
 - (void)sendButtonAction:(id)sender {
     if ([self.customKeyboard.messageTextView.text length] > 0) {
+        
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Sent message"}];
+        
         PFObject *messagePFObject = [PFObject objectWithClassName:@"Message"];
         [messagePFObject setObject:[PFUser currentUser] forKey:@"fromUser"];
         [messagePFObject setObject:self.recipient forKey:@"toUser"];
