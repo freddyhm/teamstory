@@ -456,8 +456,12 @@
         
     }];
     
-    // set flight recorder properties
-    [[FlightRecorder sharedInstance] setSessionUserID:displayName];
+    // start flight recorder for non admin sessions
+    if([isAdmin isEqualToString:@"No"]){
+        // set flight recorder properties
+        [[FlightRecorder sharedInstance] startFlight];
+        [[FlightRecorder sharedInstance] setSessionUserID:displayName];
+    }
 }
 
 - (void)inviteFriendsButtonAction:(id)sender {
