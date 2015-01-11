@@ -40,7 +40,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.2</string>
+	<string>2.3</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -55,7 +55,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2.2</string>
+	<string>2.3</string>
 	<key>FacebookAppID</key>
 	<string>${FACEBOOK_ID}</string>
 	<key>FacebookDisplayName</key>
@@ -120,7 +120,8 @@
 	<key>UIViewEdgeAntialiasing</key>
 	<false/>
 	<key>VersionChanges</key>
-	<string>• New! Message other members
-• Added notifications for follower activity</string>
+	<string>• New! Post menu colors 
+• Improved @mention links, loading speed, and filtering 
+• Improved discover loading and display  </string>
 </dict>
 </plist>
