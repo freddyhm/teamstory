@@ -16,6 +16,7 @@
 #import "Mixpanel.h"
 #import "PAPMessageListViewController.h"
 #import "Intercom.h"
+#import <FlightRecorder/FlightRecorder.h>
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
@@ -454,6 +455,9 @@
                                              } completion:^(NSError *error) {}];
         
     }];
+    
+    // set flight recorder properties
+    [[FlightRecorder sharedInstance] setSessionUserID:displayName];
 }
 
 - (void)inviteFriendsButtonAction:(id)sender {

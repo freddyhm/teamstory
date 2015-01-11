@@ -248,23 +248,17 @@ Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                 
                 });
 
-
 Parse.Cloud.beforeSave('Activity', function(request, response) {
-                       var currentUser = request.user;
-                       var objectUser = request.object.get('fromUser');
-                       
-                       if(request.object.get('type') == "post"){
-                       response.success();
-                       }else{
-                       if(!currentUser || !objectUser) {
-                       response.error('An Activity should have a valid fromUser.');
-                       } else if (currentUser.id === objectUser.id) {
-                       response.success();
-                       } else {
-                       response.error('Cannot set fromUser on Activity to a user other than the current user.');
-                       }
-                       }
-                       });
+       var currentUser = request.user;
+       var objectUser = request.object.get('fromUser');
+       
+       if(currentUser && currentUser.id != objectUser.id){
+       response.error('Cannot set fromUser on Activity to a user other than the current user.');
+       }else{
+       response.success();
+       }
+});
+
 
 Parse.Cloud.afterSave('Activity', function(request) {
                       

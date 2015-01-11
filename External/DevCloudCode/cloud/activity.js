@@ -236,16 +236,10 @@ Parse.Cloud.beforeSave('Activity', function(request, response) {
                        var currentUser = request.user;
                        var objectUser = request.object.get('fromUser');
                        
-                       if(request.object.get('type') == "post"){
-                           response.success();
+                       if(currentUser && currentUser.id != objectUser.id){
+                        response.error('Cannot set fromUser on Activity to a user other than the current user.');
                        }else{
-                           if(!currentUser || !objectUser) {
-                           response.error('An Activity should have a valid fromUser.');
-                           } else if (currentUser.id === objectUser.id) {
-                           response.success();
-                           } else {
-                           response.error('Cannot set fromUser on Activity to a user other than the current user.');
-                           }
+                        response.success();
                        }
 });
 
@@ -382,6 +376,8 @@ Parse.Cloud.afterSave('Activity', function(request) {
                                              /* add all subscribers to new comment and save.
                                               This is so we can pull in activity feed from
                                               client side. */
+                                             
+                                             console.log(results);
                                              
                                              request.object.set("subscribers", results);
                                              request.object.save();

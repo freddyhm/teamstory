@@ -485,7 +485,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                 atmentionSearchString = [atmentionSearchString stringByAppendingString:text];
             }
             
-            self.filteredArray = [self.userList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", atmentionSearchString]];
+            self.filteredArray = [self.userList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName beginswith[c] %@", atmentionSearchString]];
             
             // Check system version for keyboard offset, ios8 added suggestion bar
             // Align the mention table view
