@@ -20,6 +20,7 @@
 @property (nonatomic, strong) UILabel *linkUrlLabel;
 @property (nonatomic, strong) UILabel *linkDescription;
 @property (nonatomic, strong) PostFooterView *footerView;
+@property (nonatomic, strong) UIWebView *youtubeWebView;
 
 
 -(void)setObject:(PFObject*)object;

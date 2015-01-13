@@ -483,13 +483,22 @@ enum ActionSheetTags {
         }
         
         if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
-            return 100.0f + expectedSize.height + 75.0f;
+            if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] containsString:@"youtube.com"] || [[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] containsString:@"youtu.be"]) {
+                return 420.0f + expectedSize.height;
+            } else {
+                return 100.0f + expectedSize.height + 75.0f;
+            }
         } else {
             return 325.0f + expectedSize.height + 94.0f;
         }
     } else {
         if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
-            return 100.0f + 64.0f;
+            if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] containsString:@"youtube.com"] || [[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] containsString:@"youtu.be"]) {
+                return 400.0f;
+            } else {
+                return 100.0f + 64.0f;
+            }
+            
         } else {
             return 325.0f + 64.0f;
         }

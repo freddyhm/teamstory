@@ -52,6 +52,11 @@
         layer.shouldRasterize = YES;
          */
         
+        self.youtubeWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 320.0f)];
+        self.youtubeWebView.scrollView.scrollEnabled = NO;
+        self.youtubeWebView.scrollView.bounces = NO;
+        [self.contentView addSubview:self.youtubeWebView];
+        
         self.backgroundView = [[UIView alloc] init];
         [self.backgroundView setBackgroundColor:[UIColor whiteColor]];
         [self.contentView addSubview:self.backgroundView];
@@ -150,9 +155,9 @@
         
         //handling cases of link post
         if ([[self.ih_object objectForKey:@"type"] isEqualToString:@"link"]) {
-            if ([[self.ih_object objectForKey:@"link"] containsString:@"www.youtube.com"]) {
+            if ([[self.ih_object objectForKey:@"link"] containsString:@"youtube.com"] || [[self.ih_object objectForKey:@"link"] containsString:@"youtu.be"]) {
                 // When post is a youtube link
-                NSLog(@"here! youtubelink");
+                [self.youtubeWebView loadHTMLString:@"<iframe width='300' height='300' src='//www.youtube.com/embed/Hf_VVPoPlYI' frameborder='0' allowfullscreen></iframe>" baseURL:[[NSURL alloc] initWithString:@"https://www.youtube.com/watch?v=Hf_VVPoPlYI"]];
             } else {
                 // When post is not a youtube link (Normal Links)
                 [self.linkBackgroundView setFrame:CGRectMake(0.0f, 0.0f, 320.0f, 100.0f)];
@@ -204,45 +209,55 @@
         self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.imageView.frame.size.height + 10.0f);
 
         if ([[self.ih_object objectForKey:@"type"] isEqualToString:@"link"]) {
+            if ([[self.ih_object objectForKey:@"link"] containsString:@"youtube.com"] || [[self.ih_object objectForKey:@"link"] containsString:@"youtu.be"]) {
+                // When post is a youtube link
+                [self.youtubeWebView loadHTMLString:@"<iframe width='305' height='305' src='//www.youtube.com/embed/Hf_VVPoPlYI' frameborder='0' allowfullscreen></iframe>" baseURL:[[NSURL alloc] initWithString:@"https://www.youtube.com/watch?v=Hf_VVPoPlYI"]];
+                [self.footerView setFrame:CGRectMake(0.0f, 330.0f, self.bounds.size.width, 44.0f)];
+            } else {
+                [self.linkBackgroundView setFrame:CGRectMake(0.0f, 0.0f, 320.0f, 100.0f)];
+                [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
+                [self.contentView addSubview:self.linkBackgroundView];
+                [self.contentView sendSubviewToBack:self.linkBackgroundView];
+                
+                [self.linkBackgroundView_gray setFrame:CGRectMake(5.0f, 5.0f , 311.0f, 90.0f)];
+                [self.linkBackgroundView_gray setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
+                self.linkBackgroundView_gray.layer.borderColor = [UIColor colorWithWhite:0.9f alpha:1.0f].CGColor;
+                self.linkBackgroundView_gray.layer.borderWidth = 0.5f;
+                [self.contentView addSubview:self.linkBackgroundView_gray];
+                
+                [self.linkTitleLabel setFrame:CGRectMake(99.0f, 10.0f , 190.0f, 30.0f)];
+                self.linkTitleLabel.text = [self.ih_object objectForKey:@"linkTitle"];
+                
+                [self.linkDescription setFrame:CGRectMake(99.0f, 40.0f , 190.0f, 30.0f)];
+                self.linkDescription.text = [self.ih_object objectForKey:@"linkDesc"];
+                
+                [self.linkUrlLabel setFrame:CGRectMake(99.0f, 70.0f , 190.0f, 15.0f)];
+                self.linkUrlLabel.text = [self.ih_object objectForKey:@"link"];
             
-            [self.linkBackgroundView setFrame:CGRectMake(0.0f, 0.0f, 320.0f, 100.0f)];
-            [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
-            [self.contentView addSubview:self.linkBackgroundView];
-            [self.contentView sendSubviewToBack:self.linkBackgroundView];
+                self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 320.0f, 100.0f);
+                self.imageView.frame = CGRectMake( 10.5f, 10.0f , 80.0f, 80.0f);
+                
+                [self.footerView setFrame:CGRectMake(0.0f, self.linkBackgroundView_gray.frame.origin.y + self.linkBackgroundView_gray.frame.size.height, self.bounds.size.width, 44.0f)];
             
-            [self.linkBackgroundView_gray setFrame:CGRectMake(5.0f, 5.0f , 311.0f, 90.0f)];
-            [self.linkBackgroundView_gray setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
-            self.linkBackgroundView_gray.layer.borderColor = [UIColor colorWithWhite:0.9f alpha:1.0f].CGColor;
-            self.linkBackgroundView_gray.layer.borderWidth = 0.5f;
-            [self.contentView addSubview:self.linkBackgroundView_gray];
-            
-            [self.linkTitleLabel setFrame:CGRectMake(99.0f, 10.0f , 190.0f, 30.0f)];
-            self.linkTitleLabel.text = [self.ih_object objectForKey:@"linkTitle"];
-            
-            [self.linkDescription setFrame:CGRectMake(99.0f, 40.0f , 190.0f, 30.0f)];
-            self.linkDescription.text = [self.ih_object objectForKey:@"linkDesc"];
-            
-            [self.linkUrlLabel setFrame:CGRectMake(99.0f, 70.0f , 190.0f, 15.0f)];
-            self.linkUrlLabel.text = [self.ih_object objectForKey:@"link"];
-            
-        
-            self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 320.0f, 100.0f);
-            self.imageView.frame = CGRectMake( 10.5f, 10.0f , 80.0f, 80.0f);
-            
-            [self.footerView setFrame:CGRectMake(0.0f, self.linkBackgroundView_gray.frame.origin.y + self.linkBackgroundView_gray.frame.size.height, self.bounds.size.width, 44.0f)];
-        
-            [self.contentView bringSubviewToFront:self.linkUrlLabel];
-            [self.contentView bringSubviewToFront:self.linkTitleLabel];
-            [self.contentView bringSubviewToFront:self.linkDescription];
-            [self.contentView bringSubviewToFront:self.imageView];
-            [self.contentView bringSubviewToFront:self.photoButton];
-            
-            self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.linkBackgroundView.frame.size.height + 10.0f);
+                [self.contentView bringSubviewToFront:self.linkUrlLabel];
+                [self.contentView bringSubviewToFront:self.linkTitleLabel];
+                [self.contentView bringSubviewToFront:self.linkDescription];
+                [self.contentView bringSubviewToFront:self.imageView];
+                [self.contentView bringSubviewToFront:self.photoButton];
+                
+                self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.linkBackgroundView.frame.size.height + 10.0f);
+            }
         }
     }
     
     [self.contentView bringSubviewToFront:self.imageView];
     [self.contentView bringSubviewToFront:self.footerView];
+    
+    if ([[self.ih_object objectForKey:@"type"] isEqualToString:@"link"]) {
+        if ([[self.ih_object objectForKey:@"link"] containsString:@"youtube.com"] || [[self.ih_object objectForKey:@"link"] containsString:@"youtu.be"]) {
+            [self.contentView bringSubviewToFront:self.youtubeWebView];
+        }
+    }
 }
 
 #pragma mark - ()
