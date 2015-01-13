@@ -337,6 +337,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
             cell.cellInsetWidth = kPAPCellInsetWidth;
             cell.delegate = self;
+            [cell detectWordTaps];
         }
         [cell setNavController:self.navigationController];
         [cell setIh_object:[self.objects objectAtIndex:indexPath.row]];
@@ -379,6 +380,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         if (cell == nil) {
             cell = [[PAPBaseTextCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
             cell.delegate = self;
+            [cell detectWordTaps];
         }
         [cell setUser:[self.filteredArray objectAtIndex:indexPath.row]];
         [cell setContentText:@" "];

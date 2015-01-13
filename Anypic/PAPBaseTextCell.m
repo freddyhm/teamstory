@@ -94,9 +94,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [self.contentLabel setLineBreakMode:NSLineBreakByWordWrapping];
         [self.contentLabel setBackgroundColor:[UIColor clearColor]];
         
-        self.wordDetector = [[VSWordDetector alloc] initWithDelegate:self];
-        [self.wordDetector addOnView:self.contentLabel];
-        
         self.timeLabel = [[UILabel alloc] init];
         [self.timeLabel setFont:[UIFont systemFontOfSize:11]];
         [self.timeLabel setTextColor:[UIColor grayColor]];
@@ -251,6 +248,43 @@ static TTTTimeIntervalFormatter *timeFormatter;
         // layout the counter
         [self.likeCommentCount setFrame:CGRectMake((self.likeCommentHeart.frame.origin.x + self.likeCommentHeart.frame.size.width), timeLabel.frame.origin.y + 2, likeCounterAndHeartButtonDim, likeCounterAndHeartButtonDim)];
         
+    }
+}
+
+#pragma mark - VSWordDetector Methods & Delegate
+
+- (void)detectWordTaps{
+    self.wordDetector = [[VSWordDetector alloc] initWithDelegate:self];
+    [self.wordDetector addOnView:self.contentLabel];
+}
+
+-(void)wordDetector:(VSWordDetector *)wordDetector detectWord:(NSString *)word
+{
+    if(![self foundMentionName:word]){
+        [self foundURL:word];
+    }
+}
+
+- (void)foundURL:(NSString *)word{
+    
+    NSLog(@"%@", word);
+    
+    // get range for url and mentions
+    NSRange urlRange = [word rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
+    
+    // check if user matches current user
+    BOOL isAuthor = [[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]];
+    BOOL selectedWordIsUrl = urlRange.location != NSNotFound;
+    
+    if(isAuthor && selectedWordIsUrl){
+        // edit/delete menu with url option if current user is author of comment
+        [self commentInflatorActionWithUrl:word];
+    }else if(!isAuthor && selectedWordIsUrl){
+        // open url right away if not author
+        [self openUrl:word];
+    }else if(isAuthor){
+        // open edit/delete menu
+        [self commentInflatorAction];
     }
 }
 
@@ -413,14 +447,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 }
 
-
--(void)wordDetector:(VSWordDetector *)wordDetector detectWord:(NSString *)word
-{
-    if(![self foundMentionName:word]){
-        [self foundURL:word];
-    }
-}
-
 - (void)addLinkToMentionNames:(NSMutableAttributedString *)commentText{
     
     // go through mention array of user objects
@@ -444,29 +470,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
                 [commentText addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:86.0f/255.0f green:130.0f/255.0f blue:164.0f/255.0f alpha:1.0f] range:range];
             }
         }
-    }
-}
-
-- (void)foundURL:(NSString *)word{
-    
-    NSLog(@"%@", word);
-    
-    // get range for url and mentions
-    NSRange urlRange = [word rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
-    
-    // check if user matches current user
-    BOOL isAuthor = [[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]];
-    BOOL selectedWordIsUrl = urlRange.location != NSNotFound;
-    
-    if(isAuthor && selectedWordIsUrl){
-        // edit/delete menu with url option if current user is author of comment
-        [self commentInflatorActionWithUrl:word];
-    }else if(!isAuthor && selectedWordIsUrl){
-        // open url right away if not author
-        [self openUrl:word];
-    }else if(isAuthor){
-        // open edit/delete menu
-        [self commentInflatorAction];
     }
 }
 

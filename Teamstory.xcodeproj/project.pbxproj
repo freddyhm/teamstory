@@ -2982,8 +2982,8 @@
 				BUNDLE_DISPLAY_NAME_SUFFIX = "";
 				BUNDLE_ID_SUFFIX = "";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				FACEBOOK_ID = 533792813373044;
 				FACEBOOK_NAME = Teamstory;
@@ -3011,8 +3011,8 @@
 					"$(PROJECT_DIR)/External",
 				);
 				PRODUCT_NAME = Teamstory;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "ffaad4fc-cedc-4034-8796-445b2159f1fc";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ffaad4fc-cedc-4034-8796-445b2159f1fc";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -3084,8 +3084,8 @@
 					"$(PROJECT_DIR)/External",
 				);
 				PRODUCT_NAME = Teamstory;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "ffaad4fc-cedc-4034-8796-445b2159f1fc";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ffaad4fc-cedc-4034-8796-445b2159f1fc";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -3160,7 +3160,7 @@
 					"$(PROJECT_DIR)/External",
 				);
 				PRODUCT_NAME = Teamstory;
-				PROVISIONING_PROFILE = "51471809-0f95-4da1-b9fb-dcdfc924dc94";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
