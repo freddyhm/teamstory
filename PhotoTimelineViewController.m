@@ -484,7 +484,7 @@ enum ActionSheetTags {
         
         if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
             if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] containsString:@"youtube.com"] || [[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] containsString:@"youtu.be"]) {
-                return 420.0f + expectedSize.height;
+                return 285.0f + expectedSize.height;
             } else {
                 return 100.0f + expectedSize.height + 75.0f;
             }
@@ -494,7 +494,7 @@ enum ActionSheetTags {
     } else {
         if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
             if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] containsString:@"youtube.com"] || [[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] containsString:@"youtu.be"]) {
-                return 400.0f;
+                return 285.0f;
             } else {
                 return 100.0f + 64.0f;
             }

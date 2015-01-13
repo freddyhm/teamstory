@@ -9,6 +9,7 @@
 #import "PAPwebviewViewController.h"
 #import "PAPPhotoDetailsViewController.h"
 
+#define youtubeFrame 200.0f
 
 @interface PAPPhotoCell () {
     float notificationBarOffSet;
@@ -52,7 +53,7 @@
         layer.shouldRasterize = YES;
          */
         
-        self.youtubeWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 320.0f)];
+        self.youtubeWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, youtubeFrame)];
         self.youtubeWebView.scrollView.scrollEnabled = NO;
         self.youtubeWebView.scrollView.bounces = NO;
         [self.contentView addSubview:self.youtubeWebView];
@@ -157,7 +158,12 @@
         if ([[self.ih_object objectForKey:@"type"] isEqualToString:@"link"]) {
             if ([[self.ih_object objectForKey:@"link"] containsString:@"youtube.com"] || [[self.ih_object objectForKey:@"link"] containsString:@"youtu.be"]) {
                 // When post is a youtube link
-                [self.youtubeWebView loadHTMLString:@"<iframe width='300' height='300' src='//www.youtube.com/embed/Hf_VVPoPlYI' frameborder='0' allowfullscreen></iframe>" baseURL:[[NSURL alloc] initWithString:@"https://www.youtube.com/watch?v=Hf_VVPoPlYI"]];
+                [self.imageView removeFromSuperview];
+                [self.photoButton removeFromSuperview];
+                
+                [self.youtubeWebView loadHTMLString:[self setiFrameURLforYouTube:[self.ih_object objectForKey:@"link"]] baseURL:[[NSURL alloc] initWithString:[self.ih_object objectForKey:@"link"]]];
+                self.captionLabel.frame = CGRectMake(12.0f, youtubeFrame + 10.0f, 295.0f, expectedSize.height + 15.0f);
+                self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, youtubeFrame + self.captionLabel.frame.size.height + 20.0f);
             } else {
                 // When post is not a youtube link (Normal Links)
                 [self.linkBackgroundView setFrame:CGRectMake(0.0f, 0.0f, 320.0f, 100.0f)];
@@ -198,7 +204,6 @@
         [self.footerView setFrame:CGRectMake(0.0f, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height, self.bounds.size.width, 44.0f)];
 
     } else {
-    
         self.captionLabel.text = @"";
         self.captionLabel.frame = CGRectMake(12.5f, 0.0f, 295.0f, 44.0f);
         self.imageView.frame = CGRectMake( 0.0f, 0.0f, 320.0f, 320.0f);
@@ -211,8 +216,12 @@
         if ([[self.ih_object objectForKey:@"type"] isEqualToString:@"link"]) {
             if ([[self.ih_object objectForKey:@"link"] containsString:@"youtube.com"] || [[self.ih_object objectForKey:@"link"] containsString:@"youtu.be"]) {
                 // When post is a youtube link
-                [self.youtubeWebView loadHTMLString:@"<iframe width='305' height='305' src='//www.youtube.com/embed/Hf_VVPoPlYI' frameborder='0' allowfullscreen></iframe>" baseURL:[[NSURL alloc] initWithString:@"https://www.youtube.com/watch?v=Hf_VVPoPlYI"]];
-                [self.footerView setFrame:CGRectMake(0.0f, 330.0f, self.bounds.size.width, 44.0f)];
+                [self.imageView removeFromSuperview];
+                [self.photoButton removeFromSuperview];
+                
+                self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.youtubeWebView.frame.size.height + 10.0f);
+                [self.youtubeWebView loadHTMLString:[self setiFrameURLforYouTube:[self.ih_object objectForKey:@"link"]] baseURL:[[NSURL alloc] initWithString:[self.ih_object objectForKey:@"link"]]];
+                [self.footerView setFrame:CGRectMake(0.0f, 205.0f, self.bounds.size.width, 44.0f)];
             } else {
                 [self.linkBackgroundView setFrame:CGRectMake(0.0f, 0.0f, 320.0f, 100.0f)];
                 [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
@@ -258,6 +267,33 @@
             [self.contentView bringSubviewToFront:self.youtubeWebView];
         }
     }
+}
+
+-(NSString *)setiFrameURLforYouTube:(NSString *)url {
+    NSError *error = NULL;
+    NSRegularExpression *regex =
+    [NSRegularExpression regularExpressionWithPattern:@".*\\.be\\/([^&]+)|.*v=([^&]+)"
+                                              options:NSRegularExpressionCaseInsensitive
+                                                error:&error];
+    NSRange group1;
+    NSRange group2;
+    
+    NSArray* matches = [regex matchesInString:url options:0 range:NSMakeRange(0, [url length])];
+    for (NSTextCheckingResult* match in matches) {
+        group1 = [match rangeAtIndex:1];
+        group2 = [match rangeAtIndex:2];
+    }
+    NSString *substringForFirstMatch;
+    if (group1.location != NSNotFound) {
+        // group 1 match
+        substringForFirstMatch = [url substringWithRange:group1];
+    } else {
+        // group 2 match
+        substringForFirstMatch = [url substringWithRange:group2];
+    }
+    
+    NSString *modifiedString = [NSString stringWithFormat:@"<iframe width='305' height='200' src='//www.youtube.com/embed/%@' frameborder='0' allowfullscreen></iframe>", substringForFirstMatch];
+    return modifiedString;
 }
 
 #pragma mark - ()
