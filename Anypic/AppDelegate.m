@@ -237,9 +237,11 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
 }
 
 -(void)cycleTheGlobalMailComposer {
-    // we are cycling the damned GlobalMailComposer... due to horrible iOS issue
-    self.mc = nil;
-    self.mc = [[MFMailComposeViewController alloc] init];
+    if ([MFMailComposeViewController canSendMail]) {
+        // we are cycling the damned GlobalMailComposer... due to horrible iOS issue
+        self.mc = nil;
+        self.mc = [[MFMailComposeViewController alloc] init];
+    }
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
