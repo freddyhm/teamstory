@@ -7,7 +7,6 @@
 #import "PAPPhotoDetailsViewController.h"
 #import "PAPBaseTextCell.h"
 #import "PAPActivityCell.h"
-#import "PAPPhotoDetailsFooterView.h"
 #import "PAPConstants.h"
 #import "PAPAccountViewController.h"
 #import "PAPLoadMoreCell.h"
@@ -140,16 +139,23 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         
         // Set table header
         if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
-            self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 146.0f + expectedSize.height + 56.0f + 15.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
+            if ([[self.photo objectForKey:@"link"] containsString:@"youtube.com"] || [[self.photo objectForKey:@"link"] containsString:@"youtu.be"]) {
+                self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 246.0f + expectedSize.height + 56.0f + 15.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
+            } else {
+                self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 146.0f + expectedSize.height + 56.0f + 15.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
+            }
         } else {
-            
             self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 351.0f + expectedSize.height + 43.0f + 37.0f + 15.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
         }
         self.headerView.delegate = self;
         self.postDetails.tableHeaderView = self.headerView;
     } else {
         if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
-            self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 187.0f) photo:self.photo description:nil navigationController:self.navigationController];
+            if ([[self.photo objectForKey:@"link"] containsString:@"youtube.com"] || [[self.photo objectForKey:@"link"] containsString:@"youtu.be"]) {
+                self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 307.0f) photo:self.photo description:nil navigationController:self.navigationController];
+            } else {
+                self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 187.0f) photo:self.photo description:nil navigationController:self.navigationController];
+            }
         } else {
             self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:[PAPPhotoDetailsHeaderView rectForView] photo:self.photo description:nil navigationController:self.navigationController];
         }

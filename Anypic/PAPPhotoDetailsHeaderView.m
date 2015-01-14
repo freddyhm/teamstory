@@ -57,6 +57,8 @@
 #define likeProfileY 6.0f
 #define likeProfileDim 30.0f
 
+#define youtubeWebViewHeight 220.0f
+
 #define contentY nameHeaderHeight + mainImageHeight
 #define numLikePics 7.0f
 static CGSize expectedSize;
@@ -84,6 +86,7 @@ static CGSize expectedSize;
 @property (nonatomic, strong) UILabel *linkDescription;
 @property (nonatomic, strong) UILabel *linkUrlLabel;
 @property (nonatomic, strong) UILabel *userInfoLabel;
+@property (nonatomic, strong) UIWebView *youtubeWebView;
 
 // Redeclare for edit
 @property (nonatomic, strong, readwrite) PFUser *photographer;
@@ -290,49 +293,56 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [self addSubview:self.photoDescriptionLabel];
         
         if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
-            
-            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + 10.0f, 80.0f, 80.0f)];
-            
-            viewOffset = -190.0f;
-            
-            UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(linkPostButtonAction:)];
-            [photoTap setNumberOfTapsRequired:1];
-            [photoTap setNumberOfTouchesRequired:1];
-            
-            self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, 100.0f)];
-            
-            [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
-            [self addSubview:self.linkBackgroundView];
-            
-            self.linkContentView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX + 5.0f, mainImageY + 5.0f, self.linkBackgroundView.bounds.size.width - 10.0f, self.linkBackgroundView.bounds.size.height - 10.0f)];
-            [self.linkContentView setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
-            [self.linkContentView.layer setBorderColor:[UIColor colorWithWhite:0.9f alpha:1.0f].CGColor];
-            [self.linkContentView addGestureRecognizer:photoTap];
-            [self.linkContentView setUserInteractionEnabled:YES];
-            [self addSubview:self.linkContentView];
-            
-            self.linkTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 5.0f, 190.0f, 30.0f)];
-            [self.linkTitleLabel setText:[self.photo objectForKey:@"linkTitle"]];
-            self.linkTitleLabel.numberOfLines = 2;
-            self.linkTitleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
-            [self.linkTitleLabel setTextColor:[UIColor colorWithWhite:0.3f alpha:1.0]];
-            [self.linkContentView addSubview:self.linkTitleLabel];
-            
-            self.linkDescription = [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 35.0f, 190.0f, 30.0f)];
-            self.linkDescription.numberOfLines = 2;
-            [self.linkDescription setText:[self.photo objectForKey:@"linkDesc"]];
-            self.linkDescription.font = [UIFont systemFontOfSize:12.0f];
-            [self.linkDescription setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
-            [self.linkContentView addSubview:self.linkDescription];
-            
-            self.linkUrlLabel = [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 65.0f, 190.0f, 15.0f)];
-            [self.linkUrlLabel setText:[self.photo objectForKey:@"link"]];
-            self.linkUrlLabel.numberOfLines = 1;
-            self.linkUrlLabel.font = [UIFont systemFontOfSize:11.0f];
-            [self.linkUrlLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
-            [self.linkContentView addSubview:self.linkUrlLabel];
-            
-            self.photoDescriptionLabel.frame = CGRectMake(12.0f, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 20.0f, 295.0f, expectedSize.height + 5.0f);
+            if ([[self.photo objectForKey:@"link"] containsString:@"youtube.com"] || [[self.photo objectForKey:@"link"] containsString:@"youtu.be"]) {
+                self.youtubeWebView = [[UIWebView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, youtubeWebViewHeight)];
+                [self.youtubeWebView loadHTMLString:[self setiFrameURLforYouTube:[self.photo objectForKey:@"link"]] baseURL:[[NSURL alloc] initWithString:[self.photo objectForKey:@"link"]]];
+                self.photoDescriptionLabel.frame = CGRectMake(12.0f, mainImageX + youtubeWebViewHeight + 40.0f, 295.0f, expectedSize.height + 5.0f);
+                [self addSubview:self.youtubeWebView];
+                viewOffset = -90.0f;
+            } else {
+                self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + 10.0f, 80.0f, 80.0f)];
+                
+                viewOffset = -190.0f;
+                
+                UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(linkPostButtonAction:)];
+                [photoTap setNumberOfTapsRequired:1];
+                [photoTap setNumberOfTouchesRequired:1];
+                
+                self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, 100.0f)];
+                
+                [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
+                [self addSubview:self.linkBackgroundView];
+                
+                self.linkContentView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX + 5.0f, mainImageY + 5.0f, self.linkBackgroundView.bounds.size.width - 10.0f, self.linkBackgroundView.bounds.size.height - 10.0f)];
+                [self.linkContentView setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
+                [self.linkContentView.layer setBorderColor:[UIColor colorWithWhite:0.9f alpha:1.0f].CGColor];
+                [self.linkContentView addGestureRecognizer:photoTap];
+                [self.linkContentView setUserInteractionEnabled:YES];
+                [self addSubview:self.linkContentView];
+                
+                self.linkTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 5.0f, 190.0f, 30.0f)];
+                [self.linkTitleLabel setText:[self.photo objectForKey:@"linkTitle"]];
+                self.linkTitleLabel.numberOfLines = 2;
+                self.linkTitleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
+                [self.linkTitleLabel setTextColor:[UIColor colorWithWhite:0.3f alpha:1.0]];
+                [self.linkContentView addSubview:self.linkTitleLabel];
+                
+                self.linkDescription = [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 35.0f, 190.0f, 30.0f)];
+                self.linkDescription.numberOfLines = 2;
+                [self.linkDescription setText:[self.photo objectForKey:@"linkDesc"]];
+                self.linkDescription.font = [UIFont systemFontOfSize:12.0f];
+                [self.linkDescription setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
+                [self.linkContentView addSubview:self.linkDescription];
+                
+                self.linkUrlLabel = [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 65.0f, 190.0f, 15.0f)];
+                [self.linkUrlLabel setText:[self.photo objectForKey:@"link"]];
+                self.linkUrlLabel.numberOfLines = 1;
+                self.linkUrlLabel.font = [UIFont systemFontOfSize:11.0f];
+                [self.linkUrlLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
+                [self.linkContentView addSubview:self.linkUrlLabel];
+                
+                self.photoDescriptionLabel.frame = CGRectMake(12.0f, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 20.0f, 295.0f, expectedSize.height + 5.0f);
+            }
 
         } else {
             
@@ -354,7 +364,15 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         [self addSubview:self.photoImageView];
         
-        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(baseHorizontalOffset, nameHeaderHeight + 15.0f, mainImageWidth, self.photoImageView.frame.size.height + self.photoDescriptionLabel.frame.size.height + 50.0f)];
+        float contentOffsetHeight;
+        
+        if (self.photoImageView.frame.size.height > 0) {
+            contentOffsetHeight = self.photoImageView.frame.size.height + 50.0f;
+        } else {
+            contentOffsetHeight = youtubeWebViewHeight;
+        }
+        
+        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(baseHorizontalOffset, nameHeaderHeight + 15.0f, mainImageWidth, contentOffsetHeight + self.photoDescriptionLabel.frame.size.height)];
         [backgroundView setBackgroundColor:[UIColor whiteColor]];
         [self addSubview:backgroundView];
         [self sendSubviewToBack:backgroundView];
@@ -363,44 +381,51 @@ static TTTTimeIntervalFormatter *timeFormatter;
         viewOffset = 0;
         
         if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
-            self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + 10.0f, 80.0f, 80.0f)];
-            viewOffset = -220.0f;
-            
-            self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, 100.0f)];
-            [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
-            [self addSubview:self.linkBackgroundView];
-            
-            UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(linkPostButtonAction:)];
-            [photoTap setNumberOfTapsRequired:1];
-            [photoTap setNumberOfTouchesRequired:1];
-            
-            self.linkContentView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX + 5.0f, mainImageY + 5.0f, self.linkBackgroundView.bounds.size.width - 10.0f, self.linkBackgroundView.bounds.size.height - 10.0f)];
-            [self.linkContentView setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
-            [self.linkContentView.layer setBorderColor:[UIColor colorWithWhite:0.9f alpha:1.0f].CGColor];
-            [self.linkContentView addGestureRecognizer:photoTap];
-            [self.linkContentView setUserInteractionEnabled:YES];
-            [self addSubview:self.linkContentView];
-            
-            self.linkTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 5.0f, 190.0f, 30.0f)];
-            [self.linkTitleLabel setText:[self.photo objectForKey:@"linkTitle"]];
-            self.linkTitleLabel.numberOfLines = 2;
-            self.linkTitleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
-            [self.linkTitleLabel setTextColor:[UIColor colorWithWhite:0.3f alpha:1.0]];
-            [self.linkContentView addSubview:self.linkTitleLabel];
-            
-            self.linkDescription = [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 35.0f, 190.0f, 30.0f)];
-            self.linkDescription.numberOfLines = 2;
-            [self.linkDescription setText:[self.photo objectForKey:@"linkDesc"]];
-            self.linkDescription.font = [UIFont systemFontOfSize:12.0f];
-            [self.linkDescription setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
-            [self.linkContentView addSubview:self.linkDescription];
-            
-            self.linkUrlLabel = [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 65.0f, 190.0f, 15.0f)];
-            [self.linkUrlLabel setText:[self.photo objectForKey:@"link"]];
-            self.linkUrlLabel.numberOfLines = 1;
-            self.linkUrlLabel.font = [UIFont systemFontOfSize:11.0f];
-            [self.linkUrlLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
-            [self.linkContentView addSubview:self.linkUrlLabel];
+            if ([[self.photo objectForKey:@"link"] containsString:@"youtube.com"] || [[self.photo objectForKey:@"link"] containsString:@"youtu.be"]) {
+                self.youtubeWebView = [[UIWebView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, youtubeWebViewHeight)];
+                [self.youtubeWebView loadHTMLString:[self setiFrameURLforYouTube:[self.photo objectForKey:@"link"]] baseURL:[[NSURL alloc] initWithString:[self.photo objectForKey:@"link"]]];
+                [self addSubview:self.youtubeWebView];
+                viewOffset = -100.0f;
+            } else {
+                self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX + 10.0f, mainImageY + 10.0f, 80.0f, 80.0f)];
+                viewOffset = -220.0f;
+                
+                self.linkBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, 100.0f)];
+                [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
+                [self addSubview:self.linkBackgroundView];
+                
+                UITapGestureRecognizer *photoTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(linkPostButtonAction:)];
+                [photoTap setNumberOfTapsRequired:1];
+                [photoTap setNumberOfTouchesRequired:1];
+                
+                self.linkContentView = [[UIView alloc] initWithFrame:CGRectMake(mainImageX + 5.0f, mainImageY + 5.0f, self.linkBackgroundView.bounds.size.width - 10.0f, self.linkBackgroundView.bounds.size.height - 10.0f)];
+                [self.linkContentView setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0f]];
+                [self.linkContentView.layer setBorderColor:[UIColor colorWithWhite:0.9f alpha:1.0f].CGColor];
+                [self.linkContentView addGestureRecognizer:photoTap];
+                [self.linkContentView setUserInteractionEnabled:YES];
+                [self addSubview:self.linkContentView];
+                
+                self.linkTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 5.0f, 190.0f, 30.0f)];
+                [self.linkTitleLabel setText:[self.photo objectForKey:@"linkTitle"]];
+                self.linkTitleLabel.numberOfLines = 2;
+                self.linkTitleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
+                [self.linkTitleLabel setTextColor:[UIColor colorWithWhite:0.3f alpha:1.0]];
+                [self.linkContentView addSubview:self.linkTitleLabel];
+                
+                self.linkDescription = [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 35.0f, 190.0f, 30.0f)];
+                self.linkDescription.numberOfLines = 2;
+                [self.linkDescription setText:[self.photo objectForKey:@"linkDesc"]];
+                self.linkDescription.font = [UIFont systemFontOfSize:12.0f];
+                [self.linkDescription setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
+                [self.linkContentView addSubview:self.linkDescription];
+                
+                self.linkUrlLabel = [[UILabel alloc] initWithFrame:CGRectMake(95.0f, 65.0f, 190.0f, 15.0f)];
+                [self.linkUrlLabel setText:[self.photo objectForKey:@"link"]];
+                self.linkUrlLabel.numberOfLines = 1;
+                self.linkUrlLabel.font = [UIFont systemFontOfSize:11.0f];
+                [self.linkUrlLabel setTextColor:[UIColor colorWithWhite:0.5f alpha:1.0]];
+                [self.linkContentView addSubview:self.linkUrlLabel];
+            }
         } else {
             self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
         }
@@ -672,6 +697,33 @@ static TTTTimeIntervalFormatter *timeFormatter;
     PAPwebviewViewController *webViewController = [[PAPwebviewViewController alloc] initWithWebsite:[self.photo objectForKey:@"link"]];
     webViewController.hidesBottomBarWhenPushed = YES;
     [self.navController pushViewController:webViewController animated:YES];
+}
+
+-(NSString *)setiFrameURLforYouTube:(NSString *)url {
+    NSError *error = NULL;
+    NSRegularExpression *regex =
+    [NSRegularExpression regularExpressionWithPattern:@".*\\.be\\/([^&]+)|.*v=([^&]+)"
+                                              options:NSRegularExpressionCaseInsensitive
+                                                error:&error];
+    NSRange group1;
+    NSRange group2;
+    
+    NSArray* matches = [regex matchesInString:url options:0 range:NSMakeRange(0, [url length])];
+    for (NSTextCheckingResult* match in matches) {
+        group1 = [match rangeAtIndex:1];
+        group2 = [match rangeAtIndex:2];
+    }
+    NSString *substringForFirstMatch;
+    if (group1.location != NSNotFound) {
+        // group 1 match
+        substringForFirstMatch = [url substringWithRange:group1];
+    } else {
+        // group 2 match
+        substringForFirstMatch = [url substringWithRange:group2];
+    }
+    
+    NSString *modifiedString = [NSString stringWithFormat:@"<iframe width='305' height='200' src='//www.youtube.com/embed/%@' frameborder='0' allowfullscreen></iframe>", substringForFirstMatch];
+    return modifiedString;
 }
 
 
