@@ -40,7 +40,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.3</string>
+	<string>2.3.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -55,7 +55,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2.3</string>
+	<string>2.3.1</string>
 	<key>FacebookAppID</key>
 	<string>${FACEBOOK_ID}</string>
 	<key>FacebookDisplayName</key>
@@ -122,6 +122,7 @@
 	<key>VersionChanges</key>
 	<string>• New! Post menu colors 
 • Improved @mention links, loading speed, and filtering 
-• Improved discover loading and display  </string>
+• Improved discover loading and display  
+• Fixed no mail account bug</string>
 </dict>
 </plist>
