@@ -447,6 +447,7 @@
 		D5BFDEE018CC84A5004FEC42 /* toronto@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDED218CC84A5004FEC42 /* toronto@2x.png */; };
 		D5BFDEE118CC84A5004FEC42 /* vancity.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDED318CC84A5004FEC42 /* vancity.png */; };
 		D5BFDEE218CC84A5004FEC42 /* vancity@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDED418CC84A5004FEC42 /* vancity@2x.png */; };
+		D5C483D71A67583B0006D313 /* UIImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = D5C483D61A67583B0006D313 /* UIImageEffects.m */; };
 		D5C955321A201EE700DD2787 /* CustomKeyboardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5C955301A201EE700DD2787 /* CustomKeyboardViewController.xib */; };
 		D5D1042818B5C7AF0084C901 /* konotor.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042718B5C7AF0084C901 /* konotor.png */; };
 		D5D1042B18B5CF4E0084C901 /* button-feedback.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042918B5CF4E0084C901 /* button-feedback.png */; };
@@ -1076,6 +1077,9 @@
 		D5BFDED218CC84A5004FEC42 /* toronto@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toronto@2x.png"; sourceTree = "<group>"; };
 		D5BFDED318CC84A5004FEC42 /* vancity.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vancity.png; sourceTree = "<group>"; };
 		D5BFDED418CC84A5004FEC42 /* vancity@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vancity@2x.png"; sourceTree = "<group>"; };
+		D5C483D51A67583B0006D313 /* UIImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageEffects.h; sourceTree = "<group>"; };
+		D5C483D61A67583B0006D313 /* UIImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageEffects.m; sourceTree = "<group>"; };
+		D5C483DD1A6759E00006D313 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		D5C9552E1A201EE700DD2787 /* CustomKeyboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomKeyboardViewController.h; sourceTree = SOURCE_ROOT; };
 		D5C9552F1A201EE700DD2787 /* CustomKeyboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomKeyboardViewController.m; sourceTree = SOURCE_ROOT; };
 		D5C955301A201EE700DD2787 /* CustomKeyboardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomKeyboardViewController.xib; sourceTree = SOURCE_ROOT; };
@@ -1192,6 +1196,7 @@
 		09ABC07013A1D52D009C3FCF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D5C483DD1A6759E00006D313 /* Accelerate.framework */,
 				D5082A4819D28D1500955BF0 /* StoreKit.framework */,
 				D5569F0319CD0B170054618B /* FacebookSDK.framework */,
 				D5DC1BFB19CCF25E00ED0A6D /* ParseFacebookUtils.framework */,
@@ -1784,6 +1789,8 @@
 		C4A0B4FF156C5B9F00E48554 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				D5C483D51A67583B0006D313 /* UIImageEffects.h */,
+				D5C483D61A67583B0006D313 /* UIImageEffects.m */,
 				D56D17D11A5A2BB30090615A /* VSWordDetector.h */,
 				D56D17D21A5A2BB30090615A /* VSWordDetector.m */,
 				4611EE9C19DF427C00B319C0 /* ParseFacebookUtils.framework */,
@@ -2827,6 +2834,7 @@
 				D5903C75192EBBF900DC9896 /* ThoughtPostViewController.m in Sources */,
 				D56D17D31A5A2BB30090615A /* VSWordDetector.m in Sources */,
 				46C6FC0E198AA62900BC99D5 /* PAPprofileSetupViewController.m in Sources */,
+				D5C483D71A67583B0006D313 /* UIImageEffects.m in Sources */,
 				D54E0FF819A7B75C000B1F9D /* PAPwebviewViewController.m in Sources */,
 				D5856F9119F87E2500D0086F /* KonotorFeedbackScreen.m in Sources */,
 				C47DDDE61592761F002114F6 /* Reachability.m in Sources */,
@@ -2870,6 +2878,7 @@
 		09ABC08C13A1D52E009C3FCF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -2903,6 +2912,7 @@
 		09ABC08D13A1D52E009C3FCF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -3021,6 +3031,7 @@
 		C42500E01599424D0087C4F4 /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -3094,6 +3105,7 @@
 		C4F10200156C54D40061BC3E /* Ad Hoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;

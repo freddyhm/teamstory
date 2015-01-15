@@ -14,6 +14,9 @@
 #import "Mixpanel.h"
 #import "Intercom.h"
 #import "ParseFacebookUtils/PFFacebookUtils.h"
+#import "UIImageEffects.h"
+#import <mach/mach.h>
+#import <mach/mach_time.h>
 
 
 @interface PAPlinkPostViewController ()
@@ -201,7 +204,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     self.commentTextView.autocorrectionType = UITextAutocorrectionTypeNo;
     self.commentTextView.text = @"Add a link comment";
     self.commentTextView.font = [UIFont systemFontOfSize:17.0f];
-    [self.view addSubview:self.commentTextView];
+   // [self.view addSubview:self.commentTextView];
 }
 
 
@@ -239,10 +242,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 }
 
 - (void)postButtonAction:(id)sender {
-    
-    // analytics
-    [PAPUtility captureEventGA:@"Engagement" action:@"Upload Link" label:@"Photo"];
-    
+
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Link"}];
     
@@ -250,7 +250,6 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     [Intercom logEventWithName:@"posetd-link" optionalMetaData:nil
                     completion:^(NSError *error) {}];
 
-    
     // increment user link count by one
     [[Mixpanel sharedInstance].people increment:@"Link Count" by:[NSNumber numberWithInt:1]];
     
@@ -385,25 +384,35 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
         [self.linkPostView addGestureRecognizer:popUpTap];
         [self.linkPostView setUserInteractionEnabled:YES];
         [self.linkPostView.layer setBorderWidth:0.5f];
-        [self.view addSubview:self.linkPostView];
+        //[self.view addSubview:self.linkPostView];
         
-        UIImageView *linkPostImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0f, 10.0f, 80.0f, 80.0f)];
-        linkPostImageView.image = self.imageView.image;
+        UIImageView *linkPostImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 320.0f)];
+        linkPostImageView.image = [self blurWithImageEffects:self.imageView.image];
         linkPostImageView.contentMode = UIViewContentModeScaleAspectFit;
-        [self.linkPostView addSubview:linkPostImageView];
+        [self.view addSubview:linkPostImageView];
+        
+        UILabel *linkTitle = [[UILabel alloc]initWithFrame:CGRectMake(5, 0, linkPostImageView.frame.size.width, linkPostImageView.frame.size.height - 5)];
+        [linkTitle setText:self.titleLabel.text.uppercaseString];
+        [linkTitle setFont:[UIFont boldSystemFontOfSize:25.0f]];
+        [linkTitle setTextColor:[UIColor whiteColor]];
+        [linkTitle setTextAlignment:NSTextAlignmentLeft];
+//        [linkTitle setBackgroundColor:[UIColor redColor]];
+        [linkTitle setLineBreakMode:NSLineBreakByWordWrapping];
+        [linkTitle setNumberOfLines:5];
+        [linkPostImageView addSubview:linkTitle];
         
         self.linkPostViewLabel_title = [[UILabel alloc] init];
         [self.linkPostViewLabel_title setFont:[UIFont boldSystemFontOfSize:15.0f]];
         [self.linkPostViewLabel_title setText:self.titleLabel.text];
         self.linkPostViewLabel_title.numberOfLines = 2;
-        [self.linkPostView addSubview:self.linkPostViewLabel_title];
+       // [self.linkPostView addSubview:self.linkPostViewLabel_title];
         
         self.urlLabel = [[UILabel alloc] init];
         [self.urlLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:12.0f]];
         self.urlLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         [self.urlLabel setText:self.urlString];
         self.urlLabel.numberOfLines = 1;
-        [self.linkPostView addSubview:self.urlLabel];
+       // [self.linkPostView addSubview:self.urlLabel];
         
         if (self.imageView.image == nil) {
             self.linkPostViewLabel_title.frame = CGRectMake(10.0f, 10.0f, self.linkPostView.bounds.size.width - 20.0f, 55.0f);
@@ -416,11 +425,17 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
 }
 
+- (void)dismissKeyboard {
+    [self.view endEditing:YES];
+}
+
+
 -(void)popUpTapAction:(UITapGestureRecognizer *)tgr {
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:110].hidden = NO;
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:111].hidden = NO;
     
     [self.url_textField becomeFirstResponder];
+    [self dismissKeyboard];
 }
 
 - (void)exitPost{
@@ -509,8 +524,9 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     NSData * data = [NSData dataWithContentsOfURL:[NSURL URLWithString:fileURL]];
     result = [UIImage imageWithData:data];
+    UIImage *resizedImage = [PAPUtility resizeImage:result width:640.0f height:640.0f];
     completed(YES);
-    return result;
+    return resizedImage;
 }
 
 # pragma mark - UITextFieldDelegate
@@ -533,5 +549,10 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     }
 }
 
+- (UIImage *)blurWithImageEffects:(UIImage *)image
+{
+    return [UIImageEffects imageByApplyingBlurToImage:image withRadius:30 tintColor:[UIColor colorWithWhite:1 alpha:0.2] saturationDeltaFactor:1.5 maskImage:nil];
+    
+}
 
 @end
