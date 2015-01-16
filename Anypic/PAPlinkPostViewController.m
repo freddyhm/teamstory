@@ -255,7 +255,11 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     [self.view endEditing:YES];
     [SVProgressHUD show];
-    [self shouldUploadImage:self.imageView.image block:^(BOOL completed) {
+    
+    // new link picture
+    UIImage *newPostImg = [self createNewLinkPost];
+    
+    [self shouldUploadImage:newPostImg block:^(BOOL completed) {
         
         if(completed){
             // both files have finished uploading
@@ -313,6 +317,44 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
             [SVProgressHUD dismiss];
         }
     }];
+}
+
+- (UIImage *)createNewLinkPost{
+    
+    // create new imageview and set blurred image
+    UIImageView *newLinkImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 320.0f)];
+    newLinkImageView.image = [self blurWithImageEffects:self.imageView.image];
+    newLinkImageView.contentMode = UIViewContentModeScaleAspectFit;
+    
+    // create title to wrap around imageview bounds, add to image view
+    UILabel *newLinkTitle = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, newLinkImageView.frame.size.width, newLinkImageView.frame.size.height - 5)];
+    [newLinkTitle setText:self.titleLabel.text.uppercaseString];
+    [newLinkTitle setFont:[UIFont boldSystemFontOfSize:30.0f]];
+    [newLinkTitle setTextColor:[UIColor whiteColor]];
+    [newLinkTitle setTextAlignment:NSTextAlignmentLeft];
+    [newLinkTitle setLineBreakMode:NSLineBreakByWordWrapping];
+    [newLinkTitle setNumberOfLines:5];
+    [newLinkImageView addSubview:newLinkTitle];
+    
+    // make an image out of imageview
+    UIImage *newImg = [self ChangeImageViewToImage:newLinkImageView];
+    
+    return newImg;
+}
+
+-(UIImage *)ChangeImageViewToImage:(UIImageView *) view{
+    
+    // create and push image context to the stack with imageview bounds
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0.0);
+    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    // get image from the context
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    
+    // remove context from the stack
+    UIGraphicsEndImageContext();
+    
+    return img;
 }
 
 
@@ -428,7 +470,6 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 - (void)dismissKeyboard {
     [self.view endEditing:YES];
 }
-
 
 -(void)popUpTapAction:(UITapGestureRecognizer *)tgr {
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:110].hidden = NO;
@@ -551,7 +592,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 
 - (UIImage *)blurWithImageEffects:(UIImage *)image
 {
-    return [UIImageEffects imageByApplyingBlurToImage:image withRadius:30 tintColor:[UIColor colorWithWhite:1 alpha:0.2] saturationDeltaFactor:1.5 maskImage:nil];
+    return [UIImageEffects imageByApplyingBlurToImage:image withRadius:10 tintColor:[UIColor colorWithWhite:1 alpha:0.2] saturationDeltaFactor:1.5 maskImage:nil];
     
 }
 
