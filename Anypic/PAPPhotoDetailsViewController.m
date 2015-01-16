@@ -773,7 +773,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     actionSheet.tag = MainActionSheetTag;
     
     if ([self currentUserOwnsPhoto]) {
-        [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Delete Photo"]];
+        [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Delete Post"]];
     } else {
         [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Report Inappropriate", nil)]];
     }
@@ -813,7 +813,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             
             if ([self currentUserOwnsPhoto]){
                 [actionSheet setTitle:NSLocalizedString(@"Are you sure you want to delete this photo?", nil)];
-                [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Yes, delete photo", nil)]];
+                [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Yes, delete post", nil)]];
                 [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
                 actionSheet.tag = deletePhoto;
             } else {

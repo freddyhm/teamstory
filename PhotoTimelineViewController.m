@@ -747,7 +747,7 @@ enum ActionSheetTags {
             
             if ([self currentUserOwnsPhoto]){
                 [actionSheet setTitle:NSLocalizedString(@"Are you sure you want to delete this photo?", nil)];
-                [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Yes, delete photo", nil)]];
+                [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Yes, delete post", nil)]];
                 [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
                 actionSheet.tag = deletePhoto;
             } else {
