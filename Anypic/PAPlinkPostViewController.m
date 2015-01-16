@@ -15,8 +15,6 @@
 #import "Intercom.h"
 #import "ParseFacebookUtils/PFFacebookUtils.h"
 #import "UIImageEffects.h"
-#import <mach/mach.h>
-#import <mach/mach_time.h>
 
 
 @interface PAPlinkPostViewController ()
@@ -117,7 +115,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     UIView *popUpBoxHeader = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 280.0f, 40.0f)];
     [popUpBoxHeader setBackgroundColor:[UIColor colorWithWhite:0.95f alpha:1.0]];
     popUpBoxHeader.clipsToBounds = YES;
-
+    
     // Creating layer to only initiate the top right and left round corners.
     UIBezierPath *maskPath;
     maskPath = [UIBezierPath bezierPathWithRoundedRect:popUpBoxHeader.bounds
@@ -204,22 +202,22 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     self.commentTextView.autocorrectionType = UITextAutocorrectionTypeNo;
     self.commentTextView.text = @"Add a link comment";
     self.commentTextView.font = [UIFont systemFontOfSize:17.0f];
-   // [self.view addSubview:self.commentTextView];
+    [self.view addSubview:self.commentTextView];
 }
 
 
 # pragma mark - ()
 - (void)cancelButtonAction:(id)sender {
     if ([self.titleLabel.text length] > 0) {
-         [[[[UIApplication sharedApplication] delegate] window] viewWithTag:110].hidden = YES;
-         [[[[UIApplication sharedApplication] delegate] window] viewWithTag:111].hidden = YES;
-     } else {
+        [[[[UIApplication sharedApplication] delegate] window] viewWithTag:110].hidden = YES;
+        [[[[UIApplication sharedApplication] delegate] window] viewWithTag:111].hidden = YES;
+    } else {
         [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:110] removeFromSuperview];
         [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:111] removeFromSuperview];
         
         [[self navigationController] setNavigationBarHidden:YES animated:YES];
         [self.navigationController popViewControllerAnimated:YES];
-     }
+    }
 }
 
 - (void)backButtonAction:(id)sender {
@@ -242,24 +240,27 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 }
 
 - (void)postButtonAction:(id)sender {
-
+    
+    // analytics
+    [PAPUtility captureEventGA:@"Engagement" action:@"Upload Link" label:@"Photo"];
+    
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Link"}];
     
     // intercome analytics
     [Intercom logEventWithName:@"posetd-link" optionalMetaData:nil
                     completion:^(NSError *error) {}];
-
+    
+    
     // increment user link count by one
     [[Mixpanel sharedInstance].people increment:@"Link Count" by:[NSNumber numberWithInt:1]];
     
     [self.view endEditing:YES];
     [SVProgressHUD show];
     
-    // new link picture
-    UIImage *newPostImg = [self createNewLinkPost];
+    UIImage *newLinkImage = [self createNewLinkPost];
     
-    [self shouldUploadImage:newPostImg block:^(BOOL completed) {
+    [self shouldUploadImage:newLinkImage block:^(BOOL completed) {
         
         if(completed){
             // both files have finished uploading
@@ -358,6 +359,12 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 }
 
 
+- (UIImage *)blurWithImageEffects:(UIImage *)image
+{
+    return [UIImageEffects imageByApplyingBlurToImage:image withRadius:10 tintColor:[UIColor colorWithWhite:0 alpha:0.5] saturationDeltaFactor:1.5 maskImage:nil];
+    
+}
+
 - (void)shouldUploadImage:(UIImage *)anImage block:(void (^)(BOOL))completed
 {
     if (anImage == nil) {
@@ -370,7 +377,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     // JPEG to decrease file size and enable faster uploads & downloads
     NSData *imageData = UIImageJPEGRepresentation(anImage, 1.0f);
     NSData *thumbnailImageData = UIImagePNGRepresentation(thumbnailImage);
-
+    
     self.photoFile = [PFFile fileWithData:imageData];
     self.thumbnailFile = [PFFile fileWithData:thumbnailImageData];
     
@@ -403,7 +410,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:111].hidden = YES;
     
     [self.linkPostView removeFromSuperview];
-     
+    
     [self.commentTextView becomeFirstResponder];
     
     if ([self.titleLabel.text length] > 0 ) {
@@ -412,7 +419,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
         if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
             heightOffset = 95.0f;
             self.commentTextView.frame = CGRectMake(5.0f, 5.0f, 310.0f, 85.0f);
-         
+            
         } else {
             heightOffset = 180.0f;
             self.commentTextView.frame = CGRectMake(5.0f, 5.0f, 310.0f, 171.0f);
@@ -426,35 +433,25 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
         [self.linkPostView addGestureRecognizer:popUpTap];
         [self.linkPostView setUserInteractionEnabled:YES];
         [self.linkPostView.layer setBorderWidth:0.5f];
-        //[self.view addSubview:self.linkPostView];
+        [self.view addSubview:self.linkPostView];
         
-        UIImageView *linkPostImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 320.0f)];
-        linkPostImageView.image = [self blurWithImageEffects:self.imageView.image];
+        UIImageView *linkPostImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0f, 10.0f, 80.0f, 80.0f)];
+        linkPostImageView.image = self.imageView.image;
         linkPostImageView.contentMode = UIViewContentModeScaleAspectFit;
-        [self.view addSubview:linkPostImageView];
-        
-        UILabel *linkTitle = [[UILabel alloc]initWithFrame:CGRectMake(5, 0, linkPostImageView.frame.size.width, linkPostImageView.frame.size.height - 5)];
-        [linkTitle setText:self.titleLabel.text.uppercaseString];
-        [linkTitle setFont:[UIFont boldSystemFontOfSize:25.0f]];
-        [linkTitle setTextColor:[UIColor whiteColor]];
-        [linkTitle setTextAlignment:NSTextAlignmentLeft];
-//        [linkTitle setBackgroundColor:[UIColor redColor]];
-        [linkTitle setLineBreakMode:NSLineBreakByWordWrapping];
-        [linkTitle setNumberOfLines:5];
-        [linkPostImageView addSubview:linkTitle];
+        [self.linkPostView addSubview:linkPostImageView];
         
         self.linkPostViewLabel_title = [[UILabel alloc] init];
         [self.linkPostViewLabel_title setFont:[UIFont boldSystemFontOfSize:15.0f]];
         [self.linkPostViewLabel_title setText:self.titleLabel.text];
         self.linkPostViewLabel_title.numberOfLines = 2;
-       // [self.linkPostView addSubview:self.linkPostViewLabel_title];
+        [self.linkPostView addSubview:self.linkPostViewLabel_title];
         
         self.urlLabel = [[UILabel alloc] init];
         [self.urlLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:12.0f]];
         self.urlLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         [self.urlLabel setText:self.urlString];
         self.urlLabel.numberOfLines = 1;
-       // [self.linkPostView addSubview:self.urlLabel];
+        [self.linkPostView addSubview:self.urlLabel];
         
         if (self.imageView.image == nil) {
             self.linkPostViewLabel_title.frame = CGRectMake(10.0f, 10.0f, self.linkPostView.bounds.size.width - 20.0f, 55.0f);
@@ -467,16 +464,11 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
 }
 
-- (void)dismissKeyboard {
-    [self.view endEditing:YES];
-}
-
 -(void)popUpTapAction:(UITapGestureRecognizer *)tgr {
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:110].hidden = NO;
     [[[[UIApplication sharedApplication] delegate] window] viewWithTag:111].hidden = NO;
     
     [self.url_textField becomeFirstResponder];
-    [self dismissKeyboard];
 }
 
 - (void)exitPost{
@@ -514,7 +506,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 - (void)embedlyFailure:(NSString *)callUrl withError:(NSError *)error endpoint:(NSString *)endpoint operation:(AFHTTPRequestOperation *)operation {
     
     [SVProgressHUD dismiss];
-
+    
     NSLog(@"embedly failure %@", callUrl);
     
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please check the url or internet connection" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
@@ -555,7 +547,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
                 self.nextButton.enabled = YES;
                 self.nextButton.alpha = 1.0f;
             }
-
+            
         }];
     }
 }
@@ -565,9 +557,8 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     NSData * data = [NSData dataWithContentsOfURL:[NSURL URLWithString:fileURL]];
     result = [UIImage imageWithData:data];
-    UIImage *resizedImage = [PAPUtility resizeImage:result width:640.0f height:640.0f];
     completed(YES);
-    return resizedImage;
+    return result;
 }
 
 # pragma mark - UITextFieldDelegate
@@ -578,7 +569,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     // checking for http values.
     if ([lowerCase_pasteboard hasPrefix:@"http"]) {
-         textField.text = pasteboard.string;
+        textField.text = pasteboard.string;
     }
 }
 
@@ -590,10 +581,5 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     }
 }
 
-- (UIImage *)blurWithImageEffects:(UIImage *)image
-{
-    return [UIImageEffects imageByApplyingBlurToImage:image withRadius:10 tintColor:[UIColor colorWithWhite:1 alpha:0.2] saturationDeltaFactor:1.5 maskImage:nil];
-    
-}
 
 @end

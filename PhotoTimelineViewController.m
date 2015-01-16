@@ -482,17 +482,9 @@ enum ActionSheetTags {
             expectedSize.height = 46.527f;
         }
         
-        if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
-            return 100.0f + expectedSize.height + 75.0f;
-        } else {
-            return 325.0f + expectedSize.height + 94.0f;
-        }
+        return 325.0f + expectedSize.height + 94.0f;
     } else {
-        if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
-            return 100.0f + 64.0f;
-        } else {
-            return 325.0f + 64.0f;
-        }
+        return 325.0f + 64.0f;
     }
 }
 
@@ -536,12 +528,6 @@ enum ActionSheetTags {
         return cell;
     } else {
         NSString *CellIdentifier = @"Cell";
-        
-        if ([[object objectForKey:@"type"] isEqualToString:@"link"]) {
-            CellIdentifier = @"LinkCell";
-        } else {
-            CellIdentifier = @"Cell";
-        }
         
         PAPPhotoCell *cell = (PAPPhotoCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
