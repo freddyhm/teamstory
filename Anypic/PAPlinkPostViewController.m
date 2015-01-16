@@ -323,15 +323,18 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 - (UIImage *)createNewLinkPost{
     
     // create new imageview and set blurred image
+    
+    UIImage *resizedImg = [PAPUtility resizeImage:self.imageView.image width:320.0f height:320.0f];
     UIImageView *newLinkImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 320.0f)];
-    newLinkImageView.image = [self blurWithImageEffects:self.imageView.image];
+    newLinkImageView.image = [self blurWithImageEffects:resizedImg];
     newLinkImageView.contentMode = UIViewContentModeScaleAspectFit;
     
     // create title to wrap around imageview bounds, add to image view
-    UILabel *newLinkTitle = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, newLinkImageView.frame.size.width, newLinkImageView.frame.size.height - 5)];
+    UILabel *newLinkTitle = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, newLinkImageView.frame.size.width - 25, newLinkImageView.frame.size.height)];
     [newLinkTitle setText:self.titleLabel.text.uppercaseString];
     [newLinkTitle setFont:[UIFont boldSystemFontOfSize:30.0f]];
     [newLinkTitle setTextColor:[UIColor whiteColor]];
+    [newLinkTitle setBackgroundColor:[UIColor redColor]];
     [newLinkTitle setTextAlignment:NSTextAlignmentLeft];
     [newLinkTitle setLineBreakMode:NSLineBreakByWordWrapping];
     [newLinkTitle setNumberOfLines:5];
@@ -517,7 +520,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     if ([[response objectForKey:@"thumbnail_url"] length] <= 0) {
         [SVProgressHUD dismiss];
         
-        self.imageView.image = nil;
+        self.imageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
         self.titleLabel.frame = CGRectMake(10.0f, 85.0f, 260.0f, 55.0f);
         self.popUpBoxurlLabel.frame = CGRectMake(10.0f, 110.0f, 260.0f, 60.0f);
         
