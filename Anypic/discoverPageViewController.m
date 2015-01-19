@@ -20,6 +20,7 @@ NSInteger selection = 1;
 
 @interface discoverPageViewController() {
     BOOL isSearchString;
+    BOOL zeroFollower;
     NSInteger skip;
     NSInteger limit;
 }
@@ -214,12 +215,16 @@ NSInteger selection = 1;
     }];
     
     if ([self.follwerList count] == 0) {
+        zeroFollower = NO;
         PFQuery *activityQuery = [PFQuery queryWithClassName:@"Activity"];
         [activityQuery whereKey:@"fromUser" equalTo:[PFUser currentUser]];
         [activityQuery whereKey:@"type" equalTo:@"follow"];
         activityQuery.limit = MAXFLOAT;
         [activityQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (!error) {
+                if (objects.count == 0) {
+                    zeroFollower = YES;
+                }
                 [self.follwerList removeAllObjects];
                 [self.follwerList addObjectsFromArray:objects];
                 [self isSearchBarReady];
@@ -261,7 +266,7 @@ NSInteger selection = 1;
 }
 
 - (void)isSearchBarReady {
-    if ([self.follwerList count] > 0 && [self.userList count] > 0) {
+    if (([self.follwerList count] > 0 || zeroFollower) && [self.userList count] > 0) {
         NSLog(@"User data Successfully Loaded");
         [self.searchTV reloadData];
     }
@@ -465,15 +470,17 @@ NSInteger selection = 1;
             cell.delegate = self;
         }
         
-        if ([self.searchSelection isEqualToString:@"users"] && [self.follwerList count] > 0 && [self.userList count] > 0) {
+        if ([self.searchSelection isEqualToString:@"users"] && ([self.follwerList count] > 0 || zeroFollower) && [self.userList count] > 0) {
             if (isSearchString) {
                 //Searching for followers
-                for (int i = 0; i < [self.follwerList count]; i++) {
-                    if ([[[[self.follwerList objectAtIndex:i] objectForKey:@"toUser"] objectId] isEqualToString:[[self.userFilterList objectAtIndex:indexPath.row] objectId]]) {
-                        cell.followButton.selected = YES;
-                        break;
-                    } else {
-                        cell.followButton.selected = NO;
+                if (!zeroFollower) {
+                    for (int i = 0; i < [self.follwerList count]; i++) {
+                        if ([[[[self.follwerList objectAtIndex:i] objectForKey:@"toUser"] objectId] isEqualToString:[[self.userFilterList objectAtIndex:indexPath.row] objectId]]) {
+                            cell.followButton.selected = YES;
+                            break;
+                        } else {
+                            cell.followButton.selected = NO;
+                        }
                     }
                 }
                 
@@ -486,14 +493,17 @@ NSInteger selection = 1;
                 [cell setUser:[self.userFilterList objectAtIndex:indexPath.row]];
             } else {
                 //Searching for followers
-                for (int i = 0; i < [self.follwerList count]; i++) {
-                    if ([[[[self.follwerList objectAtIndex:i] objectForKey:@"toUser"] objectId] isEqualToString:[[self.userList objectAtIndex:indexPath.row] objectId]]) {
-                        cell.followButton.selected = YES;
-                        break;
-                    } else {
-                        cell.followButton.selected = NO;
+                if (!zeroFollower) {
+                    for (int i = 0; i < [self.follwerList count]; i++) {
+                        if ([[[[self.follwerList objectAtIndex:i] objectForKey:@"toUser"] objectId] isEqualToString:[[self.userList objectAtIndex:indexPath.row] objectId]]) {
+                            cell.followButton.selected = YES;
+                            break;
+                        } else {
+                            cell.followButton.selected = NO;
+                        }
                     }
                 }
+                
                 if ([[[self.userList objectAtIndex:indexPath.row] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
                     cell.followButton.hidden = YES;
                 } else {
@@ -520,8 +530,7 @@ NSInteger selection = 1;
             
             [cell setUser:[self.userFilterListIndustry objectAtIndex:indexPath.row]];
         }
-            
-    
+        
         return cell;
     } else {
         static NSString *CellIdentifier = @"discoverIndustryCell";
