@@ -323,7 +323,6 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 - (UIImage *)createNewLinkPost{
     
     // create new imageview and set blurred image
-    
     UIImage *resizedImg = [PAPUtility resizeImage:self.imageView.image width:320.0f height:320.0f];
     UIImageView *newLinkImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 320.0f)];
     newLinkImageView.image = [self blurWithImageEffects:resizedImg];
@@ -331,15 +330,27 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     // create title to wrap around imageview bounds, add to image view
     UILabel *newLinkTitle = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, newLinkImageView.frame.size.width - 25, newLinkImageView.frame.size.height)];
-    [newLinkTitle setText:self.titleLabel.text.uppercaseString];
-    [newLinkTitle setFont:[UIFont boldSystemFontOfSize:30.0f]];
+    [newLinkTitle setFont:[UIFont boldSystemFontOfSize:27.0f]];
     [newLinkTitle setTextColor:[UIColor whiteColor]];
-    [newLinkTitle setBackgroundColor:[UIColor redColor]];
     [newLinkTitle setTextAlignment:NSTextAlignmentLeft];
     [newLinkTitle setLineBreakMode:NSLineBreakByWordWrapping];
     [newLinkTitle setNumberOfLines:5];
-    [newLinkImageView addSubview:newLinkTitle];
     
+    // add image as attachment to string so always at the end of text
+    NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+    attachment.image = [UIImage imageNamed:@"icon_link"];
+    NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
+
+    // couldn't add padding through frame or bounds so here's a quick hack
+    NSString *formattedTitleLabelTxt = [self.titleLabel.text stringByAppendingString:@" "].uppercaseString;
+    
+    // build the final string
+    NSMutableAttributedString *linkAtttributedText = [[NSMutableAttributedString alloc] initWithString:formattedTitleLabelTxt];
+    [linkAtttributedText appendAttributedString:attachmentString];
+    
+    newLinkTitle.attributedText = linkAtttributedText;
+    [newLinkImageView addSubview:newLinkTitle];
+
     // make an image out of imageview
     UIImage *newImg = [self ChangeImageViewToImage:newLinkImageView];
     
@@ -364,7 +375,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 
 - (UIImage *)blurWithImageEffects:(UIImage *)image
 {
-    return [UIImageEffects imageByApplyingBlurToImage:image withRadius:10 tintColor:[UIColor colorWithWhite:0 alpha:0.5] saturationDeltaFactor:1.5 maskImage:nil];
+    return [UIImageEffects imageByApplyingBlurToImage:image withRadius:5 tintColor:[UIColor colorWithWhite:0 alpha:0.5] saturationDeltaFactor:1.5 maskImage:nil];
     
 }
 

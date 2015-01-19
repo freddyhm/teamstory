@@ -449,6 +449,9 @@
 		D5BFDEE218CC84A5004FEC42 /* vancity@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5BFDED418CC84A5004FEC42 /* vancity@2x.png */; };
 		D5C483D71A67583B0006D313 /* UIImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = D5C483D61A67583B0006D313 /* UIImageEffects.m */; };
 		D5C955321A201EE700DD2787 /* CustomKeyboardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5C955301A201EE700DD2787 /* CustomKeyboardViewController.xib */; };
+		D5CD73861A6D8FFB008FBDC8 /* icon_link.png in Resources */ = {isa = PBXBuildFile; fileRef = D5CD73841A6D8FFB008FBDC8 /* icon_link.png */; };
+		D5CD73871A6D8FFB008FBDC8 /* icon_link@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5CD73851A6D8FFB008FBDC8 /* icon_link@2x.png */; };
+		D5CD738E1A6D9004008FBDC8 /* icon_link@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5CD738D1A6D9004008FBDC8 /* icon_link@3x.png */; };
 		D5D1042818B5C7AF0084C901 /* konotor.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042718B5C7AF0084C901 /* konotor.png */; };
 		D5D1042B18B5CF4E0084C901 /* button-feedback.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042918B5CF4E0084C901 /* button-feedback.png */; };
 		D5D1042C18B5CF4E0084C901 /* button-feedback@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */; };
@@ -1083,6 +1086,9 @@
 		D5C9552E1A201EE700DD2787 /* CustomKeyboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomKeyboardViewController.h; sourceTree = SOURCE_ROOT; };
 		D5C9552F1A201EE700DD2787 /* CustomKeyboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomKeyboardViewController.m; sourceTree = SOURCE_ROOT; };
 		D5C955301A201EE700DD2787 /* CustomKeyboardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomKeyboardViewController.xib; sourceTree = SOURCE_ROOT; };
+		D5CD73841A6D8FFB008FBDC8 /* icon_link.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_link.png; sourceTree = "<group>"; };
+		D5CD73851A6D8FFB008FBDC8 /* icon_link@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_link@2x.png"; sourceTree = "<group>"; };
+		D5CD738D1A6D9004008FBDC8 /* icon_link@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_link@3x.png"; sourceTree = "<group>"; };
 		D5D1042718B5C7AF0084C901 /* konotor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor.png; sourceTree = "<group>"; };
 		D5D1042918B5CF4E0084C901 /* button-feedback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback.png"; sourceTree = "<group>"; };
 		D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback@2x.png"; sourceTree = "<group>"; };
@@ -1416,6 +1422,9 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				D5CD738D1A6D9004008FBDC8 /* icon_link@3x.png */,
+				D5CD73841A6D8FFB008FBDC8 /* icon_link.png */,
+				D5CD73851A6D8FFB008FBDC8 /* icon_link@2x.png */,
 				465C28F91A5F2D6500265486 /* Post Buttons */,
 				46D28CE01A4ACDE40089D1E3 /* IconDiscover_Glow@3x.png */,
 				46D28CE11A4ACDE40089D1E3 /* IconDiscover_Glow@2x.png */,
@@ -2386,6 +2395,7 @@
 				46A2FE5819635A7000D8ED12 /* btn_close_timeline@2x.png in Resources */,
 				D5144B1C195951D100650061 /* button-feedback-notify.png in Resources */,
 				469CF3761996FB4D0081FCED /* btn_twitter_select.png in Resources */,
+				D5CD738E1A6D9004008FBDC8 /* icon_link@3x.png in Resources */,
 				D552B0E719C7D3EB009F2862 /* arrows_left_white@2x.png in Resources */,
 				46B31EF0184E35150028D11C /* companyName.png in Resources */,
 				D579141619FF47E100585370 /* btn_camera_bright@2x.png in Resources */,
@@ -2466,6 +2476,7 @@
 				D5D1042B18B5CF4E0084C901 /* button-feedback.png in Resources */,
 				D5182C93193E1FDE00DD578C /* Default@2x.png in Resources */,
 				D5BFDEDB18CC84A5004FEC42 /* normal.png in Resources */,
+				D5CD73861A6D8FFB008FBDC8 /* icon_link.png in Resources */,
 				4609975E1938119A00C5AD96 /* icon-twitter-profile@2x.png in Resources */,
 				D55AEF1F19BA5E3800ECF342 /* btn_webview_options@2x.png in Resources */,
 				464AE48B1A310721009835CD /* loading_msg_list@2x.png in Resources */,
@@ -2552,6 +2563,7 @@
 				C4BE6799157FC7F700A291C2 /* ButtonLikeSelected.png in Resources */,
 				462FCB84188C8533005059F3 /* button_back_selected@2x.png in Resources */,
 				D5C955321A201EE700DD2787 /* CustomKeyboardViewController.xib in Resources */,
+				D5CD73871A6D8FFB008FBDC8 /* icon_link@2x.png in Resources */,
 				4639EDF61965CE3D00930873 /* link_thumbnail@2x.png in Resources */,
 				D5856FAF19F87E2600D0086F /* konotor_supportprofile@2x.png in Resources */,
 				4691B51618C0314600B7DF6A /* discover@2x.png in Resources */,
