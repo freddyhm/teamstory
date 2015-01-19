@@ -116,6 +116,7 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    [self.youtubeWebView removeFromSuperview];
     
     if ([self.caption length] > 0) {
         CGSize maximumLabelSize = CGSizeMake(295.0f, 9999.0f);

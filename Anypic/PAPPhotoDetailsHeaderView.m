@@ -251,6 +251,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
      Create middle section of the header view; the image
      */
     [self.hud show:YES];
+    [self.youtubeWebView removeFromSuperview];
         
     if ([self.description length] > 0) {
         CGSize maximumLabelSize = CGSizeMake(320.0f - 7.5f * 4, 9999.0f);
