@@ -20,6 +20,7 @@
 #import "Mixpanel.h"
 #import "AppDelegate.h"
 #import "Intercom.h"
+#import "PAPwebviewViewController.h"
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 #define APP ((AppDelegate *)[[UIApplication sharedApplication] delegate])
@@ -213,14 +214,19 @@ enum ActionSheetTags {
         // intercom analytics
         [Intercom logEventWithName:@"viewed-post" optionalMetaData:nil
                         completion:^(NSError *error) {}];
-
         
-        PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
+        
+        UIViewController *tappedController;
+        
+        if ([type isEqualToString:@"link"]){
+            tappedController = [[PAPwebviewViewController alloc] initWithWebsite:[photo objectForKey:@"link"]];
+        }else{
+            tappedController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
+        }
         
         // hides tab bar so we can add custom keyboard
-        photoDetailsVC.hidesBottomBarWhenPushed = YES;
-        
-        [self.navigationController pushViewController:photoDetailsVC animated:YES];
+        tappedController.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:tappedController animated:YES];
     }
 }
 
