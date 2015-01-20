@@ -330,8 +330,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     // create title to wrap around imageview bounds, add to image view
     UILabel *newLinkTitle = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, newLinkImageView.frame.size.width - 35, newLinkImageView.frame.size.height)];
-    [newLinkTitle setFont:[UIFont boldSystemFontOfSize:22.0f]];
-    
+    [newLinkTitle setFont:[UIFont fontWithName:@"Avenir-Black"  size:22.0f]];
     [newLinkTitle setTextColor:[UIColor whiteColor]];
     [newLinkTitle setTextAlignment:NSTextAlignmentCenter];
     [newLinkTitle setLineBreakMode:NSLineBreakByWordWrapping];
