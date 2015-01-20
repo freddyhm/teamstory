@@ -219,6 +219,14 @@ enum ActionSheetTags {
         UIViewController *tappedController;
         
         if ([type isEqualToString:@"link"]){
+            
+            // mixpanel analytics
+            [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Viewed Link"}];
+            
+            // intercome analytics
+            [Intercom logEventWithName:@"viewed-link" optionalMetaData:nil
+                            completion:^(NSError *error) {}];
+            
             tappedController = [[PAPwebviewViewController alloc] initWithWebsite:[photo objectForKey:@"link"]];
         }else{
             tappedController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapPhoto"];
