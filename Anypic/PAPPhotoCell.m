@@ -116,7 +116,7 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    [self.youtubeWebView removeFromSuperview];
+    [self sendSubviewToBack:self.youtubeWebView];
     
     if ([self.caption length] > 0) {
         CGSize maximumLabelSize = CGSizeMake(295.0f, 9999.0f);
@@ -132,8 +132,6 @@
         self.captionLabel.frame = CGRectMake(12.0f, self.imageView.frame.size.height + 15.0f, 295.0f, expectedSize.height + 15.0f);
         
         self.photoButton.frame = CGRectMake( 7.5f, notificationBarOffSet, 320.0f, 330.0f + expectedSize.height);
-        
-        
         self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.imageView.frame.size.height + self.captionLabel.frame.size.height + 20.0f);
         
         NSRange range = [self.caption rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
@@ -224,6 +222,8 @@
                 [self.youtubeWebView loadHTMLString:[self setiFrameURLforYouTube:[self.ih_object objectForKey:@"link"]] baseURL:[[NSURL alloc] initWithString:[self.ih_object objectForKey:@"link"]]];
                 [self.footerView setFrame:CGRectMake(0.0f, 205.0f, self.bounds.size.width, 44.0f)];
             } else {
+                self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.imageView.frame.size.height + 10.0f);
+                
                 [self.linkBackgroundView setFrame:CGRectMake(0.0f, 0.0f, 320.0f, 100.0f)];
                 [self.linkBackgroundView setBackgroundColor:[UIColor whiteColor]];
                 [self.contentView addSubview:self.linkBackgroundView];
