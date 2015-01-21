@@ -571,10 +571,12 @@ enum ActionSheetTags {
         if (cell == nil) {
             cell = [[PAPPhotoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             [cell.photoButton addTarget:self action:@selector(didTapOnPhotoAction:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.captionButton addTarget:self action:@selector(captionButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         }
         
         [cell setObject:object];
         cell.photoButton.tag = indexPath.section;
+        cell.captionButton.tag = indexPath.section;
         
         if(object){
             
@@ -761,10 +763,15 @@ enum ActionSheetTags {
     }
 }
 
-
-
 - (void)postFooterView:(PostFooterView *)postFooterView didTapCommentForPost:photo {
-    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+    [self openPhotoDetailView:photo];
+}
+
+- (void)captionButtonAction:(UIButton *)sender {
+    [self openPhotoDetailView:[self.objects objectAtIndex:sender.tag]];
+}
+
+- (void)openPhotoDetailView:(PFObject *)photo {
     PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"commentButton"];
     
     // hides tab bar so we can add custom keyboard

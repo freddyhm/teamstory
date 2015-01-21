@@ -24,12 +24,13 @@
 @synthesize linkTitleLabel;
 @synthesize linkUrlLabel;
 @synthesize linkDescription;
+@synthesize delegate;
 
 #pragma mark - NSObject
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
- 
+    
     if (self) {
         // Initialization code.
         self.opaque = NO;
@@ -37,20 +38,20 @@
         self.accessoryType = UITableViewCellAccessoryNone;
         self.backgroundColor = [UIColor clearColor];
         self.clipsToBounds = NO;
-
+        
         // removing shadow.
         /*
-        UIView *dropshadowView = [[UIView alloc] init];
-        dropshadowView.backgroundColor = [UIColor whiteColor];
-        dropshadowView.frame = CGRectMake( 7.5f, -44.0f, 305.0f, 322.0f);
-        [self.contentView addSubview:dropshadowView];
-        
-        CALayer *layer = dropshadowView.layer;
-        layer.masksToBounds = NO;
-        layer.shadowRadius = 3.0f;
-        layer.shadowOpacity = 0.5f;
-        layer.shadowOffset = CGSizeMake( 0.0f, 1.0f);
-        layer.shouldRasterize = YES;
+         UIView *dropshadowView = [[UIView alloc] init];
+         dropshadowView.backgroundColor = [UIColor whiteColor];
+         dropshadowView.frame = CGRectMake( 7.5f, -44.0f, 305.0f, 322.0f);
+         [self.contentView addSubview:dropshadowView];
+         
+         CALayer *layer = dropshadowView.layer;
+         layer.masksToBounds = NO;
+         layer.shadowRadius = 3.0f;
+         layer.shadowOpacity = 0.5f;
+         layer.shadowOffset = CGSizeMake( 0.0f, 1.0f);
+         layer.shouldRasterize = YES;
          */
         
         self.youtubeWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, youtubeFrame)];
@@ -73,17 +74,21 @@
         self.imageView.backgroundColor = [UIColor blackColor];
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
         self.imageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"]; //first pic
-    
+        
         self.photoButton = [UIButton buttonWithType:UIButtonTypeCustom];
         self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 320.0f, 320.0f);
         self.photoButton.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:self.photoButton];
-
+        
+        self.captionButton = [[UIButton alloc] init];
+        [self.captionButton setBackgroundColor:[UIColor clearColor]];
+        [self.contentView addSubview:self.captionButton];
+        
         
         self.footerView = [[PostFooterView alloc] initWithFrame:CGRectMake(0.0f, self.imageView.frame.origin.y + self.imageView.frame.size.height, self.bounds.size.width, 44.0f) buttons:PAPPhotoHeaderButtonsDefault2];
         [self.contentView addSubview:self.footerView];
     }
-
+    
     return self;
 }
 
@@ -92,11 +97,11 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    [self sendSubviewToBack:self.youtubeWebView];
+    [self.contentView sendSubviewToBack:self.youtubeWebView];
     
     if ([self.caption length] > 0) {
         CGSize maximumLabelSize = CGSizeMake(295.0f, 9999.0f);
-
+        
         CGSize expectedSize = ([self.caption boundingRectWithSize:maximumLabelSize options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]} context:nil]).size;
         
         if (expectedSize.height > 46.527f) {
@@ -106,7 +111,9 @@
         self.imageView.frame = CGRectMake( 0.0f, 0.0f , 320.0f, 320.0f);
         self.captionLabel.frame = CGRectMake(12.0f, self.imageView.frame.size.height + 15.0f, 295.0f, expectedSize.height + 15.0f);
         
-        self.photoButton.frame = CGRectMake( 7.5f, notificationBarOffSet, 320.0f, 330.0f + expectedSize.height);
+        self.captionButton.frame = self.captionLabel.frame;
+        
+        self.photoButton.frame = CGRectMake( 7.5f, notificationBarOffSet, 320.0f, self.imageView.frame.size.height);
         self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.imageView.frame.size.height + self.captionLabel.frame.size.height + 20.0f);
         
         NSRange range = [self.caption rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
@@ -141,8 +148,11 @@
         self.captionLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         
         [self.footerView setFrame:CGRectMake(0.0f, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height, self.bounds.size.width, 44.0f)];
-
+        self.captionButton.frame = self.captionLabel.frame;
+        
     } else {
+        [self.captionButton removeFromSuperview];
+        
         self.captionLabel.text = @"";
         self.captionLabel.frame = CGRectMake(12.5f, 0.0f, 295.0f, 44.0f);
         self.imageView.frame = CGRectMake( 0.0f, 0.0f, 320.0f, 320.0f);

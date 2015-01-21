@@ -5,6 +5,8 @@
 //
 #import "PostFooterView.h"
 
+@protocol PAPPhotoCellDelegate;
+
 @class PFImageView;
 @interface PAPPhotoCell : PFTableViewCell
 
@@ -21,8 +23,19 @@
 @property (nonatomic, strong) UILabel *linkDescription;
 @property (nonatomic, strong) PostFooterView *footerView;
 @property (nonatomic, strong) UIWebView *youtubeWebView;
+@property (nonatomic, strong) UIButton *captionButton;
+
+/*! @name Delegate */
+@property (nonatomic,weak) id <PAPPhotoCellDelegate> delegate;
 
 
 -(void)setObject:(PFObject*)object;
+
+@end
+
+@protocol PAPPhotoCellDelegate <NSObject>
+@optional
+
+
 
 @end
