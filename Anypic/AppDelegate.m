@@ -233,6 +233,9 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     [[FlightRecorder sharedInstance] setAccessKey:FLIGHT_RECORDER_ACCESS_KEY secretKey:FLIGHT_RECORDER_SECRET_KEY];
     [[FlightRecorder sharedInstance] setShouldStartLocationManager:YES];
     
+    // set flight recorder properties
+    [[FlightRecorder sharedInstance] startFlight];
+    
     return YES;
 }
 
@@ -434,10 +437,16 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     // get selected controller and current controller
     BOOL isHomeViewSelected = [[[selectedNav viewControllers] objectAtIndex:0] isKindOfClass:[PAPHomeViewController class]];
     BOOL isCurrentViewHome = (int)self.tabBarController.selectedIndex == 0 ? YES : NO;
+    BOOL isDiscoverViewSelected = [[[selectedNav viewControllers] objectAtIndex:0] isKindOfClass:[discoverViewController class]];
     
     // scroll to top and refresh if source and destination are the same
     if(isHomeViewSelected && isCurrentViewHome){
         [[[selectedNav viewControllers] objectAtIndex:0] refreshCurrentFeed];
+    }else if (isDiscoverViewSelected && selectedNav.tabBarItem.tag == 1){
+        
+        // mixpanel analytics - tapped discover glow, reset tag
+        [[Mixpanel sharedInstance] track:@"Test: Tapped Discover Glow"];
+        [selectedNav.tabBarItem setTag:0];
     }
 
     /* This is a fail-safe: PAPTabBarController's "Handle outside tap gesture" should handle this before it reaches this method. Hiding and showing the tabbar is affecting this function so fail-safe is used. */
@@ -592,11 +601,14 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
 
     UIImage *discoverTabBarImage = [UIImage imageNamed:@"nav_discover.png"];
     UIImage *discoverTabBarImage_Glow = [UIImage imageNamed:@"IconDiscover_Glow.png"];
+    
+
     UIImage *discoverTabBarImage_selected = [UIImage imageNamed:@"IconDiscoverSelected.png"];
     UIImage *discoverImage;
 
     if (distanceBetweenDates > discoverGlowTimeFrame || discoverUpdateDate == nil) {
         discoverImage = discoverTabBarImage_Glow;
+        [discoverTabbarItem setTag:1];
     } else {
         discoverImage = discoverTabBarImage;
     }
