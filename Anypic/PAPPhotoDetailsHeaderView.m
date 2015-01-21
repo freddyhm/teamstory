@@ -328,7 +328,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
                 self.youtubeWebView = [[UIWebView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, youtubeWebViewHeight)];
                 [self.youtubeWebView loadHTMLString:[self setiFrameURLforYouTube:[self.photo objectForKey:@"link"]] baseURL:[[NSURL alloc] initWithString:[self.photo objectForKey:@"link"]]];
                 [self addSubview:self.youtubeWebView];
-                viewOffset = -100.0f;
+                viewOffset = -115.0f;
         } else {
             self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
             
