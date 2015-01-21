@@ -133,6 +133,7 @@
             self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, youtubeFrame + self.captionLabel.frame.size.height + 20.0f);
         } else {
             [self.youtubeWebView removeFromSuperview];
+            [self.contentView bringSubviewToFront:self.imageView];
         }
         
         
