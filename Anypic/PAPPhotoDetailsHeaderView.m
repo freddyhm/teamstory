@@ -291,7 +291,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self addSubview:self.youtubeWebView];
             viewOffset = -90.0f;
         } else {
-            
             self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
             
             self.photoDescriptionLabel.frame = CGRectMake(12.0f, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 20.0f, 295.0f, expectedSize.height);
