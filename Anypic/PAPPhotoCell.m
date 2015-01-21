@@ -103,7 +103,6 @@
             expectedSize.height = 46.527f;
         }
         
-        
         self.imageView.frame = CGRectMake( 0.0f, 0.0f , 320.0f, 320.0f);
         self.captionLabel.frame = CGRectMake(12.0f, self.imageView.frame.size.height + 15.0f, 295.0f, expectedSize.height + 15.0f);
         
@@ -115,6 +114,16 @@
         if (range.location != NSNotFound) {
             NSString *lowerCaseString = [[self.caption substringWithRange:range] lowercaseString];
             self.caption = [self.caption stringByReplacingCharactersInRange:range withString:lowerCaseString];
+        }
+        
+        if ([[self.ih_object objectForKey:@"type"] isEqualToString:@"link"] && ([[self.ih_object objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[self.ih_object objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound)) {
+            // When post is a youtube link
+            [self.imageView removeFromSuperview];
+            [self.photoButton removeFromSuperview];
+            
+            [self.youtubeWebView loadHTMLString:[self setiFrameURLforYouTube:[self.ih_object objectForKey:@"link"]] baseURL:[[NSURL alloc] initWithString:[self.ih_object objectForKey:@"link"]]];
+            self.captionLabel.frame = CGRectMake(12.0f, youtubeFrame + 10.0f, 295.0f, expectedSize.height + 15.0f);
+            self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, youtubeFrame + self.captionLabel.frame.size.height + 20.0f);
         }
         
         
@@ -137,7 +146,19 @@
         self.imageView.frame = CGRectMake( 0.0f, 0.0f, 320.0f, 320.0f);
         self.photoButton.frame = CGRectMake( 7.5f, 0.0f, 320.0f, 320.0f);
         
-        [self.footerView setFrame:CGRectMake(0.0f, self.imageView.frame.origin.y + self.imageView.frame.size.height, self.bounds.size.width, 44.0f)];
+        if ([[self.ih_object objectForKey:@"type"] isEqualToString:@"link"] && ([[self.ih_object objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[self.ih_object objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound)) {
+            // When post is a youtube link
+            [self.imageView removeFromSuperview];
+            [self.photoButton removeFromSuperview];
+            
+            self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.youtubeWebView.frame.size.height + 10.0f);
+            [self.youtubeWebView loadHTMLString:[self setiFrameURLforYouTube:[self.ih_object objectForKey:@"link"]] baseURL:[[NSURL alloc] initWithString:[self.ih_object objectForKey:@"link"]]];
+            [self.footerView setFrame:CGRectMake(0.0f, 205.0f, self.bounds.size.width, 44.0f)];
+            
+            [self.footerView setFrame:CGRectMake(0.0f, self.imageView.frame.origin.y + self.imageView.frame.size.height, self.bounds.size.width, 44.0f)];
+        } else {
+            [self.footerView setFrame:CGRectMake(0.0f, self.imageView.frame.origin.y + self.imageView.frame.size.height, self.bounds.size.width, 44.0f)];
+        }
         
         self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.imageView.frame.size.height + 10.0f);
     }
