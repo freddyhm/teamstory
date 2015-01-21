@@ -57,7 +57,14 @@
         self.youtubeWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, youtubeFrame)];
         self.youtubeWebView.scrollView.scrollEnabled = NO;
         self.youtubeWebView.scrollView.bounces = NO;
+        self.youtubeWebView.delegate = self;
+        
+        self.youtubePlaceHolderView = [[UIImageView alloc] initWithFrame:self.youtubeWebView.frame];
+        [self.youtubePlaceHolderView setImage:[UIImage imageNamed:@"video_placeholder.png"]];
+        self.youtubePlaceHolderView.hidden = YES;
         [self.contentView addSubview:self.youtubeWebView];
+        [self.contentView addSubview:self.youtubePlaceHolderView];
+        
         
         self.backgroundView = [[UIView alloc] init];
         [self.backgroundView setBackgroundColor:[UIColor whiteColor]];
@@ -127,6 +134,7 @@
             // When post is a youtube link
             [self.imageView removeFromSuperview];
             [self.photoButton removeFromSuperview];
+            self.youtubePlaceHolderView.hidden = NO;
             
             [self.youtubeWebView loadHTMLString:[self setiFrameURLforYouTube:[self.ih_object objectForKey:@"link"]] baseURL:[[NSURL alloc] initWithString:[self.ih_object objectForKey:@"link"]]];
             self.captionLabel.frame = CGRectMake(12.0f, youtubeFrame + 10.0f, 295.0f, expectedSize.height + 15.0f);
@@ -134,6 +142,7 @@
         } else {
             [self.youtubeWebView removeFromSuperview];
             [self.contentView bringSubviewToFront:self.imageView];
+            self.youtubePlaceHolderView.hidden = YES;
         }
         
         
@@ -152,7 +161,7 @@
         self.captionButton.frame = self.captionLabel.frame;
         
     } else {
-        [self.captionButton removeFromSuperview];
+        self.captionButton.frame = CGRectZero;
         
         self.captionLabel.text = @"";
         self.captionLabel.frame = CGRectMake(12.5f, 0.0f, 295.0f, 44.0f);
@@ -167,13 +176,13 @@
             self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.youtubeWebView.frame.size.height + 10.0f);
             [self.youtubeWebView loadHTMLString:[self setiFrameURLforYouTube:[self.ih_object objectForKey:@"link"]] baseURL:[[NSURL alloc] initWithString:[self.ih_object objectForKey:@"link"]]];
             [self.footerView setFrame:CGRectMake(0.0f, 205.0f, self.bounds.size.width, 44.0f)];
-            
-            [self.footerView setFrame:CGRectMake(0.0f, 205.0f, self.bounds.size.width, 44.0f)];;
+            self.youtubePlaceHolderView.hidden = NO;
         } else {
             [self.footerView setFrame:CGRectMake(0.0f, self.imageView.frame.origin.y + self.imageView.frame.size.height, self.bounds.size.width, 44.0f)];
             self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.imageView.frame.size.height + 10.0f);
             [self.youtubeWebView removeFromSuperview];
             [self.contentView bringSubviewToFront:self.imageView];
+            self.youtubePlaceHolderView.hidden = YES;
         }
     }
     
@@ -182,8 +191,10 @@
     if ([[self.ih_object objectForKey:@"type"] isEqualToString:@"link"]) {
         if ([[self.ih_object objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[self.ih_object objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound) {
             [self.contentView bringSubviewToFront:self.youtubeWebView];
+            [self.contentView bringSubviewToFront:self.youtubePlaceHolderView];
         }
     }
+    [self.contentView bringSubviewToFront:self.captionButton];
 }
 
 -(NSString *)setiFrameURLforYouTube:(NSString *)url {
@@ -227,6 +238,14 @@
     self.ih_object = nil;
     self.imageView.file = nil;
     self.imageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"]; //initial state for all except first
+}
+
+
+# pragma UIWebViewDelegate
+- (void) webViewDidFinishLoad:(UIWebView *)webView {
+    [UIView animateWithDuration:0.2 animations:^{
+        [self.contentView sendSubviewToBack:self.youtubePlaceHolderView];
+    }];
 }
 
 

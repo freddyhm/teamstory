@@ -8,7 +8,7 @@
 @protocol PAPPhotoCellDelegate;
 
 @class PFImageView;
-@interface PAPPhotoCell : PFTableViewCell
+@interface PAPPhotoCell : PFTableViewCell <UIWebViewDelegate>
 
 @property (nonatomic, strong) UIButton *photoButton;
 @property (nonatomic, strong) UILabel *captionLabel;
@@ -24,6 +24,7 @@
 @property (nonatomic, strong) PostFooterView *footerView;
 @property (nonatomic, strong) UIWebView *youtubeWebView;
 @property (nonatomic, strong) UIButton *captionButton;
+@property (nonatomic, strong) UIImageView *youtubePlaceHolderView;
 
 /*! @name Delegate */
 @property (nonatomic,weak) id <PAPPhotoCellDelegate> delegate;
