@@ -335,25 +335,27 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     // create title to wrap around imageview bounds, add to image view
     UILabel *newLinkTitle = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, newLinkImageView.frame.size.width - 35, newLinkImageView.frame.size.height)];
-    [newLinkTitle setFont:[UIFont fontWithName:@"Avenir-Black"  size:22.0f]];
+    [newLinkTitle setFont:[UIFont fontWithName:@"Avenir-Black"  size:21.0f]];
+    //[newLinkTitle setBackgroundColor:[UIColor redColor]];
     [newLinkTitle setTextColor:[UIColor whiteColor]];
     [newLinkTitle setTextAlignment:NSTextAlignmentCenter];
     [newLinkTitle setLineBreakMode:NSLineBreakByWordWrapping];
-    [newLinkTitle setNumberOfLines:5];
+    [newLinkTitle setNumberOfLines:20];
     
     // add image as attachment to string so always at the end of text
     NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
     attachment.image = [UIImage imageNamed:@"icon_link"];
-    NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
+    NSMutableAttributedString *attachmentString = [[NSAttributedString attributedStringWithAttachment:attachment] mutableCopy];
 
-    // couldn't add padding through frame or bounds so here's a quick hack
-    NSString *formattedTitleLabelTxt = [self.titleLabel.text stringByAppendingString:@" "].uppercaseString;
+    // couldn't add padding through frame or bounds so here's a quick hack with space before title
+    NSString *formattedTitleLabelTxt = [@" " stringByAppendingString:self.titleLabel.text.uppercaseString];
+    
+    // convert to mutable attribute so we can add image
+    NSMutableAttributedString *linkAtttributedText = [[NSMutableAttributedString alloc] initWithString:formattedTitleLabelTxt];
     
     // build the final string
-    NSMutableAttributedString *linkAtttributedText = [[NSMutableAttributedString alloc] initWithString:formattedTitleLabelTxt];
-    [linkAtttributedText appendAttributedString:attachmentString];
-    
-    newLinkTitle.attributedText = linkAtttributedText;
+    [attachmentString appendAttributedString:linkAtttributedText];
+    newLinkTitle.attributedText = attachmentString;
     [newLinkImageView addSubview:newLinkTitle];
 
     // make an image out of imageview
