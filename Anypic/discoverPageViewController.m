@@ -8,6 +8,7 @@
 
 #import "discoverPageViewController.h"
 #import "Mixpanel.h"
+#import "FlightRecorder.h"
 #import "Intercom.h"
 #import "PAPFindFriendsCell.h"
 #import "PAPAccountViewController.h"
@@ -165,6 +166,9 @@ NSInteger selection = 1;
         
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Discover"}];
+    
+    // flightrecorder analytics
+    [[FlightRecorder sharedInstance] trackPageView:@"Discover Screen"];
     
     [SVProgressHUD setImageName:@"loading_discover.png"];
     [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeCustom];

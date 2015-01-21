@@ -12,6 +12,7 @@
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
 #import "Mixpanel.h"
+#import "FlightRecorder.h"
 #import "Intercom.h"
 #import "ParseFacebookUtils/PFFacebookUtils.h"
 #import "UIImageEffects.h"
@@ -73,6 +74,10 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Link"}];
+    
+    
+    // flightrecorder analytics
+    [[FlightRecorder sharedInstance] trackPageView:@"Link"];
     
     // init nav bar
     [[self navigationController] setNavigationBarHidden:NO animated:YES];

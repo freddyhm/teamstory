@@ -12,6 +12,7 @@
 #import "PAPProfileSettingViewController.h"
 #import "PAPprofileSetupViewController.h"
 #import "Mixpanel.h"
+#import "FlightRecorder.h"
 
 #define SUCCESSFUL 1
 
@@ -37,6 +38,9 @@
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Email Sign Up"}];
+    
+    // flightrecorder analytics
+    [[FlightRecorder sharedInstance] trackPageView:@"Email Sign Up"];
     
     cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
     signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];

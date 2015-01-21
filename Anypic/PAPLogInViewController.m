@@ -10,6 +10,7 @@
 #import "SVProgressHUD.h"
 #import "PAPprofileSetupViewController.h"
 #import "Mixpanel.h"
+#import "FlightRecorder.h"
 
 @interface PAPLogInViewController()
 @property (nonatomic, strong) UITextField *user_email;
@@ -51,6 +52,9 @@
         
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Sign In"}];
+        
+        // flightrecorder analytics
+        [[FlightRecorder sharedInstance] trackPageView:@"Sign In"];
         
         UIImage *dividerImage = [UIImage imageNamed:@"intro_divider.png"];
         UIImageView *divider = [[UIImageView alloc] initWithFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - 190.0f, dividerImage.size.width, dividerImage.size.height)];
@@ -121,6 +125,9 @@
         
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Register"}];
+        
+        // flightrecorder analytics
+        [[FlightRecorder sharedInstance] trackPageView:@"Register"];
         
         float screenOffset;
         if ([UIScreen mainScreen].bounds.size.height == 480) {

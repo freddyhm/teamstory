@@ -12,6 +12,7 @@
 #import "PAPAccountViewController.h"
 #import "AppDelegate.h"
 #import "Mixpanel.h"
+#import "FlightRecorder.h"
 
 
 #define APP ((AppDelegate *)[[UIApplication sharedApplication] delegate])
@@ -43,6 +44,9 @@
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Message List"}];
+    
+    // flightrecorder analytics
+    [[FlightRecorder sharedInstance] trackPageView:@"Message List"];
     
     [self.navigationController setToolbarHidden:YES animated:NO];
     

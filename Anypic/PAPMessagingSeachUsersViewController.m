@@ -9,6 +9,7 @@
 #import "PAPMessagingSeachUsersViewController.h"
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
+#import "FlightRecorder.h"
 
 #define headerViewHeight 64.0f
 #define querySelectionViewheight 37.5f
@@ -48,6 +49,9 @@
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Message Search Users"}];
+    
+    // flightrecorder analytics
+    [[FlightRecorder sharedInstance] trackPageView:@"Message Search Users"];
     
     [SVProgressHUD setImageName:@"loading_msg_list.png"];
     [SVProgressHUD showWithStatus:nil maskType:SVProgressHUDMaskTypeCustom];

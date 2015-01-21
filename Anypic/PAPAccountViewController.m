@@ -13,6 +13,7 @@
 #import "PAPwebviewViewController.h"
 #import "FollowersFollowingViewController.h"
 #import "Mixpanel.h"
+#import "FlightRecorder.h"
 #import "PAPMessagingViewController.h"
 #import "Intercom.h"
 
@@ -607,6 +608,9 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Account"}];
+    
+    // flightrecorder analytics
+    [[FlightRecorder sharedInstance] trackPageView:@"Account"];
     
     // edge case, if multiaction button frozen because of network problems
     if (self.user == [PFUser currentUser] && !self.multiActionButton.enabled){

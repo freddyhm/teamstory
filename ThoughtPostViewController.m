@@ -11,6 +11,7 @@
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
 #import "Mixpanel.h"
+#import "FlightRecorder.h"
 #import "Intercom.h"
 #import "ParseFacebookUtils/PFFacebookUtils.h"
 #include <stdlib.h>
@@ -139,6 +140,9 @@
         
     // new analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Thought"}];
+    
+    // flightrecorder analytics
+    [[FlightRecorder sharedInstance] trackPageView:@"Thought"];
 }
 
 #pragma mark - UITextViewDelegate & TextView related methods

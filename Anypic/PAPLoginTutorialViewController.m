@@ -10,6 +10,7 @@
 #import "PAPLogInViewController.h"
 #import "AppDelegate.h"
 #import "Mixpanel.h"
+#import "FlightRecorder.h"
 
 @interface PAPLoginTutorialViewController () {
     float screenOffset;
@@ -33,6 +34,9 @@
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Intro"}];
+    
+    // flightrecorder analytics
+    [[FlightRecorder sharedInstance] trackPageView:@"Intro"];
         
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"intro_bg.png"]]];
     

@@ -14,6 +14,7 @@
 #import "PAPCache.h"
 #import "PAPTabBarController.h"
 #import "Mixpanel.h"
+#import "FlightRecorder.h"
 #import "PAPMessageListViewController.h"
 #import "Intercom.h"
 #import <FlightRecorder/FlightRecorder.h>
@@ -220,6 +221,10 @@
                                                object:nil];
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Home"}];
+    
+    // flightrecorder analytics
+    [[FlightRecorder sharedInstance] trackPageView:@"Home"];
+    
     [self refreshBadge];
     
     
