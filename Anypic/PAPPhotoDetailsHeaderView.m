@@ -57,6 +57,8 @@
 #define likeProfileY 6.0f
 #define likeProfileDim 30.0f
 
+#define youtubeWebViewHeight 220.0f
+
 #define contentY nameHeaderHeight + mainImageHeight
 #define numLikePics 7.0f
 static CGSize expectedSize;
@@ -79,6 +81,7 @@ static CGSize expectedSize;
 @property (nonatomic, strong) UINavigationController *navController;
 @property (nonatomic, strong) UIImageView *clockIcon;
 @property (nonatomic, strong) UILabel *userInfoLabel;
+@property (nonatomic, strong) UIWebView *youtubeWebView;
 
 // Redeclare for edit
 @property (nonatomic, strong, readwrite) PFUser *photographer;
@@ -238,6 +241,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
      Create middle section of the header view; the image
      */
     [self.hud show:YES];
+    [self.youtubeWebView removeFromSuperview];
         
     if ([self.description length] > 0) {
         CGSize maximumLabelSize = CGSizeMake(320.0f - 7.5f * 4, 9999.0f);
@@ -297,7 +301,15 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         [self addSubview:self.photoImageView];
         
-        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(baseHorizontalOffset, nameHeaderHeight + 15.0f, mainImageWidth, self.photoImageView.frame.size.height + self.photoDescriptionLabel.frame.size.height + 50.0f)];
+        float contentOffsetHeight;
+        
+        if (self.photoImageView.frame.size.height > 0) {
+            contentOffsetHeight = self.photoImageView.frame.size.height + 50.0f;
+        } else {
+            contentOffsetHeight = youtubeWebViewHeight;
+        }
+        
+        UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(baseHorizontalOffset, nameHeaderHeight + 15.0f, mainImageWidth, contentOffsetHeight + self.photoDescriptionLabel.frame.size.height)];
         [backgroundView setBackgroundColor:[UIColor whiteColor]];
         [self addSubview:backgroundView];
         [self sendSubviewToBack:backgroundView];
@@ -563,6 +575,33 @@ static TTTTimeIntervalFormatter *timeFormatter;
     PAPwebviewViewController *webViewController = [[PAPwebviewViewController alloc] initWithWebsite:[self.photo objectForKey:@"link"]];
     webViewController.hidesBottomBarWhenPushed = YES;
     [self.navController pushViewController:webViewController animated:YES];
+}
+
+-(NSString *)setiFrameURLforYouTube:(NSString *)url {
+    NSError *error = NULL;
+    NSRegularExpression *regex =
+    [NSRegularExpression regularExpressionWithPattern:@".*\\.be\\/([^&]+)|.*v=([^&]+)"
+                                              options:NSRegularExpressionCaseInsensitive
+                                                error:&error];
+    NSRange group1;
+    NSRange group2;
+    
+    NSArray* matches = [regex matchesInString:url options:0 range:NSMakeRange(0, [url length])];
+    for (NSTextCheckingResult* match in matches) {
+        group1 = [match rangeAtIndex:1];
+        group2 = [match rangeAtIndex:2];
+    }
+    NSString *substringForFirstMatch;
+    if (group1.location != NSNotFound) {
+        // group 1 match
+        substringForFirstMatch = [url substringWithRange:group1];
+    } else {
+        // group 2 match
+        substringForFirstMatch = [url substringWithRange:group2];
+    }
+    
+    NSString *modifiedString = [NSString stringWithFormat:@"<iframe width='305' height='200' src='//www.youtube.com/embed/%@' frameborder='0' allowfullscreen></iframe>", substringForFirstMatch];
+    return modifiedString;
 }
 
 

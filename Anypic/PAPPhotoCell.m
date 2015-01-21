@@ -9,6 +9,7 @@
 #import "PAPwebviewViewController.h"
 #import "PAPPhotoDetailsViewController.h"
 
+#define youtubeFrame 200.0f
 
 @interface PAPPhotoCell () {
     float notificationBarOffSet;
@@ -52,6 +53,11 @@
         layer.shouldRasterize = YES;
          */
         
+        self.youtubeWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, youtubeFrame)];
+        self.youtubeWebView.scrollView.scrollEnabled = NO;
+        self.youtubeWebView.scrollView.bounces = NO;
+        [self.contentView addSubview:self.youtubeWebView];
+        
         self.backgroundView = [[UIView alloc] init];
         [self.backgroundView setBackgroundColor:[UIColor whiteColor]];
         [self.contentView addSubview:self.backgroundView];
@@ -86,6 +92,7 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    [self sendSubviewToBack:self.youtubeWebView];
     
     if ([self.caption length] > 0) {
         CGSize maximumLabelSize = CGSizeMake(295.0f, 9999.0f);
@@ -101,8 +108,6 @@
         self.captionLabel.frame = CGRectMake(12.0f, self.imageView.frame.size.height + 15.0f, 295.0f, expectedSize.height + 15.0f);
         
         self.photoButton.frame = CGRectMake( 7.5f, notificationBarOffSet, 320.0f, 330.0f + expectedSize.height);
-        
-        
         self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.imageView.frame.size.height + self.captionLabel.frame.size.height + 20.0f);
         
         NSRange range = [self.caption rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
@@ -127,7 +132,6 @@
         [self.footerView setFrame:CGRectMake(0.0f, self.captionLabel.frame.origin.y + self.captionLabel.frame.size.height, self.bounds.size.width, 44.0f)];
 
     } else {
-    
         self.captionLabel.text = @"";
         self.captionLabel.frame = CGRectMake(12.5f, 0.0f, 295.0f, 44.0f);
         self.imageView.frame = CGRectMake( 0.0f, 0.0f, 320.0f, 320.0f);
@@ -140,6 +144,39 @@
     
     [self.contentView bringSubviewToFront:self.imageView];
     [self.contentView bringSubviewToFront:self.footerView];
+    
+    if ([[self.ih_object objectForKey:@"type"] isEqualToString:@"link"]) {
+        if ([[self.ih_object objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[self.ih_object objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound) {
+            [self.contentView bringSubviewToFront:self.youtubeWebView];
+        }
+    }
+}
+
+-(NSString *)setiFrameURLforYouTube:(NSString *)url {
+    NSError *error = NULL;
+    NSRegularExpression *regex =
+    [NSRegularExpression regularExpressionWithPattern:@".*\\.be\\/([^&]+)|.*v=([^&]+)"
+                                              options:NSRegularExpressionCaseInsensitive
+                                                error:&error];
+    NSRange group1;
+    NSRange group2;
+    
+    NSArray* matches = [regex matchesInString:url options:0 range:NSMakeRange(0, [url length])];
+    for (NSTextCheckingResult* match in matches) {
+        group1 = [match rangeAtIndex:1];
+        group2 = [match rangeAtIndex:2];
+    }
+    NSString *substringForFirstMatch;
+    if (group1.location != NSNotFound) {
+        // group 1 match
+        substringForFirstMatch = [url substringWithRange:group1];
+    } else {
+        // group 2 match
+        substringForFirstMatch = [url substringWithRange:group2];
+    }
+    
+    NSString *modifiedString = [NSString stringWithFormat:@"<iframe width='305' height='200' src='//www.youtube.com/embed/%@' frameborder='0' allowfullscreen></iframe>", substringForFirstMatch];
+    return modifiedString;
 }
 
 #pragma mark - ()
