@@ -139,7 +139,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         
         // Set table header
         if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
-            if ([[self.photo objectForKey:@"link"] containsString:@"youtube.com"] || [[self.photo objectForKey:@"link"] containsString:@"youtu.be"]) {
+            if ([[self.photo objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[self.photo objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound) {
                 self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 246.0f + expectedSize.height + 56.0f + 15.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
             } else {
                 self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 146.0f + expectedSize.height + 56.0f + 15.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
@@ -151,7 +151,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         self.postDetails.tableHeaderView = self.headerView;
     } else {
         if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
-            if ([[self.photo objectForKey:@"link"] containsString:@"youtube.com"] || [[self.photo objectForKey:@"link"] containsString:@"youtu.be"]) {
+            if ([[self.photo objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[self.photo objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound) {
                 self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 307.0f) photo:self.photo description:nil navigationController:self.navigationController];
             } else {
                 self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 187.0f) photo:self.photo description:nil navigationController:self.navigationController];

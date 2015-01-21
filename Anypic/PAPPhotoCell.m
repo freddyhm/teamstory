@@ -155,7 +155,7 @@
         
         //handling cases of link post
         if ([[self.ih_object objectForKey:@"type"] isEqualToString:@"link"]) {
-            if ([[self.ih_object objectForKey:@"link"] containsString:@"youtube.com"] || [[self.ih_object objectForKey:@"link"] containsString:@"youtu.be"]) {
+            if ([[self.ih_object objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[self.ih_object objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound) {
                 // When post is a youtube link
                 [self.imageView removeFromSuperview];
                 [self.photoButton removeFromSuperview];
@@ -215,7 +215,7 @@
         self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.imageView.frame.size.height + 10.0f);
 
         if ([[self.ih_object objectForKey:@"type"] isEqualToString:@"link"]) {
-            if ([[self.ih_object objectForKey:@"link"] containsString:@"youtube.com"] || [[self.ih_object objectForKey:@"link"] containsString:@"youtu.be"]) {
+            if ([[self.ih_object objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[self.ih_object objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound) {
                 // When post is a youtube link
                 [self.imageView removeFromSuperview];
                 [self.photoButton removeFromSuperview];
@@ -267,7 +267,7 @@
     [self.contentView bringSubviewToFront:self.footerView];
     
     if ([[self.ih_object objectForKey:@"type"] isEqualToString:@"link"]) {
-        if ([[self.ih_object objectForKey:@"link"] containsString:@"youtube.com"] || [[self.ih_object objectForKey:@"link"] containsString:@"youtu.be"]) {
+        if ([[self.ih_object objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[self.ih_object objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound) {
             [self.contentView bringSubviewToFront:self.youtubeWebView];
         }
     }

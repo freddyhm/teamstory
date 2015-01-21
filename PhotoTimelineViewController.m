@@ -483,7 +483,7 @@ enum ActionSheetTags {
         }
         
         if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
-            if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] containsString:@"youtube.com"] || [[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] containsString:@"youtu.be"]) {
+            if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound) {
                 return 295.0f + expectedSize.height;
             } else {
                 return 100.0f + expectedSize.height + 75.0f;
@@ -493,7 +493,7 @@ enum ActionSheetTags {
         }
     } else {
         if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
-            if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] containsString:@"youtube.com"] || [[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] containsString:@"youtu.be"]) {
+            if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound) {
                 return 275.0f;
             } else {
                 return 100.0f + 64.0f;
@@ -547,7 +547,7 @@ enum ActionSheetTags {
         NSString *CellIdentifier = @"Cell";
         
         if ([[object objectForKey:@"type"] isEqualToString:@"link"]) {
-            if ([[object objectForKey:@"link"] containsString:@"youtube.com"] || [[object objectForKey:@"link"] containsString:@"youtu.be"]) {
+            if ([[object objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[object objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound) {
                 CellIdentifier = @"YoutubueLinkCell";
             } else {
                  CellIdentifier = @"LinkCell";
