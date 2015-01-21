@@ -323,12 +323,12 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [self sendSubviewToBack:backgroundView];
     } else {
         viewOffset = 0;
-        
         if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"] && ([[self.photo objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[self.photo objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound)) {
-                self.youtubeWebView = [[UIWebView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, youtubeWebViewHeight)];
-                [self.youtubeWebView loadHTMLString:[self setiFrameURLforYouTube:[self.photo objectForKey:@"link"]] baseURL:[[NSURL alloc] initWithString:[self.photo objectForKey:@"link"]]];
-                [self addSubview:self.youtubeWebView];
-                viewOffset = -115.0f;
+            expectedSize.height = 0.0f;
+            self.youtubeWebView = [[UIWebView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, youtubeWebViewHeight)];
+            [self.youtubeWebView loadHTMLString:[self setiFrameURLforYouTube:[self.photo objectForKey:@"link"]] baseURL:[[NSURL alloc] initWithString:[self.photo objectForKey:@"link"]]];
+            [self addSubview:self.youtubeWebView];
+            viewOffset = -100.0f;
         } else {
             self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
             
@@ -442,6 +442,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         /*
          Create bottom section fo the header view; the likes
          */
+    
         likeBarView = [[UIView alloc] init];
         [likeBarView setFrame:CGRectMake(likeBarX, likeBarY + expectedSize.height + viewOffset, likeBarWidth, likeBarHeight)];
         [likeBarView setBackgroundColor:[UIColor whiteColor]];
