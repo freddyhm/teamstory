@@ -496,9 +496,26 @@ enum ActionSheetTags {
             expectedSize.height = 46.527f;
         }
         
-        return 325.0f + expectedSize.height + 94.0f;
+        if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
+            if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound) {
+                return 295.0f + expectedSize.height;
+            } else {
+                return 100.0f + expectedSize.height + 75.0f;
+            }
+        } else {
+            return 325.0f + expectedSize.height + 94.0f;
+        }
     } else {
-        return 325.0f + 64.0f;
+        if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"type"] isEqualToString:@"link"]) {
+            if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound) {
+                return 275.0f;
+            } else {
+                return 100.0f + 64.0f;
+            }
+            
+        } else {
+            return 325.0f + 64.0f;
+        }
     }
 }
 
@@ -527,8 +544,6 @@ enum ActionSheetTags {
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    
     if([self.feedSourceType isEqualToString:@"explore"]){
         self.lastViewedExploreIndexPath = indexPath;
     }else{
