@@ -283,21 +283,19 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         [self addSubview:self.photoDescriptionLabel];
         
-        if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
-            if ([[self.photo objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[self.photo objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound) {
-                self.youtubeWebView = [[UIWebView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, youtubeWebViewHeight)];
-                [self.youtubeWebView loadHTMLString:[self setiFrameURLforYouTube:[self.photo objectForKey:@"link"]] baseURL:[[NSURL alloc] initWithString:[self.photo objectForKey:@"link"]]];
-                self.photoDescriptionLabel.frame = CGRectMake(12.0f, mainImageX + youtubeWebViewHeight + 40.0f, 295.0f, expectedSize.height + 5.0f);
-                [self addSubview:self.youtubeWebView];
-                viewOffset = -90.0f;
-            }
+        if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"] && ([[self.photo objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[self.photo objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound)) {
+            
+            self.youtubeWebView = [[UIWebView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, youtubeWebViewHeight)];
+            [self.youtubeWebView loadHTMLString:[self setiFrameURLforYouTube:[self.photo objectForKey:@"link"]] baseURL:[[NSURL alloc] initWithString:[self.photo objectForKey:@"link"]]];
+            self.photoDescriptionLabel.frame = CGRectMake(12.0f, mainImageX + youtubeWebViewHeight + 40.0f, 295.0f, expectedSize.height + 5.0f);
+            [self addSubview:self.youtubeWebView];
+            viewOffset = -90.0f;
         } else {
             
             self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
             
             self.photoDescriptionLabel.frame = CGRectMake(12.0f, self.photoImageView.frame.origin.y + self.photoImageView.frame.size.height + 20.0f, 295.0f, expectedSize.height);
         
-            
             self.photoImageView.image = [UIImage imageNamed:@"PlaceholderPhoto.png"];
             self.photoImageView.backgroundColor = [UIColor blackColor];
             self.photoImageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -324,17 +322,14 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [backgroundView setBackgroundColor:[UIColor whiteColor]];
         [self addSubview:backgroundView];
         [self sendSubviewToBack:backgroundView];
-        
     } else {
         viewOffset = 0;
         
-        if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"]) {
-            if ([[self.photo objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[self.photo objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound) {
+        if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"] && ([[self.photo objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[self.photo objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound)) {
                 self.youtubeWebView = [[UIWebView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, youtubeWebViewHeight)];
                 [self.youtubeWebView loadHTMLString:[self setiFrameURLforYouTube:[self.photo objectForKey:@"link"]] baseURL:[[NSURL alloc] initWithString:[self.photo objectForKey:@"link"]]];
                 [self addSubview:self.youtubeWebView];
                 viewOffset = -100.0f;
-            }
         } else {
             self.photoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(mainImageX, mainImageY, mainImageWidth, mainImageHeight)];
             

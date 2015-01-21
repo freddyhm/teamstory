@@ -500,7 +500,7 @@ enum ActionSheetTags {
             if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound) {
                 return 295.0f + expectedSize.height;
             } else {
-                return 100.0f + expectedSize.height + 75.0f;
+                return 325.0f + expectedSize.height + 94.0f;
             }
         } else {
             return 325.0f + expectedSize.height + 94.0f;
@@ -510,7 +510,7 @@ enum ActionSheetTags {
             if ([[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[[self.objects objectAtIndex:indexPath.section] objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound) {
                 return 275.0f;
             } else {
-                return 100.0f + 64.0f;
+                return 325.0f + 64.0f;
             }
             
         } else {
@@ -557,6 +557,14 @@ enum ActionSheetTags {
         return cell;
     } else {
         NSString *CellIdentifier = @"Cell";
+        
+        if ([[object objectForKey:@"type"] isEqualToString:@"link"]) {
+            if ([[object objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[object objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound) {
+                CellIdentifier = @"YoutubueLinkCell";
+            }
+        } else {
+            CellIdentifier = @"Cell";
+        }
         
         PAPPhotoCell *cell = (PAPPhotoCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
