@@ -505,12 +505,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
     
     if (liked) {
         
-        
         // get post type
         NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
-        
-        // analytics
-        [PAPUtility captureEventGA:@"Engagement" action:@"Like" label:@"Photo"];
         
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Liked Post", @"Source": @"Details", @"Post Type": postType}];

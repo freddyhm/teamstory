@@ -35,6 +35,10 @@
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Intro"}];
     
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"intro_tutorial_screen" action:@"viewing_tutorial_screen" label:@"" value:@""];
+
+    
     // flightrecorder analytics
     [[FlightRecorder sharedInstance] trackPageView:@"Intro"];
         

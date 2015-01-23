@@ -135,11 +135,11 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     
-    // analytics
-    [PAPUtility captureScreenGA:@"Thought Post"];
-        
     // new analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Thought"}];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"thought_screen" action:@"viewing_thought" label:@"" value:@""];
     
     // flightrecorder analytics
     [[FlightRecorder sharedInstance] trackPageView:@"Thought"];

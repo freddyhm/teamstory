@@ -67,10 +67,12 @@
 {
     [super viewDidLoad];
     
-    [PAPUtility captureEventGA:@"Testing" action:@"Started profile setup" label:nil];
-    
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"New Profile Screen 1"}];
+    
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"new_profile_1_screen" action:@"viewing_new_profile_1" label:@"" value:@""];
     
     // flightrecorder analytics
     [[FlightRecorder sharedInstance] trackPageView:@"New Profile Screen 1"];
@@ -392,6 +394,9 @@
                             // mixpanel analytics
                             [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"New Profile Screen 2"}];
                             
+                            // flightrecorder event analytics
+                            [[FlightRecorder sharedInstance] trackEventWithCategory:@"new_profile_2_screen" action:@"viewing_new_profile_2" label:@"" value:@""];
+                            
                             // flightrecorder analytics
                             [[FlightRecorder sharedInstance] trackPageView:@"New Profile Screen 2"];
                             
@@ -435,6 +440,9 @@
     // flightrecorder analytics
     [[FlightRecorder sharedInstance] trackPageView:@"New Profile Screen 3"];
     
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"new_profile_3_screen" action:@"viewing_new_profile_3" label:@"" value:@""];
+    
     [self.mainSV setContentOffset:CGPointMake(640.0f, 0.0f) animated:YES];
     
     if ([UIScreen mainScreen].bounds.size.height == 480)
@@ -475,8 +483,6 @@
 
 -(void)navDonAction:(id)sender {
     
-    [PAPUtility captureEventGA:@"Testing" action:@"Pressed done in profile setup" label:nil];
-
     [SVProgressHUD showWithStatus:@"Creating Profile..." maskType:SVProgressHUDMaskTypeBlack];
     
     NSString* companyName_input = self.displayNameTF.text;

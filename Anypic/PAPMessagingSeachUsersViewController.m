@@ -50,6 +50,9 @@
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Message Search Users"}];
     
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"message_search_users_screen" action:@"viewing_message_search_users" label:@"" value:@""];
+    
     // flightrecorder analytics
     [[FlightRecorder sharedInstance] trackPageView:@"Message Search Users"];
     
@@ -235,7 +238,7 @@
 -(void) allUserButtonAction:(id)sender {
     
     // mixpanel analytics
-    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type" : @"Core", @"Action": @"Tapped Everyone Button"}];
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type" : @"Passive", @"Action": @"Tapped Everyone Button"}];
     
     self.querySelectionString = @"Everyone";
     [self.followerTV reloadData];
@@ -307,7 +310,7 @@
 - (void)cell:(PAPFindFriendsCell *)cellView didTapUserButton:(PFUser *)aUser {
     
     // mixpanel analytics
-    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type" : @"Core", @"Action": @"Selected User In Message"}];
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type" : @"Passive", @"Action": @"Selected User In Message"}];
     
     [SVProgressHUD show];
     
@@ -383,7 +386,7 @@
 -(void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
     
     // mixpanel analytics
-    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type" : @"Core", @"Action": @"Searched For User"}];
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type" : @"Passive", @"Action": @"Searched For User"}];
     
     self.followerTV.frame = CGRectMake(0.0f, headerViewHeight + querySelectionViewheight + self.searchBar.bounds.size.height, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.height - headerViewHeight - querySelectionViewheight - self.searchBar.bounds.size.height);
 }

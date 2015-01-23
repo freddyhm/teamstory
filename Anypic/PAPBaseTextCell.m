@@ -148,7 +148,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.likeCommentHeart setBackgroundColor:[UIColor clearColor]];
             [self.likeCommentHeart setBackgroundImage:[UIImage imageNamed:@"ButtonLikeCommentSelected.png"] forState:UIControlStateSelected];
             [self.likeCommentHeart setBackgroundImage:[UIImage imageNamed:@"ButtonLikeComment.png"] forState:UIControlStateNormal];
-            [self.likeCommentHeart addTarget:self action:@selector(didTapCommentHeartAction) forControlEvents:UIControlEventTouchUpInside];
             
             // Create the counter label next to heart
             self.likeCommentCount = [[UILabel alloc] init];
@@ -304,12 +303,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [self.delegate didTapCommentLikeButton:self];
     }
 }
-
-- (void)didTapCommentHeartAction{
-    
-    [PAPUtility captureEventGA:@"Testing" action:@"Tapped Heart" label:nil];
-}
-
 
 #pragma mark - PAPBaseTextCell
 
@@ -498,6 +491,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Comment Menu" properties:@{}];
+    
     
     UIActionSheet *actionSheet = [[UIActionSheet alloc] init];
     actionSheet.delegate = self;

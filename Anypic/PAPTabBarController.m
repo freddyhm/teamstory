@@ -160,9 +160,6 @@
 
 - (void)postButtonAction:(id)sender {
     
-    // analytics
-    [PAPUtility captureEventGA:@"Testing" action:@"Pressed Post" label:nil];
-    
     // new analytics
     [[Mixpanel sharedInstance] track:@"Viewed Post Menu" properties:@{}];
     
@@ -174,9 +171,6 @@
 }
 
 - (void)cameraButtonAction:(id)sender{
-    
-    // analytics
-    [PAPUtility captureEventGA:@"Testing" action:@"Pressed Camera" label:nil];
     
     // new analytics
     [[Mixpanel sharedInstance] track:@"Viewed Post Menu" properties:@{@"Selected": @"Camera"}];
@@ -224,9 +218,6 @@
 
 - (void)linkPostButtonAction:(id)sender {
     
-    // analytics
-    [PAPUtility captureEventGA:@"Testing" action:@"Pressed Link" label:nil];
-    
     // new analytics
     [[Mixpanel sharedInstance] track:@"Viewed Post Menu" properties:@{@"Selected": @"Link"}];
     
@@ -266,9 +257,6 @@
 
 - (void)thoughtButtonAction:(id)sender{
     
-    // analytics
-    [PAPUtility captureEventGA:@"Testing" action:@"Pressed Thought" label:nil];
-    
     // new analytics
     [[Mixpanel sharedInstance] track:@"Viewed Post Menu" properties:@{@"Selected": @"Thought"}];
     
@@ -293,10 +281,7 @@
 
 
 - (UIImagePickerController *)shouldStartCameraController {
-    
-    // analytics
-    [PAPUtility captureEventGA:@"Camera & Album" action:@"Picked Camera" label:@"Photo"];
-
+   
     [[Mixpanel sharedInstance] track:@"Took Camera Picture" properties:@{}];
         
     /* starts camera, sets tabbarcontroller as delegate, and returns image picker */

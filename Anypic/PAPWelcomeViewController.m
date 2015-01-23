@@ -65,10 +65,7 @@
                 [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBarController];
             } else {
                 if (user && profileExist != YES) {
-                    
-                    // analytics
-                    [PAPUtility captureScreenGA:@"New Profile"];
-                
+                                    
                     PAPprofileSetupViewController *profileSetupViewController = [[PAPprofileSetupViewController alloc] init];
                     self.navigationController.navigationBarHidden = YES;
                     [self.navigationController pushViewController:profileSetupViewController animated:NO];

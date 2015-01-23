@@ -48,6 +48,9 @@
     
     // flightrecorder analytics
     [[FlightRecorder sharedInstance] trackPageView:@"Photo Album"];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"photo_album_screen" action:@"viewing_photo_album" label:@"" value:@""];
         
     // set color of nav bar to custom grey
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
@@ -189,9 +192,7 @@
     // check if there's a pic selected, show pop up if not
     if(isSelected){
         
-        // analytics
-        [PAPUtility captureEventGA:@"Camera & Album" action:@"Picked Album" label:@"Photo"];
-        
+        // analytics        
         [[Mixpanel sharedInstance] track:@"Selected Album Picture" properties:@{}];
         
         [self.parent selectedAssets:selectedAssetsImages];

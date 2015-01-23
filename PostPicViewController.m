@@ -77,6 +77,9 @@
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Post Photo"}];
     
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"post_photo_screen" action:@"viewing_post_photo" label:@"" value:@""];
+    
     // flightrecorder analytics
     [[FlightRecorder sharedInstance] trackPageView:@"Post Photo"];
     

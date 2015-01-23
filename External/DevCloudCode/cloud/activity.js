@@ -132,7 +132,7 @@ Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                   // get all follow activities related to the author
                   notifyFollowersQuery.equalTo("type", "follow");
                   notifyFollowersQuery.equalTo("toUser", postAuthor);
-                          
+                  notifyFollowersQuery.include("fromUser");
                   
                   notifyFollowersQuery.find({
                                             
@@ -149,7 +149,7 @@ Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                                 // notify follower
                                 var installationQuery = new Parse.Query(Parse.Installation);
                                 installationQuery.equalTo("user", follower);
-                                
+                                            
                                 // save notice in follower table
                                 var FollowerObj = Parse.Object.extend("Follower");
                                 var followerObj = new FollowerObj();
@@ -201,13 +201,19 @@ Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                                                  alert('Failed to create new object, with error code: ' + error.message);
                                                  }
                                 });
-                                
+                                            
+                                 // update activity badge for follower
+                                 var newActivityBadge = follower.get("activityBadge") + 1;
+                                 follower.set("activityBadge", newActivityBadge);
+                                 follower.save();
+                                 
                                  // send push notification with proper message
                                  Parse.Push.send({
                                  where: installationQuery,
                                  data: pushData
                                  }).then(function() {
                                  console.log('Sent follower push');
+                                         
                                  }, function(error) {
                                  throw "Push Error" + error.code + " : " + error.message;
                                  });
@@ -369,6 +375,7 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       
                       // find all the subscriptions with this post
                       subscriptionQuery.equalTo("post", photoPointer);
+                      subscriptionQuery.include("subscriber");
                       
                       subscriptionQuery.find({
                                              success: function(results) {
@@ -392,6 +399,13 @@ Parse.Cloud.afterSave('Activity', function(request) {
                                              // notify subscriber
                                              var query = new Parse.Query(Parse.Installation);
                                              query.equalTo("user", results[i].get("subscriber"));
+                                             
+                                             var subscriberUser = results[i].get("subscriber");
+                                             
+                                             // update activity badge for subscriber
+                                             var newActivityBadge = subscriberUser.get("activityBadge") + 1;
+                                             subscriberUser.set("activityBadge", newActivityBadge);
+                                             subscriberUser.save();
                                              
                                              Parse.Push.send({
                                                              where: query,

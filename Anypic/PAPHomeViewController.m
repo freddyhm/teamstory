@@ -211,9 +211,6 @@
     
     self.notificationStar.hidden = YES;
     self.notificationExitButton.hidden = YES;
-
-    // analytics
-    [PAPUtility captureScreenGA:@"Home"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(updateMessageButton:)
@@ -221,6 +218,9 @@
                                                object:nil];
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Home"}];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"home_screen" action:@"viewing_home" label:@"" value:@""];
     
     // flightrecorder analytics
     [[FlightRecorder sharedInstance] trackPageView:@"Home"];

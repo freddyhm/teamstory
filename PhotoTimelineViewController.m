@@ -21,6 +21,7 @@
 #import "AppDelegate.h"
 #import "Intercom.h"
 #import "PAPwebviewViewController.h"
+#import "FlightRecorder.h"
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 #define APP ((AppDelegate *)[[UIApplication sharedApplication] delegate])
@@ -163,9 +164,6 @@ enum ActionSheetTags {
 
 - (void)userDidCommentOnPhoto:(NSNotification *)note {
     
-    // analytics
-    [PAPUtility captureEventGA:@"Engagement" action:@"Comment" label:@"Photo"];
-    
     // increment user comment count by one
     [[Mixpanel sharedInstance].people increment:@"Comment Count" by:[NSNumber numberWithInt:1]];
     
@@ -186,9 +184,6 @@ enum ActionSheetTags {
     
     [SVProgressHUD show];
     
-    // analytics
-    [PAPUtility captureEventGA:@"Engagement" action:@"Upload" label:@"Photo"];
-    
     if (self.objects.count > 0) {
         [self.feed scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
@@ -208,13 +203,15 @@ enum ActionSheetTags {
         NSString *type = [photo objectForKey:@"type"] != nil ? [photo objectForKey:@"type"] : @"";
         
         // mixpanel analytics
-        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Viewed Post", @"Post Type":type}];
-        
+        [[Mixpanel sharedInstance] track:@"Viewed Post" properties:@{@"Type":type}];
         
         // intercom analytics
         [Intercom logEventWithName:@"viewed-post" optionalMetaData:nil
                         completion:^(NSError *error) {}];
         
+        
+        // flightrecorder event analytics
+        [[FlightRecorder sharedInstance] trackEventWithCategory:@"home_screen" action:@"tapped_post" label:@"" value:type];
         
         UIViewController *tappedController;
         
@@ -712,9 +709,7 @@ enum ActionSheetTags {
     NSNumber *likeCount = [numberFormatter numberFromString:postFooterView.likeCountLabel.text];
     
     if (liked) {
-        // analytics
-        [PAPUtility captureEventGA:@"Engagement" action:@"Like" label:@"Photo"];
-        
+    
         // get post type
         NSString *postType = [photo objectForKey:@"type"] != nil ? [photo objectForKey:@"type"] : @"";
         

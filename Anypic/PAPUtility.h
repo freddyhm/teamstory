@@ -8,8 +8,6 @@
 
 + (void)posted:(id)post;
 + (UIImage *)resizeImage:(UIImage *)image width:(int)w height:(int)h;
-+ (void)captureEventGA:(NSString *)eventCategory action:(NSString *)eventAction label:(NSString *)eventLabel;
-+ (void)captureScreenGA:(NSString *)screen;
 + (void)updateSubscriptionToPost:(PFObject *)post forState:(NSString *)state;
 + (void)likePhotoInBackground:(id)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock;
 + (void)unlikePhotoInBackground:(id)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock;

@@ -10,6 +10,7 @@
 #import "PAPdiscoverCell.h"
 #import "PAPPhotoDetailsViewController.h"
 #import "Mixpanel.h"
+#import "FlightRecorder.h"
 
 @interface PAPdiscoverTileView() {
     NSUInteger *skipQueryCountPic;
@@ -190,6 +191,9 @@
         
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Selected From Discover" properties:@{@"Type":@"Picture", @"Selected":[photo objectId]}];
+        
+        // flightrecorder event analytics
+        [[FlightRecorder sharedInstance] trackEventWithCategory:@"discover_screen" action:@"tapped_post" label:@"" value:@"picture"];
     
         if (photo) {
             PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapDiscoverPhoto"];
@@ -206,6 +210,9 @@
         
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Selected From Discover" properties:@{@"Type":@"Thought", @"Selected":[photo objectId]}];
+        
+        // flightrecorder event analytics
+        [[FlightRecorder sharedInstance] trackEventWithCategory:@"discover_screen" action:@"tapped_post" label:@"" value:@"thought"];
         
         if (photo) {
             PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapDiscoverPhoto"];

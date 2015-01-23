@@ -35,30 +35,6 @@
 
 #pragma mark Notifications
 
-+ (void)captureScreenGA:(NSString *)screen{
-    // May return nil if a tracker has not already been initialized with a
-    // property ID.
-    id tracker = [[GAI sharedInstance] defaultTracker];
-    
-    // This screen name value will remain set on the tracker and sent with
-    // hits until it is set to a new value or to nil.
-    [tracker set:kGAIScreenName
-           value:screen];
-    
-    [tracker send:[[GAIDictionaryBuilder createAppView] build]];
-}
-
-+ (void)captureEventGA:(NSString *)eventCategory action:(NSString *)eventAction label:(NSString *)eventLabel{
-    
-    id tracker = [[GAI sharedInstance] defaultTracker];
-    
-
-    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:eventCategory    // Event category (required)
-                                                          action:eventAction  // Event action (required)
-                                                           label:eventLabel         // Event label
-                                                           value:nil] build]];    // Event value
-}
-
 +(void)updateSubscriptionToPost:(PFObject *)post forState:(NSString *)state{
     
     // get all subscriptions for this post and current user

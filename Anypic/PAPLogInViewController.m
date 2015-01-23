@@ -53,6 +53,10 @@
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Sign In"}];
         
+        // flightrecorder event analytics
+        [[FlightRecorder sharedInstance] trackEventWithCategory:@"sign_in_screen" action:@"viewing_sign_in" label:@"" value:@""];
+
+        
         // flightrecorder analytics
         [[FlightRecorder sharedInstance] trackPageView:@"Sign In"];
         
@@ -125,6 +129,9 @@
         
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Register"}];
+        
+        // flightrecorder event analytics
+        [[FlightRecorder sharedInstance] trackEventWithCategory:@"register_screen" action:@"viewing_register" label:@"" value:@""];
         
         // flightrecorder analytics
         [[FlightRecorder sharedInstance] trackPageView:@"Register"];

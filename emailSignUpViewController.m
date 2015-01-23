@@ -39,6 +39,9 @@
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Email Sign Up"}];
     
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"email_sign_up_screen" action:@"viewing_email_signup" label:@"" value:@""];
+    
     // flightrecorder analytics
     [[FlightRecorder sharedInstance] trackPageView:@"Email Sign Up"];
     

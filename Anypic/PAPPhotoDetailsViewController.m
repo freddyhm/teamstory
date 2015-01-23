@@ -639,10 +639,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     NSNumber *likeCommentCount = [numberFormatter numberFromString:cellLikeCommentCount.text];
     
     if (liked) {
-        
-        // analytics
-        [PAPUtility captureEventGA:@"Engagement" action:@"Like Comment" label:@"Photo"];
-        
+                
         // get post type
         NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
         

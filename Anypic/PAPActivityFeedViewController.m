@@ -114,12 +114,12 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    
-    // analytics
-    [PAPUtility captureScreenGA:@"Activity"];
-    
+        
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Activity"}];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"activity_screen" action:@"viewing_activity" label:@"" value:@""];
     
     // flightrecorder analytics
     [[FlightRecorder sharedInstance] trackPageView:@"Activity"];
@@ -132,8 +132,7 @@
         [self loadObjects];
     }
     
-    [[PFUser currentUser] setObject:[NSNumber numberWithInt:0] forKey:@"activityBadge"];
-    [[PFUser currentUser] saveInBackground];
+   
     
     [self.tableView reloadData];
 }
@@ -516,10 +515,14 @@
 
     self.navigationController.tabBarItem.badgeValue = badge;
     
-    // Reset badge number on server side
+    // Reset badge number on server side in installation table (app badge)
     if(badge == nil){
         [[PFInstallation currentInstallation] setBadge:0];
         [[PFInstallation currentInstallation] saveEventually];
+        
+        // reset activity badge field in user table (tabbar badge)
+        [[PFUser currentUser] setObject:[NSNumber numberWithInt:0] forKey:@"activityBadge"];
+        [[PFUser currentUser] saveEventually];
     }
 }
 

@@ -75,6 +75,9 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Link"}];
     
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"post_link_screen" action:@"viewing_post_link" label:@"" value:@""];
+    
     
     // flightrecorder analytics
     [[FlightRecorder sharedInstance] trackPageView:@"Link"];
@@ -245,10 +248,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 }
 
 - (void)postButtonAction:(id)sender {
-    
-    // analytics
-    [PAPUtility captureEventGA:@"Engagement" action:@"Upload Link" label:@"Photo"];
-    
+     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Link"}];
     

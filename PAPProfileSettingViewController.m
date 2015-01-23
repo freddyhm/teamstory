@@ -7,6 +7,8 @@
 #import "PAPAccountViewController.h"
 #import "AppDelegate.h"
 #import "SVProgressHUD.h"
+#import "Mixpanel.h"
+#import "FlightRecorder.h"
 
 #define SUCCESSFUL 1
 #define IMAGE_NIL 2
@@ -101,6 +103,12 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated{
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Edit Profile"}];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"edit_profile_screen" action:@"viewed_edit_profile" label:@"" value:@""];
     
     [SVProgressHUD show];
     
@@ -780,6 +788,10 @@
 }
 
 - (void)saveButtonAction:(id)sender {
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Changed Profile"}];
+    
     [SVProgressHUD show];
     
     [self.view endEditing:YES];

@@ -161,14 +161,15 @@ NSInteger selection = 1;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
-    // analytics
-    [PAPUtility captureScreenGA:@"Discover"];
         
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Discover"}];
     
     // flightrecorder analytics
     [[FlightRecorder sharedInstance] trackPageView:@"Discover Screen"];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"discover_screen" action:@"viewing_discover" label:@"" value:@""];
     
     [SVProgressHUD setImageName:@"loading_discover.png"];
     [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeCustom];
@@ -337,6 +338,9 @@ NSInteger selection = 1;
     // mixpane analytics
     [[Mixpanel sharedInstance] track:@"Touched Tab In Discover Search" properties:@{@"Selected":@"Users"}];
     
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"discover_screen" action:@"touched_tab" label:@"" value:@"users"];
+    
     [self labelSetting:@"users"];
     self.searchTV.contentOffset = CGPointMake(0, 0);
     [self.searchTV reloadData];
@@ -349,6 +353,9 @@ NSInteger selection = 1;
     
     // mixpane analytics
     [[Mixpanel sharedInstance] track:@"Touched Tab In Discover Search" properties:@{@"Selected":@"Industries"}];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"discover_screen" action:@"touched_tab" label:@"" value:@"industries"];
     
     [self labelSetting:@"industry"];
     self.searchTV.contentOffset = CGPointMake(0, 0);
@@ -612,6 +619,9 @@ NSInteger selection = 1;
 }
 
 - (void)cell:(PAPFindFriendsCell *)cellView didTapFollowButton:(PFUser *)aUser {
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"discover_screen" action:@"followed_user" label:@"" value:@""];
     
     // mixpanel analytics
     NSString *selectedUser = [aUser objectForKey:@"displayName"] != nil ? [aUser objectForKey:@"displayName"] : [aUser objectId];

@@ -603,14 +603,16 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 - (void)viewWillAppear:(BOOL)animated{
     // analytics
     [super viewWillAppear:YES];
-    
-    [PAPUtility captureScreenGA:@"Account"];
-    
+        
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Account"}];
     
+    
     // flightrecorder analytics
     [[FlightRecorder sharedInstance] trackPageView:@"Account"];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"account_screen" action:@"viewing_account" label:@"" value:@""];
     
     // edge case, if multiaction button frozen because of network problems
     if (self.user == [PFUser currentUser] && !self.multiActionButton.enabled){
@@ -938,9 +940,6 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 
 
 - (void)followButtonAction:(id)sender {
-    
-    // analytics
-    [PAPUtility captureEventGA:@"Engagement" action:@"Follow" label:@"User"];
     
     NSString *followedUserDisplayName = [self.user objectForKey:@"displayName"] != nil ? [self.user objectForKey:@"displayName"]: @"";
     
