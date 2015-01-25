@@ -3,8 +3,8 @@
 //  FlightRecorder
 //
 //  Created by Davut Can Abacigil on 9/11/13.
-//  Copyright (c) 2013 Abacigil. All rights reserved.
-//  Version : 1.5.8
+//  Copyright (c) 2014 FlightRecorder, Inc. All rights reserved.
+//  Version : 1.6
 
 #import <Foundation/Foundation.h>
 

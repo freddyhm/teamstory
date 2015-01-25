@@ -337,8 +337,6 @@ enum ActionSheetTags {
     
     if([fromSource isEqualToString:@"following"]){
         
-
-        
         PFQuery *getFollowingQuery = [PFQuery queryWithClassName:kPAPActivityClassKey];
         [getFollowingQuery whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
         
@@ -553,6 +551,7 @@ enum ActionSheetTags {
         UITableViewCell *cell = [self tableView:tableView cellForNextPageAtIndexPath:indexPath];
         return cell;
     } else {
+        
         NSString *CellIdentifier = @"Cell";
         
         if ([[object objectForKey:@"type"] isEqualToString:@"link"]) {

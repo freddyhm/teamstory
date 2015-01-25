@@ -51,14 +51,20 @@
 // FlightRecorder
 #define COCOAPODS_POD_AVAILABLE_FlightRecorder
 #define COCOAPODS_VERSION_MAJOR_FlightRecorder 1
-#define COCOAPODS_VERSION_MINOR_FlightRecorder 5
-#define COCOAPODS_VERSION_PATCH_FlightRecorder 8
+#define COCOAPODS_VERSION_MINOR_FlightRecorder 6
+#define COCOAPODS_VERSION_PATCH_FlightRecorder 0
 
 // Mixpanel
 #define COCOAPODS_POD_AVAILABLE_Mixpanel
 #define COCOAPODS_VERSION_MAJOR_Mixpanel 2
-#define COCOAPODS_VERSION_MINOR_Mixpanel 5
-#define COCOAPODS_VERSION_PATCH_Mixpanel 0
+#define COCOAPODS_VERSION_MINOR_Mixpanel 6
+#define COCOAPODS_VERSION_PATCH_Mixpanel 2
+
+// Mixpanel/MPCategoryHelpers
+#define COCOAPODS_POD_AVAILABLE_Mixpanel_MPCategoryHelpers
+#define COCOAPODS_VERSION_MAJOR_Mixpanel_MPCategoryHelpers 2
+#define COCOAPODS_VERSION_MINOR_Mixpanel_MPCategoryHelpers 6
+#define COCOAPODS_VERSION_PATCH_Mixpanel_MPCategoryHelpers 2
 
 // embedly-ios
 #define COCOAPODS_POD_AVAILABLE_embedly_ios
