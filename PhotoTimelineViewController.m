@@ -23,6 +23,9 @@
 #import "PAPwebviewViewController.h"
 #import "FlightRecorder.h"
 
+#define IS_OS_6_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0)
+#define IS_OS_8_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 #define APP ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 
@@ -88,6 +91,20 @@ enum ActionSheetTags {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    if(IS_OS_6_OR_LATER){
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(youTubeStarted:) name:@"UIMoviePlayerControllerDidEnterFullscreenNotification" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(youTubeFinished:) name:@"UIMoviePlayerControllerWillExitFullscreenNotification" object:nil];
+        
+    }
+    
+    if (IS_OS_8_OR_LATER) {
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(youTubeStarted:) name:UIWindowDidBecomeVisibleNotification object:self.view.window];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(youTubeFinished:) name:UIWindowDidBecomeHiddenNotification object:self.view.window];
+        
+    }
     
     // Remove cell separator
     [self.feed setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -902,7 +919,12 @@ enum ActionSheetTags {
 }
 
 
+- (void) youTubeStarted:(NSNotification *)notification {
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Played Video"}];
+}
 
+- (void) youTubeFinished:(NSNotification *)notification {
+}
 
 
 @end
