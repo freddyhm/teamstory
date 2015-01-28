@@ -400,13 +400,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/PAPHomeViewController.m"
-            timestampString = "441110043.691542"
+            timestampString = "444166112.992049"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "316"
-            endingLineNumber = "316"
-            landmarkName = "@implementation PAPHomeViewController"
-            landmarkType = "3">
+            startingLineNumber = "317"
+            endingLineNumber = "317"
+            landmarkName = "-objectsDidLoad:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

@@ -209,6 +209,7 @@
 
     [self setNavBarButtonsHidden:NO];
     
+    
     self.notificationStar.hidden = YES;
     self.notificationExitButton.hidden = YES;
     
@@ -628,6 +629,8 @@
     [[PAPCache sharedCache] notificationCache:notificationContent];
     //[[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
 }
+
+
 
 
 

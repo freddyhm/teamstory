@@ -270,22 +270,6 @@ enum ActionSheetTags {
 }
 
 
-- (void) shareButton:(PFUser *)user setPhoto:(PFObject *)photo {
-    [SVProgressHUD show];
-    
-    NSString *texttoshare = @"share this post"; //this is your text string to share
-    
-    // getting image so that we can share
-    [[photo objectForKey:@"image"] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-        [SVProgressHUD dismiss];
-        NSArray *activityItems = @[texttoshare, data];
-        UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
-        activityVC.excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypePrint];
-        [self presentViewController:activityVC animated:YES completion:nil];
-    }];
-}
-
-
 - (BOOL)currentUserOwnsPhoto {
     return [[[self.current_photo objectForKey:kPAPPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]];
 }
@@ -306,6 +290,35 @@ enum ActionSheetTags {
     }];
     [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:[self.current_photo objectId]];
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void) shareButton:(PFUser *)user setPhoto:(PFObject *)photo {
+    [SVProgressHUD show];
+    
+    NSString *texttoshare = @"share this post"; //this is your text string to share
+    
+    // getting image so that we can share
+    [[photo objectForKey:@"image"] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+        [SVProgressHUD dismiss];
+        NSArray *activityItems = @[texttoshare, data];
+        UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+        activityVC.excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypePrint];
+        //activityVC set CGAffineTransformMakeScale(0.75, 0.75);
+        
+        //AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        //[appDelegate.window.rootViewController presentViewController:activityVC animated:YES completion:nil];
+        
+        //NSLog(@"%@", appDelegate.window.rootViewController);
+        //NSLog(@"%@", self);
+        [self presentViewController:activityVC animated:YES completion:nil];
+        
+        if ([activityVC respondsToSelector:@selector(popoverPresentationController)])
+        {
+            // iOS 8+
+            UIPopoverPresentationController *presentationController = [activityVC popoverPresentationController];
+            presentationController.sourceView = self.view; // if button or change to self.view.
+        }
+    }];
 }
 
 #pragma mark - Refresh
