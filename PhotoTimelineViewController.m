@@ -46,7 +46,6 @@
 
 
 
-
 @property int loadPostCount;
 @property int refreshCount;
 
@@ -269,6 +268,23 @@ enum ActionSheetTags {
     [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
     [actionSheet showFromTabBar:self.tabBarController.tabBar];
 }
+
+
+- (void) shareButton:(PFUser *)user setPhoto:(PFObject *)photo {
+    [SVProgressHUD show];
+    
+    NSString *texttoshare = @"share this post"; //this is your text string to share
+    
+    // getting image so that we can share
+    [[photo objectForKey:@"image"] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+        [SVProgressHUD dismiss];
+        NSArray *activityItems = @[texttoshare, data];
+        UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+        activityVC.excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypePrint];
+        [self presentViewController:activityVC animated:YES completion:nil];
+    }];
+}
+
 
 - (BOOL)currentUserOwnsPhoto {
     return [[[self.current_photo objectForKey:kPAPPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]];
@@ -823,7 +839,7 @@ enum ActionSheetTags {
             [self shouldDeletePhoto];
         }
         
-    } else {
+    } else if (actionSheet.tag == reportTypeTag){
         if ([actionSheet cancelButtonIndex] == buttonIndex){
             //do nothing
         } else {
@@ -869,8 +885,6 @@ enum ActionSheetTags {
                 default:
                     break;
             }
-            
-            NSLog(@"%@", kPAPPhotoClassKey);
             
             APP.mc.mailComposeDelegate = self;
             [APP.mc setSubject:emailTitle];
