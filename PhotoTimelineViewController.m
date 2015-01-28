@@ -139,6 +139,7 @@ enum ActionSheetTags {
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:NO];
     
     // Refresh timeline if user has recently updated their profile
     BOOL isHome = [[self.navigationController.viewControllers lastObject] isKindOfClass:PAPHomeViewController.class];
@@ -295,6 +296,8 @@ enum ActionSheetTags {
 - (void) shareButton:(PFUser *)user setPhoto:(PFObject *)photo {
     [SVProgressHUD show];
     
+    // need to remove this from the parent view. It will re-engage once it gets closed.
+    [self.navigationController.tabBarController removeFromParentViewController];
     NSString *texttoshare = @"share this post"; //this is your text string to share
     
     // getting image so that we can share
@@ -303,13 +306,7 @@ enum ActionSheetTags {
         NSArray *activityItems = @[texttoshare, data];
         UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
         activityVC.excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypePrint];
-        //activityVC set CGAffineTransformMakeScale(0.75, 0.75);
         
-        //AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-        //[appDelegate.window.rootViewController presentViewController:activityVC animated:YES completion:nil];
-        
-        //NSLog(@"%@", appDelegate.window.rootViewController);
-        //NSLog(@"%@", self);
         [self presentViewController:activityVC animated:YES completion:nil];
         
         if ([activityVC respondsToSelector:@selector(popoverPresentationController)])
