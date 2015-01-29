@@ -135,7 +135,7 @@
         }
         
         UIImage *shareButtonImage = [UIImage imageNamed:@"post_share.png"];
-        self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(250.0f, 7.0f, shareButtonImage.size.width, shareButtonImage.size.height)];
+        self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(238.0f, 7.0f, shareButtonImage.size.width, shareButtonImage.size.height)];
         [self.shareButton setBackgroundImage:shareButtonImage forState:UIControlStateNormal];
         [self.shareButton addTarget:self action:@selector(shareButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [containerView addSubview:self.shareButton];
