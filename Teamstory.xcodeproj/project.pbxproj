@@ -204,6 +204,9 @@
 		46B31EF0184E35150028D11C /* companyName.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B31EE8184E35150028D11C /* companyName.png */; };
 		46B31EF1184E35150028D11C /* companyName@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B31EE9184E35150028D11C /* companyName@2x.png */; };
 		46C6FC0E198AA62900BC99D5 /* PAPprofileSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C6FC0D198AA62900BC99D5 /* PAPprofileSetupViewController.m */; };
+		46CE24591A7AC8220072FA28 /* post_share.png in Resources */ = {isa = PBXBuildFile; fileRef = 46CE24561A7AC8220072FA28 /* post_share.png */; };
+		46CE24631A7ACE2D0072FA28 /* post_share@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46CE24611A7ACE2D0072FA28 /* post_share@3x.png */; };
+		46CE24641A7ACE2D0072FA28 /* post_share@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46CE24621A7ACE2D0072FA28 /* post_share@2x.png */; };
 		46D28CD81A4ACDDB0089D1E3 /* loading_discover@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46D28CD51A4ACDDB0089D1E3 /* loading_discover@2x.png */; };
 		46D28CD91A4ACDDB0089D1E3 /* loading_discover@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46D28CD61A4ACDDB0089D1E3 /* loading_discover@3x.png */; };
 		46D28CDA1A4ACDDB0089D1E3 /* loading_discover.png in Resources */ = {isa = PBXBuildFile; fileRef = 46D28CD71A4ACDDB0089D1E3 /* loading_discover.png */; };
@@ -759,6 +762,9 @@
 		46B31EE9184E35150028D11C /* companyName@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "companyName@2x.png"; path = "Resources/Assets/companyName@2x.png"; sourceTree = SOURCE_ROOT; };
 		46C6FC0C198AA62900BC99D5 /* PAPprofileSetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPprofileSetupViewController.h; sourceTree = SOURCE_ROOT; };
 		46C6FC0D198AA62900BC99D5 /* PAPprofileSetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPprofileSetupViewController.m; sourceTree = SOURCE_ROOT; };
+		46CE24561A7AC8220072FA28 /* post_share.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = post_share.png; sourceTree = "<group>"; };
+		46CE24611A7ACE2D0072FA28 /* post_share@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "post_share@3x.png"; sourceTree = "<group>"; };
+		46CE24621A7ACE2D0072FA28 /* post_share@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "post_share@2x.png"; sourceTree = "<group>"; };
 		46D28CD51A4ACDDB0089D1E3 /* loading_discover@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loading_discover@2x.png"; sourceTree = "<group>"; };
 		46D28CD61A4ACDDB0089D1E3 /* loading_discover@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loading_discover@3x.png"; sourceTree = "<group>"; };
 		46D28CD71A4ACDDB0089D1E3 /* loading_discover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading_discover.png; sourceTree = "<group>"; };
@@ -1417,6 +1423,16 @@
 			name = webview;
 			sourceTree = "<group>";
 		};
+		46CE24551A7AC8220072FA28 /* Share Button */ = {
+			isa = PBXGroup;
+			children = (
+				46CE24611A7ACE2D0072FA28 /* post_share@3x.png */,
+				46CE24621A7ACE2D0072FA28 /* post_share@2x.png */,
+				46CE24561A7AC8220072FA28 /* post_share.png */,
+			);
+			path = "Share Button";
+			sourceTree = "<group>";
+		};
 		46E1EB6C183BCA4600F64274 /* ProfileSetting */ = {
 			isa = PBXGroup;
 			children = (
@@ -1438,6 +1454,7 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				46CE24551A7AC8220072FA28 /* Share Button */,
 				462B06B61A704A02003F789C /* videoPlaceHolder */,
 				D5CD738D1A6D9004008FBDC8 /* icon_link@3x.png */,
 				D5CD73841A6D8FFB008FBDC8 /* icon_link.png */,
@@ -2629,16 +2646,19 @@
 				4691B4F018BEF61200B7DF6A /* unfollow.png in Resources */,
 				465C29191A5F2D6500265486 /* Thought Popup@2x.png in Resources */,
 				467A40C31990227700D4C693 /* btn_dropdown@2x.png in Resources */,
+				46CE24631A7ACE2D0072FA28 /* post_share@3x.png in Resources */,
 				463B0CE71985A8C80075E496 /* intro_bg@2x.png in Resources */,
 				4609975C1938119A00C5AD96 /* icon-linkedin@2x.png in Resources */,
 				D5BFDEDA18CC84A5004FEC42 /* newyork@2x.png in Resources */,
 				462FCB7D188C806C005059F3 /* button_setting.png in Resources */,
 				46D28CD81A4ACDDB0089D1E3 /* loading_discover@2x.png in Resources */,
 				D5F45B03196CE6DE001C2875 /* select_overlay.png in Resources */,
+				46CE24641A7ACE2D0072FA28 /* post_share@2x.png in Resources */,
 				D5BFDEDE18CC84A5004FEC42 /* paris@2x.png in Resources */,
 				D55AEF3619BA7B9C00ECF342 /* btn_following_discover.png in Resources */,
 				46B31EEB184E35150028D11C /* profileWebsite@2x.png in Resources */,
 				D560FADC19B916F100D14D16 /* LogoNavigationBar.png in Resources */,
+				46CE24591A7AC8220072FA28 /* post_share.png in Resources */,
 				D55A180019B5342200B9C48A /* timelineLogo.png in Resources */,
 				465B19AE18B81FE500EDBCFC /* browser-button-forward-no@2x.png in Resources */,
 				4609975F1938119A00C5AD96 /* icon-twitter.png in Resources */,

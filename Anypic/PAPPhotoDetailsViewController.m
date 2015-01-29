@@ -767,6 +767,31 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
 }
 
+- (void) shareButton:(PFUser *)user setPhoto:(PFObject *)a_photo {
+    [SVProgressHUD show];
+    
+    // need to remove this from the parent view. It will re-engage once it gets closed.
+    [self.navigationController.tabBarController removeFromParentViewController];
+    NSString *texttoshare = @"share this post"; //this is your text string to share
+    
+    // getting image so that we can share
+    [[a_photo objectForKey:@"image"] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+        [SVProgressHUD dismiss];
+        NSArray *activityItems = @[texttoshare, data];
+        UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+        activityVC.excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypePrint];
+        
+        [self presentViewController:activityVC animated:YES completion:nil];
+        
+        if ([activityVC respondsToSelector:@selector(popoverPresentationController)])
+        {
+            // iOS 8+
+            UIPopoverPresentationController *presentationController = [activityVC popoverPresentationController];
+            presentationController.sourceView = self.view; // if button or change to self.view.
+        }
+    }];
+}
+
 
 - (void) moreActionButton_inflator:(PFUser *)user photo:(PFObject *)user_photo {
     self.photoID = [user_photo objectId];

@@ -134,13 +134,13 @@
             
         }
         
-        self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(280.0f, 7.0f, 50.0f, 30.0f)];
-        [self.shareButton setTitle:@"Share" forState:UIControlStateNormal];
-        [self.shareButton setBackgroundColor:[UIColor blueColor]];
+        UIImage *shareButtonImage = [UIImage imageNamed:@"post_share.png"];
+        self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(250.0f, 7.0f, shareButtonImage.size.width, shareButtonImage.size.height)];
+        [self.shareButton setBackgroundImage:shareButtonImage forState:UIControlStateNormal];
         [self.shareButton addTarget:self action:@selector(shareButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [containerView addSubview:self.shareButton];
                 
-        self.moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(250.0f, 7.0f, 30.0f, 30.0f)];
+        self.moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(280.0f, 7.0f, 30.0f, 30.0f)];
         [self.moreActionButton setImage:[UIImage imageNamed:@"button-more.png"] forState:UIControlStateNormal];
         [self.moreActionButton addTarget:self action:@selector(moreActionButton_action:) forControlEvents:UIControlEventTouchUpInside];
         [containerView addSubview:self.moreActionButton];
