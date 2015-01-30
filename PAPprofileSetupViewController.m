@@ -235,6 +235,7 @@
     
     self.emailTF = [[UITextField alloc] initWithFrame:CGRectMake(10.0f, middleImageView_1.bounds.size.height + self.displayNameTF.bounds.size.height + self.locationTF.bounds.size.height, 300.0f, 55.0f)];
     self.emailTF.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.emailTF.autocapitalizationType = UITextAutocapitalizationTypeNone;
     if ([self.userEmail length] == 0) {
         self.emailTF.placeholder = @"Email";
         self.emailTF.userInteractionEnabled = YES;
@@ -341,7 +342,7 @@
 -(void)navNext_1Action:(id)sender {
     [self.locationTF becomeFirstResponder];
     
-    if ([self.displayNameTF.text length] > 0 && [self.locationTF.text length] > 0 && ([self.emailTF.text length] > 0 || [self.userEmail length] > 0)) {
+    if ([self.displayNameTF.text length] > 0 && [self.locationTF.text length] > 0 && (([self.emailTF.text length] > 0 && [self NSStringIsValidEmail:self.emailTF.text]) || [self.userEmail length] > 0)) {
         if ([self.displayNameTF.text length] > 0 && [(AppDelegate*)[[UIApplication sharedApplication] delegate] isParseReachable]) {
             [SVProgressHUD showWithStatus:@"Validating User Name" maskType:SVProgressHUDMaskTypeBlack];
             
@@ -421,8 +422,10 @@
             replacementString = @"Please enter Display Name";
         } else if ([self.locationTF.text length] == 0) {
             replacementString = @"Please enter Location";
-        } else {
+        } else if ([self.emailTF.text length] == 0){
             replacementString = @"Please enter Email";
+        } else {
+            replacementString = @"Invalid Email Address";
         }
             
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:replacementString delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
