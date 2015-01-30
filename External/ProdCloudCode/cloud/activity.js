@@ -104,7 +104,7 @@ Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                 var postType = request.params.postType;
                 
                 var f = 0;
-                var newFollowObjects = new Array();
+                
                 
                 
                 var pushMsg = displayName + ' posted a ' + postType;
@@ -132,7 +132,7 @@ Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                                       // get all follow activities related to the author
                                       notifyFollowersQuery.equalTo("type", "follow");
                                       notifyFollowersQuery.equalTo("toUser", postAuthor);
-                                      notifyFollowersQuery.limit("1000");
+                                      notifyFollowersQuery.include("fromUser");
                                       
                                       notifyFollowersQuery.find({
                                                                 
@@ -142,7 +142,8 @@ Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                                                                 
                                                                 // loop through all followers
                                                                 for (var i = 0; i < results.length; i++) {
-
+                                                                
+                                                                console.log(results[i]);
                                                                 var follower = results[i].get("fromUser");
                                                                 
                                                                 // notify follower
@@ -163,31 +164,14 @@ Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                                                                                  
                                                                                  console.log("in follow obj");
                                                                                  
-                                                                                 
-                                                                                 
                                                                                  /* add follower as a subscriber in post activity.
                                                                                   This is so we can pull in activity feed from
                                                                                   client side. Similar to comment subscription. */
                                                                                  
-                                                                                 
-                                                                                 newFollowObjects.push(newFollowerObj);
-                                                                                 f++;
-                                                                                 
-                                                                                 console.log(f);
-                                                                                 console.log(results.length);
-                                                                                 
-                                                                                 if(f >= results.length){
-                                                                                 
-                                                                                     postActivity.set("subscribers",newFollowObjects);
-                                                                                   postActivity.save();
-                                                                                   status.success();
-                                                                                 }
-
-                                                                               //  postActivity.add("subscribers", newFollowerObj);
+                                                                                 postActivity.add("subscribers", newFollowerObj);
                                                                                  
                                                                                  console.log("saving act in subs");
                                                                                  
-                                                                                 /*
                                                                                  
                                                                                  postActivity.save(null, {
                                                                                                    success: function(obj) {
@@ -208,7 +192,7 @@ Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                                                                                                    error: function(obj, error) {
                                                                                                    console.log(error);
                                                                                                    }
-                                                                                                   });*/
+                                                                                                   });
                                                                                  
                                                                                  },
                                                                                  error: function(newFollowerObj, error) {
@@ -217,17 +201,22 @@ Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                                                                                  alert('Failed to create new object, with error code: ' + error.message);
                                                                                  }
                                                                                  });
-                                                                                  
+                                                                
+                                                                // update activity badge for follower
+                                                                var newActivityBadge = follower.get("activityBadge") + 1;
+                                                                follower.set("activityBadge", newActivityBadge);
+                                                                follower.save();
                                                                 
                                                                 // send push notification with proper message
-                                                               /* Parse.Push.send({
+                                                                Parse.Push.send({
                                                                                 where: installationQuery,
                                                                                 data: pushData
                                                                                 }).then(function() {
                                                                                         console.log('Sent follower push');
+                                                                                        
                                                                                         }, function(error) {
                                                                                         throw "Push Error" + error.code + " : " + error.message;
-                                                                                        });*/
+                                                                                        });
                                                                 }
                                                                 },
                                                                 error: function(error) {
@@ -248,21 +237,19 @@ Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                 
                 });
 
-Parse.Cloud.beforeSave('Activity', function(request, response) {
-       var currentUser = request.user;
-       var objectUser = request.object.get('fromUser');
-       
-       if(currentUser && currentUser.id != objectUser.id){
-       response.error('Cannot set fromUser on Activity to a user other than the current user.');
-       }else{
-       response.success();
-       }
-});
 
+Parse.Cloud.beforeSave('Activity', function(request, response) {
+                       var currentUser = request.user;
+                       var objectUser = request.object.get('fromUser');
+                       
+                       if(currentUser && currentUser.id != objectUser.id){
+                       response.error('Cannot set fromUser on Activity to a user other than the current user.');
+                       }else{
+                       response.success();
+                       }
+                       });
 
 Parse.Cloud.afterSave('Activity', function(request) {
-                      
-                      
                       
                       // check if activity is of type post
                       if(request.object.get('type') == "post"){
@@ -393,6 +380,7 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       
                       // find all the subscriptions with this post
                       subscriptionQuery.equalTo("post", photoPointer);
+                      subscriptionQuery.include("subscriber");
                       
                       subscriptionQuery.find({
                                              success: function(results) {
@@ -400,6 +388,8 @@ Parse.Cloud.afterSave('Activity', function(request) {
                                              /* add all subscribers to new comment and save.
                                               This is so we can pull in activity feed from
                                               client side. */
+                                             
+                                             console.log(results);
                                              
                                              request.object.set("subscribers", results);
                                              request.object.save();
@@ -414,6 +404,13 @@ Parse.Cloud.afterSave('Activity', function(request) {
                                              // notify subscriber
                                              var query = new Parse.Query(Parse.Installation);
                                              query.equalTo("user", results[i].get("subscriber"));
+                                             
+                                             var subscriberUser = results[i].get("subscriber");
+                                             
+                                             // update activity badge for subscriber
+                                             var newActivityBadge = subscriberUser.get("activityBadge") + 1;
+                                             subscriberUser.set("activityBadge", newActivityBadge);
+                                             subscriberUser.save();
                                              
                                              Parse.Push.send({
                                                              where: query,

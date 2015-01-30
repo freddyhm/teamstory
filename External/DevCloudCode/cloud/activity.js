@@ -260,6 +260,11 @@ Parse.Cloud.afterSave('Activity', function(request) {
                               console.log("in notify followers");
                               // get picture object so we can find type of picture
                               var post = request.object.get("photo");
+                      
+                              // parse keys
+                              var dev_app_id = "0tEtPoPtsvPu1lCPzBeU032Cz3Byemcp5lr25gIU";
+                              var dev_master_key = "5CAQpBPsHdP5yB2VTIyRdDXgu0BkWZM2phC8xb9L";
+                      
                               post.fetch({
                                          success: function(post) {
                                          
@@ -271,8 +276,8 @@ Parse.Cloud.afterSave('Activity', function(request) {
                                                                  method: "POST",
                                                                  url: "https://api.parse.com/1/jobs/notifyFollowersJob",
                                                                  headers: {
-                                                                 "X-Parse-Application-Id": "0tEtPoPtsvPu1lCPzBeU032Cz3Byemcp5lr25gIU",
-                                                                 "X-Parse-Master-Key": "5CAQpBPsHdP5yB2VTIyRdDXgu0BkWZM2phC8xb9L",
+                                                                 "X-Parse-Application-Id": dev_app_id,
+                                                                 "X-Parse-Master-Key": dev_master_key,
                                                                  "Content-Type": "application/json"
                                                                  },
                                                                  body: {
