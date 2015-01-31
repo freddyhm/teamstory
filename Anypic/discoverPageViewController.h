@@ -10,6 +10,7 @@
 #import "PAPFindFriendsCell.h"
 #import "PAPdiscoverCell.h"
 #import "PAPdiscoverIndustryCell.h"
+#import "AtMention.h"
 extern NSInteger selection;
 
 @interface discoverPageViewController : UIViewController <UITabBarControllerDelegate, UINavigationBarDelegate, UISearchBarDelegate,UISearchDisplayDelegate,UITableViewDataSource,UITableViewDelegate,PAPFindFriendsCellDelegate,PAPdiscoverCellDelegate,PAPdiscoverIndustryCellDelegate>

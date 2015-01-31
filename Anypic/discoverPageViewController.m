@@ -52,7 +52,6 @@ NSInteger selection = 1;
 {
     [super viewDidLoad];
     
-    self.userList = [[NSMutableArray alloc] init];
     self.userFilterList = [[NSMutableArray alloc] init];
     self.industryFilterList = [[NSMutableArray alloc] init];
     self.userFilterListIndustry = [[NSMutableArray alloc] init];
@@ -237,40 +236,14 @@ NSInteger selection = 1;
                 NSLog(@"Activity Query Error: %@", error);
             }
         }];
-        
-        limit = 1000;
-        skip = 0;
-        [self.userList removeAllObjects];
-        [self userQueryPagination];
     }
 }
 
 #pragma - ()
 
--(void) userQueryPagination {
-    PFQuery *userQuery = [PFUser query];
-    [userQuery whereKeyExists:@"displayName"];
-    [userQuery orderByDescending:@"updatedAt"];
-    [userQuery setLimit:limit];
-    [userQuery setSkip:skip];
-    [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            [self.userList addObjectsFromArray:objects];
-            if (objects.count == limit) {
-                skip += limit;
-                [userQuery setSkip:skip];
-                [userQuery findObjectsInBackgroundWithTarget:self selector:@selector(userQueryPagination)];
-            } else {
-                [self isSearchBarReady];
-            }
-        } else {
-            NSLog(@"User query error: %@", error);
-        }
-    }];
-
-}
-
 - (void)isSearchBarReady {
+    self.userList = [[AtMention sharedAtMention] userList];
+    
     if (([self.follwerList count] > 0 || zeroFollower) && [self.userList count] > 0) {
         NSLog(@"User data Successfully Loaded");
         [self.searchTV reloadData];
