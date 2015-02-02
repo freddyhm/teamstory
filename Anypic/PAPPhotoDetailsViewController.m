@@ -767,19 +767,17 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
 }
 
-- (void) shareButton:(PFUser *)user setPhoto:(PFObject *)a_photo {
+- (void) shareButton:(UIButton *)button setPhoto:(PFObject *)aphoto {
     [SVProgressHUD show];
     
-    // need to remove this from the parent view. It will re-engage once it gets closed.
-    [self.navigationController.tabBarController removeFromParentViewController];
-    NSString *texttoshare = @"share this post"; //this is your text string to share
-    
     // getting image so that we can share
-    [[a_photo objectForKey:@"image"] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+    [[aphoto objectForKey:@"image"] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
         [SVProgressHUD dismiss];
-        NSArray *activityItems = @[texttoshare, data];
+        
+        NSArray *activityItems = @[self, data];
         UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
         activityVC.excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypePrint];
+        [activityVC setValue:@"Teamstory Share!" forKey:@"subject"];
         
         [self presentViewController:activityVC animated:YES completion:nil];
         
@@ -787,9 +785,32 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         {
             // iOS 8+
             UIPopoverPresentationController *presentationController = [activityVC popoverPresentationController];
-            presentationController.sourceView = self.view; // if button or change to self.view.
+            presentationController.sourceView = button; // if button or change to self.view.
         }
     }];
+}
+
+- (id)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController {
+    return @"";
+}
+
+- (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType {
+    if ([activityType isEqualToString:UIActivityTypePostToFacebook]) {
+        NSString *theText = @"#startup #moment shared on #teamstoryapp - Join the global #entrepreneurship #community for #founders: goo.gl/F2QSoJ @teamstory";
+        return theText;
+    }
+    
+    if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
+        NSString *theText = @"#startup #moment on #teamstoryapp - Join the #entrepreneurship #community for #founders: goo.gl/F2QSoJ @teamstoryapp";
+        return theText;
+    }
+    
+    if ([activityType isEqualToString:UIActivityTypeMail]) {
+        NSString *theText = @"Hey there!\nThis is a startup moment shared on Teamstory (http://teamstoryapp.com) - A community for startups & founders! Would love for you to join the community with me: goo.gl/F2QSoJ";
+        return theText;
+    }
+    
+    return @"Startup moment shared on Teamstory - A community for startups & founders! Join the community with me: goo.gl/F2QSoJ";
 }
 
 

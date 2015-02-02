@@ -11,7 +11,7 @@
 
 @class PAPPhotoDetailsViewController;
 
-@interface PAPPhotoDetailsViewController : UIViewController <UITextFieldDelegate, PAPPhotoDetailsHeaderViewDelegate, PAPBaseTextCellDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UITextViewDelegate, UITableViewDataSource, UITableViewDelegate, CustomKeyboardViewControllerDelegate>
+@interface PAPPhotoDetailsViewController : UIViewController <UITextFieldDelegate, PAPPhotoDetailsHeaderViewDelegate, PAPBaseTextCellDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UITextViewDelegate, UITableViewDataSource, UITableViewDelegate, CustomKeyboardViewControllerDelegate, UIActivityItemSource>
 
 @property (nonatomic, strong) PFObject *photo;
 @property (nonatomic, strong) UITableView *postDetails;

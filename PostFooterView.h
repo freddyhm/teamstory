@@ -87,7 +87,7 @@ typedef enum {
 - (void)postFooterView:(PostFooterView *)postFooterView didTapCommentForPost:(PFObject *)post;
 
 - (void) moreActionButton_inflator:(PFUser *)user photo:(PFObject *)photo;
-- (void) shareButton:(PFUser *)user setPhoto:(PFObject *)photo;
+- (void) shareButton:(UIButton *)button setPhoto:(PFObject *)photo;
 
 
 @end
