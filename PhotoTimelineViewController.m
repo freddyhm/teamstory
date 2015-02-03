@@ -303,14 +303,20 @@ enum ActionSheetTags {
             NSArray *activityItems = @[self, data];
             UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
             activityVC.excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypePrint];
+            
+            // only for email.
             [activityVC setValue:@"Teamstory Share!" forKey:@"subject"];
 
-            [self presentViewController:activityVC animated:YES completion:nil];
+            //[self presentViewController:activityVC animated:YES completion:nil];
+            AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            UINavigationController *lastController = [[(UINavigationController *)delegate.window.rootViewController viewControllers] lastObject]; // Set the delegate
+            [lastController presentViewController:activityVC animated:YES completion:nil];
             
             if ([activityVC respondsToSelector:@selector(popoverPresentationController)]) {
                 // iOS 8+
                 UIPopoverPresentationController *presentationController = [activityVC popoverPresentationController];
                 presentationController.sourceView = self.view; // if button or change to self.view.
+                
             }
         }
     }];

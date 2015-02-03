@@ -772,7 +772,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     // getting image so that we can share
     [[aphoto objectForKey:@"image"] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-        [SVProgressHUD dismiss];
+      [SVProgressHUD dismiss];
         
         NSArray *activityItems = @[self, data];
         UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
