@@ -777,9 +777,24 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         NSArray *activityItems = @[self, data];
         UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
         activityVC.excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypePrint];
-        [activityVC setValue:@"Teamstory Share!" forKey:@"subject"];
+        [activityVC setValue:@"Check this post out from Teamstory" forKey:@"subject"];
         
         [self presentViewController:activityVC animated:YES completion:nil];
+        
+        // this gets handled after an activity is completed.
+        [activityVC setCompletionHandler:^(NSString *activityType, BOOL completed) {
+            if (completed) {
+                if ([activityType isEqualToString:UIActivityTypePostToFacebook]) {
+                    NSLog(@"facebook");
+                } else if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
+                    NSLog(@"twitter");
+                } else if ([activityType isEqualToString:UIActivityTypeMail]) {
+                    NSLog(@"email");
+                } else {
+                    // all other activities.
+                }
+            }
+        }];
         
         if ([activityVC respondsToSelector:@selector(popoverPresentationController)])
         {
@@ -806,7 +821,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
     
     if ([activityType isEqualToString:UIActivityTypeMail]) {
-        NSString *theText = @"Hey there!\nThis is a startup moment shared on Teamstory (http://teamstoryapp.com) - A community for startups & founders! Would love for you to join the community with me: goo.gl/F2QSoJ";
+        NSString *theText = @"Hey there!\nThis is a startup moment shared on Teamstory (http://teamstoryapp.com) - A community for startups & founders! Would love for you to join the community with me: http://goo.gl/F2QSoJ";
         return theText;
     }
     

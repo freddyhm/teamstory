@@ -305,12 +305,24 @@ enum ActionSheetTags {
             activityVC.excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypePrint];
             
             // only for email.
-            [activityVC setValue:@"Teamstory Share!" forKey:@"subject"];
+            [activityVC setValue:@"Check this post out from Teamstory" forKey:@"subject"];
 
-            //[self presentViewController:activityVC animated:YES completion:nil];
-            AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-            UINavigationController *lastController = [[(UINavigationController *)delegate.window.rootViewController viewControllers] lastObject]; // Set the delegate
-            [lastController presentViewController:activityVC animated:YES completion:nil];
+            [self presentViewController:activityVC animated:YES completion:nil];
+            
+            // this gets handled after an activity is completed.
+            [activityVC setCompletionHandler:^(NSString *activityType, BOOL completed) {
+                if (completed) {
+                    if ([activityType isEqualToString:UIActivityTypePostToFacebook]) {
+                        NSLog(@"facebook");
+                    } else if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
+                        NSLog(@"twitter");
+                    } else if ([activityType isEqualToString:UIActivityTypeMail]) {
+                        NSLog(@"email");
+                    } else {
+                        // all other activities.
+                    }
+                }
+            }];
             
             if ([activityVC respondsToSelector:@selector(popoverPresentationController)]) {
                 // iOS 8+
@@ -338,7 +350,7 @@ enum ActionSheetTags {
     }
     
     if ([activityType isEqualToString:UIActivityTypeMail]) {
-        NSString *theText = @"Hey there!\nThis is a startup moment shared on Teamstory (http://teamstoryapp.com) - A community for startups & founders! Would love for you to join the community with me: goo.gl/F2QSoJ";
+        NSString *theText = @"Hey there!\nThis is a startup moment shared on Teamstory (http://teamstoryapp.com) - A community for startups & founders! Would love for you to join the community with me: http://goo.gl/F2QSoJ";
         return theText;
     }
     
