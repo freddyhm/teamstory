@@ -60,7 +60,7 @@
 #define youtubeWebViewHeight 220.0f
 
 #define contentY nameHeaderHeight + mainImageHeight
-#define numLikePics 7.0f
+#define numLikePics 6.0f
 static CGSize expectedSize;
 
 @interface PAPPhotoDetailsHeaderView () {
@@ -82,6 +82,7 @@ static CGSize expectedSize;
 @property (nonatomic, strong) UIImageView *clockIcon;
 @property (nonatomic, strong) UILabel *userInfoLabel;
 @property (nonatomic, strong) UIWebView *youtubeWebView;
+@property (nonatomic, strong) UIButton *shareButton;
 
 // Redeclare for edit
 @property (nonatomic, strong, readwrite) PFUser *photographer;
@@ -158,16 +159,6 @@ static TTTTimeIntervalFormatter *timeFormatter;
     return self;
 }
 
-#pragma mark - UIView
-/*
-- (void)drawRect:(CGRect)rect {
-    [super drawRect:rect];
-    [PAPUtility drawSideDropShadowForRect:self.nameHeaderView.frame inContext:UIGraphicsGetCurrentContext()];
-    [PAPUtility drawSideDropShadowForRect:self.photoImageView.frame inContext:UIGraphicsGetCurrentContext()];
-    [PAPUtility drawSideDropShadowForRect:self.likeBarView.frame inContext:UIGraphicsGetCurrentContext()];
-}
-*/
-
 #pragma mark - PAPPhotoDetailsHeaderView
 
 - (void)setPhoto:(PFObject *)aPhoto {
@@ -219,10 +210,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
 - (void)setLikeButtonState:(BOOL)selected {
     if (selected) {
         [likeButton setTitleEdgeInsets:UIEdgeInsetsMake(1.0f, 0.5f, -1.0f, -0.5f)];
-        //[[likeButton titleLabel] setShadowOffset:CGSizeMake( 0.0f, -1.0f)];
     } else {
         [likeButton setTitleEdgeInsets:UIEdgeInsetsMake(1.0f, 0.5f, -1.0f, -0.5f)];
-        //[[likeButton titleLabel] setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
     }
     [likeButton setSelected:selected];
 }
@@ -477,8 +466,22 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [moreActionButton addTarget:self action:@selector(moreActionButton_action:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:moreActionButton];
     
+        UIImage *shareButtonImage = [UIImage imageNamed:@"post_share.png"];
+        self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(250.0f, self.likeBarView.frame.origin.y + 5.0f, shareButtonImage.size.width, shareButtonImage.size.height)];
+        [self.shareButton setBackgroundImage:shareButtonImage forState:UIControlStateNormal];
+        [self.shareButton addTarget:self action:@selector(shareButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:self.shareButton];
+
+    
         [self.hud hide:YES];
     
+}
+
+- (void)shareButtonAction:(id)sender {
+    if (delegate && [delegate respondsToSelector:@selector(shareButton:setPhoto:)]) {
+        [delegate respondsToSelector:@selector(shareButton:setPhoto:)];
+        [delegate shareButton:[self.photo objectForKey:kPAPPhotoUserKey] setPhoto:self.photo];
+    }
 }
 
 - (void)moreActionButton_action:(id)sender{

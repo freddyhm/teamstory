@@ -767,6 +767,52 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
 }
 
+- (void) shareButton:(UIButton *)button setPhoto:(PFObject *)aphoto {
+    [SVProgressHUD show];
+    
+    // getting image so that we can share
+    [[aphoto objectForKey:@"image"] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+      [SVProgressHUD dismiss];
+        
+        NSArray *activityItems = @[self, data];
+        UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+        activityVC.excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypePrint];
+        [activityVC setValue:@"Teamstory Share!" forKey:@"subject"];
+        
+        [self presentViewController:activityVC animated:YES completion:nil];
+        
+        if ([activityVC respondsToSelector:@selector(popoverPresentationController)])
+        {
+            // iOS 8+
+            UIPopoverPresentationController *presentationController = [activityVC popoverPresentationController];
+            presentationController.sourceView = button; // if button or change to self.view.
+        }
+    }];
+}
+
+- (id)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController {
+    return @"";
+}
+
+- (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType {
+    if ([activityType isEqualToString:UIActivityTypePostToFacebook]) {
+        NSString *theText = @"#startup #moment shared on #teamstoryapp - Join the global #entrepreneurship #community for #founders: goo.gl/F2QSoJ @teamstory";
+        return theText;
+    }
+    
+    if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
+        NSString *theText = @"#startup #moment on #teamstoryapp - Join the #entrepreneurship #community for #founders: goo.gl/F2QSoJ @teamstoryapp";
+        return theText;
+    }
+    
+    if ([activityType isEqualToString:UIActivityTypeMail]) {
+        NSString *theText = @"Hey there!\nThis is a startup moment shared on Teamstory (http://teamstoryapp.com) - A community for startups & founders! Would love for you to join the community with me: goo.gl/F2QSoJ";
+        return theText;
+    }
+    
+    return @"Startup moment shared on Teamstory - A community for startups & founders! Join the community with me: goo.gl/F2QSoJ";
+}
+
 
 - (void) moreActionButton_inflator:(PFUser *)user photo:(PFObject *)user_photo {
     self.photoID = [user_photo objectId];

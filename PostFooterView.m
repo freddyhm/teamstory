@@ -19,6 +19,7 @@
 @property (nonatomic, strong) UILabel *timestampLabel;
 @property (nonatomic, strong) TTTTimeIntervalFormatter *timeIntervalFormatter;
 @property (nonatomic, strong) UIButton *moreActionButton;
+@property (nonatomic, strong) UIButton *shareButton;
 
 @end
 
@@ -132,6 +133,12 @@
             [containerView addSubview:self.likeTitle];
             
         }
+        
+        UIImage *shareButtonImage = [UIImage imageNamed:@"post_share.png"];
+        self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(238.0f, 7.0f, shareButtonImage.size.width, shareButtonImage.size.height)];
+        [self.shareButton setBackgroundImage:shareButtonImage forState:UIControlStateNormal];
+        [self.shareButton addTarget:self action:@selector(shareButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [containerView addSubview:self.shareButton];
                 
         self.moreActionButton = [[UIButton alloc] initWithFrame:CGRectMake(280.0f, 7.0f, 30.0f, 30.0f)];
         [self.moreActionButton setImage:[UIImage imageNamed:@"button-more.png"] forState:UIControlStateNormal];
@@ -225,6 +232,13 @@
     if (delegate && [delegate respondsToSelector:@selector(moreActionButton_inflator:photo:)]) {
         [delegate respondsToSelector:@selector(moreActionButton_inflator:photo:)];
         [delegate moreActionButton_inflator:[self.photo objectForKey:kPAPPhotoUserKey] photo:self.photo];
+    }
+}
+
+- (void) shareButtonAction:(id)sender {
+    if (delegate && [delegate respondsToSelector:@selector(shareButton:setPhoto:)]) {
+        [delegate respondsToSelector:@selector(shareButton:setPhoto:)];
+        [delegate shareButton:self.shareButton setPhoto:self.photo];
     }
 }
 

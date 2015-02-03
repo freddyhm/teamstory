@@ -12,7 +12,7 @@
 #import "PAPPhotoCell.h"
 #import <UIKit/UIKit.h>
 
-@interface PhotoTimelineViewController : UIViewController <PAPPhotoHeaderViewDelegate, PostFooterViewDelegate, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, PAPPhotoCellDelegate>
+@interface PhotoTimelineViewController : UIViewController <PAPPhotoHeaderViewDelegate, PostFooterViewDelegate, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, PAPPhotoCellDelegate, UIActivityItemSource, UIPopoverPresentationControllerDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *feed;
 @property (strong, nonatomic) IBOutlet NSMutableArray *objects;
 @property (nonatomic, strong) UIView *texturedBackgroundView;
