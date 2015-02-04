@@ -22,20 +22,15 @@ PODS:
     - AFNetworking/NSURLSession
   - embedly-ios (1.0.0):
     - AFNetworking (~> 2.0)
-  - FlightRecorder (1.6.0)
-  - Mixpanel (2.7.1):
-    - Mixpanel/MPCategoryHelpers (= 2.7.1)
-  - Mixpanel/MPCategoryHelpers (2.7.1)
+  - FlightRecorder (1.6.2)
 
 DEPENDENCIES:
   - embedly-ios
   - FlightRecorder
-  - Mixpanel
 
 SPEC CHECKSUMS:
   AFNetworking: 0f54cb5d16ce38c1b76948faffb8d5fb705021c7
   embedly-ios: 82d9defde04172d5edbdbae36cd033d9fd18e4ac
-  FlightRecorder: b1aeaf60e1a5eef07b3855a4be8f8da9b0e4b0ad
-  Mixpanel: 57314e0e7c0a63a6471618a41002da3e1408532c
+  FlightRecorder: a84dc77b6ad336e49df6706c784b579b5dd05ede
 
-COCOAPODS: 0.36.0.beta.2
+COCOAPODS: 0.35.0
