@@ -234,7 +234,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     [[FlightRecorder sharedInstance] setShouldStartLocationManager:YES];
     
     // set flight recorder properties
-    [[FlightRecorder sharedInstance] startFlight];
+    //[[FlightRecorder sharedInstance] startFlight];
     
     return YES;
 }
