@@ -1,8 +1,7 @@
 FRAMEWORK_SEARCH_PATHS = "$(PODS_ROOT)/FlightRecorder/FlightRecorder.embeddedframework"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/AFNetworking" "${PODS_ROOT}/Headers/Public/FlightRecorder" "${PODS_ROOT}/Headers/Public/Mixpanel" "${PODS_ROOT}/Headers/Public/embedly-ios"
-LIBRARY_SEARCH_PATHS = "$(PODS_ROOT)/Mixpanel/Mixpanel"
-OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/AFNetworking" -isystem "${PODS_ROOT}/Headers/Public/FlightRecorder" -isystem "${PODS_ROOT}/Headers/Public/Mixpanel" -isystem "${PODS_ROOT}/Headers/Public/embedly-ios"
-OTHER_LDFLAGS = $(inherited) -ObjC -l"MPCategoryHelpers" -l"Pods-AFNetworking" -l"Pods-FlightRecorder" -l"Pods-Mixpanel" -l"Pods-embedly-ios" -l"icucore" -l"sqlite3" -l"z" -framework "AVFoundation" -framework "Accelerate" -framework "CoreData" -framework "CoreGraphics" -framework "CoreLocation" -framework "CoreMedia" -framework "CoreTelephony" -framework "CoreVideo" -framework "FlightRecorder" -framework "Foundation" -framework "MobileCoreServices" -framework "QuartzCore" -framework "Security" -framework "SystemConfiguration" -framework "UIKit"
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/AFNetworking" "${PODS_ROOT}/Headers/Public/FlightRecorder" "${PODS_ROOT}/Headers/Public/embedly-ios"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/AFNetworking" -isystem "${PODS_ROOT}/Headers/Public/FlightRecorder" -isystem "${PODS_ROOT}/Headers/Public/embedly-ios"
+OTHER_LDFLAGS = -ObjC -l"Pods-AFNetworking" -l"Pods-FlightRecorder" -l"Pods-embedly-ios" -l"sqlite3" -l"z" -framework "AVFoundation" -framework "CoreData" -framework "CoreGraphics" -framework "CoreLocation" -framework "CoreMedia" -framework "CoreTelephony" -framework "CoreVideo" -framework "FlightRecorder" -framework "MobileCoreServices" -framework "Security" -framework "SystemConfiguration"
 OTHER_LIBTOOLFLAGS = $(OTHER_LDFLAGS)
 PODS_ROOT = ${SRCROOT}/Pods

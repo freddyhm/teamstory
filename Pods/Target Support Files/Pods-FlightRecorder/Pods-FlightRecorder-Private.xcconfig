@@ -1,6 +1,6 @@
 #include "Pods-FlightRecorder.xcconfig"
 FRAMEWORK_SEARCH_PATHS = ${PODS_FLIGHTRECORDER_FRAMEWORK_SEARCH_PATHS}
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/FlightRecorder" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/AFNetworking" "${PODS_ROOT}/Headers/Public/FlightRecorder" "${PODS_ROOT}/Headers/Public/Mixpanel" "${PODS_ROOT}/Headers/Public/embedly-ios"
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Build" "${PODS_ROOT}/Headers/Build/FlightRecorder" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/AFNetworking" "${PODS_ROOT}/Headers/Public/FlightRecorder" "${PODS_ROOT}/Headers/Public/embedly-ios"
 OTHER_LDFLAGS = ${PODS_FLIGHTRECORDER_OTHER_LDFLAGS} -ObjC
 PODS_ROOT = ${SRCROOT}
