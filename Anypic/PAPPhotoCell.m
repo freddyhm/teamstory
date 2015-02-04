@@ -123,7 +123,7 @@
         self.photoButton.frame = CGRectMake( 7.5f, notificationBarOffSet, 320.0f, self.imageView.frame.size.height);
         self.backgroundView.frame = CGRectMake(0.0f, 0.0f, 320.0f, self.imageView.frame.size.height + self.captionLabel.frame.size.height + 20.0f);
         
-        NSRange range = [self.caption rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
+        NSRange range = [self.caption rangeOfString:@"(?i)(http\\S+([^.]($|\\s))?|www\\.\\S+([^.]($|\\s))?|\\w+\\.(com|ca|\\w{2,3})(\\S+[^.]($|\\s))?)" options:NSRegularExpressionSearch];
         
         if (range.location != NSNotFound) {
             NSString *lowerCaseString = [[self.caption substringWithRange:range] lowercaseString];
