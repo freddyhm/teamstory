@@ -235,7 +235,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     if ([self.description length] > 0) {
         CGSize maximumLabelSize = CGSizeMake(320.0f - 7.5f * 4, 9999.0f);
         
-        NSRange range = [self.description rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
+        NSRange range = [self.description rangeOfString:@"(?i)(http\\S+([^.]($|\\s))?|www\\.\\S+([^.]($|\\s))?|\\w+\\.(com|ca|\\w{2,3})(\\S+[^.]($|\\s))?)" options:NSRegularExpressionSearch];
         
         if (range.location != NSNotFound) {
             NSString *lowerCaseString = [[self.description substringWithRange:range] lowercaseString];

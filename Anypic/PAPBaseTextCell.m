@@ -269,7 +269,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     NSLog(@"%@", word);
     
     // get range for url and mentions
-    NSRange urlRange = [word rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
+    NSRange urlRange = [word rangeOfString:@"(?i)(http\\S+([^.]($|\\s))?|www\\.\\S+([^.]($|\\s))?|\\w+\\.(com|ca|\\w{2,3})(\\S+[^.]($|\\s))?)" options:NSRegularExpressionSearch];
     
     // check if user matches current user
     BOOL isAuthor = [[[PFUser currentUser] objectId] isEqualToString:[[self.ih_object objectForKey:@"fromUser"] objectId]];
@@ -411,7 +411,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             
             NSString *paddedString = [PAPBaseTextCell padString:contentString withFont:[UIFont systemFontOfSize:13] toWidth:nameSize.width];
          
-            NSRange urlRange = [paddedString rangeOfString:@"(?i)(http\\S+|www\\.\\S+|\\w+\\.(com|ca|\\w{2,3})(\\S+)?)" options:NSRegularExpressionSearch];
+            NSRange urlRange = [paddedString rangeOfString:@"(?i)(http\\S+([^.]($|\\s))?|www\\.\\S+([^.]($|\\s))?|\\w+\\.(com|ca|\\w{2,3})(\\S+[^.]($|\\s))?)" options:NSRegularExpressionSearch];
             
             if (urlRange.location != NSNotFound) {
                 NSString *lowerCaseString = [[paddedString substringWithRange:urlRange] lowercaseString];
