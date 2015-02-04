@@ -14,10 +14,10 @@
 #import "PAPCache.h"
 #import "PAPTabBarController.h"
 #import "Mixpanel.h"
-#import "FlightRecorder.h"
+//#import "FlightRecorder.h"
 #import "PAPMessageListViewController.h"
 #import "Intercom.h"
-#import <FlightRecorder/FlightRecorder.h>
+//#import <FlightRecorder/FlightRecorder.h>
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
@@ -221,10 +221,10 @@
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Home"}];
     
     // flightrecorder event analytics
-    [[FlightRecorder sharedInstance] trackEventWithCategory:@"home_screen" action:@"viewing_home" label:@"" value:@""];
+  //  [[FlightRecorder sharedInstance] trackEventWithCategory:@"home_screen" action:@"viewing_home" label:@"" value:@""];
     
     // flightrecorder analytics
-    [[FlightRecorder sharedInstance] trackPageView:@"Home"];
+  //  [[FlightRecorder sharedInstance] trackPageView:@"Home"];
     
     [self refreshBadge];
     
@@ -464,7 +464,7 @@
     
     
     // set user id for flight recorder
-    [[FlightRecorder sharedInstance] setSessionUserID:displayName];
+  //  [[FlightRecorder sharedInstance] setSessionUserID:displayName];
 }
 
 - (void)inviteFriendsButtonAction:(id)sender {

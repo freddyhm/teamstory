@@ -14,7 +14,7 @@
 #import "PAPHomeViewController.h"
 #import "PAPAccountViewController.h"
 #import "Mixpanel.h"
-#import "FlightRecorder.h"
+//#import "FlightRecorder.h"
 #import "Intercom.h"
 
 @interface PostPicViewController ()
@@ -78,10 +78,10 @@
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Post Photo"}];
     
     // flightrecorder event analytics
-    [[FlightRecorder sharedInstance] trackEventWithCategory:@"post_photo_screen" action:@"viewing_post_photo" label:@"" value:@""];
+  //  [[FlightRecorder sharedInstance] trackEventWithCategory:@"post_photo_screen" action:@"viewing_post_photo" label:@"" value:@""];
     
     // flightrecorder analytics
-    [[FlightRecorder sharedInstance] trackPageView:@"Post Photo"];
+  //  [[FlightRecorder sharedInstance] trackPageView:@"Post Photo"];
     
     // change proportions based on iphone height
     float cropScrollHeight;

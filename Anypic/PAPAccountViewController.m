@@ -13,7 +13,7 @@
 #import "PAPwebviewViewController.h"
 #import "FollowersFollowingViewController.h"
 #import "Mixpanel.h"
-#import "FlightRecorder.h"
+//#import "FlightRecorder.h"
 #import "PAPMessagingViewController.h"
 #import "Intercom.h"
 
@@ -609,10 +609,10 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     
     // flightrecorder analytics
-    [[FlightRecorder sharedInstance] trackPageView:@"Account"];
+  // [[FlightRecorder sharedInstance] trackPageView:@"Account"];
     
     // flightrecorder event analytics
-    [[FlightRecorder sharedInstance] trackEventWithCategory:@"account_screen" action:@"viewing_account" label:@"" value:@""];
+  //  [[FlightRecorder sharedInstance] trackEventWithCategory:@"account_screen" action:@"viewing_account" label:@"" value:@""];
     
     // edge case, if multiaction button frozen because of network problems
     if (self.user == [PFUser currentUser] && !self.multiActionButton.enabled){

@@ -48,12 +48,6 @@
 #define COCOAPODS_VERSION_MINOR_AFNetworking_UIKit 5
 #define COCOAPODS_VERSION_PATCH_AFNetworking_UIKit 0
 
-// FlightRecorder
-#define COCOAPODS_POD_AVAILABLE_FlightRecorder
-#define COCOAPODS_VERSION_MAJOR_FlightRecorder 1
-#define COCOAPODS_VERSION_MINOR_FlightRecorder 6
-#define COCOAPODS_VERSION_PATCH_FlightRecorder 2
-
 // embedly-ios
 #define COCOAPODS_POD_AVAILABLE_embedly_ios
 #define COCOAPODS_VERSION_MAJOR_embedly_ios 1

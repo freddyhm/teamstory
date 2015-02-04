@@ -41,15 +41,6 @@ THE SOFTWARE.
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string>All text and design is copyright © 2013-2014 FlightRecorder, Inc.
-</string>
-			<key>Title</key>
-			<string>FlightRecorder</string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>FooterText</key>
 			<string>Copyright (c) 2014  &lt;Embedly&gt;
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

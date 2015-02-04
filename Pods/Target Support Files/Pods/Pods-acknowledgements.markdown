@@ -24,11 +24,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
-## FlightRecorder
-
-All text and design is copyright © 2013-2014 FlightRecorder, Inc.
-
-
 ## embedly-ios
 
 Copyright (c) 2014  <Embedly>

@@ -21,7 +21,7 @@
 #import "AppDelegate.h"
 #import "Intercom.h"
 #import "PAPwebviewViewController.h"
-#import "FlightRecorder.h"
+//#import "FlightRecorder.h"
 
 #define IS_OS_6_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0)
 #define IS_OS_8_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
@@ -228,7 +228,7 @@ enum ActionSheetTags {
         
         
         // flightrecorder event analytics
-        [[FlightRecorder sharedInstance] trackEventWithCategory:@"home_screen" action:@"tapped_post" label:@"" value:type];
+       // [[FlightRecorder sharedInstance] trackEventWithCategory:@"home_screen" action:@"tapped_post" label:@"" value:type];
         
         UIViewController *tappedController;
         

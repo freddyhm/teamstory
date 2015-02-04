@@ -9,7 +9,7 @@
 #import "PAPMessagingViewController.h"
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
-#import "FlightRecorder.h"
+//#import "FlightRecorder.h"
 
 
 #define messageTextViewHeight 45.0f
@@ -263,7 +263,7 @@
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Sent message"}];
         
         // flightrecorder event analytics
-        [[FlightRecorder sharedInstance] trackEventWithCategory:@"chat_room_screen" action:@"sent_message" label:@"" value:@""];
+      //  [[FlightRecorder sharedInstance] trackEventWithCategory:@"chat_room_screen" action:@"sent_message" label:@"" value:@""];
         
         PFObject *messagePFObject = [PFObject objectWithClassName:@"Message"];
         [messagePFObject setObject:[PFUser currentUser] forKey:@"fromUser"];

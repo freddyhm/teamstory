@@ -12,7 +12,7 @@
 #import "PAPAccountViewController.h"
 #import "AppDelegate.h"
 #import "Mixpanel.h"
-#import "FlightRecorder.h"
+//#import "FlightRecorder.h"
 
 
 #define APP ((AppDelegate *)[[UIApplication sharedApplication] delegate])
@@ -46,10 +46,10 @@
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Message List"}];
     
     // flightrecorder event analytics
-    [[FlightRecorder sharedInstance] trackEventWithCategory:@"message_list_screen" action:@"viewing_message_list" label:@"" value:@""];
+  //  [[FlightRecorder sharedInstance] trackEventWithCategory:@"message_list_screen" action:@"viewing_message_list" label:@"" value:@""];
     
     // flightrecorder analytics
-    [[FlightRecorder sharedInstance] trackPageView:@"Message List"];
+  //  [[FlightRecorder sharedInstance] trackPageView:@"Message List"];
     
     [self.navigationController setToolbarHidden:YES animated:NO];
     

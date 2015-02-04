@@ -1,7 +1,6 @@
-FRAMEWORK_SEARCH_PATHS = "$(PODS_ROOT)/FlightRecorder/FlightRecorder.embeddedframework"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/AFNetworking" "${PODS_ROOT}/Headers/Public/FlightRecorder" "${PODS_ROOT}/Headers/Public/embedly-ios"
-OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/AFNetworking" -isystem "${PODS_ROOT}/Headers/Public/FlightRecorder" -isystem "${PODS_ROOT}/Headers/Public/embedly-ios"
-OTHER_LDFLAGS = -ObjC -l"Pods-AFNetworking" -l"Pods-FlightRecorder" -l"Pods-embedly-ios" -l"sqlite3" -l"z" -framework "AVFoundation" -framework "CoreData" -framework "CoreGraphics" -framework "CoreLocation" -framework "CoreMedia" -framework "CoreTelephony" -framework "CoreVideo" -framework "FlightRecorder" -framework "MobileCoreServices" -framework "Security" -framework "SystemConfiguration"
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/AFNetworking" "${PODS_ROOT}/Headers/Public/embedly-ios"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/AFNetworking" -isystem "${PODS_ROOT}/Headers/Public/embedly-ios"
+OTHER_LDFLAGS = -ObjC -l"Pods-AFNetworking" -l"Pods-embedly-ios" -framework "CoreGraphics" -framework "MobileCoreServices" -framework "Security" -framework "SystemConfiguration"
 OTHER_LIBTOOLFLAGS = $(OTHER_LDFLAGS)
 PODS_ROOT = ${SRCROOT}/Pods
