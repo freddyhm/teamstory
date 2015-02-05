@@ -12,6 +12,7 @@
 @property (nonatomic, assign, getter = isFirstLaunch) BOOL firstLaunch;
 @property (nonatomic, strong) UIButton *feedbackBtn;
 - (void)refreshCurrentFeed;
+- (void)getActivityPoints;
 
 
 @end

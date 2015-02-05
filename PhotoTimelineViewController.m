@@ -22,6 +22,7 @@
 #import "Intercom.h"
 #import "PAPwebviewViewController.h"
 //#import "FlightRecorder.h"
+#import "AtMention.h"
 
 #define IS_OS_6_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0)
 #define IS_OS_8_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
@@ -156,6 +157,12 @@ enum ActionSheetTags {
 }
 
 #pragma mark - Custom
+
+- (void)updateActivityPoints{
+    [[AtMention sharedAtMention] addPointToActivityCount];
+    PAPHomeViewController *home = [self.navigationController.viewControllers lastObject];
+    [home getActivityPoints];
+}
 
 - (NSIndexPath *)indexPathForObject:(PFObject *)targetObject {
     for (int i = 0; i < self.objects.count; i++) {
@@ -790,6 +797,9 @@ enum ActionSheetTags {
     NSNumber *likeCount = [numberFormatter numberFromString:postFooterView.likeCountLabel.text];
     
     if (liked) {
+        
+        // increment counter by one
+        [self updateActivityPoints];
     
         // get post type
         NSString *postType = [photo objectForKey:@"type"] != nil ? [photo objectForKey:@"type"] : @"";
