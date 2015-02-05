@@ -16,6 +16,7 @@
 #import "Intercom.h"
 #import "ParseFacebookUtils/PFFacebookUtils.h"
 #import "UIImageEffects.h"
+#import "AtMention.h"
 
 
 @interface PAPlinkPostViewController ()
@@ -248,6 +249,9 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 }
 
 - (void)postButtonAction:(id)sender {
+    
+    // increment activity point
+    [[AtMention sharedAtMention] addPointToActivityCount];
      
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Link"}];

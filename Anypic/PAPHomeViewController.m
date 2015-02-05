@@ -17,6 +17,8 @@
 //#import "FlightRecorder.h"
 #import "PAPMessageListViewController.h"
 #import "Intercom.h"
+#import "AtMention.h"
+#import "ActivityPointViewController.h"
 //#import <FlightRecorder/FlightRecorder.h>
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
@@ -47,6 +49,8 @@
 @property (nonatomic, strong) UIImage *feedbackImg;
 @property (nonatomic, strong) UIImage *feedbackImgBadge;
 @property (nonatomic, strong) NSNumber *konotorCount;
+@property (nonatomic, strong) UILabel *activityPoints;
+@property (nonatomic, strong) NSNumber *prevPointCount;
 @property BOOL firstRun;
 @property BOOL isOpeningFeedback;
 @end
@@ -108,10 +112,25 @@
     self.feedFontDeselected = [UIFont systemFontOfSize:15.0f];
     
     // timeline logo
-    UIImage *logoImg = [UIImage imageNamed:@"timelineLogo.png"];
-    self.logoBtn = [[UIButton alloc]initWithFrame:CGRectMake(15.0f, 10.0f, logoImg.size.width, logoImg.size.height)];
-    [self.logoBtn setBackgroundImage:logoImg forState:UIControlStateNormal];
-    [self.logoBtn addTarget:self action:@selector(refreshCurrentFeed) forControlEvents:UIControlEventTouchUpInside];
+    //UIImage *logoImg = [UIImage imageNamed:@"timelineLogo.png"];
+    //self.logoBtn = [[UIButton alloc]initWithFrame:CGRectMake(15.0f, 10.0f, logoImg.size.width, logoImg.size.height)];
+    self.activityPoints = [[UILabel alloc] initWithFrame:CGRectMake(13.0f, 7.0f, 50.0f, 25.0f)];
+    [self.activityPoints setTextColor:[UIColor whiteColor]];
+    self.activityPoints.adjustsFontSizeToFitWidth = YES;
+    [self.activityPoints setFont:[UIFont systemFontOfSize:16.0f]];
+    [self.activityPoints setUserInteractionEnabled:YES];
+    [self.activityPoints setTextAlignment:NSTextAlignmentLeft];
+    
+    // add tap gesture to label
+    UITapGestureRecognizer *tapActivity = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedActivityPoints)];
+    [self.activityPoints addGestureRecognizer:tapActivity];
+    
+    NSNumber *initActivityPointCount = [[AtMention sharedAtMention] activityPoints];
+    self.activityPoints.text = [initActivityPointCount stringValue];
+    self.prevPointCount = initActivityPointCount;
+    
+    //[self.logoBtn setBackgroundImage:logoImg forState:UIControlStateNormal];
+    //[self.logoBtn addTarget:self action:@selector(refreshCurrentFeed) forControlEvents:UIControlEventTouchUpInside];
     
     // timeline top nav buttons
     self.exploreBtn = [[UIButton alloc]initWithFrame:CGRectMake(80.0f, 10.0f, 70.0f, 20.0f)];
@@ -128,7 +147,8 @@
     self.feedIndicator = [[UIImageView alloc]initWithImage:indicatorImg];
     [self.feedIndicator setFrame:CGRectMake(110.0f, 37.0f, indicatorImg.size.width, indicatorImg.size.height)];
 
-    [self.navigationController.navigationBar addSubview:self.logoBtn];
+    //[self.navigationController.navigationBar addSubview:self.logoBtn];
+    [self.navigationController.navigationBar addSubview:self.activityPoints];
     [self.navigationController.navigationBar addSubview:self.exploreBtn];
     [self.navigationController.navigationBar addSubview:self.followingBtn];
     [self.navigationController.navigationBar addSubview:self.feedbackBtn];
@@ -206,6 +226,8 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    [self getActivityPoints];
 
     [self setNavBarButtonsHidden:NO];
     
@@ -315,6 +337,43 @@
     }
     
     return didLoad;
+}
+
+#pragma mark - Activity Points
+
+- (void)tappedActivityPoints{
+    ActivityPointViewController *activityPointViewController = [[ActivityPointViewController alloc] initWithNibName:nil bundle:nil];
+    
+    [self.navigationController presentViewController:activityPointViewController animated:YES completion:nil];
+    
+    activityPointViewController.points.text = self.activityPoints.text;
+}
+
+- (void)getActivityPoints{
+    
+    NSNumber *activityCount = [[AtMention sharedAtMention] activityPoints];
+    
+    if(activityCount && ![self.prevPointCount isEqualToNumber:activityCount]){
+        
+        self.activityPoints.text = [activityCount stringValue];
+        self.prevPointCount = activityCount;
+        
+        CGAffineTransform transform = self.activityPoints.transform;
+        
+        [UIView animateWithDuration:0.2 animations:^{
+            self.activityPoints.font = [UIFont boldSystemFontOfSize:16];
+            self.activityPoints.transform = CGAffineTransformScale(self.activityPoints.transform, 1.1, 1.1);
+        } completion:^(BOOL finished) {
+            //fade out
+            [UIView animateWithDuration:0.2f animations:^{
+                self.activityPoints.transform = transform;
+            } completion:^(BOOL finished) {
+                self.activityPoints.font = [UIFont systemFontOfSize:16.0f];
+            }];
+        }];
+    }else if(!activityCount){
+        self.activityPoints.text = @"0";
+    }
 }
 
 
@@ -519,7 +578,8 @@
 - (void)setNavBarButtonsHidden:(BOOL)isHidden{
     
     // hides set of timeline nav bar buttons
-    [self.logoBtn setHidden:isHidden];
+    //[self.logoBtn setHidden:isHidden];
+    [self.activityPoints setHidden:isHidden];
     [self.exploreBtn setHidden:isHidden];
     [self.followingBtn setHidden:isHidden];
     

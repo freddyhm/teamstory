@@ -423,7 +423,12 @@
 		D5856FB719F87E2600D0086F /* KonotorModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D5856F8C19F87E2500D0086F /* KonotorModels.bundle */; };
 		D5856FB819F87E2600D0086F /* libKonotorCombined.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D5856F8D19F87E2500D0086F /* libKonotorCombined.a */; };
 		D586C1071A82E55D00AC7C31 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D586C1061A82E55D00AC7C31 /* libicucore.dylib */; };
-		D58FD92B1A4501D3008912C8 /* AtMention.m in Sources */ = {isa = PBXBuildFile; fileRef = D58FD92A1A4501D3008912C8 /* AtMention.m */; };
+		D586C10F1A82E81500AC7C31 /* ActivityPointViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D586C10E1A82E81500AC7C31 /* ActivityPointViewController.m */; };
+		D586C1151A82E83200AC7C31 /* AtMention.m in Sources */ = {isa = PBXBuildFile; fileRef = D586C1141A82E83200AC7C31 /* AtMention.m */; };
+		D586C1171A82E83E00AC7C31 /* ActivityPointViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D586C1161A82E83E00AC7C31 /* ActivityPointViewController.xib */; };
+		D586C11B1A82EA7600AC7C31 /* bg_points_3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D586C1181A82EA7600AC7C31 /* bg_points_3x.png */; };
+		D586C11C1A82EA7600AC7C31 /* bg_points.png in Resources */ = {isa = PBXBuildFile; fileRef = D586C1191A82EA7600AC7C31 /* bg_points.png */; };
+		D586C11D1A82EA7600AC7C31 /* bg_points_2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D586C11A1A82EA7600AC7C31 /* bg_points_2x.png */; };
 		D5903C75192EBBF900DC9896 /* ThoughtPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */; };
 		D5903C76192EBBF900DC9896 /* ThoughtPostViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5903C74192EBBF900DC9896 /* ThoughtPostViewController.xib */; };
 		D594C20418EFEBAD0008F5DF /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D594C20118EFEBAD0008F5DF /* SVProgressHUD.bundle */; };
@@ -1114,8 +1119,14 @@
 		D5856F8C19F87E2500D0086F /* KonotorModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = KonotorModels.bundle; sourceTree = "<group>"; };
 		D5856F8D19F87E2500D0086F /* libKonotorCombined.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libKonotorCombined.a; sourceTree = "<group>"; };
 		D586C1061A82E55D00AC7C31 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
-		D58FD9291A4501D3008912C8 /* AtMention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AtMention.h; sourceTree = SOURCE_ROOT; };
-		D58FD92A1A4501D3008912C8 /* AtMention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AtMention.m; sourceTree = SOURCE_ROOT; };
+		D586C10D1A82E81500AC7C31 /* ActivityPointViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityPointViewController.h; sourceTree = SOURCE_ROOT; };
+		D586C10E1A82E81500AC7C31 /* ActivityPointViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityPointViewController.m; sourceTree = SOURCE_ROOT; };
+		D586C1131A82E83200AC7C31 /* AtMention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AtMention.h; path = "../../../../../../Users/fhm/Desktop/Transfer Files/AtMention.h"; sourceTree = "<group>"; };
+		D586C1141A82E83200AC7C31 /* AtMention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AtMention.m; path = "../../../../../../Users/fhm/Desktop/Transfer Files/AtMention.m"; sourceTree = "<group>"; };
+		D586C1161A82E83E00AC7C31 /* ActivityPointViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ActivityPointViewController.xib; sourceTree = SOURCE_ROOT; };
+		D586C1181A82EA7600AC7C31 /* bg_points_3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_points_3x.png; sourceTree = "<group>"; };
+		D586C1191A82EA7600AC7C31 /* bg_points.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_points.png; sourceTree = "<group>"; };
+		D586C11A1A82EA7600AC7C31 /* bg_points_2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_points_2x.png; sourceTree = "<group>"; };
 		D5903C72192EBBF900DC9896 /* ThoughtPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThoughtPostViewController.h; sourceTree = SOURCE_ROOT; };
 		D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThoughtPostViewController.m; sourceTree = SOURCE_ROOT; };
 		D5903C74192EBBF900DC9896 /* ThoughtPostViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ThoughtPostViewController.xib; sourceTree = SOURCE_ROOT; };
@@ -1451,8 +1462,8 @@
 				C4F10290156C571C0061BC3E /* PAPUtility.m */,
 				C4A6D87A157859AA009FE621 /* PAPCache.h */,
 				C4A6D87B157859AA009FE621 /* PAPCache.m */,
-				D58FD9291A4501D3008912C8 /* AtMention.h */,
-				D58FD92A1A4501D3008912C8 /* AtMention.m */,
+				D586C1131A82E83200AC7C31 /* AtMention.h */,
+				D586C1141A82E83200AC7C31 /* AtMention.m */,
 				C4B60864155B085600EFA90C /* Resources */,
 				09ABC07813A1D52D009C3FCF /* Supporting Files */,
 			);
@@ -1641,6 +1652,9 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				D586C1181A82EA7600AC7C31 /* bg_points_3x.png */,
+				D586C1191A82EA7600AC7C31 /* bg_points.png */,
+				D586C11A1A82EA7600AC7C31 /* bg_points_2x.png */,
 				46CE24551A7AC8220072FA28 /* Share Button */,
 				462B06B61A704A02003F789C /* videoPlaceHolder */,
 				D5CD738D1A6D9004008FBDC8 /* icon_link@3x.png */,
@@ -1939,6 +1953,7 @@
 				C4F102A2156C57560061BC3E /* PAPPhotoHeaderView.h */,
 				C4F102A3156C57560061BC3E /* PAPPhotoHeaderView.m */,
 				D56D466419884C33001FAA76 /* PhotoTimelineViewController.xib */,
+				D586C1161A82E83E00AC7C31 /* ActivityPointViewController.xib */,
 			);
 			name = TimelineViews;
 			sourceTree = "<group>";
@@ -2064,6 +2079,8 @@
 		C4A894921558795F00DC57D3 /* Home & Timeline */ = {
 			isa = PBXGroup;
 			children = (
+				D586C10D1A82E81500AC7C31 /* ActivityPointViewController.h */,
+				D586C10E1A82E81500AC7C31 /* ActivityPointViewController.m */,
 				462B363C1880AB5D008C28AE /* discoverPageViewController.h */,
 				462B363D1880AB5D008C28AE /* discoverPageViewController.m */,
 				C4F102C7156C57ED0061BC3E /* PAPHomeViewController.h */,
@@ -2723,6 +2740,7 @@
 				4691B4F418BEF61C00B7DF6A /* follow.png in Resources */,
 				D579140F19FF3E0900585370 /* nav_home@2x.png in Resources */,
 				D5856FB019F87E2600D0086F /* konotor_uploading.png in Resources */,
+				D586C11B1A82EA7600AC7C31 /* bg_points_3x.png in Resources */,
 				467A40C81993056C00D4C693 /* btn_email.png in Resources */,
 				465C29111A5F2D6500265486 /* Link Popup_selected@3x.png in Resources */,
 				D5D1042C18B5CF4E0084C901 /* button-feedback@2x.png in Resources */,
@@ -2849,6 +2867,7 @@
 				46839E9918E1E8C100BD60DB /* icon-email@2x.png in Resources */,
 				460997561938119A00C5AD96 /* icon-angel@2x.png in Resources */,
 				467A40AD198FF1B200D4C693 /* profile_header_2@2x.png in Resources */,
+				D586C11C1A82EA7600AC7C31 /* bg_points.png in Resources */,
 				D55AEF3319BA78EB00ECF342 /* following_empty.png in Resources */,
 				465B19B118B81FE500EDBCFC /* browser-button-no.png in Resources */,
 				D5856FA119F87E2600D0086F /* konotor_play@2x.png in Resources */,
@@ -2921,6 +2940,7 @@
 				469CF3771996FB4D0081FCED /* btn_twitter_select@2x.png in Resources */,
 				D57684121933F917008BAA2C /* IconActivitySelected.png in Resources */,
 				D528C383191034F100CEEA35 /* ButtonLikeComment.png in Resources */,
+				D586C1171A82E83E00AC7C31 /* ActivityPointViewController.xib in Resources */,
 				465C29181A5F2D6500265486 /* Thought Popup.png in Resources */,
 				D5BFDEDF18CC84A5004FEC42 /* toronto.png in Resources */,
 				465A4EE518A83D5100E43DC6 /* share.png in Resources */,
@@ -2935,6 +2955,7 @@
 				463B0CEB1985A8C80075E496 /* intro_moment_2@2x.png in Resources */,
 				46DC23C519AAC7F300E8FCDF /* icon_search@2x.png in Resources */,
 				C4BE67A5157FC7F700A291C2 /* IconComment.png in Resources */,
+				D586C11D1A82EA7600AC7C31 /* bg_points_2x.png in Resources */,
 				46A2FE5919635A7000D8ED12 /* btn_close_timeline.png in Resources */,
 				C4BE67A6157FC7F700A291C2 /* IconComment@2x.png in Resources */,
 				465A4EDA18A8222A00E43DC6 /* iconlocation@2x.png in Resources */,
@@ -3142,7 +3163,9 @@
 				D542D8BF196A6F4700A0384F /* ELCAsset.m in Sources */,
 				D5FC095818A9B552000D85F1 /* FilterCell.m in Sources */,
 				46DC23CD19B01CBF00E8FCDF /* PAPdiscoverIndustryCell.m in Sources */,
+				D586C1151A82E83200AC7C31 /* AtMention.m in Sources */,
 				D5F0871E1A82E25B0079C922 /* MPCGAffineTransformToNSDictionaryValueTransformer.m in Sources */,
+				D586C10F1A82E81500AC7C31 /* ActivityPointViewController.m in Sources */,
 				D594C20518EFEBAD0008F5DF /* SVProgressHUD.m in Sources */,
 				D5F087441A82E25B0079C922 /* MPUIEdgeInsetsToNSDictionaryValueTransformer.m in Sources */,
 				461C57EB19C101ED00F6575C /* PAPMessageListCell.m in Sources */,
@@ -3223,7 +3246,6 @@
 				D51C02331A2830CD00A663CD /* NavWrapperViewController.m in Sources */,
 				D5F0870F1A82E25B0079C922 /* MPABTestDesignerChangeRequestMessage.m in Sources */,
 				D5F087221A82E25B0079C922 /* MPCGSizeToNSDictionaryValueTransformer.m in Sources */,
-				D58FD92B1A4501D3008912C8 /* AtMention.m in Sources */,
 				46DC23BF19AA1F0400E8FCDF /* PAPdiscoverTileView.m in Sources */,
 				D5F087431A82E25B0079C922 /* MPUIControlBinding.m in Sources */,
 				D5F087121A82E25B0079C922 /* MPABTestDesignerClearResponseMessage.m in Sources */,

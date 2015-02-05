@@ -11,6 +11,7 @@
 #import "PAPwebviewViewController.h"
 #import "Mixpanel.h"
 #import "Intercom.h"
+#import "AtMention.h"
 
 #define baseHorizontalOffset 0.0f
 #define baseWidth 320.0f
@@ -507,6 +508,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
     }
     
     if (liked) {
+        
+        // increment activity point
+        [[AtMention sharedAtMention] addPointToActivityCount];
         
         // get post type
         NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
