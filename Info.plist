@@ -40,7 +40,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.4</string>
+	<string>2.4.5</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -55,7 +55,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2.4</string>
+	<string>2.4.5</string>
 	<key>FacebookAppID</key>
 	<string>${FACEBOOK_ID}</string>
 	<key>FacebookDisplayName</key>
@@ -120,11 +120,9 @@
 	<key>UIViewEdgeAntialiasing</key>
 	<false/>
 	<key>VersionChanges</key>
-	<string>• New! Youtube links 
-• Improved displaying links 
-• Fixed notification badge mismatch bug  
-• Fixed new user discovery crash
-• Improved discover loading and display  
-• Fixed no mail account bug</string>
+	<string>• New! Share posts on twitter, facebook, email, and message
+• New! Collect points by posting, commenting, and liking 
+• Fixed discover crash 
+</string>
 </dict>
 </plist>
