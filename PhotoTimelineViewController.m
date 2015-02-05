@@ -796,10 +796,18 @@ enum ActionSheetTags {
     [numberFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
     NSNumber *likeCount = [numberFormatter numberFromString:postFooterView.likeCountLabel.text];
     
+    
+    
     if (liked) {
         
-        // increment counter by one
-        [self updateActivityPoints];
+        // check if the post author is the same as current user
+        NSString *postAuthorId = [[photo objectForKey:@"user"] objectId];
+        BOOL isAuthor = [[[PFUser currentUser] objectId] isEqualToString:postAuthorId];
+        
+        // only increment by one when post author is not the same as current user
+        if(!isAuthor){
+            [self updateActivityPoints];
+        }
     
         // get post type
         NSString *postType = [photo objectForKey:@"type"] != nil ? [photo objectForKey:@"type"] : @"";

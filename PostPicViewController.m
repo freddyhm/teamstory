@@ -16,6 +16,7 @@
 #import "Mixpanel.h"
 //#import "FlightRecorder.h"
 #import "Intercom.h"
+#import "AtMention.h"
 
 @interface PostPicViewController ()
 
@@ -220,6 +221,9 @@
 }
 
 - (void)cropPressed {
+    
+    // increment activity point
+    [[AtMention sharedAtMention] addPointToActivityCount];
     
     // show spinning indicator
     [SVProgressHUD show];

@@ -84,6 +84,7 @@ static CGSize expectedSize;
 @property (nonatomic, strong) UILabel *userInfoLabel;
 @property (nonatomic, strong) UIWebView *youtubeWebView;
 @property (nonatomic, strong) UIButton *shareButton;
+@property BOOL isPhotographer;
 
 // Redeclare for edit
 @property (nonatomic, strong, readwrite) PFUser *photographer;
@@ -129,6 +130,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.photographer = [self.photo objectForKey:kPAPPhotoUserKey];
         self.likeUsers = nil;
         
+        // check if current user is pic author
+        self.isPhotographer = [[self.photographer objectId] isEqualToString:[[PFUser currentUser] objectId]];
+        
         self.navController = anavController;
         self.description = adescription;
         
@@ -149,6 +153,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
         self.photo = aPhoto;
         self.photographer = aPhotographer;
         self.likeUsers = theLikeUsers;
+        
+        self.isPhotographer = [[self.photographer objectForKey:@"displayName"] isEqualToString:[[PFUser currentUser] objectId]];
         
         self.backgroundColor = [UIColor clearColor];
 
@@ -509,8 +515,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
     
     if (liked) {
         
-        // increment activity point
-        [[AtMention sharedAtMention] addPointToActivityCount];
+        // increment activity point if not pic owner
+        if(!self.isPhotographer){
+            [[AtMention sharedAtMention] addPointToActivityCount];
+        }
         
         // get post type
         NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";

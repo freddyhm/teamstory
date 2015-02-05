@@ -114,6 +114,8 @@
     // timeline logo
     //UIImage *logoImg = [UIImage imageNamed:@"timelineLogo.png"];
     //self.logoBtn = [[UIButton alloc]initWithFrame:CGRectMake(15.0f, 10.0f, logoImg.size.width, logoImg.size.height)];
+    
+    // create activity points label
     self.activityPoints = [[UILabel alloc] initWithFrame:CGRectMake(13.0f, 7.0f, 50.0f, 25.0f)];
     [self.activityPoints setTextColor:[UIColor whiteColor]];
     self.activityPoints.adjustsFontSizeToFitWidth = YES;
@@ -121,12 +123,15 @@
     [self.activityPoints setUserInteractionEnabled:YES];
     [self.activityPoints setTextAlignment:NSTextAlignmentLeft];
     
-    // add tap gesture to label
+    // add tap gesture to activity points label
     UITapGestureRecognizer *tapActivity = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedActivityPoints)];
     [self.activityPoints addGestureRecognizer:tapActivity];
     
+    // set activity count
     NSNumber *initActivityPointCount = [[AtMention sharedAtMention] activityPoints];
     self.activityPoints.text = [initActivityPointCount stringValue];
+    
+    // flag to track and trigger animation
     self.prevPointCount = initActivityPointCount;
     
     //[self.logoBtn setBackgroundImage:logoImg forState:UIControlStateNormal];
@@ -227,6 +232,7 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
+    // refresh activity points
     [self getActivityPoints];
 
     [self setNavBarButtonsHidden:NO];
@@ -342,24 +348,30 @@
 #pragma mark - Activity Points
 
 - (void)tappedActivityPoints{
-    ActivityPointViewController *activityPointViewController = [[ActivityPointViewController alloc] initWithNibName:nil bundle:nil];
     
+    // create and push activity point screen
+    ActivityPointViewController *activityPointViewController = [[ActivityPointViewController alloc] initWithNibName:nil bundle:nil];
     [self.navigationController presentViewController:activityPointViewController animated:YES completion:nil];
     
+    // set points after screen in stack
     activityPointViewController.points.text = self.activityPoints.text;
 }
 
 - (void)getActivityPoints{
     
+    // get current points
     NSNumber *activityCount = [[AtMention sharedAtMention] activityPoints];
     
-    if(activityCount && ![self.prevPointCount isEqualToNumber:activityCount]){
+    // check if the points have changed so we can trigger animation
+    if(![self.prevPointCount isEqualToNumber:activityCount]){
         
+        // set new count and flag
         self.activityPoints.text = [activityCount stringValue];
         self.prevPointCount = activityCount;
         
         CGAffineTransform transform = self.activityPoints.transform;
         
+        // animate the activity change
         [UIView animateWithDuration:0.2 animations:^{
             self.activityPoints.font = [UIFont boldSystemFontOfSize:16];
             self.activityPoints.transform = CGAffineTransformScale(self.activityPoints.transform, 1.1, 1.1);
@@ -371,8 +383,6 @@
                 self.activityPoints.font = [UIFont systemFontOfSize:16.0f];
             }];
         }];
-    }else if(!activityCount){
-        self.activityPoints.text = @"0";
     }
 }
 

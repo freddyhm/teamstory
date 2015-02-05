@@ -15,6 +15,7 @@
 #import "Intercom.h"
 #import "ParseFacebookUtils/PFFacebookUtils.h"
 #include <stdlib.h>
+#import "AtMention.h"
 
 @interface ThoughtPostViewController ()
 
@@ -252,6 +253,9 @@
 
 - (void)saveEdit:(id)sender {
     
+    // increment activity point
+    [[AtMention sharedAtMention] addPointToActivityCount];
+    
     
     if(self.thoughtTextView.contentSize.height < self.thoughtTextView.frame.size.height){
         
@@ -321,6 +325,7 @@
                 // save
                 [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                     if (succeeded) {
+                        
                         NSLog(@"Photo uploaded");
                         
                         // create activity for posted
