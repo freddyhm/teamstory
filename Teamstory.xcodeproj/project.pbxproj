@@ -302,6 +302,7 @@
 		D5135B0719EEDADE001F274A /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5A5F51F18D2C3CD000BB243 /* Parse.framework */; };
 		D5144B1C195951D100650061 /* button-feedback-notify.png in Resources */ = {isa = PBXBuildFile; fileRef = D5144B1A195951D100650061 /* button-feedback-notify.png */; };
 		D5144B1D195951D100650061 /* button-feedback-notify@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5144B1B195951D100650061 /* button-feedback-notify@2x.png */; };
+		D51732671A8565EA006EA751 /* AtMention.m in Sources */ = {isa = PBXBuildFile; fileRef = D51732651A8565EA006EA751 /* AtMention.m */; };
 		D5182C93193E1FDE00DD578C /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5182C92193E1FDE00DD578C /* Default@2x.png */; };
 		D51C02331A2830CD00A663CD /* NavWrapperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D51C02321A2830CD00A663CD /* NavWrapperViewController.m */; };
 		D51C98A218E28D16001230DA /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D51C98A118E28D16001230DA /* libGoogleAnalyticsServices.a */; };
@@ -424,7 +425,6 @@
 		D5856FB819F87E2600D0086F /* libKonotorCombined.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D5856F8D19F87E2500D0086F /* libKonotorCombined.a */; };
 		D586C1071A82E55D00AC7C31 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D586C1061A82E55D00AC7C31 /* libicucore.dylib */; };
 		D586C10F1A82E81500AC7C31 /* ActivityPointViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D586C10E1A82E81500AC7C31 /* ActivityPointViewController.m */; };
-		D586C1151A82E83200AC7C31 /* AtMention.m in Sources */ = {isa = PBXBuildFile; fileRef = D586C1141A82E83200AC7C31 /* AtMention.m */; };
 		D586C1171A82E83E00AC7C31 /* ActivityPointViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D586C1161A82E83E00AC7C31 /* ActivityPointViewController.xib */; };
 		D586C11B1A82EA7600AC7C31 /* bg_points_3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D586C1181A82EA7600AC7C31 /* bg_points_3x.png */; };
 		D586C11C1A82EA7600AC7C31 /* bg_points.png in Resources */ = {isa = PBXBuildFile; fileRef = D586C1191A82EA7600AC7C31 /* bg_points.png */; };
@@ -962,6 +962,8 @@
 		D5135AF519EEDA78001F274A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D5144B1A195951D100650061 /* button-feedback-notify.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback-notify.png"; sourceTree = "<group>"; };
 		D5144B1B195951D100650061 /* button-feedback-notify@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback-notify@2x.png"; sourceTree = "<group>"; };
+		D51732651A8565EA006EA751 /* AtMention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AtMention.m; sourceTree = SOURCE_ROOT; };
+		D51732661A8565EA006EA751 /* AtMention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AtMention.h; sourceTree = SOURCE_ROOT; };
 		D5182C92193E1FDE00DD578C /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		D51C02311A2830CD00A663CD /* NavWrapperViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavWrapperViewController.h; sourceTree = SOURCE_ROOT; };
 		D51C02321A2830CD00A663CD /* NavWrapperViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavWrapperViewController.m; sourceTree = SOURCE_ROOT; };
@@ -1121,8 +1123,6 @@
 		D586C1061A82E55D00AC7C31 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		D586C10D1A82E81500AC7C31 /* ActivityPointViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityPointViewController.h; sourceTree = SOURCE_ROOT; };
 		D586C10E1A82E81500AC7C31 /* ActivityPointViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityPointViewController.m; sourceTree = SOURCE_ROOT; };
-		D586C1131A82E83200AC7C31 /* AtMention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AtMention.h; path = "../../../../../../Users/fhm/Desktop/Transfer Files/AtMention.h"; sourceTree = "<group>"; };
-		D586C1141A82E83200AC7C31 /* AtMention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AtMention.m; path = "../../../../../../Users/fhm/Desktop/Transfer Files/AtMention.m"; sourceTree = "<group>"; };
 		D586C1161A82E83E00AC7C31 /* ActivityPointViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ActivityPointViewController.xib; sourceTree = SOURCE_ROOT; };
 		D586C1181A82EA7600AC7C31 /* bg_points_3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_points_3x.png; sourceTree = "<group>"; };
 		D586C1191A82EA7600AC7C31 /* bg_points.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_points.png; sourceTree = "<group>"; };
@@ -1462,8 +1462,8 @@
 				C4F10290156C571C0061BC3E /* PAPUtility.m */,
 				C4A6D87A157859AA009FE621 /* PAPCache.h */,
 				C4A6D87B157859AA009FE621 /* PAPCache.m */,
-				D586C1131A82E83200AC7C31 /* AtMention.h */,
-				D586C1141A82E83200AC7C31 /* AtMention.m */,
+				D51732651A8565EA006EA751 /* AtMention.m */,
+				D51732661A8565EA006EA751 /* AtMention.h */,
 				C4B60864155B085600EFA90C /* Resources */,
 				09ABC07813A1D52D009C3FCF /* Supporting Files */,
 			);
@@ -3163,7 +3163,7 @@
 				D542D8BF196A6F4700A0384F /* ELCAsset.m in Sources */,
 				D5FC095818A9B552000D85F1 /* FilterCell.m in Sources */,
 				46DC23CD19B01CBF00E8FCDF /* PAPdiscoverIndustryCell.m in Sources */,
-				D586C1151A82E83200AC7C31 /* AtMention.m in Sources */,
+				D51732671A8565EA006EA751 /* AtMention.m in Sources */,
 				D5F0871E1A82E25B0079C922 /* MPCGAffineTransformToNSDictionaryValueTransformer.m in Sources */,
 				D586C10F1A82E81500AC7C31 /* ActivityPointViewController.m in Sources */,
 				D594C20518EFEBAD0008F5DF /* SVProgressHUD.m in Sources */,
