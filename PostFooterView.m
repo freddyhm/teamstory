@@ -238,7 +238,7 @@
 - (void) shareButtonAction:(id)sender {
     if (delegate && [delegate respondsToSelector:@selector(shareButton:setPhoto:)]) {
         [delegate respondsToSelector:@selector(shareButton:setPhoto:)];
-        [delegate shareButton:self.shareButton setPhoto:self.photo];
+        [delegate shareButton:[self.photo objectForKey:kPAPPhotoUserKey] setPhoto:self.photo];
     }
 }
 

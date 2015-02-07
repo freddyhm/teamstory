@@ -44,7 +44,7 @@
 @property (nonatomic, strong) NSIndexPath *lastViewedExploreIndexPath;
 @property (nonatomic, strong) NSIndexPath *lastViewedFollowingIndexPath;
 @property (nonatomic, strong) NSString *feedSourceType;
-
+@property (nonatomic, strong) NSString *twitterName;
 
 
 @property int loadPostCount;
@@ -300,8 +300,9 @@ enum ActionSheetTags {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void) shareButton:(UIButton *)button setPhoto:(PFObject *)photo {
+- (void) shareButton:(PFUser *)shareUser setPhoto:(PFObject *)photo {
     [SVProgressHUD show];
+    self.twitterName = nil;
     
     // getting image so that we can share
     [[photo objectForKey:@"image"] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
@@ -313,6 +314,10 @@ enum ActionSheetTags {
             
             // only for email.
             [activityVC setValue:@"Check this post out from Teamstory" forKey:@"subject"];
+            
+            if ([[shareUser objectForKey:@"twitter_url"] length] > 0) {
+                self.twitterName = [self getTwitterNameFromURL:[shareUser objectForKey:@"twitter_url"]];
+            }
 
             [self presentViewController:activityVC animated:YES completion:nil];
             
@@ -352,7 +357,12 @@ enum ActionSheetTags {
     }
     
     if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
-        NSString *theText = @"#startup #moment on #teamstoryapp - Join the #entrepreneurship #community for #founders: goo.gl/F2QSoJ @teamstoryapp";
+        NSString *theText;
+        if (self.twitterName.length > 0) {
+            theText = [NSString stringWithFormat:@"#startup moment on @teamstoryapp via @%@. Join the global startup community: http://goo.gl/UApT1i", self.twitterName];
+        } else {
+            theText = @"#startup moment on @teamstoryapp. Join the global startup community: http://goo.gl/UApT1i";
+        }
         return theText;
     }
     
@@ -1005,6 +1015,11 @@ enum ActionSheetTags {
 }
 
 - (void) youTubeFinished:(NSNotification *)notification {
+}
+
+- (NSString *) getTwitterNameFromURL:(NSString *)url{
+    NSString *twitterAccount = [url substringFromIndex:20];
+    return twitterAccount;
 }
 
 
