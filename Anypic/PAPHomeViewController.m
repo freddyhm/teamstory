@@ -349,6 +349,9 @@
 
 - (void)tappedActivityPoints{
     
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Tapped activity points"}];
+    
     // create and push activity point screen
     ActivityPointViewController *activityPointViewController = [[ActivityPointViewController alloc] initWithNibName:nil bundle:nil];
     [self.navigationController presentViewController:activityPointViewController animated:YES completion:nil];
