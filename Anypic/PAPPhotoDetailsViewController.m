@@ -49,6 +49,7 @@ enum ActionSheetTags {
 @property (nonatomic, strong) NSMutableArray *atmentionUserArray;
 @property (nonatomic, strong) UIView *dimView;
 @property (nonatomic, strong) UIView *hideCommentsView;
+@property (nonatomic, strong) NSString *twitterName;
 @property CGFloat previousKbHeight;
 @end
 
@@ -770,8 +771,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
 }
 
-- (void) shareButton:(UIButton *)button setPhoto:(PFObject *)aphoto {
+- (void) shareButton:(PFUser *)shareUser setPhoto:(PFObject *)aphoto {
     [SVProgressHUD show];
+    self.twitterName = nil;
     
     // getting image so that we can share
     [[aphoto objectForKey:@"image"] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
@@ -781,6 +783,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
         activityVC.excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypePrint];
         [activityVC setValue:@"Check this post out from Teamstory" forKey:@"subject"];
+        
+        if ([[shareUser objectForKey:@"twitter_url"] length] > 0) {
+            self.twitterName = [self getTwitterNameFromURL:[shareUser objectForKey:@"twitter_url"]];
+        }
         
         [self presentViewController:activityVC animated:YES completion:nil];
         
@@ -812,7 +818,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         {
             // iOS 8+
             UIPopoverPresentationController *presentationController = [activityVC popoverPresentationController];
-            presentationController.sourceView = button; // if button or change to self.view.
+            presentationController.sourceView = self.view; // if button or change to self.view.
         }
     }];
 }
@@ -828,7 +834,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     }
     
     if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
-        NSString *theText = @"#startup #moment on #teamstoryapp - Join the #entrepreneurship #community for #founders: goo.gl/F2QSoJ @teamstoryapp";
+        NSString *theText;
+        if (self.twitterName.length > 0) {
+            theText = [NSString stringWithFormat:@"#startup moment on @teamstoryapp via @%@. Join the global startup community: http://goo.gl/UApT1i", self.twitterName];
+        } else {
+            theText = @"#startup moment on @teamstoryapp. Join the global startup community: http://goo.gl/UApT1i";
+        }
         return theText;
     }
     
@@ -1084,7 +1095,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.previousKbHeight = self.customKeyboard.messageTextView.frame.size.height;
 }
 
-
+- (NSString *) getTwitterNameFromURL:(NSString *)url{
+    NSString *twitterAccount = [url substringFromIndex:20];
+    return twitterAccount;
+}
 
 
 @end

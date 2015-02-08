@@ -368,11 +368,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/PAPPhotoDetailsViewController.m"
-            timestampString = "443554001.011956"
+            timestampString = "444962327.158046"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "306"
-            endingLineNumber = "306"
+            startingLineNumber = "307"
+            endingLineNumber = "307"
             landmarkName = "-objectsDidLoad:"
             landmarkType = "5">
          </BreakpointContent>

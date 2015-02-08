@@ -48,6 +48,6 @@
  */
 - (void)photoDetailsHeaderView:(PAPPhotoDetailsHeaderView *)headerView didTapUserButton:(UIButton *)button user:(PFUser *)user;
 - (void) moreActionButton_inflator:(PFUser *)user photo:(PFObject *)photo;
-- (void) shareButton:(PFUser *)user setPhoto:(PFObject *)photo;
+- (void) shareButton:(PFUser *)shareUser setPhoto:(PFObject *)photo;
 
 @end
