@@ -788,10 +788,19 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [activityVC setCompletionHandler:^(NSString *activityType, BOOL completed) {
             if (completed) {
                 if ([activityType isEqualToString:UIActivityTypePostToFacebook]) {
+                    
+                    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Details", @"Type": @"Facebook"}];
+                    
                     NSLog(@"facebook");
                 } else if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
+                    
+                    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Details", @"Type": @"Twitter"}];
+                    
                     NSLog(@"twitter");
                 } else if ([activityType isEqualToString:UIActivityTypeMail]) {
+                    
+                    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Details", @"Type": @"Email"}];
+                    
                     NSLog(@"email");
                 } else {
                     // all other activities.

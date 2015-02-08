@@ -320,10 +320,19 @@ enum ActionSheetTags {
             [activityVC setCompletionHandler:^(NSString *activityType, BOOL completed) {
                 if (completed) {
                     if ([activityType isEqualToString:UIActivityTypePostToFacebook]) {
+                        
+                        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Timeline", @"Type": @"Facebook"}];
+                        
                         NSLog(@"facebook");
                     } else if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
+                        
+                        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Timeline", @"Type": @"Twitter"}];
+                        
                         NSLog(@"twitter");
                     } else if ([activityType isEqualToString:UIActivityTypeMail]) {
+                        
+                        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Timeline", @"Type": @"Email"}];
+                        
                         NSLog(@"email");
                     } else {
                         // all other activities.
