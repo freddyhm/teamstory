@@ -9,6 +9,7 @@
 #import "PAPMessagingSeachUsersViewController.h"
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
+#import "AtMention.h"
 //#import "FlightRecorder.h"
 
 #define headerViewHeight 64.0f
@@ -16,8 +17,6 @@
 
 @interface PAPMessagingSeachUsersViewController () {
     BOOL isSearchString;
-    int limit;
-    int skip;
 }
 
 @property (nonatomic, strong) UISearchBar *searchBar;
@@ -89,40 +88,17 @@
                     }
                 }
             }
-            [self.followerTV reloadData];
+            
+            [self.userList removeAllObjects];
+            
+            self.userList = [[AtMention sharedAtMention] userList];
+            if (self.userList.count > 0) {
+                [self.followerTV reloadData];
+            }
         } else {
             NSLog(@"Query Calling Error %@", error);
         }
     }];
-    
-    limit = 1000;
-    skip = 0;
-    [self.userList removeAllObjects];
-    [self userQueryPagination];
-    
-}
-
--(void) userQueryPagination {
-    PFQuery *userQuery = [PFUser query];
-    [userQuery whereKeyExists:@"displayName"];
-    [userQuery whereKey:@"displayName" notEqualTo:[[PFUser currentUser] objectForKey:@"displayName"]];
-    [userQuery orderByDescending:@"updatedAt"];
-    [userQuery setLimit:limit];
-    [userQuery setSkip:skip];
-    [userQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            [self.userList addObjectsFromArray:objects];
-            if (objects.count == limit) {
-                skip += limit;
-                [self userQueryPagination];
-            } else if ([self.querySelectionString isEqualToString:@"Everyone"]) {
-                [self.followerTV reloadData];
-            }
-        } else {
-            NSLog(@"User query error: %@", error);
-        }
-    }];
-    
 }
 
 - (void)viewDidLoad
