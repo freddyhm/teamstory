@@ -57,7 +57,46 @@ NSInteger selection = 1;
     self.userFilterListIndustry = [[NSMutableArray alloc] init];
     self.follwerList = [[NSMutableArray alloc] init];
     
-    [SVProgressHUD show];
+    [SVProgressHUD setImageName:@"loading_discover.png"];
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeCustom];
+    [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(dismissHUD) userInfo:nil repeats:NO];
+    
+    [self updateLastVisit];
+    
+    
+    // ---------------------- Loading ------------------------------
+    
+    self.postThoughtQueryResults = nil;
+    self.postPicQueryResults = nil;
+    
+    PFQuery *postQuery_pic = [PFQuery queryWithClassName:@"Photo"];
+    [postQuery_pic setLimit:30];
+    [postQuery_pic whereKey:@"type" equalTo:@"picture"];
+    [postQuery_pic orderByDescending:@"createdAt"];
+    //[postQuery_pic whereKey:@"createdAt" greaterThanOrEqualTo:twoWeeks];
+    [postQuery_pic findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            self.postPicQueryResults = objects;
+            [self loadContents];
+        } else {
+            NSLog(@"PostQuery Picture Error: %@", error);
+        }
+    }];
+    
+    PFQuery *postQuery_thoughts = [PFQuery queryWithClassName:@"Photo"];
+    [postQuery_thoughts setLimit:30];
+    [postQuery_thoughts whereKey:@"type" equalTo:@"thought"];
+    //[postQuery_thoughts whereKey:@"createdAt" greaterThanOrEqualTo:twoWeeks];
+    [postQuery_thoughts orderByDescending:@"createdAt"];
+    [postQuery_thoughts findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            self.postThoughtQueryResults = objects;
+            [self loadContents];
+        } else {
+            NSLog(@"PostQuery Picture Error: %@", error);
+        }
+    }];
+    
     self.view.backgroundColor = [UIColor whiteColor];
     UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
     
@@ -170,53 +209,8 @@ NSInteger selection = 1;
     // flightrecorder event analytics
     [[FlightRecorder sharedInstance] trackEventWithCategory:@"discover_screen" action:@"viewing_discover" label:@"" value:@""];
     
-    [SVProgressHUD setImageName:@"loading_discover.png"];
-    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeCustom];
-    
-    [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(dismissHUD) userInfo:nil repeats:NO];
-    
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     self.navigationController.navigationBar.hidden = YES;
-    
-    [[PFUser currentUser] setObject:[NSDate date]  forKey:@"discoverUpdate"];
-    [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (!error) {
-            NSLog(@"Saved successfully current Date:%@", [[PFUser currentUser] objectForKey:@"discoverUpdate"]);
-        } else {
-            NSLog(@"error: %@", error);
-        }
-    }];
-    
-    self.postThoughtQueryResults = nil;
-    self.postPicQueryResults = nil;
-    
-    PFQuery *postQuery_pic = [PFQuery queryWithClassName:@"Photo"];
-    [postQuery_pic setLimit:30];
-    [postQuery_pic whereKey:@"type" equalTo:@"picture"];
-    [postQuery_pic orderByDescending:@"createdAt"];
-    //[postQuery_pic whereKey:@"createdAt" greaterThanOrEqualTo:twoWeeks];
-    [postQuery_pic findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            self.postPicQueryResults = objects;
-            [self loadContents];
-        } else {
-            NSLog(@"PostQuery Picture Error: %@", error);
-        }
-    }];
-    
-    PFQuery *postQuery_thoughts = [PFQuery queryWithClassName:@"Photo"];
-    [postQuery_thoughts setLimit:30];
-    [postQuery_thoughts whereKey:@"type" equalTo:@"thought"];
-    //[postQuery_thoughts whereKey:@"createdAt" greaterThanOrEqualTo:twoWeeks];
-    [postQuery_thoughts orderByDescending:@"createdAt"];
-    [postQuery_thoughts findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            self.postThoughtQueryResults = objects;
-            [self loadContents];
-        } else {
-            NSLog(@"PostQuery Picture Error: %@", error);
-        }
-    }];
     
     if ([self.follwerList count] == 0) {
         zeroFollower = NO;
@@ -657,6 +651,18 @@ NSInteger selection = 1;
             }
         }];
     }
+}
+
+
+- (void) updateLastVisit {
+    [[PFUser currentUser] setObject:[NSDate date]  forKey:@"discoverUpdate"];
+    [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            NSLog(@"Saved successfully current Date:%@", [[PFUser currentUser] objectForKey:@"discoverUpdate"]);
+        } else {
+            NSLog(@"error: %@", error);
+        }
+    }];
 }
 
 
