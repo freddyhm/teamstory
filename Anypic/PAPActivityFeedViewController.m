@@ -13,7 +13,7 @@
 #import "PAPSettingsButtonItem.h"
 #import "FollowersFollowingViewController.h"
 #import "Mixpanel.h"
-//#import "FlightRecorder.h"
+#import <FlightRecorder/FlightRecorder.h>
 #import "SVProgressHUD.h"
 
 @interface PAPActivityFeedViewController ()
@@ -119,10 +119,10 @@
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Activity"}];
     
     // flightrecorder event analytics
-   // [[FlightRecorder sharedInstance] trackEventWithCategory:@"activity_screen" action:@"viewing_activity" label:@"" value:@""];
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"activity_screen" action:@"viewing_activity" label:@"" value:@""];
     
     // flightrecorder analytics
-   // [[FlightRecorder sharedInstance] trackPageView:@"Activity"];
+    [[FlightRecorder sharedInstance] trackPageView:@"Activity"];
 
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     

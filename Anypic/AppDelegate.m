@@ -31,7 +31,7 @@
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import "ParseFacebookUtils/PFFacebookUtils.h"
 #import "Intercom.h"
-//#import <FlightRecorder/FlightRecorder.h>
+#import <FlightRecorder/FlightRecorder.h>
 #import "SVProgressHUD.h"
 #import "AtMention.h"
 
@@ -230,11 +230,11 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     [one getAllUsers:^(NSArray *objects, BOOL succeeded, NSError *error) {}];
     
     // Flight recorder
-  //  [[FlightRecorder sharedInstance] setAccessKey:FLIGHT_RECORDER_ACCESS_KEY secretKey:FLIGHT_RECORDER_SECRET_KEY];
-  //  [[FlightRecorder sharedInstance] setShouldStartLocationManager:YES];
+    [[FlightRecorder sharedInstance] setAccessKey:FLIGHT_RECORDER_ACCESS_KEY secretKey:FLIGHT_RECORDER_SECRET_KEY];
+    [[FlightRecorder sharedInstance] setShouldStartLocationManager:YES];
     
     // set flight recorder properties
-    //[[FlightRecorder sharedInstance] startFlight];
+    [[FlightRecorder sharedInstance] startFlight];
     
     return YES;
 }

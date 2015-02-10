@@ -10,7 +10,7 @@
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
 #import "AtMention.h"
-//#import "FlightRecorder.h"
+#import <FlightRecorder/FlightRecorder.h>
 
 #define headerViewHeight 64.0f
 #define querySelectionViewheight 37.5f
@@ -50,10 +50,10 @@
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Message Search Users"}];
     
     // flightrecorder event analytics
-  //  [[FlightRecorder sharedInstance] trackEventWithCategory:@"message_search_users_screen" action:@"viewing_message_search_users" label:@"" value:@""];
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"message_search_users_screen" action:@"viewing_message_search_users" label:@"" value:@""];
     
     // flightrecorder analytics
-  //  [[FlightRecorder sharedInstance] trackPageView:@"Message Search Users"];
+    [[FlightRecorder sharedInstance] trackPageView:@"Message Search Users"];
     
     [SVProgressHUD setImageName:@"loading_msg_list.png"];
     [SVProgressHUD showWithStatus:nil maskType:SVProgressHUDMaskTypeCustom];

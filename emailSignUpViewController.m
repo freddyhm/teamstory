@@ -12,7 +12,7 @@
 #import "PAPProfileSettingViewController.h"
 #import "PAPprofileSetupViewController.h"
 #import "Mixpanel.h"
-//#import "FlightRecorder.h"
+#import <FlightRecorder/FlightRecorder.h>
 
 #define SUCCESSFUL 1
 
@@ -40,10 +40,10 @@
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Email Sign Up"}];
     
     // flightrecorder event analytics
-   // [[FlightRecorder sharedInstance] trackEventWithCategory:@"email_sign_up_screen" action:@"viewing_email_signup" label:@"" value:@""];
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"email_sign_up_screen" action:@"viewing_email_signup" label:@"" value:@""];
     
     // flightrecorder analytics
-   // [[FlightRecorder sharedInstance] trackPageView:@"Email Sign Up"];
+    [[FlightRecorder sharedInstance] trackPageView:@"Email Sign Up"];
     
     cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
     signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];

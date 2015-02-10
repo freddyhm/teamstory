@@ -467,6 +467,9 @@
 		D5D1042818B5C7AF0084C901 /* konotor.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042718B5C7AF0084C901 /* konotor.png */; };
 		D5D1042B18B5CF4E0084C901 /* button-feedback.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042918B5CF4E0084C901 /* button-feedback.png */; };
 		D5D1042C18B5CF4E0084C901 /* button-feedback@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */; };
+		D5D219551A8A8EA9003B3C7C /* FlightRecorder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5D219501A8A8EA9003B3C7C /* FlightRecorder.framework */; };
+		D5D219561A8A8EA9003B3C7C /* FECoreModel.mom in Resources */ = {isa = PBXBuildFile; fileRef = D5D219531A8A8EA9003B3C7C /* FECoreModel.mom */; };
+		D5D219571A8A8EA9003B3C7C /* VersionInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = D5D219541A8A8EA9003B3C7C /* VersionInfo.plist */; };
 		D5D571151947F8E900354340 /* btn_following_user.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571111947F8E900354340 /* btn_following_user.png */; };
 		D5D571161947F8E900354340 /* btn_following_user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571121947F8E900354340 /* btn_following_user@2x.png */; };
 		D5D571171947F8E900354340 /* btn_no_follow_user.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571131947F8E900354340 /* btn_no_follow_user.png */; };
@@ -1174,6 +1177,9 @@
 		D5D1042718B5C7AF0084C901 /* konotor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = konotor.png; sourceTree = "<group>"; };
 		D5D1042918B5CF4E0084C901 /* button-feedback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback.png"; sourceTree = "<group>"; };
 		D5D1042A18B5CF4E0084C901 /* button-feedback@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button-feedback@2x.png"; sourceTree = "<group>"; };
+		D5D219501A8A8EA9003B3C7C /* FlightRecorder.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FlightRecorder.framework; sourceTree = "<group>"; };
+		D5D219531A8A8EA9003B3C7C /* FECoreModel.mom */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = FECoreModel.mom; sourceTree = "<group>"; };
+		D5D219541A8A8EA9003B3C7C /* VersionInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = VersionInfo.plist; sourceTree = "<group>"; };
 		D5D571111947F8E900354340 /* btn_following_user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_following_user.png; sourceTree = "<group>"; };
 		D5D571121947F8E900354340 /* btn_following_user@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_following_user@2x.png"; sourceTree = "<group>"; };
 		D5D571131947F8E900354340 /* btn_no_follow_user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_no_follow_user.png; sourceTree = "<group>"; };
@@ -1358,6 +1364,7 @@
 				74B108A7156D7509005B421C /* AddressBookUI.framework in Frameworks */,
 				C4A8949C15587CA600DC57D3 /* CoreLocation.framework in Frameworks */,
 				092354B713A1D83C00DA740F /* MobileCoreServices.framework in Frameworks */,
+				D5D219551A8A8EA9003B3C7C /* FlightRecorder.framework in Frameworks */,
 				D5F0870B1A82E25B0079C922 /* libMPCategoryHelpers.a in Frameworks */,
 				C4217BC01552230500CD3A47 /* AVFoundation.framework in Frameworks */,
 				2FCDD6B014A573F500295AAC /* QuartzCore.framework in Frameworks */,
@@ -2034,6 +2041,7 @@
 		C4A0B4FF156C5B9F00E48554 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				D5D2194F1A8A8EA9003B3C7C /* FlightRecorder.embeddedframework */,
 				D5F0868C1A82E25B0079C922 /* Mixpanel */,
 				D5C483D51A67583B0006D313 /* UIImageEffects.h */,
 				D5C483D61A67583B0006D313 /* UIImageEffects.m */,
@@ -2388,6 +2396,32 @@
 				D594C20318EFEBAD0008F5DF /* SVProgressHUD.m */,
 			);
 			path = SVProgressHUD;
+			sourceTree = "<group>";
+		};
+		D5D2194F1A8A8EA9003B3C7C /* FlightRecorder.embeddedframework */ = {
+			isa = PBXGroup;
+			children = (
+				D5D219501A8A8EA9003B3C7C /* FlightRecorder.framework */,
+				D5D219511A8A8EA9003B3C7C /* Resources */,
+			);
+			path = FlightRecorder.embeddedframework;
+			sourceTree = "<group>";
+		};
+		D5D219511A8A8EA9003B3C7C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D5D219521A8A8EA9003B3C7C /* FECoreModel.momd */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		D5D219521A8A8EA9003B3C7C /* FECoreModel.momd */ = {
+			isa = PBXGroup;
+			children = (
+				D5D219531A8A8EA9003B3C7C /* FECoreModel.mom */,
+				D5D219541A8A8EA9003B3C7C /* VersionInfo.plist */,
+			);
+			path = FECoreModel.momd;
 			sourceTree = "<group>";
 		};
 		D5D659EF19155A1E00FAC142 /* DevCloudCode */ = {
@@ -2795,6 +2829,7 @@
 				D5856FA019F87E2600D0086F /* konotor_play.png in Resources */,
 				D5856F9819F87E2600D0086F /* konotor_chatbubble_ios7_other.png in Resources */,
 				46B31EEE184E35150028D11C /* profileLocation.png in Resources */,
+				D5D219561A8A8EA9003B3C7C /* FECoreModel.mom in Resources */,
 				C4BE670D157FC7D000A291C2 /* Icon-72.png in Resources */,
 				C4BE670E157FC7D000A291C2 /* Icon-72@2x.png in Resources */,
 				463CE64019E9987D001F607C /* btn_message_empty@3x.png in Resources */,
@@ -2844,6 +2879,7 @@
 				D54627601A16E1B400EA739C /* OriginalBackgroundNavigationBar.png in Resources */,
 				467A40B2199000B100D4C693 /* btn_image_upload.png in Resources */,
 				463CE63C19E9987D001F607C /* btn_message_count@2x.png in Resources */,
+				D5D219571A8A8EA9003B3C7C /* VersionInfo.plist in Resources */,
 				C4BE6777157FC7F700A291C2 /* BackgroundNavigationBar.png in Resources */,
 				460997551938119A00C5AD96 /* icon-angel.png in Resources */,
 				467A40DC1993059300D4C693 /* join_teamstory.png in Resources */,
@@ -3407,6 +3443,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)/External",
+					"$(PROJECT_DIR)/External/FlightRecorder.embeddedframework",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3451,6 +3488,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)/External",
+					"$(PROJECT_DIR)/External/FlightRecorder.embeddedframework",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
@@ -3527,6 +3565,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)/External",
+					"$(PROJECT_DIR)/External/FlightRecorder.embeddedframework",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
@@ -3605,6 +3644,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)/External",
+					"$(PROJECT_DIR)/External/FlightRecorder.embeddedframework",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;

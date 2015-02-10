@@ -12,7 +12,7 @@
 #import "AppDelegate.h"
 #import "PAPUtility.h"
 #import "Mixpanel.h"
-//#import "FlightRecorder.h"
+#import <FlightRecorder/FlightRecorder.h>
 #import "Intercom.h"
 
 #define SUCCESSFUL 1
@@ -72,10 +72,10 @@
     
     
     // flightrecorder event analytics
-  //  [[FlightRecorder sharedInstance] trackEventWithCategory:@"new_profile_1_screen" action:@"viewing_new_profile_1" label:@"" value:@""];
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"new_profile_1_screen" action:@"viewing_new_profile_1" label:@"" value:@""];
     
     // flightrecorder analytics
-  //  [[FlightRecorder sharedInstance] trackPageView:@"New Profile Screen 1"];
+    [[FlightRecorder sharedInstance] trackPageView:@"New Profile Screen 1"];
     
     UIView *statusBarBackground = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, [UIApplication sharedApplication].statusBarFrame.size.height)];
     [statusBarBackground setBackgroundColor:[UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
@@ -396,10 +396,10 @@
                             [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"New Profile Screen 2"}];
                             
                             // flightrecorder event analytics
-                          // [[FlightRecorder sharedInstance] trackEventWithCategory:@"new_profile_2_screen" action:@"viewing_new_profile_2" label:@"" value:@""];
+                           [[FlightRecorder sharedInstance] trackEventWithCategory:@"new_profile_2_screen" action:@"viewing_new_profile_2" label:@"" value:@""];
                             
                             // flightrecorder analytics
-                          //  [[FlightRecorder sharedInstance] trackPageView:@"New Profile Screen 2"];
+                            [[FlightRecorder sharedInstance] trackPageView:@"New Profile Screen 2"];
                             
                             [self.mainSV setContentOffset:CGPointMake(320.0f, 0.0f) animated:YES];
                             if ([UIScreen mainScreen].bounds.size.height == 480)
@@ -441,10 +441,10 @@
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"New Profile Screen 3"}];
     
     // flightrecorder analytics
-   // [[FlightRecorder sharedInstance] trackPageView:@"New Profile Screen 3"];
+    [[FlightRecorder sharedInstance] trackPageView:@"New Profile Screen 3"];
     
     // flightrecorder event analytics
-   // [[FlightRecorder sharedInstance] trackEventWithCategory:@"new_profile_3_screen" action:@"viewing_new_profile_3" label:@"" value:@""];
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"new_profile_3_screen" action:@"viewing_new_profile_3" label:@"" value:@""];
     
     [self.mainSV setContentOffset:CGPointMake(640.0f, 0.0f) animated:YES];
     

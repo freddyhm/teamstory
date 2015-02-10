@@ -11,7 +11,7 @@
 #import "PAPTabBarController.h"
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
-//#import "FlightRecorder.h"
+#import <FlightRecorder/FlightRecorder.h>
 
 
 @interface ELCAssetTablePicker ()
@@ -47,10 +47,10 @@
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Photo Album"}];
     
     // flightrecorder analytics
-  //  [[FlightRecorder sharedInstance] trackPageView:@"Photo Album"];
+    [[FlightRecorder sharedInstance] trackPageView:@"Photo Album"];
     
     // flightrecorder event analytics
-  //  [[FlightRecorder sharedInstance] trackEventWithCategory:@"photo_album_screen" action:@"viewing_photo_album" label:@"" value:@""];
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"photo_album_screen" action:@"viewing_photo_album" label:@"" value:@""];
         
     // set color of nav bar to custom grey
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];

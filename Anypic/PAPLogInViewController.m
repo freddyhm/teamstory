@@ -10,7 +10,7 @@
 #import "SVProgressHUD.h"
 #import "PAPprofileSetupViewController.h"
 #import "Mixpanel.h"
-//#import "FlightRecorder.h"
+#import <FlightRecorder/FlightRecorder.h>
 
 @interface PAPLogInViewController()
 @property (nonatomic, strong) UITextField *user_email;
@@ -54,11 +54,11 @@
         [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Sign In"}];
         
         // flightrecorder event analytics
-     //   [[FlightRecorder sharedInstance] trackEventWithCategory:@"sign_in_screen" action:@"viewing_sign_in" label:@"" value:@""];
+        [[FlightRecorder sharedInstance] trackEventWithCategory:@"sign_in_screen" action:@"viewing_sign_in" label:@"" value:@""];
 
         
         // flightrecorder analytics
-    //    [[FlightRecorder sharedInstance] trackPageView:@"Sign In"];
+        [[FlightRecorder sharedInstance] trackPageView:@"Sign In"];
         
         UIImage *dividerImage = [UIImage imageNamed:@"intro_divider.png"];
         UIImageView *divider = [[UIImageView alloc] initWithFrame:CGRectMake(15.0f, [UIScreen mainScreen].bounds.size.height - 190.0f, dividerImage.size.width, dividerImage.size.height)];
@@ -131,10 +131,10 @@
         [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Register"}];
         
         // flightrecorder event analytics
-       // [[FlightRecorder sharedInstance] trackEventWithCategory:@"register_screen" action:@"viewing_register" label:@"" value:@""];
+        [[FlightRecorder sharedInstance] trackEventWithCategory:@"register_screen" action:@"viewing_register" label:@"" value:@""];
         
         // flightrecorder analytics
-      //  [[FlightRecorder sharedInstance] trackPageView:@"Register"];
+        [[FlightRecorder sharedInstance] trackPageView:@"Register"];
         
         float screenOffset;
         if ([UIScreen mainScreen].bounds.size.height == 480) {

@@ -8,7 +8,7 @@
 #import "AppDelegate.h"
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
-//#import "FlightRecorder.h"
+#import <FlightRecorder/FlightRecorder.h>
 
 #define SUCCESSFUL 1
 #define IMAGE_NIL 2
@@ -108,7 +108,7 @@
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Edit Profile"}];
     
     // flightrecorder event analytics
-    //[[FlightRecorder sharedInstance] trackEventWithCategory:@"edit_profile_screen" action:@"viewed_edit_profile" label:@"" value:@""];
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"edit_profile_screen" action:@"viewed_edit_profile" label:@"" value:@""];
     
     [SVProgressHUD show];
     
