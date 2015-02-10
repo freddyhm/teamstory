@@ -83,6 +83,10 @@ Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
 
 
 Parse.Cloud.job("notifyFollowersJob", function(request, status) {
+                
+                
+    
+        
     
     Parse.Cloud.useMasterKey();
                 
@@ -107,21 +111,21 @@ Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                 
                 
                 
-           var pushMsg = displayName + ' posted a ' + postType;
-                
-            var pushData = {
-                alert: pushMsg, // Set our alert message.
-                badge: 'Increment', // Increment the target device's badge count.
-                // The following keys help load the correct data in response to this push notification.
-                p: 'a', // Payload Type: Activity
-                t: 'po', // Post Type: post
-                fu: postAuthor.id, // From User
-                pid: postId, // Photo Id
-                aid: activityId // Activity Id
-                };
+   var pushMsg = displayName + ' posted a ' + postType;
+        
+    var pushData = {
+        alert: pushMsg, // Set our alert message.
+        badge: 'Increment', // Increment the target device's badge count.
+        // The following keys help load the correct data in response to this push notification.
+        p: 'a', // Payload Type: Activity
+        t: 'po', // Post Type: post
+        fu: postAuthor.id, // From User
+        pid: postId, // Photo Id
+        aid: activityId // Activity Id
+        };
 
                 
-        console.log("in notify");
+    console.log("in notify");
 
     postActivityQuery.get(activityId, {
               success: function(postActivity) {
@@ -139,11 +143,13 @@ Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                     success: function(results) {
                                             
                         console.log("in follow");
-                                
+                        
+                        // use to keep track of duplicate followers
+                        var notifiedUsers = [];
+                                            
                         // loop through all followers
                         for (var i = 0; i < results.length; i++) {
-                                
-                                console.log(results[i]);
+                                            
                                 var follower = results[i].get("fromUser");
                                 
                                 // notify follower
@@ -158,65 +164,72 @@ Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                                 followerObj.set("follower", follower);
                                 followerObj.set("following", postAuthor);
                                 followerObj.set("postActivity", postActivity);
-                                followerObj.save(null, {
-                                                 success: function(newFollowerObj) {
-                                                 
-                                                 
-                                                     console.log("in follow obj");
-                                                     
-                                                     /* add follower as a subscriber in post activity.
-                                                      This is so we can pull in activity feed from
-                                                      client side. Similar to comment subscription. */
-                                                     
-                                                     postActivity.add("subscribers", newFollowerObj);
-                                                 
-                                                 console.log("saving act in subs");
-                                                 
-                                                 
-                                                     postActivity.save(null, {
-                                                                       success: function(obj) {
-                                                                       
-                                                                       console.log("saved act in subs");
-                                                                            // check if
-                                                                       
-
-                                                                       
-                                                                       f++;
-                                                                       console.log(results.length);
-                                                                           if(f == results.length){
-                                                                       
-                                                                                console.log("success!");
-                                                                                status.success();
-                                                                           }
-                                                                       },
-                                                                       error: function(obj, error) {
-                                                                       console.log(error);
-                                                                       }
-                                                     });
-                                                  
-                                                 },
-                                                 error: function(newFollowerObj, error) {
-                                                 // Execute any logic that should take place if the save fails.
-                                                 // error is a Parse.Error with an error code and message.
-                                                 alert('Failed to create new object, with error code: ' + error.message);
-                                                 }
-                                });
                                             
-                                 // update activity badge for follower
-                                 var newActivityBadge = follower.get("activityBadge") + 1;
-                                 follower.set("activityBadge", newActivityBadge);
-                                 follower.save();
-                                 
-                                 // send push notification with proper message
-                                 Parse.Push.send({
-                                 where: installationQuery,
-                                 data: pushData
-                                 }).then(function() {
-                                 console.log('Sent follower push');
-                                         
-                                 }, function(error) {
-                                 throw "Push Error" + error.code + " : " + error.message;
-                                 });
+                                // check if we've already sent notification
+                                if(notifiedUsers.indexOf(follower.id) == -1)
+                                {
+                                    // add to list of users we sent pushes
+                                    notifiedUsers.push(follower.id);
+                                            
+                                    followerObj.save(null, {
+                                                     success: function(newFollowerObj) {
+                                                     
+                                                     
+                                                         console.log("in follow obj");
+                                                         
+                                                         /* add follower as a subscriber in post activity.
+                                                          This is so we can pull in activity feed from
+                                                          client side. Similar to comment subscription. */
+                                                         
+                                                         postActivity.add("subscribers", newFollowerObj);
+                                                     
+                                                     console.log("saving act in subs");
+                                                     
+                                                     
+                                                         postActivity.save(null, {
+                                                                           success: function(obj) {
+                                                                           
+                                                                           console.log("saved act in subs");
+                                                                                // check if
+                                                                           
+
+                                                                           
+                                                                           f++;
+                                                                           console.log(results.length);
+                                                                               if(f == results.length){
+                                                                           
+                                                                                    console.log("success!");
+                                                                                    status.success();
+                                                                               }
+                                                                           },
+                                                                           error: function(obj, error) {
+                                                                           console.log(error);
+                                                                           }
+                                                         });
+                                                      
+                                                     },
+                                                     error: function(newFollowerObj, error) {
+                                                     // Execute any logic that should take place if the save fails.
+                                                     // error is a Parse.Error with an error code and message.
+                                                     alert('Failed to create new object, with error code: ' + error.message);
+                                                     }
+                                    });
+                                                
+                                     // update activity badge for follower
+                                     var newActivityBadge = follower.get("activityBadge") + 1;
+                                     follower.set("activityBadge", newActivityBadge);
+                                     follower.save();
+                                     
+                                     // send push notification with proper message
+                                     Parse.Push.send({
+                                         where: installationQuery,
+                                         data: pushData
+                                         }).then(function() {
+                                         console.log('Sent follower push');
+                                     }, function(error) {
+                                     throw "Push Error" + error.code + " : " + error.message;
+                                     });
+                                }
                             }
                     },
                     error: function(error) {

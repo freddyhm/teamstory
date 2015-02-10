@@ -16,6 +16,8 @@ Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
                 followingQuery.include("toUser");
                 followingQuery.include("fromUser");
                 
+                followingQuery.skip("1000");
+                
                 queryUser.find({
                                
                                success: function(results){
@@ -136,14 +138,16 @@ Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                                       
                                       notifyFollowersQuery.find({
                                                                 
-                                                                success: function(results) {
+                                                success: function(results) {
+                                                
+                                                console.log("in follow");
+                                                
+                                                // use to keep track of duplicate followers
+                                                var notifiedUsers = [];
                                                                 
-                                                                console.log("in follow");
-                                                                
-                                                                // loop through all followers
-                                                                for (var i = 0; i < results.length; i++) {
-                                                                
-                                                                console.log(results[i]);
+                                                            // loop through all followers
+                                                            for (var i = 0; i < results.length; i++) {
+                                                            
                                                                 var follower = results[i].get("fromUser");
                                                                 
                                                                 // notify follower
@@ -158,72 +162,82 @@ Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                                                                 followerObj.set("follower", follower);
                                                                 followerObj.set("following", postAuthor);
                                                                 followerObj.set("postActivity", postActivity);
-                                                                followerObj.save(null, {
-                                                                                 success: function(newFollowerObj) {
-                                                                                 
-                                                                                 
-                                                                                 console.log("in follow obj");
-                                                                                 
-                                                                                 /* add follower as a subscriber in post activity.
-                                                                                  This is so we can pull in activity feed from
-                                                                                  client side. Similar to comment subscription. */
-                                                                                 
-                                                                                 postActivity.add("subscribers", newFollowerObj);
-                                                                                 
-                                                                                 console.log("saving act in subs");
-                                                                                 
-                                                                                 
-                                                                                 postActivity.save(null, {
-                                                                                                   success: function(obj) {
-                                                                                                   
-                                                                                                   console.log("saved act in subs");
-                                                                                                   // check if
-                                                                                                   
-                                                                                                   
-                                                                                                   
-                                                                                                   f++;
-                                                                                                   console.log(results.length);
-                                                                                                   if(f == results.length){
-                                                                                                   
-                                                                                                   console.log("success!");
-                                                                                                   status.success();
-                                                                                                   }
-                                                                                                   },
-                                                                                                   error: function(obj, error) {
-                                                                                                   console.log(error);
-                                                                                                   }
-                                                                                                   });
-                                                                                 
-                                                                                 },
-                                                                                 error: function(newFollowerObj, error) {
-                                                                                 // Execute any logic that should take place if the save fails.
-                                                                                 // error is a Parse.Error with an error code and message.
-                                                                                 alert('Failed to create new object, with error code: ' + error.message);
-                                                                                 }
-                                                                                 });
                                                                 
-                                                                // update activity badge for follower
-                                                                var newActivityBadge = follower.get("activityBadge") + 1;
-                                                                follower.set("activityBadge", newActivityBadge);
-                                                                follower.save();
                                                                 
-                                                                // send push notification with proper message
-                                                                Parse.Push.send({
-                                                                                where: installationQuery,
-                                                                                data: pushData
-                                                                                }).then(function() {
-                                                                                        console.log('Sent follower push');
-                                                                                        
-                                                                                        }, function(error) {
-                                                                                        throw "Push Error" + error.code + " : " + error.message;
-                                                                                        });
-                                                                }
-                                                                },
-                                                                error: function(error) {
+                                                                // check if we've already sent notification
+                                                                if(notifiedUsers.indexOf(follower.id) == -1)
+                                                                {
                                                                 
-                                                                console.error("Error: " + error.code + " " + error.message);
-                                                                }
-                                                                });
+                                                                    // add to list of users we sent pushes
+                                                                    notifiedUsers.push(follower.id);
+                                                                
+                                                                    followerObj.save(null, {
+                                                                                     success: function(newFollowerObj) {
+                                                                                     
+                                                                                     
+                                                                                     console.log("in follow obj");
+                                                                                     
+                                                                                     /* add follower as a subscriber in post activity.
+                                                                                      This is so we can pull in activity feed from
+                                                                                      client side. Similar to comment subscription. */
+                                                                                     
+                                                                                     postActivity.add("subscribers", newFollowerObj);
+                                                                                     
+                                                                                     console.log("saving act in subs");
+                                                                                     
+                                                                                     
+                                                                                     postActivity.save(null, {
+                                                                                                       success: function(obj) {
+                                                                                                       
+                                                                                                       console.log("saved act in subs");
+                                                                                                       // check if
+                                                                                                       
+                                                                                                       
+                                                                                                       
+                                                                                                       f++;
+                                                                                                       console.log(results.length);
+                                                                                                       if(f == results.length){
+                                                                                                       
+                                                                                                       console.log("success!");
+                                                                                                       status.success();
+                                                                                                       }
+                                                                                                       },
+                                                                                                       error: function(obj, error) {
+                                                                                                       console.log(error);
+                                                                                                       }
+                                                                                                       });
+                                                                                     
+                                                                                     },
+                                                                                     error: function(newFollowerObj, error) {
+                                                                                     // Execute any logic that should take place if the save fails.
+                                                                                     // error is a Parse.Error with an error code and message.
+                                                                                     alert('Failed to create new object, with error code: ' + error.message);
+                                                                                     }
+                                                                                     });
+                                                                    
+                                                                    // update activity badge for follower
+                                                                    var newActivityBadge = follower.get("activityBadge") + 1;
+                                                                    follower.set("activityBadge", newActivityBadge);
+                                                                    follower.save();
+                                                                    
+                                                                    // send push notification with proper message
+                                                                    Parse.Push.send({
+                                                                                    where: installationQuery,
+                                                                                    data: pushData
+                                                                                    }).then(function() {
+                                                                                            console.log('Sent follower push');
+                                                                                            
+                                                                                            }, function(error) {
+                                                                                            throw "Push Error" + error.code + " : " + error.message;
+                                                                                            });
+                                                                    }
+                                                                 }
+                                                },
+                                                error: function(error) {
+                                                
+                                                console.error("Error: " + error.code + " " + error.message);
+                                                }
+                                                });
                                       },
                                       error: function(object, error) {
                                       
