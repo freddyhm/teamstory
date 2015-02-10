@@ -159,9 +159,16 @@ enum ActionSheetTags {
 #pragma mark - Custom
 
 - (void)updateActivityPoints{
+    
     [[AtMention sharedAtMention] addPointToActivityCount];
-    PAPHomeViewController *home = [self.navigationController.viewControllers lastObject];
-    [home getActivityPoints];
+    
+    // check if home controller is in the stack before updating points
+    for (int i = 0; i < self.navigationController.viewControllers.count; i++) {
+        if([[self.navigationController.viewControllers objectAtIndex:i] isKindOfClass:PAPHomeViewController.class]){
+            PAPHomeViewController *homeViewController = [self.navigationController.viewControllers objectAtIndex:i];
+            [homeViewController getActivityPoints];
+        }
+    }
 }
 
 - (NSIndexPath *)indexPathForObject:(PFObject *)targetObject {
