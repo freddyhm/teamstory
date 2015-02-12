@@ -292,6 +292,7 @@
 		C4F102E7156C58570061BC3E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C4F102E5156C58570061BC3E /* InfoPlist.strings */; };
 		C4F102EF156C58E00061BC3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102EC156C58E00061BC3E /* main.m */; };
 		D503B6171A32904E00CF225B /* libIntercom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D503B6161A32904E00CF225B /* libIntercom.a */; };
+		D504F9811A8C324400AB1431 /* ProfileSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D504F9801A8C324400AB1431 /* ProfileSettingViewController.xib */; };
 		D5082A4919D28D1500955BF0 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5082A4819D28D1500955BF0 /* StoreKit.framework */; };
 		D51072D11937F33F00B1FF0E /* share_thought_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = D51072CD1937F33F00B1FF0E /* share_thought_grey.png */; };
 		D51072D21937F33F00B1FF0E /* share_thought_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D51072CE1937F33F00B1FF0E /* share_thought_grey@2x.png */; };
@@ -954,6 +955,7 @@
 		CA531AAC33A5FDDABA0AB336 /* Pods.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.distribution.xcconfig; path = "Pods/Target Support Files/Pods/Pods.distribution.xcconfig"; sourceTree = "<group>"; };
 		D503B6151A32904E00CF225B /* Intercom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Intercom.h; sourceTree = "<group>"; };
 		D503B6161A32904E00CF225B /* libIntercom.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libIntercom.a; sourceTree = "<group>"; };
+		D504F9801A8C324400AB1431 /* ProfileSettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileSettingViewController.xib; sourceTree = SOURCE_ROOT; };
 		D5082A4819D28D1500955BF0 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		D51072CD1937F33F00B1FF0E /* share_thought_grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = share_thought_grey.png; sourceTree = "<group>"; };
 		D51072CE1937F33F00B1FF0E /* share_thought_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "share_thought_grey@2x.png"; sourceTree = "<group>"; };
@@ -2150,6 +2152,7 @@
 		C4A89497155879FC00DC57D3 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D504F97A1A8C2B8200AB1431 /* Account */,
 				46FB0A3F1888769000E978CD /* discoverViews */,
 				74A504E31565F0E400CFA4E3 /* TimelineViews */,
 				74B86B911562DB2600CAFFD2 /* PhotoViews */,
@@ -2193,6 +2196,14 @@
 				C4F102C6156C57ED0061BC3E /* PAPActivityFeedViewController.m */,
 			);
 			name = Activity;
+			sourceTree = "<group>";
+		};
+		D504F97A1A8C2B8200AB1431 /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				D504F9801A8C324400AB1431 /* ProfileSettingViewController.xib */,
+			);
+			name = Account;
 			sourceTree = "<group>";
 		};
 		D5135AF319EEDA78001F274A /* Teamstory Tests */ = {
@@ -2750,6 +2761,7 @@
 				463CE64519E9987D001F607C /* btn_new_message@2x.png in Resources */,
 				46ABD74E18B147FC008F5AAB /* button_cancel_selected.png in Resources */,
 				D552B0ED19C7D3EB009F2862 /* arrows_right@2x.png in Resources */,
+				D504F9811A8C324400AB1431 /* ProfileSettingViewController.xib in Resources */,
 				D5A284921A2EE83E00EF01A9 /* bg_thought@3x.png in Resources */,
 				D575A0701947834C00C6BCC2 /* btn_editprofile@2x.png in Resources */,
 				46839E9E18E1E8C100BD60DB /* icon-upload.png in Resources */,
@@ -3510,7 +3522,7 @@
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5e460fce-25a1-45b1-a2cc-7856012fa421";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -3586,7 +3598,7 @@
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5e460fce-25a1-45b1-a2cc-7856012fa421";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -3665,7 +3677,7 @@
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5acddc1f-bc96-40f7-9d79-2a489104a546";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
