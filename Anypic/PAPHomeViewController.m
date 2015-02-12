@@ -82,10 +82,14 @@
     [statusBarOverlay setBackgroundColor:teamStoryColor];
     [self.view addSubview:statusBarOverlay];
     */
+    
     // set analytics and first run flag
     [self setUserInfoAnalytics];
     self.firstRun = YES;
     self.isOpeningFeedback = NO;
+    
+    // get activity points from server on first run
+    [[AtMention sharedAtMention] getActivityPointsOnFirstRun];
     
     // button image for feedback
     self.feedbackImg = [UIImage imageNamed:@"btn_message_empty.png"];
