@@ -9,8 +9,9 @@ typedef enum {
     PAPPhotoHeaderButtonsLike = 1 << 0,
     PAPPhotoHeaderButtonsComment = 1 << 1,
     PAPPhotoHeaderButtonsUser = 1 << 2,
+    PAPPhotoHeaderButtonsFollow = 1 << 3,
     
-    PAPPhotoHeaderButtonsDefault = PAPPhotoHeaderButtonsLike | PAPPhotoHeaderButtonsComment | PAPPhotoHeaderButtonsUser
+    PAPPhotoHeaderButtonsDefault = PAPPhotoHeaderButtonsLike | PAPPhotoHeaderButtonsComment | PAPPhotoHeaderButtonsUser | PAPPhotoHeaderButtonsFollow
 } PAPPhotoHeaderButtons;
 
 @protocol PAPPhotoHeaderViewDelegate;
@@ -23,6 +24,8 @@ typedef enum {
  @param buttons A bitmask specifying the interaction elements which are enabled in the view
  */
 - (id)initWithFrame:(CGRect)frame buttons:(PAPPhotoHeaderButtons)otherButtons;
+- (void)setUserForHeaderView:(PFUser *)auser;
+- (void)setPhoto:(PFObject *)aPhoto;
 
 /// The photo associated with this view
 @property (nonatomic,strong) PFObject *photo;
@@ -42,8 +45,7 @@ typedef enum {
 @property (nonatomic,weak) id <PAPPhotoHeaderViewDelegate> delegate;
 
 /*! @name Modifying Interaction Elements Status */
-
-
+@property (nonatomic, strong) UIButton *followButton;
 
 @end
 
@@ -54,6 +56,8 @@ typedef enum {
  */
 @protocol PAPPhotoHeaderViewDelegate <NSObject>
 @optional
+
+- (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapFollowButtonForDiscover:(UIButton *)button user:(PFUser *)user;
 
 /*!
  Sent to the delegate when the user button is tapped
@@ -72,6 +76,5 @@ typedef enum {
  @param photo the PFObject for the photo that will be commented on
  */
 - (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapCommentOnPhotoButton:(UIButton *)button photo:(PFObject *)photo;
-
 - (void) moreActionButton_inflator:(PFUser *)user photo:(PFObject *)photo;
 @end
