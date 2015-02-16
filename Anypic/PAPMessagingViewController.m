@@ -70,6 +70,9 @@
 {
     [super viewDidLoad];
     
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Chat Convo"}];
+    
     self.scrollView = [[UIScrollView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
     self.scrollView.delegate = self;
     self.scrollView.backgroundColor = [UIColor whiteColor];
