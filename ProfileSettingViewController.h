@@ -10,4 +10,7 @@
 
 @interface ProfileSettingViewController : UIViewController
 
+
+- (void)refreshView;
+
 @end

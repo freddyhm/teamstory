@@ -10,8 +10,8 @@
 
 @interface AtMention : NSObject
 
-@property NSMutableArray *userList;
-@property NSNumber *activityPoints;
+@property (nonatomic, strong) NSMutableArray *userList;
+@property (nonatomic, strong) NSNumber *activityPoints;
 + (id)sharedAtMention;
 - (void)getAllUsers:(void (^)(NSArray *objectsm, BOOL succeeded, NSError *error))completionBlock;
 - (void)addPointToActivityCount;

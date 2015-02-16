@@ -10,6 +10,9 @@
 
 @interface ProfileSettingViewController ()
 
+
+@property (nonatomic, strong) PFUser *user;
+
 @end
 
 @implementation ProfileSettingViewController
@@ -25,13 +28,37 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    self.user = [PFUser currentUser];
+    
+    // creating another method to call later for the freshing purpose.
+    [self refreshView];
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Edit Profile"}];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"edit_profile_screen" action:@"viewed_edit_profile" label:@"" value:@""];
+    
+    [SVProgressHUD show];
+    
+   // if(email_user != nil && [SVProgressHUD isVisible]){
+     //   [SVProgressHUD dismiss];
+   // }
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (void)refreshView {
+    
+    
+}
+
 
 /*
 #pragma mark - Navigation
