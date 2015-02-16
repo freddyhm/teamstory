@@ -16,6 +16,7 @@
 #import <FlightRecorder/FlightRecorder.h>
 #import "PAPMessagingViewController.h"
 #import "Intercom.h"
+#import "ProfileSettingViewController.h"
 
 @interface PAPAccountViewController() {
     float alphaValue_twitter;
@@ -880,9 +881,13 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 }
 
 - (void)editProfileAction:(id)sender{
-    PAPProfileSettingViewController *profileViewController = [[PAPProfileSettingViewController alloc] init];
-    profileViewController.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:profileViewController animated:YES];
+  //  PAPProfileSettingViewController *profileViewController = [[PAPProfileSettingViewController alloc] init];
+    //profileViewController.hidesBottomBarWhenPushed = YES;
+    
+    ProfileSettingViewController *one = [[ProfileSettingViewController alloc] initWithNibName:@"ProfileSettingViewController" bundle:nil];
+    one.hidesBottomBarWhenPushed = YES;
+    
+    [self.navigationController pushViewController:one animated:YES];
 }
 
 

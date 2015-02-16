@@ -476,6 +476,7 @@
 		D5D571171947F8E900354340 /* btn_no_follow_user.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571131947F8E900354340 /* btn_no_follow_user.png */; };
 		D5D571181947F8E900354340 /* btn_no_follow_user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571141947F8E900354340 /* btn_no_follow_user@2x.png */; };
 		D5DC1BFC19CCF25E00ED0A6D /* ParseFacebookUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5DC1BFB19CCF25E00ED0A6D /* ParseFacebookUtils.framework */; };
+		D5EB3D9A1A91AF150008B55B /* ProfileSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5EB3D991A91AF150008B55B /* ProfileSettingViewController.m */; };
 		D5F0870A1A82E25B0079C922 /* _MPTweakBindObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = D5F0868E1A82E25B0079C922 /* _MPTweakBindObserver.m */; };
 		D5F0870B1A82E25B0079C922 /* libMPCategoryHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D5F0868F1A82E25B0079C922 /* libMPCategoryHelpers.a */; };
 		D5F0870C1A82E25B0079C922 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5F086901A82E25B0079C922 /* Media.xcassets */; };
@@ -1201,6 +1202,8 @@
 		D5D65A0919155E6F00FAC142 /* global.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = global.json; sourceTree = "<group>"; };
 		D5D65A0B19155E6F00FAC142 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		D5DC1BFB19CCF25E00ED0A6D /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseFacebookUtils.framework; path = External/ParseFacebookUtils.framework; sourceTree = "<group>"; };
+		D5EB3D981A91AF150008B55B /* ProfileSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileSettingViewController.h; sourceTree = SOURCE_ROOT; };
+		D5EB3D991A91AF150008B55B /* ProfileSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileSettingViewController.m; sourceTree = SOURCE_ROOT; };
 		D5F0868D1A82E25B0079C922 /* _MPTweakBindObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _MPTweakBindObserver.h; sourceTree = "<group>"; };
 		D5F0868E1A82E25B0079C922 /* _MPTweakBindObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _MPTweakBindObserver.m; sourceTree = "<group>"; };
 		D5F0868F1A82E25B0079C922 /* libMPCategoryHelpers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMPCategoryHelpers.a; sourceTree = "<group>"; };
@@ -1645,6 +1648,8 @@
 			children = (
 				46E1EB6D183BCA6300F64274 /* PAPProfileSettingViewController.h */,
 				46E1EB6E183BCA6300F64274 /* PAPProfileSettingViewController.m */,
+				D5EB3D981A91AF150008B55B /* ProfileSettingViewController.h */,
+				D5EB3D991A91AF150008B55B /* ProfileSettingViewController.m */,
 			);
 			name = ProfileSetting;
 			sourceTree = "<group>";
@@ -3259,6 +3264,7 @@
 				D5856F9019F87E2500D0086F /* KonotorEventHandler.m in Sources */,
 				D5F087191A82E25B0079C922 /* MPABTestDesignerTweakRequestMessage.m in Sources */,
 				C4F102B4156C57820061BC3E /* PAPBaseTextCell.m in Sources */,
+				D5EB3D9A1A91AF150008B55B /* ProfileSettingViewController.m in Sources */,
 				D5856FB319F87E2600D0086F /* KonotorTextInputOverlay.m in Sources */,
 				D5F0871C1A82E25B0079C922 /* MPBOOLToNSNumberValueTransformer.m in Sources */,
 				C4F102B5156C57820061BC3E /* PAPLoadMoreCell.m in Sources */,
