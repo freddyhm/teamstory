@@ -79,6 +79,25 @@
         [self.userInfoLabel setBackgroundColor:[UIColor clearColor]];
         [self.userInfoLabel setAdjustsFontSizeToFitWidth:YES];
         [containerView addSubview:self.userInfoLabel];
+        
+        // Add timestamp
+        self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
+        self.timestampLabel = [[UILabel alloc] init];
+        [self.timestampLabel setTextColor:[UIColor colorWithRed:160.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:0.7f]];
+        [self.timestampLabel setBackgroundColor:[UIColor clearColor]];
+        self.timestampLabel.textAlignment = NSTextAlignmentRight;
+        self.timestampLabel.hidden = YES;
+        [containerView addSubview:self.timestampLabel];
+        
+        self.followButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.followButtonImage = [UIImage imageNamed:@"btn_no_follow_user.png"];
+        
+        [self.followButton setImage:self.followButtonImage forState:UIControlStateNormal];
+        [self.followButton setFrame:CGRectMake( 261.0f, 10.0f, self.followButtonImage.size.width, self.followButtonImage.size.height)];
+        [self.followButton setImage:[UIImage imageNamed:@"btn_following_user.png"] forState:UIControlStateSelected];
+        [self.followButton addTarget:self action:@selector(didTapFollowButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        self.followButton.hidden = YES;
+        [containerView addSubview:self.followButton];
     }
 
     return self;
@@ -90,14 +109,7 @@
 - (void)setPhoto:(PFObject *)aPhoto {
     photo = aPhoto;
     self.user = [self.photo objectForKey:kPAPPhotoUserKey];
-    
-    // Add timestamp
-    self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
-    self.timestampLabel = [[UILabel alloc] init];
-    [self.timestampLabel setTextColor:[UIColor colorWithRed:160.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:0.7f]];
-    [self.timestampLabel setBackgroundColor:[UIColor clearColor]];
-    self.timestampLabel.textAlignment = NSTextAlignmentRight;
-    [containerView addSubview:self.timestampLabel];
+    self.timestampLabel.hidden = NO;
     
     [self populateDetails];
 
@@ -105,16 +117,7 @@
 
 - (void)setUserForHeaderView:(PFUser *)aUser {
     self.user = aUser;
-    
-    self.followButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.followButtonImage = [UIImage imageNamed:@"btn_no_follow_user.png"];
-    
-    [self.followButton setImage:self.followButtonImage forState:UIControlStateNormal];
-    [self.followButton setFrame:CGRectMake( 261.0f, 10.0f, self.followButtonImage.size.width, self.followButtonImage.size.height)];
-    [self.followButton setImage:[UIImage imageNamed:@"btn_following_user.png"] forState:UIControlStateSelected];
-    [self.followButton addTarget:self action:@selector(didTapFollowButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [containerView addSubview:self.followButton];
-    
+    self.followButton.hidden = NO;
     [self populateDetails];
 }
 

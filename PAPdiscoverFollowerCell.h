@@ -15,11 +15,15 @@
 
 @property (nonatomic,weak) id <PAPdiscoverFollowerCellDelegate> delegate;
 
--(void)setDiscoverFollowerUser:(PFUser *)user;
-
 @property (nonatomic, strong) UIButton *photoButtion1;
 @property (nonatomic, strong) UIButton *photoButtion2;
 @property (nonatomic, strong) UIButton *photoButtion3;
+@property (nonatomic, strong) PAPPhotoHeaderView *photoHeaderView;
+
+@property (nonatomic, strong) PFImageView *PFimageViewForButton1;
+@property (nonatomic, strong) PFImageView *PFimageViewForButton2;
+@property (nonatomic, strong) PFImageView *PFimageViewForButton3;
+@property (nonatomic, strong) NSArray *photoArray;
 
 @end
 

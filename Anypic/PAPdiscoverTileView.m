@@ -39,7 +39,7 @@
 @property (nonatomic, strong) UIButton *followerMenu;
 @property (nonatomic, strong) NSArray *recomUserList;
 @property (nonatomic, strong) UIImage *inviteImage;
-
+@property (nonatomic, strong) NSMutableArray *followerListArray;
 
 @end
 
@@ -50,6 +50,11 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self loadFollowers];
+        
+        self.followerListArray = [[NSMutableArray alloc] init];
+        for (int i = 0; i < followerQueryNum; i++) {
+            [self.followerListArray addObject:@"No"];
+        }
         
         self.teamstoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
         _tableReload = YES;
@@ -233,15 +238,48 @@
     
     if ([self.menuSelection isEqualToString:@"Followers"]) {
         // --------------------------- For Followers
-        static NSString *CellIdentifier = @"Discover Cell";
+        static NSString *CellIdentifier = @"Discover Cell Followers";
         
         PAPdiscoverFollowerCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
             cell = [[PAPdiscoverFollowerCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            [cell setDelegate:self];
         }
         
-        [cell setDiscoverFollowerUser:[self.recomUserList objectAtIndex:indexPath.row]];
-        [cell setDelegate:self];
+        UIImage *placeHolderImage = [UIImage imageNamed:@"PlaceholderPhoto"];
+        cell.PFimageViewForButton1.image = placeHolderImage;
+        cell.PFimageViewForButton2.image = placeHolderImage;
+        cell.PFimageViewForButton3.image = placeHolderImage;
+        
+        PFUser *user = [self.recomUserList objectAtIndex:indexPath.row];
+        if (user) {
+            PFQuery *photoQuery = [PFQuery queryWithClassName:@"Photo"];
+            [photoQuery whereKey:@"user" equalTo:user];
+            [photoQuery setLimit:3];
+            [photoQuery orderByDescending:@"createdAt"];
+            [photoQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                if (objects.count > 2) {
+                    cell.PFimageViewForButton1.file = [[objects objectAtIndex:0] objectForKey:@"image"];
+                    cell.PFimageViewForButton2.file = [[objects objectAtIndex:1] objectForKey:@"image"];
+                    cell.PFimageViewForButton3.file = [[objects objectAtIndex:2] objectForKey:@"image"];
+                    
+                    [cell.PFimageViewForButton1 loadInBackground];
+                    [cell.PFimageViewForButton2 loadInBackground];
+                    [cell.PFimageViewForButton3 loadInBackground];
+                }
+            }];
+        }
+        
+        [cell.photoHeaderView setUserForHeaderView:user];
+        [cell.photoHeaderView.followButton setTag:indexPath.row];
+        
+        if([[self.followerListArray objectAtIndex:indexPath.row] isEqualToString:@"No"]) {
+            [cell.photoHeaderView.followButton setSelected:NO];
+        }
+        else
+{
+            [cell.photoHeaderView.followButton setSelected:YES];
+        }
         
         return cell;
     } else {
@@ -417,37 +455,40 @@
 
 - (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapFollowButtonForDiscover:(UIButton *)button user:(PFUser *)user {
     // temp disable follow button to avoid duplicates
-    button.enabled = NO;
+    photoHeaderView.followButton.enabled = NO;
     
-    if ([button isSelected]) {
+    if ([photoHeaderView.followButton isSelected]) {
         NSLog(@"unfollow");
         // Unfollow
-        button.selected = NO;
+        photoHeaderView.followButton.selected = NO;
         
         [PAPUtility unfollowUserEventually:user block:^(BOOL succeeded) {
             
             // enable button again
-            button.enabled = YES;
+            photoHeaderView.followButton.enabled = YES;
+            [self.followerListArray replaceObjectAtIndex:photoHeaderView.followButton.tag withObject:@"No"];
         }];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:PAPUtilityUserFollowingChangedNotification object:nil];
     } else {
         NSLog(@"follow");
         // Follow
-        button.selected = YES;
+        photoHeaderView.followButton.selected = YES;
         
         [PAPUtility followUserEventually:user block:^(BOOL succeeded, NSError *error) {
             
             // enable button again
-            button.enabled = YES;
+            photoHeaderView.followButton.enabled = YES;
             
             if (!error) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:PAPUtilityUserFollowingChangedNotification object:nil];
+                [self.followerListArray replaceObjectAtIndex:photoHeaderView.followButton.tag withObject:@"Yes"];
             } else {
-                button.selected = NO;
+                photoHeaderView.followButton.selected = NO;
             }
         }];
     }
+    
 }
 
 - (void)inviteButtonAction:(id)sender {

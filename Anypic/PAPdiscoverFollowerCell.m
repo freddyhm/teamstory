@@ -13,13 +13,7 @@
 
 @interface PAPdiscoverFollowerCell ()
 
-@property (nonatomic, strong) PAPPhotoHeaderView *photoHeaderView;
 
-
-@property (nonatomic, strong) PFImageView *PFimageViewForButton1;
-@property (nonatomic, strong) PFImageView *PFimageViewForButton2;
-@property (nonatomic, strong) PFImageView *PFimageViewForButton3;
-@property (nonatomic, strong) NSArray *photoArray;
 
 @end
 
@@ -57,35 +51,6 @@
          
     }
     return self;
-}
-
--(void)setDiscoverFollowerUser:(PFUser *)user {
-    [self.photoHeaderView setUserForHeaderView:user];
-    
-    UIImage *placeHolderImage = [UIImage imageNamed:@"PlaceholderPhoto"];
-    self.PFimageViewForButton1.image = placeHolderImage;
-    self.PFimageViewForButton2.image = placeHolderImage;
-    self.PFimageViewForButton3.image = placeHolderImage;
-    
-    if (user) {
-        PFQuery *photoQuery = [PFQuery queryWithClassName:@"Photo"];
-        [photoQuery whereKey:@"user" equalTo:user];
-        [photoQuery setLimit:3];
-        [photoQuery orderByDescending:@"createdAt"];
-        [photoQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            self.photoArray = objects;
-            
-            if (objects.count > 2) {
-                self.PFimageViewForButton1.file = [[objects objectAtIndex:0] objectForKey:@"image"];
-                self.PFimageViewForButton2.file = [[objects objectAtIndex:1] objectForKey:@"image"];
-                self.PFimageViewForButton3.file = [[objects objectAtIndex:2] objectForKey:@"image"];
-                
-                [self.PFimageViewForButton1 loadInBackground];
-                [self.PFimageViewForButton2 loadInBackground];
-                [self.PFimageViewForButton3 loadInBackground];
-            }
-        }];
-    }
 }
 
 - (void)photoButtion1Action:(id)sender {
