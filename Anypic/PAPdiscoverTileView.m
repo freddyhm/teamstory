@@ -58,10 +58,11 @@
         [self loadFollowers];
         
         self.followerListArray = [[NSMutableArray alloc] init];
-        for (int i = 0; i < followerQueryNum; i++) {
-            [self.followerListArray addObject:@"No"];
+        if (self.followerListArray.count <= followerQueryNum) {
+            for (int i = 0; i < followerQueryNum; i++) {
+                [self.followerListArray addObject:@"No"];
+            }
         }
-        
         self.photoListArray = [[NSMutableArray alloc] init];
         
         self.teamstoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
@@ -72,6 +73,7 @@
         self.mainTileView.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.mainTileView.delegate = self;
         self.mainTileView.dataSource = self;
+        self.mainTileView.allowsSelection = NO;
         [self addSubview:self.mainTileView];
         
         // ----------------- initiate menues
@@ -185,7 +187,7 @@
         mainView.backgroundColor = [UIColor whiteColor];
         [mainView addSubview:inviteImageView];
         
-        UIButton *inviteButton = [[UIButton alloc] initWithFrame:CGRectMake(95.0f, 49.0f, 130.0f, 27.0f)];
+        UIButton *inviteButton = [[UIButton alloc] initWithFrame:mainView.frame];
         [inviteButton setBackgroundColor:[UIColor clearColor]];
         [inviteButton addTarget:self action:@selector(inviteButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [mainView addSubview:inviteButton];
@@ -203,9 +205,9 @@
         
         UILabel *recomLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, 0.0f, mainView.bounds.size.width, headerViewHeight)];
         if ([self.menuSelection isEqualToString:@"Moments"]) {
-            recomLabel.text = @"Moments From Teamstory";
+            recomLabel.text = @"Moments from the community";
         } else {
-            recomLabel.text = @"Thoughts From Teamstory";
+            recomLabel.text = @"Thoughts from the community";
         }
         recomLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:11.0f];
         [recomLabel setTextColor:[UIColor colorWithRed:146.0f/255.0f green:146.0f/255.0f blue:146.0f/255.0f alpha:1.0f]];
@@ -282,6 +284,12 @@
         cell.PFimageViewForButton2.image = placeHolderImage;
         cell.PFimageViewForButton3.image = placeHolderImage;
         
+        // initially disable all photo cells in case an user doesn't have pictures.
+        // it will be re-enabled once the picture loads.
+        cell.photoButtion1.enabled = NO;
+        cell.photoButtion2.enabled = NO;
+        cell.photoButtion3.enabled = NO;
+        
         PFUser *user = [self.recomUserList objectAtIndex:indexPath.row];
         
         [cell setUser:user];
@@ -291,8 +299,7 @@
         if([[self.followerListArray objectAtIndex:indexPath.row] isEqualToString:@"No"]) {
             [cell.photoHeaderView.followButton setSelected:NO];
         }
-        else
-{
+        else {
             [cell.photoHeaderView.followButton setSelected:YES];
         }
         
@@ -419,7 +426,7 @@
     }];
 }
 
--(void) loadFollowers {
+-(void)loadFollowers {
     PFQuery *userFollowerQuery = [PFQuery queryWithClassName:@"Activity"];
     [userFollowerQuery whereKey:@"type" equalTo:@"follow"];
     [userFollowerQuery whereKey:@"fromUser" equalTo:[PFUser currentUser]];
@@ -439,6 +446,14 @@
         [followerByActivityPointsQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (!error) {
                 self.recomUserList = objects;
+                
+                [self.followerListArray removeAllObjects];
+                
+                if (self.followerListArray.count <= followerQueryNum) {
+                    for (int i = 0; i < followerQueryNum; i++) {
+                        [self.followerListArray addObject:@"No"];
+                    }
+                }
                 [self.mainTileView reloadData];
             } else {
                 NSLog(@"Follower Query loading error %@", error);
@@ -509,7 +524,7 @@
     NSArray *activityItems = @[self];
     UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
     activityVC.excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypePrint];
-    [activityVC setValue:@"Invitation From Teamstory" forKey:@"subject"];
+    [activityVC setValue:@"Join me on Teamstory!" forKey:@"subject"];
     
     [self.navController presentViewController:activityVC animated:YES completion:nil];
     

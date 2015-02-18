@@ -211,8 +211,10 @@ NSInteger selection = 1;
     // flightrecorder event analytics
     [[FlightRecorder sharedInstance] trackEventWithCategory:@"discover_screen" action:@"viewing_discover" label:@"" value:@""];
     
-    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+    //[[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     self.navigationController.navigationBar.hidden = YES;
+    
+    [self.discoverTileView loadFollowers];
     
     if ([self.follwerList count] == 0) {
         zeroFollower = NO;

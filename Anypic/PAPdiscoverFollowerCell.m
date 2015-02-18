@@ -66,9 +66,15 @@
                 self.PFimageViewForButton2.file = [[objects objectAtIndex:1] objectForKey:@"image"];
                 self.PFimageViewForButton3.file = [[objects objectAtIndex:2] objectForKey:@"image"];
                 
-                [self.PFimageViewForButton1 loadInBackground];
-                [self.PFimageViewForButton2 loadInBackground];
-                [self.PFimageViewForButton3 loadInBackground];
+                [self.PFimageViewForButton1 loadInBackground:^(UIImage *image, NSError *error) {
+                    self.photoButtion1.enabled = YES;
+                }];
+                [self.PFimageViewForButton2 loadInBackground:^(UIImage *image, NSError *error) {
+                    self.photoButtion2.enabled = YES;
+                }];
+                [self.PFimageViewForButton3 loadInBackground:^(UIImage *image, NSError *error) {
+                    self.photoButtion3.enabled = YES;
+                }];
             }
         }];
     }
