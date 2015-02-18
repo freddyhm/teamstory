@@ -691,7 +691,15 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     // clear out cached data, view controllers, etc
     [self.navController popToRootViewControllerAnimated:NO];
     
-    [self presentLoginSelectionController];
+    // When user logs out from the app, log in anonymously,
+    [PFAnonymousUtils logInWithBlock:^(PFUser *user, NSError *error) {
+        if (error) {
+            NSLog(@"Anonymous login failed.");
+        } else {
+            NSLog(@"Anonymous user logged in.");
+        }
+    }];
+
     
     self.homeViewController = nil;
     self.activityViewController = nil;

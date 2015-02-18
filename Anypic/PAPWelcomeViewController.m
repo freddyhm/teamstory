@@ -42,6 +42,9 @@
                 NSLog(@"Anonymous login failed.");
             } else {
                 NSLog(@"Anonymous user logged in.");
+                
+                // present a tabBar.
+                [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBarController];
             }
         }];
         return;
