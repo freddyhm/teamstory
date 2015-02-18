@@ -25,6 +25,9 @@
 @property (nonatomic, strong) PFImageView *PFimageViewForButton3;
 @property (nonatomic, strong) NSArray *photoArray;
 
+
+- (void)setUser:(PFUser *)user;
+
 @end
 
 @protocol PAPdiscoverFollowerCellDelegate <NSObject>

@@ -53,6 +53,27 @@
     return self;
 }
 
+- (void)setUser:(PFUser *)user {
+    if (user) {
+        PFQuery *photoQuery = [PFQuery queryWithClassName:@"Photo"];
+        [photoQuery whereKey:@"user" equalTo:user];
+        [photoQuery setLimit:3];
+        [photoQuery orderByDescending:@"createdAt"];
+        [photoQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            self.photoArray = objects;
+            if (objects.count > 2) {
+                self.PFimageViewForButton1.file = [[objects objectAtIndex:0] objectForKey:@"image"];
+                self.PFimageViewForButton2.file = [[objects objectAtIndex:1] objectForKey:@"image"];
+                self.PFimageViewForButton3.file = [[objects objectAtIndex:2] objectForKey:@"image"];
+                
+                [self.PFimageViewForButton1 loadInBackground];
+                [self.PFimageViewForButton2 loadInBackground];
+                [self.PFimageViewForButton3 loadInBackground];
+            }
+        }];
+    }
+}
+
 - (void)photoButtion1Action:(id)sender {
     if (delegate && [delegate respondsToSelector:@selector(setPhotoInDiscover:)]) {
         [delegate setPhotoInDiscover:[self.photoArray objectAtIndex:0]];

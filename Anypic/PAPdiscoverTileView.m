@@ -40,6 +40,12 @@
 @property (nonatomic, strong) NSArray *recomUserList;
 @property (nonatomic, strong) UIImage *inviteImage;
 @property (nonatomic, strong) NSMutableArray *followerListArray;
+@property (nonatomic, strong) NSMutableArray *photoListArray;
+@property (nonatomic, strong) UIImage *photoImage1;
+@property (nonatomic, strong) UIImage *photoImage2;
+@property (nonatomic, strong) UIImage *photoImage3;
+@property (nonatomic, strong) UITableView *postsTableView;
+@property (nonatomic, strong) NSString *postSelectionLabel;
 
 @end
 
@@ -55,6 +61,8 @@
         for (int i = 0; i < followerQueryNum; i++) {
             [self.followerListArray addObject:@"No"];
         }
+        
+        self.photoListArray = [[NSMutableArray alloc] init];
         
         self.teamstoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
         _tableReload = YES;
@@ -166,31 +174,54 @@
 
 # pragma UITableViewDelegate
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    self.inviteImage = [UIImage imageNamed:@"inviteDiscover.png"];
-    UIImageView *inviteImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.inviteImage.size.width, self.inviteImage.size.height)];
-    inviteImageView.image = self.inviteImage;
+    UIView *mainView;
     
-    UIView *mainView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, self.inviteImage.size.height + headerViewHeight)];
-    mainView.backgroundColor = [UIColor whiteColor];
-    [mainView addSubview:inviteImageView];
-    
-    UILabel *recomLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, self.inviteImage.size.height, self.inviteImage.size.width, headerViewHeight)];
-    recomLabel.text = @"Recommended People";
-    recomLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:11.0f];
-    [recomLabel setTextColor:[UIColor colorWithRed:146.0f/255.0f green:146.0f/255.0f blue:146.0f/255.0f alpha:1.0f]];
-    
-    [mainView addSubview:recomLabel];
-    
-    UIButton *inviteButton = [[UIButton alloc] initWithFrame:CGRectMake(95.0f, 49.0f, 130.0f, 27.0f)];
-    [inviteButton setBackgroundColor:[UIColor clearColor]];
-    [inviteButton addTarget:self action:@selector(inviteButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [mainView addSubview:inviteButton];
+    if ([self.menuSelection isEqualToString:@"Followers"]) {
+        self.inviteImage = [UIImage imageNamed:@"inviteDiscover.png"];
+        UIImageView *inviteImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.inviteImage.size.width, self.inviteImage.size.height)];
+        inviteImageView.image = self.inviteImage;
+        
+        mainView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, self.inviteImage.size.height + headerViewHeight)];
+        mainView.backgroundColor = [UIColor whiteColor];
+        [mainView addSubview:inviteImageView];
+        
+        UIButton *inviteButton = [[UIButton alloc] initWithFrame:CGRectMake(95.0f, 49.0f, 130.0f, 27.0f)];
+        [inviteButton setBackgroundColor:[UIColor clearColor]];
+        [inviteButton addTarget:self action:@selector(inviteButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [mainView addSubview:inviteButton];
+        
+        UILabel *recomLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, self.inviteImage.size.height, self.inviteImage.size.width, headerViewHeight)];
+        recomLabel.text = @"Recommended People";
+        recomLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:11.0f];
+        [recomLabel setTextColor:[UIColor colorWithRed:146.0f/255.0f green:146.0f/255.0f blue:146.0f/255.0f alpha:1.0f]];
+        
+        [mainView addSubview:recomLabel];
+        
+    } else {
+        mainView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, headerViewHeight)];
+        mainView.backgroundColor = [UIColor whiteColor];
+        
+        UILabel *recomLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, 0.0f, mainView.bounds.size.width, headerViewHeight)];
+        if ([self.menuSelection isEqualToString:@"Moments"]) {
+            recomLabel.text = @"Moments From Teamstory";
+        } else {
+            recomLabel.text = @"Thoughts From Teamstory";
+        }
+        recomLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:11.0f];
+        [recomLabel setTextColor:[UIColor colorWithRed:146.0f/255.0f green:146.0f/255.0f blue:146.0f/255.0f alpha:1.0f]];
+        
+        [mainView addSubview:recomLabel];
+    }
     
     return mainView;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return headerViewHeight + self.inviteImage.size.height;
+    if ([self.menuSelection isEqualToString:@"Followers"]) {
+        return headerViewHeight + self.inviteImage.size.height;
+    } else {
+        return headerViewHeight;
+    }
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -252,24 +283,8 @@
         cell.PFimageViewForButton3.image = placeHolderImage;
         
         PFUser *user = [self.recomUserList objectAtIndex:indexPath.row];
-        if (user) {
-            PFQuery *photoQuery = [PFQuery queryWithClassName:@"Photo"];
-            [photoQuery whereKey:@"user" equalTo:user];
-            [photoQuery setLimit:3];
-            [photoQuery orderByDescending:@"createdAt"];
-            [photoQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                if (objects.count > 2) {
-                    cell.PFimageViewForButton1.file = [[objects objectAtIndex:0] objectForKey:@"image"];
-                    cell.PFimageViewForButton2.file = [[objects objectAtIndex:1] objectForKey:@"image"];
-                    cell.PFimageViewForButton3.file = [[objects objectAtIndex:2] objectForKey:@"image"];
-                    
-                    [cell.PFimageViewForButton1 loadInBackground];
-                    [cell.PFimageViewForButton2 loadInBackground];
-                    [cell.PFimageViewForButton3 loadInBackground];
-                }
-            }];
-        }
         
+        [cell setUser:user];
         [cell.photoHeaderView setUserForHeaderView:user];
         [cell.photoHeaderView.followButton setTag:indexPath.row];
         
@@ -310,7 +325,6 @@
 }
 
 # pragma ()
-
 -(void)photoTapAction:(UIButton *)sender {
     if ([self.menuSelection isEqualToString:@"Moments"]) {
         PFObject *photo = [self.pictureQuery objectAtIndex:sender.tag];
