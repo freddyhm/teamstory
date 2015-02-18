@@ -37,19 +37,22 @@
         self.userQuery.limit = 1000;
         [self.userQuery whereKeyExists:@"displayName"];
         [self.userQuery orderByAscending:@"displayName"];
-        
-        self.activityPoints = [[PFUser currentUser] objectForKey:@"activityPoints"];
-        
-        // check if we have points already, set 100 as default
-        if(self.activityPoints == nil){
-            [self setDefaultPoints];
-        }
     }
     return self;
 }
 
-- (void)setDefaultPoints{
+- (void)getActivityPointsOnFirstRun{
     
+    // get points from user
+    self.activityPoints = [[PFUser currentUser] objectForKey:@"activityPoints"];
+    
+    // check if we have points already, set 100 as default if not
+    if(self.activityPoints == nil){
+        [self setDefaultPoints];
+    }
+}
+
+- (void)setDefaultPoints{
     // start with 100
     self.activityPoints = [NSNumber numberWithInt:100];
     [self saveCurrentActivityPoints];

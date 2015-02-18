@@ -15,6 +15,7 @@
 + (id)sharedAtMention;
 - (void)getAllUsers:(void (^)(NSArray *objectsm, BOOL succeeded, NSError *error))completionBlock;
 - (void)addPointToActivityCount;
+- (void)getActivityPointsOnFirstRun;
 
 
 @end
