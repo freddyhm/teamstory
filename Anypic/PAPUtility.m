@@ -8,6 +8,7 @@
 #import "GAI.h"
 #import "GAIDictionaryBuilder.h"
 #import "GAIFields.h"
+#import "PAPLoginTutorialViewController.h"
 
 @implementation PAPUtility
 
@@ -56,7 +57,13 @@
 
 #pragma mark Like Comments
 
-+ (void)likeCommentInBackground:(id)comment photo:(id)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
++ (void)likeCommentInBackground:(id)comment setNavigationController:(UINavigationController *)navController photo:(id)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
+    // Handling anonymous users.
+    if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
+        PAPLoginTutorialViewController *loginTutorialViewController = [[PAPLoginTutorialViewController alloc] init];
+        [navController presentViewController:loginTutorialViewController animated:YES completion:nil];
+        return;
+    }
     
     PFQuery *queryExistingCommentLikes = [PFQuery queryWithClassName:kPAPActivityClassKey];
     [queryExistingCommentLikes whereKey:@"forComment" equalTo:comment];
@@ -121,7 +128,14 @@
 
 #pragma mark Like Photos
 
-+ (void)likePhotoInBackground:(id)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
++ (void)likePhotoInBackground:(id)photo setNavigationController:(UINavigationController *)navController block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
+    // Handling anonymous users.
+    if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
+        PAPLoginTutorialViewController *loginTutorialViewController = [[PAPLoginTutorialViewController alloc] init];
+        [navController presentViewController:loginTutorialViewController animated:YES completion:nil];
+        return;
+    }
+    
     PFQuery *queryExistingLikes = [PFQuery queryWithClassName:kPAPActivityClassKey];
     [queryExistingLikes whereKey:kPAPActivityPhotoKey equalTo:photo];
     [queryExistingLikes whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeLike];
@@ -365,7 +379,14 @@
     [[PAPCache sharedCache] setFollowStatus:YES user:user];
 }
 
-+ (void)followUserEventually:(PFUser *)user block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
++ (void)followUserEventually:(PFUser *)user setNavigationController:(UINavigationController *)navController block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
+    // Handling anonymous users.
+    if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
+        PAPLoginTutorialViewController *loginTutorialViewController = [[PAPLoginTutorialViewController alloc] init];
+        [navController presentViewController:loginTutorialViewController animated:YES completion:nil];
+        return;
+    }
+    
     if ([[user objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
         return;
     }
@@ -383,14 +404,17 @@
     [[PAPCache sharedCache] setFollowStatus:YES user:user];
 }
 
+/*
+
 + (void)followUsersEventually:(NSArray *)users block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
     for (PFUser *user in users) {
-        [PAPUtility followUserEventually:user block:completionBlock];
+        [PAPUtility followUserEventually:user block:<#^(BOOL succeeded, NSError *error)completionBlock#> block:completionBlock];
         [[PAPCache sharedCache] setFollowStatus:YES user:user];
     }
 }
+ */
 
-+ (void)unfollowUserEventually:(PFUser *)user{
++ (void)unfollowUserEventually:(PFUser *)user {
     PFQuery *query = [PFQuery queryWithClassName:kPAPActivityClassKey];
     [query whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
     [query whereKey:kPAPActivityToUserKey equalTo:user];
@@ -426,7 +450,7 @@
 }
 
 
-
+/*
 + (void)unfollowUsersEventually:(NSArray *)users {
     PFQuery *query = [PFQuery queryWithClassName:kPAPActivityClassKey];
     [query whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
@@ -441,7 +465,7 @@
         [[PAPCache sharedCache] setFollowStatus:NO user:user];
     }
 }
-
+*/
 
 #pragma mark Activities
 

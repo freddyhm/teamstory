@@ -640,7 +640,7 @@ NSInteger selection = 1;
             [self.follwerList addObject:copyOneObject];
         }
         
-        [PAPUtility followUserEventually:cellUser block:^(BOOL succeeded, NSError *error) {
+        [PAPUtility followUserEventually:cellUser setNavigationController:self.navigationController block:^(BOOL succeeded, NSError *error) {
             
             // enable button again
             cell.followButton.enabled = YES;

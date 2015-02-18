@@ -546,7 +546,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     [self setLikeUsers:[newLikeUsersSet allObjects]];
 
     if (liked) {
-        [PAPUtility likePhotoInBackground:self.photo block:^(BOOL succeeded, NSError *error) {
+        [PAPUtility likePhotoInBackground:self.photo setNavigationController:self.navController block:^(BOOL succeeded, NSError *error) {
             if (!succeeded) {
                 [button addTarget:self action:@selector(didTapLikePhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
                 [self setLikeUsers:originalLikeUsersArray];

@@ -16,6 +16,8 @@
 #import <FlightRecorder/FlightRecorder.h>
 #import "PAPMessagingViewController.h"
 #import "Intercom.h"
+#import "PAPLoginTutorialViewController.h"
+#import "PAPUtility.h"
 
 @interface PAPAccountViewController() {
     float alphaValue_twitter;
@@ -107,6 +109,13 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // Handling anonymous users.
+    if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
+        PAPLoginTutorialViewController *loginTutorialViewController = [[PAPLoginTutorialViewController alloc] init];
+        [self presentViewController:loginTutorialViewController animated:YES completion:nil];
+        return;
+    }
     
     // remove refresh control for home that is set by default in inherited timeline
     [super.refreshControl removeFromSuperview];
@@ -963,7 +972,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     // show hud while numbers are refreshing
     [SVProgressHUD show];
     
-    [PAPUtility followUserEventually:self.user block:^(BOOL succeeded, NSError *error) {
+    [PAPUtility followUserEventually:self.user setNavigationController:self.navigationController block:^(BOOL succeeded, NSError *error) {
         
         self.multiActionButton.enabled = YES;
         

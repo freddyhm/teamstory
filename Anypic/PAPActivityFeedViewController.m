@@ -15,6 +15,7 @@
 #import "Mixpanel.h"
 #import <FlightRecorder/FlightRecorder.h>
 #import "SVProgressHUD.h"
+#import "PAPLoginTutorialViewController.h"
 
 @interface PAPActivityFeedViewController ()
 
@@ -64,6 +65,12 @@
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
+    // Handling Anonymous Users
+    if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
+        PAPLoginTutorialViewController *loginTutorialViewController = [[PAPLoginTutorialViewController alloc] init];
+        [self presentViewController:loginTutorialViewController animated:YES completion:nil];
+        return;
+    }
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 
     [super viewDidLoad];

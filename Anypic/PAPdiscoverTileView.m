@@ -489,7 +489,7 @@
         // Follow
         photoHeaderView.followButton.selected = YES;
         
-        [PAPUtility followUserEventually:user block:^(BOOL succeeded, NSError *error) {
+        [PAPUtility followUserEventually:user setNavigationController:self.navController block:^(BOOL succeeded, NSError *error) {
             
             // enable button again
             photoHeaderView.followButton.enabled = YES;
