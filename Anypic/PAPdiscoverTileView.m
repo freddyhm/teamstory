@@ -130,6 +130,7 @@
 }
 
 - (void) followersMenuAction:(id)sender {
+    [self loadFollowers];
     self.menuSelection = @"Followers";
     [self labelSetting:@"Followers"];
     [self.mainTileView reloadData];
