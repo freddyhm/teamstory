@@ -27,10 +27,23 @@
     self.view.backgroundColor = IS_WIDESCREEN ? [UIColor colorWithPatternImage:[UIImage imageNamed:@"Default-568h.png"]] : [UIColor colorWithPatternImage:[UIImage imageNamed:@"Default.png"]];
     
     PFUser *user = [PFUser currentUser];
+    
+    // checking for new anonymous Users.
+    if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
+        [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBarController];
+        return;
+    }
 
     // If not logged in, present login view controller
     if (!user) {
-        [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTutorialViewController];
+        //[(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTutorialViewController];
+        [PFAnonymousUtils logInWithBlock:^(PFUser *user, NSError *error) {
+            if (error) {
+                NSLog(@"Anonymous login failed.");
+            } else {
+                NSLog(@"Anonymous user logged in.");
+            }
+        }];
         return;
     }
 
