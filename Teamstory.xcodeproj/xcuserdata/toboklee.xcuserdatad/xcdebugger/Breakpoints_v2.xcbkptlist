@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/PAPActivityFeedViewController.m"
-            timestampString = "445985136.740901"
+            timestampString = "446070713.372813"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "178"
-            endingLineNumber = "178"
+            startingLineNumber = "179"
+            endingLineNumber = "179"
             landmarkName = "-tableView:heightForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -304,11 +304,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/PAPAccountViewController.m"
-            timestampString = "445985760.295915"
+            timestampString = "446067232.627497"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "243"
-            endingLineNumber = "243"
+            startingLineNumber = "242"
+            endingLineNumber = "242"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
@@ -384,11 +384,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Anypic/PAPAccountViewController.m"
-            timestampString = "445985760.295915"
+            timestampString = "446067232.627497"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "265"
-            endingLineNumber = "265"
+            startingLineNumber = "264"
+            endingLineNumber = "264"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>

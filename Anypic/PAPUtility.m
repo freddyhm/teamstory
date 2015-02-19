@@ -8,7 +8,9 @@
 #import "GAI.h"
 #import "GAIDictionaryBuilder.h"
 #import "GAIFields.h"
-#import "PAPLoginTutorialViewController.h"
+#import "PAPLoginSelectionViewController.h"
+#import "PAPConstants.h"
+#import "PAPCache.h"
 
 @implementation PAPUtility
 
@@ -60,8 +62,8 @@
 + (void)likeCommentInBackground:(id)comment setNavigationController:(UINavigationController *)navController photo:(id)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
     // Handling anonymous users.
     if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
-        PAPLoginTutorialViewController *loginTutorialViewController = [[PAPLoginTutorialViewController alloc] init];
-        [navController presentViewController:loginTutorialViewController animated:YES completion:nil];
+        PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] init];
+        [navController presentViewController:loginSelectionViewController animated:YES completion:nil];
         return;
     }
     
@@ -131,8 +133,8 @@
 + (void)likePhotoInBackground:(id)photo setNavigationController:(UINavigationController *)navController block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
     // Handling anonymous users.
     if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
-        PAPLoginTutorialViewController *loginTutorialViewController = [[PAPLoginTutorialViewController alloc] init];
-        [navController presentViewController:loginTutorialViewController animated:YES completion:nil];
+        PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] init];
+        [navController presentViewController:loginSelectionViewController animated:YES completion:nil];
         return;
     }
     
@@ -382,8 +384,8 @@
 + (void)followUserEventually:(PFUser *)user setNavigationController:(UINavigationController *)navController block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
     // Handling anonymous users.
     if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
-        PAPLoginTutorialViewController *loginTutorialViewController = [[PAPLoginTutorialViewController alloc] init];
-        [navController presentViewController:loginTutorialViewController animated:YES completion:nil];
+        PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] init];
+        [navController presentViewController:loginSelectionViewController animated:YES completion:nil];
         return;
     }
     

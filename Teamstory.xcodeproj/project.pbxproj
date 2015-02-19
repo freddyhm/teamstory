@@ -41,6 +41,13 @@
 		460E331D1A0EA47100028A84 /* button_feedback_arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460E331A1A0EA47100028A84 /* button_feedback_arrow@2x.png */; };
 		460E33261A0EAFEF00028A84 /* nomessage_placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 460E33241A0EAFEF00028A84 /* nomessage_placeholder.png */; };
 		460E33271A0EAFEF00028A84 /* nomessage_placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460E33251A0EAFEF00028A84 /* nomessage_placeholder@2x.png */; };
+		461371681A9653C8002A907A /* PAPLoginSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 461371661A9653C8002A907A /* PAPLoginSelectionViewController.m */; };
+		461371691A9653C8002A907A /* PAPLoginSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 461371671A9653C8002A907A /* PAPLoginSelectionViewController.xib */; };
+		4613716E1A966DB4002A907A /* logo_onboarding.png in Resources */ = {isa = PBXBuildFile; fileRef = 4613716B1A966DB4002A907A /* logo_onboarding.png */; };
+		4613716F1A966DB4002A907A /* logo_onboarding@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4613716C1A966DB4002A907A /* logo_onboarding@2x.png */; };
+		461371701A966DB4002A907A /* logo_onboarding@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4613716D1A966DB4002A907A /* logo_onboarding@3x.png */; };
+		461371741A9672FC002A907A /* PAPLoginPopupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 461371721A9672FC002A907A /* PAPLoginPopupViewController.m */; };
+		461371751A9672FC002A907A /* PAPLoginPopupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 461371731A9672FC002A907A /* PAPLoginPopupViewController.xib */; };
 		4619DEE31A27C6D4004EFFF0 /* ic_empty_list@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4619DEE01A27C6D4004EFFF0 /* ic_empty_list@2x.png */; };
 		4619DEE41A27C6D4004EFFF0 /* ic_empty_list@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4619DEE11A27C6D4004EFFF0 /* ic_empty_list@3x.png */; };
 		4619DEE51A27C6D4004EFFF0 /* ic_empty_list.png in Resources */ = {isa = PBXBuildFile; fileRef = 4619DEE21A27C6D4004EFFF0 /* ic_empty_list.png */; };
@@ -648,6 +655,15 @@
 		460E33241A0EAFEF00028A84 /* nomessage_placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nomessage_placeholder.png; sourceTree = "<group>"; };
 		460E33251A0EAFEF00028A84 /* nomessage_placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nomessage_placeholder@2x.png"; sourceTree = "<group>"; };
 		4611EE9C19DF427C00B319C0 /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseFacebookUtils.framework; sourceTree = "<group>"; };
+		461371651A9653C8002A907A /* PAPLoginSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPLoginSelectionViewController.h; path = Anypic/PAPLoginSelectionViewController.h; sourceTree = SOURCE_ROOT; };
+		461371661A9653C8002A907A /* PAPLoginSelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPLoginSelectionViewController.m; path = Anypic/PAPLoginSelectionViewController.m; sourceTree = SOURCE_ROOT; };
+		461371671A9653C8002A907A /* PAPLoginSelectionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PAPLoginSelectionViewController.xib; path = Anypic/PAPLoginSelectionViewController.xib; sourceTree = SOURCE_ROOT; };
+		4613716B1A966DB4002A907A /* logo_onboarding.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo_onboarding.png; sourceTree = "<group>"; };
+		4613716C1A966DB4002A907A /* logo_onboarding@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo_onboarding@2x.png"; sourceTree = "<group>"; };
+		4613716D1A966DB4002A907A /* logo_onboarding@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo_onboarding@3x.png"; sourceTree = "<group>"; };
+		461371711A9672FC002A907A /* PAPLoginPopupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPLoginPopupViewController.h; path = Anypic/PAPLoginPopupViewController.h; sourceTree = SOURCE_ROOT; };
+		461371721A9672FC002A907A /* PAPLoginPopupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPLoginPopupViewController.m; path = Anypic/PAPLoginPopupViewController.m; sourceTree = SOURCE_ROOT; };
+		461371731A9672FC002A907A /* PAPLoginPopupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PAPLoginPopupViewController.xib; path = Anypic/PAPLoginPopupViewController.xib; sourceTree = SOURCE_ROOT; };
 		4619DEE01A27C6D4004EFFF0 /* ic_empty_list@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_empty_list@2x.png"; sourceTree = "<group>"; };
 		4619DEE11A27C6D4004EFFF0 /* ic_empty_list@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_empty_list@3x.png"; sourceTree = "<group>"; };
 		4619DEE21A27C6D4004EFFF0 /* ic_empty_list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_empty_list.png; sourceTree = "<group>"; };
@@ -1508,6 +1524,16 @@
 			name = Notification;
 			sourceTree = "<group>";
 		};
+		4613716A1A966DB4002A907A /* onBoarding */ = {
+			isa = PBXGroup;
+			children = (
+				4613716B1A966DB4002A907A /* logo_onboarding.png */,
+				4613716C1A966DB4002A907A /* logo_onboarding@2x.png */,
+				4613716D1A966DB4002A907A /* logo_onboarding@3x.png */,
+			);
+			path = onBoarding;
+			sourceTree = "<group>";
+		};
 		461C57E219BF586B00F6575C /* MessagingCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -1678,6 +1704,7 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				4613716A1A966DB4002A907A /* onBoarding */,
 				466ED0341A8E6BC300FA4F29 /* DiscoverInvite */,
 				D586C1181A82EA7600AC7C31 /* bg_points_3x.png */,
 				D586C1191A82EA7600AC7C31 /* bg_points.png */,
@@ -2013,6 +2040,12 @@
 				C4F102BE156C57DA0061BC3E /* PAPLogInViewController.m */,
 				46C6FC0C198AA62900BC99D5 /* PAPprofileSetupViewController.h */,
 				46C6FC0D198AA62900BC99D5 /* PAPprofileSetupViewController.m */,
+				461371651A9653C8002A907A /* PAPLoginSelectionViewController.h */,
+				461371661A9653C8002A907A /* PAPLoginSelectionViewController.m */,
+				461371671A9653C8002A907A /* PAPLoginSelectionViewController.xib */,
+				461371711A9672FC002A907A /* PAPLoginPopupViewController.h */,
+				461371721A9672FC002A907A /* PAPLoginPopupViewController.m */,
+				461371731A9672FC002A907A /* PAPLoginPopupViewController.xib */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -2852,6 +2885,7 @@
 				D5856FA019F87E2600D0086F /* konotor_play.png in Resources */,
 				D5856F9819F87E2600D0086F /* konotor_chatbubble_ios7_other.png in Resources */,
 				46B31EEE184E35150028D11C /* profileLocation.png in Resources */,
+				461371691A9653C8002A907A /* PAPLoginSelectionViewController.xib in Resources */,
 				D5D219561A8A8EA9003B3C7C /* FECoreModel.mom in Resources */,
 				C4BE670D157FC7D000A291C2 /* Icon-72.png in Resources */,
 				C4BE670E157FC7D000A291C2 /* Icon-72@2x.png in Resources */,
@@ -2909,6 +2943,7 @@
 				467A40DC1993059300D4C693 /* join_teamstory.png in Resources */,
 				465C291A1A5F2D6500265486 /* Thought Popup@3x.png in Resources */,
 				D5856FA419F87E2600D0086F /* konotor_progress_black.png in Resources */,
+				4613716F1A966DB4002A907A /* logo_onboarding@2x.png in Resources */,
 				D5F087241A82E25B0079C922 /* MPCloseBtn.png in Resources */,
 				C4BE6778157FC7F700A291C2 /* BackgroundNavigationBar@2x.png in Resources */,
 				C4BE6779157FC7F700A291C2 /* BackgroundNewActivity.png in Resources */,
@@ -2933,6 +2968,7 @@
 				D5856FA119F87E2600D0086F /* konotor_play@2x.png in Resources */,
 				D5BFDED718CC84A5004FEC42 /* london.png in Resources */,
 				46076EEF193FE3EF00A7B317 /* notif_close.png in Resources */,
+				461371701A966DB4002A907A /* logo_onboarding@3x.png in Resources */,
 				46839E9818E1E8C100BD60DB /* icon-email.png in Resources */,
 				D5BFDEDD18CC84A5004FEC42 /* paris.png in Resources */,
 				465C29161A5F2D6500265486 /* Moment Popup_selected@2x.png in Resources */,
@@ -2980,6 +3016,7 @@
 				467A40DE1993059300D4C693 /* welcome_back.png in Resources */,
 				463CE64419E9987D001F607C /* btn_new_message.png in Resources */,
 				463CE64219E9987D001F607C /* btn_message_more@2x.png in Resources */,
+				4613716E1A966DB4002A907A /* logo_onboarding.png in Resources */,
 				463CE65719E99DD9001F607C /* bubble_triangle_left@3x.png in Resources */,
 				D57683F71933EA96008BAA2C /* nav_discover@2x.png in Resources */,
 				C4BE6799157FC7F700A291C2 /* ButtonLikeSelected.png in Resources */,
@@ -3009,6 +3046,7 @@
 				467A40DA1993059300D4C693 /* intro_divider.png in Resources */,
 				D542D8C4196A6F4700A0384F /* ELCAssetPicker.xib in Resources */,
 				46B31EED184E35150028D11C /* profileDescription@2x.png in Resources */,
+				461371751A9672FC002A907A /* PAPLoginPopupViewController.xib in Resources */,
 				D5F0870C1A82E25B0079C922 /* Media.xcassets in Resources */,
 				463CE65619E99DD9001F607C /* bubble_triangle_left@2x.png in Resources */,
 				D575A0711947834C00C6BCC2 /* btn_follow.png in Resources */,
@@ -3287,6 +3325,7 @@
 				D5F0874E1A82E25B0079C922 /* UIColor+MPColor.m in Sources */,
 				C4F102C2156C57DA0061BC3E /* PAPLogInViewController.m in Sources */,
 				C4F102C3156C57DA0061BC3E /* PAPWelcomeViewController.m in Sources */,
+				461371741A9672FC002A907A /* PAPLoginPopupViewController.m in Sources */,
 				D5856FB419F87E2600D0086F /* KonotorUITextView.m in Sources */,
 				D542D8C2196A6F4700A0384F /* ELCImagePickerController.m in Sources */,
 				D5743808194629280040C96A /* followersFollowingViewController.m in Sources */,
@@ -3336,6 +3375,7 @@
 				D5F087451A82E25B0079C922 /* MPUIFontToNSDictionaryValueTransformer.m in Sources */,
 				46E1EB6F183BCA6300F64274 /* PAPProfileSettingViewController.m in Sources */,
 				D542D8C0196A6F4700A0384F /* ELCAssetCell.m in Sources */,
+				461371681A9653C8002A907A /* PAPLoginSelectionViewController.m in Sources */,
 				D5903C75192EBBF900DC9896 /* ThoughtPostViewController.m in Sources */,
 				D56D17D31A5A2BB30090615A /* VSWordDetector.m in Sources */,
 				46C6FC0E198AA62900BC99D5 /* PAPprofileSetupViewController.m in Sources */,

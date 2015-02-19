@@ -16,8 +16,8 @@
 #import <FlightRecorder/FlightRecorder.h>
 #import "PAPMessagingViewController.h"
 #import "Intercom.h"
-#import "PAPLoginTutorialViewController.h"
 #import "PAPUtility.h"
+#import "PAPLoginSelectionViewController.h"
 
 @interface PAPAccountViewController() {
     float alphaValue_twitter;
@@ -112,9 +112,8 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     // Handling anonymous users.
     if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
-        PAPLoginTutorialViewController *loginTutorialViewController = [[PAPLoginTutorialViewController alloc] init];
-        [self presentViewController:loginTutorialViewController animated:YES completion:nil];
-        return;
+        PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] init];
+        [self presentViewController:loginSelectionViewController animated:YES completion:nil];
     }
     
     // remove refresh control for home that is set by default in inherited timeline
