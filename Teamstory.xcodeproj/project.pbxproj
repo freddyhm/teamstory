@@ -48,6 +48,8 @@
 		461371701A966DB4002A907A /* logo_onboarding@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4613716D1A966DB4002A907A /* logo_onboarding@3x.png */; };
 		461371741A9672FC002A907A /* PAPLoginPopupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 461371721A9672FC002A907A /* PAPLoginPopupViewController.m */; };
 		461371751A9672FC002A907A /* PAPLoginPopupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 461371731A9672FC002A907A /* PAPLoginPopupViewController.xib */; };
+		461371791A97A725002A907A /* PAPLoginInfoSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 461371771A97A725002A907A /* PAPLoginInfoSheetViewController.m */; };
+		4613717A1A97A725002A907A /* PAPLoginInfoSheetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 461371781A97A725002A907A /* PAPLoginInfoSheetViewController.xib */; };
 		4619DEE31A27C6D4004EFFF0 /* ic_empty_list@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4619DEE01A27C6D4004EFFF0 /* ic_empty_list@2x.png */; };
 		4619DEE41A27C6D4004EFFF0 /* ic_empty_list@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4619DEE11A27C6D4004EFFF0 /* ic_empty_list@3x.png */; };
 		4619DEE51A27C6D4004EFFF0 /* ic_empty_list.png in Resources */ = {isa = PBXBuildFile; fileRef = 4619DEE21A27C6D4004EFFF0 /* ic_empty_list.png */; };
@@ -664,6 +666,9 @@
 		461371711A9672FC002A907A /* PAPLoginPopupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPLoginPopupViewController.h; path = Anypic/PAPLoginPopupViewController.h; sourceTree = SOURCE_ROOT; };
 		461371721A9672FC002A907A /* PAPLoginPopupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPLoginPopupViewController.m; path = Anypic/PAPLoginPopupViewController.m; sourceTree = SOURCE_ROOT; };
 		461371731A9672FC002A907A /* PAPLoginPopupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PAPLoginPopupViewController.xib; path = Anypic/PAPLoginPopupViewController.xib; sourceTree = SOURCE_ROOT; };
+		461371761A97A725002A907A /* PAPLoginInfoSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPLoginInfoSheetViewController.h; path = Anypic/PAPLoginInfoSheetViewController.h; sourceTree = SOURCE_ROOT; };
+		461371771A97A725002A907A /* PAPLoginInfoSheetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPLoginInfoSheetViewController.m; path = Anypic/PAPLoginInfoSheetViewController.m; sourceTree = SOURCE_ROOT; };
+		461371781A97A725002A907A /* PAPLoginInfoSheetViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PAPLoginInfoSheetViewController.xib; path = Anypic/PAPLoginInfoSheetViewController.xib; sourceTree = SOURCE_ROOT; };
 		4619DEE01A27C6D4004EFFF0 /* ic_empty_list@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_empty_list@2x.png"; sourceTree = "<group>"; };
 		4619DEE11A27C6D4004EFFF0 /* ic_empty_list@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_empty_list@3x.png"; sourceTree = "<group>"; };
 		4619DEE21A27C6D4004EFFF0 /* ic_empty_list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_empty_list.png; sourceTree = "<group>"; };
@@ -2046,6 +2051,9 @@
 				461371711A9672FC002A907A /* PAPLoginPopupViewController.h */,
 				461371721A9672FC002A907A /* PAPLoginPopupViewController.m */,
 				461371731A9672FC002A907A /* PAPLoginPopupViewController.xib */,
+				461371761A97A725002A907A /* PAPLoginInfoSheetViewController.h */,
+				461371771A97A725002A907A /* PAPLoginInfoSheetViewController.m */,
+				461371781A97A725002A907A /* PAPLoginInfoSheetViewController.xib */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -2877,6 +2885,7 @@
 				462FCB85188C8533005059F3 /* button_back.png in Resources */,
 				467154A618835E470000C0CA /* privacy.png in Resources */,
 				46076EEE193FE3EF00A7B317 /* notif_star@2x.png in Resources */,
+				4613717A1A97A725002A907A /* PAPLoginInfoSheetViewController.xib in Resources */,
 				D528C381191034DE00CEEA35 /* ButtonLikeCommentSelected@2x.png in Resources */,
 				46D28CD91A4ACDDB0089D1E3 /* loading_discover@3x.png in Resources */,
 				462FCB8A188C863E005059F3 /* button_setting_selected@2x.png in Resources */,
@@ -3291,6 +3300,7 @@
 				D5F087271A82E25B0079C922 /* MPDesignerEventBindingResponseMesssage.m in Sources */,
 				C4F102A1156C574A0061BC3E /* PAPProfileImageView.m in Sources */,
 				D56D466519884C33001FAA76 /* PhotoTimelineViewController.m in Sources */,
+				461371791A97A725002A907A /* PAPLoginInfoSheetViewController.m in Sources */,
 				D5856FB219F87E2600D0086F /* KonotorMediaUIButton.m in Sources */,
 				46DC23C219AA8C2200E8FCDF /* PAPdiscoverCell.m in Sources */,
 				D5F087471A82E25B0079C922 /* MPUITableViewBinding.m in Sources */,
