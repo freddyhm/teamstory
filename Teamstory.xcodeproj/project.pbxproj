@@ -2157,7 +2157,7 @@
 		C4A89497155879FC00DC57D3 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				D504F97A1A8C2B8200AB1431 /* Account */,
+				D504F97A1A8C2B8200AB1431 /* AccountView */,
 				46FB0A3F1888769000E978CD /* discoverViews */,
 				74A504E31565F0E400CFA4E3 /* TimelineViews */,
 				74B86B911562DB2600CAFFD2 /* PhotoViews */,
@@ -2203,12 +2203,12 @@
 			name = Activity;
 			sourceTree = "<group>";
 		};
-		D504F97A1A8C2B8200AB1431 /* Account */ = {
+		D504F97A1A8C2B8200AB1431 /* AccountView */ = {
 			isa = PBXGroup;
 			children = (
 				D504F9801A8C324400AB1431 /* ProfileSettingViewController.xib */,
 			);
-			name = Account;
+			name = AccountView;
 			sourceTree = "<group>";
 		};
 		D5135AF319EEDA78001F274A /* Teamstory Tests */ = {
