@@ -8,7 +8,9 @@
 
 #import "PAPLoginInfoSheetViewController.h"
 
-@interface PAPLoginInfoSheetViewController ()
+@interface PAPLoginInfoSheetViewController () {
+    BOOL hasProfilePicChanged;
+}
 @property (strong, nonatomic) IBOutlet UIButton *profilePickerButton;
 @property (nonatomic, strong) NSData *imageData_picker;
 @property (nonatomic, strong) NSData *imageData_picker_small;
@@ -23,6 +25,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    hasProfilePicChanged = NO;
+    
     self.profilePickerButton.layer.cornerRadius = self.profilePickerButton.bounds.size.width / 2;
     self.profilePickerButton.clipsToBounds = YES;
     
@@ -35,8 +39,7 @@
     PFUser *user = [PFUser currentUser];
     
     if ([PFTwitterUtils isLinkedWithUser:user]) {
-        //NSString * requestString = [NSString stringWithFormat:@"https://api.twitter.com/1.1/users/show.json?screen_name=%@", user.username];
-        NSString * requestString = @"https://api.twitter.com/1.1/users/show.json?screen_name=toboklee";
+        NSString * requestString = [NSString stringWithFormat:@"https://api.twitter.com/1.1/users/show.json?screen_name=%@", user.username];
         
         NSURL *verify = [NSURL URLWithString:requestString];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:verify];
@@ -46,16 +49,10 @@
                                              returningResponse:&response
                                                          error:nil];
         NSDictionary* result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-        [user setObject:[result objectForKey:@"profile_image_url_https"]
-                 forKey:@"picture"];
-        // does this thign help?
-        [user setUsername:[result objectForKey:@"screen_name"]];
-        
-        NSLog(@"%@", result);
         
         self.companyNameTextField.text = [result objectForKey:@"name"];
         self.locationTextField.text = [result objectForKey:@"location"];
-        self.bioTextView = [result objectForKey:@"description"];
+        self.bioTextView.text = [result objectForKey:@"description"];
         UIImage *twitterProfilePicture = [self getImageFromURL:[result objectForKey:@"profile_image_url_https"]];
         [self.profilePickerButton setBackgroundImage:twitterProfilePicture forState:UIControlStateNormal];
         
@@ -165,6 +162,7 @@
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    hasProfilePicChanged = YES;
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
     
     // Dismiss controller
@@ -198,12 +196,89 @@
     [[PFUser currentUser] saveInBackground];
 }
 
+- (IBAction)nextButtonAction:(id)sender {
+    if (self.companyNameTextField.text.length == 0) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Invalid Company Name" message:@"Please insert a Company Name" delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
+        [alertView show];
+        return;
+    }
+    
+    if (self.emailTextField.text.length == 0) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Invalid Email" message:@"Please insert an email address" delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
+        [alertView show];
+        return;
+    }
+    
+    if (![self NSStringIsValidEmail:self.emailTextField.text]) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Invalid Email" message:@"Please insert a valid email" delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
+        [alertView show];
+        return;
+    }
+    
+    if (self.locationTextField.text.length == 0) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Invalid Location" message:@"Please insert a location" delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
+        [alertView show];
+        return;
+    }
+    
+    if (self.bioTextView.text.length == 0) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Invalid Bio" message:@"Please insert a valid bio" delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
+        [alertView show];
+        return;
+    }
+    
+    // If all validation processes pass, save data and display a new-comer screen.
+    PFUser *user = [PFUser currentUser];
+    
+    bool profileExist = YES;
+    NSNumber *profileExist_num = [NSNumber numberWithBool:profileExist];
+    [user setObject: profileExist_num forKey: @"profileExist"];
+    
+    [user setObject:self.companyNameTextField.text forKey:@"displayName"];
+    [user setObject:self.emailTextField.text forKey:@"email"];
+    [user setObject:self.locationTextField.text forKey:@"location"];
+    [user setObject:self.bioTextView.text forKey:@"description"];
+    
+    if (self.imageData_picker && hasProfilePicChanged) {
+        [self uploadImage_medium:self.imageData_picker];
+    } else if (!hasProfilePicChanged && ![self.profilePickerButton backgroundImageForState:UIControlStateNormal]) {
+        UIImage *image = [UIImage imageNamed:@"default-pic.png"];
+        UIImage *smallRoundedImage = [PAPUtility resizeImage:image width:84.0f height:84.0f];
+        
+        self.imageData_picker = UIImageJPEGRepresentation(smallRoundedImage, 1);
+        [self uploadImage_medium:self.imageData_picker];
+        
+    }
+    
+    if (self.imageData_picker_small && hasProfilePicChanged) {
+        [self uploadImage_medium:self.imageData_picker_small];
+    } else if (!hasProfilePicChanged && ![self.profilePickerButton backgroundImageForState:UIControlStateNormal]) {
+        UIImage *image = [UIImage imageNamed:@"default-pic.png"];
+        UIImage *resizedImage = [PAPUtility resizeImage:image width:200.0f height:200.0f];
+        self.imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
+        [self uploadImage_medium:self.imageData_picker];
+    }
+    
+    [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        // TODO display a new screen
+    }];
+}
+
 - (IBAction)cancelButtonAction:(id)sender {
     //[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)dismissKeyboard {
     [self.view endEditing:YES];
+}
+
+-(BOOL)NSStringIsValidEmail:(NSString *)checkString {
+    BOOL stricterFilter = YES;
+    NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";
+    NSString *laxString = @".+@([A-Za-z0-9]+\\.)+[A-Za-z]{2}[A-Za-z]*";
+    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:checkString];
 }
 
 @end

@@ -13,6 +13,7 @@
 #import "PAPprofileSetupViewController.h"
 #import "Mixpanel.h"
 #import <ParseFacebookUtils/PFFacebookUtils.h>
+#import "PAPLoginInfoSheetViewController.h"
 
 @implementation PAPWelcomeViewController
 
@@ -82,9 +83,9 @@
             } else {
                 if (user && profileExist != YES) {
                                     
-                    PAPprofileSetupViewController *profileSetupViewController = [[PAPprofileSetupViewController alloc] init];
+                    PAPLoginInfoSheetViewController *loginInfoSheetViewController = [[PAPLoginInfoSheetViewController alloc] initWithNibName:@"PAPLoginInfoSheetViewController" bundle:nil];
                     self.navigationController.navigationBarHidden = YES;
-                    [self.navigationController pushViewController:profileSetupViewController animated:NO];
+                    [self.navigationController pushViewController:loginInfoSheetViewController animated:NO];
                 } else {
                     NSLog(@"User does not exist");
                 }
