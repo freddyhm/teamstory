@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PAPLoginInfoSheetViewController : UIViewController
+@interface PAPLoginInfoSheetViewController : UIViewController <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @end

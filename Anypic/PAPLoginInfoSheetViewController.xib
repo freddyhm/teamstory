@@ -7,6 +7,10 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PAPLoginInfoSheetViewController">
             <connections>
+                <outlet property="bioTextView" destination="juG-Ub-FOz" id="q6Q-ni-cKD"/>
+                <outlet property="companyNameTextField" destination="a6B-J3-WSO" id="MO6-vF-2iQ"/>
+                <outlet property="emailTextField" destination="zeh-tj-zwK" id="u81-Tk-BGw"/>
+                <outlet property="locationTextField" destination="rNq-ZB-tWN" id="M3P-2M-JJh"/>
                 <outlet property="profilePickerButton" destination="Wx6-Qr-nFh" id="5Ip-wZ-c8y"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -22,13 +26,13 @@
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
                 </textField>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Company Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zeh-tj-zwK">
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email Address" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zeh-tj-zwK">
                     <rect key="frame" x="8" y="308" width="293" height="42"/>
                     <color key="backgroundColor" red="0.9011371722" green="0.90861854399999997" blue="0.93106265939999999" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
                 </textField>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Company Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rNq-ZB-tWN">
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Location" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="rNq-ZB-tWN">
                     <rect key="frame" x="8" y="358" width="293" height="42"/>
                     <color key="backgroundColor" red="0.9011371722" green="0.90861854399999997" blue="0.93106265939999999" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -49,6 +53,15 @@
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EOn-kk-buE">
+                            <rect key="frame" x="8" y="20" width="22" height="22"/>
+                            <state key="normal" image="button_cancel.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="cancelButtonAction:" destination="-1" eventType="touchUpInside" id="iNL-Fq-iwz"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.33725490200000002" green="0.72549019609999998" blue="0.61568627450000002" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
@@ -65,6 +78,10 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+            <point key="canvasLocation" x="-63" y="154"/>
         </view>
     </objects>
+    <resources>
+        <image name="button_cancel.png" width="22" height="22"/>
+    </resources>
 </document>
