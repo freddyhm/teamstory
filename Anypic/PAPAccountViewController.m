@@ -112,7 +112,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     // Handling anonymous users.
     if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
-        PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] init];
+        PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
         [self presentViewController:loginSelectionViewController animated:YES completion:nil];
     }
     

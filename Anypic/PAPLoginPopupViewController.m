@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "PAPLoginInfoSheetViewController.h"
 
+
 @interface PAPLoginPopupViewController ()
 
 @property (strong, nonatomic) IBOutlet UITextField *emailTextView;
@@ -22,10 +23,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
                                           action:@selector(dismissKeyboard)];
-    
+
     [self.view addGestureRecognizer:tapOutside];
     
 }
@@ -60,17 +62,8 @@
     [self presentViewController:loginInfoSheetController animated:YES completion:nil];
 }
 
-// UITextField placeholder position
-- (CGRect)textRectForBounds:(CGRect)bounds {
-    return CGRectInset( bounds , 10 , 10 );
-}
-
-// UITextField text position
-- (CGRect)editingRectForBounds:(CGRect)bounds {
-    return CGRectInset( bounds , 10 , 10 );
-}
-
 -(void)dismissKeyboard {
     [self.view endEditing:YES];
 }
+
 @end
