@@ -8,6 +8,7 @@
 
 #import "PAPLoginSelectionViewController.h"
 #import "PAPLoginPopupViewController.h"
+#import "PAPSignUpViewController.h"
 
 @interface PAPLoginSelectionViewController ()
 
@@ -27,8 +28,10 @@
 }
 
 - (IBAction)memberButtonAction:(id)sender {
-    
+    PAPSignUpViewController *signUpViewController = [[PAPSignUpViewController alloc] initWithNibName:@"PAPSignUpViewController" bundle:nil];
+    [self presentViewController:signUpViewController animated:YES completion:nil];
 }
+
 - (IBAction)cancelButtonAction:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
