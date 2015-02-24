@@ -11,7 +11,7 @@
                 <outlet property="displayName" destination="mtM-Ne-X0Z" id="2IE-RN-WSx"/>
                 <outlet property="email_address" destination="Ypi-0H-xND" id="qCY-OG-D8a"/>
                 <outlet property="industry" destination="KDX-Da-fa0" id="55x-SK-VWQ"/>
-                <outlet property="industryPickerView" destination="QGx-Rv-q6S" id="Hbo-9c-CS3"/>
+                <outlet property="industryView" destination="QGx-Rv-q6S" id="2sc-w5-Zu3"/>
                 <outlet property="industry_buttonAction" destination="Rid-Ph-EUh" id="bfd-iZ-cd9"/>
                 <outlet property="industry_pickerView" destination="Wb6-za-Zxc" id="7pW-6L-ev4"/>
                 <outlet property="location" destination="Z63-cg-RSe" id="XvP-zz-3JT"/>
@@ -232,27 +232,6 @@
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </view>
-                                <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QGx-Rv-q6S" userLabel="Industry Picker View">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="509"/>
-                                    <subviews>
-                                        <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wb6-za-Zxc" userLabel="Industry Picker View">
-                                            <rect key="frame" x="0.0" y="219" width="320" height="216"/>
-                                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <outlet property="delegate" destination="-1" id="6i3-Rb-7ji"/>
-                                            </connections>
-                                        </pickerView>
-                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rid-Ph-EUh">
-                                            <rect key="frame" x="0.0" y="435" width="320" height="69"/>
-                                            <color key="backgroundColor" red="0.33725490200000002" green="0.72549019609999998" blue="0.61568627450000002" alpha="1" colorSpace="calibratedRGB"/>
-                                            <state key="normal" title="Choose">
-                                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                            </state>
-                                        </button>
-                                    </subviews>
-                                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.46000000000000002" colorSpace="calibratedRGB"/>
-                                </view>
                             </subviews>
                             <color key="backgroundColor" red="0.83137254901960789" green="0.85490196078431369" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
@@ -269,6 +248,27 @@
                         <constraint firstAttribute="trailing" secondItem="XLc-qI-gzq" secondAttribute="trailing" id="YkB-uc-FFj"/>
                     </constraints>
                 </scrollView>
+                <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QGx-Rv-q6S" userLabel="Industry Picker View">
+                    <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                    <subviews>
+                        <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wb6-za-Zxc" userLabel="Industry Picker View">
+                            <rect key="frame" x="0.0" y="219" width="320" height="216"/>
+                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <outlet property="delegate" destination="-1" id="6i3-Rb-7ji"/>
+                            </connections>
+                        </pickerView>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rid-Ph-EUh">
+                            <rect key="frame" x="0.0" y="435" width="320" height="69"/>
+                            <color key="backgroundColor" red="0.33725490200000002" green="0.72549019609999998" blue="0.61568627450000002" alpha="1" colorSpace="calibratedRGB"/>
+                            <state key="normal" title="Choose">
+                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.46000000000000002" colorSpace="calibratedRGB"/>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
@@ -279,7 +279,7 @@
             </constraints>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-            <point key="canvasLocation" x="-45" y="-24"/>
+            <point key="canvasLocation" x="-306" y="-13"/>
         </view>
     </objects>
 </document>

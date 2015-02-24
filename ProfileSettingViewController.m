@@ -175,7 +175,7 @@
           
             UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                                   initWithTarget:self
-                                                  action:@selector(dismissKeyboard)];
+                                                  action:@selector(tappedOutside)];
             
             [self.view addGestureRecognizer:tapOutside];
             
@@ -231,21 +231,31 @@
                 
                 [SVProgressHUD dismiss];
                 
-                if(succeeded){
-                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"Your Information has been saved successfully" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                    [alert show];
-                    
-                    [self refreshUserInfo];
-                    
-                }else{
-                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your Information could not be saved. Reach us at info@teamstoryapp.com" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                    [alert show];
-                }
+                NSString *messageTitle = succeeded ? @"Saved" : @"Error";
+                NSString *messageBody = succeeded ? @"Your Information has been saved successfully" : @"Your Information could not be saved. Reach us at info@teamstoryapp.com";
+                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:messageTitle message:messageBody delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alert show];
             }];
         }
         
         self.saveButton.userInteractionEnabled = YES;
     }];
+}
+
+#pragma mark - AlertView Delegate 
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    if([alertView.title isEqualToString:@"Saved"]){
+        
+        // Notify timeline so a refresh is triggered
+        [[NSNotificationCenter defaultCenter] postNotificationName:PAPProfileSettingViewControllerUserChangedProfile object:nil userInfo:nil];
+        
+        // remove controller from stack
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    
 }
 
 #pragma mark - Upload Image Methods
@@ -335,8 +345,15 @@
 
 #pragma mark - Keyboard Related Methods
 
--(void)dismissKeyboard {
+-(void)tappedOutside {
+    
+    // dismiss keyboard
     [self.view endEditing:YES];
+    
+    // hide pickerview if visible
+    if(!self.industryView.isHidden){
+        [self.industryView setHidden:YES];
+    }
 }
 
 
@@ -348,13 +365,14 @@
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    [self dismissKeyboard];
-   
+    
+    // retrieve image from picker selection
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
     
-    // Dismiss controller
+    // Dismiss media picker controller
     [picker dismissViewControllerAnimated:YES completion:nil];
     
+    // resize to thumbnail and post format
     UIImage *smallRoundedImage = [PAPUtility resizeImage:image width:84.0f height:84.0f];
     UIImage *resizedImage = [PAPUtility resizeImage:image width:200.0f height:200.0f];
     
@@ -362,7 +380,7 @@
     self.imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
     self.imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
     
-    // set image
+    // set image for our profile image view
     [self.profilePictureImageView setImage:smallRoundedImage];
 }
 
@@ -478,11 +496,11 @@
 #pragma mark - Industry Picker Delegate & Methods
 
 - (void)industry_buttonAction:(id)sender{
-    [self.industryPickerView setHidden:NO];
+    [self.industryView setHidden:NO];
 }
 
 - (void)industry_chooseButtonAction:(id)sender {
-    [self.industryPickerView setHidden:YES];
+    [self.industryView setHidden:YES];
     [self.industry setTitle:[self.industry_dataSource objectAtIndex:self.industry_pickerRow] forState:UIControlStateNormal];
 }
 

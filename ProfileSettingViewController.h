@@ -20,7 +20,8 @@
 @property (strong, nonatomic) IBOutlet UITextField *website;
 @property (strong, nonatomic) IBOutlet UITextField *displayName;
 @property (strong, nonatomic) IBOutlet UIButton *industry;
-@property (strong, nonatomic) IBOutlet UIView *industryPickerView;
+
+@property (strong, nonatomic) IBOutlet UIView *industryView;
 @property (strong, nonatomic) IBOutlet UIButton *industry_buttonAction;
 
 @end
