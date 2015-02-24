@@ -44,11 +44,7 @@
             [self navigateToInfoSheet];
         } else {
             NSLog(@"User logged in with Twitter!");
-
-            [self.presentingViewController.presentingViewController dismissViewControllerAnimated:YES completion:^{
-                [self.presentingViewController.presentingViewController dismissViewControllerAnimated:NO completion:^{
-                }];
-            }];
+            [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
             
         }     
     }];

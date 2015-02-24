@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OverrideTextField.h"
 
 @interface PAPLoginPopupViewController : UIViewController <UITextFieldDelegate>
 
