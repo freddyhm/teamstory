@@ -12,18 +12,15 @@
 #import "Reachability.h"
 #import "MBProgressHUD.h"
 #import "PAPHomeViewController.h"
-#import "PAPLogInViewController.h"
 #import "PAPAccountViewController.h"
 #import "PAPWelcomeViewController.h"
 #import "PAPActivityFeedViewController.h"
 #import "PAPPhotoDetailsViewController.h"
 #import "discoverPageViewController.h"
 #import "PAPwebviewViewController.h"
-#import "PAPLoginTutorialViewController.h"
 #import "PhotoTimelineViewController.h"
 #import <Crashlytics/Crashlytics.h>
 #import "iRate.h"
-#import "PAPprofileSetupViewController.h"
 #import "Mixpanel.h"
 #import "PAPMessageListViewController.h"
 #import "PAPMessagingViewController.h"
@@ -34,7 +31,7 @@
 #import <FlightRecorder/FlightRecorder.h>
 #import "SVProgressHUD.h"
 #import "AtMention.h"
-
+#import "PAPLoginSelectionViewController.h"
 
 @interface AppDelegate () {
     NSMutableData *_data;
@@ -47,7 +44,6 @@
 @property (nonatomic, strong) PAPActivityFeedViewController *activityViewController;
 @property (nonatomic, strong) PAPWelcomeViewController *welcomeViewController;
 @property (nonatomic, strong) PAPAccountViewController *accountViewController_tabBar;
-@property (nonatomic, strong) PAPLogInViewController *loginviewcontroller;
 @property (nonatomic, strong) discoverPageViewController *discoverViewController;
 @property (nonatomic, strong) PhotoTimelineViewController *photoTimelineViewController;
 @property (nonatomic, strong) PAPMessageListCell *messageListCell;
@@ -89,7 +85,6 @@
 @synthesize activityViewController;
 @synthesize welcomeViewController;
 @synthesize accountViewController_tabBar;
-@synthesize loginviewcontroller;
 @synthesize discoverViewController;
 
 @synthesize autoFollowTimer;
@@ -461,6 +456,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
 }
 
 
+/*
 #pragma mark - PFLoginViewController
 
 - (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
@@ -507,7 +503,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
         }];
     }
 }
-
+*/
 
 #pragma mark - NSURLConnectionDataDelegate
 
@@ -531,12 +527,12 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
 }
 
 - (void)presentLoginSelectionController {
-    PAPLoginTutorialViewController *loginSelectionViewController = [[PAPLoginTutorialViewController alloc] init];
+    PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
     [self.navController pushViewController:loginSelectionViewController animated:YES];
 }
 
 - (void)presentTutorialViewController {
-    PAPLoginTutorialViewController *loginTutorialViewController = [[PAPLoginTutorialViewController alloc] init];
+    PAPLoginSelectionViewController *loginTutorialViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
     [self.navController pushViewController:loginTutorialViewController animated:YES];
 }
 

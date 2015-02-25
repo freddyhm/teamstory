@@ -8,9 +8,7 @@
 #import "SVProgressHUD.h"
 #import "MBProgressHUD.h"
 #import "AppDelegate.h"
-#import "PAPLoginTutorialViewController.h"
 #import "PAPHomeViewController.h"
-#import "PAPprofileSetupViewController.h"
 #import "Mixpanel.h"
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import "PAPLoginInfoSheetViewController.h"
@@ -82,7 +80,6 @@
                 [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBarController];
             } else {
                 if (user && profileExist != YES) {
-                                    
                     PAPLoginInfoSheetViewController *loginInfoSheetViewController = [[PAPLoginInfoSheetViewController alloc] initWithNibName:@"PAPLoginInfoSheetViewController" bundle:nil];
                     self.navigationController.navigationBarHidden = YES;
                     [self.navigationController pushViewController:loginInfoSheetViewController animated:NO];

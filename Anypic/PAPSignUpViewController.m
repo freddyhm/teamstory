@@ -22,7 +22,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    
 }
 
 - (IBAction)signInButtonAction:(id)sender {
@@ -43,6 +43,10 @@
 
 - (IBAction)signInEmailButtonAction:(id)sender {
     [self userLoginWithEmail];
+}
+
+- (IBAction)cancelButtonAction:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)forgotPWButtonAction:(id)sender {
@@ -69,7 +73,7 @@
     
     // checking for email address in advance.
     if (![self NSStringIsValidEmail:self.emailTextField.text]) {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Wrong Email" message:@"Please check your email address" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Wrong Email" message:@"Please check your email address" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         alert.alertViewStyle = UIAlertViewStyleDefault;
         [alert show];
         return;
@@ -94,13 +98,13 @@
                                                     [self.navigationController presentViewController:loginInfoSheetViewController animated:YES completion:nil];
                                                 }
                                             } else {
-                                                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Wrong Email" message:@"Please check your email address or password" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                                                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Wrong Email" message:@"Please check your email address or password" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                                                 alert.alertViewStyle = UIAlertViewStyleDefault;
                                                 [alert show];
                                             }
                                         }];
     } else {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please check your internet connection" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please check your internet connection" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         alert.alertViewStyle = UIAlertViewStyleDefault;
         [alert show];
     }

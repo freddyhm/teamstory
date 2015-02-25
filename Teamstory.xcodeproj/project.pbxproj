@@ -174,14 +174,12 @@
 		467A40DD1993059300D4C693 /* join_teamstory@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 467A40D31993059300D4C693 /* join_teamstory@2x.png */; };
 		467A40DE1993059300D4C693 /* welcome_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 467A40D41993059300D4C693 /* welcome_back.png */; };
 		467A40DF1993059300D4C693 /* welcome_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 467A40D51993059300D4C693 /* welcome_back@2x.png */; };
-		46839E7E18E1E89600BD60DB /* PAPLoginTutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46839E7B18E1E89600BD60DB /* PAPLoginTutorialViewController.m */; };
 		46839E9618E1E8C100BD60DB /* btn-back.png in Resources */ = {isa = PBXBuildFile; fileRef = 46839E8218E1E8C100BD60DB /* btn-back.png */; };
 		46839E9718E1E8C100BD60DB /* btn-back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46839E8318E1E8C100BD60DB /* btn-back@2x.png */; };
 		46839E9818E1E8C100BD60DB /* icon-email.png in Resources */ = {isa = PBXBuildFile; fileRef = 46839E8418E1E8C100BD60DB /* icon-email.png */; };
 		46839E9918E1E8C100BD60DB /* icon-email@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46839E8518E1E8C100BD60DB /* icon-email@2x.png */; };
 		46839E9E18E1E8C100BD60DB /* icon-upload.png in Resources */ = {isa = PBXBuildFile; fileRef = 46839E8A18E1E8C100BD60DB /* icon-upload.png */; };
 		46839E9F18E1E8C100BD60DB /* icon-upload@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46839E8B18E1E8C100BD60DB /* icon-upload@2x.png */; };
-		4688686F185F8B78002BA081 /* emailSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4688686E185F8B78002BA081 /* emailSignUpViewController.m */; };
 		4691B4F018BEF61200B7DF6A /* unfollow.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B4EE18BEF61200B7DF6A /* unfollow.png */; };
 		4691B4F118BEF61200B7DF6A /* unfollow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B4EF18BEF61200B7DF6A /* unfollow@2x.png */; };
 		4691B4F418BEF61C00B7DF6A /* follow.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B4F218BEF61C00B7DF6A /* follow.png */; };
@@ -218,7 +216,6 @@
 		46B31EEF184E35150028D11C /* profileLocation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B31EE7184E35150028D11C /* profileLocation@2x.png */; };
 		46B31EF0184E35150028D11C /* companyName.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B31EE8184E35150028D11C /* companyName.png */; };
 		46B31EF1184E35150028D11C /* companyName@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46B31EE9184E35150028D11C /* companyName@2x.png */; };
-		46C6FC0E198AA62900BC99D5 /* PAPprofileSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C6FC0D198AA62900BC99D5 /* PAPprofileSetupViewController.m */; };
 		46CE24591A7AC8220072FA28 /* post_share.png in Resources */ = {isa = PBXBuildFile; fileRef = 46CE24561A7AC8220072FA28 /* post_share.png */; };
 		46CE24631A7ACE2D0072FA28 /* post_share@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46CE24611A7ACE2D0072FA28 /* post_share@3x.png */; };
 		46CE24641A7ACE2D0072FA28 /* post_share@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46CE24621A7ACE2D0072FA28 /* post_share@2x.png */; };
@@ -296,7 +293,6 @@
 		C4F102B6156C57820061BC3E /* PAPPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102B2156C57820061BC3E /* PAPPhotoCell.m */; };
 		C4F102B9156C57B90061BC3E /* PAPSettingsButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102B8156C57B90061BC3E /* PAPSettingsButtonItem.m */; };
 		C4F102BC156C57CD0061BC3E /* PAPTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102BB156C57CD0061BC3E /* PAPTabBarController.m */; };
-		C4F102C2156C57DA0061BC3E /* PAPLogInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102BE156C57DA0061BC3E /* PAPLogInViewController.m */; };
 		C4F102C3156C57DA0061BC3E /* PAPWelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102C0156C57DA0061BC3E /* PAPWelcomeViewController.m */; };
 		C4F102CB156C57EE0061BC3E /* PAPActivityFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102C6156C57ED0061BC3E /* PAPActivityFeedViewController.m */; };
 		C4F102CC156C57EE0061BC3E /* PAPHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102C8156C57ED0061BC3E /* PAPHomeViewController.m */; };
@@ -802,16 +798,12 @@
 		467A40D31993059300D4C693 /* join_teamstory@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "join_teamstory@2x.png"; sourceTree = "<group>"; };
 		467A40D41993059300D4C693 /* welcome_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = welcome_back.png; sourceTree = "<group>"; };
 		467A40D51993059300D4C693 /* welcome_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome_back@2x.png"; sourceTree = "<group>"; };
-		46839E7A18E1E89600BD60DB /* PAPLoginTutorialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPLoginTutorialViewController.h; path = Anypic/PAPLoginTutorialViewController.h; sourceTree = SOURCE_ROOT; };
-		46839E7B18E1E89600BD60DB /* PAPLoginTutorialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPLoginTutorialViewController.m; path = Anypic/PAPLoginTutorialViewController.m; sourceTree = SOURCE_ROOT; };
 		46839E8218E1E8C100BD60DB /* btn-back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-back.png"; sourceTree = "<group>"; };
 		46839E8318E1E8C100BD60DB /* btn-back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn-back@2x.png"; sourceTree = "<group>"; };
 		46839E8418E1E8C100BD60DB /* icon-email.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-email.png"; sourceTree = "<group>"; };
 		46839E8518E1E8C100BD60DB /* icon-email@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-email@2x.png"; sourceTree = "<group>"; };
 		46839E8A18E1E8C100BD60DB /* icon-upload.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-upload.png"; sourceTree = "<group>"; };
 		46839E8B18E1E8C100BD60DB /* icon-upload@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-upload@2x.png"; sourceTree = "<group>"; };
-		4688686D185F8B78002BA081 /* emailSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = emailSignUpViewController.h; sourceTree = SOURCE_ROOT; };
-		4688686E185F8B78002BA081 /* emailSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = emailSignUpViewController.m; sourceTree = SOURCE_ROOT; };
 		4691B4EE18BEF61200B7DF6A /* unfollow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unfollow.png; sourceTree = "<group>"; };
 		4691B4EF18BEF61200B7DF6A /* unfollow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unfollow@2x.png"; sourceTree = "<group>"; };
 		4691B4F218BEF61C00B7DF6A /* follow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = follow.png; sourceTree = "<group>"; };
@@ -861,8 +853,6 @@
 		46B31EE7184E35150028D11C /* profileLocation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "profileLocation@2x.png"; path = "Resources/Assets/profileLocation@2x.png"; sourceTree = SOURCE_ROOT; };
 		46B31EE8184E35150028D11C /* companyName.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = companyName.png; path = Resources/Assets/companyName.png; sourceTree = SOURCE_ROOT; };
 		46B31EE9184E35150028D11C /* companyName@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "companyName@2x.png"; path = "Resources/Assets/companyName@2x.png"; sourceTree = SOURCE_ROOT; };
-		46C6FC0C198AA62900BC99D5 /* PAPprofileSetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPprofileSetupViewController.h; sourceTree = SOURCE_ROOT; };
-		46C6FC0D198AA62900BC99D5 /* PAPprofileSetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPprofileSetupViewController.m; sourceTree = SOURCE_ROOT; };
 		46CE24561A7AC8220072FA28 /* post_share.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = post_share.png; sourceTree = "<group>"; };
 		46CE24611A7ACE2D0072FA28 /* post_share@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "post_share@3x.png"; sourceTree = "<group>"; };
 		46CE24621A7ACE2D0072FA28 /* post_share@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "post_share@2x.png"; sourceTree = "<group>"; };
@@ -967,8 +957,6 @@
 		C4F102B8156C57B90061BC3E /* PAPSettingsButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPSettingsButtonItem.m; path = Anypic/PAPSettingsButtonItem.m; sourceTree = SOURCE_ROOT; };
 		C4F102BA156C57CD0061BC3E /* PAPTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPTabBarController.h; path = Anypic/PAPTabBarController.h; sourceTree = SOURCE_ROOT; };
 		C4F102BB156C57CD0061BC3E /* PAPTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPTabBarController.m; path = Anypic/PAPTabBarController.m; sourceTree = SOURCE_ROOT; };
-		C4F102BD156C57DA0061BC3E /* PAPLogInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPLogInViewController.h; path = Anypic/PAPLogInViewController.h; sourceTree = SOURCE_ROOT; };
-		C4F102BE156C57DA0061BC3E /* PAPLogInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPLogInViewController.m; path = Anypic/PAPLogInViewController.m; sourceTree = SOURCE_ROOT; };
 		C4F102BF156C57DA0061BC3E /* PAPWelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPWelcomeViewController.h; path = Anypic/PAPWelcomeViewController.h; sourceTree = SOURCE_ROOT; };
 		C4F102C0156C57DA0061BC3E /* PAPWelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPWelcomeViewController.m; path = Anypic/PAPWelcomeViewController.m; sourceTree = SOURCE_ROOT; };
 		C4F102C5156C57ED0061BC3E /* PAPActivityFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPActivityFeedViewController.h; path = Anypic/PAPActivityFeedViewController.h; sourceTree = SOURCE_ROOT; };
@@ -2040,16 +2028,8 @@
 		74A504E51565F17E00CFA4E3 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				46839E7A18E1E89600BD60DB /* PAPLoginTutorialViewController.h */,
-				46839E7B18E1E89600BD60DB /* PAPLoginTutorialViewController.m */,
-				4688686D185F8B78002BA081 /* emailSignUpViewController.h */,
-				4688686E185F8B78002BA081 /* emailSignUpViewController.m */,
 				C4F102BF156C57DA0061BC3E /* PAPWelcomeViewController.h */,
 				C4F102C0156C57DA0061BC3E /* PAPWelcomeViewController.m */,
-				C4F102BD156C57DA0061BC3E /* PAPLogInViewController.h */,
-				C4F102BE156C57DA0061BC3E /* PAPLogInViewController.m */,
-				46C6FC0C198AA62900BC99D5 /* PAPprofileSetupViewController.h */,
-				46C6FC0D198AA62900BC99D5 /* PAPprofileSetupViewController.m */,
 				461371651A9653C8002A907A /* PAPLoginSelectionViewController.h */,
 				461371661A9653C8002A907A /* PAPLoginSelectionViewController.m */,
 				461371671A9653C8002A907A /* PAPLoginSelectionViewController.xib */,
@@ -3274,7 +3254,6 @@
 				D5654177196F64D400E74164 /* ALAssetsLibrary+CustomPhotoAlbum.m in Sources */,
 				D5F0871A1A82E25B0079C922 /* MPABTestDesignerTweakResponseMessage.m in Sources */,
 				D5F087331A82E25B0079C922 /* MPObjectSerializerConfig.m in Sources */,
-				46839E7E18E1E89600BD60DB /* PAPLoginTutorialViewController.m in Sources */,
 				461C57E819C0FEA100F6575C /* PAPMessageListViewController.m in Sources */,
 				D5F087421A82E25B0079C922 /* MPUIColorToNSStringValueTransformer.m in Sources */,
 				D542D8BF196A6F4700A0384F /* ELCAsset.m in Sources */,
@@ -3291,7 +3270,6 @@
 				D5F0873D1A82E25B0079C922 /* MPSwizzler.m in Sources */,
 				D5F087151A82E25B0079C922 /* MPABTestDesignerDeviceInfoResponseMessage.m in Sources */,
 				D5F087461A82E25B0079C922 /* MPUIImageToNSDictionaryValueTransformer.m in Sources */,
-				4688686F185F8B78002BA081 /* emailSignUpViewController.m in Sources */,
 				C4F10291156C571C0061BC3E /* AppDelegate.m in Sources */,
 				D5F087141A82E25B0079C922 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */,
 				D5856FB519F87E2600D0086F /* KonotorUtility.m in Sources */,
@@ -3342,7 +3320,6 @@
 				C4F102B9156C57B90061BC3E /* PAPSettingsButtonItem.m in Sources */,
 				C4F102BC156C57CD0061BC3E /* PAPTabBarController.m in Sources */,
 				D5F0874E1A82E25B0079C922 /* UIColor+MPColor.m in Sources */,
-				C4F102C2156C57DA0061BC3E /* PAPLogInViewController.m in Sources */,
 				C4F102C3156C57DA0061BC3E /* PAPWelcomeViewController.m in Sources */,
 				461371741A9672FC002A907A /* PAPLoginPopupViewController.m in Sources */,
 				D5856FB419F87E2600D0086F /* KonotorUITextView.m in Sources */,
@@ -3398,7 +3375,6 @@
 				461371681A9653C8002A907A /* PAPLoginSelectionViewController.m in Sources */,
 				D5903C75192EBBF900DC9896 /* ThoughtPostViewController.m in Sources */,
 				D56D17D31A5A2BB30090615A /* VSWordDetector.m in Sources */,
-				46C6FC0E198AA62900BC99D5 /* PAPprofileSetupViewController.m in Sources */,
 				D5F087211A82E25B0079C922 /* MPCGRectToNSDictionaryValueTransformer.m in Sources */,
 				D5F087361A82E25B0079C922 /* MPPropertyDescription.m in Sources */,
 				D5C483D71A67583B0006D313 /* UIImageEffects.m in Sources */,

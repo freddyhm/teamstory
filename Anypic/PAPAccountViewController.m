@@ -6,7 +6,6 @@
 
 #import "PAPAccountViewController.h"
 #import "PAPLoadMoreCell.h"
-#import "PAPProfileSettingViewController.h"
 #import "PAPSettingsButtonItem.h"
 #import "PAPSettingsActionSheetDelegate.h"
 #import "SVProgressHUD.h"
@@ -888,9 +887,12 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 }
 
 - (void)editProfileAction:(id)sender{
+    // TODO mount a new profile settings screen
+    /*
     PAPProfileSettingViewController *profileViewController = [[PAPProfileSettingViewController alloc] init];
     profileViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:profileViewController animated:YES];
+     */
 }
 
 

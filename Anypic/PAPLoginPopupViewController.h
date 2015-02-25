@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PAPLoginPopupViewController : UIViewController <UITextFieldDelegate>
+@interface PAPLoginPopupViewController : UIViewController <UITextFieldDelegate, UIScrollViewDelegate>
 
 @end

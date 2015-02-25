@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PAPSignUpViewController : UIViewController
+@interface PAPSignUpViewController : UIViewController <UIAlertViewDelegate, UITextFieldDelegate>
 
 @end

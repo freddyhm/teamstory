@@ -7,6 +7,7 @@
 //
 
 #import "PAPLoginInfoSheetViewController.h"
+#import "AppDelegate.h"
 
 @interface PAPLoginInfoSheetViewController () {
     BOOL hasProfilePicChanged;
@@ -18,6 +19,7 @@
 @property (strong, nonatomic) IBOutlet UITextField *locationTextField;
 @property (strong, nonatomic) IBOutlet UITextField *emailTextField;
 @property (strong, nonatomic) IBOutlet UITextView *bioTextView;
+@property (strong, nonatomic) IBOutlet UIScrollView *mainScrollView;
 
 @end
 
@@ -25,7 +27,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.companyNameTextField.delegate = self;
+    self.emailTextField.delegate = self;
+    self.locationTextField.delegate = self;
+    
     hasProfilePicChanged = NO;
+    self.bioTextView.delegate = self;
+    self.mainScrollView.delegate = self;
     
     self.profilePickerButton.layer.cornerRadius = self.profilePickerButton.bounds.size.width / 2;
     self.profilePickerButton.clipsToBounds = YES;
@@ -57,6 +66,14 @@
         [self.profilePickerButton setBackgroundImage:twitterProfilePicture forState:UIControlStateNormal];
         
     }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:YES];
+    [self.bioTextView setTextColor:[UIColor colorWithWhite:0.8 alpha:1.0f]];
+    self.bioTextView.text = @"Bio";
+    
+
 }
 
 -(UIImage *) getImageFromURL:(NSString *)fileURL {
@@ -221,7 +238,7 @@
         return;
     }
     
-    if (self.bioTextView.text.length == 0) {
+    if (self.bioTextView.text.length == 0 && [self.bioTextView.text isEqualToString:@"Bio"]) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Invalid Bio" message:@"Please insert a valid bio" delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
         [alertView show];
         return;
@@ -265,7 +282,16 @@
 }
 
 - (IBAction)cancelButtonAction:(id)sender {
-    //[self dismissViewControllerAnimated:YES completion:nil];
+    [PFUser logOut];
+    
+    [self.view endEditing:YES];
+    [PFAnonymousUtils logInWithBlock:^(PFUser *user, NSError *error) {
+        if (!error) {
+            [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
+        } else {
+            NSLog(@"Anonymous login failed");
+        }
+    }];
 }
 
 -(void)dismissKeyboard {
@@ -281,14 +307,35 @@
     return [emailTest evaluateWithObject:checkString];
 }
 
-// placeholder position
-- (CGRect)textRectForBounds:(CGRect)bounds {
-    return CGRectInset( bounds , 10 , 10 );
+#pragma UITextViewDelegate
+
+-(void)textViewDidBeginEditing:(UITextView *)textView {
+    textView.textColor = [UIColor blackColor];
+    textView.text = @"";
+    
+    CGPoint scrollPoint = CGPointMake(0, textView.frame.origin.y);
+    [self.mainScrollView setContentOffset:scrollPoint animated:YES];
 }
 
-// text position
-- (CGRect)editingRectForBounds:(CGRect)bounds {
-    return CGRectInset( bounds , 10 , 10 );
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    if (textView.text.length == 0) {
+        textView.text = @"Bio";
+        textView.textColor = [UIColor colorWithWhite:0.8 alpha:1.0f];
+    }
 }
+
+#pragma UITextFieldDelegate
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    float offsetValue = 5.0f;
+    
+    CGPoint scrollPoint = CGPointMake(0, textField.frame.origin.y - offsetValue);
+    [self.mainScrollView setContentOffset:scrollPoint animated:YES];
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    [self.mainScrollView setContentOffset:CGPointZero animated:YES];
+}
+
 
 @end
