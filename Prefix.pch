@@ -17,5 +17,10 @@
     #import "PAPCache.h"
     #import "PAPConstants.h"
     #import "PAPUtility.h"
+    #import "AtMention.h"
+    #import "Intercom.h"
+    #import "SVProgressHUD.h"
+    #import "Mixpanel.h"
+    #import <FlightRecorder/FlightRecorder.h>
 #endif
 

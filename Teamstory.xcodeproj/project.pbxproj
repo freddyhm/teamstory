@@ -292,6 +292,7 @@
 		C4F102E7156C58570061BC3E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C4F102E5156C58570061BC3E /* InfoPlist.strings */; };
 		C4F102EF156C58E00061BC3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C4F102EC156C58E00061BC3E /* main.m */; };
 		D503B6171A32904E00CF225B /* libIntercom.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D503B6161A32904E00CF225B /* libIntercom.a */; };
+		D504F9811A8C324400AB1431 /* ProfileSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D504F9801A8C324400AB1431 /* ProfileSettingViewController.xib */; };
 		D5082A4919D28D1500955BF0 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5082A4819D28D1500955BF0 /* StoreKit.framework */; };
 		D51072D11937F33F00B1FF0E /* share_thought_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = D51072CD1937F33F00B1FF0E /* share_thought_grey.png */; };
 		D51072D21937F33F00B1FF0E /* share_thought_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D51072CE1937F33F00B1FF0E /* share_thought_grey@2x.png */; };
@@ -431,6 +432,10 @@
 		D586C11D1A82EA7600AC7C31 /* bg_points_2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D586C11A1A82EA7600AC7C31 /* bg_points_2x.png */; };
 		D5903C75192EBBF900DC9896 /* ThoughtPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */; };
 		D5903C76192EBBF900DC9896 /* ThoughtPostViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5903C74192EBBF900DC9896 /* ThoughtPostViewController.xib */; };
+		D5949D5F1A9D650400BC23A7 /* TPKeyboardAvoidingCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5949D581A9D650400BC23A7 /* TPKeyboardAvoidingCollectionView.m */; };
+		D5949D601A9D650400BC23A7 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5949D5A1A9D650400BC23A7 /* TPKeyboardAvoidingScrollView.m */; };
+		D5949D611A9D650400BC23A7 /* TPKeyboardAvoidingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5949D5C1A9D650400BC23A7 /* TPKeyboardAvoidingTableView.m */; };
+		D5949D621A9D650400BC23A7 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D5949D5E1A9D650400BC23A7 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
 		D594C20418EFEBAD0008F5DF /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D594C20118EFEBAD0008F5DF /* SVProgressHUD.bundle */; };
 		D594C20518EFEBAD0008F5DF /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = D594C20318EFEBAD0008F5DF /* SVProgressHUD.m */; };
 		D59AE7B618CD501D007F882B /* valley.png in Resources */ = {isa = PBXBuildFile; fileRef = D59AE7B418CD501D007F882B /* valley.png */; };
@@ -475,6 +480,7 @@
 		D5D571171947F8E900354340 /* btn_no_follow_user.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571131947F8E900354340 /* btn_no_follow_user.png */; };
 		D5D571181947F8E900354340 /* btn_no_follow_user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D571141947F8E900354340 /* btn_no_follow_user@2x.png */; };
 		D5DC1BFC19CCF25E00ED0A6D /* ParseFacebookUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5DC1BFB19CCF25E00ED0A6D /* ParseFacebookUtils.framework */; };
+		D5EB3D9A1A91AF150008B55B /* ProfileSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5EB3D991A91AF150008B55B /* ProfileSettingViewController.m */; };
 		D5F0870A1A82E25B0079C922 /* _MPTweakBindObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = D5F0868E1A82E25B0079C922 /* _MPTweakBindObserver.m */; };
 		D5F0870B1A82E25B0079C922 /* libMPCategoryHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D5F0868F1A82E25B0079C922 /* libMPCategoryHelpers.a */; };
 		D5F0870C1A82E25B0079C922 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5F086901A82E25B0079C922 /* Media.xcassets */; };
@@ -954,6 +960,7 @@
 		CA531AAC33A5FDDABA0AB336 /* Pods.distribution.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.distribution.xcconfig; path = "Pods/Target Support Files/Pods/Pods.distribution.xcconfig"; sourceTree = "<group>"; };
 		D503B6151A32904E00CF225B /* Intercom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Intercom.h; sourceTree = "<group>"; };
 		D503B6161A32904E00CF225B /* libIntercom.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libIntercom.a; sourceTree = "<group>"; };
+		D504F9801A8C324400AB1431 /* ProfileSettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileSettingViewController.xib; sourceTree = SOURCE_ROOT; };
 		D5082A4819D28D1500955BF0 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		D51072CD1937F33F00B1FF0E /* share_thought_grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = share_thought_grey.png; sourceTree = "<group>"; };
 		D51072CE1937F33F00B1FF0E /* share_thought_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "share_thought_grey@2x.png"; sourceTree = "<group>"; };
@@ -1133,6 +1140,14 @@
 		D5903C72192EBBF900DC9896 /* ThoughtPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThoughtPostViewController.h; sourceTree = SOURCE_ROOT; };
 		D5903C73192EBBF900DC9896 /* ThoughtPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThoughtPostViewController.m; sourceTree = SOURCE_ROOT; };
 		D5903C74192EBBF900DC9896 /* ThoughtPostViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ThoughtPostViewController.xib; sourceTree = SOURCE_ROOT; };
+		D5949D571A9D650400BC23A7 /* TPKeyboardAvoidingCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingCollectionView.h; sourceTree = "<group>"; };
+		D5949D581A9D650400BC23A7 /* TPKeyboardAvoidingCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingCollectionView.m; sourceTree = "<group>"; };
+		D5949D591A9D650400BC23A7 /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
+		D5949D5A1A9D650400BC23A7 /* TPKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
+		D5949D5B1A9D650400BC23A7 /* TPKeyboardAvoidingTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingTableView.h; sourceTree = "<group>"; };
+		D5949D5C1A9D650400BC23A7 /* TPKeyboardAvoidingTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingTableView.m; sourceTree = "<group>"; };
+		D5949D5D1A9D650400BC23A7 /* UIScrollView+TPKeyboardAvoidingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+TPKeyboardAvoidingAdditions.h"; sourceTree = "<group>"; };
+		D5949D5E1A9D650400BC23A7 /* UIScrollView+TPKeyboardAvoidingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+TPKeyboardAvoidingAdditions.m"; sourceTree = "<group>"; };
 		D594C20018EFEBAD0008F5DF /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
 		D594C20118EFEBAD0008F5DF /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
 		D594C20218EFEBAD0008F5DF /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
@@ -1199,6 +1214,8 @@
 		D5D65A0919155E6F00FAC142 /* global.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = global.json; sourceTree = "<group>"; };
 		D5D65A0B19155E6F00FAC142 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		D5DC1BFB19CCF25E00ED0A6D /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseFacebookUtils.framework; path = External/ParseFacebookUtils.framework; sourceTree = "<group>"; };
+		D5EB3D981A91AF150008B55B /* ProfileSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileSettingViewController.h; sourceTree = SOURCE_ROOT; };
+		D5EB3D991A91AF150008B55B /* ProfileSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileSettingViewController.m; sourceTree = SOURCE_ROOT; };
 		D5F0868D1A82E25B0079C922 /* _MPTweakBindObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _MPTweakBindObserver.h; sourceTree = "<group>"; };
 		D5F0868E1A82E25B0079C922 /* _MPTweakBindObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _MPTweakBindObserver.m; sourceTree = "<group>"; };
 		D5F0868F1A82E25B0079C922 /* libMPCategoryHelpers.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMPCategoryHelpers.a; sourceTree = "<group>"; };
@@ -1643,6 +1660,8 @@
 			children = (
 				46E1EB6D183BCA6300F64274 /* PAPProfileSettingViewController.h */,
 				46E1EB6E183BCA6300F64274 /* PAPProfileSettingViewController.m */,
+				D5EB3D981A91AF150008B55B /* ProfileSettingViewController.h */,
+				D5EB3D991A91AF150008B55B /* ProfileSettingViewController.m */,
 			);
 			name = ProfileSetting;
 			sourceTree = "<group>";
@@ -2041,6 +2060,7 @@
 		C4A0B4FF156C5B9F00E48554 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				D5949D561A9D650400BC23A7 /* TPKeyboardAvoiding */,
 				D5D2194F1A8A8EA9003B3C7C /* FlightRecorder.embeddedframework */,
 				D5F0868C1A82E25B0079C922 /* Mixpanel */,
 				D5C483D51A67583B0006D313 /* UIImageEffects.h */,
@@ -2150,6 +2170,7 @@
 		C4A89497155879FC00DC57D3 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D504F97A1A8C2B8200AB1431 /* AccountViews */,
 				46FB0A3F1888769000E978CD /* discoverViews */,
 				74A504E31565F0E400CFA4E3 /* TimelineViews */,
 				74B86B911562DB2600CAFFD2 /* PhotoViews */,
@@ -2193,6 +2214,14 @@
 				C4F102C6156C57ED0061BC3E /* PAPActivityFeedViewController.m */,
 			);
 			name = Activity;
+			sourceTree = "<group>";
+		};
+		D504F97A1A8C2B8200AB1431 /* AccountViews */ = {
+			isa = PBXGroup;
+			children = (
+				D504F9801A8C324400AB1431 /* ProfileSettingViewController.xib */,
+			);
+			name = AccountViews;
 			sourceTree = "<group>";
 		};
 		D5135AF319EEDA78001F274A /* Teamstory Tests */ = {
@@ -2385,6 +2414,21 @@
 				D5856F8019F87E2500D0086F /* konotor_uploading@2x.png */,
 			);
 			path = KonotorImageResources;
+			sourceTree = "<group>";
+		};
+		D5949D561A9D650400BC23A7 /* TPKeyboardAvoiding */ = {
+			isa = PBXGroup;
+			children = (
+				D5949D571A9D650400BC23A7 /* TPKeyboardAvoidingCollectionView.h */,
+				D5949D581A9D650400BC23A7 /* TPKeyboardAvoidingCollectionView.m */,
+				D5949D591A9D650400BC23A7 /* TPKeyboardAvoidingScrollView.h */,
+				D5949D5A1A9D650400BC23A7 /* TPKeyboardAvoidingScrollView.m */,
+				D5949D5B1A9D650400BC23A7 /* TPKeyboardAvoidingTableView.h */,
+				D5949D5C1A9D650400BC23A7 /* TPKeyboardAvoidingTableView.m */,
+				D5949D5D1A9D650400BC23A7 /* UIScrollView+TPKeyboardAvoidingAdditions.h */,
+				D5949D5E1A9D650400BC23A7 /* UIScrollView+TPKeyboardAvoidingAdditions.m */,
+			);
+			path = TPKeyboardAvoiding;
 			sourceTree = "<group>";
 		};
 		D594C1FF18EFEBAD0008F5DF /* SVProgressHUD */ = {
@@ -2750,6 +2794,7 @@
 				463CE64519E9987D001F607C /* btn_new_message@2x.png in Resources */,
 				46ABD74E18B147FC008F5AAB /* button_cancel_selected.png in Resources */,
 				D552B0ED19C7D3EB009F2862 /* arrows_right@2x.png in Resources */,
+				D504F9811A8C324400AB1431 /* ProfileSettingViewController.xib in Resources */,
 				D5A284921A2EE83E00EF01A9 /* bg_thought@3x.png in Resources */,
 				D575A0701947834C00C6BCC2 /* btn_editprofile@2x.png in Resources */,
 				46839E9E18E1E8C100BD60DB /* icon-upload.png in Resources */,
@@ -3196,6 +3241,7 @@
 				46839E7E18E1E89600BD60DB /* PAPLoginTutorialViewController.m in Sources */,
 				461C57E819C0FEA100F6575C /* PAPMessageListViewController.m in Sources */,
 				D5F087421A82E25B0079C922 /* MPUIColorToNSStringValueTransformer.m in Sources */,
+				D5949D5F1A9D650400BC23A7 /* TPKeyboardAvoidingCollectionView.m in Sources */,
 				D542D8BF196A6F4700A0384F /* ELCAsset.m in Sources */,
 				D5FC095818A9B552000D85F1 /* FilterCell.m in Sources */,
 				46DC23CD19B01CBF00E8FCDF /* PAPdiscoverIndustryCell.m in Sources */,
@@ -3247,6 +3293,7 @@
 				D5856F9019F87E2500D0086F /* KonotorEventHandler.m in Sources */,
 				D5F087191A82E25B0079C922 /* MPABTestDesignerTweakRequestMessage.m in Sources */,
 				C4F102B4156C57820061BC3E /* PAPBaseTextCell.m in Sources */,
+				D5EB3D9A1A91AF150008B55B /* ProfileSettingViewController.m in Sources */,
 				D5856FB319F87E2600D0086F /* KonotorTextInputOverlay.m in Sources */,
 				D5F0871C1A82E25B0079C922 /* MPBOOLToNSNumberValueTransformer.m in Sources */,
 				C4F102B5156C57820061BC3E /* PAPLoadMoreCell.m in Sources */,
@@ -3263,6 +3310,7 @@
 				C4F102C3156C57DA0061BC3E /* PAPWelcomeViewController.m in Sources */,
 				D5856FB419F87E2600D0086F /* KonotorUITextView.m in Sources */,
 				D542D8C2196A6F4700A0384F /* ELCImagePickerController.m in Sources */,
+				D5949D621A9D650400BC23A7 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
 				D5743808194629280040C96A /* followersFollowingViewController.m in Sources */,
 				462B363E1880AB5D008C28AE /* discoverPageViewController.m in Sources */,
 				C4F102CB156C57EE0061BC3E /* PAPActivityFeedViewController.m in Sources */,
@@ -3292,6 +3340,7 @@
 				D5F0873C1A82E25B0079C922 /* MPSurveyQuestionViewController.m in Sources */,
 				747FC485156FFF74003349E1 /* PAPConstants.m in Sources */,
 				461C57F119C24C2300F6575C /* PAPMessagingSeachUsersViewController.m in Sources */,
+				D5949D601A9D650400BC23A7 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				D5F0873B1A82E25B0079C922 /* MPSurveyQuestion.m in Sources */,
 				D5F087301A82E25B0079C922 /* MPObjectIdentityProvider.m in Sources */,
 				D5F0874A1A82E25B0079C922 /* NSData+MPBase64.m in Sources */,
@@ -3304,6 +3353,7 @@
 				D527D3AF1A2405C40072766E /* PostPicViewController.m in Sources */,
 				D5F087321A82E25B0079C922 /* MPObjectSerializer.m in Sources */,
 				D5F0874B1A82E25B0079C922 /* NSInvocation+MPHelpers.m in Sources */,
+				D5949D611A9D650400BC23A7 /* TPKeyboardAvoidingTableView.m in Sources */,
 				D5F087411A82E25B0079C922 /* MPTypeDescription.m in Sources */,
 				D5F0873E1A82E25B0079C922 /* MPTweak.m in Sources */,
 				C4A6A246158FF842003F64A8 /* MBProgressHUD.m in Sources */,

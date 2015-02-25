@@ -6,9 +6,6 @@
 #import "PAPProfileSettingViewController.h"
 #import "PAPAccountViewController.h"
 #import "AppDelegate.h"
-#import "SVProgressHUD.h"
-#import "Mixpanel.h"
-#import <FlightRecorder/FlightRecorder.h>
 
 #define SUCCESSFUL 1
 #define IMAGE_NIL 2
