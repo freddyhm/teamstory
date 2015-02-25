@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6724" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6711"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProfileSettingViewController">
             <connections>
+                <outlet property="angellist_textfield" destination="hp3-H8-w9K" id="TEm-Ex-AN3"/>
                 <outlet property="backgroundView" destination="9po-VW-1Ni" id="3Ny-aO-Jvg"/>
                 <outlet property="displayName" destination="mtM-Ne-X0Z" id="2IE-RN-WSx"/>
                 <outlet property="email_address" destination="Ypi-0H-xND" id="qCY-OG-D8a"/>
@@ -14,6 +15,7 @@
                 <outlet property="industryView" destination="QGx-Rv-q6S" id="2sc-w5-Zu3"/>
                 <outlet property="industry_buttonAction" destination="Rid-Ph-EUh" id="bfd-iZ-cd9"/>
                 <outlet property="industry_pickerView" destination="Wb6-za-Zxc" id="7pW-6L-ev4"/>
+                <outlet property="linkedin_textfield" destination="Kbl-Ru-oTi" id="RHl-rf-FVT"/>
                 <outlet property="location" destination="Z63-cg-RSe" id="XvP-zz-3JT"/>
                 <outlet property="profilePictureImageView" destination="skL-vf-Jb1" id="ztX-fS-bBb"/>
                 <outlet property="twitter_textfield" destination="L7M-Hg-XWz" id="Ndl-Hq-Y1N"/>
@@ -31,7 +33,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="509"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XLc-qI-gzq" userLabel="Content View">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="585"/>
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="676"/>
                             <subviews>
                                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mV4-rS-G2R" userLabel="Profile Section">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
@@ -208,6 +210,32 @@
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </view>
+                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uor-zI-8mC" userLabel="LinkedIn Section">
+                                    <rect key="frame" x="0.0" y="511" width="320" height="55"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="LinkedIn" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BuO-aQ-znj" userLabel="LinkedIn Title">
+                                            <rect key="frame" x="15" y="17" width="63" height="21"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                            <color key="textColor" red="0.27058823529999998" green="0.29411764709999999" blue="0.34509803919999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <textField opaque="NO" clipsSubviews="YES" tag="7" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="What's your LinkedIn?" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Kbl-Ru-oTi" userLabel="LinkedIn Text Field">
+                                            <rect key="frame" x="100" y="12" width="212" height="30"/>
+                                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="textColor" red="0.3411764706" green="0.72549019609999998" blue="0.61960784310000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="-1" id="hNT-Uf-rAM"/>
+                                            </connections>
+                                        </textField>
+                                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TXB-u2-vCT" userLabel="Horizontal line">
+                                            <rect key="frame" x="0.0" y="54" width="320" height="1"/>
+                                            <color key="backgroundColor" red="0.7843137255" green="0.78039215689999997" blue="0.80000000000000004" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </view>
+                                    </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </view>
                                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8ph-At-Cl6" userLabel="Industry Section">
                                     <rect key="frame" x="0.0" y="346" width="320" height="55"/>
                                     <subviews>
@@ -233,20 +261,46 @@
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </view>
+                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U0J-hS-0Yh" userLabel="Twitter Section">
+                                    <rect key="frame" x="0.0" y="566" width="320" height="55"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="AngelList" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wu1-rB-jDx" userLabel="Twitter Title">
+                                            <rect key="frame" x="15" y="17" width="68" height="21"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                            <color key="textColor" red="0.27058823529999998" green="0.29411764709999999" blue="0.34509803919999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <textField opaque="NO" clipsSubviews="YES" tag="7" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="What's your AngelList?" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hp3-H8-w9K" userLabel="Twitter Text Field">
+                                            <rect key="frame" x="100" y="12" width="212" height="30"/>
+                                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="textColor" red="0.3411764706" green="0.72549019609999998" blue="0.61960784310000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="-1" id="8kg-ok-Zyz"/>
+                                            </connections>
+                                        </textField>
+                                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gX3-6a-WmB" userLabel="Horizontal line">
+                                            <rect key="frame" x="0.0" y="54" width="320" height="1"/>
+                                            <color key="backgroundColor" red="0.7843137255" green="0.78039215689999997" blue="0.80000000000000004" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </view>
+                                    </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </view>
                             </subviews>
                             <color key="backgroundColor" red="0.83137254901960789" green="0.85490196078431369" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="320" id="WGv-Ea-DMA"/>
-                                <constraint firstAttribute="height" constant="585" id="x1O-0M-sUg"/>
+                                <constraint firstAttribute="height" constant="676" id="egh-vu-sFM"/>
+                                <constraint firstAttribute="width" constant="320" id="yBr-Ne-lHS"/>
                             </constraints>
                         </view>
                     </subviews>
                     <color key="backgroundColor" red="0.83137254901960789" green="0.85490196078431369" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
+                        <constraint firstAttribute="trailing" secondItem="XLc-qI-gzq" secondAttribute="trailing" id="25J-sg-VUg"/>
+                        <constraint firstItem="XLc-qI-gzq" firstAttribute="leading" secondItem="9po-VW-1Ni" secondAttribute="leading" id="7b9-Dl-zRW"/>
                         <constraint firstAttribute="bottom" secondItem="XLc-qI-gzq" secondAttribute="bottom" id="AWi-nU-YhR"/>
-                        <constraint firstItem="XLc-qI-gzq" firstAttribute="leading" secondItem="9po-VW-1Ni" secondAttribute="leading" id="CoC-Ez-nil"/>
-                        <constraint firstItem="XLc-qI-gzq" firstAttribute="top" secondItem="9po-VW-1Ni" secondAttribute="top" id="UIl-8N-d1F"/>
-                        <constraint firstAttribute="trailing" secondItem="XLc-qI-gzq" secondAttribute="trailing" id="YkB-uc-FFj"/>
+                        <constraint firstItem="XLc-qI-gzq" firstAttribute="top" secondItem="9po-VW-1Ni" secondAttribute="top" id="P6P-9a-qKz"/>
                     </constraints>
                 </scrollView>
                 <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QGx-Rv-q6S" userLabel="Industry Picker View">
@@ -274,9 +328,13 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="9po-VW-1Ni" secondAttribute="bottom" constant="-5" id="0EX-05-hnL"/>
+                <constraint firstAttribute="trailing" secondItem="9po-VW-1Ni" secondAttribute="trailing" id="74k-UA-gGB"/>
+                <constraint firstItem="9po-VW-1Ni" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="DYW-Xk-V53"/>
                 <constraint firstAttribute="trailing" secondItem="9po-VW-1Ni" secondAttribute="trailing" id="HcJ-zb-DrK"/>
+                <constraint firstItem="9po-VW-1Ni" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="HdQ-Si-MSD"/>
                 <constraint firstItem="9po-VW-1Ni" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Kbk-f6-Hg5"/>
                 <constraint firstItem="9po-VW-1Ni" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Sjm-BE-f8g"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="9po-VW-1Ni" secondAttribute="bottom" constant="-5" id="kyB-l5-dOJ"/>
             </constraints>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
