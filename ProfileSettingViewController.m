@@ -347,7 +347,7 @@
 
 -(void)tappedOutside {
     
-    // dismiss keyboard
+    // dismiss keyboard if present
     [self.view endEditing:YES];
     
     // hide pickerview if visible
@@ -496,6 +496,10 @@
 #pragma mark - Industry Picker Delegate & Methods
 
 - (void)industry_buttonAction:(id)sender{
+    
+    // dismiss keyboard if present
+    [self.view endEditing:YES];
+    
     [self.industryView setHidden:NO];
 }
 
