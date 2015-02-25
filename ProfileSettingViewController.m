@@ -8,24 +8,26 @@
 
 #import "ProfileSettingViewController.h"
 
+#define WEBSITE_TAG_NUM 6
+#define TWITTER_TAG_NUM 7
+#define LINKEDIN_TAG_NUM 8
+#define ANGELIST_TAG_NUM 9
+
 @interface ProfileSettingViewController ()
 
-
 @property (nonatomic, strong) PFUser *user;
-@property (nonatomic, strong) NSArray *industry_dataSource;
-@property BOOL smallImage;
-@property int movementDistance;
-@property CGRect companyName_frame;
-@property CGRect email_address_frame;
-@property int lineStartPoint;
-@property int industry_pickerRow;
-@property BOOL profileExist;
 
+// picker variables
+
+@property (nonatomic, strong) UINavigationController *navController;
 @property (nonatomic, strong) PFFile *imageProfileFile;
 @property (nonatomic, strong) NSData *imageData_picker;
 @property (nonatomic, strong) NSData *imageData_picker_small;
 @property (nonatomic, strong) UIButton *saveButton;
+@property int industry_pickerRow;
+@property (nonatomic, strong) NSArray *industry_dataSource;
 
+// server data variables
 
 @property (nonatomic, strong) NSString *email_user;
 @property (nonatomic, strong) NSString *industry_user;
@@ -51,11 +53,6 @@
         
         // set industry data
         self.industry_dataSource = [NSArray arrayWithObjects:@"Information Technology", @"Consumers", @"Enterprises", @"Media", @"Education", @"Health Care", @"Finance", @"Sales and Marketing", @"Fashion", @"Health and Wellness", @"Retail", @"Sports", @"UI/UX Design", @"Travel", @"Web Development", @"Real Estate", @"Recruiting", @"Entertainment", @"Clean Technology", @"Events", @"B2B", @"Restaurants", @"Lifestyle", @"Big Data Analytics", @"Music Services", @"Event Management", @"Non Profits", @"Discovery", @"Incubators", @"Other", nil];
-        
-        // check if profile exists
-        NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
-        self.profileExist = [profilExist_num boolValue];
-        
     }
     return self;
 }
@@ -133,6 +130,8 @@
             self.email_user = self.user[@"email"];
             self.industry_user = self.user[@"industry"];
             self.twitter_user = self.user[@"twitter_url"];
+            self.linkedin_user = self.user[@"linkedin_url"];
+            self.angelist_user = self.user[@"angellist_url"];
             
             // keep default industry placeholder if no industry set
             NSString *industryTitle = [self.user[@"industry"] length] > 0 ? self.user[@"industry"] : self.industry.titleLabel.text;
@@ -219,6 +218,8 @@
             self.user[@"website"] = self.website.text;
             self.user[@"twitter_url"] = self.twitter_textfield.text;
             self.user[@"industry"] = self.industry.titleLabel.text;
+            self.user[@"angellist_url"] = self.angellist_textfield.text;
+            self.user[@"linkedin_url"] = self.linkedin_textfield.text;
             
             // upload image if picker has data
             if (self.imageData_picker) {
@@ -319,9 +320,22 @@
 #pragma mark - TextField Delegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    NSInteger tagNum = textField.tag;
-    if(tagNum == 7 && [textField.text length] == 0){
-        textField.text = @"https://twitter.com/";
+    
+    // add prepopulated url on first edit
+    if([textField.text length] == 0){
+        
+        // get unique tag for textfield
+        NSInteger tagNum = textField.tag;
+        
+        if(tagNum == WEBSITE_TAG_NUM){
+            textField.text = @"http://";
+        }else if(tagNum == TWITTER_TAG_NUM){
+            textField.text = @"https://twitter.com/";
+        }else if(tagNum == LINKEDIN_TAG_NUM){
+            textField.text = @"https://linkedin.com/in/";
+        }else if(tagNum == ANGELIST_TAG_NUM){
+            textField.text = @"https://angel.co/";
+        }
     }
 }
 
@@ -533,15 +547,48 @@
     return [self.industry_dataSource objectAtIndex:row];
 }
 
+#pragma mark - UINavigationControllerDelegate
 
-/*
-#pragma mark - Navigation
+/* The below methods help us customize the nav bar of apple's image picker */
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+-(void)backToPhotoAlbum{
+    // check if navigation controller has been set from image picker
+    if(self.navController){
+        // triggered when in selected picture in picker
+        [self.navController popViewControllerAnimated:YES];
+    }
 }
-*/
+
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    
+    // store a pointer to the image pickers nav controller for user
+    self.navController = navigationController;
+    
+    // keep status bar white, in ios7 changes in imagepicker
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+
+    viewController.navigationItem.titleView =[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
+    viewController.navigationItem.rightBarButtonItem = nil;
+    
+    // set color of nav bar to custom grey
+    [viewController.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+    viewController.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(79/255.0) green:(91/255.0) blue:(100/255.0) alpha:(0.0/255.0)];
+    viewController.navigationController.navigationBar.translucent = NO;
+    
+    if ([viewController.title isEqualToString:@"Photos"])
+    {
+        viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_cancel"] style:UIBarButtonItemStylePlain target:self action:@selector(imagePickerControllerDidCancel:)];
+        
+    }else{
+        
+        viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_back.png"] style:UIBarButtonItemStylePlain target:self action:@selector(backToPhotoAlbum)];
+        
+    }
+    
+    [viewController.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
+    
+}
+
 
 @end
