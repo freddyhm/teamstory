@@ -252,17 +252,22 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     // increment activity point
     [[AtMention sharedAtMention] addPointToActivityCount];
-     
-    // mixpanel analytics
-    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Link"}];
     
-    // intercome analytics
-    [Intercom logEventWithName:@"posetd-link" optionalMetaData:nil
-                    completion:^(NSError *error) {}];
-    
-    
-    // increment user link count by one
-    [[Mixpanel sharedInstance].people increment:@"Link Count" by:[NSNumber numberWithInt:1]];
+    if ([self.url_textField.text rangeOfString:@"youtube.com"].location != NSNotFound || [self.url_textField.text rangeOfString:@"youtu.be"].location != NSNotFound) {
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Link", @"Post Type": @"Video"}];
+            
+    } else {
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Link", @"Type": @"Web Link"}];
+        
+        // intercome analytics
+        [Intercom logEventWithName:@"posetd-link" optionalMetaData:nil
+                        completion:^(NSError *error) {}];
+        
+        // increment user link count by one
+        [[Mixpanel sharedInstance].people increment:@"Link Count" by:[NSNumber numberWithInt:1]];
+    }
     
     [self.view endEditing:YES];
     [SVProgressHUD show];
