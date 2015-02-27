@@ -139,10 +139,12 @@
          
             // set textfields with db inputs
             self.twitter_textfield.text = self.twitter_user;
+            self.linkedin_textfield.text = self.linkedin_user;
+            self.angellist_textfield.text = self.angelist_user;
+            
             self.location.text = self.location_user;
             self.website.text = self.website_user;
             self.displayName.text = self.displayName_user;
-            
             
             // set textview text and change text color
             if([self.user[@"description"] length] > 0 ){

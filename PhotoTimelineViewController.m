@@ -249,7 +249,7 @@ enum ActionSheetTags {
         if ([type isEqualToString:@"link"]){
             
             // mixpanel analytics
-            [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Viewed Link"}];
+            [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Viewed Link", @"Source": @"Timeline"}];
             
             // intercome analytics
             [Intercom logEventWithName:@"viewed-link" optionalMetaData:nil

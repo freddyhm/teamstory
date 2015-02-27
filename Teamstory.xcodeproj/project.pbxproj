@@ -561,7 +561,6 @@
 		D5F45B03196CE6DE001C2875 /* select_overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = D5F45B01196CE6DE001C2875 /* select_overlay.png */; };
 		D5F45B04196CE6DE001C2875 /* select_overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5F45B02196CE6DE001C2875 /* select_overlay@2x.png */; };
 		D5FB8E6C18F79E2D0034CAE6 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FB8E6B18F79E2D0034CAE6 /* Crashlytics.framework */; };
-		D5FC095818A9B552000D85F1 /* FilterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D5FC095718A9B552000D85F1 /* FilterCell.m */; };
 		D5FC09C618A9C267000D85F1 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FC09C518A9C267000D85F1 /* CoreMedia.framework */; };
 		D5FC09C818A9C272000D85F1 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FC09C718A9C272000D85F1 /* CoreData.framework */; };
 		D5FC09CA18A9C2C2000D85F1 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5FC09C918A9C2C2000D85F1 /* CoreImage.framework */; };
@@ -1355,8 +1354,6 @@
 		D5F45B01196CE6DE001C2875 /* select_overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select_overlay.png; sourceTree = "<group>"; };
 		D5F45B02196CE6DE001C2875 /* select_overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "select_overlay@2x.png"; sourceTree = "<group>"; };
 		D5FB8E6B18F79E2D0034CAE6 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
-		D5FC095618A9B552000D85F1 /* FilterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterCell.h; sourceTree = SOURCE_ROOT; };
-		D5FC095718A9B552000D85F1 /* FilterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterCell.m; sourceTree = SOURCE_ROOT; };
 		D5FC09C518A9C267000D85F1 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		D5FC09C718A9C272000D85F1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		D5FC09C918A9C2C2000D85F1 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
@@ -2039,8 +2036,6 @@
 		74B86B911562DB2600CAFFD2 /* PhotoViews */ = {
 			isa = PBXGroup;
 			children = (
-				D5FC095618A9B552000D85F1 /* FilterCell.h */,
-				D5FC095718A9B552000D85F1 /* FilterCell.m */,
 				D5903C74192EBBF900DC9896 /* ThoughtPostViewController.xib */,
 			);
 			name = PhotoViews;
@@ -3268,7 +3263,6 @@
 				D5F087421A82E25B0079C922 /* MPUIColorToNSStringValueTransformer.m in Sources */,
 				D5949D5F1A9D650400BC23A7 /* TPKeyboardAvoidingCollectionView.m in Sources */,
 				D542D8BF196A6F4700A0384F /* ELCAsset.m in Sources */,
-				D5FC095818A9B552000D85F1 /* FilterCell.m in Sources */,
 				46DC23CD19B01CBF00E8FCDF /* PAPdiscoverIndustryCell.m in Sources */,
 				D51732671A8565EA006EA751 /* AtMention.m in Sources */,
 				D5F0871E1A82E25B0079C922 /* MPCGAffineTransformToNSDictionaryValueTransformer.m in Sources */,

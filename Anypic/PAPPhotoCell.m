@@ -5,9 +5,6 @@
 //
 
 #import "PAPPhotoCell.h"
-#import "PAPUtility.h"
-#import "PAPwebviewViewController.h"
-#import "PAPPhotoDetailsViewController.h"
 
 #define youtubeFrame 200.0f
 

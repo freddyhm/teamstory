@@ -232,7 +232,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 #pragma mark - ()
 
-- (void)createView {    
+- (void)createView {
+    
+    /* Wow this file is brutal! Need to refactor all of this and nib it */
+    
     /*
      Create middle section of the header view; the image
      */
@@ -276,6 +279,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         viewOffset = 39;
         
         self.photoImageView = [[PFImageView alloc]init];
+        
         
         [self addSubview:self.photoDescriptionLabel];
         
@@ -482,6 +486,16 @@ static TTTTimeIntervalFormatter *timeFormatter;
     
         [self.hud hide:YES];
     
+    
+    
+    // check for weblink and add add post action to website
+    if([[self.photo objectForKey:@"type"] isEqualToString:@"link"] && ([[self.photo objectForKey:@"link"] rangeOfString:@"youtube.com"].location == NSNotFound || [[self.photo objectForKey:@"link"] rangeOfString:@"youtu.be"].location == NSNotFound)){
+        
+        // make image tappable used for links
+        [self.photoImageView setUserInteractionEnabled:YES];
+        UITapGestureRecognizer *tapPost = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(linkPostButtonAction:)];
+        [self.photoImageView addGestureRecognizer:tapPost];
+    }
 }
 
 - (void)shareButtonAction:(id)sender {
@@ -598,6 +612,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 -(void)linkPostButtonAction:(UITapGestureRecognizer *)gr {
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Viewed Link", @"Source": @"Details"}];
+    
     PAPwebviewViewController *webViewController = [[PAPwebviewViewController alloc] initWithWebsite:[self.photo objectForKey:@"link"]];
     webViewController.hidesBottomBarWhenPushed = YES;
     [self.navController pushViewController:webViewController animated:YES];

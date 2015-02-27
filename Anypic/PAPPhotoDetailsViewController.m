@@ -287,7 +287,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             if(succeeded){
                 
                 // move to last comments when notification relates to a new comment
-                if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] || [self.source isEqual:@"activityComment"] || [self.source isEqual:@"commentButton"] || [self.source isEqual:@"postedComment"]  )){
+                if(self.objects.count > 0 && ([self.source isEqual:@"notificationComment"] || [self.source isEqual:@"activityComment"] || [self.source isEqual:@"postedComment"]  )){
                     
                     
                     float newVerticalPos = self.postDetails.contentSize.height - self.postDetails.bounds.size.height + 84;
@@ -295,31 +295,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
                     if(newVerticalPos > 0){
                         [self.postDetails setContentOffset:CGPointMake(0, newVerticalPos)];
                     }
-                    
-                    if([self.source isEqualToString:@"commentButton"]){
-                        [self.customKeyboard setObjCount:[loadedObjects count]];
-                        [self.customKeyboard.messageTextView becomeFirstResponder];
-                    }
-                    
                 }
             }
         }];
     }
     
     [self.postDetails reloadData];
-    
-    
-    if([self.source isEqualToString:@"commentButton"] && [loadedObjects count] == 0){
-        
-        [self.customKeyboard setObjCount:0];
-        [self.customKeyboard.messageTextView becomeFirstResponder];
-        
-        float newVerticalPos = self.postDetails.contentSize.height - self.postDetails.bounds.size.height + 44;
-        
-        if(newVerticalPos > 0){
-            [self.postDetails setContentOffset:CGPointMake(0, newVerticalPos)];
-        }
-    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
