@@ -522,12 +522,16 @@
 }
 
 - (void)inviteButtonAction:(id)sender {
+    [SVProgressHUD show];
+    
     NSArray *activityItems = @[self];
     UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
     activityVC.excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypePrint];
     [activityVC setValue:@"Join me on Teamstory!" forKey:@"subject"];
     
-    [self.navController presentViewController:activityVC animated:YES completion:nil];
+    [self.navController presentViewController:activityVC animated:YES completion:^{
+        [SVProgressHUD dismiss];
+    }];
     
     // this gets handled after an activity is completed.
     [activityVC setCompletionHandler:^(NSString *activityType, BOOL completed) {
