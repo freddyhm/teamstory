@@ -20,6 +20,8 @@
 @property (nonatomic, strong) UILabel *timestampLabel;
 @property (nonatomic, strong) UILabel *userInfoLabel;
 @property (nonatomic, strong) TTTTimeIntervalFormatter *timeIntervalFormatter;
+@property (nonatomic, strong) PFUser *user;
+@property (nonatomic, assign) UIImage *followButtonImage;
 
 @end
 
@@ -68,27 +70,34 @@
             [self.userButton setBackgroundColor:[UIColor clearColor]];
             [[self.userButton titleLabel] setFont:[UIFont boldSystemFontOfSize:15]];
             [self.userButton setTitleColor:[UIColor colorWithRed:79.0f/255.0f green:182.0f/255.0f blue:154.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
-            //[self.userButton setTitleColor:[UIColor colorWithRed:134.0f/255.0f green:100.0f/255.0f blue:65.0f/255.0f alpha:1.0f] forState:UIControlStateHighlighted];
             [[self.userButton titleLabel] setLineBreakMode:NSLineBreakByTruncatingTail];
-            //[[self.userButton titleLabel] setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
-            //[self.userButton setTitleShadowColor:[UIColor colorWithWhite:1.0f alpha:0.750f] forState:UIControlStateNormal];
         }
-    
-        // Add timestamp
-        self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
-        self.timestampLabel = [[UILabel alloc] init];
-        [self.timestampLabel setTextColor:[UIColor colorWithRed:160.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:0.7f]];
-        [self.timestampLabel setBackgroundColor:[UIColor clearColor]];
-        self.timestampLabel.textAlignment = NSTextAlignmentRight;
-        [containerView addSubview:self.timestampLabel];
         
         self.userInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50.0f, 20.0f, containerView.bounds.size.width - 50.0f - 72.0f, 18.0f)];
         [self.userInfoLabel setTextColor:[UIColor colorWithRed:157.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
         [self.userInfoLabel setFont:[UIFont systemFontOfSize:11.0f]];
         [self.userInfoLabel setBackgroundColor:[UIColor clearColor]];
         [self.userInfoLabel setAdjustsFontSizeToFitWidth:YES];
-
         [containerView addSubview:self.userInfoLabel];
+        
+        // Add timestamp
+        self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
+        self.timestampLabel = [[UILabel alloc] init];
+        [self.timestampLabel setTextColor:[UIColor colorWithRed:160.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:0.7f]];
+        [self.timestampLabel setBackgroundColor:[UIColor clearColor]];
+        self.timestampLabel.textAlignment = NSTextAlignmentRight;
+        self.timestampLabel.hidden = YES;
+        [containerView addSubview:self.timestampLabel];
+        
+        self.followButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.followButtonImage = [UIImage imageNamed:@"btn_no_follow_user.png"];
+        
+        [self.followButton setImage:self.followButtonImage forState:UIControlStateNormal];
+        [self.followButton setFrame:CGRectMake( 261.0f, 10.0f, self.followButtonImage.size.width, self.followButtonImage.size.height)];
+        [self.followButton setImage:[UIImage imageNamed:@"btn_following_user.png"] forState:UIControlStateSelected];
+        [self.followButton addTarget:self action:@selector(didTapFollowButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        self.followButton.hidden = YES;
+        [containerView addSubview:self.followButton];
     }
 
     return self;
@@ -98,20 +107,31 @@
 #pragma mark - PAPPhotoHeaderView
 
 - (void)setPhoto:(PFObject *)aPhoto {
-    
-    
     photo = aPhoto;
+    self.user = [self.photo objectForKey:kPAPPhotoUserKey];
+    self.timestampLabel.hidden = NO;
+    
+    [self populateDetails];
 
+}
+
+- (void)setUserForHeaderView:(PFUser *)aUser {
+    self.user = aUser;
+    self.followButton.hidden = NO;
+    [self populateDetails];
+}
+
+
+-(void) populateDetails {
     // user's avatar
-    PFUser *user = [self.photo objectForKey:kPAPPhotoUserKey];
-    PFFile *profilePictureSmall = [user objectForKey:kPAPUserProfilePicSmallKey];
+    PFFile *profilePictureSmall = [self.user objectForKey:kPAPUserProfilePicSmallKey];
     [self.avatarImageView setFile:profilePictureSmall];
-
-    NSString *authorName = [user objectForKey:kPAPUserDisplayNameKey];
+    
+    NSString *authorName = [self.user objectForKey:kPAPUserDisplayNameKey];
     [self.userButton setTitle:authorName forState:UIControlStateNormal];
     
     CGFloat constrainWidth = containerView.bounds.size.width;
-
+    
     if (self.buttons & PAPPhotoHeaderButtonsUser) {
         [self.userButton addTarget:self action:@selector(didTapUserButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -125,12 +145,12 @@
     
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
-        
+    
     CGSize userButtonSize = ([self.userButton.titleLabel.text boundingRectWithSize:constrainSize
-                                         options:NSStringDrawingUsesLineFragmentOrigin
-                                      attributes:@{NSFontAttributeName:self.userButton.titleLabel.font, NSParagraphStyleAttributeName: paragraphStyle.copy}
-                                         context:nil]).size;
-
+                                                                           options:NSStringDrawingUsesLineFragmentOrigin
+                                                                        attributes:@{NSFontAttributeName:self.userButton.titleLabel.font, NSParagraphStyleAttributeName: paragraphStyle.copy}
+                                                                           context:nil]).size;
+    
     
     
     
@@ -153,13 +173,13 @@
     
     [self setNeedsDisplay];
     
-    NSString *industry = [user objectForKey:@"industry"];
-    NSString *location = [user objectForKey:@"location"];
+    NSString *industry = [self.user objectForKey:@"industry"];
+    NSString *location = [self.user objectForKey:@"location"];
     NSString *separator = @" • ";
     NSString *allInfo = @"";
     
     if(industry && location){
-       allInfo = [[industry stringByAppendingString:separator] stringByAppendingString:location];
+        allInfo = [[industry stringByAppendingString:separator] stringByAppendingString:location];
     }else if(!industry && location){
         allInfo = location;
     }else if(industry && !location){
@@ -181,7 +201,14 @@
 
 - (void)didTapUserButtonAction:(UIButton *)sender {
     if (delegate && [delegate respondsToSelector:@selector(photoHeaderView:didTapUserButton:user:)]) {
-        [delegate photoHeaderView:self didTapUserButton:sender user:[self.photo objectForKey:kPAPPhotoUserKey]];
+        [delegate photoHeaderView:self didTapUserButton:sender user:self.user];
+    }
+}
+
+/* Inform delegate that the follow button was tapped */
+- (void)didTapFollowButtonAction:(UIButton *)sender {
+    if (delegate && [delegate respondsToSelector:@selector(photoHeaderView:didTapFollowButtonForDiscover:user:)]) {
+        [delegate photoHeaderView:self didTapFollowButtonForDiscover:sender user:self.user];
     }
 }
 

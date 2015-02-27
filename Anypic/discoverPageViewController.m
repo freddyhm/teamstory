@@ -43,6 +43,7 @@ NSInteger selection = 1;
 @property (nonatomic, strong) NSArray *postPicQueryResults;
 @property (nonatomic, strong) NSArray *postThoughtQueryResults;
 @property (nonatomic, strong) PAPdiscoverTileView *discoverTileView;
+@property (nonatomic, strong) UIButton *followerLabel;
 
 @end
 
@@ -144,6 +145,7 @@ NSInteger selection = 1;
     self.industryLabel.titleLabel.font = [UIFont boldSystemFontOfSize:13.0f];
     [self.industryLabel addTarget:self action:@selector(industryLabelAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.searchOptionView addSubview:self.industryLabel];
+
     
     // --------------- Searchbar
     
@@ -209,15 +211,17 @@ NSInteger selection = 1;
     // flightrecorder event analytics
     [[FlightRecorder sharedInstance] trackEventWithCategory:@"discover_screen" action:@"viewing_discover" label:@"" value:@""];
     
-    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+    //[[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     self.navigationController.navigationBar.hidden = YES;
+    
+    [self.discoverTileView loadFollowers];
     
     if ([self.follwerList count] == 0) {
         zeroFollower = NO;
         PFQuery *activityQuery = [PFQuery queryWithClassName:@"Activity"];
         [activityQuery whereKey:@"fromUser" equalTo:[PFUser currentUser]];
         [activityQuery whereKey:@"type" equalTo:@"follow"];
-        activityQuery.limit = MAXFLOAT;
+        activityQuery.limit = 1000;
         [activityQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (!error) {
                 if (objects.count == 0) {
@@ -324,7 +328,7 @@ NSInteger selection = 1;
     // flightrecorder event analytics
     [[FlightRecorder sharedInstance] trackEventWithCategory:@"discover_screen" action:@"touched_tab" label:@"" value:@"industries"];
     
-    [self labelSetting:@"industry"];
+    [self labelSetting:@"users"];
     self.searchTV.contentOffset = CGPointMake(0, 0);
     [self.searchTV reloadData];
     [UIView animateWithDuration:0.2f animations:^{
@@ -338,7 +342,7 @@ NSInteger selection = 1;
         self.industryLabel.titleLabel.font = [UIFont systemFontOfSize:13.0f];
         self.searchSelection = @"users";
         self.searchBar.placeholder = @"Search users";
-    } else {
+    } else if ([selected isEqual:@"industry"]){
         self.industryLabel.titleLabel.font = [UIFont boldSystemFontOfSize:13.0f];
         self.usersLabel.titleLabel.font = [UIFont systemFontOfSize:13.0f];
         self.searchSelection = @"industry";
@@ -348,7 +352,6 @@ NSInteger selection = 1;
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    NSLog(@"Search Clicked");
     [self searchTableList];
 }
 
