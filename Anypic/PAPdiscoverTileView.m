@@ -237,7 +237,7 @@
     } else if ([self.menuSelection isEqualToString:@"Thoughts"]){
         return [self.thoughtQuery count] / 3;
     } else {
-        return followerQueryNum;
+        return self.recomUserList.count;
     }
 }
 
@@ -428,6 +428,11 @@
 }
 
 -(void)loadFollowers {
+    /* -------------------------------
+    // TODO (justin): pointer comparision is not supported yet. Use when it's supported.
+    //[followerByActivityPointsQuery whereKey:@"objectId" doesNotMatchKey:@"toUser" inQuery:userFollowerQuery];
+     ------------------------------- */
+    
     PFQuery *userFollowerQuery = [PFQuery queryWithClassName:@"Activity"];
     [userFollowerQuery whereKey:@"type" equalTo:@"follow"];
     [userFollowerQuery whereKey:@"fromUser" equalTo:[PFUser currentUser]];
@@ -437,10 +442,8 @@
         
         PFQuery *followerByActivityPointsQuery = [PFUser query];
         [followerByActivityPointsQuery orderByDescending:@"activityPoints"];
+        [followerByActivityPointsQuery whereKey:@"postCount" greaterThan:[NSNumber numberWithInt:2]];
         [followerByActivityPointsQuery setLimit:followerQueryNum];
-        
-        // TODO (justin): pointer comparision is not supported yet. Use when it's supported.
-        //[followerByActivityPointsQuery whereKey:@"objectId" doesNotMatchKey:@"toUser" inQuery:userFollowerQuery];
         [followerByActivityPointsQuery whereKey:@"objectId" notContainedIn:objectIds];
         [followerByActivityPointsQuery whereKeyExists:@"displayName"];
         [followerByActivityPointsQuery whereKey:@"objectId" notEqualTo:[PFUser currentUser].objectId];
@@ -522,12 +525,16 @@
 }
 
 - (void)inviteButtonAction:(id)sender {
+    [SVProgressHUD show];
+    
     NSArray *activityItems = @[self];
     UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
     activityVC.excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypePrint];
     [activityVC setValue:@"Join me on Teamstory!" forKey:@"subject"];
     
-    [self.navController presentViewController:activityVC animated:YES completion:nil];
+    [self.navController presentViewController:activityVC animated:YES completion:^{
+        [SVProgressHUD dismiss];
+    }];
     
     // this gets handled after an activity is completed.
     [activityVC setCompletionHandler:^(NSString *activityType, BOOL completed) {

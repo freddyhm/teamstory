@@ -1,3 +1,34 @@
+Parse.Cloud.job("photoCount", function(request, status) {
+  // Set up to modify user data
+  Parse.Cloud.useMasterKey();
+  // Query for all users
+  var query = new Parse.Query(Parse.User);
+  query.doesNotExist("postCount");
+  query.exists("displayName");
+  query.each(function(user) {
+      var subQuery = new Parse.Query("Photo");
+      subQuery.equalTo("user", user);
+      subQuery.count({
+      success: function(number) {
+       // Set and save the change
+          user.set("postCount", number);
+          return user.save(); 
+      },
+      error: function(error) {
+        // error is an instance of Parse.Error.
+        console.log(error);
+      }
+    });
+  }).then(function() {
+    // Set the job's success status
+    status.success("User photo counting completed successfully.");
+  }, function(error) {
+    // Set the job's error status
+    status.error("Uh oh, something went wrong.");
+    console.log(error);
+  });
+});
+
 Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
                 
                 // Set up to modify user data
@@ -269,6 +300,8 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       
                           /* when user is present, post has just created so notify followers. If not then post activity is being saved so just return */
                           if(request.user){
+                              request.user.increment("postCount");
+                              request.user.save();
                       
                               console.log("in notify followers");
                               // get picture object so we can find type of picture
