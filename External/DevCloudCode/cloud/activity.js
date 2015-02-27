@@ -3,9 +3,9 @@ Parse.Cloud.job("photoCount", function(request, status) {
   Parse.Cloud.useMasterKey();
   // Query for all users
   var query = new Parse.Query(Parse.User);
-  query.limit = 1000;
+  query.doesNotExist("postCount");
+  query.exists("displayName");
   query.each(function(user) {
-
       var subQuery = new Parse.Query("Photo");
       subQuery.equalTo("user", user);
       subQuery.count({
@@ -16,6 +16,7 @@ Parse.Cloud.job("photoCount", function(request, status) {
       },
       error: function(error) {
         // error is an instance of Parse.Error.
+        console.log(error);
       }
     });
   }).then(function() {
@@ -24,6 +25,7 @@ Parse.Cloud.job("photoCount", function(request, status) {
   }, function(error) {
     // Set the job's error status
     status.error("Uh oh, something went wrong.");
+    console.log(error);
   });
 });
 
@@ -298,6 +300,8 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       
                           /* when user is present, post has just created so notify followers. If not then post activity is being saved so just return */
                           if(request.user){
+                              request.user.increment("postCount");
+                              request.user.save();
                       
                               console.log("in notify followers");
                               // get picture object so we can find type of picture
