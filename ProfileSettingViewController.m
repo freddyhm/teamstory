@@ -246,6 +246,17 @@
     }];
 }
 
+#pragma mark - UIActionSheetDelegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        [self shouldStartCameraController];
+    } else if (buttonIndex == 1) {
+        [self shouldStartPhotoLibraryPickerController];
+    }
+}
+
+
 #pragma mark - AlertView Delegate 
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -258,7 +269,6 @@
         // remove controller from stack
         [self.navigationController popViewControllerAnimated:YES];
     }
-    
 }
 
 #pragma mark - Upload Image Methods
@@ -563,6 +573,8 @@
 
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    
+    
     
     // store a pointer to the image pickers nav controller for user
     self.navController = navigationController;

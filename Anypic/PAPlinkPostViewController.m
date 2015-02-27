@@ -254,7 +254,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
         
     } else {
         // mixpanel analytics
-        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Link", @"Post Type": @"Web"}];
+        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Link", @"Post    Type": @"Web"}];
     }
     
     // increment user link count by one
