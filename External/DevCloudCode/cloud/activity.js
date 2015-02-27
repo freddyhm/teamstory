@@ -1,3 +1,32 @@
+Parse.Cloud.job("photoCount", function(request, status) {
+  // Set up to modify user data
+  Parse.Cloud.useMasterKey();
+  // Query for all users
+  var query = new Parse.Query(Parse.User);
+  query.limit = 1000;
+  query.each(function(user) {
+
+      var subQuery = new Parse.Query("Photo");
+      subQuery.equalTo("user", user);
+      subQuery.count({
+      success: function(number) {
+       // Set and save the change
+          user.set("postCount", number);
+          return user.save(); 
+      },
+      error: function(error) {
+        // error is an instance of Parse.Error.
+      }
+    });
+  }).then(function() {
+    // Set the job's success status
+    status.success("User photo counting completed successfully.");
+  }, function(error) {
+    // Set the job's error status
+    status.error("Uh oh, something went wrong.");
+  });
+});
+
 Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
                 
                 // Set up to modify user data
