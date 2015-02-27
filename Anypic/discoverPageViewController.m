@@ -370,6 +370,10 @@ NSInteger selection = 1;
 # pragma UISearchBarDelegate
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Selected From Discover" properties:@{@"Type": @"Search Users"}];
+    
     self.discoverTileView.hidden = YES;
     self.searchTV.hidden = NO;
     self.searchBar.showsCancelButton = YES;

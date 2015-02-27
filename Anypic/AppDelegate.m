@@ -24,16 +24,11 @@
 #import <Crashlytics/Crashlytics.h>
 #import "iRate.h"
 #import "PAPprofileSetupViewController.h"
-#import "Mixpanel.h"
 #import "PAPMessageListViewController.h"
 #import "PAPMessagingViewController.h"
 #import "PAPMessageListCell.h"
 #import <ParseFacebookUtils/PFFacebookUtils.h>
-#import "ParseFacebookUtils/PFFacebookUtils.h"
-#import "Intercom.h"
-#import <FlightRecorder/FlightRecorder.h>
-#import "SVProgressHUD.h"
-#import "AtMention.h"
+
 
 
 @interface AppDelegate () {
