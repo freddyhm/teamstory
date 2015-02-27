@@ -11,12 +11,7 @@
 #import "SVProgressHUD.h"
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
-#import "Mixpanel.h"
-#import <FlightRecorder/FlightRecorder.h>
-#import "Intercom.h"
-#import "ParseFacebookUtils/PFFacebookUtils.h"
 #import "UIImageEffects.h"
-#import "AtMention.h"
 
 
 @interface PAPlinkPostViewController ()
@@ -78,7 +73,6 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     
     // flightrecorder event analytics
     [[FlightRecorder sharedInstance] trackEventWithCategory:@"post_link_screen" action:@"viewing_post_link" label:@"" value:@""];
-    
     
     // flightrecorder analytics
     [[FlightRecorder sharedInstance] trackPageView:@"Link"];
@@ -254,20 +248,21 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     [[AtMention sharedAtMention] addPointToActivityCount];
     
     if ([self.url_textField.text rangeOfString:@"youtube.com"].location != NSNotFound || [self.url_textField.text rangeOfString:@"youtu.be"].location != NSNotFound) {
+        
         // mixpanel analytics
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Link", @"Post Type": @"Video"}];
-            
+        
     } else {
         // mixpanel analytics
-        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Link", @"Type": @"Web Link"}];
-        
-        // intercome analytics
-        [Intercom logEventWithName:@"posetd-link" optionalMetaData:nil
-                        completion:^(NSError *error) {}];
-        
-        // increment user link count by one
-        [[Mixpanel sharedInstance].people increment:@"Link Count" by:[NSNumber numberWithInt:1]];
+        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Link", @"Post Type": @"Web"}];
     }
+    
+    // increment user link count by one
+    [[Mixpanel sharedInstance].people increment:@"Link Count" by:[NSNumber numberWithInt:1]];
+    
+    // intercome analytics
+    [Intercom logEventWithName:@"posted-link" optionalMetaData:nil
+                    completion:^(NSError *error) {}];
     
     [self.view endEditing:YES];
     [SVProgressHUD show];

@@ -613,6 +613,9 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 -(void)linkPostButtonAction:(UITapGestureRecognizer *)gr {
     
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"details_screen" action:@"viewed_link" label:@"" value:@"web"];
+    
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Viewed Link", @"Source": @"Details"}];
     
