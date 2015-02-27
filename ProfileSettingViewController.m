@@ -16,6 +16,7 @@
 @interface ProfileSettingViewController ()
 
 @property (nonatomic, strong) PFUser *user;
+@property BOOL didEditProfile;
 
 // picker variables
 
@@ -24,8 +25,8 @@
 @property (nonatomic, strong) NSData *imageData_picker;
 @property (nonatomic, strong) NSData *imageData_picker_small;
 @property (nonatomic, strong) UIButton *saveButton;
-@property int industry_pickerRow;
 @property (nonatomic, strong) NSArray *industry_dataSource;
+@property int industry_pickerRow;
 
 // server data variables
 
@@ -52,7 +53,10 @@
         self.user = [PFUser currentUser];
         
         // set industry data
-        self.industry_dataSource = [NSArray arrayWithObjects:@"Information Technology", @"Consumers", @"Enterprises", @"Media", @"Education", @"Health Care", @"Finance", @"Sales and Marketing", @"Fashion", @"Health and Wellness", @"Retail", @"Sports", @"UI/UX Design", @"Travel", @"Web Development", @"Real Estate", @"Recruiting", @"Entertainment", @"Clean Technology", @"Events", @"B2B", @"Restaurants", @"Lifestyle", @"Big Data Analytics", @"Music Services", @"Event Management", @"Non Profits", @"Discovery", @"Incubators", @"Other", nil];
+        self.industry_dataSource = [NSArray arrayWithObjects:@"Information Technology", @"Consumers", @"Enterprises", @"Media", @"Education", @"Health Care", @"Finance", @"Sales and Marketing", @"Fashion", @"Health and Wellness", @"Retail", @"Sports", @"UI/UX Design", @"Travel", @"Web Development", @"Real Estate", @"Recruiting", @"Entertainment", @"Clean Technology", @"Events", @"B2B", @"Restaurants", @"Lifestyle", @"Big Data Analytics", @"Music   Services", @"Event Management", @"Non Profits", @"Discovery", @"Incubators", @"Other", nil];
+        
+        // flag to check for changes
+        self.didEditProfile = NO;
     }
     return self;
 }
@@ -191,7 +195,14 @@
 }
 
 - (void)backButtonAction:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    
+    // prompt to save unsaved changes
+    if(self.didEditProfile){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unsaved Changes" message:@"Save your changes?" delegate:self  cancelButtonTitle:@"Cancel" otherButtonTitles:@"YES", nil];
+        [alert show];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)saveButtonAction:(id)sender {
@@ -212,14 +223,21 @@
        
         if(succeeded && isEmailValid){
             
-            // get current text
+            /* get current text and set server variables */
+            
             self.user[@"displayName"] = self.displayName.text;
             self.user[@"email"] = self.email_address.text;
             self.user[@"location"] = self.location.text;
+            
+            // set to empty string if custom placeholder is present
             self.user[@"description"] = [self.userDescription.text isEqualToString:@"What's your story?"] ? @"" : self.userDescription.text;
+            
             self.user[@"website"] = self.website.text;
             self.user[@"twitter_url"] = self.twitter_textfield.text;
-            self.user[@"industry"] = self.industry.titleLabel.text;
+            
+            // set to empty string if custom placeholder is present
+            self.user[@"industry"] = [self.industry.titleLabel.text isEqualToString:@"What's your industry?"] ? @"" : self.industry.titleLabel;
+            
             self.user[@"angellist_url"] = self.angellist_textfield.text;
             self.user[@"linkedin_url"] = self.linkedin_textfield.text;
             
@@ -235,7 +253,7 @@
                 [SVProgressHUD dismiss];
                 
                 NSString *messageTitle = succeeded ? @"Saved" : @"Error";
-                NSString *messageBody = succeeded ? @"Your Information has been saved successfully" : @"Your Information could not be saved. Reach us at info@teamstoryapp.com";
+                NSString *messageBody = succeeded ? @"Your Information has been saved!" : @"Your Information could not be saved. Reach us at info@teamstoryapp.com";
                 
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:messageTitle message:messageBody delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                 [alert show];
@@ -268,6 +286,15 @@
         
         // remove controller from stack
         [self.navigationController popViewControllerAnimated:YES];
+        
+    }else if ([alertView.title isEqualToString:@"Unsaved Changes"]){
+        
+        // trigger saving method if user selects ok when going back
+        if(buttonIndex == 1){
+            [self saveButtonAction:nil];
+        }else{
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }
 }
 
@@ -333,6 +360,9 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     
+    // flag to detect changes
+    self.didEditProfile = YES;
+    
     // add prepopulated url on first edit
     if([textField.text length] == 0){
         
@@ -353,6 +383,10 @@
 
 #pragma mark - TextView Delegate
 - (void)textViewDidBeginEditing:(UITextView *)textView {
+    
+    // flag to detect changes
+    self.didEditProfile = YES;
+    
     if([textView.text isEqualToString:@"What's your story?"]){
         textView.text = @"";
         // set text color to teamstory color
@@ -391,6 +425,9 @@
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
+    // flag to detect changes
+    self.didEditProfile = YES;
     
     // retrieve image from picker selection
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
@@ -573,8 +610,6 @@
 
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    
-    
     
     // store a pointer to the image pickers nav controller for user
     self.navController = navigationController;
