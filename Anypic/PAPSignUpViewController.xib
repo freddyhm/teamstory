@@ -7,8 +7,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PAPSignUpViewController">
             <connections>
-                <outlet property="emailTextfield" destination="Suz-0P-cjj" id="RCc-EB-qQA"/>
-                <outlet property="pwTextField" destination="msg-Cb-UNo" id="Smb-DC-7Ea"/>
+                <outlet property="emailTextField" destination="Suz-0P-cjj" id="O4b-De-HBn"/>
+                <outlet property="pwTextField" destination="msg-Cb-UNo" id="HyW-CX-zTx"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -20,21 +20,21 @@
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UyR-pB-uEl">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="69"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VWL-25-wPC">
-                            <rect key="frame" x="12" y="29" width="22" height="22"/>
-                            <state key="normal" image="button_cancel.png">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="cancelButtonAction:" destination="-1" eventType="touchUpInside" id="QaS-Px-OdT"/>
-                            </connections>
-                        </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Welcome Back!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3YC-H1-7sY">
                             <rect key="frame" x="75" y="31" width="171" height="21"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BY4-cM-The">
+                            <rect key="frame" x="14" y="27" width="22" height="22"/>
+                            <state key="normal" image="button_cancel.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="cancelButtonAction:" destination="-1" eventType="touchUpInside" id="lZL-bt-7Ew"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.27058823529999998" green="0.29411764709999999" blue="0.34509803919999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>

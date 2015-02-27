@@ -10,11 +10,13 @@
 #import "PAPLoginInfoSheetViewController.h"
 #import "SVProgressHUD.h"
 #import "AppDelegate.h"
+#import <ParseFacebookUtils/PFFacebookUtils.h>
 
 @interface PAPSignUpViewController ()
 
 @property (strong, nonatomic) IBOutlet UITextField *emailTextField;
 @property (strong, nonatomic) IBOutlet UITextField *pwTextField;
+
 
 @end
 
@@ -35,8 +37,16 @@
             [self navigateToInfoSheet];
         } else {
             NSLog(@"User logged in with Twitter!");
-            [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
+            NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
+            bool profileExist = [profilExist_num boolValue];
             
+            if (user && profileExist != YES) {
+                PAPLoginInfoSheetViewController *loginInfoSheetViewController = [[PAPLoginInfoSheetViewController alloc] initWithNibName:@"PAPLoginInfoSheetViewController" bundle:nil];
+                self.navigationController.navigationBarHidden = YES;
+                [self presentViewController:loginInfoSheetViewController animated:YES completion:nil];
+            } else if (user && profileExist == YES) {
+                [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
+            }
         }
     }];
 }
@@ -49,6 +59,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+
 - (IBAction)forgotPWButtonAction:(id)sender {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Forgot Password" message:@"Enter your email" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
     alert.alertViewStyle = UIAlertViewStylePlainTextInput;
@@ -56,6 +67,34 @@
 }
 
 - (IBAction)signedUpWithFacebookAction:(id)sender {
+    // Set permissions required from the facebook user account
+    NSArray *permissionsArray = @[ @"user_about_me", @"user_relationships", @"user_birthday", @"user_location"];
+    
+    // Login PFUser using Facebook
+    [PFFacebookUtils logInWithPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
+        [SVProgressHUD dismiss]; // Hide loading indicator
+        
+        if (!user) {
+            NSString *errorMessage = nil;
+            if (!error) {
+                NSLog(@"Uh oh. The user cancelled the Facebook login.");
+                errorMessage = @"Uh oh. The user cancelled the Facebook login.";
+            } else {
+                NSLog(@"Uh oh. An error occurred: %@", error);
+                errorMessage = [error localizedDescription];
+            }
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Log In Error"
+                                                            message:errorMessage
+                                                           delegate:nil
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:@"Dismiss", nil];
+            [alert show];
+        } else {
+            [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
+        }
+    }];
+    
+    [SVProgressHUD dismiss]; // Show loading indicator until login is finished
 }
 
 - (void) navigateToInfoSheet {

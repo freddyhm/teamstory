@@ -8,6 +8,7 @@
 
 #import "PAPLoginInfoSheetViewController.h"
 #import "AppDelegate.h"
+#import "PAPrecomUsersViewController.h"
 
 @interface PAPLoginInfoSheetViewController () {
     BOOL hasProfilePicChanged;
@@ -20,6 +21,7 @@
 @property (strong, nonatomic) IBOutlet UITextField *emailTextField;
 @property (strong, nonatomic) IBOutlet UITextView *bioTextView;
 @property (strong, nonatomic) IBOutlet UIScrollView *mainScrollView;
+@property (strong, nonatomic) NSString *twitterDescription;
 
 @end
 
@@ -47,8 +49,15 @@
     
     PFUser *user = [PFUser currentUser];
     
+    if ([user objectForKey:@"email"]) {
+        self.emailTextField.text = [user objectForKey:@"email"];
+        self.emailTextField.enabled = NO;
+    }
+    
     if ([PFTwitterUtils isLinkedWithUser:user]) {
-        NSString * requestString = [NSString stringWithFormat:@"https://api.twitter.com/1.1/users/show.json?screen_name=%@", user.username];
+        //NSString * requestString = [NSString stringWithFormat:@"https://api.twitter.com/1.1/users/show.json?screen_name=%@", user.username];
+        
+        NSString * requestString = @"https://api.twitter.com/1.1/users/show.json?screen_name=toboklee";
         
         NSURL *verify = [NSURL URLWithString:requestString];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:verify];
@@ -61,18 +70,25 @@
         
         self.companyNameTextField.text = [result objectForKey:@"name"];
         self.locationTextField.text = [result objectForKey:@"location"];
-        self.bioTextView.text = [result objectForKey:@"description"];
+        self.twitterDescription = [result objectForKey:@"description"];
         UIImage *twitterProfilePicture = [self getImageFromURL:[result objectForKey:@"profile_image_url_https"]];
         [self.profilePickerButton setBackgroundImage:twitterProfilePicture forState:UIControlStateNormal];
         
+        UIImage *smallRoundedImage = [PAPUtility resizeImage:twitterProfilePicture width:84.0f height:84.0f];
+        UIImage *resizedImage = [PAPUtility resizeImage:twitterProfilePicture width:200.0f height:200.0f];
+        self.imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
+        self.imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
     }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:YES];
-    [self.bioTextView setTextColor:[UIColor colorWithWhite:0.8 alpha:1.0f]];
-    self.bioTextView.text = @"Bio";
-    
+    if (self.twitterDescription.length > 0) {
+        self.bioTextView.text = self.twitterDescription;
+    } else {
+        [self.bioTextView setTextColor:[UIColor colorWithWhite:0.8 alpha:1.0f]];
+        self.bioTextView.text = @"Bio";
+    }
 
 }
 
@@ -200,17 +216,12 @@
 
 -(void)uploadImage_small:(NSData *)imageData {
     PFFile *imageFile = [PFFile fileWithName:nil data:imageData];
-    
-    
     [[PFUser currentUser] setObject:imageFile forKey:@"profilePictureSmall"];
-    [[PFUser currentUser] saveInBackground];
 }
 
 -(void)uploadImage_medium:(NSData *)imageData {
     PFFile *imageFile = [PFFile fileWithName:nil data:imageData];
-    
     [[PFUser currentUser] setObject:imageFile forKey:@"profilePictureMedium"];
-    [[PFUser currentUser] saveInBackground];
 }
 
 - (IBAction)nextButtonAction:(id)sender {
@@ -257,27 +268,58 @@
     [user setObject:self.bioTextView.text forKey:@"description"];
     
     if (self.imageData_picker && hasProfilePicChanged) {
+        // upload image from library
         [self uploadImage_medium:self.imageData_picker];
     } else if (!hasProfilePicChanged && ![self.profilePickerButton backgroundImageForState:UIControlStateNormal]) {
+        // Nothing picked. Mount a default image
         UIImage *image = [UIImage imageNamed:@"default-pic.png"];
         UIImage *smallRoundedImage = [PAPUtility resizeImage:image width:84.0f height:84.0f];
         
         self.imageData_picker = UIImageJPEGRepresentation(smallRoundedImage, 1);
         [self uploadImage_medium:self.imageData_picker];
-        
+    } else {
+        // upload image for twitter
+        [self uploadImage_medium:self.imageData_picker];
     }
     
     if (self.imageData_picker_small && hasProfilePicChanged) {
-        [self uploadImage_medium:self.imageData_picker_small];
+        // upload image from library
+        [self uploadImage_small:self.imageData_picker_small];
     } else if (!hasProfilePicChanged && ![self.profilePickerButton backgroundImageForState:UIControlStateNormal]) {
+        // Nothing picked. Mount a default image
         UIImage *image = [UIImage imageNamed:@"default-pic.png"];
         UIImage *resizedImage = [PAPUtility resizeImage:image width:200.0f height:200.0f];
         self.imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
-        [self uploadImage_medium:self.imageData_picker];
+        [self uploadImage_small:self.imageData_picker_small];
+    } else {
+        // upload image for twitter
+        [self uploadImage_small:self.imageData_picker_small];
     }
     
     [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         // TODO display a new screen
+        if (!error) {
+            //successful
+            PAPrecomUsersViewController *recomUsersViewController = [[PAPrecomUsersViewController alloc] initWithNibName:@"PAPrecomUsersViewController" bundle:nil];
+            [self presentViewController:recomUsersViewController animated:YES completion:nil];
+        } else {
+            if ([error code] == 203) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Log In Error"
+                                                                message:@"Email you've entered is already being used"
+                                                               delegate:nil
+                                                      cancelButtonTitle:nil
+                                                      otherButtonTitles:@"Dismiss", nil];
+                [alert show];
+            } else {
+                NSString *errorMessage = [error localizedDescription];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Log In Error"
+                                                                message:errorMessage
+                                                               delegate:nil
+                                                      cancelButtonTitle:nil
+                                                      otherButtonTitles:@"Dismiss", nil];
+                [alert show];
+            }
+        }
     }];
 }
 
@@ -311,9 +353,12 @@
 
 -(void)textViewDidBeginEditing:(UITextView *)textView {
     textView.textColor = [UIColor blackColor];
-    textView.text = @"";
     
-    CGPoint scrollPoint = CGPointMake(0, textView.frame.origin.y);
+    if ([textView.text isEqualToString:@"Bio"]) {
+        textView.text = @"";
+    }
+    
+    CGPoint scrollPoint = CGPointMake(0, textView.frame.origin.y - 50);
     [self.mainScrollView setContentOffset:scrollPoint animated:YES];
 }
 
@@ -322,12 +367,13 @@
         textView.text = @"Bio";
         textView.textColor = [UIColor colorWithWhite:0.8 alpha:1.0f];
     }
+    [self.mainScrollView setContentOffset:CGPointZero animated:YES];
 }
 
 #pragma UITextFieldDelegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    float offsetValue = 5.0f;
+    float offsetValue = 50.0f;
     
     CGPoint scrollPoint = CGPointMake(0, textField.frame.origin.y - offsetValue);
     [self.mainScrollView setContentOffset:scrollPoint animated:YES];

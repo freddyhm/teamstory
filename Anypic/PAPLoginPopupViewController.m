@@ -67,7 +67,20 @@
     }];
 }
 - (IBAction)signUpButtonAction:(id)sender {
-    [self navigateToInfoSheet];
+    [self.view endEditing:YES];
+    
+    PFUser *user = [PFUser user];
+    user.username = self.emailTextField.text;
+    user.password = self.passwordTextField.text;
+    user.email = self.emailTextField.text;
+    
+    [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            [self navigateToInfoSheet];
+        } else {
+            NSLog(@"error!");
+        }
+    }];
 }
 
 - (void) navigateToInfoSheet {
@@ -84,7 +97,7 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     CGPoint scrollPoint;
     
-    float offsetValue = 5.0f;
+    float offsetValue = 20.0f;
     
     if (self.emailTextField == textField) {
         scrollPoint = CGPointMake(0, self.emailTextView.frame.origin.y - offsetValue);

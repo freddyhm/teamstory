@@ -230,6 +230,10 @@
 		46DC23C519AAC7F300E8FCDF /* icon_search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46DC23C319AAC7F300E8FCDF /* icon_search@2x.png */; };
 		46DC23C619AAC7F300E8FCDF /* icon_search.png in Resources */ = {isa = PBXBuildFile; fileRef = 46DC23C419AAC7F300E8FCDF /* icon_search.png */; };
 		46DC23CD19B01CBF00E8FCDF /* PAPdiscoverIndustryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 46DC23CC19B01CBF00E8FCDF /* PAPdiscoverIndustryCell.m */; };
+		46DD4B261A9FB5230022B20A /* PAPrecomUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46DD4B241A9FB5230022B20A /* PAPrecomUsersViewController.m */; };
+		46DD4B271A9FB5230022B20A /* PAPrecomUsersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46DD4B251A9FB5230022B20A /* PAPrecomUsersViewController.xib */; };
+		46DD4B2B1A9FB58D0022B20A /* PAPfirstPicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46DD4B291A9FB58D0022B20A /* PAPfirstPicViewController.m */; };
+		46DD4B2C1A9FB58D0022B20A /* PAPfirstPicViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46DD4B2A1A9FB58D0022B20A /* PAPfirstPicViewController.xib */; };
 		46E1EB6F183BCA6300F64274 /* PAPProfileSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E1EB6E183BCA6300F64274 /* PAPProfileSettingViewController.m */; };
 		74636BF31578281E00B44132 /* PAPFindFriendsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74636BF21578281E00B44132 /* PAPFindFriendsCell.m */; };
 		747FC485156FFF74003349E1 /* PAPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 747FC484156FFF74003349E1 /* PAPConstants.m */; };
@@ -870,6 +874,12 @@
 		46DC23C419AAC7F300E8FCDF /* icon_search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_search.png; sourceTree = "<group>"; };
 		46DC23CB19B01CBF00E8FCDF /* PAPdiscoverIndustryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPdiscoverIndustryCell.h; path = Anypic/PAPdiscoverIndustryCell.h; sourceTree = SOURCE_ROOT; };
 		46DC23CC19B01CBF00E8FCDF /* PAPdiscoverIndustryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPdiscoverIndustryCell.m; path = Anypic/PAPdiscoverIndustryCell.m; sourceTree = SOURCE_ROOT; };
+		46DD4B231A9FB5230022B20A /* PAPrecomUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPrecomUsersViewController.h; path = Anypic/PAPrecomUsersViewController.h; sourceTree = SOURCE_ROOT; };
+		46DD4B241A9FB5230022B20A /* PAPrecomUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPrecomUsersViewController.m; path = Anypic/PAPrecomUsersViewController.m; sourceTree = SOURCE_ROOT; };
+		46DD4B251A9FB5230022B20A /* PAPrecomUsersViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PAPrecomUsersViewController.xib; path = Anypic/PAPrecomUsersViewController.xib; sourceTree = SOURCE_ROOT; };
+		46DD4B281A9FB58D0022B20A /* PAPfirstPicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPfirstPicViewController.h; path = Anypic/PAPfirstPicViewController.h; sourceTree = SOURCE_ROOT; };
+		46DD4B291A9FB58D0022B20A /* PAPfirstPicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPfirstPicViewController.m; path = Anypic/PAPfirstPicViewController.m; sourceTree = SOURCE_ROOT; };
+		46DD4B2A1A9FB58D0022B20A /* PAPfirstPicViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PAPfirstPicViewController.xib; path = Anypic/PAPfirstPicViewController.xib; sourceTree = SOURCE_ROOT; };
 		46E1EB6D183BCA6300F64274 /* PAPProfileSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPProfileSettingViewController.h; sourceTree = SOURCE_ROOT; };
 		46E1EB6E183BCA6300F64274 /* PAPProfileSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPProfileSettingViewController.m; sourceTree = SOURCE_ROOT; };
 		74636BF11578281E00B44132 /* PAPFindFriendsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = PAPFindFriendsCell.h; path = AnyPic/PAPFindFriendsCell.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -2042,6 +2052,12 @@
 				461371801A9BC8DB002A907A /* PAPSignUpViewController.h */,
 				461371811A9BC8DB002A907A /* PAPSignUpViewController.m */,
 				461371821A9BC8DB002A907A /* PAPSignUpViewController.xib */,
+				46DD4B231A9FB5230022B20A /* PAPrecomUsersViewController.h */,
+				46DD4B241A9FB5230022B20A /* PAPrecomUsersViewController.m */,
+				46DD4B251A9FB5230022B20A /* PAPrecomUsersViewController.xib */,
+				46DD4B281A9FB58D0022B20A /* PAPfirstPicViewController.h */,
+				46DD4B291A9FB58D0022B20A /* PAPfirstPicViewController.m */,
+				46DD4B2A1A9FB58D0022B20A /* PAPfirstPicViewController.xib */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -2869,6 +2885,7 @@
 				D528C380191034DE00CEEA35 /* ButtonLikeCommentSelected.png in Resources */,
 				D5144B1D195951D100650061 /* button-feedback-notify@2x.png in Resources */,
 				46B31EEF184E35150028D11C /* profileLocation@2x.png in Resources */,
+				46DD4B271A9FB5230022B20A /* PAPrecomUsersViewController.xib in Resources */,
 				D59B997E18C59836002D6EFE /* AppIcon80x80.png in Resources */,
 				460E331C1A0EA47100028A84 /* button_feedback_arrow@3x.png in Resources */,
 				462FCB85188C8533005059F3 /* button_back.png in Resources */,
@@ -2901,6 +2918,7 @@
 				C4BE6712157FC7D000A291C2 /* Icon.png in Resources */,
 				D5F45B04196CE6DE001C2875 /* select_overlay@2x.png in Resources */,
 				D5D571171947F8E900354340 /* btn_no_follow_user.png in Resources */,
+				46DD4B2C1A9FB58D0022B20A /* PAPfirstPicViewController.xib in Resources */,
 				C4BE6713157FC7D000A291C2 /* Icon@2x.png in Resources */,
 				D5BFDED918CC84A5004FEC42 /* newyork.png in Resources */,
 				C4BE6714157FC7D000A291C2 /* iTunesArtwork in Resources */,
@@ -3323,6 +3341,7 @@
 				C4F102C3156C57DA0061BC3E /* PAPWelcomeViewController.m in Sources */,
 				461371741A9672FC002A907A /* PAPLoginPopupViewController.m in Sources */,
 				D5856FB419F87E2600D0086F /* KonotorUITextView.m in Sources */,
+				46DD4B2B1A9FB58D0022B20A /* PAPfirstPicViewController.m in Sources */,
 				D542D8C2196A6F4700A0384F /* ELCImagePickerController.m in Sources */,
 				D5743808194629280040C96A /* followersFollowingViewController.m in Sources */,
 				462B363E1880AB5D008C28AE /* discoverPageViewController.m in Sources */,
@@ -3343,6 +3362,7 @@
 				D51C02331A2830CD00A663CD /* NavWrapperViewController.m in Sources */,
 				D5F0870F1A82E25B0079C922 /* MPABTestDesignerChangeRequestMessage.m in Sources */,
 				D5F087221A82E25B0079C922 /* MPCGSizeToNSDictionaryValueTransformer.m in Sources */,
+				46DD4B261A9FB5230022B20A /* PAPrecomUsersViewController.m in Sources */,
 				46DC23BF19AA1F0400E8FCDF /* PAPdiscoverTileView.m in Sources */,
 				D5F087431A82E25B0079C922 /* MPUIControlBinding.m in Sources */,
 				D5F087121A82E25B0079C922 /* MPABTestDesignerClearResponseMessage.m in Sources */,
