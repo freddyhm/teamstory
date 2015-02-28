@@ -236,7 +236,7 @@
             self.user[@"twitter_url"] = self.twitter_textfield.text;
             
             // set to empty string if custom placeholder is present
-            self.user[@"industry"] = [self.industry.titleLabel.text isEqualToString:@"What's your industry?"] ? @"" : self.industry.titleLabel;
+            self.user[@"industry"] = [self.industry.titleLabel.text isEqualToString:@"What's your industry?"] ? @"" : self.industry.titleLabel.text;
             
             self.user[@"angellist_url"] = self.angellist_textfield.text;
             self.user[@"linkedin_url"] = self.linkedin_textfield.text;
