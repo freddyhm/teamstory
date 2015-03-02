@@ -14,5 +14,6 @@
 -(void)setPictureQuery:(NSArray *)pictureQueryResults setThoughtQuery:(NSArray *)thoughtQueryResults;
 
 - (void)setNavigationController:(UINavigationController *)navigationController;
+- (void)setFieldsForFirstLogin;
 
 @end

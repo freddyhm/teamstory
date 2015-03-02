@@ -7,7 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ELCImagePickerController.h"
+#import "ELCAlbumPickerController.h"
+#import "ELCAssetTablePicker.h"
+#import "ThoughtPostViewController.h"
+#import "PostPicViewController.h"
 
-@interface PAPfirstPicViewController : UIViewController
+@interface PAPfirstPicViewController : UIViewController <UIImagePickerControllerDelegate, ELCImagePickerControllerDelegate, ThoughtPostViewControllerDelegate>
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info;
+- (UIImagePickerController *)shouldStartCameraController;
 
 @end

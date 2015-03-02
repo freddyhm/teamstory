@@ -12,4 +12,6 @@
 
 - (id)initWithImage:(UIImage *)originalImg source:(NSString *)source;
 
+@property (nonatomic, assign) BOOL firstPicViewController;
+
 @end

@@ -155,6 +155,11 @@
 
 }
 
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:NO];
+    self.firstPicViewController = NO;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -398,8 +403,12 @@
 }
 
 - (void)backButtonAction{
-    [[self navigationController] setNavigationBarHidden:YES animated:YES];
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.firstPicViewController) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        [[self navigationController] setNavigationBarHidden:YES animated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)exitPhoto{
@@ -679,5 +688,4 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
-
 @end

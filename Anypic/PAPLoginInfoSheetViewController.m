@@ -9,6 +9,7 @@
 #import "PAPLoginInfoSheetViewController.h"
 #import "AppDelegate.h"
 #import "PAPrecomUsersViewController.h"
+#import "SVProgressHUD.h"
 
 @interface PAPLoginInfoSheetViewController () {
     BOOL hasProfilePicChanged;
@@ -215,13 +216,17 @@
 }
 
 -(void)uploadImage_small:(NSData *)imageData {
-    PFFile *imageFile = [PFFile fileWithName:nil data:imageData];
-    [[PFUser currentUser] setObject:imageFile forKey:@"profilePictureSmall"];
+    if (imageData) {
+        PFFile *imageFile = [PFFile fileWithName:nil data:imageData];
+        [[PFUser currentUser] setObject:imageFile forKey:@"profilePictureSmall"];
+    }
 }
 
 -(void)uploadImage_medium:(NSData *)imageData {
-    PFFile *imageFile = [PFFile fileWithName:nil data:imageData];
-    [[PFUser currentUser] setObject:imageFile forKey:@"profilePictureMedium"];
+    if (imageData) {
+        PFFile *imageFile = [PFFile fileWithName:nil data:imageData];
+        [[PFUser currentUser] setObject:imageFile forKey:@"profilePictureMedium"];
+    }
 }
 
 - (IBAction)nextButtonAction:(id)sender {
@@ -249,33 +254,21 @@
         return;
     }
     
-    if (self.bioTextView.text.length == 0 && [self.bioTextView.text isEqualToString:@"Bio"]) {
+    if (self.bioTextView.text.length == 0 || [self.bioTextView.text isEqualToString:@"Bio"]) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Invalid Bio" message:@"Please insert a valid bio" delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
         [alertView show];
         return;
     }
     
-    // If all validation processes pass, save data and display a new-comer screen.
-    PFUser *user = [PFUser currentUser];
-    
-    bool profileExist = YES;
-    NSNumber *profileExist_num = [NSNumber numberWithBool:profileExist];
-    [user setObject: profileExist_num forKey: @"profileExist"];
-    
-    [user setObject:self.companyNameTextField.text forKey:@"displayName"];
-    [user setObject:self.emailTextField.text forKey:@"email"];
-    [user setObject:self.locationTextField.text forKey:@"location"];
-    [user setObject:self.bioTextView.text forKey:@"description"];
-    
     if (self.imageData_picker && hasProfilePicChanged) {
         // upload image from library
         [self uploadImage_medium:self.imageData_picker];
-    } else if (!hasProfilePicChanged && ![self.profilePickerButton backgroundImageForState:UIControlStateNormal]) {
+    } else if (!hasProfilePicChanged && [self.profilePickerButton backgroundImageForState:UIControlStateNormal] == nil) {
         // Nothing picked. Mount a default image
         UIImage *image = [UIImage imageNamed:@"default-pic.png"];
-        UIImage *smallRoundedImage = [PAPUtility resizeImage:image width:84.0f height:84.0f];
+        UIImage *resizedImage = [PAPUtility resizeImage:image width:200.0f height:200.0f];
         
-        self.imageData_picker = UIImageJPEGRepresentation(smallRoundedImage, 1);
+        self.imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
         [self uploadImage_medium:self.imageData_picker];
     } else {
         // upload image for twitter
@@ -285,18 +278,38 @@
     if (self.imageData_picker_small && hasProfilePicChanged) {
         // upload image from library
         [self uploadImage_small:self.imageData_picker_small];
-    } else if (!hasProfilePicChanged && ![self.profilePickerButton backgroundImageForState:UIControlStateNormal]) {
+    } else if (!hasProfilePicChanged && [self.profilePickerButton backgroundImageForState:UIControlStateNormal] == nil) {
         // Nothing picked. Mount a default image
         UIImage *image = [UIImage imageNamed:@"default-pic.png"];
-        UIImage *resizedImage = [PAPUtility resizeImage:image width:200.0f height:200.0f];
-        self.imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
+        UIImage *smallRoundedImage = [PAPUtility resizeImage:image width:84.0f height:84.0f];
+        
+        self.imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
         [self uploadImage_small:self.imageData_picker_small];
     } else {
         // upload image for twitter
         [self uploadImage_small:self.imageData_picker_small];
     }
     
-    [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+    // If all validation processes pass, save data and display a new-comer screen.
+    PFUser *targetUser = [PFUser currentUser];
+    [SVProgressHUD show];
+    
+    bool profileExist = YES;
+    NSNumber *profileExist_num = [NSNumber numberWithBool:profileExist];
+    [targetUser setObject: profileExist_num forKey:@"profileExist"];
+    
+    [targetUser setObject:self.companyNameTextField.text forKey:@"displayName"];
+    [targetUser setObject:self.locationTextField.text forKey:@"location"];
+    [targetUser setObject:self.bioTextView.text forKey:@"description"];
+    [targetUser setObject:[NSNumber numberWithInt:100] forKey:@"activityPoints"];
+    
+    // only save set email when emailTextField enabled.
+    if (self.emailTextField.enabled == YES) {
+        [targetUser setObject:self.emailTextField.text forKey:@"email"];
+    }
+    
+    [targetUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        [SVProgressHUD dismiss];
         // TODO display a new screen
         if (!error) {
             //successful
@@ -321,6 +334,7 @@
             }
         }
     }];
+    
 }
 
 - (IBAction)cancelButtonAction:(id)sender {

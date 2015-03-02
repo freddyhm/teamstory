@@ -234,6 +234,12 @@
 		46DD4B271A9FB5230022B20A /* PAPrecomUsersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46DD4B251A9FB5230022B20A /* PAPrecomUsersViewController.xib */; };
 		46DD4B2B1A9FB58D0022B20A /* PAPfirstPicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46DD4B291A9FB58D0022B20A /* PAPfirstPicViewController.m */; };
 		46DD4B2C1A9FB58D0022B20A /* PAPfirstPicViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46DD4B2A1A9FB58D0022B20A /* PAPfirstPicViewController.xib */; };
+		46DD4B371AA4F4950022B20A /* thought_onboarding.png in Resources */ = {isa = PBXBuildFile; fileRef = 46DD4B311AA4F4950022B20A /* thought_onboarding.png */; };
+		46DD4B381AA4F4950022B20A /* thought_onboarding@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46DD4B321AA4F4950022B20A /* thought_onboarding@2x.png */; };
+		46DD4B391AA4F4950022B20A /* thought_onboarding@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46DD4B331AA4F4950022B20A /* thought_onboarding@3x.png */; };
+		46DD4B3A1AA4F4950022B20A /* moment_onboarding.png in Resources */ = {isa = PBXBuildFile; fileRef = 46DD4B341AA4F4950022B20A /* moment_onboarding.png */; };
+		46DD4B3B1AA4F4950022B20A /* moment_onboarding@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46DD4B351AA4F4950022B20A /* moment_onboarding@2x.png */; };
+		46DD4B3C1AA4F4950022B20A /* moment_onboarding@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46DD4B361AA4F4950022B20A /* moment_onboarding@3x.png */; };
 		46E1EB6F183BCA6300F64274 /* PAPProfileSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E1EB6E183BCA6300F64274 /* PAPProfileSettingViewController.m */; };
 		74636BF31578281E00B44132 /* PAPFindFriendsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74636BF21578281E00B44132 /* PAPFindFriendsCell.m */; };
 		747FC485156FFF74003349E1 /* PAPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 747FC484156FFF74003349E1 /* PAPConstants.m */; };
@@ -880,6 +886,12 @@
 		46DD4B281A9FB58D0022B20A /* PAPfirstPicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPfirstPicViewController.h; path = Anypic/PAPfirstPicViewController.h; sourceTree = SOURCE_ROOT; };
 		46DD4B291A9FB58D0022B20A /* PAPfirstPicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPfirstPicViewController.m; path = Anypic/PAPfirstPicViewController.m; sourceTree = SOURCE_ROOT; };
 		46DD4B2A1A9FB58D0022B20A /* PAPfirstPicViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PAPfirstPicViewController.xib; path = Anypic/PAPfirstPicViewController.xib; sourceTree = SOURCE_ROOT; };
+		46DD4B311AA4F4950022B20A /* thought_onboarding.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thought_onboarding.png; sourceTree = "<group>"; };
+		46DD4B321AA4F4950022B20A /* thought_onboarding@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thought_onboarding@2x.png"; sourceTree = "<group>"; };
+		46DD4B331AA4F4950022B20A /* thought_onboarding@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thought_onboarding@3x.png"; sourceTree = "<group>"; };
+		46DD4B341AA4F4950022B20A /* moment_onboarding.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = moment_onboarding.png; sourceTree = "<group>"; };
+		46DD4B351AA4F4950022B20A /* moment_onboarding@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "moment_onboarding@2x.png"; sourceTree = "<group>"; };
+		46DD4B361AA4F4950022B20A /* moment_onboarding@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "moment_onboarding@3x.png"; sourceTree = "<group>"; };
 		46E1EB6D183BCA6300F64274 /* PAPProfileSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAPProfileSettingViewController.h; sourceTree = SOURCE_ROOT; };
 		46E1EB6E183BCA6300F64274 /* PAPProfileSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAPProfileSettingViewController.m; sourceTree = SOURCE_ROOT; };
 		74636BF11578281E00B44132 /* PAPFindFriendsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = PAPFindFriendsCell.h; path = AnyPic/PAPFindFriendsCell.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -1535,6 +1547,12 @@
 		4613716A1A966DB4002A907A /* onBoarding */ = {
 			isa = PBXGroup;
 			children = (
+				46DD4B311AA4F4950022B20A /* thought_onboarding.png */,
+				46DD4B321AA4F4950022B20A /* thought_onboarding@2x.png */,
+				46DD4B331AA4F4950022B20A /* thought_onboarding@3x.png */,
+				46DD4B341AA4F4950022B20A /* moment_onboarding.png */,
+				46DD4B351AA4F4950022B20A /* moment_onboarding@2x.png */,
+				46DD4B361AA4F4950022B20A /* moment_onboarding@3x.png */,
 				4613716B1A966DB4002A907A /* logo_onboarding.png */,
 				4613716C1A966DB4002A907A /* logo_onboarding@2x.png */,
 				4613716D1A966DB4002A907A /* logo_onboarding@3x.png */,
@@ -2859,6 +2877,7 @@
 				D5856F8F19F87E2500D0086F /* KonotorConversationViewController.xib in Resources */,
 				467A40C91993056C00D4C693 /* btn_email@2x.png in Resources */,
 				D552B0EA19C7D3EB009F2862 /* arrows_right_white.png in Resources */,
+				46DD4B381AA4F4950022B20A /* thought_onboarding@2x.png in Resources */,
 				46076EED193FE3EF00A7B317 /* notif_star.png in Resources */,
 				463CE63D19E9987D001F607C /* btn_message_count@3x.png in Resources */,
 				467A40CB1993056C00D4C693 /* btn_facebook@2x.png in Resources */,
@@ -2999,6 +3018,7 @@
 				463B0CEE1985A8C80075E496 /* intro_logo.png in Resources */,
 				4609975B1938119A00C5AD96 /* icon-linkedin.png in Resources */,
 				D5856F9919F87E2600D0086F /* konotor_chatbubble_ios7_other@2x.png in Resources */,
+				46DD4B371AA4F4950022B20A /* thought_onboarding.png in Resources */,
 				46ABD74F18B147FC008F5AAB /* button_cancel_selected@2x.png in Resources */,
 				D579141019FF3E0900585370 /* IconHomeSelected@2x.png in Resources */,
 				463CE64619E9987D001F607C /* btn_new_message@3x.png in Resources */,
@@ -3020,8 +3040,10 @@
 				D56D466619884C33001FAA76 /* PhotoTimelineViewController.xib in Resources */,
 				D5856FAE19F87E2600D0086F /* konotor_supportprofile.png in Resources */,
 				4691B4F518BEF61C00B7DF6A /* follow@2x.png in Resources */,
+				46DD4B3C1AA4F4950022B20A /* moment_onboarding@3x.png in Resources */,
 				D57684021933EBA3008BAA2C /* nav_profile.png in Resources */,
 				462FCB7C188C806C005059F3 /* button_done@2x.png in Resources */,
+				46DD4B3B1AA4F4950022B20A /* moment_onboarding@2x.png in Resources */,
 				463CE65919E99DD9001F607C /* bubble_triangle_right@2x.png in Resources */,
 				46B31EEA184E35150028D11C /* profileWebsite.png in Resources */,
 				463B0CEF1985A8C80075E496 /* intro_logo@2x.png in Resources */,
@@ -3036,6 +3058,7 @@
 				463CE65719E99DD9001F607C /* bubble_triangle_left@3x.png in Resources */,
 				D57683F71933EA96008BAA2C /* nav_discover@2x.png in Resources */,
 				C4BE6799157FC7F700A291C2 /* ButtonLikeSelected.png in Resources */,
+				46DD4B3A1AA4F4950022B20A /* moment_onboarding.png in Resources */,
 				462FCB84188C8533005059F3 /* button_back_selected@2x.png in Resources */,
 				D5C955321A201EE700DD2787 /* CustomKeyboardViewController.xib in Resources */,
 				D5CD73871A6D8FFB008FBDC8 /* icon_link@2x.png in Resources */,
@@ -3079,6 +3102,7 @@
 				D575A0721947834C00C6BCC2 /* btn_follow@2x.png in Resources */,
 				46D28CE51A4ACDE40089D1E3 /* IconDiscover_Glow.png in Resources */,
 				462B06BA1A704A02003F789C /* video_placeholder.png in Resources */,
+				46DD4B391AA4F4950022B20A /* thought_onboarding@3x.png in Resources */,
 				463CE65819E99DD9001F607C /* bubble_triangle_right.png in Resources */,
 				D5A2848B1A2EE83700EF01A9 /* bg_thought@2x.png in Resources */,
 				D576840E1933F910008BAA2C /* IconDiscoverSelected.png in Resources */,

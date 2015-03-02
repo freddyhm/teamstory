@@ -16,6 +16,7 @@
 #import "ParseFacebookUtils/PFFacebookUtils.h"
 #include <stdlib.h>
 #import "AtMention.h"
+#import "AppDelegate.h"
 
 @interface ThoughtPostViewController ()
 
@@ -396,7 +397,7 @@
 }
 
 - (void)exitPost{
-    [self.delegate didUploadThought];
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
 }
 
 

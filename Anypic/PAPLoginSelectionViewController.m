@@ -9,6 +9,7 @@
 #import "PAPLoginSelectionViewController.h"
 #import "PAPLoginPopupViewController.h"
 #import "PAPSignUpViewController.h"
+#import "AppDelegate.h"
 
 @interface PAPLoginSelectionViewController ()
 
@@ -33,6 +34,6 @@
 }
 
 - (IBAction)cancelButtonAction:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
 }
 @end
