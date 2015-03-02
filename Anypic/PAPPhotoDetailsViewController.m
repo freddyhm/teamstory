@@ -100,6 +100,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     [super viewDidLoad];
     
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Details" properties:@{@"Type":[self.photo objectForKey:@"type"], @"Source": self.source}];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"details_screen" action:@"viewing_post_details" label:[self.photo objectForKey:@"type"] value:self.source];
+    
     [self.postDetails setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     self.postDetails.delegate = self;
     self.postDetails.dataSource = self;

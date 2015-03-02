@@ -13,16 +13,10 @@
 #import "PAPAccountViewController.h"
 #import "PAPHomeViewController.h"
 #import "PAPPhotoDetailsViewController.h"
-#import "PAPUtility.h"
 #import "PAPLoadMoreCell.h"
 #import "MBProgressHUD.h"
-#import "SVProgressHUD.h"
-#import "Mixpanel.h"
 #import "AppDelegate.h"
-#import "Intercom.h"
 #import "PAPwebviewViewController.h"
-#import <FlightRecorder/FlightRecorder.h>
-#import "AtMention.h"
 
 #define IS_OS_6_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0)
 #define IS_OS_8_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
@@ -892,6 +886,7 @@ enum ActionSheetTags {
 }
 
 - (void)openPhotoDetailView:(PFObject *)photo {
+    
     PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"commentButton"];
     
     // hides tab bar so we can add custom keyboard
