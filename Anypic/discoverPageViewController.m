@@ -7,13 +7,9 @@
 //
 
 #import "discoverPageViewController.h"
-#import "Mixpanel.h"
-#import <FlightRecorder/FlightRecorder.h>
-#import "Intercom.h"
 #import "PAPFindFriendsCell.h"
 #import "PAPAccountViewController.h"
 #import "PAPdiscoverTileView.h"
-#import "SVProgressHUD.h"
 
 #define screenWidth 320.0f
 
@@ -188,8 +184,7 @@ NSInteger selection = 1;
     self.discoverTileView = [[PAPdiscoverTileView alloc] initWithFrame:CGRectMake(0.0f, 20 + self.searchBar.bounds.size.height, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.height - (20 + self.searchBar.bounds.size.height + tabBarHeight))];
     [self.discoverTileView setNavigationController:self.navigationController];
     [self.view addSubview:self.discoverTileView];
-    
-	   
+
 }
 
 - (void)dismissHUD {
@@ -593,22 +588,7 @@ NSInteger selection = 1;
 }
 
 - (void)cell:(PAPFindFriendsCell *)cellView didTapFollowButton:(PFUser *)aUser {
-    
-    // flightrecorder event analytics
-    [[FlightRecorder sharedInstance] trackEventWithCategory:@"discover_screen" action:@"followed_user" label:@"" value:@""];
-    
-    // mixpanel analytics
-    NSString *selectedUser = [aUser objectForKey:@"displayName"] != nil ? [aUser objectForKey:@"displayName"] : [aUser objectId];
-    
-    [[Mixpanel sharedInstance] track:@"Selected From Discover" properties:@{@"Type": @"Followed", @"Selected":selectedUser}];
-    
-    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Followed User", @"Source": @"Discover", @"Followed User": selectedUser}];
-    
-    // intercome analytics
-    [Intercom logEventWithName:@"followed-user" optionalMetaData:@{@"followed": selectedUser, @"source": @"discover"}
-                    completion:^(NSError *error) {}];
 
-    
     [self shouldToggleFollowFriendForCell:cellView];
 }
 

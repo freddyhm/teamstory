@@ -360,7 +360,7 @@
         
         // flightrecorder event analytics
         [[FlightRecorder sharedInstance] trackEventWithCategory:@"discover_screen" action:@"tapped_post" label:@"" value:@"thought"];
-        
+    
         if (photo) {
             PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapDiscoverPhoto"];
             
@@ -468,7 +468,15 @@
 
 
 - (void)setPhotoInDiscover:(PFObject *)photo {
+    
     if (photo) {
+        
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Selected From Discover" properties:@{@"Source":@"Main View", @"Selected":[photo objectId]}];
+        
+        // flightrecorder event analytics
+        [[FlightRecorder sharedInstance] trackEventWithCategory:@"discover_screen" action:@"tapped_post" label:@"main_view" value:[photo objectId]];
+        
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"tapDiscoverPhoto"];
         
         // hides tab bar so we can add custom keyboard
@@ -487,6 +495,7 @@
 }
 
 - (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapFollowButtonForDiscover:(UIButton *)button user:(PFUser *)user {
+    
     // temp disable follow button to avoid duplicates
     photoHeaderView.followButton.enabled = NO;
     
@@ -504,6 +513,24 @@
         
         [[NSNotificationCenter defaultCenter] postNotificationName:PAPUtilityUserFollowingChangedNotification object:nil];
     } else {
+        
+        /* analytics (need to refactor later) */
+        
+        // flightrecorder event analytics
+        [[FlightRecorder sharedInstance] trackEventWithCategory:@"discover_screen" action:@"followed_user" label:@"" value:@""];
+        
+        // mixpanel analytics
+        NSString *selectedUser = [user objectForKey:@"displayName"] != nil ? [user objectForKey:@"displayName"] : [user objectId];
+        
+        [[Mixpanel sharedInstance] track:@"Selected From Discover" properties:@{@"Type": @"Followed", @"Selected":selectedUser}];
+        
+        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Followed User", @"Source": @"Discover", @"Followed User": selectedUser}];
+        
+        // intercom analytics
+        [Intercom logEventWithName:@"followed-user" optionalMetaData:@{@"followed": selectedUser, @"source": @"discover"}
+                        completion:^(NSError *error) {}];
+
+        
         NSLog(@"follow");
         // Follow
         photoHeaderView.followButton.selected = YES;
@@ -541,17 +568,17 @@
         if (completed) {
             if ([activityType isEqualToString:UIActivityTypePostToFacebook]) {
                 
-                [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Details", @"Platform": @"Facebook"}];
+                [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Discover", @"Platform": @"Facebook"}];
                 
                 NSLog(@"facebook");
             } else if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
                 
-                [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Details", @"Platform": @"Twitter"}];
+                [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Discover", @"Platform": @"Twitter"}];
                 
                 NSLog(@"twitter");
             } else if ([activityType isEqualToString:UIActivityTypeMail]) {
                 
-                [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Details", @"Platform": @"Email"}];
+                [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Discover", @"Platform": @"Email"}];
                 
                 NSLog(@"email");
             } else {
