@@ -230,6 +230,9 @@
 }
 
 - (IBAction)nextButtonAction:(id)sender {
+    [self.view endEditing:YES];
+    [self.mainScrollView setContentOffset:CGPointZero animated:YES];
+    
     if (self.companyNameTextField.text.length == 0) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Invalid Company Name" message:@"Please insert a Company Name" delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
         [alertView show];
