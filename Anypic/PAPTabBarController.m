@@ -11,6 +11,7 @@
 #import "PostPicViewController.h"
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
+#import "PAPLoginSelectionViewController.h"
 
 @interface PAPTabBarController ()
 @property (nonatomic,strong) NSString *imageSource;
@@ -159,7 +160,6 @@
 }
 
 - (void)postButtonAction:(id)sender {
-    
     // new analytics
     [[Mixpanel sharedInstance] track:@"Viewed Post Menu" properties:@{}];
     
@@ -171,6 +171,8 @@
 }
 
 - (void)cameraButtonAction:(id)sender{
+    // If the user is logged in with an anonymous account, show login page.
+    [self navigateToLoginPage];
     
     // new analytics
     [[Mixpanel sharedInstance] track:@"Viewed Post Menu" properties:@{@"Selected": @"Camera"}];
@@ -217,6 +219,8 @@
 
 
 - (void)linkPostButtonAction:(id)sender {
+    // If the user is logged in with an anonymous account, show login page.
+    [self navigateToLoginPage];
     
     // new analytics
     [[Mixpanel sharedInstance] track:@"Viewed Post Menu" properties:@{@"Selected": @"Link"}];
@@ -256,6 +260,8 @@
 }
 
 - (void)thoughtButtonAction:(id)sender{
+    // If the user is logged in with an anonymous account, show login page.
+    [self navigateToLoginPage];
     
     // new analytics
     [[Mixpanel sharedInstance] track:@"Viewed Post Menu" properties:@{@"Selected": @"Thought"}];
@@ -416,6 +422,11 @@
     return img;
 }
 
-
+- (void) navigateToLoginPage {
+    if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
+        PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
+        [self presentViewController:loginSelectionViewController animated:YES completion:nil];
+    }
+}
 
 @end
