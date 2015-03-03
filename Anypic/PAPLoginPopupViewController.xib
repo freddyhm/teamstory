@@ -14,6 +14,8 @@
                 <outlet property="mainScrollView" destination="G0X-F0-Qju" id="Etu-L7-CMT"/>
                 <outlet property="passwordTextField" destination="rqu-Q2-ZQh" id="zV5-3K-3WQ"/>
                 <outlet property="passwordTextView" destination="LjF-CW-cqi" id="LCF-EH-AgO"/>
+                <outlet property="signUpButton" destination="gg4-qC-GSK" id="kN1-14-8Rb"/>
+                <outlet property="twitterButton" destination="VYm-Tn-wHK" id="CL5-Ee-Jdr"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>

@@ -12,6 +12,7 @@
 #import "AppDelegate.h"
 
 @interface PAPLoginSelectionViewController ()
+@property (strong, nonatomic) IBOutlet UIButton *joinButton;
 
 @end
 
@@ -20,6 +21,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.joinButton.layer.cornerRadius = 2.0f;
 }
 
 

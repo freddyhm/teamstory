@@ -16,6 +16,10 @@
 
 @property (strong, nonatomic) IBOutlet UITextField *emailTextField;
 @property (strong, nonatomic) IBOutlet UITextField *pwTextField;
+@property (strong, nonatomic) IBOutlet UIView *emailTextView;
+@property (strong, nonatomic) IBOutlet UIView *passwordTextView;
+@property (strong, nonatomic) IBOutlet UIButton *signInButton;
+@property (strong, nonatomic) IBOutlet UIButton *signInWithEmailButton;
 
 
 @end
@@ -24,6 +28,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.emailTextView.layer.cornerRadius = 2.0f;
+    self.passwordTextView.layer.cornerRadius = 2.0f;
+    self.signInButton.layer.cornerRadius = 2.0f;
+    self.signInWithEmailButton.layer.cornerRadius = 2.0f;
     
 }
 

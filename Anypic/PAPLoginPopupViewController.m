@@ -20,6 +20,8 @@
 @property (strong, nonatomic) IBOutlet UIView *emailTextView;
 @property (strong, nonatomic) IBOutlet UIView *passwordTextView;
 @property (strong, nonatomic) IBOutlet UIView *confirmPWTextView;
+@property (strong, nonatomic) IBOutlet UIButton *twitterButton;
+@property (strong, nonatomic) IBOutlet UIButton *signUpButton;
 
 @end
 
@@ -32,6 +34,12 @@
     self.confirmPWTextField.delegate = self;
     self.passwordTextField.delegate = self;
     self.mainScrollView.delegate = self;
+    
+    self.emailTextView.layer.cornerRadius = 2.0f;
+    self.passwordTextView.layer.cornerRadius = 2.0f;
+    self.confirmPWTextView.layer.cornerRadius = 2.0f;
+    self.twitterButton.layer.cornerRadius = 2.0f;
+    self.signUpButton.layer.cornerRadius = 2.0f;
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
