@@ -76,8 +76,10 @@
 }
 
 - (IBAction)signedUpWithFacebookAction:(id)sender {
+    [SVProgressHUD show];
+    
     // Set permissions required from the facebook user account
-    NSArray *permissionsArray = @[ @"user_about_me", @"user_relationships", @"user_birthday", @"user_location"];
+    NSArray *permissionsArray = @[ @"user_about_me", @"user_location"];
     
     // Login PFUser using Facebook
     [PFFacebookUtils logInWithPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
@@ -185,6 +187,9 @@
             // check if email is properly formatted
             if([self NSStringIsValidEmail:input]){
                 [PFUser requestPasswordResetForEmailInBackground:input];
+                
+                UIAlertView *successfulAlertView = [[UIAlertView alloc] initWithTitle:@"Successful" message:@"Email Sent!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [successfulAlertView show];
             } else {
                 UIAlertView *notEmailFormat = [[UIAlertView alloc] initWithTitle:@"Invalid Email" message:@"Make sure you enter a valid email address" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
                 [notEmailFormat show];
