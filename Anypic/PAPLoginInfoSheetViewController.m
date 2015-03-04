@@ -11,7 +11,7 @@
 #import "PAPrecomUsersViewController.h"
 #import "SVProgressHUD.h"
 
-@interface PAPLoginInfoSheetViewController () {
+@interface PAPLoginInfoSheetViewController () <CLLocationManagerDelegate> {
     BOOL hasProfilePicChanged;
     BOOL displayNameCheckResult;
 }
@@ -27,6 +27,7 @@
 @property (strong, nonatomic) NSString *twitterDescription;
 @property (strong, nonatomic) IBOutlet UILabel *errorMessageBox;
 
+@property (strong, nonatomic) CLLocationManager *locationManager;
 @end
 
 @implementation PAPLoginInfoSheetViewController
@@ -83,6 +84,21 @@
         self.imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
         self.imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
     }
+    
+    if (self.locationTextField.text.length == 0) {
+        [self detectLocation];
+    }
+}
+
+- (void) detectLocation {
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    
+    // Check for iOS 8. Without this guard the code will crash with "unknown selector" on iOS 7.
+    if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+        [self.locationManager requestWhenInUseAuthorization];
+    }
+    [self.locationManager startUpdatingLocation];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -420,9 +436,15 @@
         }];
     }
 }
+
 - (IBAction)locationDetectionButtonAction:(id)sender {
-    
+    [self detectLocation];
 }
 
+#pragma CLLocationManagerDelegate
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    self.locationTextField.text = [locations lastObject];
+}
 
 @end
