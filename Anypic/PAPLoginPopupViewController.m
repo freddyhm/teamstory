@@ -9,7 +9,7 @@
 #import "PAPLoginPopupViewController.h"
 #import "AppDelegate.h"
 #import "PAPLoginInfoSheetViewController.h"
-
+#import "PAPwebviewViewController.h"
 
 @interface PAPLoginPopupViewController ()
 
@@ -77,6 +77,24 @@
 - (IBAction)signUpButtonAction:(id)sender {
     [self.view endEditing:YES];
     
+    if (![self.passwordTextField.text isEqualToString:self.confirmPWTextField.text]) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Password confirmation failed" message:@"Passwords don't match!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertView show];
+        return;
+    }
+    
+    if (self.passwordTextField.text.length < 6) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Password Length" message:@"Please choose a password longer than 6 characters" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertView show];
+        return;
+    }
+    
+    if (![self NSStringIsValidEmail:self.emailTextField.text]) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Incorrect Email" message:@"Please enter a valid email" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertView show];
+        return;
+    }
+    
     PFUser *user = [PFUser user];
     user.username = self.emailTextField.text;
     user.password = self.passwordTextField.text;
@@ -86,7 +104,22 @@
         if (!error) {
             [self navigateToInfoSheet];
         } else {
-            NSLog(@"error!");
+            if ([error code] == 203) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Log In Error"
+                                                                message:@"Email you've entered is already being used"
+                                                               delegate:nil
+                                                      cancelButtonTitle:nil
+                                                      otherButtonTitles:@"Dismiss", nil];
+                [alert show];
+            } else {
+                NSString *errorMessage = [error localizedDescription];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Log In Error"
+                                                                message:errorMessage
+                                                               delegate:nil
+                                                      cancelButtonTitle:nil
+                                                      otherButtonTitles:@"Dismiss", nil];
+                [alert show];
+            }
         }
     }];
 }
@@ -120,6 +153,29 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     [self.mainScrollView setContentOffset:CGPointZero animated:YES];
+}
+
+-(BOOL)NSStringIsValidEmail:(NSString *)checkString {
+    BOOL stricterFilter = YES;
+    NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";
+    NSString *laxString = @".+@([A-Za-z0-9]+\\.)+[A-Za-z]{2}[A-Za-z]*";
+    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:checkString];
+}
+
+- (IBAction)privacyButtonAction:(id)sender {
+    PAPwebviewViewController *webViewController = [[PAPwebviewViewController alloc] initWithWebsite:@"http://teamstoryapp.com/privacy.html"];
+    UINavigationController *postNavController = [[UINavigationController alloc]initWithRootViewController:webViewController];
+    postNavController.navigationBarHidden = NO;
+    [self presentViewController:postNavController animated:YES completion:nil];
+}
+
+- (IBAction)termsButtonAction:(id)sender {
+    PAPwebviewViewController *webViewController = [[PAPwebviewViewController alloc] initWithWebsite:@"http://teamstoryapp.com/terms.html"];
+    UINavigationController *postNavController = [[UINavigationController alloc]initWithRootViewController:webViewController];
+    postNavController.navigationBarHidden = NO;
+    [self presentViewController:postNavController animated:YES completion:nil];
 }
 
 @end

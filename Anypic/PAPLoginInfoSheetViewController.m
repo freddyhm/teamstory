@@ -93,6 +93,7 @@
 - (void) detectLocation {
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
+    self.locationTextField.placeholder = @"Loading Location...";
     
     // Check for iOS 8. Without this guard the code will crash with "unknown selector" on iOS 7.
     if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
@@ -437,9 +438,37 @@
 }
 
 #pragma CLLocationManagerDelegate
-
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    self.locationTextField.text = [locations lastObject];
+    if (locations.count > 0) {
+        CLGeocoder * geoCoder = [[CLGeocoder alloc] init];
+        [geoCoder reverseGeocodeLocation:[locations lastObject] completionHandler:^(NSArray *placemarks, NSError *error) {
+            if (error){
+                NSLog(@"Geocode failed with error: %@", error);
+                return;
+                
+            }
+            
+            CLPlacemark *placemark = [placemarks objectAtIndex:0];
+            /*
+             -----------Available Fields------------
+            NSLog(@"placemark.ISOcountryCode %@",placemark.ISOcountryCode);
+            NSLog(@"placemark.country %@",placemark.country);
+            NSLog(@"placemark.postalCode %@",placemark.postalCode);
+            NSLog(@"placemark.administrativeArea %@",placemark.administrativeArea);
+            NSLog(@"placemark.locality %@",placemark.locality);
+            NSLog(@"placemark.subLocality %@",placemark.subLocality);
+            NSLog(@"placemark.subThoroughfare %@",placemark.subThoroughfare);
+            */
+            
+            self.locationTextField.text = [NSString stringWithFormat:@"%@, %@", placemark.locality, placemark.administrativeArea];
+        }];
+    }
 }
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    self.locationTextField.placeholder = @"Location";
+}
+
 
 @end
