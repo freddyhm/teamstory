@@ -109,6 +109,8 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self updateLastVisit];
+    
     // Handling anonymous users.
     if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
         PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
@@ -1080,6 +1082,17 @@ static NSString *const freddy_account = @"rblDQcdZcY";
             if(self.userStatUpdateCount > 1){
                  completed(YES);
             }
+        }
+    }];
+}
+
+- (void) updateLastVisit {
+    [[PFUser currentUser] setObject:[NSDate date]  forKey:@"discoverUpdate"];
+    [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            NSLog(@"Saved successfully current Date:%@", [[PFUser currentUser] objectForKey:@"discoverUpdate"]);
+        } else {
+            NSLog(@"error: %@", error);
         }
     }];
 }

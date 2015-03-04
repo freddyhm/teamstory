@@ -584,7 +584,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     [activityFeedTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconActivitySelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
 
     activityFeedTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
-
+    
     
     UITabBarItem *discoverTabbarItem = [[UITabBarItem alloc] init];
     
@@ -592,7 +592,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     NSDate *currentDate = [NSDate date];
     
     NSTimeInterval distanceBetweenDates = [currentDate timeIntervalSinceDate:discoverUpdateDate];
-    float discoverGlowTimeFrame = 2*24*60*60;
+    float discoverGlowTimeFrame = 2*24*60*60; //every 2 days
 
     UIImage *discoverTabBarImage = [UIImage imageNamed:@"nav_discover.png"];
     UIImage *discoverTabBarImage_Glow = [UIImage imageNamed:@"IconDiscover_Glow.png"];
@@ -613,11 +613,33 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
    
     discoverTabbarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
     
-    UITabBarItem *accountTabBarItem = [[UITabBarItem alloc] init];
-
-    [accountTabBarItem setImage:[[UIImage imageNamed:@"nav_profile.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     
-    [accountTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconProfileSelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    UITabBarItem *accountTabBarItem = [[UITabBarItem alloc] init];
+    UIImage *profileImage = [UIImage imageNamed:@"nav_profile.png"];
+    UIImage *profileTabBarImage_selected = [UIImage imageNamed:@"IconProfileSelected.png"];
+    
+    if (![PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]] && ([[PFUser currentUser] objectForKey:@"description"] == nil || [[PFUser currentUser] objectForKey:@"industry"] == nil || [[PFUser currentUser] objectForKey:@"location"] == nil)) {
+        NSDate *profileUpdateDate = [[PFUser currentUser] objectForKey:@"profileUpdate"];
+        
+        NSTimeInterval distanceBetweenDates = [currentDate timeIntervalSinceDate:profileUpdateDate];
+        float profileGlowTimeFrame = 7*24*60*60; //every 7 days
+        
+        UIImage *profileTabBarImage = [UIImage imageNamed:@"nav_profile.png"];
+        
+        // since the image is same as discover glow, we reuse the discover image
+        UIImage *profileTabBarImage_Glow = [UIImage imageNamed:@"IconDiscover_Glow.png"];
+        
+        if (distanceBetweenDates > profileGlowTimeFrame || profileUpdateDate == nil) {
+            profileImage = profileTabBarImage_Glow;
+        } else {
+            profileImage = profileTabBarImage;
+        }
+    }
+    
+
+    [accountTabBarItem setImage:[profileImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    
+    [accountTabBarItem setSelectedImage:[profileTabBarImage_selected imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     
     accountTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
     
