@@ -26,11 +26,6 @@
     
 }
 
-- (IBAction)cancelButtonAction:(id)sender {
-    PAPfirstPicViewController *firstPicViewController = [[PAPfirstPicViewController alloc] initWithNibName:@"PAPfirstPicViewController" bundle:nil];
-    [self presentViewController:firstPicViewController animated:YES completion:nil];
-}
-
 - (IBAction)nextButtonAction:(id)sender {
     PAPfirstPicViewController *firstPicViewController = [[PAPfirstPicViewController alloc] initWithNibName:@"PAPfirstPicViewController" bundle:nil];
     [self presentViewController:firstPicViewController animated:YES completion:nil];

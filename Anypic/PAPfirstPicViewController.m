@@ -65,10 +65,6 @@
     }];
 }
 
-- (IBAction)cancelButtonAction:(id)sender {
-    [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
-}
-
 - (IBAction)thoughtButtonAction:(id)sender {
     ThoughtPostViewController *thoughtPostViewController = [[ThoughtPostViewController alloc] init];
     thoughtPostViewController.delegate = self;

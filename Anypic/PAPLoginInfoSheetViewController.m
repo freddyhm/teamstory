@@ -13,6 +13,7 @@
 
 @interface PAPLoginInfoSheetViewController () {
     BOOL hasProfilePicChanged;
+    BOOL displayNameCheckResult;
 }
 @property (strong, nonatomic) IBOutlet UIButton *profilePickerButton;
 @property (nonatomic, strong) NSData *imageData_picker;
@@ -21,8 +22,10 @@
 @property (strong, nonatomic) IBOutlet UITextField *locationTextField;
 @property (strong, nonatomic) IBOutlet UITextField *emailTextField;
 @property (strong, nonatomic) IBOutlet UITextView *bioTextView;
+@property (strong, nonatomic) IBOutlet UIButton *nextButton;
 @property (strong, nonatomic) IBOutlet UIScrollView *mainScrollView;
 @property (strong, nonatomic) NSString *twitterDescription;
+@property (strong, nonatomic) IBOutlet UILabel *errorMessageBox;
 
 @end
 
@@ -41,6 +44,8 @@
     
     self.profilePickerButton.layer.cornerRadius = self.profilePickerButton.bounds.size.width / 2;
     self.profilePickerButton.clipsToBounds = YES;
+    
+    self.nextButton.alpha = 0.3f;
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
@@ -234,32 +239,38 @@
     [self.mainScrollView setContentOffset:CGPointZero animated:YES];
     
     if (self.companyNameTextField.text.length == 0) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Invalid Company Name" message:@"Please insert a Company Name" delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
-        [alertView show];
+        self.errorMessageBox.text = @"Please complete your username";
+        self.errorMessageBox.textColor = [UIColor redColor];
+        return;
+    }
+    
+    if (!displayNameCheckResult) {
+        self.errorMessageBox.text = @"Your username is already being used";
+        self.errorMessageBox.textColor = [UIColor redColor];
         return;
     }
     
     if (self.emailTextField.text.length == 0) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Invalid Email" message:@"Please insert an email address" delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
-        [alertView show];
+        self.errorMessageBox.text = @"Please complete your email address";
+        self.errorMessageBox.textColor = [UIColor redColor];
         return;
     }
     
     if (![self NSStringIsValidEmail:self.emailTextField.text]) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Invalid Email" message:@"Please insert a valid email" delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
-        [alertView show];
+        self.errorMessageBox.text = @"Your email address is invalid";
+        self.errorMessageBox.textColor = [UIColor redColor];
         return;
     }
     
     if (self.locationTextField.text.length == 0) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Invalid Location" message:@"Please insert a location" delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
-        [alertView show];
+        self.errorMessageBox.text = @"Please complete your location";
+        self.errorMessageBox.textColor = [UIColor redColor];
         return;
     }
     
     if (self.bioTextView.text.length == 0 || [self.bioTextView.text isEqualToString:@"Bio"]) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Invalid Bio" message:@"Please insert a valid bio" delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
-        [alertView show];
+        self.errorMessageBox.text = @"Please complete your bio";
+        self.errorMessageBox.textColor = [UIColor redColor];
         return;
     }
     
@@ -398,6 +409,18 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     [self.mainScrollView setContentOffset:CGPointZero animated:YES];
+    
+    if (textField == self.companyNameTextField) {
+        PFQuery *displayNameCheck = [PFUser query];
+        [displayNameCheck whereKey:@"displayName" equalTo:self.companyNameTextField.text];
+        [displayNameCheck getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+            if (!error && object) {
+                displayNameCheckResult = NO;
+            } else {
+                displayNameCheckResult = YES;
+            }
+        }];
+    }
 }
 
 

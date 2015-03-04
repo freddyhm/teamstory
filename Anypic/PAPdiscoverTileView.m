@@ -207,7 +207,7 @@
         mostActiveUsersLabel.numberOfLines = 2;
         mostActiveUsersLabel.textColor = [UIColor colorWithRed:104.0f/255.0f green:116.0f/255.0f blue:127.0f/255.0f alpha:1.0];
         mostActiveUsersLabel.textAlignment = NSTextAlignmentCenter;
-        mostActiveUsersLabel.font = [UIFont systemFontOfSize:15.0f];
+        mostActiveUsersLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:15.0f];
         [mainView addSubview:mostActiveUsersLabel];
         
     } else {

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PAPfirstPicViewController">
@@ -18,15 +17,6 @@
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="33m-jS-OVa">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="69"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NAl-PU-4ZA">
-                            <rect key="frame" x="12" y="29" width="22" height="22"/>
-                            <state key="normal" image="button_cancel.png">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="cancelButtonAction:" destination="-1" eventType="touchUpInside" id="yGJ-M4-e2n"/>
-                            </connections>
-                        </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Za8-OQ-72u">
                             <rect key="frame" x="262" y="27" width="46" height="30"/>
                             <state key="normal" title="Skip">
@@ -85,7 +75,6 @@ WW91J3JlIGFsbCBnb29kIHRvIGdvIRENVG8gaGVscCB5b3UgZ2V0IHN0YXJ0ZWQ6A
         </view>
     </objects>
     <resources>
-        <image name="button_cancel.png" width="22" height="22"/>
         <image name="moment_onboarding.png" width="261" height="137"/>
         <image name="thought_onboarding.png" width="260" height="137"/>
     </resources>
