@@ -45,8 +45,6 @@
     self.profilePickerButton.layer.cornerRadius = self.profilePickerButton.bounds.size.width / 2;
     self.profilePickerButton.clipsToBounds = YES;
     
-    self.nextButton.alpha = 0.3f;
-    
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
                                           initWithTarget:self
                                           action:@selector(dismissKeyboard)];
