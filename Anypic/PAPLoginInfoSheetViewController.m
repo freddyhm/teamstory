@@ -253,37 +253,32 @@
     [self.mainScrollView setContentOffset:CGPointZero animated:YES];
     
     if (self.companyNameTextField.text.length == 0) {
-        self.errorMessageBox.text = @"Please complete your username";
-        self.errorMessageBox.textColor = [UIColor redColor];
+        self.errorMessageBox.text = @"Please fill out the 4 fields to help us get to know you better.";
         return;
     }
     
     if (!displayNameCheckResult) {
-        self.errorMessageBox.text = @"Your username is already being used";
-        self.errorMessageBox.textColor = [UIColor redColor];
+        self.errorMessageBox.text = @"Your username is already being used.";
         return;
     }
     
     if (self.emailTextField.text.length == 0) {
-        self.errorMessageBox.text = @"Please complete your email address";
-        self.errorMessageBox.textColor = [UIColor redColor];
+        self.errorMessageBox.text = @"Please fill out the 4 fields to help us get to know you better.";
         return;
     }
     
     if (![self NSStringIsValidEmail:self.emailTextField.text]) {
-        self.errorMessageBox.text = @"Your email address is invalid";
-        self.errorMessageBox.textColor = [UIColor redColor];
+        self.errorMessageBox.text = @"Please use a valid email.";
         return;
     }
     
     if (self.locationTextField.text.length == 0) {
-        self.errorMessageBox.text = @"Please complete your location";
-        self.errorMessageBox.textColor = [UIColor redColor];
+        self.errorMessageBox.text = @"Please fill out the 4 fields to help us get to know you better.";
         return;
     }
     
     if (self.bioTextView.text.length == 0 || [self.bioTextView.text isEqualToString:@"Bio"]) {
-        self.errorMessageBox.text = @"Please complete your bio";
+        self.errorMessageBox.text = @"Please fill out the 4 fields to help us get to know you better.";
         self.errorMessageBox.textColor = [UIColor redColor];
         return;
     }
