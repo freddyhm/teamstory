@@ -16,6 +16,7 @@
 #import "PAPMessagingViewController.h"
 #import "Intercom.h"
 #import "ProfileSettingViewController.h"
+#import "PAPLoginSelectionViewController.h"
 
 @interface PAPAccountViewController() {
     float alphaValue_twitter;
@@ -1120,7 +1121,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger) buttonIndex
 {
     if (buttonIndex == 1) {
-        PAPProfileSettingViewController *profileViewController = [[PAPProfileSettingViewController alloc] init];
+        ProfileSettingViewController *profileViewController = [[ProfileSettingViewController alloc] init];
         profileViewController.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:profileViewController animated:YES];
 

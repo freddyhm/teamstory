@@ -15,5 +15,6 @@
 
 - (void)setNavigationController:(UINavigationController *)navigationController;
 - (void)loadFollowers;
+- (void)setFieldsForFirstLogin;
 
 @end
