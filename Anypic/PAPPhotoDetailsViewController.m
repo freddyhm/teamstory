@@ -17,6 +17,7 @@
 #import "AppDelegate.h"
 #import "Intercom.h"
 #import "AtMention.h"
+#import "PAPLoginSelectionViewController.h"
 
 #define APP ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 
@@ -840,6 +841,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 
 - (void) moreActionButton_inflator:(PFUser *)user photo:(PFObject *)user_photo {
+    if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
+        PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
+        [self.navigationController presentViewController:loginSelectionViewController animated:YES completion:nil];
+        return;
+    }
+    
     self.photoID = [user_photo objectId];
     self.reported_user = [user objectForKey:@"displayName"];
     self.current_photo = user_photo;

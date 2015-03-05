@@ -69,6 +69,7 @@
     if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
         PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
         [self.navigationController presentViewController:loginSelectionViewController animated:YES completion:nil];
+        return;
     }
     
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];

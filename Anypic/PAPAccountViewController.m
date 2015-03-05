@@ -113,6 +113,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
         PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
         [self.navigationController presentViewController:loginSelectionViewController animated:YES completion:nil];
+        return;
     }
     
     // remove refresh control for home that is set by default in inherited timeline

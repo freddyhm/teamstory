@@ -17,6 +17,7 @@
 #import "MBProgressHUD.h"
 #import "AppDelegate.h"
 #import "PAPwebviewViewController.h"
+#import "PAPLoginSelectionViewController.h"
 
 #define IS_OS_6_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0)
 #define IS_OS_8_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
@@ -261,6 +262,12 @@ enum ActionSheetTags {
 }
 
 - (void) moreActionButton_inflator:(PFUser *) user photo:(PFObject *)photo {
+    if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
+        PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
+        [self.navigationController presentViewController:loginSelectionViewController animated:YES completion:nil];
+        return;
+    }
+    
     self.photoID = [photo objectId];
     self.reported_user = [user objectForKey:@"displayName"];
     self.current_photo = photo;
