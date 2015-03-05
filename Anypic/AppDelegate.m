@@ -21,11 +21,11 @@
 #import "PhotoTimelineViewController.h"
 #import <Crashlytics/Crashlytics.h>
 #import "iRate.h"
-#import "PAPprofileSetupViewController.h"
 #import "PAPMessageListViewController.h"
 #import "PAPMessagingViewController.h"
 #import "PAPMessageListCell.h"
 #import <ParseFacebookUtils/PFFacebookUtils.h>
+#import "PAPLoginSelectionViewController.h"
 
 
 
