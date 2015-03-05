@@ -621,15 +621,15 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     if (![PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]] && ([[PFUser currentUser] objectForKey:@"description"] == nil || [[PFUser currentUser] objectForKey:@"industry"] == nil || [[PFUser currentUser] objectForKey:@"location"] == nil)) {
         NSDate *profileUpdateDate = [[PFUser currentUser] objectForKey:@"profileUpdate"];
         
-        NSTimeInterval distanceBetweenDates = [currentDate timeIntervalSinceDate:profileUpdateDate];
+        NSTimeInterval distanceBetweenDatesProfile = [currentDate timeIntervalSinceDate:profileUpdateDate];
         float profileGlowTimeFrame = 7*24*60*60; //every 7 days
         
         UIImage *profileTabBarImage = [UIImage imageNamed:@"nav_profile.png"];
         
         // since the image is same as discover glow, we reuse the discover image
-        UIImage *profileTabBarImage_Glow = [UIImage imageNamed:@"IconDiscover_Glow.png"];
+        UIImage *profileTabBarImage_Glow = [UIImage imageNamed:@"IconProfile_Glow.png"];
         
-        if (distanceBetweenDates > profileGlowTimeFrame || profileUpdateDate == nil) {
+        if (distanceBetweenDatesProfile > profileGlowTimeFrame || profileUpdateDate == nil) {
             profileImage = profileTabBarImage_Glow;
         } else {
             profileImage = profileTabBarImage;

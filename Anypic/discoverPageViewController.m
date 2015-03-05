@@ -201,7 +201,6 @@ NSInteger selection = 1;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
-        
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Discover"}];
     

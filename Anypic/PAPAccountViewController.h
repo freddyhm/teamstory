@@ -6,7 +6,7 @@
 
 #import "PhotoTimelineViewController.h"
 
-@interface PAPAccountViewController : PhotoTimelineViewController
+@interface PAPAccountViewController : PhotoTimelineViewController <UIAlertViewDelegate>
 
 @property (nonatomic, strong) PFUser *user;
 @property (nonatomic, strong) UITextField *textField;
