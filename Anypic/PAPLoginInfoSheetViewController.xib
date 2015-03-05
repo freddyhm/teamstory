@@ -113,7 +113,7 @@
                             </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bKE-tr-8bS">
-                            <rect key="frame" x="25" y="7" width="273" height="39"/>
+                            <rect key="frame" x="25" y="3" width="273" height="39"/>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="10"/>
                             <color key="textColor" red="1" green="0.29929875725150101" blue="0.32126940283627092" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
