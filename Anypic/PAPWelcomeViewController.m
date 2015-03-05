@@ -8,11 +8,10 @@
 #import "SVProgressHUD.h"
 #import "MBProgressHUD.h"
 #import "AppDelegate.h"
-#import "PAPLoginTutorialViewController.h"
 #import "PAPHomeViewController.h"
-#import "PAPprofileSetupViewController.h"
 #import "Mixpanel.h"
 #import <ParseFacebookUtils/PFFacebookUtils.h>
+#import "PAPLoginInfoSheetViewController.h"
 
 @implementation PAPWelcomeViewController
 
@@ -27,10 +26,26 @@
     self.view.backgroundColor = IS_WIDESCREEN ? [UIColor colorWithPatternImage:[UIImage imageNamed:@"Default-568h.png"]] : [UIColor colorWithPatternImage:[UIImage imageNamed:@"Default.png"]];
     
     PFUser *user = [PFUser currentUser];
+    
+    // checking for new anonymous Users.
+    if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
+        [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBarController];
+        return;
+    }
 
     // If not logged in, present login view controller
     if (!user) {
-        [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTutorialViewController];
+        //[(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTutorialViewController];
+        [PFAnonymousUtils logInWithBlock:^(PFUser *user, NSError *error) {
+            if (error) {
+                NSLog(@"Anonymous login failed.");
+            } else {
+                NSLog(@"Anonymous user logged in.");
+                
+                // present a tabBar.
+                [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBarController];
+            }
+        }];
         return;
     }
 
@@ -65,10 +80,9 @@
                 [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBarController];
             } else {
                 if (user && profileExist != YES) {
-                                    
-                    PAPprofileSetupViewController *profileSetupViewController = [[PAPprofileSetupViewController alloc] init];
+                    PAPLoginInfoSheetViewController *loginInfoSheetViewController = [[PAPLoginInfoSheetViewController alloc] initWithNibName:@"PAPLoginInfoSheetViewController" bundle:nil];
                     self.navigationController.navigationBarHidden = YES;
-                    [self.navigationController pushViewController:profileSetupViewController animated:NO];
+                    [self.navigationController pushViewController:loginInfoSheetViewController animated:NO];
                 } else {
                     NSLog(@"User does not exist");
                 }

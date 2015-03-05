@@ -6,7 +6,6 @@
 
 #import "PAPAccountViewController.h"
 #import "PAPLoadMoreCell.h"
-#import "PAPProfileSettingViewController.h"
 #import "PAPSettingsButtonItem.h"
 #import "PAPSettingsActionSheetDelegate.h"
 #import "SVProgressHUD.h"
@@ -108,6 +107,12 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // Handling anonymous users.
+    if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
+        PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
+        [self presentViewController:loginSelectionViewController animated:YES completion:nil];
+    }
     
     // remove refresh control for home that is set by default in inherited timeline
     [super.refreshControl removeFromSuperview];
@@ -601,9 +606,28 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     [self.navigationController pushViewController:showFollowing animated:YES];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [[self.navigationController.tabBarController.viewControllers objectAtIndex:4] tabBarItem].image = [[UIImage imageNamed:@"nav_profile.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+}
+
 - (void)viewWillAppear:(BOOL)animated{
     // analytics
     [super viewWillAppear:YES];
+    
+    if (![PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]] && ([[PFUser currentUser] objectForKey:@"description"] == nil || [[PFUser currentUser] objectForKey:@"industry"] == nil || [[PFUser currentUser] objectForKey:@"location"] == nil)) {
+        NSDate *profileUpdateDate = [[PFUser currentUser] objectForKey:@"profileUpdate"];
+        NSDate *currentDate = [NSDate date];
+        
+        NSTimeInterval distanceBetweenDatesProfile = [currentDate timeIntervalSinceDate:profileUpdateDate];
+        float profileGlowTimeFrame = 7*24*60*60; //every 7 days
+        
+        if (distanceBetweenDatesProfile > profileGlowTimeFrame || profileUpdateDate == nil) {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Hello" message:@"Did you know that filling out your profile completely gets you noticed more?" delegate:self cancelButtonTitle:@"Maybe Later" otherButtonTitles:@"Edit Profile", nil];
+            [alertView show];
+        }
+    }
+    
+    [self updateLastVisit];
         
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Account"}];
@@ -968,7 +992,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     // show hud while numbers are refreshing
     [SVProgressHUD show];
     
-    [PAPUtility followUserEventually:self.user block:^(BOOL succeeded, NSError *error) {
+    [PAPUtility followUserEventually:self.user setNavigationController:self.navigationController block:^(BOOL succeeded, NSError *error) {
         
         self.multiActionButton.enabled = YES;
         
@@ -1077,6 +1101,30 @@ static NSString *const freddy_account = @"rblDQcdZcY";
             }
         }
     }];
+}
+
+- (void) updateLastVisit {
+    if (![PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
+        [[PFUser currentUser] setObject:[NSDate date]  forKey:@"profileUpdate"];
+        [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (!error) {
+                NSLog(@"Saved successfully current Date:%@", [[PFUser currentUser] objectForKey:@"discoverUpdate"]);
+            } else {
+                NSLog(@"error: %@", error);
+            }
+        }];
+    }
+}
+
+#pragma UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger) buttonIndex
+{
+    if (buttonIndex == 1) {
+        PAPProfileSettingViewController *profileViewController = [[PAPProfileSettingViewController alloc] init];
+        profileViewController.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:profileViewController animated:YES];
+
+    }
 }
 
 

@@ -15,6 +15,7 @@
 #import "Mixpanel.h"
 #import <FlightRecorder/FlightRecorder.h>
 #import "SVProgressHUD.h"
+#import "PAPLoginSelectionViewController.h"
 
 @interface PAPActivityFeedViewController ()
 
@@ -64,6 +65,13 @@
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
+    // Handling Anonymous Users
+    if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
+        PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
+        [self presentViewController:loginSelectionViewController animated:YES completion:^{
+            [self.navigationController.tabBarController setSelectedIndex:PAPHomeTabBarItemIndex];
+        }];
+    }
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 
     [super viewDidLoad];

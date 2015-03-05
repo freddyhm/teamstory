@@ -17,6 +17,7 @@
 #import <FlightRecorder/FlightRecorder.h>
 #import "Intercom.h"
 #import "AtMention.h"
+#import "AppDelegate.h"
 
 @interface PostPicViewController ()
 
@@ -153,6 +154,11 @@
     [self.view addSubview:self.autocompleteTableView];
      */
 
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:NO];
+    self.firstPicViewController = NO;
 }
 
 - (void)viewDidLoad {
@@ -398,36 +404,17 @@
 }
 
 - (void)backButtonAction{
-    [[self navigationController] setNavigationBarHidden:YES animated:YES];
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.firstPicViewController) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        [[self navigationController] setNavigationBarHidden:YES animated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)exitPhoto{
-    
-    // set color of nav bar back to teal
-    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
-    self.navigationController.navigationBar.translucent = NO;
-    
-    // hide custom grey bar and pop to home
-    [[self navigationController] setNavigationBarHidden:YES animated:YES];
-    
-    // get tab bar and home controller from stack
-    PAPTabBarController *tabBarController =[[self.navigationController viewControllers] objectAtIndex:1];
-    NSArray *tabBarViewControllers = [tabBarController viewControllers];
-    
-    // get home and phototimeline, if there are children pop 'em to get back to timeline
-    PAPHomeViewController *homeViewController = [tabBarViewControllers objectAtIndex:0];
-    PhotoTimelineViewController *photoViewController = [homeViewController.childViewControllers objectAtIndex:0];
-    
-    if([homeViewController.childViewControllers count] > 1){
-        [photoViewController.navigationController popViewControllerAnimated:NO];
-    }
-    
-    [tabBarController setSelectedViewController:homeViewController];
-    
-    // push tab bar with home controller now selected
-    [self.navigationController popToViewController:tabBarController animated:YES];
+    [self.view endEditing:YES];
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
 }
 
 #pragma mark - UITextView Delegate
@@ -679,5 +666,4 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
-
 @end

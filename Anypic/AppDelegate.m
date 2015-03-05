@@ -12,14 +12,12 @@
 #import "Reachability.h"
 #import "MBProgressHUD.h"
 #import "PAPHomeViewController.h"
-#import "PAPLogInViewController.h"
 #import "PAPAccountViewController.h"
 #import "PAPWelcomeViewController.h"
 #import "PAPActivityFeedViewController.h"
 #import "PAPPhotoDetailsViewController.h"
 #import "discoverPageViewController.h"
 #import "PAPwebviewViewController.h"
-#import "PAPLoginTutorialViewController.h"
 #import "PhotoTimelineViewController.h"
 #import <Crashlytics/Crashlytics.h>
 #import "iRate.h"
@@ -42,7 +40,6 @@
 @property (nonatomic, strong) PAPActivityFeedViewController *activityViewController;
 @property (nonatomic, strong) PAPWelcomeViewController *welcomeViewController;
 @property (nonatomic, strong) PAPAccountViewController *accountViewController_tabBar;
-@property (nonatomic, strong) PAPLogInViewController *loginviewcontroller;
 @property (nonatomic, strong) discoverPageViewController *discoverViewController;
 @property (nonatomic, strong) PhotoTimelineViewController *photoTimelineViewController;
 @property (nonatomic, strong) PAPMessageListCell *messageListCell;
@@ -84,7 +81,6 @@
 @synthesize activityViewController;
 @synthesize welcomeViewController;
 @synthesize accountViewController_tabBar;
-@synthesize loginviewcontroller;
 @synthesize discoverViewController;
 
 @synthesize autoFollowTimer;
@@ -456,6 +452,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
 }
 
 
+/*
 #pragma mark - PFLoginViewController
 
 - (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
@@ -463,7 +460,6 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     [self shouldProceedToMainInterface:user];
     NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
     bool profileExist = [profilExist_num boolValue];
-    
     
     if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]){
         [[PFUser currentUser] setObject:[PFTwitterUtils twitter].userId forKey:@"twitterID"];
@@ -503,7 +499,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
         }];
     }
 }
-
+*/
 
 #pragma mark - NSURLConnectionDataDelegate
 
@@ -527,12 +523,12 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
 }
 
 - (void)presentLoginSelectionController {
-    PAPLoginTutorialViewController *loginSelectionViewController = [[PAPLoginTutorialViewController alloc] init];
+    PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
     [self.navController pushViewController:loginSelectionViewController animated:YES];
 }
 
 - (void)presentTutorialViewController {
-    PAPLoginTutorialViewController *loginTutorialViewController = [[PAPLoginTutorialViewController alloc] init];
+    PAPLoginSelectionViewController *loginTutorialViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
     [self.navController pushViewController:loginTutorialViewController animated:YES];
 }
 
@@ -584,7 +580,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     [activityFeedTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconActivitySelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
 
     activityFeedTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
-
+    
     
     UITabBarItem *discoverTabbarItem = [[UITabBarItem alloc] init];
     
@@ -592,7 +588,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     NSDate *currentDate = [NSDate date];
     
     NSTimeInterval distanceBetweenDates = [currentDate timeIntervalSinceDate:discoverUpdateDate];
-    float discoverGlowTimeFrame = 2*24*60*60;
+    float discoverGlowTimeFrame = 2*24*60*60; //every 2 days
 
     UIImage *discoverTabBarImage = [UIImage imageNamed:@"nav_discover.png"];
     UIImage *discoverTabBarImage_Glow = [UIImage imageNamed:@"IconDiscover_Glow.png"];
@@ -613,11 +609,33 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
    
     discoverTabbarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
     
-    UITabBarItem *accountTabBarItem = [[UITabBarItem alloc] init];
-
-    [accountTabBarItem setImage:[[UIImage imageNamed:@"nav_profile.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     
-    [accountTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconProfileSelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    UITabBarItem *accountTabBarItem = [[UITabBarItem alloc] init];
+    UIImage *profileImage = [UIImage imageNamed:@"nav_profile.png"];
+    UIImage *profileTabBarImage_selected = [UIImage imageNamed:@"IconProfileSelected.png"];
+    
+    if (![PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]] && ([[PFUser currentUser] objectForKey:@"description"] == nil || [[PFUser currentUser] objectForKey:@"industry"] == nil || [[PFUser currentUser] objectForKey:@"location"] == nil)) {
+        NSDate *profileUpdateDate = [[PFUser currentUser] objectForKey:@"profileUpdate"];
+        
+        NSTimeInterval distanceBetweenDatesProfile = [currentDate timeIntervalSinceDate:profileUpdateDate];
+        float profileGlowTimeFrame = 7*24*60*60; //every 7 days
+        
+        UIImage *profileTabBarImage = [UIImage imageNamed:@"nav_profile.png"];
+        
+        // since the image is same as discover glow, we reuse the discover image
+        UIImage *profileTabBarImage_Glow = [UIImage imageNamed:@"IconProfile_Glow.png"];
+        
+        if (distanceBetweenDatesProfile > profileGlowTimeFrame || profileUpdateDate == nil) {
+            profileImage = profileTabBarImage_Glow;
+        } else {
+            profileImage = profileTabBarImage;
+        }
+    }
+    
+
+    [accountTabBarItem setImage:[profileImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    
+    [accountTabBarItem setSelectedImage:[profileTabBarImage_selected imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     
     accountTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
     
@@ -687,7 +705,15 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     // clear out cached data, view controllers, etc
     [self.navController popToRootViewControllerAnimated:NO];
     
-    [self presentLoginSelectionController];
+    // When user logs out from the app, log in anonymously,
+    [PFAnonymousUtils logInWithBlock:^(PFUser *user, NSError *error) {
+        if (error) {
+            NSLog(@"Anonymous login failed.");
+        } else {
+            NSLog(@"Anonymous user logged in.");
+        }
+    }];
+
     
     self.homeViewController = nil;
     self.activityViewController = nil;

@@ -233,8 +233,9 @@
 }
 
 - (void)backButtonAction:(id)sender {
-    if (![PFUser currentUser]) {
+    if (![PFUser currentUser] || [PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
         self.navigationController.navigationBarHidden = YES;
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
     
     [self.navigationController popViewControllerAnimated:YES];

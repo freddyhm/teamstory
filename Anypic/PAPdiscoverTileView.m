@@ -20,10 +20,12 @@
 #define tabBarHeight 30.0f
 #define photoCellHeight 105.0f
 #define followerQueryNum 20
+#define firstLoginKey @"FirstLogin"
 
 @interface PAPdiscoverTileView() {
     NSUInteger *skipQueryCountPic;
     NSUInteger *skipQueryCountThought;
+    BOOL isFirstLogin;
 }
 @property (nonatomic, strong) UIView *mainMenuView;
 @property (nonatomic, strong) UIButton *momentsMenu;
@@ -105,7 +107,6 @@
         
         self.menuSelection = @"Followers";
         [self labelSetting:@"Followers"];
-        
     }
     return self;
 }
@@ -200,6 +201,18 @@
         
         [mainView addSubview:recomLabel];
         
+    } else if ([self.menuSelection isEqualToString:firstLoginKey]) {
+        mainView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, self.inviteImage.size.height + headerViewHeight)];
+        mainView.backgroundColor = [UIColor whiteColor];
+        
+        UILabel *mostActiveUsersLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 20.0f, [UIScreen mainScreen].bounds.size.width, mainView.bounds.size.height)];
+        [mostActiveUsersLabel setText:@"Here are the most active people on\nTeamstory that you should follow!"];
+        mostActiveUsersLabel.numberOfLines = 2;
+        mostActiveUsersLabel.textColor = [UIColor colorWithRed:104.0f/255.0f green:116.0f/255.0f blue:127.0f/255.0f alpha:1.0];
+        mostActiveUsersLabel.textAlignment = NSTextAlignmentCenter;
+        mostActiveUsersLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:15.0f];
+        [mainView addSubview:mostActiveUsersLabel];
+        
     } else {
         mainView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, headerViewHeight)];
         mainView.backgroundColor = [UIColor whiteColor];
@@ -222,6 +235,8 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if ([self.menuSelection isEqualToString:@"Followers"]) {
         return headerViewHeight + self.inviteImage.size.height;
+    } else if ([self.menuSelection isEqualToString:firstLoginKey]) {
+        return headerViewHeight + 50.0f;
     } else {
         return headerViewHeight;
     }
@@ -242,7 +257,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([self.menuSelection isEqualToString:@"Followers"]) {
+    if ([self.menuSelection isEqualToString:@"Followers"] || [self.menuSelection isEqualToString:firstLoginKey]) {
         return headerViewHeight + photoCellHeight + 5.0f;
     } else {
         return photoCellHeight;
@@ -270,7 +285,7 @@
         }
     }
     
-    if ([self.menuSelection isEqualToString:@"Followers"]) {
+    if ([self.menuSelection isEqualToString:@"Followers"] || [self.menuSelection isEqualToString:firstLoginKey]) {
         // --------------------------- For Followers
         static NSString *CellIdentifier = @"Discover Cell Followers";
         
@@ -446,6 +461,7 @@
         [followerByActivityPointsQuery setLimit:followerQueryNum];
         [followerByActivityPointsQuery whereKey:@"objectId" notContainedIn:objectIds];
         [followerByActivityPointsQuery whereKeyExists:@"displayName"];
+        [followerByActivityPointsQuery whereKey:@"postCount" greaterThan:[NSNumber numberWithInt:2]];
         [followerByActivityPointsQuery whereKey:@"objectId" notEqualTo:[PFUser currentUser].objectId];
         [followerByActivityPointsQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (!error) {
@@ -535,7 +551,7 @@
         // Follow
         photoHeaderView.followButton.selected = YES;
         
-        [PAPUtility followUserEventually:user block:^(BOOL succeeded, NSError *error) {
+        [PAPUtility followUserEventually:user setNavigationController:self.navController block:^(BOOL succeeded, NSError *error) {
             
             // enable button again
             photoHeaderView.followButton.enabled = YES;
@@ -613,6 +629,14 @@
     }
     
     return @"Join me and hundreds of entrepreneurs and founders on teamstoryapp!:http://goo.gl/F2QSoJ";
+}
+
+- (void)setFieldsForFirstLogin{
+    self.menuSelection = firstLoginKey;
+    [self.mainMenuView removeFromSuperview];
+    self.mainTileView.frame = CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - (searchBarHeight + 39.0f));
+    [self.mainTileView reloadData];
+    
 }
 
 @end

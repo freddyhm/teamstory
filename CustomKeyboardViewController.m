@@ -8,6 +8,7 @@
 
 #import "CustomKeyboardViewController.h"
 #import "PAPBaseTextCell.h"
+#import "PAPLoginSelectionViewController.h"
 #import "SVProgressHUD.h"
 
 #define messageTextViewHeight 45.0f
@@ -346,6 +347,12 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
 }
 
 - (void)keyboardWillShow:(NSNotification*)notification {
+    // Handling anonymous users.
+    if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
+        PAPLoginSelectionViewController *LoginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
+        [self presentViewController:LoginSelectionViewController animated:YES completion:nil];
+        return;
+    }
     
     NSDictionary* info = [notification userInfo];
     NSNumber *number = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];

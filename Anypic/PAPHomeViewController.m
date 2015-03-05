@@ -19,6 +19,7 @@
 #import "Intercom.h"
 #import "AtMention.h"
 #import "ActivityPointViewController.h"
+#import "PAPLoginSelectionViewController.h"
 
 #define IS_WIDESCREEN ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
@@ -548,6 +549,11 @@
 }
 
 - (void)promptFeedback:(id)sender{
+    if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
+        PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
+        [self presentViewController:loginSelectionViewController animated:YES completion:nil];
+        return;
+    }
     PAPMessageListViewController *messageListViewController = [[PAPMessageListViewController alloc] init];
     messageListViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:messageListViewController animated:YES];

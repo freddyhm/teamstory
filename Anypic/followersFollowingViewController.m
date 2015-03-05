@@ -290,7 +290,7 @@
     } else {
         // Follow
         cell.followButton.selected = YES;
-        [PAPUtility followUserEventually:cellUser block:^(BOOL succeeded, NSError *error) {
+        [PAPUtility followUserEventually:cellUser setNavigationController:self.navigationController block:^(BOOL succeeded, NSError *error) {
             
             // enable button again
             cell.followButton.enabled = YES;

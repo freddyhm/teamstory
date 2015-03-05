@@ -8,7 +8,6 @@
 #import "FollowersFollowingViewController.h"
 #import "PAPAccountViewController.h"
 #import "AppDelegate.h"
-#import "PAPProfileSettingViewController.h"
 #import "PAPwebviewViewController.h"
 #import "PAPNotificationViewController.h"
 

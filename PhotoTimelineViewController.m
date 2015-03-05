@@ -859,7 +859,7 @@ enum ActionSheetTags {
     
     // Send new info to server
     if (liked) {
-        [PAPUtility likePhotoInBackground:photo block:^(BOOL succeeded, NSError *error) {
+        [PAPUtility likePhotoInBackground:photo setNavigationController:self.navigationController block:^(BOOL succeeded, NSError *error) {
             [postFooterView shouldEnableLikeButton:YES];
             [postFooterView setLikeStatus:succeeded];
             if (!succeeded) {
