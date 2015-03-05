@@ -112,7 +112,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     // Handling anonymous users.
     if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
         PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
-        [self presentViewController:loginSelectionViewController animated:YES completion:nil];
+        [self.navigationController presentViewController:loginSelectionViewController animated:YES completion:nil];
     }
     
     // remove refresh control for home that is set by default in inherited timeline
@@ -623,7 +623,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         float profileGlowTimeFrame = 7*24*60*60; //every 7 days
         
         if (distanceBetweenDatesProfile > profileGlowTimeFrame || profileUpdateDate == nil) {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Hello" message:@"Did you know that filling out your profile completely gets you noticed more?" delegate:self cancelButtonTitle:@"Maybe Later" otherButtonTitles:@"Edit Profile", nil];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Hi there!" message:@"Did you know that filling out your profile completely gets you noticed more?" delegate:self cancelButtonTitle:@"Maybe Later" otherButtonTitles:@"Edit Profile", nil];
             [alertView show];
         }
     }

@@ -551,7 +551,7 @@
 - (void)promptFeedback:(id)sender{
     if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
         PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
-        [self presentViewController:loginSelectionViewController animated:YES completion:nil];
+        [self.view.window.rootViewController presentViewController:loginSelectionViewController animated:YES completion:nil];
         return;
     }
     PAPMessageListViewController *messageListViewController = [[PAPMessageListViewController alloc] init];

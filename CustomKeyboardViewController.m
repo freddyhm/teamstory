@@ -350,7 +350,7 @@ static inline UIViewAnimationOptions animationOptionsWithCurve(UIViewAnimationCu
     // Handling anonymous users.
     if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
         PAPLoginSelectionViewController *LoginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
-        [self presentViewController:LoginSelectionViewController animated:YES completion:nil];
+        [self.view.window.rootViewController presentViewController:LoginSelectionViewController animated:YES completion:nil];
         return;
     }
     

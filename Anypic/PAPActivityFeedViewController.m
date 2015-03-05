@@ -68,10 +68,9 @@
     // Handling Anonymous Users
     if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
         PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
-        [self presentViewController:loginSelectionViewController animated:YES completion:^{
-            [self.navigationController.tabBarController setSelectedIndex:PAPHomeTabBarItemIndex];
-        }];
+        [self.navigationController presentViewController:loginSelectionViewController animated:YES completion:nil];
     }
+    
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 
     [super viewDidLoad];

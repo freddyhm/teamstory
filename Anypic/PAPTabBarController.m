@@ -425,7 +425,7 @@
 - (void) navigateToLoginPage {
     if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
         PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
-        [self presentViewController:loginSelectionViewController animated:YES completion:nil];
+        [self.view.window.rootViewController presentViewController:loginSelectionViewController animated:YES completion:nil];
     }
 }
 

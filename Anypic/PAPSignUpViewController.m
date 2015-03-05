@@ -20,6 +20,7 @@
 @property (strong, nonatomic) IBOutlet UIView *passwordTextView;
 @property (strong, nonatomic) IBOutlet UIButton *signInButton;
 @property (strong, nonatomic) IBOutlet UIButton *signInWithEmailButton;
+@property (strong, nonatomic) IBOutlet UIScrollView *mainScrollView;
 
 
 @end
@@ -33,6 +34,15 @@
     self.passwordTextView.layer.cornerRadius = 2.0f;
     self.signInButton.layer.cornerRadius = 2.0f;
     self.signInWithEmailButton.layer.cornerRadius = 2.0f;
+    
+    self.emailTextField.delegate = self;
+    self.pwTextField.delegate = self;
+    
+    UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
+                                          initWithTarget:self
+                                          action:@selector(dismissKeyboard)];
+    
+    [self.view addGestureRecognizer:tapOutside];
     
 }
 
@@ -198,6 +208,30 @@
 
          [self.view endEditing:YES];
     }
+}
+
+-(void)dismissKeyboard {
+    [self.view endEditing:YES];
+}
+
+#pragma UITextViewDelegate
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    CGPoint scrollPoint;
+    
+    float offsetValue = 20.0f;
+    
+    if (self.emailTextField == textField) {
+        scrollPoint = CGPointMake(0, self.emailTextView.frame.origin.y - offsetValue);
+    } else if (self.pwTextField == textField) {
+        scrollPoint = CGPointMake(0, self.passwordTextView.frame.origin.y - offsetValue);
+    }
+    
+    [self.mainScrollView setContentOffset:scrollPoint animated:YES];
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    [self.mainScrollView setContentOffset:CGPointZero animated:YES];
 }
 
 @end
