@@ -798,10 +798,11 @@ enum ActionSheetTags {
 #pragma mark - PhotoHeaderView Delegate
 
 - (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapUserButton:(UIButton *)button user:(PFUser *)user {
-    //[[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
     [accountViewController setUser:user];
+    self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:accountViewController animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
 }
 
 #pragma mark - PostFooterView Delegate

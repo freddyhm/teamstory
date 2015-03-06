@@ -823,6 +823,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 
                 [messageViewController setTargetUser:aUser setUserNumber:userNumber];
                 [messageViewController setRoomInfo:object];
+                [self setHidesBottomBarWhenPushed:YES];
                 [self.navigationController pushViewController:messageViewController animated:NO];
         } else {
             if ([error code] == 101) {
@@ -842,6 +843,8 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                             PAPMessagingViewController *messageViewController = [[PAPMessagingViewController alloc] init];
                             [messageViewController setTargetUser:aUser setUserNumber:@"userTwo"];
                             [messageViewController setRoomInfo:createChatRoom];
+                            
+                            [self setHidesBottomBarWhenPushed:YES];
                             [self.navigationController pushViewController:messageViewController animated:NO];
                         }];
                     } else {
