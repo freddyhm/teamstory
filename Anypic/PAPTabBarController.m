@@ -426,6 +426,7 @@
     if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
         PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
         [self.view.window.rootViewController presentViewController:loginSelectionViewController animated:YES completion:nil];
+        return;
     }
 }
 

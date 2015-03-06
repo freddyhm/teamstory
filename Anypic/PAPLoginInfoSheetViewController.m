@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "PAPrecomUsersViewController.h"
 #import "SVProgressHUD.h"
+#import "PostPicViewController.h"
 
 @interface PAPLoginInfoSheetViewController () <CLLocationManagerDelegate> {
     BOOL hasProfilePicChanged;
@@ -26,6 +27,10 @@
 @property (strong, nonatomic) IBOutlet UIScrollView *mainScrollView;
 @property (strong, nonatomic) NSString *twitterDescription;
 @property (strong, nonatomic) IBOutlet UILabel *errorMessageBox;
+@property (nonatomic, strong) ALAssetsLibrary *specialLibrary;
+@property (assign) NSUInteger cameraRollIndex;
+@property (nonatomic,strong) UIImagePickerController *camera;
+@property (nonatomic, strong) ELCImagePickerController *elcPicker;
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @end
@@ -127,113 +132,99 @@
 }
 
 - (void) photo_picker_init {
-    BOOL cameraDeviceAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
-    BOOL photoLibraryAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
+    // init asset library
+    ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+    self.specialLibrary = library;
     
-    if (cameraDeviceAvailable && photoLibraryAvailable) {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take Photo", @"Choose Photo", nil];
-        [actionSheet showInView:self.view];
-    } else {
-        // if we don't have at least two options, we automatically show whichever is available (camera or roll)
-        [self shouldPresentPhotoCaptureController];
-    }
+    NSMutableArray *groups = [NSMutableArray array];
+    
+    // keep track of camera roll index
+    self.cameraRollIndex = 0;
+    
+    // fetch all albums and set first pop up to camera roll
+    [_specialLibrary enumerateGroupsWithTypes:ALAssetsGroupAll usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+        
+        if (group) {
+            
+            [groups addObject:group];
+            
+            NSString *sGroupPropertyName = (NSString *)[group valueForProperty:ALAssetsGroupPropertyName];
+            
+            if ([[sGroupPropertyName lowercaseString] isEqualToString:@"camera roll"]) {
+                // display camera roll first
+                self.cameraRollIndex = [groups indexOfObject:group];
+            }
+        } else {
+            [self displayPickerForGroup:[groups objectAtIndex:self.cameraRollIndex]];
+        }
+    } failureBlock:^(NSError *error) {
+        
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Album Error: %@ - %@", [error localizedDescription], [error localizedRecoverySuggestion]] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+        
+        NSLog(@"A problem occured %@", [error description]);
+        // an error here means that the asset groups were inaccessable.
+        // Maybe the user or system preferences refused access.
+    }];
 }
 
-- (BOOL)shouldPresentPhotoCaptureController {
-    BOOL presentedPhotoCaptureController = [self shouldStartCameraController];
+- (void)displayPickerForGroup:(ALAssetsGroup *)group
+{
+    ELCAssetTablePicker *tablePicker = [[ELCAssetTablePicker alloc] initWithStyle:UITableViewStylePlain];
     
-    if (!presentedPhotoCaptureController) {
-        presentedPhotoCaptureController = [self shouldStartPhotoLibraryPickerController];
-    }
+    // set title with arrow
+    NSString *albumName = [group valueForProperty:ALAssetsGroupPropertyName];
+    [tablePicker setButtonTitle:albumName];
     
-    return presentedPhotoCaptureController;
+    tablePicker.singleSelection = YES;
+    tablePicker.immediateReturn = NO;
+    
+    self.elcPicker = [[ELCImagePickerController alloc] initWithRootViewController:tablePicker];
+    self.elcPicker.maximumImagesCount = 1;
+    self.elcPicker.imagePickerDelegate = self;
+    self.elcPicker.defaultImagePickerDelegate = self;
+    self.elcPicker.returnsOriginalImage = NO; //Only return the fullScreenImage, not the fullResolutionImage
+    tablePicker.parent = self.elcPicker;
+    
+    // Move me
+    tablePicker.assetGroup = group;
+    
+    [tablePicker.assetGroup setAssetsFilter:[ALAssetsFilter allAssets]];
+    
+    [self presentViewController:self.elcPicker animated:YES completion:nil];
 }
 
-- (BOOL)shouldStartCameraController {
+- (UIImagePickerController *)shouldStartCameraController {
+    /* starts camera, sets tabbarcontroller as delegate, and returns image picker */
     
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
-        return NO;
-    }
-    
-    UIImagePickerController *cameraUI = [[UIImagePickerController alloc] init];
+    self.camera = [[UIImagePickerController alloc] init];
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]
         && [[UIImagePickerController availableMediaTypesForSourceType:
              UIImagePickerControllerSourceTypeCamera] containsObject:(NSString *)kUTTypeImage]) {
         
-        cameraUI.mediaTypes = [NSArray arrayWithObject:(NSString *) kUTTypeImage];
-        cameraUI.sourceType = UIImagePickerControllerSourceTypeCamera;
+        self.camera.mediaTypes = [NSArray arrayWithObject:(NSString *) kUTTypeImage];
+        self.camera.sourceType = UIImagePickerControllerSourceTypeCamera;
         
         if ([UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceRear]) {
-            cameraUI.cameraDevice = UIImagePickerControllerCameraDeviceRear;
+            self.camera.cameraDevice = UIImagePickerControllerCameraDeviceRear;
         } else if ([UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceFront]) {
-            cameraUI.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+            self.camera.cameraDevice = UIImagePickerControllerCameraDeviceFront;
         }
         
     } else {
-        return NO;
+        return nil;
     }
     
-    cameraUI.allowsEditing = YES;
-    cameraUI.showsCameraControls = YES;
-    cameraUI.delegate = self;
+    self.camera.allowsEditing = NO;
+    self.camera.showsCameraControls = YES;
+    self.camera.delegate = self;
     
-    [self presentViewController:cameraUI animated:YES completion:nil];
+    [SVProgressHUD dismiss];
     
-    return YES;
+    return self.camera;
 }
 
-- (BOOL)shouldStartPhotoLibraryPickerController {
-    if (([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary] == NO
-         && [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum] == NO)) {
-        return NO;
-    }
-    
-    UIImagePickerController *cameraUI = [[UIImagePickerController alloc] init];
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]
-        && [[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary] containsObject:(NSString *)kUTTypeImage]) {
-        
-        cameraUI.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        cameraUI.mediaTypes = [NSArray arrayWithObject:(NSString *) kUTTypeImage];
-        
-    } else if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum]
-               && [[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum] containsObject:(NSString *)kUTTypeImage]) {
-        
-        cameraUI.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-        cameraUI.mediaTypes = [NSArray arrayWithObject:(NSString *) kUTTypeImage];
-        
-    } else {
-        return NO;
-    }
-    
-    cameraUI.allowsEditing = YES;
-    cameraUI.delegate = self;
-    cameraUI.navigationBar.tintColor = [UIColor clearColor];
-    
-    [self presentViewController:cameraUI animated:YES completion:nil];
-    
-    return YES;
-}
-
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    hasProfilePicChanged = YES;
-    UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
-    
-    // Dismiss controller
-    [picker dismissViewControllerAnimated:YES completion:nil];
-    
-    UIImage *smallRoundedImage = [PAPUtility resizeImage:image width:84.0f height:84.0f];
-    UIImage *resizedImage = [PAPUtility resizeImage:image width:200.0f height:200.0f];
-    
-    // Upload image
-    self.imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
-    self.imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
-    
-    [self.profilePickerButton setBackgroundImage:image forState:UIControlStateNormal];
-    self.profilePickerButton.backgroundColor = [UIColor clearColor];
-    self.profilePickerButton.layer.cornerRadius = self.profilePickerButton.frame.size.width / 2;
-    self.profilePickerButton.clipsToBounds = YES;
-}
 
 -(void)uploadImage_small:(NSData *)imageData {
     if (imageData) {
@@ -462,6 +453,56 @@
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
     self.locationTextField.placeholder = @"Location";
+}
+
+#pragma mark - ELCImagePickerControllerDelegate Methods
+
+- (void)elcImagePickerController:(ELCImagePickerController *)picker didFinishPickingMediaWithInfo:(NSArray *)info {
+    UIImage *image = [[info objectAtIndex:0] objectForKey:UIImagePickerControllerOriginalImage];
+    
+    [self processPickedImage:image];
+    // Dismiss controller
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)elcImagePickerControllerDidCancel:(ELCImagePickerController *)picker {
+    hasProfilePicChanged = NO;
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+#pragma mark - UIImagePickerDelegate
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    
+    [self processPickedImage:image];
+    
+    // Dismiss controller
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    [self.elcPicker dismissViewControllerAnimated:NO completion:nil];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    hasProfilePicChanged = NO;
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma Custom
+- (void)processPickedImage:(UIImage *)image {
+    hasProfilePicChanged = YES;
+    
+    UIImage *smallRoundedImage = [PAPUtility resizeImage:image width:84.0f height:84.0f];
+    UIImage *resizedImage = [PAPUtility resizeImage:image width:200.0f height:200.0f];
+    
+    // Upload image
+    self.imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
+    self.imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
+    
+    [self.profilePickerButton setBackgroundImage:image forState:UIControlStateNormal];
+    self.profilePickerButton.backgroundColor = [UIColor clearColor];
+    self.profilePickerButton.layer.cornerRadius = self.profilePickerButton.frame.size.width / 2;
+    self.profilePickerButton.clipsToBounds = YES;
 }
 
 

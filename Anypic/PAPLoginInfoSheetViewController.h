@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ELCImagePickerController.h"
 
-@interface PAPLoginInfoSheetViewController : UIViewController <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate, UITextViewDelegate, UIScrollViewDelegate, UITextFieldDelegate>
+@interface PAPLoginInfoSheetViewController : UIViewController <UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate, UITextViewDelegate, UIScrollViewDelegate, UITextFieldDelegate, ELCImagePickerControllerDelegate>
 
 @end
