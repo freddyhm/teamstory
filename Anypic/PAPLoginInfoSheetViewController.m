@@ -65,9 +65,7 @@
     }
     
     if ([PFTwitterUtils isLinkedWithUser:user]) {
-        //NSString * requestString = [NSString stringWithFormat:@"https://api.twitter.com/1.1/users/show.json?screen_name=%@", user.username];
-        
-        NSString * requestString = @"https://api.twitter.com/1.1/users/show.json?screen_name=toboklee";
+        NSString * requestString = [NSString stringWithFormat:@"https://api.twitter.com/1.1/users/show.json?screen_name=%@",  [PFTwitterUtils twitter].screenName];
         
         NSURL *verify = [NSURL URLWithString:requestString];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:verify];
@@ -336,7 +334,7 @@
                     [self presentViewController:recomUsersViewController animated:YES completion:nil];
                 } else {
                     if ([error code] == 203) {
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Log In Error"
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sign up error"
                                                                         message:@"Email you've entered is already being used"
                                                                        delegate:nil
                                                               cancelButtonTitle:nil
@@ -344,7 +342,7 @@
                         [alert show];
                     } else {
                         NSString *errorMessage = [error localizedDescription];
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Log In Error"
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sign up failed"
                                                                         message:errorMessage
                                                                        delegate:nil
                                                               cancelButtonTitle:nil
@@ -499,6 +497,7 @@
     self.imageData_picker = UIImageJPEGRepresentation(resizedImage, 1);
     self.imageData_picker_small = UIImagePNGRepresentation(smallRoundedImage);
     
+    [self.profilePickerButton setBackgroundImage:nil forState:UIControlStateNormal];
     [self.profilePickerButton setBackgroundImage:image forState:UIControlStateNormal];
     self.profilePickerButton.backgroundColor = [UIColor clearColor];
     self.profilePickerButton.layer.cornerRadius = self.profilePickerButton.frame.size.width / 2;

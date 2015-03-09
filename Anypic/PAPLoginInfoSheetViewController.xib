@@ -72,16 +72,6 @@
                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
                         </textField>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wx6-Qr-nFh">
-                            <rect key="frame" x="121" y="47" width="81" height="81"/>
-                            <color key="backgroundColor" red="0.88235294117647056" green="0.88235294117647056" blue="0.88235294117647056" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <state key="normal">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="profilePickerButtonAction:" destination="-1" eventType="touchUpInside" id="Gqr-nI-Tw5"/>
-                            </connections>
-                        </button>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" scrollEnabled="NO" text="Bio" translatesAutoresizingMaskIntoConstraints="NO" id="juG-Ub-FOz">
                             <rect key="frame" x="2" y="358" width="305" height="132"/>
                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
@@ -118,6 +108,15 @@
                             <color key="textColor" red="1" green="0.29929875725150101" blue="0.32126940283627092" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wx6-Qr-nFh">
+                            <rect key="frame" x="109" y="36" width="103" height="103"/>
+                            <state key="normal" backgroundImage="btn_camera.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="profilePickerButtonAction:" destination="-1" eventType="touchUpInside" id="Gqr-nI-Tw5"/>
+                            </connections>
+                        </button>
                     </subviews>
                 </scrollView>
             </subviews>
@@ -129,6 +128,7 @@
     </objects>
     <resources>
         <image name="btn_auto_detect.png" width="70" height="59"/>
+        <image name="btn_camera.png" width="103" height="103"/>
         <image name="button_cancel.png" width="22" height="22"/>
     </resources>
 </document>
