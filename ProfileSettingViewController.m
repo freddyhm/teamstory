@@ -103,6 +103,9 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     
+    // google analytics
+    [PAPUtility captureScreenGA:@"Profile Settings"];
+    
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Edit Profile"}];
     
@@ -119,7 +122,7 @@
     
     [SVProgressHUD show];
     
-    [self.user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+    [self.user fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
 
         if(!error){
             

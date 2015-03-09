@@ -6,6 +6,8 @@
 
 @interface PAPUtility : NSObject
 
+
++ (void)captureScreenGA:(NSString *)screen;
 + (void)posted:(id)post;
 + (UIImage *)resizeImage:(UIImage *)image width:(int)w height:(int)h;
 + (void)updateSubscriptionToPost:(PFObject *)post forState:(NSString *)state;

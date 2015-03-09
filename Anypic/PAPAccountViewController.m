@@ -151,7 +151,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     [self.locationLabel setFont:locationFont];
     [self.locationLabel setText:self.locationInfo];
     
-    [self.user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+    [self.user fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         
         if(!error){
         
@@ -616,6 +616,10 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     // analytics
     [super viewWillAppear:YES];
     
+    // google analytics
+    [PAPUtility captureScreenGA:@"Account"];
+
+    
     if (![PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]] && ([[PFUser currentUser] objectForKey:@"description"] == nil || [[PFUser currentUser] objectForKey:@"industry"] == nil || [[PFUser currentUser] objectForKey:@"location"] == nil)) {
         NSDate *profileUpdateDate = [[PFUser currentUser] objectForKey:@"profileUpdate"];
         NSDate *currentDate = [NSDate date];
@@ -652,7 +656,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     
-    [self.user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+    [self.user fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         self.user = (PFUser *)object;
     
         self.accountTitleLabel.text = [self.user objectForKey:@"displayName"];

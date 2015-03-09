@@ -17,6 +17,22 @@
 
 #pragma mark - PAPUtility
 
+
+#pragma mark Google Analytics
+
++ (void)captureScreenGA:(NSString *)screen{
+    // May return nil if a tracker has not already been initialized with a
+    // property ID.
+    id tracker = [[GAI sharedInstance] defaultTracker];
+
+    // This screen name value will remain set on the tracker and sent with
+    // hits until it is set to a new value or to nil.
+    [tracker set:kGAIScreenName
+                value:screen];
+
+    [tracker send:[[GAIDictionaryBuilder createAppView] build]];
+}
+
 #pragma mark Images
 
 + (UIImage *)resizeImage:(UIImage *)image width:(int)w height:(int)h{

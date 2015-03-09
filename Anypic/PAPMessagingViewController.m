@@ -46,6 +46,9 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     
+    // google analytics
+    [PAPUtility captureScreenGA:@"Messaging User"];
+    
     [self.navigationController setToolbarHidden:YES animated:NO];
     
     self.messageQuery = [[NSMutableArray alloc] init];

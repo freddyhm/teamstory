@@ -145,7 +145,7 @@
     [profileImagePicker addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
     
-    [self.user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+    [self.user fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if(!error){
             
             self.user = (PFUser *)object;

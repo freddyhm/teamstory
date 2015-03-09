@@ -373,7 +373,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    [[PFUser currentUser] refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+    [[PFUser currentUser] fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         NSNumber *activityBadgeNumber = [[PFUser currentUser] objectForKey:@"activityBadge"];
         
         if ([self.tabBarController viewControllers].count > PAPActivityTabBarItemIndex) {

@@ -137,6 +137,9 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     
+    // google analytics
+    [PAPUtility captureScreenGA:@"Thought Upload"];
+    
     // new analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Thought"}];
     

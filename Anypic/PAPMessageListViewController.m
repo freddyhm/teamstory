@@ -40,8 +40,10 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
-    
-    
+        
+    // google analytics
+    [PAPUtility captureScreenGA:@"Messaging List"];
+
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Message List"}];
     

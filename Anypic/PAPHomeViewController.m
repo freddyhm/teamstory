@@ -236,6 +236,10 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
+    // google analytics
+    [PAPUtility captureScreenGA:@"Home"];
+
+    
     // refresh activity points
     [self getActivityPoints];
 
@@ -304,7 +308,7 @@
 }
 
 - (void) refreshBadge {
-    [[PFUser currentUser] refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+    [[PFUser currentUser] fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if ([[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue] > 0) {
             [self.feedbackBtn setTitle:[[[PFUser currentUser] objectForKey:@"messagingBadge"] stringValue] forState:UIControlStateNormal];
             self.feedbackBtn.frame = CGRectMake(275, 1, self.feedbackImgBadge.size.width, self.feedbackImgBadge.size.height);

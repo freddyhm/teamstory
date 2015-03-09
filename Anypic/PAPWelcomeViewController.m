@@ -59,7 +59,7 @@
     
     [SVProgressHUD show];
     
-    [user refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+    [user fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         
         [SVProgressHUD dismissQuickly];
         
@@ -75,7 +75,7 @@
             bool profileExist = [profilExist_num boolValue];
             
             if (user && profileExist == YES) {
-                [[PFUser currentUser] refreshInBackgroundWithTarget:self selector:@selector(refreshCurrentUserCallbackWithResult:error:)];
+                [[PFUser currentUser] fetchInBackgroundWithTarget:self selector:@selector(refreshCurrentUserCallbackWithResult:error:)];
                 // Present Teamstory UI
                 [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBarController];
             } else {

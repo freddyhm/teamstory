@@ -122,6 +122,10 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    
+    // google analytics
+    [PAPUtility captureScreenGA:@"Activity"];
+
         
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Activity"}];
@@ -612,7 +616,7 @@
 - (void)fetchReadListFromServer:(void (^)(id readList, NSError*error))completionBlock {
 
     // fetch read list
-    [[PFUser currentUser] refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+    [[PFUser currentUser] fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         completionBlock([object objectForKey:@"activityReadList"], error);
     }];
 }

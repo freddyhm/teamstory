@@ -76,6 +76,11 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     
+    
+    // google analytics
+    [PAPUtility captureScreenGA:@"Post Pic Upload"];
+
+    
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Post Photo"}];
     
