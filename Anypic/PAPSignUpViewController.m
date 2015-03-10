@@ -47,7 +47,10 @@
 }
 
 - (IBAction)signInButtonAction:(id)sender {
+    [SVProgressHUD show];
+    
     [PFTwitterUtils logInWithBlock:^(PFUser *user, NSError *error) {
+        [SVProgressHUD dismiss];
         if (!user) {
             NSLog(@"Uh oh. The user cancelled the Twitter login.");
             return;
@@ -168,6 +171,7 @@
         alert.alertViewStyle = UIAlertViewStyleDefault;
         [alert show];
     }
+    [SVProgressHUD dismiss];
 }
 
 -(BOOL)NSStringIsValidEmail:(NSString *)checkString

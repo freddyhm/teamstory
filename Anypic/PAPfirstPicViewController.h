@@ -13,7 +13,7 @@
 #import "ThoughtPostViewController.h"
 #import "PostPicViewController.h"
 
-@interface PAPfirstPicViewController : UIViewController <UIImagePickerControllerDelegate, ELCImagePickerControllerDelegate, ThoughtPostViewControllerDelegate>
+@interface PAPfirstPicViewController : UIViewController <UIImagePickerControllerDelegate, ELCImagePickerControllerDelegate, ThoughtPostViewControllerDelegate, UIScrollViewDelegate>
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info;
 - (UIImagePickerController *)shouldStartCameraController;

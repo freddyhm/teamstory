@@ -277,10 +277,14 @@
                 return;
             }
             
+            // disable to prevent double tapping
+            self.nextButton.enabled = NO;
+            [SVProgressHUD show];
+            
             if (self.imageData_picker && hasProfilePicChanged) {
                 // upload image from library
                 [self uploadImage_medium:self.imageData_picker];
-            } else if (!hasProfilePicChanged && [self.profilePickerButton backgroundImageForState:UIControlStateNormal] == nil) {
+            } else if (!hasProfilePicChanged && !self.imageData_picker) {
                 // Nothing picked. Mount a default image
                 UIImage *image = [UIImage imageNamed:@"default-pic.png"];
                 UIImage *resizedImage = [PAPUtility resizeImage:image width:200.0f height:200.0f];
@@ -295,7 +299,7 @@
             if (self.imageData_picker_small && hasProfilePicChanged) {
                 // upload image from library
                 [self uploadImage_small:self.imageData_picker_small];
-            } else if (!hasProfilePicChanged && [self.profilePickerButton backgroundImageForState:UIControlStateNormal] == nil) {
+            } else if (!hasProfilePicChanged && !self.imageData_picker_small) {
                 // Nothing picked. Mount a default image
                 UIImage *image = [UIImage imageNamed:@"default-pic.png"];
                 UIImage *smallRoundedImage = [PAPUtility resizeImage:image width:84.0f height:84.0f];
@@ -309,7 +313,6 @@
             
             // If all validation processes pass, save data and display a new-comer screen.
             PFUser *targetUser = [PFUser currentUser];
-            [SVProgressHUD show];
             
             bool profileExist = YES;
             NSNumber *profileExist_num = [NSNumber numberWithBool:profileExist];
@@ -326,13 +329,15 @@
             }
             
             [targetUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                [SVProgressHUD dismiss];
                 // TODO display a new screen
                 if (!error) {
                     //successful
                     PAPrecomUsersViewController *recomUsersViewController = [[PAPrecomUsersViewController alloc] initWithNibName:@"PAPrecomUsersViewController" bundle:nil];
                     [self presentViewController:recomUsersViewController animated:YES completion:nil];
                 } else {
+                    
+                    // re-enable once the it fails to log in
+                    self.nextButton.enabled = YES;
                     if ([error code] == 203) {
                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sign up error"
                                                                         message:@"Email you've entered is already being used"
@@ -350,6 +355,7 @@
                         [alert show];
                     }
                 }
+                [SVProgressHUD dismiss];
             }];
 
         }

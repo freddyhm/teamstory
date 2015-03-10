@@ -13,6 +13,10 @@
 
 @interface PAPLoginSelectionViewController ()
 @property (strong, nonatomic) IBOutlet UIButton *joinButton;
+@property (strong, nonatomic) IBOutlet UIView *topView;
+@property (strong, nonatomic) IBOutlet UIView *bottomView;
+@property (strong, nonatomic) IBOutlet UILabel *signInLabel;
+@property (strong, nonatomic) IBOutlet UIButton *memberButton;
 
 @end
 
@@ -21,9 +25,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
+        self.signInLabel.frame = CGRectMake(0.0f, 20.0f, [UIScreen mainScreen].bounds.size.width, 23.0f);
+        self.joinButton.frame = CGRectMake(30.0f, 60.0f, 260.0f, 40.0f);
+        self.memberButton.frame = CGRectMake(0.0f, 110.0f, [UIScreen mainScreen].bounds.size.width, 30.0f);
+    }
+    
     self.joinButton.layer.cornerRadius = 2.0f;
+    self.joinButton.clipsToBounds = YES;
 }
-
 
 - (IBAction)joinButtonAction:(id)sender {
     PAPLoginPopupViewController *popupViewController = [[PAPLoginPopupViewController alloc] initWithNibName:@"PAPLoginPopupViewController" bundle:nil];

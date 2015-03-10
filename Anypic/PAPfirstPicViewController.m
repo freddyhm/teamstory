@@ -18,6 +18,7 @@
 @property (nonatomic,strong) NSDictionary *imagePickerInfo;
 @property (nonatomic,strong) NSString *imageSource;
 @property (nonatomic, strong) UINavigationController *navController;
+@property (strong, nonatomic) IBOutlet UIScrollView *mainScrollView;
 
 @end
 
@@ -27,6 +28,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.navController = [[UINavigationController alloc] init];
+    
+    self.mainScrollView.delegate = self;
+    self.mainScrollView.contentSize = CGSizeMake([UIScreen mainScreen].bounds.size.width, 600);
 }
 - (IBAction)momentButtonAction:(id)sender {
     // init asset library

@@ -52,7 +52,11 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 - (IBAction)twitterButtonAction:(id)sender {
+    [SVProgressHUD show];
+    
     [PFTwitterUtils logInWithBlock:^(PFUser *user, NSError *error) {
+        [SVProgressHUD dismiss];
+        
         if (!user) {
             NSLog(@"Uh oh. The user cancelled the Twitter login.");
             return;
@@ -95,12 +99,15 @@
         return;
     }
     
+    [SVProgressHUD show];
+    
     PFUser *user = [PFUser user];
     user.username = self.emailTextField.text;
     user.password = self.passwordTextField.text;
     user.email = self.emailTextField.text;
     
     [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        [SVProgressHUD dismiss];
         if (!error) {
             [self navigateToInfoSheet];
         } else {
