@@ -7,7 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PAPLoginSelectionViewController">
             <connections>
-                <outlet property="joinButton" destination="jkY-2G-oVu" id="zc2-rr-oei"/>
+                <outlet property="joinButton" destination="c4z-Yf-5AV" id="JcZ-81-3CX"/>
                 <outlet property="view" destination="dKw-fc-dW9" id="zaB-Cy-KPl"/>
             </connections>
         </placeholder>
@@ -16,208 +16,103 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bnN-yo-hXC">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                    <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0LF-oW-Hoe">
-                            <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                            <state key="normal" image="button_cancel.png">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                <rect key="frame" x="12" y="29" width="22" height="22"/>
-                            </variation>
-                            <connections>
-                                <action selector="cancelButtonAction:" destination="-1" eventType="touchUpInside" id="haf-Tc-bRZ"/>
-                            </connections>
-                        </button>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_onboarding.png" translatesAutoresizingMaskIntoConstraints="NO" id="1c2-tf-upK">
-                            <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                            <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                <rect key="frame" x="127" y="140" width="67" height="67"/>
-                            </variation>
-                        </imageView>
-                    </subviews>
-                    <color key="backgroundColor" red="0.33725490200000002" green="0.72549019609999998" blue="0.61568627450000002" alpha="1" colorSpace="calibratedRGB"/>
-                    <variation key="default">
-                        <mask key="subviews">
-                            <exclude reference="0LF-oW-Hoe"/>
-                            <exclude reference="1c2-tf-upK"/>
-                        </mask>
-                    </variation>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="328"/>
-                        <mask key="subviews">
-                            <include reference="0LF-oW-Hoe"/>
-                            <include reference="1c2-tf-upK"/>
-                        </mask>
-                    </variation>
-                </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PcM-CB-is3">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                    <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jkY-2G-oVu">
-                            <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                            <color key="backgroundColor" red="0.33725490200000002" green="0.72549019609999998" blue="0.61568627450000002" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="14"/>
-                            <state key="normal" title="Join Teamstory">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                <rect key="frame" x="30" y="94" width="261" height="45"/>
-                            </variation>
-                            <connections>
-                                <action selector="joinButtonAction:" destination="-1" eventType="touchUpInside" id="Ihd-MA-vmG"/>
-                            </connections>
-                        </button>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hey there! Please sign in to do that:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rb7-ud-vrl">
-                            <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="14"/>
-                            <color key="textColor" red="0.41960784313725491" green="0.41960784313725491" blue="0.41960784313725491" alpha="1" colorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                            <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                <rect key="frame" x="17" y="37" width="286" height="21"/>
-                            </variation>
-                        </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yhx-Cn-aSh">
-                            <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
-                            <state key="normal" title="Already a member? Sign in"/>
-                            <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                <rect key="frame" x="61" y="171" width="199" height="29"/>
-                            </variation>
-                            <connections>
-                                <action selector="memberButtonAction:" destination="-1" eventType="touchUpInside" id="qBk-L6-GlZ"/>
-                            </connections>
-                        </button>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <variation key="default">
-                        <mask key="subviews">
-                            <exclude reference="jkY-2G-oVu"/>
-                            <exclude reference="Rb7-ud-vrl"/>
-                            <exclude reference="yhx-Cn-aSh"/>
-                        </mask>
-                    </variation>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <rect key="frame" x="0.0" y="327" width="320" height="241"/>
-                        <mask key="subviews">
-                            <include reference="jkY-2G-oVu"/>
-                            <include reference="Rb7-ud-vrl"/>
-                            <include reference="yhx-Cn-aSh"/>
-                        </mask>
-                    </variation>
-                </view>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LRJ-Zg-xoM">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LRJ-Zg-xoM">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="328"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OZw-ud-OID">
-                            <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_onboarding.png" translatesAutoresizingMaskIntoConstraints="NO" id="Hae-zV-GQa">
+                            <rect key="frame" x="127" y="130" width="67" height="67"/>
+                        </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4RX-WG-puu">
+                            <rect key="frame" x="12" y="29" width="24" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="24" id="Kab-hS-PQy"/>
+                            </constraints>
                             <state key="normal" image="button_cancel.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
-                            <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                <rect key="frame" x="12" y="29" width="22" height="22"/>
-                            </variation>
                             <connections>
-                                <action selector="cancelButtonAction:" destination="-1" eventType="touchUpInside" id="sUq-Pr-s2s"/>
+                                <action selector="cancelButtonAction:" destination="-1" eventType="touchUpInside" id="5SC-ld-WcZ"/>
                             </connections>
                         </button>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_onboarding.png" translatesAutoresizingMaskIntoConstraints="NO" id="vJl-c7-SXB">
-                            <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                            <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                <rect key="frame" x="127" y="140" width="67" height="67"/>
-                            </variation>
-                        </imageView>
                     </subviews>
                     <color key="backgroundColor" red="0.33725490200000002" green="0.72549019609999998" blue="0.61568627450000002" alpha="1" colorSpace="calibratedRGB"/>
-                    <variation key="default">
-                        <mask key="subviews">
-                            <exclude reference="OZw-ud-OID"/>
-                            <exclude reference="vJl-c7-SXB"/>
-                        </mask>
-                    </variation>
+                    <constraints>
+                        <constraint firstItem="Hae-zV-GQa" firstAttribute="top" secondItem="LRJ-Zg-xoM" secondAttribute="top" constant="130" id="2Nw-1p-AgF"/>
+                        <constraint firstItem="4RX-WG-puu" firstAttribute="top" secondItem="LRJ-Zg-xoM" secondAttribute="top" constant="29" id="FuZ-Wl-jSt"/>
+                        <constraint firstItem="Hae-zV-GQa" firstAttribute="centerX" secondItem="LRJ-Zg-xoM" secondAttribute="centerX" id="JVr-2t-0Lb"/>
+                        <constraint firstItem="4RX-WG-puu" firstAttribute="leading" secondItem="LRJ-Zg-xoM" secondAttribute="leading" constant="12" id="phB-b7-HNW"/>
+                    </constraints>
                     <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="328"/>
-                        <mask key="subviews">
-                            <include reference="OZw-ud-OID"/>
-                            <include reference="vJl-c7-SXB"/>
-                        </mask>
                     </variation>
                 </view>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Avl-eg-sAh">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Avl-eg-sAh">
                     <rect key="frame" x="0.0" y="327" width="320" height="241"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yLq-ju-a85">
-                            <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c4z-Yf-5AV">
+                            <rect key="frame" x="30" y="98" width="260" height="45"/>
                             <color key="backgroundColor" red="0.33725490200000002" green="0.72549019609999998" blue="0.61568627450000002" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="14"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="14"/>
                             <state key="normal" title="Join Teamstory">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
-                            <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                <rect key="frame" x="30" y="94" width="261" height="45"/>
-                            </variation>
                             <connections>
-                                <action selector="joinButtonAction:" destination="-1" eventType="touchUpInside" id="rX7-dI-4jK"/>
+                                <action selector="joinButtonAction:" destination="-1" eventType="touchUpInside" id="Aka-Cd-LhC"/>
                             </connections>
                         </button>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hey there! Please sign in to do that:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uSu-2O-L9F">
-                            <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hey there! Please sign in to do that :)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KOk-iu-YT2">
+                            <rect key="frame" x="40" y="31" width="240" height="23"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="23" id="53h-6D-Ez2"/>
+                            </constraints>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="14"/>
-                            <color key="textColor" red="0.41960784309999999" green="0.41960784309999999" blue="0.41960784309999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                             <nil key="highlightedColor"/>
-                            <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                <rect key="frame" x="17" y="37" width="286" height="21"/>
-                            </variation>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5fd-cl-z4X">
-                            <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
-                            <state key="normal" title="Already a member? Sign in"/>
-                            <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                <rect key="frame" x="61" y="171" width="199" height="29"/>
-                            </variation>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XAd-eV-dxy">
+                            <rect key="frame" x="57" y="174" width="206" height="30"/>
+                            <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="14"/>
+                            <state key="normal" title="Already a member? Sign in">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
                             <connections>
-                                <action selector="memberButtonAction:" destination="-1" eventType="touchUpInside" id="dk0-vB-D8L"/>
+                                <action selector="memberButtonAction:" destination="-1" eventType="touchUpInside" id="R68-qR-wm1"/>
                             </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <variation key="default">
-                        <mask key="subviews">
-                            <exclude reference="yLq-ju-a85"/>
-                            <exclude reference="uSu-2O-L9F"/>
-                            <exclude reference="5fd-cl-z4X"/>
-                        </mask>
-                    </variation>
+                    <constraints>
+                        <constraint firstItem="KOk-iu-YT2" firstAttribute="top" secondItem="Avl-eg-sAh" secondAttribute="top" constant="31" id="DcN-DE-4KO"/>
+                        <constraint firstItem="KOk-iu-YT2" firstAttribute="leading" secondItem="Avl-eg-sAh" secondAttribute="leading" constant="40" id="G1u-7S-dHx"/>
+                        <constraint firstItem="c4z-Yf-5AV" firstAttribute="centerY" secondItem="Avl-eg-sAh" secondAttribute="centerY" id="Mdb-1d-k3M"/>
+                        <constraint firstItem="XAd-eV-dxy" firstAttribute="leading" secondItem="Avl-eg-sAh" secondAttribute="leading" constant="57" id="Oyu-yR-nf3"/>
+                        <constraint firstItem="c4z-Yf-5AV" firstAttribute="leading" secondItem="Avl-eg-sAh" secondAttribute="leading" constant="30" id="bgt-jM-IYT"/>
+                        <constraint firstAttribute="bottom" secondItem="XAd-eV-dxy" secondAttribute="bottom" constant="37" id="fm5-rp-F4B"/>
+                        <constraint firstItem="c4z-Yf-5AV" firstAttribute="centerX" secondItem="KOk-iu-YT2" secondAttribute="centerX" id="fwu-Gx-mCz"/>
+                        <constraint firstItem="XAd-eV-dxy" firstAttribute="top" secondItem="c4z-Yf-5AV" secondAttribute="bottom" constant="31" id="kH0-rc-n9A"/>
+                        <constraint firstItem="XAd-eV-dxy" firstAttribute="centerX" secondItem="c4z-Yf-5AV" secondAttribute="centerX" id="nGf-K5-ccF"/>
+                        <constraint firstItem="c4z-Yf-5AV" firstAttribute="top" secondItem="KOk-iu-YT2" secondAttribute="bottom" constant="44" id="s6k-tD-3Ji"/>
+                        <constraint firstItem="XAd-eV-dxy" firstAttribute="centerX" secondItem="Avl-eg-sAh" secondAttribute="centerX" id="yxT-u8-vGU"/>
+                    </constraints>
                     <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
                         <rect key="frame" x="0.0" y="327" width="320" height="241"/>
-                        <mask key="subviews">
-                            <include reference="yLq-ju-a85"/>
-                            <include reference="uSu-2O-L9F"/>
-                            <include reference="5fd-cl-z4X"/>
-                        </mask>
                     </variation>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="LRJ-Zg-xoM" firstAttribute="top" secondItem="dKw-fc-dW9" secondAttribute="top" id="5Kx-ub-vBC"/>
+                <constraint firstAttribute="bottom" secondItem="LRJ-Zg-xoM" secondAttribute="bottom" constant="240" id="9yH-rV-RM4"/>
+                <constraint firstItem="LRJ-Zg-xoM" firstAttribute="leading" secondItem="dKw-fc-dW9" secondAttribute="leading" id="AXU-HP-mif"/>
+                <constraint firstAttribute="trailing" secondItem="Avl-eg-sAh" secondAttribute="trailing" id="HAx-bs-RpE"/>
+                <constraint firstItem="LRJ-Zg-xoM" firstAttribute="leading" secondItem="Avl-eg-sAh" secondAttribute="leading" id="J3P-iV-W3E"/>
+                <constraint firstItem="Avl-eg-sAh" firstAttribute="trailing" secondItem="LRJ-Zg-xoM" secondAttribute="trailing" id="TwE-8c-ymv"/>
+                <constraint firstItem="Avl-eg-sAh" firstAttribute="top" secondItem="dKw-fc-dW9" secondAttribute="top" constant="327" id="hDd-jE-d8Z"/>
+                <constraint firstAttribute="bottom" secondItem="Avl-eg-sAh" secondAttribute="bottom" id="mkO-vx-U1m"/>
+            </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-            <variation key="default">
-                <mask key="subviews">
-                    <exclude reference="bnN-yo-hXC"/>
-                    <exclude reference="PcM-CB-is3"/>
-                </mask>
-            </variation>
-            <variation key="heightClass=regular-widthClass=compact">
-                <mask key="subviews">
-                    <include reference="bnN-yo-hXC"/>
-                    <include reference="PcM-CB-is3"/>
-                </mask>
-            </variation>
-            <point key="canvasLocation" x="-22" y="-195"/>
+            <point key="canvasLocation" x="181" y="-190"/>
         </view>
     </objects>
     <resources>
