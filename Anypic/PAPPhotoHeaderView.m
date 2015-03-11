@@ -71,6 +71,7 @@
             [self.userButton setBackgroundColor:[UIColor clearColor]];
             [[self.userButton titleLabel] setFont:[UIFont boldSystemFontOfSize:15]];
             [self.userButton setTitleColor:[UIColor colorWithRed:79.0f/255.0f green:182.0f/255.0f blue:154.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
+            [[self.userButton titleLabel] setTextAlignment:NSTextAlignmentRight];
             [[self.userButton titleLabel] setLineBreakMode:NSLineBreakByTruncatingTail];
         }
         
@@ -182,11 +183,11 @@
     NSString *separator = @" • ";
     NSString *allInfo = @"";
     
-    if(industry && location){
+    if(industry.length > 0 && location.length > 0){
         allInfo = [[industry stringByAppendingString:separator] stringByAppendingString:location];
-    }else if(!industry && location){
+    }else if(industry.length == 0 && location.length > 0){
         allInfo = location;
-    }else if(industry && !location){
+    }else if(industry.length > 0 && location.length == 0){
         allInfo = industry;
     }
     
