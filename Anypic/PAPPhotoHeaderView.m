@@ -11,6 +11,7 @@
 
 @interface PAPPhotoHeaderView () {
     float notificationBarOffset;
+    float headerNameLengthOffset;
 }
 
 @property (nonatomic, strong) UIView *containerView;
@@ -110,6 +111,7 @@
     photo = aPhoto;
     self.user = [self.photo objectForKey:kPAPPhotoUserKey];
     self.timestampLabel.hidden = NO;
+    headerNameLengthOffset = 35.0f;
     
     [self populateDetails];
 
@@ -118,6 +120,8 @@
 - (void)setUserForHeaderView:(PFUser *)aUser {
     self.user = aUser;
     self.followButton.hidden = NO;
+    
+    headerNameLengthOffset = 60.0f;
     [self populateDetails];
 }
 
@@ -139,7 +143,7 @@
     
     // we resize the button to fit the user's name to avoid having a huge touch area
     CGPoint userButtonPoint = CGPointMake(50.0f, 6.0f);
-    constrainWidth -= userButtonPoint.x;
+    constrainWidth -= userButtonPoint.x + headerNameLengthOffset;
     CGSize constrainSize = CGSizeMake(constrainWidth, containerView.bounds.size.height - userButtonPoint.y*2.0f);
     
     
