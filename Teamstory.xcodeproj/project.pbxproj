@@ -3664,7 +3664,6 @@
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)/External",
 					"$(PROJECT_DIR)/External/FlightRecorder.embeddedframework",
-					"$(PROJECT_DIR)/External/intercom-ios-master",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -3684,6 +3683,18 @@
 					"$(PROJECT_DIR)/External/GoogleAnalytics",
 					"$(PROJECT_DIR)/External",
 					"$(PROJECT_DIR)/External/Mixpanel",
+				);
+				OTHER_LDFLAGS = (
+					"-l\"Pods-AFNetworking\"",
+					"-l\"Pods-embedly-ios\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "";
@@ -3710,7 +3721,6 @@
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)/External",
 					"$(PROJECT_DIR)/External/FlightRecorder.embeddedframework",
-					"$(PROJECT_DIR)/External/intercom-ios-master",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
@@ -3729,6 +3739,18 @@
 					"$(PROJECT_DIR)/External/GoogleAnalytics",
 					"$(PROJECT_DIR)/External",
 					"$(PROJECT_DIR)/External/Mixpanel",
+				);
+				OTHER_LDFLAGS = (
+					"-l\"Pods-AFNetworking\"",
+					"-l\"Pods-embedly-ios\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "";
@@ -3789,7 +3811,6 @@
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)/External",
 					"$(PROJECT_DIR)/External/FlightRecorder.embeddedframework",
-					"$(PROJECT_DIR)/External/intercom-ios-master",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
@@ -3807,6 +3828,18 @@
 					"$(PROJECT_DIR)/External/GoogleAnalytics",
 					"$(PROJECT_DIR)/External",
 					"$(PROJECT_DIR)/External/Mixpanel",
+				);
+				OTHER_LDFLAGS = (
+					"-l\"Pods-AFNetworking\"",
+					"-l\"Pods-embedly-ios\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "";
@@ -3870,7 +3903,6 @@
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)/External",
 					"$(PROJECT_DIR)/External/FlightRecorder.embeddedframework",
-					"$(PROJECT_DIR)/External/intercom-ios-master",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
@@ -3888,6 +3920,18 @@
 					"$(PROJECT_DIR)/External/GoogleAnalytics",
 					"$(PROJECT_DIR)/External",
 					"$(PROJECT_DIR)/External/Mixpanel",
+				);
+				OTHER_LDFLAGS = (
+					"-l\"Pods-AFNetworking\"",
+					"-l\"Pods-embedly-ios\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "";

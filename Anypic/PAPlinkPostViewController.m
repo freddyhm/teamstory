@@ -268,7 +268,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     [[Mixpanel sharedInstance].people increment:@"Link Count" by:[NSNumber numberWithInt:1]];
     
     // intercome analytics
-    [Intercom logEventWithName:@"posted-link" metaData:nil];
+    [Intercom logEventWithName:@"posted-link" metaData:@{@"":@""}];
     
     [self.view endEditing:YES];
     [SVProgressHUD show];

@@ -232,7 +232,7 @@ enum ActionSheetTags {
         [[Mixpanel sharedInstance] track:@"Viewed Post" properties:@{@"Type":type}];
         
         // intercom analytics
-        [Intercom logEventWithName:@"viewed-post" metaData:nil];
+        [Intercom logEventWithName:@"viewed-post" metaData:@{@"":@""}];
         
         
         // flightrecorder event analytics
@@ -246,7 +246,7 @@ enum ActionSheetTags {
             [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Viewed Link", @"Source": @"Timeline"}];
             
             // intercome analytics
-            [Intercom logEventWithName:@"viewed-link" metaData:nil];
+            [Intercom logEventWithName:@"viewed-link" metaData:@{@"":@""}];
             
             tappedController = [[PAPwebviewViewController alloc] initWithWebsite:[photo objectForKey:@"link"]];
         }else{

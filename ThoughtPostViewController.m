@@ -272,7 +272,7 @@
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Thought"}];
         
         // intercom analytics
-        [Intercom logEventWithName:@"posted-thought" metaData:nil];
+        [Intercom logEventWithName:@"posted-thought" metaData:@{@"":@""}];
 
         
         // track selected color and current suggestion   

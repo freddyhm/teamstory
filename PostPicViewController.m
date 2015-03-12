@@ -242,7 +242,7 @@
     [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Moment"}];
     
     // intercom analytics
-    [Intercom logEventWithName:@"posted-moment" metaData:nil];
+    [Intercom logEventWithName:@"posted-moment" metaData:@{@"":@""}];
 
     
     // increment user photo count by one
