@@ -220,7 +220,7 @@ typedef void (^FBDialogAppCallCompletionHandler)(
 
  @see canPresentShareDialogWithOpenGraphActionParams:
  @see canPresentShareDialogWithParams:
- @see canPresentShareDialogWithPhotos:
+ @see canPresentShareDialogWithPhotos
  */
 + (BOOL)canPresentShareDialog;
 
@@ -633,7 +633,7 @@ typedef void (^FBDialogAppCallCompletionHandler)(
 
  @see canPresentMessageDialogWithOpenGraphActionParams:
  @see canPresentMessageDialogWithParams:
- @see canPresentMessageDialogWithPhotos:
+ @see canPresentMessageDialogWithPhotos
  */
 + (BOOL)canPresentMessageDialog;
 
@@ -805,7 +805,6 @@ typedef void (^FBDialogAppCallCompletionHandler)(
 
  @param params The parameters for the Message Dialog. The "friends" and "place" properties
  will be ignored as the Facebook Messenger app does not support tagging.
-
 
  @param clientState An NSDictionary that's passed through when the completion handler
  is called. This is useful for the app to maintain state about the share request that
