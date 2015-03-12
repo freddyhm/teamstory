@@ -232,8 +232,7 @@ enum ActionSheetTags {
         [[Mixpanel sharedInstance] track:@"Viewed Post" properties:@{@"Type":type}];
         
         // intercom analytics
-        [Intercom logEventWithName:@"viewed-post" optionalMetaData:nil
-                        completion:^(NSError *error) {}];
+        [Intercom logEventWithName:@"viewed-post" metaData:nil];
         
         
         // flightrecorder event analytics
@@ -247,8 +246,7 @@ enum ActionSheetTags {
             [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Viewed Link", @"Source": @"Timeline"}];
             
             // intercome analytics
-            [Intercom logEventWithName:@"viewed-link" optionalMetaData:nil
-                            completion:^(NSError *error) {}];
+            [Intercom logEventWithName:@"viewed-link" metaData:nil];
             
             tappedController = [[PAPwebviewViewController alloc] initWithWebsite:[photo objectForKey:@"link"]];
         }else{
@@ -844,8 +842,7 @@ enum ActionSheetTags {
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Liked Post", @"Source":@"Timeline", @"Post Type": postType}];
         
         // intercom analytics
-        [Intercom logEventWithName:@"liked-post" optionalMetaData:@{@"source":@"timeline"}
-                        completion:^(NSError *error) {}];
+        [Intercom logEventWithName:@"liked-post" metaData:@{@"source":@"timeline"}];
 
         
         // increment user like count by one

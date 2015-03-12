@@ -15,7 +15,6 @@
 #import "MBProgressHUD.h"
 #import "Mixpanel.h"
 #import "AppDelegate.h"
-#import "Intercom.h"
 #import "AtMention.h"
 #import "PAPLoginSelectionViewController.h"
 
@@ -543,8 +542,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Commented", @"Post Type" : postType}];
         
         // intercome analytics
-        [Intercom logEventWithName:@"commented" optionalMetaData:nil
-                        completion:^(NSError *error) {}];
+        [Intercom logEventWithName:@"commented" metaData:nil];
 
         
         // Show HUD view
@@ -642,8 +640,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         [[Mixpanel sharedInstance].people increment:@"Like Comment Count" by:[NSNumber numberWithInt:1]];
         
         // intercom analytics
-        [Intercom logEventWithName:@"liked-comment" optionalMetaData:nil
-                        completion:^(NSError *error) {}];
+        [Intercom logEventWithName:@"liked-comment" metaData:nil];
         
         
         likeCommentCount = [NSNumber numberWithInt:[likeCommentCount intValue] + 1];

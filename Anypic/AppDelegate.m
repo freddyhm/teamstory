@@ -158,7 +158,6 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
                                                          UIRemoteNotificationTypeSound)];
     }
     
-    
     // ****************************************************************************
     // Parse initialization
         [Parse setApplicationId:PARSE_APP_ID
@@ -178,9 +177,6 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
 
     // Intercom setup
     [Intercom setApiKey:INTERCOM_API_KEY forAppId:INTERCOM_APP_ID];
-    
-    // Intercom push notifications
-    [Intercom registerForRemoteNotifications];
     
     // Set installation id for mixpanel and crashlytics analytics
     NSString *installationId = [[PFInstallation currentInstallation] objectId];
@@ -227,6 +223,10 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     // set flight recorder properties
     [[FlightRecorder sharedInstance] startFlight];
     
+    // Stating FB framework version
+    NSLog(@"### FB SDK VERSION : %@",
+          [[FBRequestConnection class] performSelector:@selector(userAgent)]);
+    
     return YES;
 }
 
@@ -252,6 +252,9 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     
     // konotor notifications setup
     [Konotor addDeviceToken:newDeviceToken];
+    
+    // intercome notification setup
+    [Intercom setDeviceToken:newDeviceToken];
     
     [[PFInstallation currentInstallation] setDeviceTokenFromData:newDeviceToken];
     [[PFInstallation currentInstallation] saveInBackground];
