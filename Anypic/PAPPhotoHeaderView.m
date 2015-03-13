@@ -100,6 +100,16 @@
         [self.followButton addTarget:self action:@selector(didTapFollowButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         self.followButton.hidden = YES;
         [containerView addSubview:self.followButton];
+        
+        self.activityCount = [[UILabel alloc] initWithFrame:self.followButton.frame];
+        self.activityCount.backgroundColor = [UIColor orangeColor];
+        self.activityCount.textColor = [UIColor whiteColor];
+        self.activityCount.layer.cornerRadius = 13.0f;
+        self.activityCount.clipsToBounds = YES;
+        self.activityCount.hidden = YES;
+        self.activityCount.textAlignment = NSTextAlignmentCenter;
+        [containerView addSubview:self.activityCount];
+        
     }
 
     return self;
@@ -112,6 +122,8 @@
     photo = aPhoto;
     self.user = [self.photo objectForKey:kPAPPhotoUserKey];
     self.timestampLabel.hidden = NO;
+    self.activityCount.hidden = YES;
+    
     headerNameLengthOffset = 35.0f;
     
     [self populateDetails];
@@ -121,6 +133,18 @@
 - (void)setUserForHeaderView:(PFUser *)aUser {
     self.user = aUser;
     self.followButton.hidden = NO;
+    self.timestampLabel.hidden = YES;
+    self.activityCount.hidden = YES;
+    
+    headerNameLengthOffset = 60.0f;
+    [self populateDetails];
+}
+
+- (void)setForActivityPointView:(PFUser *)aUser {
+    self.user = aUser;
+    self.followButton.hidden = YES;
+    self.timestampLabel.hidden = YES;
+    self.activityCount.hidden = NO;
     
     headerNameLengthOffset = 60.0f;
     [self populateDetails];
@@ -192,6 +216,7 @@
     }
     
     [self.userInfoLabel setText:allInfo];
+    [self.activityCount setText:[(NSNumber *)[self.user objectForKey:@"activityPoints"] stringValue]];
 }
 
 

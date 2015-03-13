@@ -8,11 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ActivityPointViewController : UIViewController
+@interface ActivityPointViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UILabel *points;
-
-
-- (IBAction)close:(id)sender;
 
 @end
