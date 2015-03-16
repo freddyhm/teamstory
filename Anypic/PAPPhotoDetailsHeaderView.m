@@ -10,7 +10,6 @@
 #import "MBProgressHUD.h"
 #import "PAPwebviewViewController.h"
 #import "Mixpanel.h"
-#import "Intercom.h"
 #import "AtMention.h"
 
 #define baseHorizontalOffset 0.0f
@@ -541,8 +540,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Liked Post", @"Source": @"Details", @"Post Type": postType}];
         
         // intercome analytics
-        [Intercom logEventWithName:@"liked-post" optionalMetaData:@{@"source": @"details"}
-                        completion:^(NSError *error) {}];
+        [Intercom logEventWithName:@"liked-post" metaData:@{@"source": @"details"}];
 
         
         // increment user like count by one

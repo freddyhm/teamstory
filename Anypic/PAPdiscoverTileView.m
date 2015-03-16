@@ -543,8 +543,7 @@
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Followed User", @"Source": @"Discover", @"Followed User": selectedUser}];
         
         // intercom analytics
-        [Intercom logEventWithName:@"followed-user" optionalMetaData:@{@"followed": selectedUser, @"source": @"discover"}
-                        completion:^(NSError *error) {}];
+        [Intercom logEventWithName:@"followed-user" metaData:@{@"followed": selectedUser, @"source": @"discover"}];
 
         
         NSLog(@"follow");

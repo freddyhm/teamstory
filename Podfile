@@ -1,4 +1,6 @@
 platform :ios, '7.1'
-pod 'embedly-ios'
 
-xcodeproj 'Teamstory.xcodeproj'
+xcodeproj 'Teamstory'
+
+pod 'embedly-ios’
+pod ‘Intercom’

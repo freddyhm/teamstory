@@ -16,7 +16,6 @@
 #import "Mixpanel.h"
 #import <FlightRecorder/FlightRecorder.h>
 #import "PAPMessageListViewController.h"
-#import "Intercom.h"
 #import "AtMention.h"
 #import "ActivityPointViewController.h"
 #import "PAPLoginSelectionViewController.h"
@@ -532,19 +531,23 @@
     [Konotor setUserEmail:email]; //To set user's email id
     [Konotor setUserIdentifier:currentUserObjectId]; // To set the user's identifier unique to your system
     
-    // set intercom properties
-    [Intercom beginSessionForUserWithUserId:currentUserObjectId completion:^(NSError *error) {
-        [Intercom updateUserWithAttributes:@{
-                                             @"name": displayName,
-                                             @"email": email,
-                                             @"custom_attributes":@{@"industry": industry, @"admin": isAdmin},
-                                             } completion:^(NSError *error) {}];
-        
-    }];
-    
-    
     // set user id for flight recorder
     [[FlightRecorder sharedInstance] setSessionUserID:displayName];
+    
+    // registers dummy users.
+    if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
+        [Intercom registerUnidentifiedUser];
+        return;
+    }
+    
+    // set intercom properties for real users.
+    
+    [Intercom registerUserWithUserId:currentUserObjectId];
+    [Intercom updateUserWithAttributes:@{
+                                         @"name": displayName,
+                                         @"email" : email,
+                                         @"custom_attributes":@{@"industry": industry, @"admin": isAdmin},
+                                         }];
 }
 
 - (void)inviteFriendsButtonAction:(id)sender {

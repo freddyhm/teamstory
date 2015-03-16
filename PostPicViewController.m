@@ -15,7 +15,6 @@
 #import "PAPAccountViewController.h"
 #import "Mixpanel.h"
 #import <FlightRecorder/FlightRecorder.h>
-#import "Intercom.h"
 #import "AtMention.h"
 #import "AppDelegate.h"
 
@@ -243,8 +242,7 @@
     [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Moment"}];
     
     // intercom analytics
-    [Intercom logEventWithName:@"posted-moment" optionalMetaData:nil
-                    completion:^(NSError *error) {}];
+    [Intercom logEventWithName:@"posted-moment" metaData:@{@"":@""}];
 
     
     // increment user photo count by one

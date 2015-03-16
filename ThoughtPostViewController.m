@@ -12,7 +12,6 @@
 #import "PAPHomeViewController.h"
 #import "Mixpanel.h"
 #import <FlightRecorder/FlightRecorder.h>
-#import "Intercom.h"
 #import "ParseFacebookUtils/PFFacebookUtils.h"
 #include <stdlib.h>
 #import "AtMention.h"
@@ -273,8 +272,7 @@
         [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Thought"}];
         
         // intercom analytics
-        [Intercom logEventWithName:@"posted-thought" optionalMetaData:nil
-                        completion:^(NSError *error) {}];
+        [Intercom logEventWithName:@"posted-thought" metaData:@{@"":@""}];
 
         
         // track selected color and current suggestion   

@@ -14,7 +14,6 @@
 #import "Mixpanel.h"
 #import <FlightRecorder/FlightRecorder.h>
 #import "PAPMessagingViewController.h"
-#import "Intercom.h"
 #import "ProfileSettingViewController.h"
 #import "PAPLoginSelectionViewController.h"
 
@@ -986,8 +985,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     
     // intercome analytics
-    [Intercom logEventWithName:@"followed-user" optionalMetaData:@{@"followed": followedUserDisplayName, @"source": @"accountview"}
-                    completion:^(NSError *error) {}];
+    [Intercom logEventWithName:@"followed-user" metaData:@{@"followed": followedUserDisplayName, @"source": @"accountview"}];
 
     
     // increment user follow count by one
