@@ -863,6 +863,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 
 - (void)backButtonAction:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)websiteLinkAction:(id)sender{

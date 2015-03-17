@@ -101,13 +101,14 @@
         self.followButton.hidden = YES;
         [containerView addSubview:self.followButton];
         
-        self.activityCount = [[UILabel alloc] initWithFrame:self.followButton.frame];
-        self.activityCount.backgroundColor = [UIColor orangeColor];
+        self.activityCount = [[UILabel alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 63.0f, 6.0f, 40.0f, 25.0f)];
+        self.activityCount.backgroundColor = [UIColor colorWithRed:245.0f/255.0f green:166.0f/255.0f blue:35.0f/255.0f alpha:1.0f];
         self.activityCount.textColor = [UIColor whiteColor];
         self.activityCount.layer.cornerRadius = 13.0f;
         self.activityCount.clipsToBounds = YES;
         self.activityCount.hidden = YES;
         self.activityCount.textAlignment = NSTextAlignmentCenter;
+        self.activityCount.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:10.0f];
         [containerView addSubview:self.activityCount];
         
     }

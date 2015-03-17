@@ -17,12 +17,18 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.photoHeaderView = [[PAPPhotoHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, photoHeaderViewHeight) buttons:PAPPhotoHeaderButtonsDefault];
+        self.photoHeaderView = [[PAPPhotoHeaderView alloc] initWithFrame:CGRectMake(11.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, photoHeaderViewHeight) buttons:PAPPhotoHeaderButtonsDefault];
         self.photoHeaderView.delegate = self;
         [self addSubview:self.photoHeaderView];
         
     }
     return self;
+}
+
+- (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapUserButton:(UIButton *)button user:(PFUser *)user {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(photoHeaderView:didTapUserButton:user:)]) {
+        [self.delegate photoHeaderView:photoHeaderView didTapUserButton:button user:user];
+    }
 }
 
 @end

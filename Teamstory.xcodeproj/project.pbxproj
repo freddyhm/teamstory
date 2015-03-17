@@ -187,6 +187,7 @@
 		46839E9918E1E8C100BD60DB /* icon-email@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46839E8518E1E8C100BD60DB /* icon-email@2x.png */; };
 		46839E9E18E1E8C100BD60DB /* icon-upload.png in Resources */ = {isa = PBXBuildFile; fileRef = 46839E8A18E1E8C100BD60DB /* icon-upload.png */; };
 		46839E9F18E1E8C100BD60DB /* icon-upload@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46839E8B18E1E8C100BD60DB /* icon-upload@2x.png */; };
+		4689743C1AB780E900D54CD7 /* Intercom.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4689743B1AB780E900D54CD7 /* Intercom.bundle */; };
 		4691B4F018BEF61200B7DF6A /* unfollow.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B4EE18BEF61200B7DF6A /* unfollow.png */; };
 		4691B4F118BEF61200B7DF6A /* unfollow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B4EF18BEF61200B7DF6A /* unfollow@2x.png */; };
 		4691B4F418BEF61C00B7DF6A /* follow.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B4F218BEF61C00B7DF6A /* follow.png */; };
@@ -844,6 +845,7 @@
 		46839E8518E1E8C100BD60DB /* icon-email@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-email@2x.png"; sourceTree = "<group>"; };
 		46839E8A18E1E8C100BD60DB /* icon-upload.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-upload.png"; sourceTree = "<group>"; };
 		46839E8B18E1E8C100BD60DB /* icon-upload@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-upload@2x.png"; sourceTree = "<group>"; };
+		4689743B1AB780E900D54CD7 /* Intercom.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Intercom.bundle; sourceTree = "<group>"; };
 		4691B4EE18BEF61200B7DF6A /* unfollow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unfollow.png; sourceTree = "<group>"; };
 		4691B4EF18BEF61200B7DF6A /* unfollow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unfollow@2x.png"; sourceTree = "<group>"; };
 		4691B4F218BEF61C00B7DF6A /* follow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = follow.png; sourceTree = "<group>"; };
@@ -1801,6 +1803,7 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				4689743B1AB780E900D54CD7 /* Intercom.bundle */,
 				467823801AA7F7C000C67A03 /* IconProfile_Glow@2x.png */,
 				467823811AA7F7C000C67A03 /* IconProfile_Glow@3x.png */,
 				467823821AA7F7C000C67A03 /* IconProfile_Glow.png */,
@@ -2934,6 +2937,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4689743C1AB780E900D54CD7 /* Intercom.bundle in Resources */,
 				465C290F1A5F2D6500265486 /* Link Popup_selected.png in Resources */,
 				463CE64519E9987D001F607C /* btn_new_message@2x.png in Resources */,
 				46ABD74E18B147FC008F5AAB /* button_cancel_selected.png in Resources */,
