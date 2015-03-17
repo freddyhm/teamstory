@@ -3378,7 +3378,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./External/Crashlytics.framework/run 9075de9af4f252529090970cd8c2f7e426771d92 b65a067085879699667823a2059d609d2b04476fc3804d3a5a6f9ab5896ca5d4";
+			shellScript = "./External/Crashlytics.framework/run 9075de9af4f252529090970cd8c2f7e426771d92 b65a067085879699667823a2059d609d2b04476fc3804d3a5a6f9ab5896ca5d4\n\nexport PATH=/usr/local/bin:$PATH\n\nif [ \"${CONFIGURATION}\" == \"Release\" ]; then\n\ncd /Applications/MAMP/htdocs/ios-projects/teamstory/External/ProdCloudCode\n\nelse\n\ncd /Applications/MAMP/htdocs/ios-projects/teamstory/External/DevCloudCode\n\nfi\n\nparse symbols \"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}\"\n";
 		};
 		F50D72C740BC4A25A4D688E6 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

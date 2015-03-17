@@ -308,8 +308,8 @@ Parse.Cloud.afterSave('Activity', function(request) {
                               var post = request.object.get("photo");
                       
                               // parse keys
-                              var dev_app_id = "0tEtPoPtsvPu1lCPzBeU032Cz3Byemcp5lr25gIU";
-                              var dev_master_key = "5CAQpBPsHdP5yB2VTIyRdDXgu0BkWZM2phC8xb9L";
+                              var dev_app_id = Parse.applicationId;
+                              var dev_master_key = Parse.masterKey;
                       
                               post.fetch({
                                          success: function(post) {

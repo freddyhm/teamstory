@@ -160,8 +160,13 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     
     // ****************************************************************************
     // Parse initialization
+    
+        // Enable Parse Crash Reporting
+        [ParseCrashReporting enable];
+    
         [Parse setApplicationId:PARSE_APP_ID
                       clientKey:PARSE_CLIENT_KEY];
+    
         [PFFacebookUtils initializeFacebook];
     
 
