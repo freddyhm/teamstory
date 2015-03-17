@@ -7,12 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PAPActivityPointCell.h"
 
-@interface ActivityPointViewController : UIViewController
+@interface ActivityPointViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, PAPActivityPointCellDelegate>
 
 @property (strong, nonatomic) IBOutlet UILabel *points;
-
-
-- (IBAction)close:(id)sender;
 
 @end

@@ -23,6 +23,7 @@
 @property (nonatomic, strong) TTTTimeIntervalFormatter *timeIntervalFormatter;
 @property (nonatomic, strong) PFUser *user;
 @property (nonatomic, assign) UIImage *followButtonImage;
+@property (nonatomic, strong) UIView *activityCountView;
 
 @end
 
@@ -100,6 +101,20 @@
         [self.followButton addTarget:self action:@selector(didTapFollowButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         self.followButton.hidden = YES;
         [containerView addSubview:self.followButton];
+        
+        self.activityCountView = [[UIView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 63.0f, 6.0f, 40.0f, 25.0f)];
+        self.activityCountView.backgroundColor = [UIColor colorWithRed:245.0f/255.0f green:166.0f/255.0f blue:35.0f/255.0f alpha:1.0f];
+        self.activityCountView.layer.cornerRadius = 13.0f;
+        self.activityCountView.clipsToBounds = YES;
+        self.activityCountView.hidden = YES;
+        [containerView addSubview:self.activityCountView];
+        
+        self.activityCount = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, -1.0f, 40.0f, 25.0f)];
+        self.activityCount.textColor = [UIColor whiteColor];
+        self.activityCount.textAlignment = NSTextAlignmentCenter;
+        self.activityCount.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:10.0f];
+        [self.activityCountView addSubview:self.activityCount];
+        
     }
 
     return self;
@@ -112,6 +127,8 @@
     photo = aPhoto;
     self.user = [self.photo objectForKey:kPAPPhotoUserKey];
     self.timestampLabel.hidden = NO;
+    self.activityCountView.hidden = YES;
+    
     headerNameLengthOffset = 35.0f;
     
     [self populateDetails];
@@ -121,6 +138,18 @@
 - (void)setUserForHeaderView:(PFUser *)aUser {
     self.user = aUser;
     self.followButton.hidden = NO;
+    self.timestampLabel.hidden = YES;
+    self.activityCountView.hidden = YES;
+    
+    headerNameLengthOffset = 60.0f;
+    [self populateDetails];
+}
+
+- (void)setForActivityPointView:(PFUser *)aUser {
+    self.user = aUser;
+    self.followButton.hidden = YES;
+    self.timestampLabel.hidden = YES;
+    self.activityCountView.hidden = NO;
     
     headerNameLengthOffset = 60.0f;
     [self populateDetails];
@@ -172,7 +201,7 @@
     [self.timestampLabel setFont:[UIFont boldSystemFontOfSize:10.0f]];
     
     // Update timestamp frame
-    [self.timestampLabel setFrame:CGRectMake(282.0f, 12.0f, 23.0f, 18.0f)];
+    [self.timestampLabel setFrame:CGRectMake(282.0f, 12.0f, 27.0f, 18.0f)];
     
     [self.timestampLabel adjustsFontSizeToFitWidth];
     
@@ -192,6 +221,7 @@
     }
     
     [self.userInfoLabel setText:allInfo];
+    [self.activityCount setText:[(NSNumber *)[self.user objectForKey:@"activityPoints"] stringValue]];
 }
 
 

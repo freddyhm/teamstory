@@ -151,6 +151,7 @@
 		466ED0381A8E6BC300FA4F29 /* inviteDiscover.png in Resources */ = {isa = PBXBuildFile; fileRef = 466ED0351A8E6BC300FA4F29 /* inviteDiscover.png */; };
 		466ED0391A8E6BC300FA4F29 /* inviteDiscover@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 466ED0361A8E6BC300FA4F29 /* inviteDiscover@2x.png */; };
 		466ED03A1A8E6BC300FA4F29 /* inviteDiscover@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 466ED0371A8E6BC300FA4F29 /* inviteDiscover@3x.png */; };
+		467104151AB36668001445C4 /* PAPActivityPointCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 467104141AB36668001445C4 /* PAPActivityPointCell.m */; };
 		467154A618835E470000C0CA /* privacy.png in Resources */ = {isa = PBXBuildFile; fileRef = 467154A418835E470000C0CA /* privacy.png */; };
 		467154A718835E470000C0CA /* privacy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 467154A518835E470000C0CA /* privacy@2x.png */; };
 		467823831AA7F7C000C67A03 /* IconProfile_Glow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 467823801AA7F7C000C67A03 /* IconProfile_Glow@2x.png */; };
@@ -186,6 +187,7 @@
 		46839E9918E1E8C100BD60DB /* icon-email@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46839E8518E1E8C100BD60DB /* icon-email@2x.png */; };
 		46839E9E18E1E8C100BD60DB /* icon-upload.png in Resources */ = {isa = PBXBuildFile; fileRef = 46839E8A18E1E8C100BD60DB /* icon-upload.png */; };
 		46839E9F18E1E8C100BD60DB /* icon-upload@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46839E8B18E1E8C100BD60DB /* icon-upload@2x.png */; };
+		4689743C1AB780E900D54CD7 /* Intercom.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4689743B1AB780E900D54CD7 /* Intercom.bundle */; };
 		4691B4F018BEF61200B7DF6A /* unfollow.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B4EE18BEF61200B7DF6A /* unfollow.png */; };
 		4691B4F118BEF61200B7DF6A /* unfollow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B4EF18BEF61200B7DF6A /* unfollow@2x.png */; };
 		4691B4F418BEF61C00B7DF6A /* follow.png in Resources */ = {isa = PBXBuildFile; fileRef = 4691B4F218BEF61C00B7DF6A /* follow.png */; };
@@ -460,7 +462,6 @@
 		D5856FB819F87E2600D0086F /* libKonotorCombined.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D5856F8D19F87E2500D0086F /* libKonotorCombined.a */; };
 		D586C1071A82E55D00AC7C31 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D586C1061A82E55D00AC7C31 /* libicucore.dylib */; };
 		D586C10F1A82E81500AC7C31 /* ActivityPointViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D586C10E1A82E81500AC7C31 /* ActivityPointViewController.m */; };
-		D586C1171A82E83E00AC7C31 /* ActivityPointViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D586C1161A82E83E00AC7C31 /* ActivityPointViewController.xib */; };
 		D586C11B1A82EA7600AC7C31 /* bg_points_3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D586C1181A82EA7600AC7C31 /* bg_points_3x.png */; };
 		D586C11C1A82EA7600AC7C31 /* bg_points.png in Resources */ = {isa = PBXBuildFile; fileRef = D586C1191A82EA7600AC7C31 /* bg_points.png */; };
 		D586C11D1A82EA7600AC7C31 /* bg_points_2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D586C11A1A82EA7600AC7C31 /* bg_points_2x.png */; };
@@ -807,6 +808,8 @@
 		466ED0351A8E6BC300FA4F29 /* inviteDiscover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = inviteDiscover.png; sourceTree = "<group>"; };
 		466ED0361A8E6BC300FA4F29 /* inviteDiscover@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "inviteDiscover@2x.png"; sourceTree = "<group>"; };
 		466ED0371A8E6BC300FA4F29 /* inviteDiscover@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "inviteDiscover@3x.png"; sourceTree = "<group>"; };
+		467104131AB36668001445C4 /* PAPActivityPointCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAPActivityPointCell.h; path = Anypic/PAPActivityPointCell.h; sourceTree = SOURCE_ROOT; };
+		467104141AB36668001445C4 /* PAPActivityPointCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PAPActivityPointCell.m; path = Anypic/PAPActivityPointCell.m; sourceTree = SOURCE_ROOT; };
 		467154A418835E470000C0CA /* privacy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = privacy.png; sourceTree = "<group>"; };
 		467154A518835E470000C0CA /* privacy@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "privacy@2x.png"; sourceTree = "<group>"; };
 		467823801AA7F7C000C67A03 /* IconProfile_Glow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IconProfile_Glow@2x.png"; sourceTree = "<group>"; };
@@ -842,6 +845,7 @@
 		46839E8518E1E8C100BD60DB /* icon-email@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-email@2x.png"; sourceTree = "<group>"; };
 		46839E8A18E1E8C100BD60DB /* icon-upload.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-upload.png"; sourceTree = "<group>"; };
 		46839E8B18E1E8C100BD60DB /* icon-upload@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-upload@2x.png"; sourceTree = "<group>"; };
+		4689743B1AB780E900D54CD7 /* Intercom.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Intercom.bundle; sourceTree = "<group>"; };
 		4691B4EE18BEF61200B7DF6A /* unfollow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unfollow.png; sourceTree = "<group>"; };
 		4691B4EF18BEF61200B7DF6A /* unfollow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unfollow@2x.png"; sourceTree = "<group>"; };
 		4691B4F218BEF61C00B7DF6A /* follow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = follow.png; sourceTree = "<group>"; };
@@ -1213,7 +1217,6 @@
 		D586C1061A82E55D00AC7C31 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		D586C10D1A82E81500AC7C31 /* ActivityPointViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityPointViewController.h; sourceTree = SOURCE_ROOT; };
 		D586C10E1A82E81500AC7C31 /* ActivityPointViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityPointViewController.m; sourceTree = SOURCE_ROOT; };
-		D586C1161A82E83E00AC7C31 /* ActivityPointViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ActivityPointViewController.xib; sourceTree = SOURCE_ROOT; };
 		D586C1181A82EA7600AC7C31 /* bg_points_3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_points_3x.png; sourceTree = "<group>"; };
 		D586C1191A82EA7600AC7C31 /* bg_points.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_points.png; sourceTree = "<group>"; };
 		D586C11A1A82EA7600AC7C31 /* bg_points_2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_points_2x.png; sourceTree = "<group>"; };
@@ -1800,6 +1803,7 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				4689743B1AB780E900D54CD7 /* Intercom.bundle */,
 				467823801AA7F7C000C67A03 /* IconProfile_Glow@2x.png */,
 				467823811AA7F7C000C67A03 /* IconProfile_Glow@3x.png */,
 				467823821AA7F7C000C67A03 /* IconProfile_Glow.png */,
@@ -2096,6 +2100,8 @@
 				46DC23CC19B01CBF00E8FCDF /* PAPdiscoverIndustryCell.m */,
 				46ACBD7B1A8D207A00B0D5D1 /* PAPdiscoverFollowerCell.h */,
 				46ACBD761A8D203700B0D5D1 /* PAPdiscoverFollowerCell.m */,
+				467104131AB36668001445C4 /* PAPActivityPointCell.h */,
+				467104141AB36668001445C4 /* PAPActivityPointCell.m */,
 			);
 			name = UITableViewCells;
 			sourceTree = "<group>";
@@ -2108,7 +2114,6 @@
 				C4F102A2156C57560061BC3E /* PAPPhotoHeaderView.h */,
 				C4F102A3156C57560061BC3E /* PAPPhotoHeaderView.m */,
 				D56D466419884C33001FAA76 /* PhotoTimelineViewController.xib */,
-				D586C1161A82E83E00AC7C31 /* ActivityPointViewController.xib */,
 			);
 			name = TimelineViews;
 			sourceTree = "<group>";
@@ -2932,6 +2937,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4689743C1AB780E900D54CD7 /* Intercom.bundle in Resources */,
 				465C290F1A5F2D6500265486 /* Link Popup_selected.png in Resources */,
 				463CE64519E9987D001F607C /* btn_new_message@2x.png in Resources */,
 				46ABD74E18B147FC008F5AAB /* button_cancel_selected.png in Resources */,
@@ -3182,7 +3188,6 @@
 				469CF3771996FB4D0081FCED /* btn_twitter_select@2x.png in Resources */,
 				D57684121933F917008BAA2C /* IconActivitySelected.png in Resources */,
 				D528C383191034F100CEEA35 /* ButtonLikeComment.png in Resources */,
-				D586C1171A82E83E00AC7C31 /* ActivityPointViewController.xib in Resources */,
 				465C29181A5F2D6500265486 /* Thought Popup.png in Resources */,
 				D5BFDEDF18CC84A5004FEC42 /* toronto.png in Resources */,
 				465A4EE518A83D5100E43DC6 /* share.png in Resources */,
@@ -3422,6 +3427,7 @@
 				D5F087461A82E25B0079C922 /* MPUIImageToNSDictionaryValueTransformer.m in Sources */,
 				C4F10291156C571C0061BC3E /* AppDelegate.m in Sources */,
 				D5F087141A82E25B0079C922 /* MPABTestDesignerDeviceInfoRequestMessage.m in Sources */,
+				467104151AB36668001445C4 /* PAPActivityPointCell.m in Sources */,
 				D5856FB519F87E2600D0086F /* KonotorUtility.m in Sources */,
 				C4F10292156C571C0061BC3E /* PAPUtility.m in Sources */,
 				D542D8C1196A6F4700A0384F /* ELCAssetTablePicker.m in Sources */,
@@ -3695,6 +3701,8 @@
 					"\"Security\"",
 					"-framework",
 					"\"SystemConfiguration\"",
+					"-force_load",
+					"$(PROJECT_DIR)/External/Intercom.framework/Versions/A/Intercom",
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "";
@@ -3751,6 +3759,8 @@
 					"\"Security\"",
 					"-framework",
 					"\"SystemConfiguration\"",
+					"-force_load",
+					"$(PROJECT_DIR)/External/Intercom.framework/Versions/A/Intercom",
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "";
@@ -3840,6 +3850,8 @@
 					"\"Security\"",
 					"-framework",
 					"\"SystemConfiguration\"",
+					"-force_load",
+					"$(PROJECT_DIR)/External/Intercom.framework/Versions/A/Intercom",
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "";
@@ -3932,6 +3944,8 @@
 					"\"Security\"",
 					"-framework",
 					"\"SystemConfiguration\"",
+					"-force_load",
+					"$(PROJECT_DIR)/External/Intercom.framework/Versions/A/Intercom",
 				);
 				PRODUCT_NAME = Teamstory;
 				PROVISIONING_PROFILE = "";

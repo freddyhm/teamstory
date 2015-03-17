@@ -25,6 +25,7 @@ typedef enum {
  */
 - (id)initWithFrame:(CGRect)frame buttons:(PAPPhotoHeaderButtons)otherButtons;
 - (void)setUserForHeaderView:(PFUser *)auser;
+- (void)setForActivityPointView:(PFUser *)aUser;
 - (void)setPhoto:(PFObject *)aPhoto;
 
 /// The photo associated with this view
@@ -46,6 +47,8 @@ typedef enum {
 
 /*! @name Modifying Interaction Elements Status */
 @property (nonatomic, strong) UIButton *followButton;
+
+@property (nonatomic, strong) UILabel *activityCount;
 
 @end
 
