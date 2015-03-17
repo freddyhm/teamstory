@@ -21,15 +21,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
+    //UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
     
     self.mainTableView = [[UITableView alloc] initWithFrame:[UIScreen mainScreen].bounds style:UITableViewStyleGrouped];
     self.mainTableView.delegate = self;
     self.mainTableView.dataSource = self;
     self.mainTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.mainTableView.backgroundColor = teamStoryColor;
+    self.mainTableView.backgroundColor = [UIColor whiteColor];
     self.mainTableView.allowsSelection = NO;
     [self.view addSubview:self.mainTableView];
+    
+    [SVProgressHUD show];
     
     
     PFQuery *activeUserQuery = [PFUser query];
@@ -45,6 +47,7 @@
         } else {
             NSLog(@"loading query error : %@", error);
         }
+        [SVProgressHUD dismiss];
     }];
 }
 

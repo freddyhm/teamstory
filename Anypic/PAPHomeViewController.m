@@ -118,13 +118,18 @@
     //UIImage *logoImg = [UIImage imageNamed:@"timelineLogo.png"];
     //self.logoBtn = [[UIButton alloc]initWithFrame:CGRectMake(15.0f, 10.0f, logoImg.size.width, logoImg.size.height)];
     
+    UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
+    
     // create activity points label
-    self.activityPoints = [[UILabel alloc] initWithFrame:CGRectMake(13.0f, 7.0f, 50.0f, 25.0f)];
-    [self.activityPoints setTextColor:[UIColor whiteColor]];
+    self.activityPoints = [[UILabel alloc] initWithFrame:CGRectMake(13.0f, 11.0f, 30.0f, 22.0f)];
+    [self.activityPoints setTextColor:teamStoryColor];
+    self.activityPoints.textAlignment = NSTextAlignmentCenter;
     self.activityPoints.adjustsFontSizeToFitWidth = YES;
-    [self.activityPoints setFont:[UIFont systemFontOfSize:16.0f]];
+    [self.activityPoints setFont:[UIFont boldSystemFontOfSize:10.0f]];
     [self.activityPoints setUserInteractionEnabled:YES];
-    [self.activityPoints setTextAlignment:NSTextAlignmentLeft];
+    self.activityPoints.backgroundColor = [UIColor whiteColor];
+    self.activityPoints.layer.cornerRadius = 11.0f;
+    self.activityPoints.clipsToBounds = YES;
     
     // add tap gesture to activity points label
     UITapGestureRecognizer *tapActivity = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedActivityPoints)];
@@ -383,14 +388,14 @@
         
         // animate the activity change
         [UIView animateWithDuration:0.2 animations:^{
-            self.activityPoints.font = [UIFont boldSystemFontOfSize:16];
+            self.activityPoints.font = [UIFont boldSystemFontOfSize:12];
             self.activityPoints.transform = CGAffineTransformScale(self.activityPoints.transform, 1.1, 1.1);
         } completion:^(BOOL finished) {
             //fade out
             [UIView animateWithDuration:0.2f animations:^{
                 self.activityPoints.transform = transform;
             } completion:^(BOOL finished) {
-                self.activityPoints.font = [UIFont systemFontOfSize:16.0f];
+                self.activityPoints.font = [UIFont boldSystemFontOfSize:10.0f];
             }];
         }];
     }
