@@ -5,11 +5,9 @@
 //
 
 #import "PAPWelcomeViewController.h"
-#import "SVProgressHUD.h"
 #import "MBProgressHUD.h"
 #import "AppDelegate.h"
 #import "PAPHomeViewController.h"
-#import "Mixpanel.h"
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import "PAPLoginInfoSheetViewController.h"
 
@@ -48,28 +46,9 @@
         }];
         return;
     }
-
-    // Show spinning indicator while user is being refreshed
-    [SVProgressHUD setForegroundColor:[UIColor whiteColor]];
-
-    // move hud for iphone 4
-    if(!IS_WIDESCREEN){
-        [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, 45.0f)];
-    }
-    
-    [SVProgressHUD show];
     
     [user fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         
-        [SVProgressHUD dismissQuickly];
-        
-        // reset hud to normal
-        if(!IS_WIDESCREEN){
-            [SVProgressHUD setOffsetFromCenter:UIOffsetMake(0.0f, 0.0f)];
-        }
-        
-        [SVProgressHUD setForegroundColor:[UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
-    
         if(!error){
             NSNumber *profilExist_num = [[PFUser currentUser] objectForKey: @"profileExist"];
             bool profileExist = [profilExist_num boolValue];
