@@ -627,6 +627,13 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         float profileGlowTimeFrame = 7*24*60*60; //every 7 days
         
         if (distanceBetweenDatesProfile > profileGlowTimeFrame || profileUpdateDate == nil) {
+            
+            // mixpanel analytics
+            [[Mixpanel sharedInstance] track:@"Showed Edit Profile Alert" properties:@{}];
+            
+            // flightrecorder event analytics
+            [[FlightRecorder sharedInstance] trackEventWithCategory:@"showed_edit_profile" action:@"" label:@"" value:@""];
+            
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Hi there!" message:@"Did you know that filling out your profile completely gets you noticed more?" delegate:self cancelButtonTitle:@"Maybe Later" otherButtonTitles:@"Edit Profile", nil];
             [alertView show];
         }
@@ -914,6 +921,13 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 }
 
 - (void)editProfileAction:(id)sender{
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Selected Edit Profile" properties:@{@"Source": @"Edit Button"}];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"selected_edit_profile" action:@"edit_button" label:@"" value:@""];
+    
   //  PAPProfileSettingViewController *profileViewController = [[PAPProfileSettingViewController alloc] init];
     //profileViewController.hidesBottomBarWhenPushed = YES;
     
@@ -1128,6 +1142,14 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger) buttonIndex
 {
     if (buttonIndex == 1) {
+        
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Selected Edit Profile" properties:@{@"Source": @"Alert For New"}];
+        
+        // flightrecorder event analytics
+        [[FlightRecorder sharedInstance] trackEventWithCategory:@"selected_edit_profile" action:@"alert_for_new" label:@"" value:@""];
+        
+        
         ProfileSettingViewController *profileViewController = [[ProfileSettingViewController alloc] init];
         profileViewController.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:profileViewController animated:YES];

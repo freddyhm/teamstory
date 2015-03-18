@@ -30,6 +30,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Register"}];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"register_screen" action:@"viewing_register" label:@"" value:@""];
+    
+    // flightrecorder analytics
+    [[FlightRecorder sharedInstance] trackPageView:@"Register"];
+    
     self.emailTextField.delegate = self;
     self.confirmPWTextField.delegate = self;
     self.passwordTextField.delegate = self;
@@ -61,6 +70,16 @@
             NSLog(@"Uh oh. The user cancelled the Twitter login.");
             return;
         } else if (user.isNew) {
+            
+            // mixpanel analytics
+            [[Mixpanel sharedInstance] track:@"Signed Up" properties:@{@"Type" : @"Twitter"}];
+            
+            // flightrecorder event analytics
+            [[FlightRecorder sharedInstance] trackEventWithCategory:@"signed_up" action:@"twitter" label:@"" value:@""];
+            
+            // intercom analytics
+            [Intercom logEventWithName:@"signed-up"];
+            
             NSLog(@"User signed up and logged in with Twitter!");
             [self navigateToInfoSheet];
         } else {
@@ -109,6 +128,16 @@
     [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         [SVProgressHUD dismiss];
         if (!error) {
+            
+            // mixpanel analytics
+            [[Mixpanel sharedInstance] track:@"Signed Up" properties:@{@"Type": @"email"}];
+            
+            // flightrecorder event analytics
+            [[FlightRecorder sharedInstance] trackEventWithCategory:@"signed_up" action:@"email" label:@"" value:@""];
+            
+            // intercom analytics
+            [Intercom logEventWithName:@"signed-up"];
+            
             [self navigateToInfoSheet];
         } else {
             if ([error code] == 203) {

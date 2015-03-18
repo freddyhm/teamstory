@@ -40,6 +40,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type": @"New Profile Screen 1"}];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"viewed_screen" action:@"new_profile_1" label:@"" value:@""];
+
+    // flightrecorder analytics
+    [[FlightRecorder sharedInstance] trackPageView:@"New Profile Screen 1"];
+    
     self.companyNameTextField.delegate = self;
     self.emailTextField.delegate = self;
     self.locationTextField.delegate = self;

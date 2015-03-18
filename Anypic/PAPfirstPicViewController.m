@@ -26,6 +26,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type": @"New Profile Screen 3"}];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"viewed_screen" action:@"new_profile_3" label:@"" value:@""];
+    
+    // flightrecorder analytics
+    [[FlightRecorder sharedInstance] trackPageView:@"New Profile Screen 3"];
+    
     // Do any additional setup after loading the view from its nib.
     self.navController = [[UINavigationController alloc] init];
     
@@ -33,6 +44,13 @@
     self.mainScrollView.contentSize = CGSizeMake([UIScreen mainScreen].bounds.size.width, 600);
 }
 - (IBAction)momentButtonAction:(id)sender {
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Selected In Welcome Screen" properties:@{@"Type": @"Moment"}];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"select_in_welcome" action:@"moment" label:@"" value:@""];
+    
     // init asset library
     ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
     self.specialLibrary = library;
@@ -70,6 +88,13 @@
 }
 
 - (IBAction)thoughtButtonAction:(id)sender {
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Selected In Welcome Screen" properties:@{@"Type": @"Thought"}];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"select_in_welcome" action:@"Thought" label:@"" value:@""];
+    
     ThoughtPostViewController *thoughtPostViewController = [[ThoughtPostViewController alloc] init];
     thoughtPostViewController.delegate = self;
     

@@ -25,6 +25,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Intro"}];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"intro_screen" action:@"viewing_intro" label:@"" value:@""];
+    
+    // flightrecorder analytics
+    [[FlightRecorder sharedInstance] trackPageView:@"Intro"];
+    
     if ([UIScreen mainScreen].bounds.size.height == 480.0f) {
         self.signInLabel.frame = CGRectMake(0.0f, 20.0f, [UIScreen mainScreen].bounds.size.width, 23.0f);
         self.joinButton.frame = CGRectMake(30.0f, 60.0f, 260.0f, 40.0f);

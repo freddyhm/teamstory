@@ -30,6 +30,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Sign In"}];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"sign_in_screen" action:@"viewing_sign_in" label:@"" value:@""];
+    
+    // flightrecorder analytics
+    [[FlightRecorder sharedInstance] trackPageView:@"Sign In"];
+    
     self.emailTextView.layer.cornerRadius = 2.0f;
     self.passwordTextView.layer.cornerRadius = 2.0f;
     self.signInButton.layer.cornerRadius = 2.0f;
@@ -49,6 +58,12 @@
 - (IBAction)signInButtonAction:(id)sender {
     [SVProgressHUD show];
     
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Log In" properties:@{@"Type": @"twitter"}];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"log_in" action:@"twitter" label:@"" value:@""];
+
     [PFTwitterUtils logInWithBlock:^(PFUser *user, NSError *error) {
         [SVProgressHUD dismiss];
         if (!user) {
@@ -74,6 +89,13 @@
 }
 
 - (IBAction)signInEmailButtonAction:(id)sender {
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Log In" properties:@{@"Type": @"email"}];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"log_in" action:@"email" label:@"" value:@""];
+    
     [self userLoginWithEmail];
 }
 
@@ -90,6 +112,12 @@
 
 - (IBAction)signedUpWithFacebookAction:(id)sender {
     [SVProgressHUD show];
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Log In" properties:@{@"Type": @"facebook"}];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"log_in" action:@"facebook" label:@"" value:@""];
     
     // Set permissions required from the facebook user account
     NSArray *permissionsArray = @[ @"user_about_me", @"user_location"];
