@@ -21,6 +21,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type": @"Activity Points"}];
+    
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"activity_points_screen" action:@"viewing_activity_points" label:@"" value:@""];
+    
+    // flightrecorder analytics
+    [[FlightRecorder sharedInstance] trackPageView:@"Activity Points"];
+    
     //UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
     
     self.mainTableView = [[UITableView alloc] initWithFrame:[UIScreen mainScreen].bounds style:UITableViewStyleGrouped];
@@ -140,7 +150,15 @@
 }
 
 - (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapUserButton:(UIButton *)button user:(PFUser *)user {
+    
     if (user) {
+        
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Selected In Activity Points" properties:@{@"Type": @"User", @"Name": [user objectForKey:@"displayName"]}];
+        
+        // flightrecorder event analytics
+        [[FlightRecorder sharedInstance] trackEventWithCategory:@"selected_in_activity" action:@"user" label:@"" value:[user objectForKey:@"displayName"]];
+        
         PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
         [accountViewController setUser:user];
         
