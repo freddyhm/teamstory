@@ -8,6 +8,7 @@
 
 #import "ActivityPointViewController.h"
 #import "PAPAccountViewController.h"
+#import "PAPLoginSelectionViewController.h"
 
 #define PhotoHeaderViewHeight 44.0f
 

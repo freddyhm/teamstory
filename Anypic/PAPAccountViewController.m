@@ -109,7 +109,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     [super viewDidLoad];
     
     // Handling anonymous users.
-    if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
+    if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]] && [[self.user objectForKey:@"displayName"] length] == 0) {
         PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
         [self.navigationController presentViewController:loginSelectionViewController animated:YES completion:nil];
         return;
@@ -619,7 +619,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     [PAPUtility captureScreenGA:@"Account"];
 
     
-    if (![PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]] && ([[PFUser currentUser] objectForKey:@"description"] == nil || [[PFUser currentUser] objectForKey:@"industry"] == nil || [[PFUser currentUser] objectForKey:@"location"] == nil)) {
+    if (![PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]] && ([[PFUser currentUser] objectForKey:@"description"] == nil || [[PFUser currentUser] objectForKey:@"industry"] == nil || [[PFUser currentUser] objectForKey:@"location"] == nil) && [[self.user objectForKey:@"displayName"] isEqualToString:[[PFUser currentUser] objectForKey:@"displayName"]]) {
         NSDate *profileUpdateDate = [[PFUser currentUser] objectForKey:@"profileUpdate"];
         NSDate *currentDate = [NSDate date];
         
