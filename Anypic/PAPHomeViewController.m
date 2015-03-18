@@ -366,10 +366,10 @@
     
     // create and push activity point screen
     ActivityPointViewController *activityPointViewController = [[ActivityPointViewController alloc] initWithNibName:nil bundle:nil];
-    [self.navigationController presentViewController:activityPointViewController animated:YES completion:nil];
-    
     // set points after screen in stack
     activityPointViewController.points.text = self.activityPoints.text;
+    [self.navigationController presentViewController:activityPointViewController animated:YES completion:nil];
+    
 }
 
 - (void)getActivityPoints{
