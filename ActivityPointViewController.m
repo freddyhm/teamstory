@@ -8,6 +8,7 @@
 
 #import "ActivityPointViewController.h"
 #import "PAPAccountViewController.h"
+#import "PAPLoginSelectionViewController.h"
 
 #define PhotoHeaderViewHeight 44.0f
 
@@ -140,6 +141,15 @@
 }
 
 - (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapUserButton:(UIButton *)button user:(PFUser *)user {
+    if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
+        PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
+        
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:loginSelectionViewController];
+        navigationController.navigationBarHidden = YES;
+        [self presentViewController:navigationController animated:YES completion:nil];
+        return;
+    }
+    
     if (user) {
         PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
         [accountViewController setUser:user];
