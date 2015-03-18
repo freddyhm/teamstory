@@ -107,11 +107,13 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:YES];
-    if (self.twitterDescription.length > 0) {
-        self.bioTextView.text = self.twitterDescription;
-    } else {
-        [self.bioTextView setTextColor:[UIColor colorWithWhite:0.8 alpha:1.0f]];
-        self.bioTextView.text = @"Bio";
+    if (!hasProfilePicChanged) {
+        if (self.twitterDescription.length > 0) {
+            self.bioTextView.text = self.twitterDescription;
+        } else {
+            [self.bioTextView setTextColor:[UIColor colorWithWhite:0.8 alpha:1.0f]];
+            self.bioTextView.text = @"Bio";
+        }
     }
 
 }
