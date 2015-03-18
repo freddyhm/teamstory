@@ -121,7 +121,7 @@
     UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
     
     // create activity points label
-    self.activityPoints = [[UILabel alloc] initWithFrame:CGRectMake(13.0f, 11.0f, 30.0f, 22.0f)];
+    self.activityPoints = [[UILabel alloc] initWithFrame:CGRectMake(13.0f, 10.0f, 30.0f, 22.0f)];
     [self.activityPoints setTextColor:teamStoryColor];
     self.activityPoints.textAlignment = NSTextAlignmentCenter;
     self.activityPoints.adjustsFontSizeToFitWidth = YES;
