@@ -10,8 +10,6 @@
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleGetInfoString</key>
 	<string></string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>GPS Detection</string>
 	<key>CFBundleIcons</key>
 	<dict>
 		<key>CFBundlePrimaryIcon</key>
@@ -42,7 +40,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.5</string>
+	<string>2.5.5</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -57,7 +55,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2.5</string>
+	<string>2.5.5</string>
 	<key>FacebookAppID</key>
 	<string>${FACEBOOK_ID}</string>
 	<key>FacebookDisplayName</key>
@@ -68,6 +66,8 @@
 	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string>© 2014 Growple, inc</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>GPS Detection</string>
 	<key>UIApplicationExitsOnSuspend</key>
 	<false/>
 	<key>UIBackgroundModes</key>
@@ -122,9 +122,10 @@
 	<key>UIViewEdgeAntialiasing</key>
 	<false/>
 	<key>VersionChanges</key>
-	<string>• New! Recommended followers in discover section
-• New! Simplified edit profile screen 
-• Fixed link bug in comment section
-• Fixed keyboard trigger when tapping comment bubble</string>
+	<string>• New! Browse before joining
+• New! Leaderboard for activity points
+• Fixed truncating date for older posts
+• Fixed truncating longer names  
+• Fixed followers posting notification</string>
 </dict>
 </plist>
