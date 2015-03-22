@@ -473,6 +473,24 @@
 		D5949D621A9D650400BC23A7 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D5949D5E1A9D650400BC23A7 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
 		D594C20418EFEBAD0008F5DF /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D594C20118EFEBAD0008F5DF /* SVProgressHUD.bundle */; };
 		D594C20518EFEBAD0008F5DF /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = D594C20318EFEBAD0008F5DF /* SVProgressHUD.m */; };
+		D596805D1ABF815D00803759 /* profile_angellist_off.png in Resources */ = {isa = PBXBuildFile; fileRef = D596804B1ABF815C00803759 /* profile_angellist_off.png */; };
+		D596805E1ABF815D00803759 /* profile_angellist_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D596804C1ABF815C00803759 /* profile_angellist_off@2x.png */; };
+		D596805F1ABF815D00803759 /* profile_angellist_off@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D596804D1ABF815C00803759 /* profile_angellist_off@3x.png */; };
+		D59680601ABF815D00803759 /* profile_angellist_on.png in Resources */ = {isa = PBXBuildFile; fileRef = D596804E1ABF815C00803759 /* profile_angellist_on.png */; };
+		D59680611ABF815D00803759 /* profile_angellist_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D596804F1ABF815C00803759 /* profile_angellist_on@2x.png */; };
+		D59680621ABF815D00803759 /* profile_angellist_on@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D59680501ABF815C00803759 /* profile_angellist_on@3x.png */; };
+		D59680631ABF815D00803759 /* profile_linkedin_off.png in Resources */ = {isa = PBXBuildFile; fileRef = D59680511ABF815C00803759 /* profile_linkedin_off.png */; };
+		D59680641ABF815D00803759 /* profile_linkedin_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D59680521ABF815C00803759 /* profile_linkedin_off@2x.png */; };
+		D59680651ABF815D00803759 /* profile_linkedin_off@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D59680531ABF815C00803759 /* profile_linkedin_off@3x.png */; };
+		D59680661ABF815D00803759 /* profile_linkedin_on.png in Resources */ = {isa = PBXBuildFile; fileRef = D59680541ABF815C00803759 /* profile_linkedin_on.png */; };
+		D59680671ABF815D00803759 /* profile_linkedin_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D59680551ABF815C00803759 /* profile_linkedin_on@2x.png */; };
+		D59680681ABF815D00803759 /* profile_linkedin_on@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D59680561ABF815C00803759 /* profile_linkedin_on@3x.png */; };
+		D59680691ABF815D00803759 /* profile_twitter_off.png in Resources */ = {isa = PBXBuildFile; fileRef = D59680571ABF815C00803759 /* profile_twitter_off.png */; };
+		D596806A1ABF815D00803759 /* profile_twitter_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D59680581ABF815C00803759 /* profile_twitter_off@2x.png */; };
+		D596806B1ABF815D00803759 /* profile_twitter_off@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D59680591ABF815C00803759 /* profile_twitter_off@3x.png */; };
+		D596806C1ABF815D00803759 /* profile_twitter_on.png in Resources */ = {isa = PBXBuildFile; fileRef = D596805A1ABF815C00803759 /* profile_twitter_on.png */; };
+		D596806D1ABF815D00803759 /* profile_twitter_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D596805B1ABF815D00803759 /* profile_twitter_on@2x.png */; };
+		D596806E1ABF815D00803759 /* profile_twitter_on@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D596805C1ABF815D00803759 /* profile_twitter_on@3x.png */; };
 		D59AE7B618CD501D007F882B /* valley.png in Resources */ = {isa = PBXBuildFile; fileRef = D59AE7B418CD501D007F882B /* valley.png */; };
 		D59AE7B718CD501D007F882B /* valley@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D59AE7B518CD501D007F882B /* valley@2x.png */; };
 		D59B997A18C5974D002D6EFE /* AppIcon120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = D59B997918C5974C002D6EFE /* AppIcon120x120.png */; };
@@ -1235,6 +1253,24 @@
 		D594C20118EFEBAD0008F5DF /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
 		D594C20218EFEBAD0008F5DF /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
 		D594C20318EFEBAD0008F5DF /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
+		D596804B1ABF815C00803759 /* profile_angellist_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_angellist_off.png; sourceTree = "<group>"; };
+		D596804C1ABF815C00803759 /* profile_angellist_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_angellist_off@2x.png"; sourceTree = "<group>"; };
+		D596804D1ABF815C00803759 /* profile_angellist_off@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_angellist_off@3x.png"; sourceTree = "<group>"; };
+		D596804E1ABF815C00803759 /* profile_angellist_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_angellist_on.png; sourceTree = "<group>"; };
+		D596804F1ABF815C00803759 /* profile_angellist_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_angellist_on@2x.png"; sourceTree = "<group>"; };
+		D59680501ABF815C00803759 /* profile_angellist_on@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_angellist_on@3x.png"; sourceTree = "<group>"; };
+		D59680511ABF815C00803759 /* profile_linkedin_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_linkedin_off.png; sourceTree = "<group>"; };
+		D59680521ABF815C00803759 /* profile_linkedin_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_linkedin_off@2x.png"; sourceTree = "<group>"; };
+		D59680531ABF815C00803759 /* profile_linkedin_off@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_linkedin_off@3x.png"; sourceTree = "<group>"; };
+		D59680541ABF815C00803759 /* profile_linkedin_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_linkedin_on.png; sourceTree = "<group>"; };
+		D59680551ABF815C00803759 /* profile_linkedin_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_linkedin_on@2x.png"; sourceTree = "<group>"; };
+		D59680561ABF815C00803759 /* profile_linkedin_on@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_linkedin_on@3x.png"; sourceTree = "<group>"; };
+		D59680571ABF815C00803759 /* profile_twitter_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_twitter_off.png; sourceTree = "<group>"; };
+		D59680581ABF815C00803759 /* profile_twitter_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_twitter_off@2x.png"; sourceTree = "<group>"; };
+		D59680591ABF815C00803759 /* profile_twitter_off@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_twitter_off@3x.png"; sourceTree = "<group>"; };
+		D596805A1ABF815C00803759 /* profile_twitter_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_twitter_on.png; sourceTree = "<group>"; };
+		D596805B1ABF815D00803759 /* profile_twitter_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_twitter_on@2x.png"; sourceTree = "<group>"; };
+		D596805C1ABF815D00803759 /* profile_twitter_on@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_twitter_on@3x.png"; sourceTree = "<group>"; };
 		D59AE7B418CD501D007F882B /* valley.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = valley.png; sourceTree = "<group>"; };
 		D59AE7B518CD501D007F882B /* valley@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "valley@2x.png"; sourceTree = "<group>"; };
 		D59B997918C5974C002D6EFE /* AppIcon120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon120x120.png; sourceTree = "<group>"; };
@@ -1803,6 +1839,7 @@
 		7460D3AD1565557A00F755E4 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				D59680721ABF816400803759 /* Profile Social Icons */,
 				4689743B1AB780E900D54CD7 /* Intercom.bundle */,
 				467823801AA7F7C000C67A03 /* IconProfile_Glow@2x.png */,
 				467823811AA7F7C000C67A03 /* IconProfile_Glow@3x.png */,
@@ -2589,6 +2626,31 @@
 			path = SVProgressHUD;
 			sourceTree = "<group>";
 		};
+		D59680721ABF816400803759 /* Profile Social Icons */ = {
+			isa = PBXGroup;
+			children = (
+				D596804B1ABF815C00803759 /* profile_angellist_off.png */,
+				D596804C1ABF815C00803759 /* profile_angellist_off@2x.png */,
+				D596804D1ABF815C00803759 /* profile_angellist_off@3x.png */,
+				D596804E1ABF815C00803759 /* profile_angellist_on.png */,
+				D596804F1ABF815C00803759 /* profile_angellist_on@2x.png */,
+				D59680501ABF815C00803759 /* profile_angellist_on@3x.png */,
+				D59680511ABF815C00803759 /* profile_linkedin_off.png */,
+				D59680521ABF815C00803759 /* profile_linkedin_off@2x.png */,
+				D59680531ABF815C00803759 /* profile_linkedin_off@3x.png */,
+				D59680541ABF815C00803759 /* profile_linkedin_on.png */,
+				D59680551ABF815C00803759 /* profile_linkedin_on@2x.png */,
+				D59680561ABF815C00803759 /* profile_linkedin_on@3x.png */,
+				D59680571ABF815C00803759 /* profile_twitter_off.png */,
+				D59680581ABF815C00803759 /* profile_twitter_off@2x.png */,
+				D59680591ABF815C00803759 /* profile_twitter_off@3x.png */,
+				D596805A1ABF815C00803759 /* profile_twitter_on.png */,
+				D596805B1ABF815D00803759 /* profile_twitter_on@2x.png */,
+				D596805C1ABF815D00803759 /* profile_twitter_on@3x.png */,
+			);
+			name = "Profile Social Icons";
+			sourceTree = "<group>";
+		};
 		D5D2194F1A8A8EA9003B3C7C /* FlightRecorder.embeddedframework */ = {
 			isa = PBXGroup;
 			children = (
@@ -2972,6 +3034,7 @@
 				465C29111A5F2D6500265486 /* Link Popup_selected@3x.png in Resources */,
 				D5D1042C18B5CF4E0084C901 /* button-feedback@2x.png in Resources */,
 				C4F102E7156C58570061BC3E /* InfoPlist.strings in Resources */,
+				D59680611ABF815D00803759 /* profile_angellist_on@2x.png in Resources */,
 				D5856FA819F87E2600D0086F /* konotor_send.png in Resources */,
 				467A40D81993059300D4C693 /* btn_twitter.png in Resources */,
 				465B19AF18B81FE500EDBCFC /* browser-button-forward-normal.png in Resources */,
@@ -2979,7 +3042,9 @@
 				D5144B1C195951D100650061 /* button-feedback-notify.png in Resources */,
 				469CF3761996FB4D0081FCED /* btn_twitter_select.png in Resources */,
 				D5CD738E1A6D9004008FBDC8 /* icon_link@3x.png in Resources */,
+				D596806D1ABF815D00803759 /* profile_twitter_on@2x.png in Resources */,
 				D552B0E719C7D3EB009F2862 /* arrows_left_white@2x.png in Resources */,
+				D596806C1ABF815D00803759 /* profile_twitter_on.png in Resources */,
 				46B31EF0184E35150028D11C /* companyName.png in Resources */,
 				D579141619FF47E100585370 /* btn_camera_bright@2x.png in Resources */,
 				D5856F8F19F87E2500D0086F /* KonotorConversationViewController.xib in Resources */,
@@ -3001,6 +3066,7 @@
 				D5856FA319F87E2600D0086F /* konotor_profile@2x.png in Resources */,
 				467A40B619900FA600D4C693 /* btn_auto_detect.png in Resources */,
 				D575A0731947834C00C6BCC2 /* btn_following.png in Resources */,
+				D59680601ABF815D00803759 /* profile_angellist_on.png in Resources */,
 				D5856FB119F87E2600D0086F /* konotor_uploading@2x.png in Resources */,
 				461371841A9BC8DB002A907A /* PAPSignUpViewController.xib in Resources */,
 				4619DEE41A27C6D4004EFFF0 /* ic_empty_list@3x.png in Resources */,
@@ -3009,6 +3075,7 @@
 				D5856F9619F87E2600D0086F /* konotor_chatbox.png in Resources */,
 				D51072D11937F33F00B1FF0E /* share_thought_grey.png in Resources */,
 				467A40AB198FF1B200D4C693 /* profile_header_1@2x.png in Resources */,
+				D59680641ABF815D00803759 /* profile_linkedin_off@2x.png in Resources */,
 				D528C380191034DE00CEEA35 /* ButtonLikeCommentSelected.png in Resources */,
 				D5144B1D195951D100650061 /* button-feedback-notify@2x.png in Resources */,
 				46B31EEF184E35150028D11C /* profileLocation@2x.png in Resources */,
@@ -3038,6 +3105,7 @@
 				C4BE670F157FC7D000A291C2 /* Icon-Small-50.png in Resources */,
 				46F22AB31AAE390E009F42DB /* btn_camera_profile@2x.png in Resources */,
 				C4BE6710157FC7D000A291C2 /* Icon-Small.png in Resources */,
+				D59680631ABF815D00803759 /* profile_linkedin_off.png in Resources */,
 				46076EEC193FE3EF00A7B317 /* notif_close@2x.png in Resources */,
 				D510B6211A0897ED00BED420 /* nav_activity.png in Resources */,
 				D510B6201A0897ED00BED420 /* nav_activity@2x.png in Resources */,
@@ -3060,6 +3128,7 @@
 				D579141419FF47E100585370 /* btn_camera_bright.png in Resources */,
 				D5903C76192EBBF900DC9896 /* ThoughtPostViewController.xib in Resources */,
 				C4BE676E157FC7F700A291C2 /* BackgroundComments@2x.png in Resources */,
+				D59680691ABF815D00803759 /* profile_twitter_off.png in Resources */,
 				465B19AD18B81FE500EDBCFC /* browser-button-forward-no.png in Resources */,
 				D5BFDEE118CC84A5004FEC42 /* vancity.png in Resources */,
 				D5D571151947F8E900354340 /* btn_following_user.png in Resources */,
@@ -3108,6 +3177,7 @@
 				460997561938119A00C5AD96 /* icon-angel@2x.png in Resources */,
 				467A40AD198FF1B200D4C693 /* profile_header_2@2x.png in Resources */,
 				D586C11C1A82EA7600AC7C31 /* bg_points.png in Resources */,
+				D59680671ABF815D00803759 /* profile_linkedin_on@2x.png in Resources */,
 				D55AEF3319BA78EB00ECF342 /* following_empty.png in Resources */,
 				465B19B118B81FE500EDBCFC /* browser-button-no.png in Resources */,
 				D5856FA119F87E2600D0086F /* konotor_play@2x.png in Resources */,
@@ -3175,6 +3245,8 @@
 				D5C955321A201EE700DD2787 /* CustomKeyboardViewController.xib in Resources */,
 				D5CD73871A6D8FFB008FBDC8 /* icon_link@2x.png in Resources */,
 				4639EDF61965CE3D00930873 /* link_thumbnail@2x.png in Resources */,
+				D596806E1ABF815D00803759 /* profile_twitter_on@3x.png in Resources */,
+				D596806A1ABF815D00803759 /* profile_twitter_off@2x.png in Resources */,
 				D5856FAF19F87E2600D0086F /* konotor_supportprofile@2x.png in Resources */,
 				4691B51618C0314600B7DF6A /* discover@2x.png in Resources */,
 				C4BE679A157FC7F700A291C2 /* ButtonLikeSelected@2x.png in Resources */,
@@ -3183,6 +3255,7 @@
 				467A40DF1993059300D4C693 /* welcome_back@2x.png in Resources */,
 				463B0CEC1985A8C80075E496 /* intro_moment_1.png in Resources */,
 				D528C37F191034DE00CEEA35 /* ButtonLikeComment@2x.png in Resources */,
+				D59680621ABF815D00803759 /* profile_angellist_on@3x.png in Resources */,
 				4691B50718BFD9B200B7DF6A /* button-more.png in Resources */,
 				465C29151A5F2D6500265486 /* Moment Popup_selected.png in Resources */,
 				469CF3771996FB4D0081FCED /* btn_twitter_select@2x.png in Resources */,
@@ -3260,6 +3333,7 @@
 				4609975A1938119A00C5AD96 /* icon-linkedin-profile@2x.png in Resources */,
 				D5856FAC19F87E2600D0086F /* konotor_stop.png in Resources */,
 				462FCB8D188C8892005059F3 /* button_done_selected.png in Resources */,
+				D596806B1ABF815D00803759 /* profile_twitter_off@3x.png in Resources */,
 				4691B4F118BEF61200B7DF6A /* unfollow@2x.png in Resources */,
 				462FCB89188C863E005059F3 /* button_setting_selected.png in Resources */,
 				D5D1042818B5C7AF0084C901 /* konotor.png in Resources */,
@@ -3271,6 +3345,7 @@
 				C4BE67BC157FC7F700A291C2 /* SeparatorComments@2x.png in Resources */,
 				D55A17F919B52E5500B9C48A /* triangle.png in Resources */,
 				4619DEE31A27C6D4004EFFF0 /* ic_empty_list@2x.png in Resources */,
+				D596805E1ABF815D00803759 /* profile_angellist_off@2x.png in Resources */,
 				D5856FB719F87E2600D0086F /* KonotorModels.bundle in Resources */,
 				D5856F9C19F87E2600D0086F /* konotor_cross.png in Resources */,
 				C4BE67BD157FC7F700A291C2 /* SeparatorTimeline.png in Resources */,
@@ -3295,6 +3370,7 @@
 				D552B0EC19C7D3EB009F2862 /* arrows_right.png in Resources */,
 				D5F0872C1A82E25B0079C922 /* MPNotification.storyboard in Resources */,
 				467A40AC198FF1B200D4C693 /* profile_header_2.png in Resources */,
+				D59680661ABF815D00803759 /* profile_linkedin_on.png in Resources */,
 				C47DDDE915927631002114F6 /* iTunesArtwork@2x in Resources */,
 				C42500DC159939940087C4F4 /* Icon-Small-50@2x.png in Resources */,
 				460997601938119A00C5AD96 /* icon-twitter@2x.png in Resources */,
@@ -3310,6 +3386,7 @@
 				D5856F9E19F87E2600D0086F /* konotor_mic.png in Resources */,
 				D5856F9B19F87E2600D0086F /* konotor_chatbubble_ios7_you@2x.png in Resources */,
 				D5F087251A82E25B0079C922 /* MPCloseBtn@2x.png in Resources */,
+				D596805F1ABF815D00803759 /* profile_angellist_off@3x.png in Resources */,
 				465B19A218B81DD000EDBCFC /* bg-browser-bar@2x.png in Resources */,
 				D5BFDEE218CC84A5004FEC42 /* vancity@2x.png in Resources */,
 				463CE63B19E9987D001F607C /* btn_message_count.png in Resources */,
@@ -3330,12 +3407,15 @@
 				D5BFDED518CC84A5004FEC42 /* la.png in Resources */,
 				4639EDF51965CE3D00930873 /* link_thumbnail.png in Resources */,
 				D542D8C3196A6F4700A0384F /* ELCAlbumPickerController.xib in Resources */,
+				D59680681ABF815D00803759 /* profile_linkedin_on@3x.png in Resources */,
 				D576840B1933F908008BAA2C /* IconProfileSelected@2x.png in Resources */,
 				465C29131A5F2D6500265486 /* Moment Popup@2x.png in Resources */,
+				D59680651ABF815D00803759 /* profile_linkedin_off@3x.png in Resources */,
 				D576840A1933F908008BAA2C /* IconProfileSelected.png in Resources */,
 				466ED0381A8E6BC300FA4F29 /* inviteDiscover.png in Resources */,
 				D55A180119B5342200B9C48A /* timelineLogo@2x.png in Resources */,
 				469D9B5D1A0B041900A585FD /* message_empty@3x.png in Resources */,
+				D596805D1ABF815D00803759 /* profile_angellist_off.png in Resources */,
 				460997571938119A00C5AD96 /* icon-industry.png in Resources */,
 				460997581938119A00C5AD96 /* icon-industry@2x.png in Resources */,
 				467823851AA7F7C000C67A03 /* IconProfile_Glow.png in Resources */,

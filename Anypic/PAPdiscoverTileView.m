@@ -138,7 +138,11 @@
 }
 
 -(void) labelSetting:(NSString *)selected {
+    
     if ([selected isEqualToString:@"Moments"]) {
+        
+        [[Mixpanel sharedInstance] track:@"Selected Subcat From Discover" properties:@{@"Type": @"Moments"}];
+        
         [self.momentsMenu setTitleColor:self.teamstoryColor forState:UIControlStateNormal];
         self.momentsMenu.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
         [self.thoughtsMenu setTitleColor:[UIColor colorWithWhite:0.7f alpha:1.0f] forState:UIControlStateNormal];
@@ -149,6 +153,9 @@
             self.highlightBar.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 3, 41.0f, [UIScreen mainScreen].bounds.size.width / 3, 3.0f);
         }];
     } else if ([selected isEqualToString:@"Thoughts"]) {
+        
+        [[Mixpanel sharedInstance] track:@"Selected Subcat From Discover" properties:@{@"Type": @"Thoughts"}];
+        
         [self.thoughtsMenu setTitleColor:self.teamstoryColor forState:UIControlStateNormal];
         self.thoughtsMenu.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
         [self.momentsMenu setTitleColor:[UIColor colorWithWhite:0.7f alpha:1.0f] forState:UIControlStateNormal];
@@ -159,6 +166,9 @@
             self.highlightBar.frame = CGRectMake([UIScreen mainScreen].bounds.size.width * 2 / 3, 41.0f, [UIScreen mainScreen].bounds.size.width / 3, 3.0f);
         }];
     } else if ([selected isEqualToString:@"Followers"]) {
+        
+        [[Mixpanel sharedInstance] track:@"Selected Subcat From Discover" properties:@{@"Type": @"People"}];
+        
         [self.followerMenu setTitleColor:self.teamstoryColor forState:UIControlStateNormal];
         self.followerMenu.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
         [self.momentsMenu setTitleColor:[UIColor colorWithWhite:0.7f alpha:1.0f] forState:UIControlStateNormal];
