@@ -2,7 +2,6 @@
 //  PAPAccountViewController.m
 //  Teamstory
 //
-//
 
 #import "PAPAccountViewController.h"
 #import "PAPLoadMoreCell.h"
