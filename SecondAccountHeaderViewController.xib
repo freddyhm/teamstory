@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
-        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SecondAccountHeaderViewController">
@@ -53,7 +52,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Internet Software" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VPS-f2-PGz" userLabel="Industry Info">
-                            <rect key="frame" x="66" y="16" width="111" height="21"/>
+                            <rect key="frame" x="66" y="18" width="111" height="17"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
@@ -61,12 +60,12 @@
                     </subviews>
                     <color key="backgroundColor" red="0.3411764706" green="0.72549019609999998" blue="0.61960784310000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstItem="WUw-Rc-Un3" firstAttribute="baseline" secondItem="VPS-f2-PGz" secondAttribute="baseline" id="51W-eQ-wWg"/>
+                        <constraint firstItem="WUw-Rc-Un3" firstAttribute="baseline" secondItem="VPS-f2-PGz" secondAttribute="baseline" constant="2" id="51W-eQ-wWg"/>
                         <constraint firstAttribute="trailing" secondItem="VPS-f2-PGz" secondAttribute="trailing" id="6C7-1n-bbK"/>
                         <constraint firstItem="WUw-Rc-Un3" firstAttribute="leading" secondItem="qlc-h7-9Mx" secondAttribute="leading" id="BVu-eS-hoz"/>
                         <constraint firstItem="WUw-Rc-Un3" firstAttribute="top" secondItem="qlc-h7-9Mx" secondAttribute="top" constant="16" id="HZf-EV-oJz"/>
                         <constraint firstAttribute="bottom" secondItem="WUw-Rc-Un3" secondAttribute="bottom" constant="17" id="J1l-YK-EoH"/>
-                        <constraint firstItem="WUw-Rc-Un3" firstAttribute="firstBaseline" secondItem="VPS-f2-PGz" secondAttribute="firstBaseline" id="Luv-aK-KI6"/>
+                        <constraint firstItem="WUw-Rc-Un3" firstAttribute="baseline" secondItem="VPS-f2-PGz" secondAttribute="baseline" constant="2" id="Luv-aK-KI6"/>
                         <constraint firstItem="WUw-Rc-Un3" firstAttribute="leading" secondItem="qlc-h7-9Mx" secondAttribute="leading" id="WNt-9v-ZsT"/>
                         <constraint firstItem="WUw-Rc-Un3" firstAttribute="leading" secondItem="qlc-h7-9Mx" secondAttribute="leading" id="dvg-pD-Xna"/>
                         <constraint firstItem="WUw-Rc-Un3" firstAttribute="leading" secondItem="qlc-h7-9Mx" secondAttribute="leading" id="iCB-co-7Uw"/>
@@ -77,35 +76,35 @@
             </subviews>
             <color key="backgroundColor" red="0.3411764706" green="0.72549019609999998" blue="0.61960784310000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="GFB-fa-wxV" firstAttribute="firstBaseline" secondItem="Nwl-cn-8sq" secondAttribute="firstBaseline" id="23e-9t-O2N"/>
+                <constraint firstItem="GFB-fa-wxV" firstAttribute="baseline" secondItem="Nwl-cn-8sq" secondAttribute="baseline" id="23e-9t-O2N"/>
                 <constraint firstItem="GFB-fa-wxV" firstAttribute="baseline" secondItem="hRw-pZ-YvA" secondAttribute="baseline" id="3NC-BI-aMs"/>
                 <constraint firstItem="GFB-fa-wxV" firstAttribute="baseline" secondItem="hRw-pZ-YvA" secondAttribute="baseline" id="3z1-Jf-IBY"/>
                 <constraint firstItem="hRw-pZ-YvA" firstAttribute="top" secondItem="GFB-fa-wxV" secondAttribute="top" id="4B9-3D-9AP"/>
                 <constraint firstItem="qlc-h7-9Mx" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="29" id="5ev-xl-g2T"/>
-                <constraint firstItem="GFB-fa-wxV" firstAttribute="firstBaseline" secondItem="hRw-pZ-YvA" secondAttribute="firstBaseline" id="6FI-cX-KdA"/>
-                <constraint firstItem="GFB-fa-wxV" firstAttribute="firstBaseline" secondItem="Nwl-cn-8sq" secondAttribute="firstBaseline" id="6jt-VD-ZhT"/>
+                <constraint firstItem="GFB-fa-wxV" firstAttribute="baseline" secondItem="hRw-pZ-YvA" secondAttribute="baseline" id="6FI-cX-KdA"/>
+                <constraint firstItem="GFB-fa-wxV" firstAttribute="baseline" secondItem="Nwl-cn-8sq" secondAttribute="baseline" id="6jt-VD-ZhT"/>
                 <constraint firstItem="GFB-fa-wxV" firstAttribute="baseline" secondItem="Nwl-cn-8sq" secondAttribute="baseline" id="6m2-J3-qKj"/>
-                <constraint firstItem="hRw-pZ-YvA" firstAttribute="firstBaseline" secondItem="GFB-fa-wxV" secondAttribute="firstBaseline" id="8DH-93-l2j"/>
+                <constraint firstItem="hRw-pZ-YvA" firstAttribute="baseline" secondItem="GFB-fa-wxV" secondAttribute="baseline" id="8DH-93-l2j"/>
                 <constraint firstItem="Nwl-cn-8sq" firstAttribute="leading" secondItem="hRw-pZ-YvA" secondAttribute="trailing" constant="24" id="8ba-me-ka9"/>
                 <constraint firstItem="qlc-h7-9Mx" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="45" id="IbD-XL-blA"/>
                 <constraint firstAttribute="bottom" secondItem="GFB-fa-wxV" secondAttribute="bottom" constant="45" id="Lsv-5g-o72"/>
                 <constraint firstItem="hRw-pZ-YvA" firstAttribute="leading" secondItem="GFB-fa-wxV" secondAttribute="trailing" constant="24" id="QFy-OP-STx"/>
-                <constraint firstItem="Nwl-cn-8sq" firstAttribute="firstBaseline" secondItem="GFB-fa-wxV" secondAttribute="firstBaseline" id="RHB-xc-gb8"/>
+                <constraint firstItem="Nwl-cn-8sq" firstAttribute="baseline" secondItem="GFB-fa-wxV" secondAttribute="baseline" id="RHB-xc-gb8"/>
                 <constraint firstItem="GFB-fa-wxV" firstAttribute="top" secondItem="qlc-h7-9Mx" secondAttribute="bottom" constant="13" id="Sa1-O3-KZT"/>
                 <constraint firstItem="hRw-pZ-YvA" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="TR9-We-pni"/>
                 <constraint firstItem="GFB-fa-wxV" firstAttribute="baseline" secondItem="hRw-pZ-YvA" secondAttribute="baseline" id="Tku-d9-4eU"/>
                 <constraint firstItem="hRw-pZ-YvA" firstAttribute="baseline" secondItem="Nwl-cn-8sq" secondAttribute="baseline" id="U9k-Pd-GwB"/>
-                <constraint firstItem="hRw-pZ-YvA" firstAttribute="firstBaseline" secondItem="GFB-fa-wxV" secondAttribute="firstBaseline" id="XqI-dc-8Ua"/>
+                <constraint firstItem="hRw-pZ-YvA" firstAttribute="baseline" secondItem="GFB-fa-wxV" secondAttribute="baseline" id="XqI-dc-8Ua"/>
                 <constraint firstItem="hRw-pZ-YvA" firstAttribute="top" secondItem="Nwl-cn-8sq" secondAttribute="top" id="clc-m1-FsT"/>
                 <constraint firstItem="hRw-pZ-YvA" firstAttribute="baseline" secondItem="Nwl-cn-8sq" secondAttribute="baseline" id="dqC-6L-t1s"/>
                 <constraint firstItem="GFB-fa-wxV" firstAttribute="baseline" secondItem="Nwl-cn-8sq" secondAttribute="baseline" id="fKp-2q-iZ4"/>
                 <constraint firstItem="hRw-pZ-YvA" firstAttribute="baseline" secondItem="Nwl-cn-8sq" secondAttribute="baseline" id="jFb-WW-cWz"/>
-                <constraint firstItem="Nwl-cn-8sq" firstAttribute="firstBaseline" secondItem="hRw-pZ-YvA" secondAttribute="firstBaseline" id="jZX-Az-Jzx"/>
+                <constraint firstItem="Nwl-cn-8sq" firstAttribute="baseline" secondItem="hRw-pZ-YvA" secondAttribute="baseline" id="jZX-Az-Jzx"/>
                 <constraint firstItem="Nwl-cn-8sq" firstAttribute="baseline" secondItem="GFB-fa-wxV" secondAttribute="baseline" id="mwf-yA-v1z"/>
                 <constraint firstItem="Nwl-cn-8sq" firstAttribute="top" secondItem="qlc-h7-9Mx" secondAttribute="bottom" constant="13" id="nqB-0O-qUj"/>
                 <constraint firstItem="hRw-pZ-YvA" firstAttribute="top" secondItem="qlc-h7-9Mx" secondAttribute="bottom" constant="13" id="ond-pu-s6j"/>
-                <constraint firstItem="Nwl-cn-8sq" firstAttribute="firstBaseline" secondItem="hRw-pZ-YvA" secondAttribute="firstBaseline" id="tFi-cG-nSw"/>
-                <constraint firstItem="Nwl-cn-8sq" firstAttribute="firstBaseline" secondItem="hRw-pZ-YvA" secondAttribute="firstBaseline" id="vrc-pD-Xvn"/>
+                <constraint firstItem="Nwl-cn-8sq" firstAttribute="baseline" secondItem="hRw-pZ-YvA" secondAttribute="baseline" id="tFi-cG-nSw"/>
+                <constraint firstItem="Nwl-cn-8sq" firstAttribute="baseline" secondItem="hRw-pZ-YvA" secondAttribute="baseline" id="vrc-pD-Xvn"/>
                 <constraint firstItem="hRw-pZ-YvA" firstAttribute="centerX" secondItem="qlc-h7-9Mx" secondAttribute="centerX" id="yID-al-qZ1"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
