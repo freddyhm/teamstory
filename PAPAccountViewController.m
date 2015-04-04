@@ -34,8 +34,6 @@
 @property (nonatomic, strong) NSString *locationInfo;
 @property (nonatomic, strong) NSString *descriptionInfo;
 @property (nonatomic, strong) NSString *websiteInfo;
-@property (nonatomic, strong) PFImageView *profilePictureImageView;
-@property (nonatomic, strong) UIView *profilePictureBackgroundView;
 @property (nonatomic, strong) PFUser *currentUser;
 @property (nonatomic, strong) PAPSettingsActionSheetDelegate *settingsActionSheetDelegate;
 @property (nonatomic, strong) NSString *displayName;
@@ -58,7 +56,7 @@
 @property (nonatomic, strong) UIViewController *headerContainerViewController;
 @property (nonatomic, strong) UIView *multiActionContainerView;
 @property int userStatUpdateCount;
-
+@property BOOL isProfileOwner;
 
 @end
 
@@ -70,8 +68,6 @@
 @synthesize locationLabel;
 @synthesize imageFile;
 @synthesize locationInfo;
-@synthesize profilePictureImageView;
-@synthesize profilePictureBackgroundView;
 @synthesize currentUser;
 @synthesize descriptionInfo;
 @synthesize descriptionLabel;
@@ -108,6 +104,10 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
+    // check if user in profile owns the profile
+    self.isProfileOwner = [[[PFUser currentUser] objectId] isEqualToString:[self.user objectId]];
+    
     // Handling anonymous users.
     if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]] && [[self.user objectForKey:@"displayName"] length] == 0){
             PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
@@ -123,6 +123,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     // hide back button
     [self.navigationItem setHidesBackButton:YES];
+    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
     
     self.accountTitleLabel = [[UILabel alloc] initWithFrame:self.navigationItem.titleView.frame];
     self.accountTitleLabel.text = [self.user objectForKey:@"displayName"];
@@ -178,7 +179,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
             [self setLocationAndWebsite:self.locationInfo website:self.websiteInfo];
             
             
-            if (imageFile && locationInfo && displayName) {
+            if (self.imageFile && locationInfo && displayName) {
                 
                 // industry label
                 self.secondHeaderViewController.industryInfo.text = self.industry;
@@ -222,14 +223,17 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 }
             
                 
-                self.firstHeaderViewController.profilePictureImageView.layer.cornerRadius = self.firstHeaderViewController.profilePictureImageView.frame.size.width / 2;
+               self.firstHeaderViewController.profilePictureImageView.layer.cornerRadius = self.firstHeaderViewController.profilePictureImageView.frame.size.width / 2;
                     self.firstHeaderViewController.profilePictureImageView.clipsToBounds = YES;
                 
                 currentUser = [PFUser currentUser];
                 
-                if (imageFile) {
-                    [self.firstHeaderViewController.profilePictureImageView setFile:imageFile];
+                /*
+                if (self.imageFile) {
+                    [self.firstHeaderViewController.profilePictureImageView setFile:self.imageFile];
                     [self.firstHeaderViewController.profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {
+                        
+                        
                         if (!error) {
                             [UIView animateWithDuration:0.05f animations:^{
                                 self.firstHeaderViewController.profilePictureImageView.alpha = 1.0f;
@@ -238,7 +242,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                     }];
                 } else {
                     NSLog(@"ImageFile Not found");
-                }
+                }*/
 
                 
                 if ([self.industry length] > 0) {
@@ -461,35 +465,33 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 
                 
                 // set follow and message button when visiting someone's profile
-                if (![[self.user objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+                if (!self.isProfileOwner) {
                     
                     
                     UIImage *messageButtonImage = [UIImage imageNamed:@"btn_message.png"];
                     
                     // resize button to message and follow size (assuming both stay the same) - hurts my soul :(
                     self.multiActionButton.frame = CGRectMake(self.multiActionButton.frame.origin.x, self.multiActionButton.frame.origin.y, messageButtonImage.size.width, self.multiActionButton.frame.size.height);
-                    
-                    // set message frame
-                    UIView *messageButtonView = [[UIView alloc] initWithFrame:CGRectMake(self.multiActionButton.frame.origin.x + self.multiActionButton.frame.size.width, self.multiActionButton.frame.origin.y, messageButtonImage.size.width / 2, messageButtonImage.size.height)];
-                    
+          
                     UIButton *messageButton = [UIButton buttonWithType:UIButtonTypeCustom];
                     
-                    [messageButton setFrame:CGRectMake(10, 0, messageButtonImage.size.width, messageButtonImage.size.height)];
+                    [messageButton setImage:[UIImage imageNamed:@"btn_message"] forState:UIControlStateNormal];
+                    
+                    [messageButton setFrame:CGRectMake(self.multiActionButton.frame.origin.x + self.multiActionButton.frame.size.width + 10, self.multiActionButton.frame.origin.y, messageButtonImage.size.width, messageButtonImage.size.height)];
                     [messageButton addTarget:self action:@selector(messageButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-                    [messageButton setBackgroundImage:messageButtonImage forState:UIControlStateNormal];
-                    [messageButton setBackgroundImage:[UIImage imageNamed:@"btn_message_tapped"] forState:UIControlStateSelected];
                     
-                    [messageButtonView addSubview:messageButton];
+                    [messageButton setImage:messageButtonImage forState:UIControlStateNormal];
                     
-                    [self.multiActionContainerView addSubview:messageButtonView];
+                    [messageButton setImage:[UIImage imageNamed:@"btn_message_tapped"] forState:UIControlStateSelected];
                     
+                    [self.multiActionContainerView addSubview:messageButton];
                     
                     // check if the currentUser is following this user
                     PFQuery *queryIsFollowing = [PFQuery queryWithClassName:kPAPActivityClassKey];
                     [queryIsFollowing whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
                     [queryIsFollowing whereKey:kPAPActivityToUserKey equalTo:self.user];
                     [queryIsFollowing whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
-                    [queryIsFollowing setCachePolicy:kPFCachePolicyCacheThenNetwork];
+                    [queryIsFollowing setCachePolicy:kPFCachePolicyNetworkElseCache];
                     [queryIsFollowing countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
                         if (error && [error code] != kPFErrorCacheMiss) {
                             NSLog(@"Couldn't determine follow relationship: %@", error);
@@ -711,6 +713,9 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                             PAPMessagingViewController *messageViewController = [[PAPMessagingViewController alloc] init];
                             [messageViewController setTargetUser:aUser setUserNumber:@"userTwo"];
                             [messageViewController setRoomInfo:createChatRoom];
+                            
+                            //[self setHidesBottomBarWhenPushed:YES];
+                            
                             [self.navigationController pushViewController:messageViewController animated:NO];
                         }];
                     } else {
@@ -1036,6 +1041,8 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 
 - (void)configureFollowButton {
     
+    self.multiActionButton.enabled = YES;
+    
     [self.multiActionButton setImage:[UIImage imageNamed:@"btn_follow.png"] forState:UIControlStateNormal];
     [self.multiActionButton removeTarget:self action:@selector(settingsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.multiActionButton addTarget:self action:@selector(followButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -1044,6 +1051,8 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 }
 
 - (void)configureUnfollowButton {
+    
+self.multiActionButton.enabled = YES;
         
     [self.multiActionButton setImage:[UIImage imageNamed:@"btn_following.png"] forState:UIControlStateNormal];
     [self.multiActionButton removeTarget:self action:@selector(settingsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -1129,11 +1138,20 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     NSArray *viewControllers = @[self.firstHeaderViewController];
     [self.pageViewController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
     
+    
     // follow/unfollow/editprofile big button
     UIImage *editProfileBtn = [UIImage imageNamed:@"btn_edit_profile.png"];
     self.multiActionButton = [[UIButton alloc]initWithFrame:CGRectMake(10, 10, editProfileBtn.size.width, editProfileBtn.size.height)];
-    [self.multiActionButton setImage:editProfileBtn forState:UIControlStateNormal];
-    [self.multiActionButton setImage:[UIImage imageNamed:@"btn_edit_profile_tapped"] forState:UIControlStateSelected];
+    
+    if(self.isProfileOwner){
+        [self.multiActionButton setImage:editProfileBtn forState:UIControlStateNormal];
+        [self.multiActionButton setImage:[UIImage imageNamed:@"btn_edit_profile_tapped"] forState:UIControlStateSelected];
+    }else{
+        
+        [self.multiActionButton setImage:[UIImage imageNamed:@"btn_follow.png"] forState:UIControlStateNormal];
+        [self.multiActionButton addTarget:self action:@selector(followButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        self.multiActionButton.enabled = NO;
+    }
     
     // create button that'll serve as edit and follow/following depending on owner
     self.multiActionButton.titleLabel.font = [UIFont systemFontOfSize:13.0f];
