@@ -22,6 +22,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *followerLabel;
 @property (strong, nonatomic) IBOutlet PFImageView *profilePictureImageView;
 @property (strong, nonatomic) IBOutlet UILabel *seperatorLabel;
+@property (strong, nonatomic) IBOutlet UILabel *pointLabel;
 
 
 // values

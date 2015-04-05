@@ -14,6 +14,8 @@
 #import "ProfileSettingViewController.h"
 #import "PAPLoginSelectionViewController.h"
 
+#define SPACE_FOR_COUNTS 10
+#define FIRST_X_POS 15
 
 @interface PAPAccountViewController() {
     float alphaValue_twitter;
@@ -97,6 +99,7 @@ static NSString *const kevin_account = @"3KiW2NoGuT";
 static NSString *const justin_account = @"vB648p1bT1";
 static NSString *const freddy_account = @"rblDQcdZcY";
 #endif
+
 
 
 #pragma mark - UIViewController
@@ -193,10 +196,10 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 
         
                 if ([self.websiteInfo length] > 0) {
-                    website_expectedSize = [self.websiteInfo sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}];
+                    //website_expectedSize = [self.websiteInfo sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}];
                     
                 } else {
-                    website_expectedSize = CGSizeMake(132.01f, 15.50f);
+                   // website_expectedSize = CGSizeMake(132.01f, 15.50f);
                 }
                 
                 UIColor *textColor = [UIColor colorWithRed:158.0f/255.0f green:158.0f/255.0f blue:158.0f/255.0f alpha:1.0f];
@@ -436,6 +439,9 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 [queryFollowerCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
                     if (!error) {
                         [self.firstHeaderViewController.followerCountLabel setText:[NSString stringWithFormat:@"%d",number]];
+                        [self.firstHeaderViewController.followerCountLabel sizeToFit];
+                        
+                        [self.firstHeaderViewController.followerLabel setFrame:CGRectMake(self.firstHeaderViewController.followerCountLabel.frame.origin.x + self.firstHeaderViewController.followerCountLabel.frame.size.width + SPACE_FOR_COUNTS, self.firstHeaderViewController.followerLabel.frame.origin.y, self.firstHeaderViewController.followerLabel.frame.size.width, self.firstHeaderViewController.followerLabel.frame.size.height)];
                     }
                 }];
                 
@@ -455,13 +461,19 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 [queryFollowingCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
                     if (!error) {
                         [self.firstHeaderViewController.followingCountLabel setText:[NSString stringWithFormat:@"%d", number]];
+                        [self.firstHeaderViewController.followingCountLabel sizeToFit];
+                        
+                        [self.firstHeaderViewController.followingLabel setFrame:CGRectMake(self.firstHeaderViewController.followingCountLabel.frame.origin.x + self.firstHeaderViewController.followingCountLabel.frame.size.width + SPACE_FOR_COUNTS, self.firstHeaderViewController.followingLabel.frame.origin.y, self.firstHeaderViewController.followingLabel.frame.size.width, self.firstHeaderViewController.followingLabel.frame.size.height)];
                     }
                 }];
               
-                // set activity points for user
+                // get activity points for profile owner
+                NSNumber *activityPoints = self.isProfileOwner ? [[AtMention sharedAtMention] activityPoints] : [self.user objectForKey:@"activityPoints"];
                 
-                NSNumber *activityPoints = [[AtMention sharedAtMention] activityPoints];
                 [self.firstHeaderViewController.pointCountLabel setText:[activityPoints stringValue]];
+                [self.firstHeaderViewController.pointCountLabel sizeToFit];
+                
+                [self.firstHeaderViewController.pointLabel setFrame:CGRectMake(self.firstHeaderViewController.pointCountLabel.frame.origin.x + self.firstHeaderViewController.pointCountLabel.frame.size.width + SPACE_FOR_COUNTS, self.firstHeaderViewController.pointLabel.frame.origin.y, self.firstHeaderViewController.pointLabel.frame.size.width, self.firstHeaderViewController.pointLabel.frame.size.height)];
                 
                 
                 // set follow and message button when visiting someone's profile
@@ -858,7 +870,6 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     int maxWidth = 290;
     float sepWidth = self.firstHeaderViewController.seperatorLabel.frame.size.width;
-    float firstPosX = 15;
     
     float remainingSpace = 0;
     float totalWidth = 0;
@@ -892,28 +903,32 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     // check if total width is under remaining space
     if(remainingSpace >= 0){
+        
+        // we have enough space to put both location and website on the same line
+        
+        // both are present so we place elements and show seperator
         if(isBothElem){
 
-            elem1.frame = CGRectMake(elem1.frame.origin.x, elem1.frame.origin.y, elem1.frame.size.width, elem1.frame.size.height);
+            elem1.frame = CGRectMake(FIRST_X_POS, elem1.frame.origin.y, elem1.frame.size.width, elem1.frame.size.height);
             
-            self.firstHeaderViewController.seperatorLabel.frame = CGRectMake(elem1.frame.origin.x + elem1.frame.size.width+ 7, self.firstHeaderViewController.seperatorLabel.frame.origin.y, self.firstHeaderViewController.seperatorLabel.frame.size.width, self.firstHeaderViewController.seperatorLabel.frame.size.height);
+            self.firstHeaderViewController.seperatorLabel.frame = CGRectMake(elem1.frame.origin.x + elem1.frame.size.width, self.firstHeaderViewController.seperatorLabel.frame.origin.y, self.firstHeaderViewController.seperatorLabel.frame.size.width, self.firstHeaderViewController.seperatorLabel.frame.size.height);
             
-            elem2.frame = CGRectMake(self.firstHeaderViewController.seperatorLabel.frame.origin.x + self.firstHeaderViewController.seperatorLabel.frame.size.width + 5, elem1.frame.origin.y, elem2.frame.size.width, elem1.frame.size.height);
+            elem2.frame = CGRectMake(self.firstHeaderViewController.seperatorLabel.frame.origin.x + self.firstHeaderViewController.seperatorLabel.frame.size.width, elem1.frame.origin.y, elem2.frame.size.width, elem1.frame.size.height);
             
             [self.firstHeaderViewController.seperatorLabel setHidden:NO];
             
         }else if(isOnlyElem1){
-            elem1.frame = CGRectMake(elem1.frame.origin.x, elem1.frame.origin.y, elem1.frame.size.width, elem1.frame.size.height);
+            elem1.frame = CGRectMake(FIRST_X_POS, elem1.frame.origin.y, elem1.frame.size.width, elem1.frame.size.height);
         }else if(isOnlyElem2){
-            elem2.frame = CGRectMake(firstPosX, elem1.frame.origin.y, elem2.frame.size.width, elem1.frame.size.height);
+            elem2.frame = CGRectMake(FIRST_X_POS, elem1.frame.origin.y, elem2.frame.size.width, elem1.frame.size.height);
         }
     }else{
         if(isBothElem){
             
             [self.firstHeaderViewController.seperatorLabel setHidden:YES];
             
-            elem1.frame = CGRectMake(elem1.frame.origin.x, elem1.frame.origin.y, elem1.frame.size.width, elem1.frame.size.height);
-            elem2.frame = CGRectMake(elem1.frame.origin.x, elem1.frame.origin.y + 10, elem2.frame.size.width, elem2.frame.size.height);
+            elem1.frame = CGRectMake(FIRST_X_POS, elem1.frame.origin.y, elem1.frame.size.width, elem1.frame.size.height);
+            elem2.frame = CGRectMake(FIRST_X_POS, elem1.frame.origin.y + 10, elem2.frame.size.width, elem2.frame.size.height);
         }
     }
 }
