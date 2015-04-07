@@ -516,6 +516,9 @@
 - (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapUserButton:(UIButton *)button user:(PFUser *)user {
     PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
     [accountViewController setUser:user];
+    
+    accountViewController.hidesBottomBarWhenPushed = YES;
+    
     self.navController.navigationBar.hidden = NO;
     [self.navController pushViewController:accountViewController animated:YES];
 }

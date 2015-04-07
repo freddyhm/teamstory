@@ -7,10 +7,6 @@
 //
 
 #import "PAPMessagingViewController.h"
-#import "SVProgressHUD.h"
-#import "Mixpanel.h"
-#import <FlightRecorder/FlightRecorder.h>
-
 
 #define messageTextViewHeight 45.0f
 #define navBarHeight 64.0f

@@ -16,6 +16,7 @@
 
 #define SPACE_FOR_COUNTS 10
 #define FIRST_X_POS 15
+#define MAX_LABEL_WIDTH 290
 
 @interface PAPAccountViewController() {
     float alphaValue_twitter;
@@ -868,7 +869,6 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     BOOL isElem1 = ![elem1 isHidden];
     BOOL isElem2 = ![elem2 isHidden];
     
-    int maxWidth = 290;
     float sepWidth = self.firstHeaderViewController.seperatorLabel.frame.size.width;
     
     float remainingSpace = 0;
@@ -894,13 +894,8 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     }
     
     // calc remaining space
-    remainingSpace = maxWidth - totalWidth;
-    
-  //  [elem1 setBackgroundColor:[UIColor redColor]];
-  //  [elem2 setBackgroundColor:[UIColor redColor]];
-    
-   // [self.firstHeaderViewController.seperatorLabel setBackgroundColor:[UIColor redColor]];
-    
+    remainingSpace = MAX_LABEL_WIDTH - totalWidth;
+        
     // check if total width is under remaining space
     if(remainingSpace >= 0){
         

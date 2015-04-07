@@ -12,6 +12,7 @@
 #define TWITTER_TAG_NUM 7
 #define LINKEDIN_TAG_NUM 8
 #define ANGELIST_TAG_NUM 9
+#define MAX_INFO_LENGTH 290
 
 @interface ProfileSettingViewController ()
 
@@ -325,6 +326,7 @@
     [SVProgressHUD dismiss];
 }
 
+#pragma mark - Validation Methods
 
 -(BOOL)validateEmail:(NSString *)checkString {
     BOOL stricterFilter = YES;
@@ -333,6 +335,20 @@
     NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
     return [emailTest evaluateWithObject:checkString];
+}
+
+- (BOOL)validateInfo:(NSString *)input{
+    if(input.length > MAX_INFO_LENGTH){
+        NSNumber *maxNum = [NSNumber numberWithInt:MAX_INFO_LENGTH];
+        NSString *maxLengthMsg = [@"Max characters is " stringByAppendingString:[maxNum stringValue]];
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops" message:maxLengthMsg delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+        [alert show];
+        
+        return NO;
+    }else{
+        return YES;
+    }
 }
 
 - (void)validateDisplayName:(NSString *)name block:(void (^)(BOOL succeeded))completionBlock{
@@ -384,12 +400,17 @@
     }
 }
 
+- (void)textFieldDidEndEditing:(UITextField *)textField{
+    [self validateInfo:textField.text];
+}
+
 #pragma mark - TextView Delegate
 - (void)textViewDidBeginEditing:(UITextView *)textView {
     
     // flag to detect changes
     self.didEditProfile = YES;
     
+    // checking if member editing bio
     if([textView.text isEqualToString:@"What's your story?"]){
         textView.text = @"";
         // set text color to teamstory color
@@ -404,7 +425,6 @@
         textView.text = @"What's your story?";
     }
 }
-
 
 #pragma mark - Keyboard Related Methods
 
