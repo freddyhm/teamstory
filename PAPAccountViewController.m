@@ -16,7 +16,9 @@
 
 #define SPACE_FOR_COUNTS 10
 #define FIRST_X_POS 15
+#define MULTI_LINE_Y_POS 350
 #define MAX_LABEL_WIDTH 290
+#define VERTICAL_SPACE_FOR_MULTI_LINE 50
 
 @interface PAPAccountViewController() {
     float alphaValue_twitter;
@@ -125,7 +127,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     [super.refreshControl removeFromSuperview];
     [self.feed setBounces:NO];
     
-    // hide back button
+    // hide default back button
     [self.navigationItem setHidesBackButton:YES];
     [self.navigationController.navigationBar setShadowImage:[UIImage new]];
     
@@ -146,392 +148,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         [NSException raise:NSInvalidArgumentException format:@"user cannot be nil"];
     }
     
-    [SVProgressHUD show];
-    
-    // Location label
-    //self.firstHeaderViewController.locationLabel.text = self.locationInfo;
-    
-
-    [self.user fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        
-        if(!error){
-        
-            self.user = (PFUser *)object;
-            self.imageFile = [self.user objectForKey:@"profilePictureMedium"];
-            self.locationInfo = [self.user objectForKey:@"location"];
-            self.descriptionInfo = [self.user objectForKey:@"description"];
-            self.websiteInfo = [self.user objectForKey:@"website"];
-            self.displayName = [self.user objectForKey:@"displayName"];
-            self.industry = [self.user objectForKey:@"industry"];
-            self.linkedin_url = [self.user objectForKey:@"linkedin_url"];
-            self.twitter_url = [self.user objectForKey:@"twitter_url"];
-            self.angellist_url = [self.user objectForKey:@"angellist_url"];
-            
-            if ([websiteInfo isEqualToString:@"http://"]) {
-                websiteInfo = nil;
-            }
-            if ([self.linkedin_url isEqualToString:@"https://www.linkedin.com/in/"]) {
-                self.linkedin_url = nil;
-            }
-            if ([self.twitter_url isEqualToString:@"https://twitter.com/"]) {
-                self.twitter_url = nil;
-            }
-            if ([self.angellist_url isEqualToString:@"https://angel.co/"]) {
-                self.angellist_url = nil;
-            }
-            
-            [self setLocationAndWebsite:self.locationInfo website:self.websiteInfo];
-            
-            
-            if (self.imageFile && locationInfo && displayName) {
-                
-                // industry label
-                self.secondHeaderViewController.industryInfo.text = self.industry;
-                
-                // description label
-                self.firstHeaderViewController.descriptionLabel.text = self.descriptionInfo;
-                
-                CGSize maximumLabelSize = CGSizeMake(300.0f, MAXFLOAT);
-                
-                CGSize expectedSize = [self.descriptionLabel sizeThatFits:maximumLabelSize];
-                
-        
-                if ([self.websiteInfo length] > 0) {
-                    //website_expectedSize = [self.websiteInfo sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}];
-                    
-                } else {
-                   // website_expectedSize = CGSizeMake(132.01f, 15.50f);
-                }
-                
-                UIColor *textColor = [UIColor colorWithRed:158.0f/255.0f green:158.0f/255.0f blue:158.0f/255.0f alpha:1.0f];
-                
-                self.navigationItem.rightBarButtonItem = [[PAPSettingsButtonItem alloc] initWithTarget:self action:@selector(settingsButtonAction:)];
-                
-                self.headerView = [[UIView alloc] init];
-                
-                self.headerView.frame = CGRectMake( 0.0f, 0.0f, self.feed.bounds.size.width, 97.0f + expectedSize.height + website_expectedSize.height + 43.0f);
-                [self.headerView setBackgroundColor:[UIColor clearColor]]; // should be clear, this will be the container for our avatar, photo count, follower count, following count, and so on
-                
-                whiteBackground = [[UIView alloc] init];
-                [whiteBackground setFrame:CGRectMake( 0.0f, 0.0f, self.feed.bounds.size.width, self.headerView.bounds.size.height - 10.0f)];
-                [whiteBackground setBackgroundColor:[UIColor whiteColor]];
-                [self.headerView addSubview:whiteBackground];
-                
-                if (self.user != [PFUser currentUser]){
-                    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-                    [backButton setFrame:CGRectMake(0, 0, 22.0f, 22.0f)];
-                    [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-                    [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
-                    [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
-                    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-                }
-            
-                
-               self.firstHeaderViewController.profilePictureImageView.layer.cornerRadius = self.firstHeaderViewController.profilePictureImageView.frame.size.width / 2;
-                    self.firstHeaderViewController.profilePictureImageView.clipsToBounds = YES;
-                
-                currentUser = [PFUser currentUser];
-                
-                /*
-                if (self.imageFile) {
-                    [self.firstHeaderViewController.profilePictureImageView setFile:self.imageFile];
-                    [self.firstHeaderViewController.profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {
-                        
-                        
-                        if (!error) {
-                            [UIView animateWithDuration:0.05f animations:^{
-                                self.firstHeaderViewController.profilePictureImageView.alpha = 1.0f;
-                            }];
-                        }
-                    }];
-                } else {
-                    NSLog(@"ImageFile Not found");
-                }*/
-
-                
-                if ([self.industry length] > 0) {
-                    self.secondHeaderViewController.industryLabel.hidden = NO;
-                    self.secondHeaderViewController.industryInfo.hidden = NO;
-                } else {
-                    self.secondHeaderViewController.industryLabel.hidden = YES;
-                    self.secondHeaderViewController.industryInfo.hidden = YES;
-                }
-                
-                if ([self.twitter_url length] > 0) {
-                    alphaValue_twitter = 1.0f;
-                    button_enable_twitter = YES;
-                } else {
-                    alphaValue_twitter = 0.4f;
-                    button_enable_twitter = NO;
-                }
-                
-                if ([self.angellist_url length] > 0) {
-                    alphaValue_angellist = 1.0f;
-                    button_enable_angellist = YES;
-                } else {
-                    alphaValue_angellist = 0.4f;
-                    button_enable_angellist = NO;
-                }
-                
-                if ([self.linkedin_url length] > 0) {
-                    alphaValue_linkedin = 1.0f;
-                    button_enable_linkedin = YES;
-                } else {
-                    alphaValue_linkedin = 0.4f;
-                    button_enable_linkedin = NO;
-                }
-                 
-                UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
-                [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]]];
-                 self.feed.backgroundView = texturedBackgroundView;
-                
-                // taps for followers/following section, all point to same method
-                
-                UITapGestureRecognizer *tap3 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
-                
-                UITapGestureRecognizer *tap4 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
-                
-                UITapGestureRecognizer *tap5 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowing:)];
-                
-                UITapGestureRecognizer *tap6 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowing:)];
-                
-                /* followers/following count & title */
-                
-                UIFont *countFont = [UIFont fontWithName:@"HelveticaNeue" size:15.0f];
-                UIColor *countColor = [UIColor colorWithRed:118.0f/255.0f green:118.0f/255.0f blue:118.0f/255.0f alpha:1.0f];
-                
-                UIColor *countTitleColor = [UIColor colorWithRed:178.0f/255.0f green:184.0f/255.0f blue:189.0f/255.0f alpha:1.0f];
-                UIFont *countTitleFont = [UIFont fontWithName:@"HelveticaNeue-Light" size:12.0f];
-                
-                // photo/moment count
-                
-                // Title
-                UILabel *photoCountTitle = [[UILabel alloc] init];
-                [photoCountTitle setTextColor:countTitleColor];
-                [photoCountTitle setFont:countTitleFont];
-                [photoCountTitle setText:@"moments"];
-                
-                CGFloat photoCountTitleWidth = [photoCountTitle.text sizeWithAttributes:@{NSFontAttributeName: countTitleFont}].width;
-                
-                [photoCountTitle setFrame:CGRectMake(108.0f, 30.0f, photoCountTitleWidth, 15.0f)];
-                [photoCountTitle setUserInteractionEnabled:YES];
-                
-                // Count
-                UILabel *photoCountLabel= [[UILabel alloc] initWithFrame:CGRectMake(108.0f, 10.0f, photoCountTitleWidth, 22.0f)];
-                [photoCountLabel setTextAlignment:NSTextAlignmentCenter];
-                [photoCountLabel setTextColor:countColor];
-                [photoCountLabel setFont:countFont];
-                [photoCountLabel setUserInteractionEnabled:YES];
-                
-                [self.headerView addSubview:photoCountLabel];
-                [self.headerView addSubview:photoCountTitle];
-                
-                // follower label & count
-                
-                // Title
-                [self.firstHeaderViewController.followerLabel addGestureRecognizer:tap3];
-                
-                // Count
-                [self.firstHeaderViewController.followerCountLabel addGestureRecognizer:tap4];
-                
-                
-                // following lable & count
-                
-                // Title
-                [self.firstHeaderViewController.followingLabel addGestureRecognizer:tap5];
-                
-                // Count
-                [self.firstHeaderViewController.followingCountLabel addGestureRecognizer:tap6];
-                
-                self.locationIconImageView = [[UIImageView alloc] initWithImage:nil];
-                [self.locationIconImageView setImage:[UIImage imageNamed:@"iconlocation.png"]];
-                [self.locationIconImageView setFrame:CGRectMake(6.0f, 88.0f + expectedSize.height, 15.0f, 15.0f)];
-                [self.headerView addSubview:self.locationIconImageView];
-                
-                // Check length of location
-                if([self.locationInfo length] == 0){
-                    self.locationInfo = @"";
-                }
-                
-                // handling slow internet / slow backend
-                if(self.locationLabel == nil ){
-                    self.locationLabel = [[UILabel alloc]init];
-                }
-                
-                if(self.locationLabel.font == nil){
-                    self.locationLabel.font = [UIFont fontWithName:@"Helvetica" size:13.0f];
-                }
-                
-                CGFloat locationLabelWidth = [self.locationLabel.text sizeWithAttributes:
-                               @{NSFontAttributeName:
-                                     self.locationLabel.font}].width;
-                
-                [self.locationLabel setFrame:CGRectMake(self.locationIconImageView.frame.origin.x + 20.0f, 88.0f + expectedSize.height, locationLabelWidth + 10.0f, 16.0f)];
-    
-
-                // the bar separating location and website link
-                self.locationSiteSeparator = [[UILabel alloc] init];
-                self.locationSiteSeparator.font = [UIFont fontWithName:@"Helvetica" size:13.0f];
-                self.locationSiteSeparator.textColor = textColor;
-            
-                if(websiteInfo.length > 0){
-                    self.locationSiteSeparator.text = @"|";
-                }
-                
-                self.locationSiteSeparator.frame = CGRectMake(locationLabelWidth + self.locationLabel.frame.origin.x + 5.0f, 91.5f + expectedSize.height, 10.0f, 10.0f);
-                
-                [self.headerView addSubview: self.locationSiteSeparator];
-                
-                websiteLink = [UIButton buttonWithType:UIButtonTypeCustom];
-                
-                
-                // calculate space left for website link
-                CGFloat spaceLeft = [[UIScreen mainScreen] bounds].size.width - self.locationSiteSeparator.frame.size.width - self.locationLabel.frame.size.width - self.locationIconImageView.frame.size.width - 20;
-                
-                // edge case when size of website link goes over screen bounds, reduce font to fit
-                if(website_expectedSize.width > spaceLeft){
-                    website_expectedSize.width = spaceLeft;
-                    websiteLink.titleLabel.adjustsFontSizeToFitWidth = YES;
-                }
-                
-                // website link
-                [self.firstHeaderViewController.websiteLink addTarget:self action:@selector(websiteLinkAction:) forControlEvents:UIControlEventTouchUpInside];
-                
-                if ([websiteInfo length] > 0) {
-                    //[self.firstHeaderViewController.websiteLink setTitle:websiteInfo forState:UIControlStateNormal];
-                }
-                
-                // social buttons
-                
-                [self.secondHeaderViewController.linkedIn setAlpha:alphaValue_angellist];
-                self.secondHeaderViewController.linkedIn.enabled = button_enable_angellist;
-                [self.secondHeaderViewController.linkedIn addTarget:self action:@selector(linkedin_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-                
-                [self.secondHeaderViewController.twitter setAlpha:alphaValue_angellist];
-                self.secondHeaderViewController.twitter.enabled = button_enable_angellist;
-                [self.secondHeaderViewController.twitter addTarget:self action:@selector(twitter_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-                
-                
-                [self.secondHeaderViewController.angelList setAlpha:alphaValue_angellist];
-                self.secondHeaderViewController.angelList.enabled = button_enable_angellist;
-                [self.secondHeaderViewController.angelList addTarget:self action:@selector(angellist_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-                
-      
-                [photoCountLabel setText:@"0"];
-                
-                PFQuery *queryPhotoCount = [PFQuery queryWithClassName:@"Photo"];
-                [queryPhotoCount whereKey:kPAPPhotoUserKey equalTo:self.user];
-                [queryPhotoCount setCachePolicy:kPFCachePolicyCacheThenNetwork];
-                [queryPhotoCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
-                    if (!error) {
-                        [photoCountLabel setText:[NSString stringWithFormat:@"%d", number]];
-                        [[PAPCache sharedCache] setPhotoCount:[NSNumber numberWithInt:number] user:self.user];
-                    }
-                }];
-                
-                // follower count
-                [self.firstHeaderViewController.followerCountLabel setText:@"0"];
-                
-                PFQuery *queryFollowerCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
-                [queryFollowerCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
-                [queryFollowerCount whereKey:kPAPActivityToUserKey equalTo:self.user];
-                [queryFollowerCount setCachePolicy:kPFCachePolicyNetworkElseCache];
-                
-                [queryFollowerCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
-                    if (!error) {
-                        [self.firstHeaderViewController.followerCountLabel setText:[NSString stringWithFormat:@"%d",number]];
-                        [self.firstHeaderViewController.followerCountLabel sizeToFit];
-                        
-                        [self.firstHeaderViewController.followerLabel setFrame:CGRectMake(self.firstHeaderViewController.followerCountLabel.frame.origin.x + self.firstHeaderViewController.followerCountLabel.frame.size.width + SPACE_FOR_COUNTS, self.firstHeaderViewController.followerLabel.frame.origin.y, self.firstHeaderViewController.followerLabel.frame.size.width, self.firstHeaderViewController.followerLabel.frame.size.height)];
-                    }
-                }];
-                
-                // following count
-                NSDictionary *followingDictionary = [[PFUser currentUser] objectForKey:@"following"];
-                [self.firstHeaderViewController.followingCountLabel setText:@"0"];
-                if (followingDictionary) {
-                    [self.firstHeaderViewController.followingCountLabel setText:[NSString stringWithFormat:@"%d", (int)[[followingDictionary allValues] count]]];
-                }
-                
-                PFQuery *queryFollowingCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
-                [queryFollowingCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
-                [queryFollowingCount whereKey:kPAPActivityFromUserKey equalTo:self.user];
-                [queryFollowingCount setCachePolicy:kPFCachePolicyNetworkElseCache];
-                
-                // get followers for current user                
-                [queryFollowingCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
-                    if (!error) {
-                        [self.firstHeaderViewController.followingCountLabel setText:[NSString stringWithFormat:@"%d", number]];
-                        [self.firstHeaderViewController.followingCountLabel sizeToFit];
-                        
-                        [self.firstHeaderViewController.followingLabel setFrame:CGRectMake(self.firstHeaderViewController.followingCountLabel.frame.origin.x + self.firstHeaderViewController.followingCountLabel.frame.size.width + SPACE_FOR_COUNTS, self.firstHeaderViewController.followingLabel.frame.origin.y, self.firstHeaderViewController.followingLabel.frame.size.width, self.firstHeaderViewController.followingLabel.frame.size.height)];
-                    }
-                }];
-              
-                // get activity points for profile owner
-                NSNumber *activityPoints = self.isProfileOwner ? [[AtMention sharedAtMention] activityPoints] : [self.user objectForKey:@"activityPoints"];
-                
-                [self.firstHeaderViewController.pointCountLabel setText:[activityPoints stringValue]];
-                [self.firstHeaderViewController.pointCountLabel sizeToFit];
-                
-                [self.firstHeaderViewController.pointLabel setFrame:CGRectMake(self.firstHeaderViewController.pointCountLabel.frame.origin.x + self.firstHeaderViewController.pointCountLabel.frame.size.width + SPACE_FOR_COUNTS, self.firstHeaderViewController.pointLabel.frame.origin.y, self.firstHeaderViewController.pointLabel.frame.size.width, self.firstHeaderViewController.pointLabel.frame.size.height)];
-                
-                
-                // set follow and message button when visiting someone's profile
-                if (!self.isProfileOwner) {
-                    
-                    
-                    UIImage *messageButtonImage = [UIImage imageNamed:@"btn_message.png"];
-                    
-                    // resize button to message and follow size (assuming both stay the same) - hurts my soul :(
-                    self.multiActionButton.frame = CGRectMake(self.multiActionButton.frame.origin.x, self.multiActionButton.frame.origin.y, messageButtonImage.size.width, self.multiActionButton.frame.size.height);
-          
-                    UIButton *messageButton = [UIButton buttonWithType:UIButtonTypeCustom];
-                    
-                    [messageButton setImage:[UIImage imageNamed:@"btn_message"] forState:UIControlStateNormal];
-                    
-                    [messageButton setFrame:CGRectMake(self.multiActionButton.frame.origin.x + self.multiActionButton.frame.size.width + 10, self.multiActionButton.frame.origin.y, messageButtonImage.size.width, messageButtonImage.size.height)];
-                    [messageButton addTarget:self action:@selector(messageButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-                    
-                    [messageButton setImage:messageButtonImage forState:UIControlStateNormal];
-                    
-                    [messageButton setImage:[UIImage imageNamed:@"btn_message_tapped"] forState:UIControlStateSelected];
-                    
-                    [self.multiActionContainerView addSubview:messageButton];
-                    
-                    // check if the currentUser is following this user
-                    PFQuery *queryIsFollowing = [PFQuery queryWithClassName:kPAPActivityClassKey];
-                    [queryIsFollowing whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
-                    [queryIsFollowing whereKey:kPAPActivityToUserKey equalTo:self.user];
-                    [queryIsFollowing whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
-                    [queryIsFollowing setCachePolicy:kPFCachePolicyNetworkElseCache];
-                    [queryIsFollowing countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
-                        if (error && [error code] != kPFErrorCacheMiss) {
-                            NSLog(@"Couldn't determine follow relationship: %@", error);
-                            self.navigationItem.rightBarButtonItem = nil;
-                        } else {
-                            if (number == 0) {
-                                [self configureFollowButton];
-                            } else {
-                                [self configureUnfollowButton];
-                            }
-                        }
-                    }];
-                }
-            }
-            
-        }else{
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Account info failed to load. Try again later" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            alert.alertViewStyle = UIAlertViewStyleDefault;
-            [alert show];
-        }
-        
-        if([SVProgressHUD isVisible]){
-            [SVProgressHUD dismiss];
-        }
-
-        self.feed.tableHeaderView = self.headerContainerViewController.view;
-    }];
+    [self loadMemberInfo];
 }
 
 - (void)showFollowers:(id)selector{
@@ -599,8 +216,18 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     
+  //  [self loadMemberInfo];
+    
+    /*
+    
     [self.user fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        
         self.user = (PFUser *)object;
+        
+        
+        // load member profile image
+        [self setMemberProfilePic:self.imageFile];
+
     
         self.accountTitleLabel.text = [self.user objectForKey:@"displayName"];
         [self.accountTitleLabel sizeToFit];
@@ -668,14 +295,283 @@ static NSString *const freddy_account = @"rblDQcdZcY";
                 [SVProgressHUD dismiss];
             }
         }];
-    }];
+    }];*/
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [[self.navigationController.tabBarController.viewControllers objectAtIndex:4] tabBarItem].image = [[UIImage imageNamed:@"nav_profile.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
 }
 
-#pragma mark - Custom
+#pragma mark - Pull & Set Member Info
+
+- (void)loadMemberInfo{
+    
+    [SVProgressHUD show];
+    
+    [self.user fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        
+        if(!error){
+            
+            self.user = (PFUser *)object;
+            self.imageFile = [self.user objectForKey:@"profilePictureMedium"];
+            self.locationInfo = [self.user objectForKey:@"location"];
+            self.descriptionInfo = [self.user objectForKey:@"description"];
+            self.websiteInfo = [self.user objectForKey:@"website"];
+            self.displayName = [self.user objectForKey:@"displayName"];
+            self.industry = [self.user objectForKey:@"industry"];
+            self.linkedin_url = [self.user objectForKey:@"linkedin_url"];
+            self.twitter_url = [self.user objectForKey:@"twitter_url"];
+            self.angellist_url = [self.user objectForKey:@"angellist_url"];
+            
+            // load member profile image
+            
+            if(self.imageFile){
+                [self setMemberProfilePic:self.imageFile];
+            }
+            
+            
+            
+            if ([websiteInfo isEqualToString:@"http://"]) {
+                websiteInfo = nil;
+            }
+            if ([self.linkedin_url isEqualToString:@"https://www.linkedin.com/in/"]) {
+                self.linkedin_url = nil;
+            }
+            if ([self.twitter_url isEqualToString:@"https://twitter.com/"]) {
+                self.twitter_url = nil;
+            }
+            if ([self.angellist_url isEqualToString:@"https://angel.co/"]) {
+                self.angellist_url = nil;
+            }
+            
+            [self setLocationAndWebsite:self.locationInfo website:self.websiteInfo];
+            
+            
+            if (self.imageFile && self.locationInfo && self.displayName) {
+                
+                // industry label
+                self.secondHeaderViewController.industryInfo.text = self.industry;
+                
+                // description label
+                self.firstHeaderViewController.descriptionLabel.text = self.descriptionInfo;
+                
+                self.navigationItem.rightBarButtonItem = [[PAPSettingsButtonItem alloc] initWithTarget:self action:@selector(settingsButtonAction:)];
+                
+                if (!self.isProfileOwner){
+                    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                    [backButton setFrame:CGRectMake(0, 0, 22.0f, 22.0f)];
+                    [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+                    [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
+                    [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
+                    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+                }
+                
+                
+                self.firstHeaderViewController.profilePictureImageView.layer.cornerRadius = self.firstHeaderViewController.profilePictureImageView.frame.size.width / 2;
+                self.firstHeaderViewController.profilePictureImageView.clipsToBounds = YES;
+                
+                currentUser = [PFUser currentUser];
+                
+                // show/hide industry label and value
+                if ([self.industry length] > 0) {
+                    self.secondHeaderViewController.industryLabel.hidden = NO;
+                    self.secondHeaderViewController.industryInfo.hidden = NO;
+                } else {
+                    self.secondHeaderViewController.industryLabel.hidden = YES;
+                    self.secondHeaderViewController.industryInfo.hidden = YES;
+                }
+                
+                // enable/disable social icons
+                if ([self.twitter_url length] > 0) {
+                    alphaValue_twitter = 1.0f;
+                    button_enable_twitter = YES;
+                } else {
+                    alphaValue_twitter = 0.4f;
+                    button_enable_twitter = NO;
+                }
+                
+                if ([self.angellist_url length] > 0) {
+                    alphaValue_angellist = 1.0f;
+                    button_enable_angellist = YES;
+                } else {
+                    alphaValue_angellist = 0.4f;
+                    button_enable_angellist = NO;
+                }
+                
+                if ([self.linkedin_url length] > 0) {
+                    alphaValue_linkedin = 1.0f;
+                    button_enable_linkedin = YES;
+                } else {
+                    alphaValue_linkedin = 0.4f;
+                    button_enable_linkedin = NO;
+                }
+                
+                UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
+                [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]]];
+                self.feed.backgroundView = texturedBackgroundView;
+                
+                // taps for followers/following section, all point to same method
+                // should be refactored to use file's delegate
+                
+                UITapGestureRecognizer *tap3 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
+                
+                UITapGestureRecognizer *tap4 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowers:)];
+                
+                UITapGestureRecognizer *tap5 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowing:)];
+                
+                UITapGestureRecognizer *tap6 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showFollowing:)];
+                
+                /* followers/following  */
+                
+                // Title
+                [self.firstHeaderViewController.followerLabel addGestureRecognizer:tap3];
+                
+                // Count
+                [self.firstHeaderViewController.followerCountLabel addGestureRecognizer:tap4];
+                
+                
+                // following label & count
+                
+                // Title
+                [self.firstHeaderViewController.followingLabel addGestureRecognizer:tap5];
+                
+                // Count
+                [self.firstHeaderViewController.followingCountLabel addGestureRecognizer:tap6];
+                
+                // handling slow internet / slow backend
+                if(self.locationLabel == nil ){
+                    self.locationLabel = [[UILabel alloc]init];
+                }
+                
+                if(self.locationLabel.font == nil){
+                    self.locationLabel.font = [UIFont fontWithName:@"Helvetica" size:13.0f];
+                }
+                
+                // website link
+                [self.firstHeaderViewController.websiteLink addTarget:self action:@selector(websiteLinkAction:) forControlEvents:UIControlEventTouchUpInside];
+                                
+                // social buttons
+                
+                [self.secondHeaderViewController.linkedIn setAlpha:alphaValue_angellist];
+                self.secondHeaderViewController.linkedIn.enabled = button_enable_angellist;
+                [self.secondHeaderViewController.linkedIn addTarget:self action:@selector(linkedin_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+                
+                [self.secondHeaderViewController.twitter setAlpha:alphaValue_angellist];
+                self.secondHeaderViewController.twitter.enabled = button_enable_angellist;
+                [self.secondHeaderViewController.twitter addTarget:self action:@selector(twitter_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+                
+                
+                [self.secondHeaderViewController.angelList setAlpha:alphaValue_angellist];
+                self.secondHeaderViewController.angelList.enabled = button_enable_angellist;
+                [self.secondHeaderViewController.angelList addTarget:self action:@selector(angellist_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+                
+                // follower count
+                [self.firstHeaderViewController.followerCountLabel setText:@"0"];
+                
+                PFQuery *queryFollowerCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
+                [queryFollowerCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
+                [queryFollowerCount whereKey:kPAPActivityToUserKey equalTo:self.user];
+                [queryFollowerCount setCachePolicy:kPFCachePolicyNetworkElseCache];
+                
+                [queryFollowerCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
+                    if (!error) {
+                        [self.firstHeaderViewController.followerCountLabel setText:[NSString stringWithFormat:@"%d",number]];
+                        [self.firstHeaderViewController.followerCountLabel sizeToFit];
+                        
+                        [self.firstHeaderViewController.followerLabel setFrame:CGRectMake(self.firstHeaderViewController.followerCountLabel.frame.origin.x + self.firstHeaderViewController.followerCountLabel.frame.size.width + SPACE_FOR_COUNTS, self.firstHeaderViewController.followerLabel.frame.origin.y, self.firstHeaderViewController.followerLabel.frame.size.width, self.firstHeaderViewController.followerLabel.frame.size.height)];
+                    }
+                }];
+                
+                // following count
+                NSDictionary *followingDictionary = [[PFUser currentUser] objectForKey:@"following"];
+                [self.firstHeaderViewController.followingCountLabel setText:@"0"];
+                if (followingDictionary) {
+                    [self.firstHeaderViewController.followingCountLabel setText:[NSString stringWithFormat:@"%d", (int)[[followingDictionary allValues] count]]];
+                }
+                
+                PFQuery *queryFollowingCount = [PFQuery queryWithClassName:kPAPActivityClassKey];
+                [queryFollowingCount whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
+                [queryFollowingCount whereKey:kPAPActivityFromUserKey equalTo:self.user];
+                [queryFollowingCount setCachePolicy:kPFCachePolicyNetworkElseCache];
+                
+                // get followers for current user
+                [queryFollowingCount countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
+                    if (!error) {
+                        [self.firstHeaderViewController.followingCountLabel setText:[NSString stringWithFormat:@"%d", number]];
+                        [self.firstHeaderViewController.followingCountLabel sizeToFit];
+                        
+                        [self.firstHeaderViewController.followingLabel setFrame:CGRectMake(self.firstHeaderViewController.followingCountLabel.frame.origin.x + self.firstHeaderViewController.followingCountLabel.frame.size.width + SPACE_FOR_COUNTS, self.firstHeaderViewController.followingLabel.frame.origin.y, self.firstHeaderViewController.followingLabel.frame.size.width, self.firstHeaderViewController.followingLabel.frame.size.height)];
+                    }
+                }];
+                
+                // get activity points for profile owner
+                NSNumber *activityPoints = self.isProfileOwner ? [[AtMention sharedAtMention] activityPoints] : [self.user objectForKey:@"activityPoints"];
+                
+                [self.firstHeaderViewController.pointCountLabel setText:[activityPoints stringValue]];
+                [self.firstHeaderViewController.pointCountLabel sizeToFit];
+                
+                [self.firstHeaderViewController.pointLabel setFrame:CGRectMake(self.firstHeaderViewController.pointCountLabel.frame.origin.x + self.firstHeaderViewController.pointCountLabel.frame.size.width + SPACE_FOR_COUNTS, self.firstHeaderViewController.pointLabel.frame.origin.y, self.firstHeaderViewController.pointLabel.frame.size.width, self.firstHeaderViewController.pointLabel.frame.size.height)];
+                
+                
+                // set follow and message button when visiting someone's profile
+                if (!self.isProfileOwner) {
+                    
+                    
+                    UIImage *messageButtonImage = [UIImage imageNamed:@"btn_message.png"];
+                    
+                    // resize button to message and follow size (assuming both stay the same) - hurts my soul :(
+                    self.multiActionButton.frame = CGRectMake(self.multiActionButton.frame.origin.x, self.multiActionButton.frame.origin.y, messageButtonImage.size.width, self.multiActionButton.frame.size.height);
+                    
+                    UIButton *messageButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                    
+                    [messageButton setImage:[UIImage imageNamed:@"btn_message"] forState:UIControlStateNormal];
+                    
+                    [messageButton setFrame:CGRectMake(self.multiActionButton.frame.origin.x + self.multiActionButton.frame.size.width + 10, self.multiActionButton.frame.origin.y, messageButtonImage.size.width, messageButtonImage.size.height)];
+                    [messageButton addTarget:self action:@selector(messageButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+                    
+                    [messageButton setImage:messageButtonImage forState:UIControlStateNormal];
+                    
+                    [messageButton setImage:[UIImage imageNamed:@"btn_message_tapped"] forState:UIControlStateSelected];
+                    
+                    [self.multiActionContainerView addSubview:messageButton];
+                    
+                    // check if the currentUser is following this user
+                    PFQuery *queryIsFollowing = [PFQuery queryWithClassName:kPAPActivityClassKey];
+                    [queryIsFollowing whereKey:kPAPActivityTypeKey equalTo:kPAPActivityTypeFollow];
+                    [queryIsFollowing whereKey:kPAPActivityToUserKey equalTo:self.user];
+                    [queryIsFollowing whereKey:kPAPActivityFromUserKey equalTo:[PFUser currentUser]];
+                    [queryIsFollowing setCachePolicy:kPFCachePolicyNetworkElseCache];
+                    [queryIsFollowing countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
+                        if (error && [error code] != kPFErrorCacheMiss) {
+                            NSLog(@"Couldn't determine follow relationship: %@", error);
+                            self.navigationItem.rightBarButtonItem = nil;
+                        } else {
+                            if (number == 0) {
+                                [self configureFollowButton];
+                            } else {
+                                [self configureUnfollowButton];
+                            }
+                        }
+                    }];
+                }
+            }
+            
+        }else{
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Account info failed to load. Try again later" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            alert.alertViewStyle = UIAlertViewStyleDefault;
+            [alert show];
+        }
+        
+        if([SVProgressHUD isVisible]){
+            [SVProgressHUD dismiss];
+        }
+        
+        self.feed.tableHeaderView = self.headerContainerViewController.view;
+    }];
+}
+
+
+#pragma mark - Button Actions
 
 -(void)messageButtonAction:(id)sender {
     [SVProgressHUD show];
@@ -824,6 +720,12 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 
 #pragma mark - Layout
 
+- (void)setMemberProfilePic:(PFFile *)imgFile{
+    
+    [self.firstHeaderViewController.profilePictureImageView setFile:[self.user objectForKey:@"profilePictureMedium"]];
+    [self.firstHeaderViewController.profilePictureImageView loadInBackground];
+}
+
 - (void)setLocationAndWebsite:(NSString *)location website:(NSString *)website{
     
     // set variables
@@ -922,8 +824,10 @@ static NSString *const freddy_account = @"rblDQcdZcY";
             
             [self.firstHeaderViewController.seperatorLabel setHidden:YES];
             
-            elem1.frame = CGRectMake(FIRST_X_POS, elem1.frame.origin.y, elem1.frame.size.width, elem1.frame.size.height);
-            elem2.frame = CGRectMake(FIRST_X_POS, elem1.frame.origin.y + 10, elem2.frame.size.width, elem2.frame.size.height);
+            NSLog(@"%f", elem1.frame.origin.y);
+            
+            elem1.frame = CGRectMake(FIRST_X_POS, MULTI_LINE_Y_POS, elem1.frame.size.width, elem1.frame.size.height);
+            elem2.frame = CGRectMake(FIRST_X_POS, MULTI_LINE_Y_POS + elem1.frame.size.height + VERTICAL_SPACE_FOR_MULTI_LINE, elem2.frame.size.width, elem2.frame.size.height);
         }
     }
 }
