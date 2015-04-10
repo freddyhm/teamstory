@@ -16,9 +16,8 @@
 
 #define SPACE_FOR_COUNTS 10
 #define FIRST_X_POS 15
-#define MULTI_LINE_Y_POS 350
 #define MAX_LABEL_WIDTH 290
-#define VERTICAL_SPACE_FOR_MULTI_LINE 50
+#define VERTICAL_SPACE_FOR_MULTI_LINE 15
 
 @interface PAPAccountViewController() {
     float alphaValue_twitter;
@@ -63,6 +62,8 @@
 @property int userStatUpdateCount;
 @property BOOL isProfileOwner;
 @property BOOL refreshInfo;
+@property float firstXPos;
+@property float firstYPos;
 
 @end
 
@@ -779,25 +780,38 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     if(isBoth){
         self.firstHeaderViewController.locationLabel.text = self.locationInfo;
         [self.firstHeaderViewController.websiteLink setTitle:self.websiteInfo forState:UIControlStateNormal];
-        
-        [self.firstHeaderViewController.locationLabel sizeToFit];
-        [self.firstHeaderViewController.websiteLink sizeToFit];
     }else if(isOnlyLoc){
         [self.firstHeaderViewController.websiteLink setHidden:YES];
         
         self.firstHeaderViewController.locationLabel.text = self.locationInfo;
-        [self.firstHeaderViewController.locationLabel sizeToFit];
     }else if(isOnlyWeb){
         [self.firstHeaderViewController.locationLabel setHidden:YES];
         
         [self.firstHeaderViewController.websiteLink setTitle:self.websiteInfo forState:UIControlStateNormal];
-        [self.firstHeaderViewController.websiteLink sizeToFit];
     }else{
         [self.firstHeaderViewController.locationLabel setHidden:YES];
         [self.firstHeaderViewController.websiteLink setHidden:YES];
     }
     
+    [self resizeLocationAndWebsite];
     [self setFrameForElements:self.firstHeaderViewController.locationLabel elem2:self.firstHeaderViewController.websiteLink];
+}
+
+- (void)resizeLocationAndWebsite{
+    
+    // change label size to fit server data
+    [self.firstHeaderViewController.locationLabel sizeToFit];
+    [self.firstHeaderViewController.websiteLink sizeToFit];
+    
+    /* Truncate tails that go over our max width. Used for labels set before latest version.Should not happen with new accounts 'cos of max character validation check */
+     
+    if(self.firstHeaderViewController.locationLabel.frame.size.width > MAX_LABEL_WIDTH){
+        [self.firstHeaderViewController.locationLabel setFrame:CGRectMake(self.firstHeaderViewController.locationLabel.frame.origin.x, self.firstHeaderViewController.locationLabel.frame.origin.y, MAX_LABEL_WIDTH, self.firstHeaderViewController.locationLabel.frame.size.height)];
+    }
+    
+    if(self.firstHeaderViewController.websiteLink.frame.size.width > MAX_LABEL_WIDTH){
+        [self.firstHeaderViewController.websiteLink setFrame:CGRectMake(self.firstHeaderViewController.websiteLink.frame.origin.x, self.firstHeaderViewController.websiteLink.frame.origin.y, MAX_LABEL_WIDTH, self.firstHeaderViewController.websiteLink.frame.size.height)];
+    }
 }
 
 - (void)setFrameForElements:(UIView *)elem1 elem2:(UIView *)elem2{
@@ -850,19 +864,31 @@ static NSString *const freddy_account = @"rblDQcdZcY";
             [self.firstHeaderViewController.seperatorLabel setHidden:NO];
             
         }else if(isOnlyElem1){
-            elem1.frame = CGRectMake(FIRST_X_POS, elem1.frame.origin.y, elem1.frame.size.width, elem1.frame.size.height);
+            elem1.frame = CGRectMake(FIRST_X_POS, self.firstYPos, elem1.frame.size.width, elem1.frame.size.height);
         }else if(isOnlyElem2){
-            elem2.frame = CGRectMake(FIRST_X_POS, elem1.frame.origin.y, elem2.frame.size.width, elem1.frame.size.height);
+            elem2.frame = CGRectMake(FIRST_X_POS, self.firstYPos, elem2.frame.size.width, elem1.frame.size.height);
         }
     }else{
         if(isBothElem){
             
             [self.firstHeaderViewController.seperatorLabel setHidden:YES];
             
-            NSLog(@"%f", elem1.frame.origin.y);
+            // get y position of first label so we can place second underneath
+            float profileImageViewY = self.firstHeaderViewController.profilePictureImageView.frame.origin.y;
+            float profileImageViewHeight = self.firstHeaderViewController.profilePictureImageView.frame.size.height;
+            float multiLineYPos = profileImageViewY + profileImageViewHeight + VERTICAL_SPACE_FOR_MULTI_LINE;
             
-            elem1.frame = CGRectMake(FIRST_X_POS, MULTI_LINE_Y_POS, elem1.frame.size.width, elem1.frame.size.height);
-            elem2.frame = CGRectMake(FIRST_X_POS, MULTI_LINE_Y_POS + elem1.frame.size.height + VERTICAL_SPACE_FOR_MULTI_LINE, elem2.frame.size.width, elem2.frame.size.height);
+            elem1.frame = CGRectMake(FIRST_X_POS, multiLineYPos, elem1.frame.size.width, elem1.frame.size.height);
+            elem2.frame = CGRectMake(FIRST_X_POS, multiLineYPos + elem1.frame.size.height, elem2.frame.size.width, elem2.frame.size.height);
+        }else{
+            
+            /*  Occurs when location or website is longer than our allowed space. Should not happen with new accounts 'cos of max character validation check. Edge case. */
+            
+            if(isOnlyElem1){
+                elem1.frame = CGRectMake(FIRST_X_POS, self.firstYPos, elem1.frame.size.width, elem1.frame.size.height);
+            }else if(isOnlyElem2){
+                elem2.frame = CGRectMake(FIRST_X_POS, self.firstYPos, elem2.frame.size.width, elem2.frame.size.height);
+            }
         }
     }
 }
@@ -1081,6 +1107,9 @@ self.multiActionButton.enabled = YES;
     // call view to load elements since we link action before view is showing - need to refactor
     [self.secondHeaderViewController view];
     [self.firstHeaderViewController view];
+    
+    
+    self.firstYPos = self.firstHeaderViewController.locationLabel.frame.origin.y;
     
     // create container controller to hold all our subviews
     self.headerContainerViewController = [[UIViewController alloc]init];

@@ -24,6 +24,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *seperatorLabel;
 @property (strong, nonatomic) IBOutlet UILabel *pointLabel;
 
+@property (strong, nonatomic) IBOutlet UIView *containerView;
 
 // values
 
