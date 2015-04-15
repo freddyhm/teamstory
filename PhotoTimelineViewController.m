@@ -109,21 +109,21 @@ enum ActionSheetTags {
     self.feed.backgroundView = self.texturedBackgroundView;
     
     // pull-to-refresh
-    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-    refreshControl.tintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:0.5f];
-    [refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
-    refreshControl.backgroundColor = [UIColor whiteColor];
-    [self.feed addSubview:refreshControl];
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.tintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:0.5f];
+    [self.refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl.backgroundColor = [UIColor whiteColor];
+    [self.feed addSubview:self.refreshControl];
     
     // creating view for extending white background
     CGRect frame = self.feed.bounds;
     frame.origin.y = -frame.size.height;
-    UIView* bgView = [[UIView alloc] initWithFrame:frame];
-    bgView.backgroundColor = [UIColor whiteColor];
+    self.extendBgView = [[UIView alloc] initWithFrame:frame];
+    self.extendBgView.backgroundColor = [UIColor whiteColor];
     
     // adding the view below the refresh control
-    [self.feed insertSubview:bgView atIndex:0];
-
+    [self.feed insertSubview:self.extendBgView atIndex:0];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidPublishPhoto:) name:PAPTabBarControllerDidFinishEditingPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidDeletePhoto:) name:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLikeOrUnlikePhoto:) name:PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotification object:nil];

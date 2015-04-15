@@ -18,6 +18,7 @@
 @property (nonatomic, strong) UIView *texturedBackgroundView;
 @property (nonatomic, strong) PFQuery *loadQuery;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (nonatomic, strong) UIView *extendBgView;
 
 - (BOOL)objectsDidLoad:(NSError *)error;
 - (void)loadObjects:(void (^)(BOOL succeeded))completionBlock isRefresh:(BOOL)isRefresh fromSource:(NSString *)fromSource;

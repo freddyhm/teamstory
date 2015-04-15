@@ -124,9 +124,11 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     
     [self createPageViewController];
     
-    // remove refresh control for home that is set by default in inherited timeline
-    [super.refreshControl removeFromSuperview];
-    [self.feed setBounces:NO];
+    // remove refresh control for home that's set by default in inherited timeline
+    [self.refreshControl removeFromSuperview];
+
+    // change extended background color to match header
+    self.extendBgView.backgroundColor = [UIColor colorWithRed:73.0f/255.0f green:174.0f/255.0f blue:137.0f/255.0f alpha:1.0f];
     
     // hide default back button
     [self.navigationItem setHidesBackButton:YES];
@@ -149,12 +151,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
         [NSException raise:NSInvalidArgumentException format:@"user cannot be nil"];
     }
     
-    UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
-    [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]]];
-    self.feed.backgroundView = texturedBackgroundView;
-    
-    
-    if (!self.isProfileOwner){
+    if (self.user != [PFUser currentUser]){
         UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [backButton setFrame:CGRectMake(0, 0, 22.0f, 22.0f)];
         [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
