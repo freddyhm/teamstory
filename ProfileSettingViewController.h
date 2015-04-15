@@ -29,4 +29,8 @@
 @property (strong, nonatomic) IBOutlet UIView *industryView;
 @property (strong, nonatomic) IBOutlet UIButton *industry_buttonAction;
 
+- (IBAction)websiteChanged:(UITextField *)sender;
+- (IBAction)locationChanged:(UITextField *)sender;
+
+
 @end

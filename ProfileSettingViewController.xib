@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="13F1077" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProfileSettingViewController">
@@ -115,13 +115,14 @@
                                             <color key="textColor" red="0.27058823529411763" green="0.29411764705882354" blue="0.34509803921568627" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Where are you?" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Z63-cg-RSe" userLabel="Location Text Field">
+                                        <textField opaque="NO" clipsSubviews="YES" tag="3" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Where are you?" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Z63-cg-RSe" userLabel="Location Text Field">
                                             <rect key="frame" x="100" y="13" width="212" height="30"/>
                                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <color key="textColor" red="0.3411764705882353" green="0.72549019607843135" blue="0.61960784313725492" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits"/>
                                             <connections>
+                                                <action selector="locationChanged:" destination="-1" eventType="editingChanged" id="Tnp-hK-n4L"/>
                                                 <outlet property="delegate" destination="-1" id="0A0-hY-nCy"/>
                                             </connections>
                                         </textField>
@@ -141,7 +142,7 @@
                                             <color key="textColor" red="0.27058823529411763" green="0.29411764705882354" blue="0.34509803921568627" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="What's your story?" translatesAutoresizingMaskIntoConstraints="NO" id="ILT-bb-LyR" userLabel="Bio Text View">
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" tag="4" contentMode="scaleToFill" fixedFrame="YES" text="What's your story?" translatesAutoresizingMaskIntoConstraints="NO" id="ILT-bb-LyR" userLabel="Bio Text View">
                                             <rect key="frame" x="95" y="9" width="212" height="77"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -199,6 +200,7 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits"/>
                                             <connections>
+                                                <action selector="websiteChanged:" destination="-1" eventType="editingChanged" id="ZKh-lF-5v3"/>
                                                 <outlet property="delegate" destination="-1" id="vLd-mg-eDF"/>
                                             </connections>
                                         </textField>
@@ -338,7 +340,7 @@
             </constraints>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-            <point key="canvasLocation" x="-306" y="-13"/>
+            <point key="canvasLocation" x="-709" y="-70"/>
         </view>
     </objects>
 </document>

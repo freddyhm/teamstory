@@ -8,16 +8,20 @@
 
 #import "ProfileSettingViewController.h"
 
+#define LOCATION_TAG_NUM 3
+#define BIO_TAG_NUM 4
 #define WEBSITE_TAG_NUM 6
 #define TWITTER_TAG_NUM 7
 #define LINKEDIN_TAG_NUM 8
 #define ANGELIST_TAG_NUM 9
-#define MAX_INFO_LENGTH 290
+#define MAX_TEXTFIELD_CHAR 50
+#define MAX_TEXTVIEW_CHAR 128
 
 @interface ProfileSettingViewController ()
 
 @property (nonatomic, strong) PFUser *user;
 @property BOOL didEditProfile;
+@property UIColor *defaultTextColor;
 
 // picker variables
 
@@ -67,6 +71,9 @@
     
     // set logo on nav bar
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
+    
+    // set default text color to twitter's color - should all be the same
+    self.defaultTextColor = self.twitter_textfield.textColor;
 
     // set back button
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -337,17 +344,67 @@
     return [emailTest evaluateWithObject:checkString];
 }
 
-- (BOOL)validateInfo:(NSString *)input{
-    if(input.length > MAX_INFO_LENGTH){
-        NSNumber *maxNum = [NSNumber numberWithInt:MAX_INFO_LENGTH];
-        NSString *maxLengthMsg = [@"Max characters is " stringByAppendingString:[maxNum stringValue]];
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops" message:maxLengthMsg delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-        [alert show];
-        
-        return NO;
-    }else{
-        return YES;
+- (BOOL)validateLength:(NSString *)input type:(NSString *)type{
+    int maxChar = [type isEqualToString:@"textfield"] ? MAX_TEXTFIELD_CHAR : MAX_TEXTVIEW_CHAR;
+    return input.length <= maxChar;
+}
+
+- (void)toggleTextColorForInput:(NSObject *)textInput{
+    
+    // method variables to hold custom object properties
+    UIColor *textColor;
+    NSString *text;
+    NSString *type;
+    UITextView *textViewInput;
+    UITextField *textFieldInput;
+    int maxChar;
+    
+    // determine if we're given a textview or a textfield
+    
+    /* Similar properties but both objects inherit from different parents*/
+    
+    if([textInput isKindOfClass:UITextView.class]){
+        textViewInput = (UITextView *)textInput;
+        text = textViewInput.text;
+        textColor = textViewInput.textColor;
+        type = @"textview";
+        maxChar = MAX_TEXTVIEW_CHAR;
+    }else if([textInput isKindOfClass:UITextField.class]){
+        textFieldInput = (UITextField *)textInput;
+        text = textFieldInput.text;
+        textColor = textFieldInput.textColor;
+        type = @"textfield";
+        maxChar = MAX_TEXTFIELD_CHAR;
+    }
+    
+    // avoid all other types of objects
+    if([type isEqualToString:@"textview"] || [type isEqualToString:@"textfield"]){
+    
+        // only show prompt once when characters go from valid to non-valid (green & validate returns NO)
+        if([textColor isEqual:self.defaultTextColor] && ![self validateLength:text type:type]){
+            
+            // change color based
+            if([type isEqualToString:@"textview"]){
+                textViewInput.textColor = [UIColor redColor];
+            }else if([type isEqualToString:@"textfield"]){
+                textFieldInput.textColor = [UIColor redColor];
+            }
+            
+            // notify member of maximum characters
+            NSNumber *maxNum = [NSNumber numberWithInt:maxChar];
+            NSString *maxLengthMsg = [@"Max characters is " stringByAppendingString:[maxNum stringValue]];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:maxLengthMsg delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+            
+        }else if([self validateLength:text type:type]){
+            
+            // keep default color if length is valid
+            if([type isEqualToString:@"textview"]){
+                textViewInput.textColor = self.defaultTextColor;
+            }else if([type isEqualToString:@"textfield"]){
+                textFieldInput.textColor = self.defaultTextColor;
+            }
+        }
     }
 }
 
@@ -398,10 +455,16 @@
             textField.text = @"https://angel.co/";
         }
     }
+    
+    
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField{
-    [self validateInfo:textField.text];
+- (void)locationChanged:(UITextField *)sender{
+    [self toggleTextColorForInput:sender];
+}
+
+- (void)websiteChanged:(UITextField *)sender{
+    [self toggleTextColorForInput:sender];
 }
 
 #pragma mark - TextView Delegate
@@ -414,7 +477,19 @@
     if([textView.text isEqualToString:@"What's your story?"]){
         textView.text = @"";
         // set text color to teamstory color
-        [self.userDescription setTextColor:[UIColor colorWithRed:87.0f/255.0f green:185.0f/255.0f blue:158.0f/255.0f alpha:1.0f]];
+        [self.userDescription setTextColor:self.defaultTextColor];
+    }
+    
+}
+
+- (void)textViewDidChange:(UITextView *)textView{
+    
+    // get unique tag for textfield
+    NSInteger tagNum = textView.tag;
+    
+    // apply validating check for bio
+    if(tagNum == BIO_TAG_NUM){
+        [self toggleTextColorForInput:textView];
     }
 }
 
@@ -661,6 +736,5 @@
     [viewController.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
     
 }
-
 
 @end
