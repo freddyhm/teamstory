@@ -504,8 +504,15 @@
         // add post type to item in title
         NSString *begTitle = @"posted a ";
         
-        // change wording "picture" to "moment" 
-        NSString *postType = [[post objectForKey:@"type"] isEqualToString:@"picture"] ? @"moment": [post objectForKey:@"type"];
+        NSString *postType = [post objectForKey:@"type"];
+        
+        // post type wasn't set until "thoughts" were introduced so for old posts set to "moment"
+        if(postType){
+            // change wording "picture" to "moment"
+            postType = [postType isEqualToString:@"picture"] ? @"moment": [post objectForKey:@"type"];
+        }else{
+            postType = @"moment";
+        }
         
         NSString *fullTitle = [begTitle stringByAppendingString:postType];
     
