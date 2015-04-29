@@ -526,8 +526,12 @@
 #pragma mark - ()
 
 - (void)scrollToTop{
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
-                      atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    
+    // check if table is empty by checking index path of the first row
+    if([self.tableView indexPathForRowAtPoint:CGPointMake(0, 0)]){
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
+                              atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    }
 }
 
 - (void)setActivityBadge:(NSString *)badge{
