@@ -474,6 +474,9 @@
     [self.navigationController pushViewController:accountViewController animated:YES];
 }
 
+#pragma mark - PAPBaseTextCellDelegate via PAPActivityCellDelegate Methods
+
+
 
 #pragma mark - PAPActivityFeedViewController
 
@@ -729,6 +732,5 @@
 - (void)removeActivitiesInReadList:(NSMutableArray *)activities{
     [self.activityReadList removeObjectsForKeys:activities];
 }
-
-
+    
 @end
