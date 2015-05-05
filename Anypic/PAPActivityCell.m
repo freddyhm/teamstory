@@ -253,7 +253,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 - (void)didTapUserButtonAction:(id)sender {
     if (self.delegate && [self.delegate respondsToSelector:@selector(cell:didTapUserButton:)]) {
-        [self.delegate cell:self didTapUserButton:self.activity];
+        [self.delegate cell:self didTapUserButton:self.user];
     }
 }
 
