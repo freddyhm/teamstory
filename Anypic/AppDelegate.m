@@ -433,21 +433,26 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     PAPTabBarController *tabBar = (PAPTabBarController *)aTabBarController;
     UINavigationController *selectedNav = (UINavigationController *)viewController;
     
-    // get selected controller and current controller
-    BOOL isHomeViewSelected = [[[selectedNav viewControllers] objectAtIndex:0] isKindOfClass:[PAPHomeViewController class]];
-    BOOL isCurrentViewHome = (int)self.tabBarController.selectedIndex == 0 ? YES : NO;
-    BOOL isDiscoverViewSelected = [[[selectedNav viewControllers] objectAtIndex:0] isKindOfClass:[discoverViewController class]];
-    
-    // scroll to top and refresh if source and destination are the same
-    if(isHomeViewSelected && isCurrentViewHome){
-        [[[selectedNav viewControllers] objectAtIndex:0] refreshCurrentFeed];
-    }else if (isDiscoverViewSelected && selectedNav.tabBarItem.tag == 1){
+    // make sure our nav controller actually has view controllers
+    /* I suspect this happens when memory is low and view controllers are released - need to repo */
+    if([[selectedNav viewControllers] count] > 0){
+            
+        // get selected controller and current controller
+        BOOL isHomeViewSelected = [[[selectedNav viewControllers] objectAtIndex:0] isKindOfClass:[PAPHomeViewController class]];
+        BOOL isCurrentViewHome = (int)self.tabBarController.selectedIndex == 0 ? YES : NO;
+        BOOL isDiscoverViewSelected = [[[selectedNav viewControllers] objectAtIndex:0] isKindOfClass:[discoverViewController class]];
         
-        // mixpanel analytics - tapped discover glow, reset tag
-        [[Mixpanel sharedInstance] track:@"Test: Tapped Discover Glow"];
-        [selectedNav.tabBarItem setTag:0];
+        // scroll to top and refresh if source and destination are the same
+        if(isHomeViewSelected && isCurrentViewHome){
+            [[[selectedNav viewControllers] objectAtIndex:0] refreshCurrentFeed];
+        }else if (isDiscoverViewSelected && selectedNav.tabBarItem.tag == 1){
+            
+            // mixpanel analytics - tapped discover glow, reset tag
+            [[Mixpanel sharedInstance] track:@"Test: Tapped Discover Glow"];
+            [selectedNav.tabBarItem setTag:0];
+        }
     }
-
+    
     /* This is a fail-safe: PAPTabBarController's "Handle outside tap gesture" should handle this before it reaches this method. Hiding and showing the tabbar is affecting this function so fail-safe is used. */
     
     // check if tab bar post menu is present, do not change tabs if so
