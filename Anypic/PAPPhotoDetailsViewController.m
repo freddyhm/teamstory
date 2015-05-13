@@ -531,9 +531,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         comment.ACL = ACL;
         
         [[PAPCache sharedCache] incrementCommentCountForPhoto:self.photo];
-        
+                
         // increment activity point
-        [[AtMention sharedAtMention] addPointToActivityCount];
+        [[ActivityPointSystem sharedActivityPointSystem] addPointToActivityCount:@"comment"];
         
         // get post type
         NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";

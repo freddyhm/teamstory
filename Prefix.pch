@@ -20,6 +20,7 @@
     #import "PAPConstants.h"
     #import "PAPUtility.h"
     #import "AtMention.h"
+    #import "ActivityPointSystem.h"
     #import <Intercom/Intercom.h>
     #import "SVProgressHUD.h"
     #import "Mixpanel.h"

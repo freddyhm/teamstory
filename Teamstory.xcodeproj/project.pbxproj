@@ -450,6 +450,7 @@
 		D579141619FF47E100585370 /* btn_camera_bright@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D579141319FF47E100585370 /* btn_camera_bright@2x.png */; };
 		D57E663619A5705100E0E3FF /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = D57E663419A5705100E0E3FF /* bg.png */; };
 		D57E663719A5705100E0E3FF /* bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D57E663519A5705100E0E3FF /* bg@2x.png */; };
+		D582782E1B02EDA900063EC7 /* ActivityPointSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = D582782D1B02EDA900063EC7 /* ActivityPointSystem.m */; };
 		D5856F8E19F87E2500D0086F /* KonotorConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5856F5919F87E2500D0086F /* KonotorConversationViewController.m */; };
 		D5856F8F19F87E2500D0086F /* KonotorConversationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5856F5A19F87E2500D0086F /* KonotorConversationViewController.xib */; };
 		D5856F9019F87E2500D0086F /* KonotorEventHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = D5856F5C19F87E2500D0086F /* KonotorEventHandler.m */; };
@@ -1214,6 +1215,8 @@
 		D57F45E81AAE4F1800CEE014 /* ParseCrashReporting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseCrashReporting.framework; path = External/ParseCrashReporting.framework; sourceTree = "<group>"; };
 		D57F45E91AAE4F1800CEE014 /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseFacebookUtils.framework; path = External/ParseFacebookUtils.framework; sourceTree = "<group>"; };
 		D57F45EA1AAE4F1800CEE014 /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseUI.framework; path = External/ParseUI.framework; sourceTree = "<group>"; };
+		D582782C1B02EDA900063EC7 /* ActivityPointSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityPointSystem.h; sourceTree = SOURCE_ROOT; };
+		D582782D1B02EDA900063EC7 /* ActivityPointSystem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityPointSystem.m; sourceTree = SOURCE_ROOT; };
 		D5856F5619F87E2500D0086F /* Konotor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Konotor.h; sourceTree = "<group>"; };
 		D5856F5819F87E2500D0086F /* KonotorConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KonotorConversationViewController.h; sourceTree = "<group>"; };
 		D5856F5919F87E2500D0086F /* KonotorConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KonotorConversationViewController.m; sourceTree = "<group>"; };
@@ -1637,6 +1640,8 @@
 				C4A6D87B157859AA009FE621 /* PAPCache.m */,
 				D51732661A8565EA006EA751 /* AtMention.h */,
 				D51732651A8565EA006EA751 /* AtMention.m */,
+				D582782C1B02EDA900063EC7 /* ActivityPointSystem.h */,
+				D582782D1B02EDA900063EC7 /* ActivityPointSystem.m */,
 				C4B60864155B085600EFA90C /* Resources */,
 				09ABC07813A1D52D009C3FCF /* Supporting Files */,
 			);
@@ -3557,7 +3562,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./External/Crashlytics.framework/run 9075de9af4f252529090970cd8c2f7e426771d92 b65a067085879699667823a2059d609d2b04476fc3804d3a5a6f9ab5896ca5d4\n\nexport PATH=/usr/local/bin:$PATH\n\nif [ \"${CONFIGURATION}\" == \"Release\" ]; then\n\ncd ./External/ProdCloudCode\n\nelse\n\ncd ./External/DevCloudCode\n\nfi\n\nparse symbols \"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}\"\n";
+			shellScript = "./External/Crashlytics.framework/run 9075de9af4f252529090970cd8c2f7e426771d92 b65a067085879699667823a2059d609d2b04476fc3804d3a5a6f9ab5896ca5d4\n\n";
 		};
 		F50D72C740BC4A25A4D688E6 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3635,6 +3640,7 @@
 				D5B1E6F61A1417130096D5EC /* CustomKeyboardViewController.m in Sources */,
 				46076EE7193E9A6000A7B317 /* PAPNotificationViewController.m in Sources */,
 				C4F102A9156C57620061BC3E /* PAPPhotoDetailsFooterView.m in Sources */,
+				D582782E1B02EDA900063EC7 /* ActivityPointSystem.m in Sources */,
 				D5F0870E1A82E25B0079C922 /* MPAbstractABTestDesignerMessage.m in Sources */,
 				C4F102AA156C57620061BC3E /* PAPPhotoDetailsHeaderView.m in Sources */,
 				D5856F8E19F87E2500D0086F /* KonotorConversationViewController.m in Sources */,

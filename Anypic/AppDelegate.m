@@ -220,7 +220,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     // load users for mention
     AtMention *one = [AtMention sharedAtMention];
     [one getAllUsers:^(NSArray *objects, BOOL succeeded, NSError *error) {}];
-    
+
     // Flight recorder
     [[FlightRecorder sharedInstance] setAccessKey:FLIGHT_RECORDER_ACCESS_KEY secretKey:FLIGHT_RECORDER_SECRET_KEY];
     [[FlightRecorder sharedInstance] setShouldStartLocationManager:YES];
@@ -734,6 +734,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
 
 
 #pragma mark - ()
+
 
 - (void)setUserCurrentScreen:(NSString *)currentScreen setTargetRoom:(PFObject *)targetRoom setTargetUser:(PFUser *)user setNavigationController:(UINavigationController *)navigationController{
     self.userView = currentScreen;

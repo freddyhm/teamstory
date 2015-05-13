@@ -153,19 +153,6 @@ enum ActionSheetTags {
 
 #pragma mark - Custom
 
-- (void)updateActivityPoints{
-    
-    [[AtMention sharedAtMention] addPointToActivityCount];
-    
-    // check if home controller is in the stack before updating points
-    for (int i = 0; i < self.navigationController.viewControllers.count; i++) {
-        if([[self.navigationController.viewControllers objectAtIndex:i] isKindOfClass:PAPHomeViewController.class]){
-            PAPHomeViewController *homeViewController = [self.navigationController.viewControllers objectAtIndex:i];
-            [homeViewController getActivityPoints];
-        }
-    }
-}
-
 - (NSIndexPath *)indexPathForObject:(PFObject *)targetObject {
     for (int i = 0; i < self.objects.count; i++) {
         PFObject *object = [self.objects objectAtIndex:i];
@@ -825,15 +812,6 @@ enum ActionSheetTags {
     
     if (liked) {
         
-        // check if the post author is the same as current user
-        NSString *postAuthorId = [[photo objectForKey:@"user"] objectId];
-        BOOL isAuthor = [[[PFUser currentUser] objectId] isEqualToString:postAuthorId];
-        
-        // only increment by one when post author is not the same as current user
-        if(!isAuthor){
-            [self updateActivityPoints];
-        }
-    
         // get post type
         NSString *postType = [photo objectForKey:@"type"] != nil ? [photo objectForKey:@"type"] : @"";
         

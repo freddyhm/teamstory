@@ -252,7 +252,7 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
 - (void)postButtonAction:(id)sender {
     
     // increment activity point
-    [[AtMention sharedAtMention] addPointToActivityCount];
+    [[ActivityPointSystem sharedActivityPointSystem] addPointToActivityCount:@"post"];
     
     if ([self.url_textField.text rangeOfString:@"youtube.com"].location != NSNotFound || [self.url_textField.text rangeOfString:@"youtu.be"].location != NSNotFound) {
         

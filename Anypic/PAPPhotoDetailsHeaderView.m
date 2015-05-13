@@ -527,12 +527,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     }
     
     if (liked) {
-        
-        // increment activity point if not pic owner
-        if(!self.isPhotographer){
-            [[AtMention sharedAtMention] addPointToActivityCount];
-        }
-        
+            
         // get post type
         NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
         

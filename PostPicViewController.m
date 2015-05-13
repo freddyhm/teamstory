@@ -233,7 +233,7 @@
 - (void)cropPressed {
     
     // increment activity point
-    [[AtMention sharedAtMention] addPointToActivityCount];
+    [[ActivityPointSystem sharedActivityPointSystem] addPointToActivityCount:@"post"];
     
     // show spinning indicator
     [SVProgressHUD show];
