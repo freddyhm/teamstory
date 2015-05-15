@@ -353,7 +353,7 @@ Parse.Cloud.afterSave('Activity', function(request) {
                       
                       var fromUser = request.object.get("fromUser");
                       var fromUserId = fromUser != undefined ? request.object.get("fromUser").id : "";
-                      var fromUserEmail = fromUser != undefined ? request.user.get("email") : "";
+                      var fromUserEmail = (fromUser != undefined) && (request.user != undefined) ? request.user.get("email") : "";
                       
                       if (request.object.get("type") === "membership") {
                       var Mailgun = require('mailgun');
@@ -634,14 +634,18 @@ Parse.Cloud.define ('incrementCounter', function(request, response) {
                     query.get(request.params.currentObjectId, {
                               success: function(counter) {
                               
+                              // init what we need to increment and add extra points
                               var photoOwner = counter.get('user');
-                              var points;
-                              var commentCount = 0;
+                              var points = 0;
+                              var commentCount = getCommentCount(counter);
                               var newDiscoverTotalPoints = 0;
                               
                               if (request.params.type === 'comment') {
                                 points = 2;
+                              
+                                 // update & get new comment count for photo
                                 commentCount = incrementCommentCounter(counter);
+                              
                               } else {
                                 points = 1;
                               }
@@ -653,6 +657,7 @@ Parse.Cloud.define ('incrementCounter', function(request, response) {
                                   counter.set('discoverCount', newDiscoverTotalPoints);
                               }
                               
+                              // check if new totals qualify for extra profile activity points
                               evaluateActivityForPoints(photoOwner, counter, commentCount, newDiscoverTotalPoints);
                               
                               return counter.save({
@@ -670,33 +675,50 @@ Parse.Cloud.define ('incrementCounter', function(request, response) {
         
         function evaluateActivityForPoints(owner, photoObj, photoCommentCount, discoverCount){
             
-                    console.log("in evaluate");
-                    
+            // criteria for extra activity points
             var isExtraForComments = photoCommentCount > 5;
             var isExtraForDiscoverPoints = discoverCount > 30;
                     
-            if(isExtraForComments){
-                    console.log("in extra for comments");
+            // add one after the other if all activities pass, if not add the one that passed
+            if(isExtraForComments && isExtraForDiscoverPoints){
+                    console.log("in both");
                 addExtraActivityPoints("comments", owner, photoObj, function(){
-                   if(isExtraForDiscoverPoints){
-                                       console.log("in discover");
-                      addExtraActivityPoints("discoverCount", photoOwner, counter);
-                   }
+                                       
+                    console.log("going to discover");
+                    addExtraActivityPoints("discoverCount", owner, photoObj);
                 });
+            }else if(isExtraForComments){
+                    
+                    console.log("in comments");
+                addExtraActivityPoints("comments", owner, photoObj);
             }else if(isExtraForDiscoverPoints){
-                addExtraActivityPoints("discoverCount", photoOwner, counter);
+                    
+                                        console.log("in discover");
+                addExtraActivityPoints("discoverCount", owner, photoObj);
             }
         }
+        
+                    
                     
         function incrementCommentCounter(photoObj){
-            var photoCommentCount = photoObj.get('commentCount') !== undefined ? photoObj.get('commentCount') + 1 : 1;
+             
+            // get, incremement, update, and return with new total
+            var commentCount = getCommentCount(photoObj);
+            var photoCommentCount = commentCount !== undefined ? commentCount + 1 : 1;
             photoObj.set('commentCount', photoCommentCount);
-            photoObj.save();
+
                     
             return photoCommentCount;
         }
                     
+        function getCommentCount(photoObj){
+            return photoObj.get('commentCount');
+        }
+                    
         function checkExtraActivityPoints(type, photoObj){
+                    
+            // checks if we've already added the extra points based on type for the photo
+            // points get awarded only once after a certain number of activity
             var extraPointsList = photoObj.get('extraActivityPoints');
             var hasExtraActivityPoints = false;
             
@@ -708,21 +730,13 @@ Parse.Cloud.define ('incrementCounter', function(request, response) {
                     
                     
         function addExtraActivityPoints(type, owner, photoObj, callback){
-                    
+            
+            // make sure we're rewarding this type of activity for the first time
             var hasExtraActivityPoints = checkExtraActivityPoints(type, photoObj);
                     
             if(!hasExtraActivityPoints){
-                
-                var photoObjActivityExtra = photoObj.get('extraActivityPoints');
-                
-                if(photoObjActivityExtra === undefined){
-                  photoObjActivityExtra = [];
-                }
-                    
-                photoObjActivityExtra.push(type);
-                
-                console.log(photoObjActivityExtra[0]);
-                    
+                   
+                // set points based on type
                 var extraPoints = 0;
                 
                 if(type === "comments"){
@@ -730,27 +744,73 @@ Parse.Cloud.define ('incrementCounter', function(request, response) {
                 }else if(type === "discoverCount"){
                     extraPoints = 5;
                 }
-                        
-                        
-                var ownerQuery = new Parse.Query('User');
-                ownerQuery.get(owner.id,{
-                                       success: function(photoOwner) {
-                                            // The object was retrieved successfully.
-                                            var newActivityPointsTotal = photoOwner.get('activityPoints') + extraPoints;
-                               
-                                            photoOwner.set('activityPoints', newActivityPointsTotal);
-                                            photoOwner.save();
-                               
-                                            photoObj.set('extraActivityPoints', photoObjActivityExtra);
-                                            photoObj.save();
-                               
-                                            callback();
-                                       },
-                                       error: function(object, error) {
-                                       // The object was not retrieved successfully.
-                                       }
+            
+                savePointsToUserProfile(extraPoints, type, owner, photoObj, function(){
+                                        
+                                        
+                                        
+                                        console.log("calling 1");
+                    if(callback){
+                                        
+                                        console.log("going back grom save user points");
+                      callback();
+                    }
                 });
+                    
+            }else{
+                if(callback){
+                    callback();
+                }
             }
         }
                     
+        function savePointsToUserProfile(extraPoints, type, owner, photoObj, callback){
+                    
+            // get and set new values for post owner
+            var ownerQuery = new Parse.Query('User');
+                    
+            ownerQuery.get(owner.id,{
+                   success: function(photoOwner) {
+                   
+                   // save new points
+                   var newActivityPointsTotal = photoOwner.get('activityPoints') + extraPoints;
+                   photoOwner.set('activityPoints', newActivityPointsTotal);
+                   photoOwner.save();
+                   
+                   }
+            });
+                    
+            // refactor: this should be triggered after we're sure that the user's points are saved
+            // problem: does not trigger within photoOwner.save I suspect it's a callback issue
+            saveActivityExtraToPostList(type, photoObj, function(){
+                if(callback){
+                  callback();
+                }
+            });
+        }
+                    
+        function saveActivityExtraToPostList(type, photoObj, callback){
+                    
+            // get our list of what's been added already
+            var photoObjActivityExtra = photoObj.get('extraActivityPoints');
+            
+            // set to empty if this is the first activity
+            if(photoObjActivityExtra === undefined){
+              photoObjActivityExtra = [];
+            }
+                    
+            // add new activity the photos list after points have been awarded to user
+            photoObjActivityExtra.push(type);
+                    
+            photoObj.set('extraActivityPoints', photoObjActivityExtra);
+                    
+            photoObj.save(null, {
+                      success: function(gameScore) {
+                          if(callback){
+                            callback();
+                          }
+                          
+                }
+            });
+        }
 });
