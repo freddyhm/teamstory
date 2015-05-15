@@ -636,24 +636,24 @@ Parse.Cloud.define ('incrementCounter', function(request, response) {
                               
                               var photoOwner = counter.get('user');
                               var points;
+                              var commentCount = 0;
+                              var newDiscoverTotalPoints = 0;
                               
                               if (request.params.type === 'comment') {
-                              points = 2;
+                                points = 2;
+                                commentCount = incrementCommentCounter(counter);
                               } else {
-                              points = 1;
+                                points = 1;
                               }
                               
                               if (counter.get('discoverCount') === undefined) {
-                              counter.set('discoverCount', points);
+                                  counter.set('discoverCount', points);
                               } else {
-                              
-                                  var newTotalPoints = counter.get('discoverCount') + points;
-                                  counter.set('discoverCount', newTotalPoints);
-                              
-                                  if(newTotalPoints > 30){
-                                    addExtraActivityPoints(photoOwner, 'discover');
-                                  }
+                                  newDiscoverTotalPoints = counter.get('discoverCount') + points;
+                                  counter.set('discoverCount', newDiscoverTotalPoints);
                               }
+                              
+                              evaluateActivityForPoints(photoOwner, counter, commentCount, newDiscoverTotalPoints);
                               
                               return counter.save({
                                                   success:function () {
@@ -667,26 +667,90 @@ Parse.Cloud.define ('incrementCounter', function(request, response) {
                               response.error('could not be saved');
                               }
                               });
-                    
-        function addExtraActivityPoints(owner, type){
+        
+        function evaluateActivityForPoints(owner, photoObj, photoCommentCount, discoverCount){
             
-            var ownerQuery = new Parse.Query('User');
-                    ownerQuery.get(owner.id,{
-                                   success: function(photoOwner) {
-                                   // The object was retrieved successfully.
-                                   var newActivityPointsTotal = photoOwner.get('activityPoints') + 5;
-                                    photoOwner.set('activityPoints', newActivityPointsTotal);
-                                    photoOwner.save();
-                                   },
-                                   error: function(object, error) {
-                                   // The object was not retrieved successfully.
-                                   }
-                        });
-
+                    console.log("in evaluate");
+                    
+            var isExtraForComments = photoCommentCount > 5;
+            var isExtraForDiscoverPoints = discoverCount > 30;
+                    
+            if(isExtraForComments){
+                    console.log("in extra for comments");
+                addExtraActivityPoints("comments", owner, photoObj, function(){
+                   if(isExtraForDiscoverPoints){
+                                       console.log("in discover");
+                      addExtraActivityPoints("discoverCount", photoOwner, counter);
+                   }
+                });
+            }else if(isExtraForDiscoverPoints){
+                addExtraActivityPoints("discoverCount", photoOwner, counter);
+            }
         }
                     
-});
-
-Parse.Cloud.define ('addExtraActivityPoints', function(request, response) {
-    
+        function incrementCommentCounter(photoObj){
+            var photoCommentCount = photoObj.get('commentCount') !== undefined ? photoObj.get('commentCount') + 1 : 1;
+            photoObj.set('commentCount', photoCommentCount);
+            photoObj.save();
+                    
+            return photoCommentCount;
+        }
+                    
+        function checkExtraActivityPoints(type, photoObj){
+            var extraPointsList = photoObj.get('extraActivityPoints');
+            var hasExtraActivityPoints = false;
+            
+            if(extraPointsList !== undefined && extraPointsList.indexOf(type) !== -1){
+                hasExtraActivityPoints = true;
+            }
+           return hasExtraActivityPoints;
+        }
+                    
+                    
+        function addExtraActivityPoints(type, owner, photoObj, callback){
+                    
+            var hasExtraActivityPoints = checkExtraActivityPoints(type, photoObj);
+                    
+            if(!hasExtraActivityPoints){
+                
+                var photoObjActivityExtra = photoObj.get('extraActivityPoints');
+                
+                if(photoObjActivityExtra === undefined){
+                  photoObjActivityExtra = [];
+                }
+                    
+                photoObjActivityExtra.push(type);
+                
+                console.log(photoObjActivityExtra[0]);
+                    
+                var extraPoints = 0;
+                
+                if(type === "comments"){
+                    extraPoints = 1;
+                }else if(type === "discoverCount"){
+                    extraPoints = 5;
+                }
+                        
+                        
+                var ownerQuery = new Parse.Query('User');
+                ownerQuery.get(owner.id,{
+                                       success: function(photoOwner) {
+                                            // The object was retrieved successfully.
+                                            var newActivityPointsTotal = photoOwner.get('activityPoints') + extraPoints;
+                               
+                                            photoOwner.set('activityPoints', newActivityPointsTotal);
+                                            photoOwner.save();
+                               
+                                            photoObj.set('extraActivityPoints', photoObjActivityExtra);
+                                            photoObj.save();
+                               
+                                            callback();
+                                       },
+                                       error: function(object, error) {
+                                       // The object was not retrieved successfully.
+                                       }
+                });
+            }
+        }
+                    
 });
