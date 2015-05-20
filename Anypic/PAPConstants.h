@@ -7,7 +7,7 @@
 typedef enum {
 	PAPHomeTabBarItemIndex = 0,
     PAPPerksTabBarItemIndex = 1,
-	PAPEmptyTabBarItemIndex = 2,
+	PAPMessageTabBarItemIndex = 2,
 	PAPActivityTabBarItemIndex = 3,
     PAPProfileTabBarItemIndex = 4
 } PAPTabBarControllerViewControllerIndex;
