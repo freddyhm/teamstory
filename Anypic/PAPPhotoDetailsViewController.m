@@ -100,11 +100,14 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     [super viewDidLoad];
     
+    // get post type
+    NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
+    
     // mixpanel analytics
-    [[Mixpanel sharedInstance] track:@"Viewed Details" properties:@{@"Type":[self.photo objectForKey:@"type"], @"Source": self.source}];
+    [[Mixpanel sharedInstance] track:@"Viewed Details" properties:@{@"Type":postType, @"Source": self.source}];
     
     // flightrecorder event analytics
-    [[FlightRecorder sharedInstance] trackEventWithCategory:@"details_screen" action:@"viewing_post_details" label:[self.photo objectForKey:@"type"] value:self.source];
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"details_screen" action:@"viewing_post_details" label:postType value:self.source];
     
     [self.postDetails setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     self.postDetails.delegate = self;
@@ -203,8 +206,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.postDetails.showsVerticalScrollIndicator = NO;
     
     [self loadObjects];
-    
-    NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
     
     self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
     self.customKeyboard.delegate = self;
