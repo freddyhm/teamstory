@@ -342,6 +342,9 @@
 		D5182C93193E1FDE00DD578C /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5182C92193E1FDE00DD578C /* Default@2x.png */; };
 		D51C02331A2830CD00A663CD /* NavWrapperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D51C02321A2830CD00A663CD /* NavWrapperViewController.m */; };
 		D51C98A218E28D16001230DA /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D51C98A118E28D16001230DA /* libGoogleAnalyticsServices.a */; };
+		D52375741B0FA4CF00EC5070 /* ProjectPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D52375731B0FA4CF00EC5070 /* ProjectPostViewController.m */; };
+		D52375791B0FA63300EC5070 /* ProjectPostViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D52375781B0FA63300EC5070 /* ProjectPostViewController.xib */; };
+		D523757B1B0FA7A900EC5070 /* ProjectPostViewControllerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = D523757A1B0FA7A900EC5070 /* ProjectPostViewControllerTest.m */; };
 		D527D3AF1A2405C40072766E /* PostPicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D527D3AD1A2405C40072766E /* PostPicViewController.m */; };
 		D528C37F191034DE00CEEA35 /* ButtonLikeComment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D528C37C191034DE00CEEA35 /* ButtonLikeComment@2x.png */; };
 		D528C380191034DE00CEEA35 /* ButtonLikeCommentSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = D528C37D191034DE00CEEA35 /* ButtonLikeCommentSelected.png */; };
@@ -1081,6 +1084,10 @@
 		D51C989F18E28D16001230DA /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
 		D51C98A018E28D16001230DA /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
 		D51C98A118E28D16001230DA /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
+		D52375721B0FA4CF00EC5070 /* ProjectPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectPostViewController.h; sourceTree = SOURCE_ROOT; };
+		D52375731B0FA4CF00EC5070 /* ProjectPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectPostViewController.m; sourceTree = SOURCE_ROOT; };
+		D52375781B0FA63300EC5070 /* ProjectPostViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProjectPostViewController.xib; sourceTree = SOURCE_ROOT; };
+		D523757A1B0FA7A900EC5070 /* ProjectPostViewControllerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectPostViewControllerTest.m; sourceTree = "<group>"; };
 		D527D3AC1A2405C40072766E /* PostPicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostPicViewController.h; sourceTree = SOURCE_ROOT; };
 		D527D3AD1A2405C40072766E /* PostPicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostPicViewController.m; sourceTree = SOURCE_ROOT; };
 		D528C37C191034DE00CEEA35 /* ButtonLikeComment@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonLikeComment@2x.png"; sourceTree = "<group>"; };
@@ -2200,6 +2207,7 @@
 		74B86B911562DB2600CAFFD2 /* PhotoViews */ = {
 			isa = PBXGroup;
 			children = (
+				D52375781B0FA63300EC5070 /* ProjectPostViewController.xib */,
 				D5903C74192EBBF900DC9896 /* ThoughtPostViewController.xib */,
 			);
 			name = PhotoViews;
@@ -2325,6 +2333,8 @@
 				46A1DCAC195BB6F100729FD0 /* PAPlinkPostViewController.m */,
 				D527D3AC1A2405C40072766E /* PostPicViewController.h */,
 				D527D3AD1A2405C40072766E /* PostPicViewController.m */,
+				D52375721B0FA4CF00EC5070 /* ProjectPostViewController.h */,
+				D52375731B0FA4CF00EC5070 /* ProjectPostViewController.m */,
 			);
 			name = "Upload Post ";
 			sourceTree = "<group>";
@@ -2414,6 +2424,7 @@
 			isa = PBXGroup;
 			children = (
 				D5135AF419EEDA78001F274A /* Supporting Files */,
+				D523757A1B0FA7A900EC5070 /* ProjectPostViewControllerTest.m */,
 			);
 			path = "Teamstory Tests";
 			sourceTree = "<group>";
@@ -3240,6 +3251,7 @@
 				D55AEF1F19BA5E3800ECF342 /* btn_webview_options@2x.png in Resources */,
 				D5F0874D1A82E25B0079C922 /* test_variant.json in Resources */,
 				464AE48B1A310721009835CD /* loading_msg_list@2x.png in Resources */,
+				D52375791B0FA63300EC5070 /* ProjectPostViewController.xib in Resources */,
 				466ED03A1A8E6BC300FA4F29 /* inviteDiscover@3x.png in Resources */,
 				D5379A731ACB9DC200DA784B /* btn_edit_profile_tapped.png in Resources */,
 				D5856F9D19F87E2600D0086F /* konotor_cross@2x.png in Resources */,
@@ -3640,6 +3652,7 @@
 				D5B1E6F61A1417130096D5EC /* CustomKeyboardViewController.m in Sources */,
 				46076EE7193E9A6000A7B317 /* PAPNotificationViewController.m in Sources */,
 				C4F102A9156C57620061BC3E /* PAPPhotoDetailsFooterView.m in Sources */,
+				D52375741B0FA4CF00EC5070 /* ProjectPostViewController.m in Sources */,
 				D582782E1B02EDA900063EC7 /* ActivityPointSystem.m in Sources */,
 				D5F0870E1A82E25B0079C922 /* MPAbstractABTestDesignerMessage.m in Sources */,
 				C4F102AA156C57620061BC3E /* PAPPhotoDetailsHeaderView.m in Sources */,
@@ -3739,6 +3752,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D523757B1B0FA7A900EC5070 /* ProjectPostViewControllerTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

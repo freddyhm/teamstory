@@ -12,6 +12,7 @@
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
 #import "PAPLoginSelectionViewController.h"
+#import "ProjectPostViewController.h"
 
 @interface PAPTabBarController ()
 @property (nonatomic,strong) NSString *imageSource;
@@ -269,7 +270,7 @@
     postButton.selected = self.postButton.selected ? NO : YES;
     self.postMenu.hidden = YES;
     
-    ThoughtPostViewController *thoughtPostViewController = [[ThoughtPostViewController alloc] init];
+    ProjectPostViewController *thoughtPostViewController = [[ProjectPostViewController alloc] init];
     thoughtPostViewController.delegate = self;
     
     // nav controller here serves to display nav bar easily
