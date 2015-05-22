@@ -345,6 +345,7 @@
 		D52375741B0FA4CF00EC5070 /* ProjectPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D52375731B0FA4CF00EC5070 /* ProjectPostViewController.m */; };
 		D52375791B0FA63300EC5070 /* ProjectPostViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D52375781B0FA63300EC5070 /* ProjectPostViewController.xib */; };
 		D523757B1B0FA7A900EC5070 /* ProjectPostViewControllerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = D523757A1B0FA7A900EC5070 /* ProjectPostViewControllerTest.m */; };
+		D523757E1B0FAF3200EC5070 /* FakeTextContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = D523757D1B0FAF3200EC5070 /* FakeTextContainer.m */; };
 		D527D3AF1A2405C40072766E /* PostPicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D527D3AD1A2405C40072766E /* PostPicViewController.m */; };
 		D528C37F191034DE00CEEA35 /* ButtonLikeComment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D528C37C191034DE00CEEA35 /* ButtonLikeComment@2x.png */; };
 		D528C380191034DE00CEEA35 /* ButtonLikeCommentSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = D528C37D191034DE00CEEA35 /* ButtonLikeCommentSelected.png */; };
@@ -1088,6 +1089,8 @@
 		D52375731B0FA4CF00EC5070 /* ProjectPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectPostViewController.m; sourceTree = SOURCE_ROOT; };
 		D52375781B0FA63300EC5070 /* ProjectPostViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProjectPostViewController.xib; sourceTree = SOURCE_ROOT; };
 		D523757A1B0FA7A900EC5070 /* ProjectPostViewControllerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectPostViewControllerTest.m; sourceTree = "<group>"; };
+		D523757C1B0FAF3200EC5070 /* FakeTextContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeTextContainer.h; sourceTree = "<group>"; };
+		D523757D1B0FAF3200EC5070 /* FakeTextContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeTextContainer.m; sourceTree = "<group>"; };
 		D527D3AC1A2405C40072766E /* PostPicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostPicViewController.h; sourceTree = SOURCE_ROOT; };
 		D527D3AD1A2405C40072766E /* PostPicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostPicViewController.m; sourceTree = SOURCE_ROOT; };
 		D528C37C191034DE00CEEA35 /* ButtonLikeComment@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ButtonLikeComment@2x.png"; sourceTree = "<group>"; };
@@ -2424,6 +2427,8 @@
 			isa = PBXGroup;
 			children = (
 				D5135AF419EEDA78001F274A /* Supporting Files */,
+				D523757C1B0FAF3200EC5070 /* FakeTextContainer.h */,
+				D523757D1B0FAF3200EC5070 /* FakeTextContainer.m */,
 				D523757A1B0FA7A900EC5070 /* ProjectPostViewControllerTest.m */,
 			);
 			path = "Teamstory Tests";
@@ -3753,6 +3758,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D523757B1B0FA7A900EC5070 /* ProjectPostViewControllerTest.m in Sources */,
+				D523757E1B0FAF3200EC5070 /* FakeTextContainer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
