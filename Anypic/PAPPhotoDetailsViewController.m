@@ -893,12 +893,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             actionSheet.delegate = self;
             
             if ([self currentUserOwnsPhoto]){
-                [actionSheet setTitle:NSLocalizedString(@"Are you sure you want to delete this photo?", nil)];
+                [actionSheet setTitle:NSLocalizedString(@"Are you sure you want to delete this post?", nil)];
                 [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Yes, delete post", nil)]];
                 [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
                 actionSheet.tag = deletePhoto;
             } else {
-                [actionSheet addButtonWithTitle:@"I don't like this photo"];
+                [actionSheet addButtonWithTitle:@"I don't like this post"];
                 [actionSheet addButtonWithTitle:@"Spam or scam"];
                 [actionSheet addButtonWithTitle:@"Nudity or pornography"];
                 [actionSheet addButtonWithTitle:@"Graphic violence"];

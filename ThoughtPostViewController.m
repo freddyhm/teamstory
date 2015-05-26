@@ -388,7 +388,7 @@
                 
                 // both files have finished uploading
                 
-                // create a project objeft
+                // create a project object
                 PFObject *project = [PFObject objectWithClassName:@"Project"];
                 [project setObject:@"mocktitle" forKey:@"title"];
                 [project setObject:@"mockGoal" forKey:@"goal"];
@@ -417,6 +417,11 @@
                 // save
                 [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                     if (succeeded) {
+                        
+                        // update member's active project
+                        PFUser *user = [PFUser currentUser];
+                        [user setValue:project forKey:@"activeProject"];
+                        [user saveEventually];
                         
                         NSLog(@"Photo uploaded");
                         

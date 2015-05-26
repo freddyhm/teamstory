@@ -38,6 +38,7 @@
     self.postType = @"project";
     self.user = [PFUser currentUser];
     
+    // warn the member of special condition if they already have a project
     [self checkForActiveProject];
 }
 
