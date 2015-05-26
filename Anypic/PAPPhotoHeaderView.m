@@ -25,6 +25,11 @@
 @property (nonatomic, assign) UIImage *followButtonImage;
 @property (nonatomic, strong) UIView *activityCountView;
 
+// project related properties
+@property (nonatomic, strong) UILabel *projInfoLabel;
+@property (nonatomic, strong) UILabel *projContainer;
+@property (nonatomic, strong) PFObject *projPost;
+
 @end
 
 
@@ -83,6 +88,25 @@
         [self.userInfoLabel setAdjustsFontSizeToFitWidth:YES];
         [containerView addSubview:self.userInfoLabel];
         
+        /* need to refactor this */
+        
+        self.projInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50.0f, 20.0f, containerView.bounds.size.width - 50.0f - 72.0f, 18.0f)];
+        [self.projInfoLabel setTextColor:[UIColor colorWithRed:157.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
+        [self.projInfoLabel setFont:[UIFont systemFontOfSize:11.0f]];
+        [self.projInfoLabel setBackgroundColor:[UIColor clearColor]];
+        [self.projInfoLabel setAdjustsFontSizeToFitWidth:YES];
+        self.projInfoLabel.text = @"Working on ";
+        [containerView addSubview:self.projInfoLabel];
+        
+        self.projContainer = [[UILabel alloc] initWithFrame:CGRectMake(self.userInfoLabel.frame.origin.x + self.userInfoLabel.frame.size.width + 5, self.userInfoLabel.frame.origin.y, self.userInfoLabel.frame.size.width, self.userInfoLabel.frame.size.height)];
+        self.projContainer.text = @"";
+        [self.projContainer setUserInteractionEnabled:YES];
+        
+        // create tap gesture and add to project container
+        UITapGestureRecognizer *tapProject = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(didTapProjectLinkAction)];
+        [self.projContainer addGestureRecognizer:tapProject];
+        [containerView addSubview:self.projContainer];
+        
         // Add timestamp
         self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
         self.timestampLabel = [[UILabel alloc] init];
@@ -132,7 +156,6 @@
     headerNameLengthOffset = 35.0f;
     
     [self populateDetails];
-
 }
 
 - (void)setUserForHeaderView:(PFUser *)aUser {
@@ -156,7 +179,7 @@
 }
 
 
--(void) populateDetails {
+-(void)populateDetails {
     // user's avatar
     PFFile *profilePictureSmall = [self.user objectForKey:kPAPUserProfilePicSmallKey];
     [self.avatarImageView setFile:profilePictureSmall];
@@ -184,8 +207,6 @@
                                                                            options:NSStringDrawingUsesLineFragmentOrigin
                                                                         attributes:@{NSFontAttributeName:self.userButton.titleLabel.font, NSParagraphStyleAttributeName: paragraphStyle.copy}
                                                                            context:nil]).size;
-    
-    
     
     
     CGRect userButtonFrame = CGRectMake(userButtonPoint.x, userButtonPoint.y, userButtonSize.width, userButtonSize.height);
@@ -222,6 +243,81 @@
     
     [self.userInfoLabel setText:allInfo];
     [self.activityCount setText:[(NSNumber *)[self.user objectForKey:@"activityPoints"] stringValue]];
+    
+    [self checkForActiveProject];
+}
+
+
+#pragma mark - Project Methods
+
+- (void)checkForActiveProject{
+    [self replaceUserInfoWithProject:[self doesUserHaveActiveProject]];
+}
+
+- (BOOL)doesUserHaveActiveProject{
+    return [[[self.user objectForKey:@"activeProject"] objectId] length] > 0;
+}
+
+- (void)replaceUserInfoWithProject:(BOOL)willReplace{
+    if(willReplace){
+        [self hideExtraInfo];
+        [self setActiveProjectInfo];
+    }else{
+        [self hideActiveProjectInfo];
+        [self showExtraInfo];
+    }
+}
+
+- (void)hideExtraInfo{
+    [self.userInfoLabel setHidden:YES];
+}
+
+- (void)showExtraInfo{
+    [self.userInfoLabel setHidden:NO];
+}
+
+- (void)hideActiveProjectInfo{
+    [self.projInfoLabel setHidden:YES];
+    [self.projContainer setHidden:YES];
+}
+
+- (void)setActiveProjectInfo{
+    // need to set post for project link before we display project title
+    [self getProjectPost];
+}
+
+- (void)getProjectPost{
+    
+    // get post object from server
+    PFQuery *postQuery = [PFQuery queryWithClassName:@"Photo"];
+    [postQuery whereKey:@"project" equalTo:[self.user objectForKey:@"activeProject"]];
+    [postQuery whereKey:@"type" equalTo:@"project"];
+    [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if(!error && object){
+            self.projPost = object;
+            [self getProjectTitle];
+        }
+    }];
+}
+
+- (void)getProjectTitle{
+    // get project from server
+    PFQuery *projectQuery = [PFQuery queryWithClassName:@"Project"];
+    [projectQuery getObjectInBackgroundWithId:[[self.user objectForKey:@"activeProject"] objectId] block:^(PFObject *project, NSError *error) {
+        // set title
+        NSString *projectTitle = [project objectForKey:@"title"];
+        [self setProjectTitleContainer:projectTitle];
+    }];
+}
+
+- (void)setProjectTitleContainer:(NSString *)projTitle{
+    self.projContainer.text = projTitle;
+    [self showActiveProjectInfo];
+}
+
+- (void)showActiveProjectInfo{
+    [self.projInfoLabel setHidden:NO];
+    [self.projContainer setHidden:NO];
 }
 
 
@@ -244,6 +340,13 @@
 - (void)didTapFollowButtonAction:(UIButton *)sender {
     if (delegate && [delegate respondsToSelector:@selector(photoHeaderView:didTapFollowButtonForDiscover:user:)]) {
         [delegate photoHeaderView:self didTapFollowButtonForDiscover:sender user:self.user];
+    }
+}
+
+/* Inform delegate that the project link was tapped */
+- (void)didTapProjectLinkAction{
+    if (delegate && [delegate respondsToSelector:@selector(photoHeaderView:didTapProjectLink:)]) {
+        [delegate photoHeaderView:self didTapProjectLink:self.projPost];
     }
 }
 

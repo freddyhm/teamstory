@@ -789,6 +789,10 @@ enum ActionSheetTags {
     [self.navigationController pushViewController:accountViewController animated:YES];
 }
 
+- (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapProjectLink:(PFObject *)post{
+    [self openPhotoDetailView:post];
+}
+
 #pragma mark - PostFooterView Delegate
 
 - (void)postFooterView:(PostFooterView *)postFooterView didTapLikePhotoButton:(UIButton *)button photo:(PFObject *)photo {

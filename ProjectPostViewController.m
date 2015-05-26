@@ -12,12 +12,20 @@
 #define MAX_GOAL_LENGTH 50
 #define MAX_DUE_DATE_LENGTH 30
 
+@interface ThoughtPostViewController ()
+
+- (void)saveEdit:(id)sender;
+
+@end
+
+
 @interface ProjectPostViewController ()
 
 
 @property (weak, nonatomic) IBOutlet UITextField *projectTitle;
 @property (weak, nonatomic) IBOutlet UITextView *projectGoal;
 @property (weak, nonatomic) IBOutlet UITextField *projectDueDate;
+@property (weak, nonatomic) NSString *postType;
 
 @end
 
@@ -26,6 +34,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.postType = @"project";
 }
 
 - (void)didReceiveMemoryWarning {
@@ -83,7 +92,7 @@
 
 - (BOOL)checkInputTextIsNotEmpty:(NSString *)text{
 
-    return [text length] <= 0;
+    return [text length] > 0;
 }
 
 - (void)showEmptyInputAlert{
@@ -116,10 +125,8 @@
     
     if([self checkAllInputTextIsValid]){
         
-        NSLog(@"saving");
+        [super saveEdit:sender];
         
-    }else{
-        NSLog(@"not saved");
     }
 }
 

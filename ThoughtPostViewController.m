@@ -27,6 +27,7 @@
 @property (nonatomic, strong) NSMutableArray *suggOptions;
 @property (nonatomic, strong) UIBarButtonItem *rightNavButton;
 @property (nonatomic, strong) NSString *placeholderSuggestion;
+@property (nonatomic, strong) NSString *postType;
 @property int prevBkgdIndex;
 
 @end
@@ -46,6 +47,8 @@
 {
     
     [super viewDidLoad];
+    
+    self.postType = @"thought";
     
     // set color of nav bar to custom grey
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
@@ -258,32 +261,113 @@
     
     // increment activity point
     [[ActivityPointSystem sharedActivityPointSystem] addPointToActivityCount:@"post"];
+    
+    if([self.postType isEqualToString:@"thought"]){
 
-    if(self.thoughtTextView.contentSize.height < self.thoughtTextView.frame.size.height){
+        if(self.thoughtTextView.contentSize.height < self.thoughtTextView.frame.size.height){
+            
+            // disable save button so duplicates are not sent by mistake
+            [self.rightNavButton setEnabled:NO];
+        
+            // dismiss keyboard before taking picture
+            [self dismissKeyboard];
+            
+            // mixpanel analytics
+            [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Thought"}];
+            
+            // intercom analytics
+            [Intercom logEventWithName:@"posted-thought" metaData:@{@"":@""}];
+
+            
+            // track selected color and current suggestion   
+            [[Mixpanel sharedInstance] track:@"Uploaded Color Index" properties:@{@"Type": [[NSNumber numberWithInt:self.prevBkgdIndex] stringValue]}];
+            
+            [[Mixpanel sharedInstance] track:@"Uploaded Suggestion" properties:@{@"Type": self.placeholder.text}];
+            
+            // increment user thought count by one
+            [[Mixpanel sharedInstance].people increment:@"Thought Count" by:[NSNumber numberWithInt:1]];
+           
+            // add label to background image for picture
+            [self.backgroundImg addSubview:self.thoughtTextView];
+            
+            // create image
+            UIGraphicsBeginImageContextWithOptions(self.backgroundImg.bounds.size, NO, 0.0); //retina res
+            [self.backgroundImg.layer renderInContext:UIGraphicsGetCurrentContext()];
+            UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            
+            [SVProgressHUD show];
+            
+            [self shouldUploadImage:image block:^(BOOL completed) {
+                
+                if(completed){
+                    if (!self.photoFile || !self.thumbnailFile) {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+                        [alert show];
+                        return;
+                    }
+                    
+                    // both files have finished uploading
+                    
+                    // create a photo object
+                    PFObject *photo = [PFObject objectWithClassName:kPAPPhotoClassKey];
+                    [photo setObject:[PFUser currentUser] forKey:kPAPPhotoUserKey];
+                    [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
+                    [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
+                    [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
+                    [photo setObject:@"thought" forKey:kPAPPhotoType];
+                    [photo setObject:[NSNumber numberWithInt:0] forKey:@"discoverCount"];
+                    
+                    // photos are public, but may only be modified by the user who uploaded them
+                    PFACL *photoACL = [PFACL ACLWithUser:[PFUser currentUser]];
+                    [photoACL setPublicReadAccess:YES];
+                    photo.ACL = photoACL;
+                    
+                    // Request a background execution task to allow us to finish uploading the photo even if the app is backgrounded
+                    self.photoPostBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+                        [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
+                    }];
+                    
+                    // save
+                    [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                        if (succeeded) {
+                            
+                            NSLog(@"Photo uploaded");
+                            
+                            // create activity for posted
+                            [PAPUtility posted:photo];
+                            
+                            [[PAPCache sharedCache] setAttributesForPhoto:photo likers:[NSArray array] commenters:[NSArray array] likedByCurrentUser:NO];
+                            [[NSNotificationCenter defaultCenter] postNotificationName:PAPTabBarControllerDidFinishEditingPhotoNotification object:photo];
+                        } else {
+                            NSLog(@"Photo failed to save: %@", error);
+                            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+                            [alert show];
+                        }
+                        [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
+                    }];
+                    
+                    [self exitPost];
+                }else{
+                    [SVProgressHUD dismiss];
+                    [self.rightNavButton setEnabled:YES];
+                }
+            }];
+            
+        }else{
+            
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:[NSString stringWithFormat:@"Your post is too long"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+            
+        }
+        
+    }else{
         
         // disable save button so duplicates are not sent by mistake
         [self.rightNavButton setEnabled:NO];
-    
+        
         // dismiss keyboard before taking picture
         [self dismissKeyboard];
-        
-        // mixpanel analytics
-        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Thought"}];
-        
-        // intercom analytics
-        [Intercom logEventWithName:@"posted-thought" metaData:@{@"":@""}];
-
-        
-        // track selected color and current suggestion   
-        [[Mixpanel sharedInstance] track:@"Uploaded Color Index" properties:@{@"Type": [[NSNumber numberWithInt:self.prevBkgdIndex] stringValue]}];
-        
-        [[Mixpanel sharedInstance] track:@"Uploaded Suggestion" properties:@{@"Type": self.placeholder.text}];
-        
-        // increment user thought count by one
-        [[Mixpanel sharedInstance].people increment:@"Thought Count" by:[NSNumber numberWithInt:1]];
-       
-        // add label to background image for picture
-        [self.backgroundImg addSubview:self.thoughtTextView];
         
         // create image
         UIGraphicsBeginImageContextWithOptions(self.backgroundImg.bounds.size, NO, 0.0); //retina res
@@ -304,15 +388,22 @@
                 
                 // both files have finished uploading
                 
+                // create a project objeft
+                PFObject *project = [PFObject objectWithClassName:@"Project"];
+                [project setObject:@"mocktitle" forKey:@"title"];
+                [project setObject:@"mockGoal" forKey:@"goal"];
+                [project setObject:@"mockDueDate" forKey:@"due"];
+                
                 // create a photo object
                 PFObject *photo = [PFObject objectWithClassName:kPAPPhotoClassKey];
                 [photo setObject:[PFUser currentUser] forKey:kPAPPhotoUserKey];
                 [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
                 [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
                 [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
-                [photo setObject:@"thought" forKey:kPAPPhotoType];
+                [photo setObject:@"project" forKey:kPAPPhotoType];
+                [photo setObject:project forKey:@"project"];
                 [photo setObject:[NSNumber numberWithInt:0] forKey:@"discoverCount"];
-                
+                                
                 // photos are public, but may only be modified by the user who uploaded them
                 PFACL *photoACL = [PFACL ACLWithUser:[PFUser currentUser]];
                 [photoACL setPublicReadAccess:YES];
@@ -348,12 +439,7 @@
                 [self.rightNavButton setEnabled:YES];
             }
         }];
-        
-    }else{
-        
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:[NSString stringWithFormat:@"Your post is too long"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alert show];
-        
+    
     }
 }
 
