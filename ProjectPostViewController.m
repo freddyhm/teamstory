@@ -26,6 +26,7 @@
 @property (weak, nonatomic) IBOutlet UITextView *projectGoal;
 @property (weak, nonatomic) IBOutlet UITextField *projectDueDate;
 @property (weak, nonatomic) NSString *postType;
+@property (weak, nonatomic) PFUser *user;
 
 @end
 
@@ -35,6 +36,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.postType = @"project";
+    self.user = [PFUser currentUser];
+    
+    [self checkForActiveProject];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -126,22 +130,29 @@
     if([self checkAllInputTextIsValid]){
         
         [super saveEdit:sender];
-        
+    }
+}
+
+- (void)checkForActiveProject{
+    [self.user fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        self.user = (PFUser *)object;
+        BOOL hasProject = [[[self.user objectForKey:@"activeProject"] objectId] length] > 0;
+        [self showExistingProjectWarning:hasProject];
+    }];
+}
+
+- (void)showExistingProjectWarning:(BOOL)hasProject{
+    if(hasProject){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning!"
+                                                        message:@"Creating a new project post will not delete your current one. It will only replace your 'working on...' status"
+                                                       delegate:self
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
     }
 }
 
 
 
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

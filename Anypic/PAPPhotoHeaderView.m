@@ -107,6 +107,8 @@
         [self.projContainer addGestureRecognizer:tapProject];
         [containerView addSubview:self.projContainer];
         
+        [self hideActiveProjectInfo];
+        
         // Add timestamp
         self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
         self.timestampLabel = [[UILabel alloc] init];
@@ -251,11 +253,11 @@
 #pragma mark - Project Methods
 
 - (void)checkForActiveProject{
-    [self replaceUserInfoWithProject:[self doesUserHaveActiveProject]];
-}
-
-- (BOOL)doesUserHaveActiveProject{
-    return [[[self.user objectForKey:@"activeProject"] objectId] length] > 0;
+    [self.user fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+         self.user = (PFUser *)object;
+         BOOL hasProject = [[[self.user objectForKey:@"activeProject"] objectId] length] > 0;
+         [self replaceUserInfoWithProject:hasProject];
+    }];
 }
 
 - (void)replaceUserInfoWithProject:(BOOL)willReplace{
