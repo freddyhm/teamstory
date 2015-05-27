@@ -79,23 +79,10 @@
     [[ActivityPointSystem sharedActivityPointSystem] getActivityPointsOnFirstRun];
     
     // button image for feedback
-    self.feedbackImg = [UIImage imageNamed:@"btn_message_empty.png"];
-    self.feedbackImgBadge = [UIImage imageNamed:@"btn_message_count.png"];
-    self.feedbackBtn = [[UIButton alloc] initWithFrame:CGRectMake(282, 0, self.feedbackImg.size.width, self.feedbackImg.size.height)];
-    self.feedbackBtn.titleEdgeInsets = UIEdgeInsetsMake(-2.0f, 1.0f, 0.0f, 0.0f);
-    self.feedbackBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
-    [self.feedbackBtn.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:10.0f]];
+    self.feedbackImg = [UIImage imageNamed:@"btn_main_invite.png"];
+    self.feedbackBtn = [[UIButton alloc] initWithFrame:CGRectMake(280, 5, self.feedbackImg.size.width, self.feedbackImg.size.height)];
+    [self.feedbackBtn setBackgroundImage:self.feedbackImg forState:UIControlStateNormal];
     [self.feedbackBtn addTarget:self action:@selector(promptFeedback:) forControlEvents:UIControlEventTouchUpInside];
-    
-    if ([[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue] > 0) {
-        [self.feedbackBtn setTitle:[[[PFUser currentUser] objectForKey:@"messagingBadge"] stringValue] forState:UIControlStateNormal];
-        self.feedbackBtn.frame = CGRectMake(275, 1, self.feedbackImgBadge.size.width, self.feedbackImgBadge.size.height);
-        [self.feedbackBtn setBackgroundImage:self.feedbackImgBadge forState:UIControlStateNormal];
-    } else {
-        self.feedbackBtn.frame = CGRectMake(275, 1, self.feedbackImg.size.width, self.feedbackImg.size.height);
-        [self.feedbackBtn setBackgroundImage:self.feedbackImg forState:UIControlStateNormal];
-        [self.feedbackBtn setTitle:nil forState:UIControlStateNormal];
-    }
 
     // feed title ui
     self.feedFontSelected = [UIFont boldSystemFontOfSize:15.0f];
@@ -233,14 +220,27 @@
 - (void) refreshBadge {
     [[PFUser currentUser] fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if ([[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue] > 0) {
-            [self.feedbackBtn setTitle:[[[PFUser currentUser] objectForKey:@"messagingBadge"] stringValue] forState:UIControlStateNormal];
-            self.feedbackBtn.frame = CGRectMake(275, 1, self.feedbackImgBadge.size.width, self.feedbackImgBadge.size.height);
-            [self.feedbackBtn setBackgroundImage:self.feedbackImgBadge forState:UIControlStateNormal];
-            [self.feedbackBtn setTitle:[[[PFUser currentUser] objectForKey:@"messagingBadge"] stringValue] forState:UIControlStateNormal];
+            UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPMessageTabBarItemIndex] tabBarItem];
+            NSNumber *messagingBadgeNumber = [[PFUser currentUser] objectForKey:@"messagingBadge"];
+            
+            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+            
+            if ([messagingBadgeNumber intValue] > 0) {
+                tabBarItem.badgeValue = [numberFormatter stringFromNumber:messagingBadgeNumber];
+            } else {
+                tabBarItem.badgeValue = nil;
+            }
+            
+            // get current selected tab
+            NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
+            
+            // current view is tabbar, clear the badge.
+            if(selectedtabIndex == PAPMessageTabBarItemIndex){
+                tabBarItem.badgeValue = nil;
+            }
         } else {
-            self.feedbackBtn.frame = CGRectMake(275, 1, self.feedbackImg.size.width, self.feedbackImg.size.height);
-            [self.feedbackBtn setBackgroundImage:self.feedbackImg forState:UIControlStateNormal];
-            [self.feedbackBtn setTitle:nil forState:UIControlStateNormal];
+            UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPMessageTabBarItemIndex] tabBarItem];
+            tabBarItem.badgeValue = nil;
         }
     }];
 }
