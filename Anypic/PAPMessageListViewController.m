@@ -73,6 +73,9 @@
         self.notificationView.titleEdgeInsets = UIEdgeInsetsMake(0.0f, -130.0f, 0.0f, 0.0f);
     }
     
+    UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPMessageTabBarItemIndex] tabBarItem];
+    tabBarItem.badgeValue = nil;
+    
     [self updateListViewQuery];
     
 }

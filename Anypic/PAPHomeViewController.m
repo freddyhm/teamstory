@@ -396,9 +396,48 @@
         [self.view.window.rootViewController presentViewController:loginSelectionViewController animated:YES completion:nil];
         return;
     }
-    PAPMessageListViewController *messageListViewController = [[PAPMessageListViewController alloc] init];
-    messageListViewController.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:messageListViewController animated:YES];
+    
+    [SVProgressHUD show];
+    
+    NSArray *activityItems = @[self];
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+    activityVC.excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypePrint];
+    [activityVC setValue:@"Join me on Teamstory!" forKey:@"subject"];
+    
+    [self.navigationController presentViewController:activityVC animated:YES completion:^{
+        [SVProgressHUD dismiss];
+    }];
+    
+    // this gets handled after an activity is completed.
+    [activityVC setCompletionHandler:^(NSString *activityType, BOOL completed) {
+        if (completed) {
+            if ([activityType isEqualToString:UIActivityTypePostToFacebook]) {
+                
+                [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Discover", @"Platform": @"Facebook"}];
+                
+                NSLog(@"facebook");
+            } else if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
+                
+                [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Discover", @"Platform": @"Twitter"}];
+                
+                NSLog(@"twitter");
+            } else if ([activityType isEqualToString:UIActivityTypeMail]) {
+                
+                [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Discover", @"Platform": @"Email"}];
+                
+                NSLog(@"email");
+            } else {
+                // all other activities.
+            }
+        }
+    }];
+    
+    if ([activityVC respondsToSelector:@selector(popoverPresentationController)])
+    {
+        // iOS 8+
+        UIPopoverPresentationController *presentationController = [activityVC popoverPresentationController];
+        presentationController.sourceView = self.view; // if button or change to self.view.
+    }
 }
 
 -(void)notificationBarButton:(id)sender {
