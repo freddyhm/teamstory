@@ -150,7 +150,7 @@
     return isUnderMax;
 }
 
-- (BOOL)checkAllInputTextIsValid{
+- (BOOL)validateBeforeSaving{
     
     BOOL areInputsNotEmpty = [self checkInputTextIsNotEmpty:self.projectTitle.text] && [self checkInputTextIsNotEmpty:self.projectGoal.text] &&  [self checkInputTextIsNotEmpty:self.projectDueDate.text];
     
@@ -194,16 +194,49 @@
     }
 }
 
-- (void)saveEdit:(id)sender {
+- (UIImageView *)buildImageWithSubviews:(UIImageView *)backgroundView{
     
-    if([self checkAllInputTextIsValid]){
-        
-        [super saveEdit:sender];
-        
-        
-        
-        
-    }
+    [backgroundView addSubview:self.projectTitleLabel];
+    [backgroundView addSubview:self.projectTitle];
+    [backgroundView addSubview:self.projectGoalLabel];
+    [backgroundView addSubview:self.projectGoal];
+    [backgroundView addSubview:self.projectDueDateLabel];
+    [backgroundView addSubview:self.projectDueDate];
+    
+    return backgroundView;
+}
+
+- (void)addExtraValueToPost:(PFObject *)post{
+    [self createProjectObj:post];
+}
+
+- (void)createProjectObj:(PFObject *)post{
+    
+    // create a project object
+    PFObject *project = [PFObject objectWithClassName:@"Project"];
+    [project setObject:self.projectTitle.text forKey:@"title"];
+    [project setObject:self.projectGoal.text forKey:@"goal"];
+    [project setObject:self.projectDueDate.text forKey:@"dueDate"];
+    
+    // set project object on post
+    [post setObject:project forKey:@"project"];
+    
+    [project saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        [self updateMemberActiveProject:project];
+    }];
+}
+
+- (void)updateMemberActiveProject:(PFObject *)project{
+    // update member's active project
+    PFUser *user = [PFUser currentUser];
+    [user setValue:project forKey:@"activeProject"];
+    [user saveEventually];
+
+}
+
+- (void)saveEdit:(id)sender {
+    [super saveEdit:sender];
+
 }
 
 - (void)checkForActiveProject{

@@ -286,12 +286,12 @@
     return self.thoughtTextView.contentSize.height < self.thoughtTextView.frame.size.height;
 }
 
-- (UIView *)buildImageWithSubviews:(UIView *)backgroundView{
+- (UIImageView *)buildImageWithSubviews:(UIImageView *)backgroundView{
     [backgroundView addSubview:self.thoughtTextView];
     return backgroundView;
 }
 
-- (UIImage *)createImage:(UIView *)backgroundView{
+- (UIImage *)createImage:(UIImageView *)backgroundView{
     // create image
     UIGraphicsBeginImageContextWithOptions(backgroundView.bounds.size, NO, 0.0); //retina res
     [backgroundView.layer renderInContext:UIGraphicsGetCurrentContext()];
@@ -300,6 +300,8 @@
     
     return image;
 }
+
+- (void)addExtraValueToPost:(PFObject *)post{}
 
 - (PFObject *)createPostObj:(NSString *)type{
     // create a photo object
@@ -315,6 +317,8 @@
     PFACL *photoACL = [PFACL ACLWithUser:[PFUser currentUser]];
     [photoACL setPublicReadAccess:YES];
     photo.ACL = photoACL;
+    
+    [self addExtraValueToPost:photo];
 
     return photo;
 }
@@ -338,6 +342,7 @@
             // set cache
             [[PAPCache sharedCache] setAttributesForPhoto:post likers:[NSArray array] commenters:[NSArray array] likedByCurrentUser:NO];
             [[NSNotificationCenter defaultCenter] postNotificationName:PAPTabBarControllerDidFinishEditingPhotoNotification object:post];
+            
         } else {
             
             // error alert box
@@ -358,64 +363,21 @@
     // track analytics
     [self trackAnalytics:self.postType];
     
-    if([self.postType isEqualToString:@"thought"]){
-
-        if([self validateBeforeSaving]){
-            
-            // disable save button so duplicates are not sent by mistake
-            [self.rightNavButton setEnabled:NO];
-        
-            // dismiss keyboard before taking picture
-            [self dismissKeyboard];
-            
-            // add label to background image for picture
-            UIImage *renderedBkgdImg = [self createImage:[self buildImageWithSubviews:self.backgroundImg]];
-            
-            [SVProgressHUD show];
-            
-            // prepare image for upload
-            [self shouldUploadImage:renderedBkgdImg block:^(BOOL completed) {
-                
-                if(completed){
-                    if (!self.photoFile || !self.thumbnailFile) {
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
-                        [alert show];
-                        return;
-                    }
-                    
-                    // create, save post, and exit
-                    [self savePost:[self createPostObj:self.postType]];
-                    [self exitPost];
-                }else{
-                    [SVProgressHUD dismiss];
-                    [self.rightNavButton setEnabled:YES];
-                }
-            }];
-            
-        }else{
-            
-            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:[NSString stringWithFormat:@"Your post is too long"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-            [alert show];
-            
-        }
-        
-    }else{
+    if([self validateBeforeSaving]){
         
         // disable save button so duplicates are not sent by mistake
         [self.rightNavButton setEnabled:NO];
-        
+    
         // dismiss keyboard before taking picture
         [self dismissKeyboard];
         
-        // create image
-        UIGraphicsBeginImageContextWithOptions(self.backgroundImg.bounds.size, NO, 0.0); //retina res
-        [self.backgroundImg.layer renderInContext:UIGraphicsGetCurrentContext()];
-        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
+        // add label to background image for picture
+        UIImage *renderedBkgdImg = [self createImage:[self buildImageWithSubviews:self.backgroundImg]];
         
         [SVProgressHUD show];
         
-        [self shouldUploadImage:image block:^(BOOL completed) {
+        // prepare image for upload
+        [self shouldUploadImage:renderedBkgdImg block:^(BOOL completed) {
             
             if(completed){
                 if (!self.photoFile || !self.thumbnailFile) {
@@ -424,65 +386,20 @@
                     return;
                 }
                 
-                // both files have finished uploading
-                
-                // create a project object
-                PFObject *project = [PFObject objectWithClassName:@"Project"];
-                [project setObject:@"mocktitle" forKey:@"title"];
-                [project setObject:@"mockGoal" forKey:@"goal"];
-                [project setObject:@"mockDueDate" forKey:@"due"];
-                
-                // create a photo object
-                PFObject *photo = [PFObject objectWithClassName:kPAPPhotoClassKey];
-                [photo setObject:[PFUser currentUser] forKey:kPAPPhotoUserKey];
-                [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
-                [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
-                [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
-                [photo setObject:@"project" forKey:kPAPPhotoType];
-                [photo setObject:project forKey:@"project"];
-                [photo setObject:[NSNumber numberWithInt:0] forKey:@"discoverCount"];
-                                
-                // photos are public, but may only be modified by the user who uploaded them
-                PFACL *photoACL = [PFACL ACLWithUser:[PFUser currentUser]];
-                [photoACL setPublicReadAccess:YES];
-                photo.ACL = photoACL;
-                
-                // Request a background execution task to allow us to finish uploading the photo even if the app is backgrounded
-                self.photoPostBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-                    [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
-                }];
-                
-                // save
-                [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                    if (succeeded) {
-                        
-                        // update member's active project
-                        PFUser *user = [PFUser currentUser];
-                        [user setValue:project forKey:@"activeProject"];
-                        [user saveEventually];
-                        
-                        NSLog(@"Photo uploaded");
-                        
-                        // create activity for posted
-                        [PAPUtility posted:photo];
-                        
-                        [[PAPCache sharedCache] setAttributesForPhoto:photo likers:[NSArray array] commenters:[NSArray array] likedByCurrentUser:NO];
-                        [[NSNotificationCenter defaultCenter] postNotificationName:PAPTabBarControllerDidFinishEditingPhotoNotification object:photo];
-                    } else {
-                        NSLog(@"Photo failed to save: %@", error);
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
-                        [alert show];
-                    }
-                    [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
-                }];
-                
+                // create, save post, and exit
+                [self savePost:[self createPostObj:self.postType]];
                 [self exitPost];
             }else{
                 [SVProgressHUD dismiss];
                 [self.rightNavButton setEnabled:YES];
             }
         }];
-    
+        
+    }else{
+        
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:[NSString stringWithFormat:@"Your post is too long"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+        
     }
 }
 
