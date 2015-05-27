@@ -12,6 +12,9 @@
 #define MAX_GOAL_LENGTH 50
 #define MAX_DUE_DATE_LENGTH 30
 
+#define TITLE_TAG_NUM 1
+#define DUEDATE_TAG_NUM 3
+
 
 @interface ThoughtPostViewController ()
 
@@ -41,8 +44,8 @@
 @property (strong, nonatomic) UIColor *placeholderColor;
 
 // textfield placeholders
-@property (strong, nonatomic) NSString *projectTitlePlaceholder;
-@property (strong, nonatomic) NSString *projectDueDatePlaceholder;
+@property (weak, nonatomic) IBOutlet UILabel *projectTitlePlaceholder;
+@property (weak, nonatomic) IBOutlet UILabel *projectDueDatePlaceholder;
 
 @end
 
@@ -57,8 +60,6 @@
     [self.placeholder setText:@"It'll make the world a better place"];
     
     [super showSaveButtonOnStart];
-
-    [self setFieldPlaceholder];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -67,55 +68,57 @@
 
 #pragma mark - Placeholder Methods
 
-- (void)setFieldPlaceholder{
-    self.projectTitlePlaceholder = self.projectTitle.text;
-    self.projectDueDatePlaceholder = self.projectDueDate.text;
+- (void)hidePlaceholderIfPresent:(UITextField *)textField{
+    
+    NSUInteger fieldNum = textField.tag;
+    
+    if(fieldNum == TITLE_TAG_NUM){
+        [self.projectTitlePlaceholder setHidden:YES];
+    }else if(fieldNum == DUEDATE_TAG_NUM){
+        [self.projectDueDatePlaceholder setHidden:YES];
+    }
 }
 
-- (BOOL)isPlaceholder:(UITextField *)textField{
-    
-    if(([textField.text isEqualToString:self.projectTitlePlaceholder] || [textField.text isEqualToString:self.projectDueDatePlaceholder])){
-        return YES;
-    }
-    
-    return NO;
+- (void)changeInputColor:(UIColor *)color{
+    self.projectGoal.textColor = color;
+    self.projectTitle.textColor = color;
+    self.projectDueDate.textColor = color;
+}
+
+- (void)changePlaceholderColor:(UIColor *)color{
+    [self.placeholder setTextColor:color];
+    [self.projectTitlePlaceholder setTextColor:color];
+    [self.projectDueDatePlaceholder setTextColor:color];
+}
+
+- (void)changeLabelColor:(UIColor *)color{
+    self.projectTitleLabel.textColor = color;
+    self.projectGoalLabel.textColor = color;
+    self.projectDueDateLabel.textColor = color;
 }
 
 - (void)updateTextColor{
     
     self.placeholderColor = [UIColor colorWithRed:255.0f/255.0f green:255.0f/255.0f blue:255.0f/255.0f alpha:0.6];
     
-    // when current background is white
+    // chck if current background is white
     if(super.prevBkgdIndex == 0){
-        
-        // input labels
-        self.projectTitleLabel.textColor = [UIColor blackColor];
-        self.projectGoalLabel.textColor = [UIColor blackColor];
-        self.projectDueDateLabel.textColor = [UIColor blackColor];
-        
-        self.projectTitle.textColor = [UIColor grayColor];
-        self.projectDueDate.textColor = [UIColor grayColor];
-        
-        [self.placeholder setTextColor:[UIColor grayColor]];
+        [self changeLabelColor:[UIColor blackColor]];
+        [self changeInputColor:[UIColor blackColor]];
+        [self changePlaceholderColor:[UIColor grayColor]];
         
         [self updateNavControlColors:@"dark"];
 
     }else{
-        
-        // input labels
-        self.projectTitleLabel.textColor = [UIColor whiteColor];
-        self.projectGoalLabel.textColor = [UIColor whiteColor];
-        self.projectDueDateLabel.textColor = [UIColor whiteColor];
-        
-        // input text
-        self.projectTitle.textColor = self.placeholderColor;
-        self.projectDueDate.textColor = self.placeholderColor;
-        
-        self.placeholder.textColor = self.placeholderColor;
-    
+        [self changeLabelColor:[UIColor whiteColor]];
+        [self changeInputColor:[UIColor whiteColor]];
+        [self changePlaceholderColor:self.placeholderColor];
+
         [self updateNavControlColors:@"light"];
     }
 }
+
+
 
 - (void)updateNavControlColors:(NSString *)type{
     if([type isEqualToString:@"light"]){
@@ -130,10 +133,7 @@
 #pragma mark - Textfield and Textview Delegates
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    
-    if([self isPlaceholder:textField]){
-        textField.text = @"";
-    }
+    [self hidePlaceholderIfPresent:textField];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
@@ -141,6 +141,10 @@
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView{
+    
+    // set default writing color
+    textView.textColor = [UIColor blackColor];
+    
     if(!self.placeholder.hidden){
         [self.placeholder setHidden:YES];
     }

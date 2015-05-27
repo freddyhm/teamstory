@@ -88,6 +88,8 @@
         [self.userInfoLabel setAdjustsFontSizeToFitWidth:YES];
         [containerView addSubview:self.userInfoLabel];
         
+        [self hideExtraInfo];
+        
         /* need to refactor this */
         
         self.projInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.userInfoLabel.frame.origin.x, self.userInfoLabel.frame.origin.y, 60.0f, self.userInfoLabel.frame.size.height)];
