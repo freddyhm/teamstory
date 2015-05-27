@@ -16,6 +16,8 @@
 @interface ThoughtPostViewController ()
 
 - (void)saveEdit:(id)sender;
+- (void)showSaveButtonOnStart;
+
 @property int prevBkgdIndex;
 
 @end
@@ -53,6 +55,8 @@
     self.user = [PFUser currentUser];
     
     [self.placeholder setText:@"It'll make the world a better place"];
+    
+    [super showSaveButtonOnStart];
 
     [self setFieldPlaceholder];
 }
@@ -142,17 +146,16 @@
     }
 }
 
-
 - (void)textViewDidEndEditing:(UITextView *)textView{
     [self checkInputTextIsLessThanMaxLength:textView.text type:@"goal"];
 }
+
+#pragma mark - Error Checking Methods
 
 - (BOOL)isInputTypeValid:(NSString *)type{
     return [type isEqualToString:@"title"] || [type isEqualToString:@"goal"] || [type isEqualToString:@"due date"];
     
 }
-
-#pragma mark - Error Checking Methods
 
 - (BOOL)checkInputTextIsLessThanMaxLength:(NSString *)text type:(NSString *)type{
     

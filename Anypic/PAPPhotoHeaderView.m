@@ -93,14 +93,14 @@
         self.projInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.userInfoLabel.frame.origin.x, self.userInfoLabel.frame.origin.y, 60.0f, self.userInfoLabel.frame.size.height)];
         [self.projInfoLabel setTextColor:self.userInfoLabel.textColor];
         [self.projInfoLabel setFont:self.userInfoLabel.font];
-      //  [self.projInfoLabel setBackgroundColor:[UIColor redColor]];
         self.projInfoLabel.text = @"Working on ";
         [containerView addSubview:self.projInfoLabel];
+        
+        [self hideProjectInfoPrefix];
         
         self.projContainer = [[UILabel alloc] initWithFrame:CGRectMake(self.projInfoLabel.frame.origin.x + self.projInfoLabel.frame.size.width + 2.0f, self.projInfoLabel.frame.origin.y, 200.0f, self.projInfoLabel.frame.size.height)];
         [self.projContainer setTextColor:[UIColor blueColor]];
         [self.projContainer setFont:self.projInfoLabel.font];
-       // [self.projContainer setBackgroundColor:[UIColor redColor]];
         self.projContainer.text = @"";
         [self.projContainer setUserInteractionEnabled:YES];
         
@@ -109,7 +109,7 @@
         [self.projContainer addGestureRecognizer:tapProject];
         [containerView addSubview:self.projContainer];
         
-        [self hideActiveProjectInfo];
+        [self hideProjectInfo];
         
         // Add timestamp
         self.timeIntervalFormatter = [[TTTTimeIntervalFormatter alloc] init];
@@ -184,6 +184,7 @@
 
 
 -(void)populateDetails {
+    
     // user's avatar
     PFFile *profilePictureSmall = [self.user objectForKey:kPAPUserProfilePicSmallKey];
     [self.avatarImageView setFile:profilePictureSmall];
@@ -232,6 +233,12 @@
     
     [self setNeedsDisplay];
     
+   
+    [self checkForActiveProject];
+
+}
+
+- (void)setExtraInfo{
     NSString *industry = [self.user objectForKey:@"industry"];
     NSString *location = [self.user objectForKey:@"location"];
     NSString *separator = @" • ";
@@ -247,8 +254,6 @@
     
     [self.userInfoLabel setText:allInfo];
     [self.activityCount setText:[(NSNumber *)[self.user objectForKey:@"activityPoints"] stringValue]];
-    
-    [self checkForActiveProject];
 }
 
 
@@ -265,9 +270,11 @@
 - (void)replaceUserInfoWithProject:(BOOL)willReplace{
     if(willReplace){
         [self hideExtraInfo];
-        [self setActiveProjectInfo];
+        [self showProjectInfoPrefix];
+        [self setActiveProject];
     }else{
-        [self hideActiveProjectInfo];
+        [self hideActiveProject];
+        [self setExtraInfo];
         [self showExtraInfo];
     }
 }
@@ -280,12 +287,12 @@
     [self.userInfoLabel setHidden:NO];
 }
 
-- (void)hideActiveProjectInfo{
-    [self.projInfoLabel setHidden:YES];
-    [self.projContainer setHidden:YES];
+- (void)hideActiveProject{
+    [self hideProjectInfoPrefix];
+    [self hideProjectInfo];
 }
 
-- (void)setActiveProjectInfo{
+- (void)setActiveProject{
     // need to set post for project link before we display project title
     [self getProjectPost];
 }
@@ -316,12 +323,23 @@
 
 - (void)setProjectTitleContainer:(NSString *)projTitle{
     self.projContainer.text = projTitle;
-    [self showActiveProjectInfo];
+    [self showProjectInfo];
 }
 
-- (void)showActiveProjectInfo{
+- (void)showProjectInfoPrefix{
     [self.projInfoLabel setHidden:NO];
+}
+
+- (void)hideProjectInfoPrefix{
+    [self.projInfoLabel setHidden:YES];
+}
+
+- (void)showProjectInfo{
     [self.projContainer setHidden:NO];
+}
+
+- (void)hideProjectInfo{
+    [self.projContainer setHidden:YES];
 }
 
 

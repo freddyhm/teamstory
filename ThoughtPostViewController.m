@@ -25,6 +25,7 @@
 @property (nonatomic, strong) NSString *placeholderSuggestion;
 @property (nonatomic, strong) NSString *postType;
 @property int prevBkgdIndex;
+@property BOOL isSaveButtonShownOnStart;
 
 @end
 
@@ -57,6 +58,7 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_cancel.png"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonAction:)];
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
     
+    self.isSaveButtonShownOnStart = NO;
     self.rightNavButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_done.png"] style:UIBarButtonItemStylePlain target:self action:@selector(saveEdit:)];
     self.rightNavButton.tintColor = [UIColor whiteColor];
     
@@ -180,11 +182,19 @@
 
 - (void)textViewDidChange:(UITextView *)textView {
     
-    self.navigationItem.rightBarButtonItem = [textView.text isEqualToString:@""] ? nil : self.rightNavButton;
-
+    if(!self.isSaveButtonShownOnStart){
+        [self showSaveButtonAfterEditingTextView:textView];
+    }
+    
     // align cursor vertically dynamically
     [self verticalAlignTextview];
 }
+
+- (void)showSaveButtonOnStart{
+    self.navigationItem.rightBarButtonItem = self.rightNavButton;
+    self.isSaveButtonShownOnStart = YES;
+}
+
 
 -(void)verticalAlignTextview{
     
@@ -200,8 +210,9 @@
     [self.view endEditing:YES];
 }
 
-
-
+- (void)showSaveButtonAfterEditingTextView:(UITextView *)textView{
+    self.navigationItem.rightBarButtonItem = [textView.text isEqualToString:@""] ? nil : self.rightNavButton;
+}
 
 - (void)updateTextColor{
     
@@ -246,8 +257,18 @@
 }
 
 - (BOOL)validateBeforeSaving{
-    return self.thoughtTextView.contentSize.height < self.thoughtTextView.frame.size.height;
+    
+    BOOL isValid = YES;
+    
+    if(self.thoughtTextView.contentSize.height < self.thoughtTextView.frame.size.height){
+        isValid = NO;
+        [self showFailValidateBeforeSaveAlert];
+    }
+    
+    return isValid;
 }
+
+
 
 - (UIImageView *)buildImageWithSubviews:(UIImageView *)backgroundView{
     [backgroundView addSubview:self.thoughtTextView];
@@ -397,13 +418,12 @@
                 [self.rightNavButton setEnabled:YES];
             }
         }];
-        
-    }else{
-        
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:[NSString stringWithFormat:@"Your post is too long"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alert show];
-        
     }
+}
+
+- (void)showFailValidateBeforeSaveAlert{
+    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:[NSString stringWithFormat:@"Your post is too long"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    [alert show];
 }
 
 #pragma mark - Navigation Related Methods
