@@ -90,15 +90,17 @@
         
         /* need to refactor this */
         
-        self.projInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50.0f, 20.0f, containerView.bounds.size.width - 50.0f - 72.0f, 18.0f)];
-        [self.projInfoLabel setTextColor:[UIColor colorWithRed:157.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
-        [self.projInfoLabel setFont:[UIFont systemFontOfSize:11.0f]];
-        [self.projInfoLabel setBackgroundColor:[UIColor clearColor]];
-        [self.projInfoLabel setAdjustsFontSizeToFitWidth:YES];
+        self.projInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.userInfoLabel.frame.origin.x, self.userInfoLabel.frame.origin.y, 60.0f, self.userInfoLabel.frame.size.height)];
+        [self.projInfoLabel setTextColor:self.userInfoLabel.textColor];
+        [self.projInfoLabel setFont:self.userInfoLabel.font];
+      //  [self.projInfoLabel setBackgroundColor:[UIColor redColor]];
         self.projInfoLabel.text = @"Working on ";
         [containerView addSubview:self.projInfoLabel];
         
-        self.projContainer = [[UILabel alloc] initWithFrame:CGRectMake(self.userInfoLabel.frame.origin.x + self.userInfoLabel.frame.size.width + 5, self.userInfoLabel.frame.origin.y, self.userInfoLabel.frame.size.width, self.userInfoLabel.frame.size.height)];
+        self.projContainer = [[UILabel alloc] initWithFrame:CGRectMake(self.projInfoLabel.frame.origin.x + self.projInfoLabel.frame.size.width + 2.0f, self.projInfoLabel.frame.origin.y, 200.0f, self.projInfoLabel.frame.size.height)];
+        [self.projContainer setTextColor:[UIColor blueColor]];
+        [self.projContainer setFont:self.projInfoLabel.font];
+       // [self.projContainer setBackgroundColor:[UIColor redColor]];
         self.projContainer.text = @"";
         [self.projContainer setUserInteractionEnabled:YES];
         
