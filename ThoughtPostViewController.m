@@ -10,11 +10,7 @@
 #import "SVProgressHUD.h"
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
-#import "Mixpanel.h"
-#import <FlightRecorder/FlightRecorder.h>
-#import "ParseFacebookUtils/PFFacebookUtils.h"
 #include <stdlib.h>
-#import "AtMention.h"
 #import "AppDelegate.h"
 
 @interface ThoughtPostViewController ()
@@ -150,6 +146,11 @@
     [[FlightRecorder sharedInstance] trackPageView:@"Thought"];
 }
 
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+}
+
 #pragma mark - UITextViewDelegate & TextView related methods
 
 - (void)textViewDidBeginEditing:(UITextView *)textView{
@@ -185,8 +186,6 @@
     [self verticalAlignTextview];
 }
 
-
-
 -(void)verticalAlignTextview{
     
     UITextView *tv = self.thoughtTextView;
@@ -202,7 +201,7 @@
 }
 
 
-#pragma mark - ()
+
 
 - (void)updateTextColor{
     
@@ -220,43 +219,7 @@
     }
 }
 
-
-- (IBAction)rightNav:(id)sender{
-    
-    // update index, reset to first if reached end of array
-    int currentBkgdIndex = self.prevBkgdIndex + 1;
-    
-    if(currentBkgdIndex < [self.bkgdOptions count]){
-        self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:currentBkgdIndex];
-        self.prevBkgdIndex = currentBkgdIndex;
-    }else{
-        self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:0];
-        self.prevBkgdIndex = 0;
-    }
-    
-    // change present text color
-    [self updateTextColor];
-}
-
-- (IBAction)leftNav:(id)sender{
-    
-    // update index, set to last if reached end of array
-    int currentBkgdIndex = self.prevBkgdIndex - 1;
-    
-    if(currentBkgdIndex > -1){
-        self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:currentBkgdIndex];
-        self.prevBkgdIndex = currentBkgdIndex;
-    }else{
-        self.prevBkgdIndex = (int)[self.bkgdOptions count] - 1;
-        self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:self.prevBkgdIndex];
-    }
-    
-    // change present text color
-    [self updateTextColor];
-}
-
-
-
+#pragma mark - Saving Related Methods
 
 - (void)trackAnalytics:(NSString *)type{
     
@@ -301,6 +264,7 @@
     return image;
 }
 
+// overwritten by inerited objects
 - (void)addExtraValueToPost:(PFObject *)post{}
 
 - (PFObject *)createPostObj:(NSString *)type{
@@ -323,7 +287,7 @@
     return photo;
 }
 
-- (void)savePost:(PFObject *)post{
+- (void)savePostObj:(PFObject *)post{
     
     // Request a background execution task to allow us to finish uploading the photo even if the app is backgrounded
     self.photoPostBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
@@ -352,55 +316,6 @@
         }
         [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
     }];
-}
-
-
-- (void)saveEdit:(id)sender {
-    
-    // increment activity point
-    [[ActivityPointSystem sharedActivityPointSystem] addPointToActivityCount:@"post"];
-    
-    // track analytics
-    [self trackAnalytics:self.postType];
-    
-    if([self validateBeforeSaving]){
-        
-        // disable save button so duplicates are not sent by mistake
-        [self.rightNavButton setEnabled:NO];
-    
-        // dismiss keyboard before taking picture
-        [self dismissKeyboard];
-        
-        // add label to background image for picture
-        UIImage *renderedBkgdImg = [self createImage:[self buildImageWithSubviews:self.backgroundImg]];
-        
-        [SVProgressHUD show];
-        
-        // prepare image for upload
-        [self shouldUploadImage:renderedBkgdImg block:^(BOOL completed) {
-            
-            if(completed){
-                if (!self.photoFile || !self.thumbnailFile) {
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
-                    [alert show];
-                    return;
-                }
-                
-                // create, save post, and exit
-                [self savePost:[self createPostObj:self.postType]];
-                [self exitPost];
-            }else{
-                [SVProgressHUD dismiss];
-                [self.rightNavButton setEnabled:YES];
-            }
-        }];
-        
-    }else{
-        
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:[NSString stringWithFormat:@"Your post is too long"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alert show];
-        
-    }
 }
 
 - (void)shouldUploadImage:(UIImage *)anImage block:(void (^)(BOOL))completed
@@ -442,6 +357,57 @@
     }];
 }
 
+
+- (void)saveEdit:(id)sender {
+    
+    // increment activity point
+    [[ActivityPointSystem sharedActivityPointSystem] addPointToActivityCount:@"post"];
+    
+    // track analytics
+    [self trackAnalytics:self.postType];
+    
+    if([self validateBeforeSaving]){
+        
+        // disable save button so duplicates are not sent by mistake
+        [self.rightNavButton setEnabled:NO];
+    
+        // dismiss keyboard before taking picture
+        [self dismissKeyboard];
+        
+        // add label to background image for picture
+        UIImage *renderedBkgdImg = [self createImage:[self buildImageWithSubviews:self.backgroundImg]];
+        
+        [SVProgressHUD show];
+        
+        // prepare image for upload
+        [self shouldUploadImage:renderedBkgdImg block:^(BOOL completed) {
+            
+            if(completed){
+                if (!self.photoFile || !self.thumbnailFile) {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+                    [alert show];
+                    return;
+                }
+                
+                // create, save post, and exit
+                [self savePostObj:[self createPostObj:self.postType]];
+                [self exitPost];
+            }else{
+                [SVProgressHUD dismiss];
+                [self.rightNavButton setEnabled:YES];
+            }
+        }];
+        
+    }else{
+        
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:[NSString stringWithFormat:@"Your post is too long"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+        
+    }
+}
+
+#pragma mark - Navigation Related Methods
+
 - (void)exitPost{
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
 }
@@ -451,10 +417,39 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
+- (IBAction)rightNav:(id)sender{
+    
+    // update index, reset to first if reached end of array
+    int currentBkgdIndex = self.prevBkgdIndex + 1;
+    
+    if(currentBkgdIndex < [self.bkgdOptions count]){
+        self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:currentBkgdIndex];
+        self.prevBkgdIndex = currentBkgdIndex;
+    }else{
+        self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:0];
+        self.prevBkgdIndex = 0;
+    }
+    
+    // change present text color
+    [self updateTextColor];
 }
+
+- (IBAction)leftNav:(id)sender{
+    
+    // update index, set to last if reached end of array
+    int currentBkgdIndex = self.prevBkgdIndex - 1;
+    
+    if(currentBkgdIndex > -1){
+        self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:currentBkgdIndex];
+        self.prevBkgdIndex = currentBkgdIndex;
+    }else{
+        self.prevBkgdIndex = (int)[self.bkgdOptions count] - 1;
+        self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:self.prevBkgdIndex];
+    }
+    
+    // change present text color
+    [self updateTextColor];
+}
+
 
 @end
