@@ -294,7 +294,7 @@
     [self.timeIntervalFormatter setUsesAbbreviatedCalendarUnits:YES];
     NSString *timestamp = [self.timeIntervalFormatter stringForTimeInterval:timeInterval];
     
-    if (fabsf(timeInterval) > (12 * 60 * 60)) {
+    if (fabs(timeInterval) > (12 * 60 * 60)) {
         cell.timeStampLabel.text = timestamp;
     } else {
         cell.timeStampLabel.text = [dateFormat stringFromDate:updatedDate];
