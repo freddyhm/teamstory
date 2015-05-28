@@ -73,6 +73,9 @@
         self.notificationView.titleEdgeInsets = UIEdgeInsetsMake(0.0f, -130.0f, 0.0f, 0.0f);
     }
     
+    UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPMessageTabBarItemIndex] tabBarItem];
+    tabBarItem.badgeValue = nil;
+    
     [self updateListViewQuery];
     
 }
@@ -130,12 +133,16 @@
     self.userNumberList = [[NSMutableArray alloc] init];
     self.messageList = [[NSMutableArray alloc] init];
     
-    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [backButton setFrame:CGRectMake(0, 0, 22.0f, 22.0f)];
-    [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
-    [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    // backbutton should only be available when the the view wasn't created for PAPtabbarcontroller.
+    if (self.navigationController.parentViewController != self.tabBarController) {
+        UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [backButton setFrame:CGRectMake(0, 0, 22.0f, 22.0f)];
+        [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
+        [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    }
+    
     self.navigationController.navigationBar.backgroundColor = [UIColor whiteColor];
     
     UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
