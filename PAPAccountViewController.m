@@ -13,6 +13,7 @@
 #import "PAPMessagingViewController.h"
 #import "ProfileSettingViewController.h"
 #import "PAPLoginSelectionViewController.h"
+#import "PAPTabBarController.h"
 
 #define SPACE_FOR_COUNTS 10
 #define FIRST_X_POS 15
@@ -205,6 +206,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
     // google analytics
     [PAPUtility captureScreenGA:@"Account"];
     
+    ((PAPTabBarController *)self.tabBarController).postMenuButton.hidden = YES;
     
     if (![PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]] && ([[PFUser currentUser] objectForKey:@"description"] == nil || [[PFUser currentUser] objectForKey:@"industry"] == nil || [[PFUser currentUser] objectForKey:@"location"] == nil) && [[self.user objectForKey:@"displayName"] isEqualToString:[[PFUser currentUser] objectForKey:@"displayName"]]) {
         NSDate *profileUpdateDate = [[PFUser currentUser] objectForKey:@"profileUpdate"];
@@ -268,6 +270,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    ((PAPTabBarController *)self.tabBarController).postMenuButton.hidden = NO;
     [[self.navigationController.tabBarController.viewControllers objectAtIndex:4] tabBarItem].image = [[UIImage imageNamed:@"nav_profile.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
 }
 

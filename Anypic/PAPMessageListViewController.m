@@ -13,6 +13,8 @@
 #import "AppDelegate.h"
 #import "Mixpanel.h"
 #import <FlightRecorder/FlightRecorder.h>
+#import "PAPLoginSelectionViewController.h"
+#import "PAPTabBarController.h"
 
 
 #define APP ((AppDelegate *)[[UIApplication sharedApplication] delegate])
@@ -40,6 +42,8 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
+    
+    ((PAPTabBarController *)self.tabBarController).postMenuButton.hidden = YES;
         
     // google analytics
     [PAPUtility captureScreenGA:@"Messaging List"];
@@ -113,6 +117,8 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:YES];
     
+    ((PAPTabBarController *)self.tabBarController).postMenuButton.hidden = NO;
+    
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:nil setTargetRoom:nil setTargetUser:nil setNavigationController:nil];
     
     [[PFUser currentUser] setObject:[NSNumber numberWithInt:totalBadgeNumber] forKey:@"messagingBadge"];
@@ -125,6 +131,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // Handling Anonymous users
+    if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
+        PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
+        [self.navigationController presentViewController:loginSelectionViewController animated:YES completion:nil];
+        return;
+    }
+    
     self.edgesForExtendedLayout = UIRectEdgeNone;
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -199,9 +213,21 @@
     [placeHolderImageView setImage:placeHolderImage];
     [self.placeHolder addSubview:placeHolderImageView];
     
+    UITapGestureRecognizer *tapNewMessage = [[UITapGestureRecognizer alloc]
+                                          initWithTarget:self
+                                          action:@selector(newMessage)];
+    
+    [self.placeHolder addGestureRecognizer:tapNewMessage];
+    
 }
 
 #pragma - ()
+
+- (void) newMessage {
+    PAPMessagingSeachUsersViewController *searchBarViewController = [[PAPMessagingSeachUsersViewController alloc] init];
+    [searchBarViewController setNavigationController:self.navigationController];
+    [self presentViewController:searchBarViewController animated:YES completion:nil];
+}
 
 - (void) notificationButtonAction:(id)sender {
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];

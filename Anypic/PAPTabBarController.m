@@ -34,8 +34,6 @@
 @property (nonatomic, strong) UIView *photoPostView;
 @property (nonatomic, strong) UIView *thoughtPostView;
 @property (nonatomic, strong) UIView *linkPostView;
-@property (nonatomic, strong) UIButton *postMenuButton;
-
 
 @end
 

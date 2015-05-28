@@ -588,6 +588,26 @@
     [[PAPCache sharedCache] notificationCache:notificationContent];
 }
 
+# pragma UIActivityViewControllerDelegate
+- (id)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController {
+    return @"";
+}
+
+- (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType {
+    if ([activityType isEqualToString:UIActivityTypePostToFacebook]) {
+        NSString *theText = @"Join me and hundreds of #entrepreneurs and #founders on @teamstory!:goo.gl/F2QSoJ" ;
+        return theText;
+    }
+    
+    if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
+        NSString *theText;
+        theText = @"Join me and hundreds of #entrepreneurs and #founders on @teamstoryapp!:goo.gl/F2QSoJ";
+        return theText;
+    }
+    
+    return @"Join me and hundreds of entrepreneurs and founders on teamstoryapp!:http://goo.gl/F2QSoJ";
+}
+
 
 
 

@@ -17,6 +17,7 @@
 #import "AppDelegate.h"
 #import "AtMention.h"
 #import "PAPLoginSelectionViewController.h"
+#import "PAPTabBarController.h"
 
 #define APP ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 
@@ -95,6 +96,16 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 #pragma mark - UIViewController
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
+    ((PAPTabBarController *)self.tabBarController).postMenuButton.hidden = YES;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:YES];
+    ((PAPTabBarController *)self.tabBarController).postMenuButton.hidden = NO;
+}
 
 - (void)viewDidLoad {
     

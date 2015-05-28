@@ -11,6 +11,7 @@
 #import "Mixpanel.h"
 #import "AtMention.h"
 #import <FlightRecorder/FlightRecorder.h>
+#import "PAPTabBarController.h"
 
 #define headerViewHeight 64.0f
 #define querySelectionViewheight 37.5f
@@ -43,8 +44,16 @@
     self.navController = navController;
 }
 
+- (void) viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:YES];
+    
+    ((PAPTabBarController *)self.tabBarController).postMenuButton.hidden = NO;
+}
+
 -(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
+    
+    ((PAPTabBarController *)self.tabBarController).postMenuButton.hidden = YES;
     
     // mixpanel analytics
     [[Mixpanel sharedInstance] track:@"Viewed Screen" properties:@{@"Type" : @"Message Search Users"}];

@@ -7,6 +7,7 @@
 //
 
 #import "PAPMessagingViewController.h"
+#import "PAPTabBarController.h"
 
 #define messageTextViewHeight 45.0f
 #define navBarHeight 64.0f
@@ -42,6 +43,8 @@
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     
+    ((PAPTabBarController *)self.tabBarController).postMenuButton.hidden = YES;
+    
     // google analytics
     [PAPUtility captureScreenGA:@"Messaging User"];
     
@@ -60,6 +63,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:YES];
+    ((PAPTabBarController *)self.tabBarController).postMenuButton.hidden = NO;
    
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:nil setTargetRoom:nil setTargetUser:nil setNavigationController:nil];
     [self.customKeyboard setLocation:nil];
