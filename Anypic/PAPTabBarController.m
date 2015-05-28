@@ -79,7 +79,7 @@
     
     // create post menu
     self.postMenu = [[UIView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    self.postMenu.backgroundColor = [UIColor colorWithRed:54.0f/255.0f green:54.0f/255.0f blue:56.0f/255.0f alpha:0.7f];
+    self.postMenu.backgroundColor = [UIColor colorWithRed:54.0f/255.0f green:54.0f/255.0f blue:56.0f/255.0f alpha:0.9f];
 
     UIImage *photoPostImage = [UIImage imageNamed:@"Moment Popup.png"];
     
