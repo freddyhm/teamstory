@@ -230,6 +230,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.filteredArray = [[NSMutableArray alloc]init];
     self.atmentionUserArray = [[NSMutableArray alloc] init];
     self.autocompleteTableView.backgroundColor = [UIColor clearColor];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated {
