@@ -50,4 +50,10 @@
 - (void) moreActionButton_inflator:(PFUser *)user photo:(PFObject *)photo;
 - (void) shareButton:(PFUser *)shareUser setPhoto:(PFObject *)photo;
 
+/*!
+ Sent to the delegate when the project link on photo is tapped
+ @param post the PFObject for the post associated with this link
+ */
+- (void)photoDetailsHeaderView:(PAPPhotoDetailsHeaderView *)photoHeaderView didTapProjectLink:(PFObject *)post;
+
 @end

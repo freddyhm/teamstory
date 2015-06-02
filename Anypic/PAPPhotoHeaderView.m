@@ -9,6 +9,7 @@
 #import "TTTTimeIntervalFormatter.h"
 #import "PAPUtility.h"
 
+
 @interface PAPPhotoHeaderView () {
     float notificationBarOffset;
     float headerNameLengthOffset;
@@ -29,6 +30,8 @@
 @property (nonatomic, strong) UILabel *projInfoLabel;
 @property (nonatomic, strong) UILabel *projContainer;
 @property (nonatomic, strong) PFObject *projPost;
+
+
 
 @end
 
@@ -235,7 +238,7 @@
     
     [self setNeedsDisplay];
     
-   
+    // kick start project display
     [self checkForActiveProject];
 
 }
@@ -263,9 +266,10 @@
 
 - (void)checkForActiveProject{
     [self.user fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-         self.user = (PFUser *)object;
-         BOOL hasProject = [[[self.user objectForKey:@"activeProject"] objectId] length] > 0;
-         [self replaceUserInfoWithProject:hasProject];
+        self.user = (PFUser *)object;
+        NSString *activeProject = [self.user objectForKey:@"projectGoal"];
+        BOOL hasProject = [activeProject length] > 0;
+        [self replaceUserInfoWithProject:hasProject];
     }];
 }
 
@@ -303,7 +307,7 @@
     
     // get post object from server
     PFQuery *postQuery = [PFQuery queryWithClassName:@"Photo"];
-    [postQuery whereKey:@"project" equalTo:[self.user objectForKey:@"activeProject"]];
+    [postQuery whereKey:@"projectGoal" equalTo:[self.user objectForKey:@"projectGoal"]];
     [postQuery whereKey:@"type" equalTo:@"project"];
     [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if(!error && object){
@@ -314,16 +318,12 @@
 }
 
 - (void)getProjectTitle{
-    // get project from server
-    PFQuery *projectQuery = [PFQuery queryWithClassName:@"Project"];
-    [projectQuery getObjectInBackgroundWithId:[[self.user objectForKey:@"activeProject"] objectId] block:^(PFObject *project, NSError *error) {
-        // set title
-        NSString *projectTitle = [project objectForKey:@"title"];
-        [self setProjectTitleContainer:projectTitle];
-    }];
+    NSString *projectTitle = [self.user objectForKey:@"projectGoal"];
+    [self setProjectTitleContainer:projectTitle];
 }
 
 - (void)setProjectTitleContainer:(NSString *)projTitle{
+    NSLog(@"%@", projTitle);
     self.projContainer.text = projTitle;
     [self showProjectInfo];
 }

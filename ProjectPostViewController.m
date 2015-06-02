@@ -29,23 +29,17 @@
 @interface ProjectPostViewController ()
 
 // input fields
-@property (weak, nonatomic) IBOutlet UITextField *projectTitle;
 @property (weak, nonatomic) IBOutlet UITextView *projectGoal;
-@property (weak, nonatomic) IBOutlet UITextField *projectDueDate;
 
 // input labels
-@property (weak, nonatomic) IBOutlet UILabel *projectTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *projectGoalLabel;
-@property (weak, nonatomic) IBOutlet UILabel *projectDueDateLabel;
 
 @property (weak, nonatomic) NSString *postType;
 @property (weak, nonatomic) PFUser *user;
-@property (weak, nonatomic) IBOutlet UILabel *placeholder;
 @property (strong, nonatomic) UIColor *placeholderColor;
 
 // textfield placeholders
-@property (weak, nonatomic) IBOutlet UILabel *projectTitlePlaceholder;
-@property (weak, nonatomic) IBOutlet UILabel *projectDueDatePlaceholder;
+@property (weak, nonatomic) IBOutlet UILabel *projectGoalPlaceholder;
 
 @end
 
@@ -57,7 +51,7 @@
     self.postType = @"project";
     self.user = [PFUser currentUser];
     
-    [self.placeholder setText:@"It'll make the world a better place"];
+    [self.projectGoalPlaceholder setText:@"It'll make the world a better place"];
     
     [super showSaveButtonOnStart];
 }
@@ -73,29 +67,22 @@
     NSUInteger fieldNum = textField.tag;
     
     if(fieldNum == TITLE_TAG_NUM){
-        [self.projectTitlePlaceholder setHidden:YES];
-    }else if(fieldNum == DUEDATE_TAG_NUM){
-        [self.projectDueDatePlaceholder setHidden:YES];
+        [self.projectGoalPlaceholder setHidden:YES];
     }
 }
 
 - (void)changeInputColor:(UIColor *)color{
     self.projectGoal.textColor = color;
-    self.projectTitle.textColor = color;
-    self.projectDueDate.textColor = color;
 }
 
 - (void)changePlaceholderColor:(UIColor *)color{
-    [self.placeholder setTextColor:color];
-    [self.projectTitlePlaceholder setTextColor:color];
-    [self.projectDueDatePlaceholder setTextColor:color];
+    [self.projectGoalPlaceholder setTextColor:color];
 }
 
 - (void)changeLabelColor:(UIColor *)color{
-    self.projectTitleLabel.textColor = color;
     self.projectGoalLabel.textColor = color;
-    self.projectDueDateLabel.textColor = color;
 }
+
 
 - (void)updateTextColor{
     
@@ -111,7 +98,7 @@
 
     }else{
         [self changeLabelColor:[UIColor whiteColor]];
-        [self changeInputColor:[UIColor whiteColor]];
+        //[self changeInputColor:[UIColor whiteColor]];
         [self changePlaceholderColor:self.placeholderColor];
 
         [self updateNavControlColors:@"light"];
@@ -145,8 +132,8 @@
     // set default writing color
     textView.textColor = [UIColor blackColor];
     
-    if(!self.placeholder.hidden){
-        [self.placeholder setHidden:YES];
+    if(!self.projectGoalPlaceholder.hidden){
+        [self.projectGoalPlaceholder setHidden:YES];
     }
 }
 
@@ -157,7 +144,7 @@
 #pragma mark - Error Checking Methods
 
 - (BOOL)isInputTypeValid:(NSString *)type{
-    return [type isEqualToString:@"title"] || [type isEqualToString:@"goal"] || [type isEqualToString:@"due date"];
+    return [type isEqualToString:@"goal"];
     
 }
 
@@ -166,15 +153,9 @@
     BOOL isUnderMax = YES;
     
     if([self isInputTypeValid:type]){
-        if([type isEqualToString:@"title"] && [text length] > MAX_TITLE_LENGTH){
-            isUnderMax = NO;
-            [self showOverMaxLengthAlert:type maxLength:MAX_TITLE_LENGTH];
-        }else if([type isEqualToString:@"goal"] && [text length] > MAX_GOAL_LENGTH){
+        if([type isEqualToString:@"goal"] && [text length] > MAX_GOAL_LENGTH){
             isUnderMax = NO;
             [self showOverMaxLengthAlert:type maxLength:MAX_GOAL_LENGTH];
-        }else if([type isEqualToString:@"due date"] && [text length] > MAX_DUE_DATE_LENGTH){
-            isUnderMax = NO;
-            [self showOverMaxLengthAlert:type maxLength:MAX_DUE_DATE_LENGTH];
         }
     }
     
@@ -183,13 +164,13 @@
 
 - (BOOL)validateBeforeSaving{
     
-    BOOL areInputsNotEmpty = [self checkInputTextIsNotEmpty:self.projectTitle.text] && [self checkInputTextIsNotEmpty:self.projectGoal.text] &&  [self checkInputTextIsNotEmpty:self.projectDueDate.text];
+    BOOL areInputsNotEmpty = [self checkInputTextIsNotEmpty:self.projectGoal.text];
     
     if(!areInputsNotEmpty){
         [self showEmptyInputAlert];
     }
     
-    BOOL areInputsLessThanMax = [self checkInputTextIsLessThanMaxLength:self.projectTitle.text type:@"title"] && [self checkInputTextIsLessThanMaxLength:self.projectGoal.text type:@"goal"] && [self checkInputTextIsLessThanMaxLength:self.projectDueDate.text type:@"due date"];
+    BOOL areInputsLessThanMax = [self checkInputTextIsLessThanMaxLength:self.projectGoal.text type:@"goal"];
     
     return areInputsNotEmpty && areInputsLessThanMax;
 }
@@ -204,42 +185,30 @@
 
 - (UIImageView *)buildImageWithSubviews:(UIImageView *)backgroundView{
     
-    [backgroundView addSubview:self.projectTitleLabel];
-    [backgroundView addSubview:self.projectTitle];
     [backgroundView addSubview:self.projectGoalLabel];
     [backgroundView addSubview:self.projectGoal];
-    [backgroundView addSubview:self.projectDueDateLabel];
-    [backgroundView addSubview:self.projectDueDate];
     
     return backgroundView;
 }
 
 - (void)addExtraValueToPost:(PFObject *)post{
-    [self createProjectObj:post];
+    [self createProject:post];
 }
 
-- (void)createProjectObj:(PFObject *)post{
+- (void)createProject:(PFObject *)post{
     
-    // create a project object
-    PFObject *project = [PFObject objectWithClassName:@"Project"];
-    [project setObject:self.projectTitle.text forKey:@"title"];
-    [project setObject:self.projectGoal.text forKey:@"goal"];
-    [project setObject:self.projectDueDate.text forKey:@"dueDate"];
+    // update member active project
+    [self updateMemberActiveProject:self.projectGoal.text];
     
-    // set project object on post
-    [post setObject:project forKey:@"project"];
-    
-    [project saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        [self updateMemberActiveProject:project];
-    }];
+    // create post with project goal as identifier for project
+    [post setObject:self.projectGoal.text forKey:@"projectGoal"];
 }
 
-- (void)updateMemberActiveProject:(PFObject *)project{
+- (void)updateMemberActiveProject:(NSString *)projectGoal{
     // update member's active project
     PFUser *user = [PFUser currentUser];
-    [user setValue:project forKey:@"activeProject"];
+    [user setValue:self.projectGoal.text forKey:@"projectGoal"];
     [user saveEventually];
-
 }
 
 - (void)saveEdit:(id)sender {
