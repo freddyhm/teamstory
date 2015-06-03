@@ -62,19 +62,6 @@
     self.rightNavButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_done.png"] style:UIBarButtonItemStylePlain target:self action:@selector(saveEdit:)];
     self.rightNavButton.tintColor = [UIColor whiteColor];
     
-    // set colors
-    UIColor *black = [UIColor colorWithRed:255.0f/255.0f green:255.0f/255.0f blue:255.0f/255.0f alpha:1];
-    UIColor *gray = [UIColor colorWithRed:42.0f/255.0f green:42.0f/255.0f blue:42.0f/255.0f alpha:1];
-    UIColor *green = [UIColor colorWithRed:75.0f/255.0f green:82.0f/255.0f blue:95.0f/255.0f alpha:1];
-    UIColor *teal = [UIColor colorWithRed:98.0f/255.0f green:195.0f/255.0f blue:112.0f/255.0f alpha:1];
-    UIColor *orange = [UIColor colorWithRed:132.0f/255.0f green:198.0f/255.0f blue:201.0f/255.0f alpha:1];
-    UIColor *redOrange = [UIColor colorWithRed:249.0f/255.0f green:175.0f/255.0f blue:54.0f/255.0f alpha:1];
-    UIColor *purple = [UIColor colorWithRed:243.0f/255.0f green:137.0f/255.0f blue:100.0f/255.0f alpha:1];
-    UIColor *pink = [UIColor colorWithRed:125.0f/255.0f green:112.0f/255.0f blue:186.0f/255.0f alpha:1];
-    UIColor *blue = [UIColor colorWithRed:237.0f/255.0f green:86.0f/255.0f blue:118.0f/255.0f alpha:1];
-    UIColor *brown = [UIColor colorWithRed:144.0f/255.0f green:190.0f/255.0f blue:222.0f/255.0f alpha:1];
-    UIColor *olive = [UIColor colorWithRed:85.0f/255.0f green:67.0f/255.0f blue:72.0f/255.0f alpha:1];
-    UIColor *white = [UIColor colorWithRed:107.0f/255.0f green:163.0f/255.0f blue:104.0f/255.0f alpha:1];
     
     // personalize suggestion, check if name is not empty
     NSString *userName = ![[[PFUser currentUser] objectForKey:@"displayName"] isEqualToString:@" "] ? [[PFUser currentUser] objectForKey:@"displayName"] : @"You";
@@ -104,15 +91,16 @@
     // suggestion selection
     self.suggOptions = [[NSMutableArray alloc]initWithObjects:sugg1, sugg2, sugg3, sugg4, sugg5, sugg6, sugg7, sugg8, sugg9, sugg10, sugg11, sugg12, sugg13, sugg14, sugg15, sugg16, sugg17, sugg18, sugg19, nil];
     
-    // color selection
-    self.bkgdOptions = [[NSMutableArray alloc]initWithObjects:black, gray, green, teal, orange, redOrange, purple, pink, blue, brown, olive, white, nil];
+    // create and set background options
+    [self setBkgdOptions:[self createBackgroundOptions]];
     
     // random suggestion within selection bounds
-    int randomSuggOption = arc4random_uniform((int)self.suggOptions.count);
-    int randomBkgdOption = arc4random_uniform((int)self.bkgdOptions.count);
+    int randomSuggOption = [self generateRandomNumFromCoumt:self.suggOptions.count];
+    int randomBkgdOption = [self generateRandomNumFromCoumt:self.bkgdOptions.count];
     
+    [self setBkgIndex:randomBkgdOption];
     
-    self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:randomBkgdOption];
+    // used to keep track of current background color 
     self.prevBkgdIndex = randomBkgdOption;
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
@@ -131,6 +119,41 @@
     [self.view addGestureRecognizer:tapOutside];
     
     [self updateTextColor];
+}
+
+- (int)generateRandomNumFromCoumt:(NSUInteger)count{
+    int randomNum = arc4random_uniform((int)count);
+    return randomNum;
+}
+
+- (void)setBkgIndex:(int)index{
+    self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:index];
+}
+
+- (void)setBackgroundOptions:(NSMutableArray *)bkgdOptions{
+    self.bkgdOptions = bkgdOptions;
+}
+
+- (NSMutableArray *)createBackgroundOptions{
+    
+    // set colors
+    UIColor *black = [UIColor colorWithRed:255.0f/255.0f green:255.0f/255.0f blue:255.0f/255.0f alpha:1];
+    UIColor *gray = [UIColor colorWithRed:42.0f/255.0f green:42.0f/255.0f blue:42.0f/255.0f alpha:1];
+    UIColor *green = [UIColor colorWithRed:75.0f/255.0f green:82.0f/255.0f blue:95.0f/255.0f alpha:1];
+    UIColor *teal = [UIColor colorWithRed:98.0f/255.0f green:195.0f/255.0f blue:112.0f/255.0f alpha:1];
+    UIColor *orange = [UIColor colorWithRed:132.0f/255.0f green:198.0f/255.0f blue:201.0f/255.0f alpha:1];
+    UIColor *redOrange = [UIColor colorWithRed:249.0f/255.0f green:175.0f/255.0f blue:54.0f/255.0f alpha:1];
+    UIColor *purple = [UIColor colorWithRed:243.0f/255.0f green:137.0f/255.0f blue:100.0f/255.0f alpha:1];
+    UIColor *pink = [UIColor colorWithRed:125.0f/255.0f green:112.0f/255.0f blue:186.0f/255.0f alpha:1];
+    UIColor *blue = [UIColor colorWithRed:237.0f/255.0f green:86.0f/255.0f blue:118.0f/255.0f alpha:1];
+    UIColor *brown = [UIColor colorWithRed:144.0f/255.0f green:190.0f/255.0f blue:222.0f/255.0f alpha:1];
+    UIColor *olive = [UIColor colorWithRed:85.0f/255.0f green:67.0f/255.0f blue:72.0f/255.0f alpha:1];
+    UIColor *white = [UIColor colorWithRed:107.0f/255.0f green:163.0f/255.0f blue:104.0f/255.0f alpha:1];
+    
+    // color selection
+    NSMutableArray *bckgdColorOptions = [[NSMutableArray alloc]initWithObjects:black, gray, green, teal, orange, redOrange, purple, pink, blue, brown, olive, white, nil];
+    
+    return bckgdColorOptions;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -437,16 +460,17 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+
 - (IBAction)rightNav:(id)sender{
     
     // update index, reset to first if reached end of array
     int currentBkgdIndex = self.prevBkgdIndex + 1;
     
     if(currentBkgdIndex < [self.bkgdOptions count]){
-        self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:currentBkgdIndex];
+        [self setBkgIndex:currentBkgdIndex];
         self.prevBkgdIndex = currentBkgdIndex;
     }else{
-        self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:0];
+        [self setBkgIndex:0];
         self.prevBkgdIndex = 0;
     }
     
@@ -460,11 +484,11 @@
     int currentBkgdIndex = self.prevBkgdIndex - 1;
     
     if(currentBkgdIndex > -1){
-        self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:currentBkgdIndex];
+        [self setBkgIndex:currentBkgdIndex];
         self.prevBkgdIndex = currentBkgdIndex;
     }else{
         self.prevBkgdIndex = (int)[self.bkgdOptions count] - 1;
-        self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:self.prevBkgdIndex];
+        [self setBkgIndex:self.prevBkgdIndex];
     }
     
     // change present text color

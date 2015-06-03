@@ -8,12 +8,8 @@
 
 #import "ProjectPostViewController.h"
 
-#define MAX_TITLE_LENGTH 30
-#define MAX_GOAL_LENGTH 50
-#define MAX_DUE_DATE_LENGTH 30
-
+#define MAX_GOAL_LENGTH 35
 #define TITLE_TAG_NUM 1
-#define DUEDATE_TAG_NUM 3
 
 
 @interface ThoughtPostViewController ()
@@ -37,6 +33,7 @@
 @property (weak, nonatomic) NSString *postType;
 @property (weak, nonatomic) PFUser *user;
 @property (strong, nonatomic) UIColor *placeholderColor;
+@property (strong, nonatomic) NSMutableArray *bkgdOptions;
 
 // textfield placeholders
 @property (weak, nonatomic) IBOutlet UILabel *projectGoalPlaceholder;
@@ -50,6 +47,7 @@
 
     self.postType = @"project";
     self.user = [PFUser currentUser];
+    self.navigationItem.title = @"Create Project";
     
     [self.projectGoalPlaceholder setText:@"It'll make the world a better place"];
     
@@ -59,6 +57,30 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
+
+#pragma mark - Background Options Methods
+
+// override thought post since we're using images instead of colors
+- (void)setBkgIndex:(int)index{
+    self.backgroundImg.image = [self.bkgdOptions objectAtIndex:index];
+}
+
+- (void)setBackgroundOptions:(NSMutableArray *)bkgdOptions{
+    self.bkgdOptions = bkgdOptions;
+}
+
+- (NSMutableArray *)createBackgroundOptions{
+    
+    UIImage *black = [UIImage imageNamed:@"intro_moment_1.png"];
+    UIImage *gray = [UIImage imageNamed:@"intro_moment_2.png"];
+    UIImage *green = [UIImage imageNamed:@"intro_moment_3.png"];
+    
+    // image selection
+    NSMutableArray *bckgdImgOptions = [[NSMutableArray alloc]initWithObjects:black, gray, green, nil];
+    
+    return bckgdImgOptions;
+}
+
 
 #pragma mark - Placeholder Methods
 
@@ -86,6 +108,10 @@
 
 - (void)updateTextColor{
     
+    [self updateNavControlColors:@"light"];
+    
+    /*
+    
     self.placeholderColor = [UIColor colorWithRed:255.0f/255.0f green:255.0f/255.0f blue:255.0f/255.0f alpha:0.6];
     
     // chck if current background is white
@@ -103,6 +129,7 @@
 
         [self updateNavControlColors:@"light"];
     }
+     */
 }
 
 
@@ -128,10 +155,6 @@
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView{
-    
-    // set default writing color
-    textView.textColor = [UIColor blackColor];
-    
     if(!self.projectGoalPlaceholder.hidden){
         [self.projectGoalPlaceholder setHidden:YES];
     }
