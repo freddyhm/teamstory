@@ -683,11 +683,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
 #pragma mark - Project Methods
 
 - (void)checkForActiveProject{
-    [self.user fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        self.user = (PFUser *)object;
-        BOOL hasProject = [[[self.user objectForKey:@"activeProject"] objectId] length] > 0;
-        [self replaceUserInfoWithProject:hasProject];
-    }];
+    
+    NSString *activeProject = [self.user objectForKey:@"projectGoal"];
+    BOOL hasProject = [activeProject length] > 0;
+    [self replaceUserInfoWithProject:hasProject];
 }
 
 - (void)replaceUserInfoWithProject:(BOOL)willReplace{
@@ -724,7 +723,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     
     // get post object from server
     PFQuery *postQuery = [PFQuery queryWithClassName:@"Photo"];
-    [postQuery whereKey:@"project" equalTo:[self.user objectForKey:@"activeProject"]];
+    [postQuery whereKey:@"projectGoal" equalTo:[self.user objectForKey:@"projectGoal"]];
     [postQuery whereKey:@"type" equalTo:@"project"];
     [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if(!error && object){
@@ -735,13 +734,8 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 - (void)getProjectTitle{
-    // get project from server
-    PFQuery *projectQuery = [PFQuery queryWithClassName:@"Project"];
-    [projectQuery getObjectInBackgroundWithId:[[self.user objectForKey:@"activeProject"] objectId] block:^(PFObject *project, NSError *error) {
-        // set title
-        NSString *projectTitle = [project objectForKey:@"goal"];
-        [self setProjectTitleContainer:projectTitle];
-    }];
+    NSString *projectTitle = [self.user objectForKey:@"projectGoal"];
+    [self setProjectTitleContainer:projectTitle];
 }
 
 - (void)setProjectTitleContainer:(NSString *)projTitle{

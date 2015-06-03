@@ -877,11 +877,24 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             }
         }
         
-        // Delete photo
+        // Delete project goal associated with photo in user table if present
+        [self deleteProjectIfPresent:self.current_photo];
+        
+        // Delete post
         [self.current_photo deleteEventually];
     }];
     [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:[self.current_photo objectId]];
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)deleteProjectIfPresent:(PFObject *)post{
+    
+    NSUInteger postLength = [[post objectForKey:@"projectGoal"] length];
+    
+    if(postLength > 0){
+        [[PFUser currentUser] removeObjectForKey:@"projectGoal"];
+        [[PFUser currentUser] saveEventually];
+    }
 }
 
 #pragma mark - UIActionSheetDelegate

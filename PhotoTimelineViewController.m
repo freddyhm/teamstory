@@ -286,9 +286,11 @@ enum ActionSheetTags {
             }
         }
         
-        // Delete photo
-        [self.current_photo deleteEventually];
+        // Delete project goal associated with photo in user table if present
         [self deleteProjectIfPresent:self.current_photo];
+        
+        // Delete post
+        [self.current_photo deleteEventually];
     }];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:[self.current_photo objectId]];
@@ -297,12 +299,13 @@ enum ActionSheetTags {
 
 - (void)deleteProjectIfPresent:(PFObject *)post{
     
-    NSUInteger postLength = [[[post objectForKey:@"project"] objectId] length];
+    NSUInteger postLength = [[post objectForKey:@"projectGoal"] length];
     
     if(postLength > 0){
-        [[post objectForKey:@"project"] deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        [post removeObjectForKey:@"projectGoal"];
+        [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if(succeeded){
-                [[PFUser currentUser] removeObjectForKey:@"activeProject"];
+                [[PFUser currentUser] removeObjectForKey:@"projectGoal"];
                 [[PFUser currentUser] saveEventually];
             }
         }];

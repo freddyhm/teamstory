@@ -265,12 +265,10 @@
 #pragma mark - Project Methods
 
 - (void)checkForActiveProject{
-    [self.user fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        self.user = (PFUser *)object;
-        NSString *activeProject = [self.user objectForKey:@"projectGoal"];
-        BOOL hasProject = [activeProject length] > 0;
-        [self replaceUserInfoWithProject:hasProject];
-    }];
+    
+    NSString *activeProject = [self.user objectForKey:@"projectGoal"];
+    BOOL hasProject = [activeProject length] > 0;
+    [self replaceUserInfoWithProject:hasProject];
 }
 
 - (void)replaceUserInfoWithProject:(BOOL)willReplace{
