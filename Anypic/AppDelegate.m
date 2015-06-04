@@ -24,6 +24,8 @@
 #import "PAPMessageListViewController.h"
 #import "PAPMessagingViewController.h"
 #import "PAPMessageListCell.h"
+#import <Parse/Parse.h>
+#import <ParseCrashReporting/ParseCrashReporting.h>
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import "PAPLoginSelectionViewController.h"
 
