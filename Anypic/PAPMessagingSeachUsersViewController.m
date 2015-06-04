@@ -85,23 +85,19 @@
         if (!error) {
             [SVProgressHUD dismiss];
             for (int i = 0; i < objects.count; i++) {
-                if ([[[objects[i] objectForKey:@"fromUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+                if ([[objects[i] objectForKey:@"toUser"] objectId].length > 0 && [[[objects[i] objectForKey:@"fromUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
                     if ([self.filterUserList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", [[objects[i] objectForKey:@"toUser"] objectForKey:@"displayName"]]].count <= 0) {
                         [self.filterUserList addObject:[objects[i] objectForKey:@"toUser"]];
                         [self.followUserList addObject:objects[i]];
                     }
-                } else {
-                    if ([self.filterUserList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", [[objects[i] objectForKey:@"fromUser"] objectForKey:@"displayName"]]].count <= 0) {
+                } else if ([[objects[i] objectForKey:@"fromUser"] objectId].length > 0 && [[[objects[i] objectForKey:@"toUser"] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+                    if ([self.filterUserList filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"displayName contains[c] %@", [[objects[i] objectForKey:@"fromUser"] objectForKey:@"displayName"]]].count <= 0 ) {
                         [self.filterUserList addObject:[objects[i] objectForKey:@"fromUser"]];
                         [self.followUserList addObject:objects[i]];
                     }
                 }
             }
-            
-            self.userList = [[AtMention sharedAtMention] userList];
-            if (self.userList.count > 0) {
-                [self.followerTV reloadData];
-            }
+            [self.followerTV reloadData];
         } else {
             NSLog(@"Query Calling Error %@", error);
         }
@@ -111,11 +107,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.filterFollowUserList = [[NSMutableArray alloc] init];
     self.userList = [[NSMutableArray alloc] init];
+    self.filterFollowUserList = [[NSMutableArray alloc] init];
     self.followUserList = [[NSMutableArray alloc] init];
     self.filterUserList = [[NSMutableArray alloc] init];
+    self.userList = [[AtMention sharedAtMention] userList];
     
     self.view.backgroundColor = [UIColor whiteColor];
     isSearchString = NO;
