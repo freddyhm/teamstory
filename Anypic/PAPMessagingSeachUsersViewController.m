@@ -98,8 +98,6 @@
                 }
             }
             
-            [self.userList removeAllObjects];
-            
             self.userList = [[AtMention sharedAtMention] userList];
             if (self.userList.count > 0) {
                 [self.followerTV reloadData];
