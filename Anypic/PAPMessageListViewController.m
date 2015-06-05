@@ -261,6 +261,7 @@
     PAPMessagingViewController *messageViewController = [[PAPMessagingViewController alloc] init];
     [messageViewController setTargetUser:[[self.messageList objectAtIndex:view.tag] objectForKey:userNumber] setUserNumber:userNumber];
     [messageViewController setRoomInfo:[self.messageList objectAtIndex:view.tag]];
+    messageViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:messageViewController animated:YES];
 }
 

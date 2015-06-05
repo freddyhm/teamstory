@@ -297,6 +297,7 @@ enum ActionSheetTags {
     [SVProgressHUD show];
     self.twitterName = nil;
     
+    self.inviteButtonCheckForShare = NO;
     // getting image so that we can share
     [[photo objectForKey:@"image"] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
         [SVProgressHUD dismiss];
@@ -353,27 +354,44 @@ enum ActionSheetTags {
 }
 
 - (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType {
-    if ([activityType isEqualToString:UIActivityTypePostToFacebook]) {
-        NSString *theText = @"#startup #moment shared on #teamstoryapp - Join the global #entrepreneurship #community for #founders: goo.gl/F2QSoJ @teamstory";
-        return theText;
-    }
     
-    if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
-        NSString *theText;
-        if (self.twitterName.length > 0) {
-            theText = [NSString stringWithFormat:@"#startup moment on @teamstoryapp via @%@. Join the global startup community: http://goo.gl/UApT1i", self.twitterName];
-        } else {
-            theText = @"#startup moment on @teamstoryapp. Join the global startup community: http://goo.gl/UApT1i";
+    if (!self.inviteButtonCheckForShare) {
+        if ([activityType isEqualToString:UIActivityTypePostToFacebook]) {
+            NSString *theText = @"#startup #moment shared on #teamstoryapp - Join the global #entrepreneurship #community for #founders: goo.gl/F2QSoJ @teamstory";
+            return theText;
         }
-        return theText;
+        
+        if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
+            NSString *theText;
+            if (self.twitterName.length > 0) {
+                theText = [NSString stringWithFormat:@"#startup moment on @teamstoryapp via @%@. Join the global startup community: http://goo.gl/UApT1i", self.twitterName];
+            } else {
+                theText = @"#startup moment on @teamstoryapp. Join the global startup community: http://goo.gl/UApT1i";
+            }
+            return theText;
+        }
+        
+        if ([activityType isEqualToString:UIActivityTypeMail]) {
+            NSString *theText = @"Hey there!\nThis is a startup moment shared on Teamstory (http://teamstoryapp.com) - A community for startups & founders! Would love for you to join the community with me: http://goo.gl/F2QSoJ";
+            return theText;
+        }
+        
+        return @"Startup moment shared on Teamstory - A community for startups & founders! Join the community with me: goo.gl/F2QSoJ";
+        
+    } else {
+        if ([activityType isEqualToString:UIActivityTypePostToFacebook]) {
+            NSString *theText = @"Join me and hundreds of #entrepreneurs and #founders on @teamstory!:goo.gl/F2QSoJ" ;
+            return theText;
+        }
+        
+        if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
+            NSString *theText;
+            theText = @"Join me and hundreds of #entrepreneurs and #founders on @teamstoryapp!:goo.gl/F2QSoJ";
+            return theText;
+        }
+        
+        return @"Join me and hundreds of entrepreneurs and founders on teamstoryapp!:http://goo.gl/F2QSoJ";
     }
-    
-    if ([activityType isEqualToString:UIActivityTypeMail]) {
-        NSString *theText = @"Hey there!\nThis is a startup moment shared on Teamstory (http://teamstoryapp.com) - A community for startups & founders! Would love for you to join the community with me: http://goo.gl/F2QSoJ";
-        return theText;
-    }
-    
-    return @"Startup moment shared on Teamstory - A community for startups & founders! Join the community with me: goo.gl/F2QSoJ";
 }
 
 #pragma mark - Refresh
