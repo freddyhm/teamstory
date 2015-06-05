@@ -286,7 +286,7 @@ enum ActionSheetTags {
             }
         }
         
-        // Delete project goal associated with photo in user table if present
+        // Delete project title associated with photo in user table if present
         [self deleteProjectIfPresent:self.current_photo];
         
         // Delete post
@@ -299,13 +299,13 @@ enum ActionSheetTags {
 
 - (void)deleteProjectIfPresent:(PFObject *)post{
     
-    NSUInteger postLength = [[post objectForKey:@"projectGoal"] length];
+    NSUInteger postLength = [[post objectForKey:@"projectTitle"] length];
     
     if(postLength > 0){
-        [post removeObjectForKey:@"projectGoal"];
+        [post removeObjectForKey:@"projectTitle"];
         [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if(succeeded){
-                [[PFUser currentUser] removeObjectForKey:@"projectGoal"];
+                [[PFUser currentUser] removeObjectForKey:@"projectTitle"];
                 [[PFUser currentUser] saveEventually];
             }
         }];

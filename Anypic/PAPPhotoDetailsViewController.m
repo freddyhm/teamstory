@@ -877,7 +877,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             }
         }
         
-        // Delete project goal associated with photo in user table if present
+        // Delete project title associated with photo in user table if present
         [self deleteProjectIfPresent:self.current_photo];
         
         // Delete post
@@ -889,10 +889,10 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 - (void)deleteProjectIfPresent:(PFObject *)post{
     
-    NSUInteger postLength = [[post objectForKey:@"projectGoal"] length];
+    NSUInteger postLength = [[post objectForKey:@"projectTitle"] length];
     
     if(postLength > 0){
-        [[PFUser currentUser] removeObjectForKey:@"projectGoal"];
+        [[PFUser currentUser] removeObjectForKey:@"projectTitle"];
         [[PFUser currentUser] saveEventually];
     }
 }

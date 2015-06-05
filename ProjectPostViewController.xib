@@ -10,9 +10,13 @@
                 <outlet property="backgroundImg" destination="0Of-tk-kJa" id="Dx7-Em-Vkv"/>
                 <outlet property="leftNavSelector" destination="L3r-dl-eFg" id="bcU-59-dq6"/>
                 <outlet property="leftSwipe" destination="5XT-Ua-Fft" id="cI3-vd-mAo"/>
+                <outlet property="projecTitlePlaceholder" destination="dqt-eT-TIp" id="9wG-xc-GRS"/>
+                <outlet property="projectBkgdImgView" destination="cbb-iS-HHZ" id="bEM-q1-fPQ"/>
                 <outlet property="projectGoal" destination="xzn-3r-69N" id="fvk-tN-4Zp"/>
-                <outlet property="projectGoalLabel" destination="Qno-V3-Xdy" id="6h2-Tr-M0J"/>
+                <outlet property="projectGoalLabel" destination="3HS-2x-42q" id="77s-MQ-xUi"/>
                 <outlet property="projectGoalPlaceholder" destination="siI-ls-0nQ" id="aSh-nj-eWG"/>
+                <outlet property="projectTitle" destination="ZJA-Oh-unl" id="Kco-U0-3ZX"/>
+                <outlet property="projectTitleLabel" destination="Qno-V3-Xdy" id="W1Z-vy-PzT"/>
                 <outlet property="rightNavSelector" destination="Hse-na-Kmj" id="dqe-oM-5LR"/>
                 <outlet property="rightSwipe" destination="YP5-J5-ut2" id="44b-Zt-jR7"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -23,7 +27,7 @@
             <rect key="frame" x="0.0" y="64" width="320" height="504"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Of-tk-kJa">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Of-tk-kJa" userLabel="Colour">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="320"/>
                     <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
                     <gestureRecognizers/>
@@ -32,22 +36,10 @@
                         <outletCollection property="gestureRecognizers" destination="YP5-J5-ut2" appends="YES" id="cWc-7j-0aj"/>
                     </connections>
                 </imageView>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" tag="2" contentMode="center" fixedFrame="YES" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="xzn-3r-69N" userLabel="Goal">
-                    <rect key="frame" x="40" y="140" width="248" height="58"/>
-                    <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="16"/>
-                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                    <connections>
-                        <outlet property="delegate" destination="-1" id="Y6D-SL-r9C"/>
-                    </connections>
-                </textView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="kicking ass!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="siI-ls-0nQ" userLabel="Goal Placeholder">
-                    <rect key="frame" x="62" y="135" width="199" height="67"/>
-                    <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="16"/>
-                    <color key="textColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cbb-iS-HHZ" userLabel="Images">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="320"/>
+                    <gestureRecognizers/>
+                </imageView>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Tap above to create a project or a task" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BnI-OO-hVx">
                     <rect key="frame" x="32" y="338" width="256" height="116"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="13"/>
@@ -85,9 +77,46 @@
                     <color key="backgroundColor" red="0.60000002384185791" green="0.60000002384185791" blue="0.60000002384185791" alpha="1" colorSpace="calibratedRGB"/>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Today I'm working on..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qno-V3-Xdy" userLabel="Today I'm Working On...">
-                    <rect key="frame" x="70" y="100" width="178" height="22"/>
+                    <rect key="frame" x="70" y="80" width="178" height="22"/>
                     <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="16"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZJA-Oh-unl" userLabel="Title ">
+                    <rect key="frame" x="70" y="110" width="178" height="30"/>
+                    <color key="textColor" red="0.97647058819999999" green="0.97647058819999999" blue="0.97647058819999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="16"/>
+                    <textInputTraits key="textInputTraits"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="81t-38-dSq"/>
+                    </connections>
+                </textField>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Teamstory Web Project" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dqt-eT-TIp" userLabel="Title Placeholder">
+                    <rect key="frame" x="70" y="110" width="178" height="30"/>
+                    <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="16"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="To" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3HS-2x-42q" userLabel="To">
+                    <rect key="frame" x="149" y="167" width="20" height="22"/>
+                    <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="16"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="xzn-3r-69N" userLabel="Goal">
+                    <rect key="frame" x="40" y="201" width="248" height="58"/>
+                    <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="16"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="Y6D-SL-r9C"/>
+                    </connections>
+                </textView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="kicking ass!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="siI-ls-0nQ" userLabel="Goal Placeholder">
+                    <rect key="frame" x="62" y="201" width="199" height="67"/>
+                    <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="16"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
@@ -99,7 +128,7 @@
                 <outletCollection property="gestureRecognizers" destination="5XT-Ua-Fft" appends="YES" id="png-kn-Q9Y"/>
                 <outletCollection property="gestureRecognizers" destination="YP5-J5-ut2" appends="YES" id="ULu-6o-mHq"/>
             </connections>
-            <point key="canvasLocation" x="-1987" y="86"/>
+            <point key="canvasLocation" x="-2048" y="85"/>
         </view>
         <swipeGestureRecognizer direction="left" id="5XT-Ua-Fft"/>
         <swipeGestureRecognizer direction="right" id="YP5-J5-ut2"/>

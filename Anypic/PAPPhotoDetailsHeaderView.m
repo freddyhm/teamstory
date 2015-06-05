@@ -684,7 +684,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 
 - (void)checkForActiveProject{
     
-    NSString *activeProject = [self.user objectForKey:@"projectGoal"];
+    NSString *activeProject = [self.user objectForKey:@"projectTitle"];
     BOOL hasProject = [activeProject length] > 0;
     [self replaceUserInfoWithProject:hasProject];
 }
@@ -723,7 +723,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
     
     // get post object from server
     PFQuery *postQuery = [PFQuery queryWithClassName:@"Photo"];
-    [postQuery whereKey:@"projectGoal" equalTo:[self.user objectForKey:@"projectGoal"]];
+    [postQuery whereKey:@"projectTitle" equalTo:[self.user objectForKey:@"projectTitle"]];
     [postQuery whereKey:@"type" equalTo:@"project"];
     [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if(!error && object){
@@ -734,7 +734,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
 }
 
 - (void)getProjectTitle{
-    NSString *projectTitle = [self.user objectForKey:@"projectGoal"];
+    NSString *projectTitle = [self.user objectForKey:@"projectTitle"];
     [self setProjectTitleContainer:projectTitle];
 }
 

@@ -9,13 +9,14 @@
 #import "ProjectPostViewController.h"
 
 #define MAX_GOAL_LENGTH 35
+#define MAX_TITLE_LENGTH 30
 #define TITLE_TAG_NUM 1
-
 
 @interface ThoughtPostViewController ()
 
 - (void)saveEdit:(id)sender;
 - (void)showSaveButtonOnStart;
+- (void)setBkgIndex:(int)index;
 
 @property int prevBkgdIndex;
 
@@ -29,14 +30,18 @@
 
 // input labels
 @property (weak, nonatomic) IBOutlet UILabel *projectGoalLabel;
+@property (weak, nonatomic) IBOutlet UITextField *projectTitle;
+@property (weak, nonatomic) IBOutlet UILabel *projectTitleLabel;
 
 @property (weak, nonatomic) NSString *postType;
 @property (weak, nonatomic) PFUser *user;
 @property (strong, nonatomic) UIColor *placeholderColor;
-@property (strong, nonatomic) NSMutableArray *bkgdOptions;
+@property (strong, nonatomic) NSMutableArray *bkgdImgOptions;
 
 // textfield placeholders
 @property (weak, nonatomic) IBOutlet UILabel *projectGoalPlaceholder;
+@property (weak, nonatomic) IBOutlet UILabel *projecTitlePlaceholder;
+@property (weak, nonatomic) IBOutlet UIImageView *projectBkgdImgView;
 
 @end
 
@@ -60,23 +65,37 @@
 
 #pragma mark - Background Options Methods
 
-// override thought post since we're using images instead of colors
+// override thought post so we can add overlay pictures
 - (void)setBkgIndex:(int)index{
-    self.backgroundImg.image = [self.bkgdOptions objectAtIndex:index];
-}
-
-- (void)setBackgroundOptions:(NSMutableArray *)bkgdOptions{
-    self.bkgdOptions = bkgdOptions;
-}
-
-- (NSMutableArray *)createBackgroundOptions{
+    [super setBkgIndex:index];
     
-    UIImage *black = [UIImage imageNamed:@"intro_moment_1.png"];
-    UIImage *gray = [UIImage imageNamed:@"intro_moment_2.png"];
-    UIImage *green = [UIImage imageNamed:@"intro_moment_3.png"];
+    // create our background images when method is called by parent for the first tim
+    if(self.bkgdImgOptions == nil){
+        [self setBackgroundImgOptions:[self createBackgroundImgOptions]];
+    }
+    
+    self.projectBkgdImgView.image = [self.bkgdImgOptions objectAtIndex:index];
+}
+
+- (void)setBackgroundImgOptions:(NSMutableArray *)bkgdOptions{
+    self.bkgdImgOptions = bkgdOptions;
+}
+ 
+
+- (NSMutableArray *)createBackgroundImgOptions{
+    
+    UIImage *imgA = [UIImage imageNamed:@"bg_project_a.png"];
+    UIImage *imgB = [UIImage imageNamed:@"bg_project_b.png"];
+    UIImage *imgC = [UIImage imageNamed:@"bg_project_c.png"];
+    UIImage *imgD = [UIImage imageNamed:@"bg_project_d.png"];
+    UIImage *imgE = [UIImage imageNamed:@"bg_project_e.png"];
+    UIImage *imgF = [UIImage imageNamed:@"bg_project_f.png"];
+    UIImage *imgG = [UIImage imageNamed:@"bg_project_g.png"];
+    UIImage *imgH = [UIImage imageNamed:@"bg_project_h.png"];
+    UIImage *imgI = [UIImage imageNamed:@"bg_project_i.png"];
     
     // image selection
-    NSMutableArray *bckgdImgOptions = [[NSMutableArray alloc]initWithObjects:black, gray, green, nil];
+    NSMutableArray *bckgdImgOptions = [[NSMutableArray alloc]initWithObjects:imgA, imgB, imgC, imgD, imgE, imgF, imgG, imgH, imgI, nil];
     
     return bckgdImgOptions;
 }
@@ -89,7 +108,7 @@
     NSUInteger fieldNum = textField.tag;
     
     if(fieldNum == TITLE_TAG_NUM){
-        [self.projectGoalPlaceholder setHidden:YES];
+        [self.projecTitlePlaceholder setHidden:YES];
     }
 }
 
@@ -187,13 +206,13 @@
 
 - (BOOL)validateBeforeSaving{
     
-    BOOL areInputsNotEmpty = [self checkInputTextIsNotEmpty:self.projectGoal.text];
+    BOOL areInputsNotEmpty = [self checkInputTextIsNotEmpty:self.projectTitle.text] && [self checkInputTextIsNotEmpty:self.projectGoal.text];
     
     if(!areInputsNotEmpty){
         [self showEmptyInputAlert];
     }
     
-    BOOL areInputsLessThanMax = [self checkInputTextIsLessThanMaxLength:self.projectGoal.text type:@"goal"];
+    BOOL areInputsLessThanMax = [self checkInputTextIsLessThanMaxLength:self.projectTitle.text type:@"title"] && [self checkInputTextIsLessThanMaxLength:self.projectGoal.text type:@"goal"];
     
     return areInputsNotEmpty && areInputsLessThanMax;
 }
@@ -208,6 +227,9 @@
 
 - (UIImageView *)buildImageWithSubviews:(UIImageView *)backgroundView{
     
+    [backgroundView addSubview:self.projectBkgdImgView];
+    [backgroundView addSubview:self.projectTitleLabel];
+    [backgroundView addSubview:self.projectTitle];
     [backgroundView addSubview:self.projectGoalLabel];
     [backgroundView addSubview:self.projectGoal];
     
@@ -221,16 +243,16 @@
 - (void)createProject:(PFObject *)post{
     
     // update member active project
-    [self updateMemberActiveProject:self.projectGoal.text];
+    [self updateMemberActiveProject:self.projectTitle.text];
     
-    // create post with project goal as identifier for project
-    [post setObject:self.projectGoal.text forKey:@"projectGoal"];
+    // create post with project title as identifier for project
+    [post setObject:self.projectTitle.text forKey:@"projectTitle"];
 }
 
-- (void)updateMemberActiveProject:(NSString *)projectGoal{
+- (void)updateMemberActiveProject:(NSString *)projectTitle{
     // update member's active project
     PFUser *user = [PFUser currentUser];
-    [user setValue:self.projectGoal.text forKey:@"projectGoal"];
+    [user setValue:projectTitle forKey:@"projectTitle"];
     [user saveEventually];
 }
 

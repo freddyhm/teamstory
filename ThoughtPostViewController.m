@@ -92,11 +92,11 @@
     self.suggOptions = [[NSMutableArray alloc]initWithObjects:sugg1, sugg2, sugg3, sugg4, sugg5, sugg6, sugg7, sugg8, sugg9, sugg10, sugg11, sugg12, sugg13, sugg14, sugg15, sugg16, sugg17, sugg18, sugg19, nil];
     
     // create and set background options
-    [self setBkgdOptions:[self createBackgroundOptions]];
+    [self setBackgroundOptions:[self createBackgroundOptions]];
     
     // random suggestion within selection bounds
-    int randomSuggOption = [self generateRandomNumFromCoumt:self.suggOptions.count];
-    int randomBkgdOption = [self generateRandomNumFromCoumt:self.bkgdOptions.count];
+    int randomSuggOption = [self generateRandomNumFromCount:self.suggOptions.count];
+    int randomBkgdOption = [self generateRandomNumFromCount:self.bkgdOptions.count];
     
     [self setBkgIndex:randomBkgdOption];
     
@@ -121,7 +121,7 @@
     [self updateTextColor];
 }
 
-- (int)generateRandomNumFromCoumt:(NSUInteger)count{
+- (int)generateRandomNumFromCount:(NSUInteger)count{
     int randomNum = arc4random_uniform((int)count);
     return randomNum;
 }
@@ -137,7 +137,6 @@
 - (NSMutableArray *)createBackgroundOptions{
     
     // set colors
-    UIColor *black = [UIColor colorWithRed:255.0f/255.0f green:255.0f/255.0f blue:255.0f/255.0f alpha:1];
     UIColor *gray = [UIColor colorWithRed:42.0f/255.0f green:42.0f/255.0f blue:42.0f/255.0f alpha:1];
     UIColor *green = [UIColor colorWithRed:75.0f/255.0f green:82.0f/255.0f blue:95.0f/255.0f alpha:1];
     UIColor *teal = [UIColor colorWithRed:98.0f/255.0f green:195.0f/255.0f blue:112.0f/255.0f alpha:1];
@@ -146,12 +145,10 @@
     UIColor *purple = [UIColor colorWithRed:243.0f/255.0f green:137.0f/255.0f blue:100.0f/255.0f alpha:1];
     UIColor *pink = [UIColor colorWithRed:125.0f/255.0f green:112.0f/255.0f blue:186.0f/255.0f alpha:1];
     UIColor *blue = [UIColor colorWithRed:237.0f/255.0f green:86.0f/255.0f blue:118.0f/255.0f alpha:1];
-    UIColor *brown = [UIColor colorWithRed:144.0f/255.0f green:190.0f/255.0f blue:222.0f/255.0f alpha:1];
     UIColor *olive = [UIColor colorWithRed:85.0f/255.0f green:67.0f/255.0f blue:72.0f/255.0f alpha:1];
-    UIColor *white = [UIColor colorWithRed:107.0f/255.0f green:163.0f/255.0f blue:104.0f/255.0f alpha:1];
     
     // color selection
-    NSMutableArray *bckgdColorOptions = [[NSMutableArray alloc]initWithObjects:black, gray, green, teal, orange, redOrange, purple, pink, blue, brown, olive, white, nil];
+    NSMutableArray *bckgdColorOptions = [[NSMutableArray alloc]initWithObjects:gray, green, teal, orange, redOrange, purple, pink, blue, olive, nil];
     
     return bckgdColorOptions;
 }
