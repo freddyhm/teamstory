@@ -833,9 +833,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
         NSString *theText;
         if (self.twitterName.length > 0) {
-            theText = [NSString stringWithFormat:@"#startup moment on @teamstoryapp via @%@. Join the global startup community: http://goo.gl/UApT1i", self.twitterName];
+            theText = [NSString stringWithFormat:@"#startup moment on @teamstoryapp via @%@. Join the global startup community: http://goo.gl/F2QSoJ", self.twitterName];
         } else {
-            theText = @"#startup moment on @teamstoryapp. Join the global startup community: http://goo.gl/UApT1i";
+            theText = @"#startup moment on @teamstoryapp. Join the global startup community: http://goo.gl/F2QSoJ";
         }
         return theText;
     }
