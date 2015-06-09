@@ -17,6 +17,7 @@
 #import "AppDelegate.h"
 #import "AtMention.h"
 #import "PAPLoginSelectionViewController.h"
+#import "PAPTabBarController.h"
 
 #define APP ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 
@@ -95,6 +96,16 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 #pragma mark - UIViewController
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
+    ((PAPTabBarController *)self.tabBarController).postMenuButton.hidden = YES;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:YES];
+    ((PAPTabBarController *)self.tabBarController).postMenuButton.hidden = NO;
+}
 
 - (void)viewDidLoad {
     
@@ -219,6 +230,7 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.filteredArray = [[NSMutableArray alloc]init];
     self.atmentionUserArray = [[NSMutableArray alloc] init];
     self.autocompleteTableView.backgroundColor = [UIColor clearColor];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -531,9 +543,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         comment.ACL = ACL;
         
         [[PAPCache sharedCache] incrementCommentCountForPhoto:self.photo];
-        
+                
         // increment activity point
-        [[AtMention sharedAtMention] addPointToActivityCount];
+        [[ActivityPointSystem sharedActivityPointSystem] addPointToActivityCount:@"comment"];
         
         // get post type
         NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
@@ -821,9 +833,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
         NSString *theText;
         if (self.twitterName.length > 0) {
-            theText = [NSString stringWithFormat:@"#startup moment on @teamstoryapp via @%@. Join the global startup community: http://goo.gl/UApT1i", self.twitterName];
+            theText = [NSString stringWithFormat:@"#startup moment on @teamstoryapp via @%@. Join the global startup community: http://goo.gl/F2QSoJ", self.twitterName];
         } else {
-            theText = @"#startup moment on @teamstoryapp. Join the global startup community: http://goo.gl/UApT1i";
+            theText = @"#startup moment on @teamstoryapp. Join the global startup community: http://goo.gl/F2QSoJ";
         }
         return theText;
     }

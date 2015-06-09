@@ -1,33 +1,33 @@
 Parse.Cloud.job("photoCount", function(request, status) {
-  // Set up to modify user data
-  Parse.Cloud.useMasterKey();
-  // Query for all users
-  var query = new Parse.Query(Parse.User);
-  query.doesNotExist("postCount");
-  query.exists("displayName");
-  query.each(function(user) {
-      var subQuery = new Parse.Query("Photo");
-      subQuery.equalTo("user", user);
-      subQuery.count({
-      success: function(number) {
-       // Set and save the change
-          user.set("postCount", number);
-          return user.save(); 
-      },
-      error: function(error) {
-        // error is an instance of Parse.Error.
-        console.log(error);
-      }
-    });
-  }).then(function() {
-    // Set the job's success status
-    status.success("User photo counting completed successfully.");
-  }, function(error) {
-    // Set the job's error status
-    status.error("Uh oh, something went wrong.");
-    console.log(error);
-  });
-});
+                // Set up to modify user data
+                Parse.Cloud.useMasterKey();
+                // Query for all users
+                var query = new Parse.Query(Parse.User);
+                query.doesNotExist("postCount");
+                query.exists("displayName");
+                query.each(function(user) {
+                           var subQuery = new Parse.Query("Photo");
+                           subQuery.equalTo("user", user);
+                           subQuery.count({
+                                          success: function(number) {
+                                          // Set and save the change
+                                          user.set("postCount", number);
+                                          return user.save();
+                                          },
+                                          error: function(error) {
+                                          // error is an instance of Parse.Error.
+                                          console.log(error);
+                                          }
+                                          });
+                           }).then(function() {
+                                   // Set the job's success status
+                                   status.success("User photo counting completed successfully.");
+                                   }, function(error) {
+                                   // Set the job's error status
+                                   status.error("Uh oh, something went wrong.");
+                                   console.log(error);
+                                   });
+                });
 
 Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
                 
@@ -115,167 +115,167 @@ Parse.Cloud.job("deleteDuplicateFollowing", function(request, status) {
 
 Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                 
-    Parse.Cloud.useMasterKey();
+                Parse.Cloud.useMasterKey();
                 
-    // create pointer to post activity to save in query
-    var Author = Parse.Object.extend("User");
-    var postAuthor = new Author();
-    var postAuthorId = request.params.postAuthorId;
-    postAuthor.id = postAuthorId;
+                // create pointer to post activity to save in query
+                var Author = Parse.Object.extend("User");
+                var postAuthor = new Author();
+                var postAuthorId = request.params.postAuthorId;
+                postAuthor.id = postAuthorId;
                 
-    var notifyFollowersQuery = new Parse.Query("Activity");
+                var notifyFollowersQuery = new Parse.Query("Activity");
                 
-    // create pointer to post activity to save in query
-    var Activity  = Parse.Object.extend("Activity");
-    var postActivityQuery = new Parse.Query(Activity);
+                // create pointer to post activity to save in query
+                var Activity  = Parse.Object.extend("Activity");
+                var postActivityQuery = new Parse.Query(Activity);
                 
-    var activityId = request.params.activityId;
-    var displayName = request.params.displayName;
-    var postId = request.params.postId;
-    var postType = request.params.postType;
+                var activityId = request.params.activityId;
+                var displayName = request.params.displayName;
+                var postId = request.params.postId;
+                var postType = request.params.postType;
                 
-    var f = 0;
-                
-                
-                
-   var pushMsg = displayName + ' posted a ' + postType;
-        
-    var pushData = {
-        alert: pushMsg, // Set our alert message.
-        badge: 'Increment', // Increment the target device's badge count.
-        // The following keys help load the correct data in response to this push notification.
-        p: 'a', // Payload Type: Activity
-        t: 'po', // Post Type: post
-        fu: postAuthor.id, // From User
-        pid: postId, // Photo Id
-        aid: activityId // Activity Id
-        };
-
-                
-    console.log("in notify");
-
-    postActivityQuery.get(activityId, {
-              success: function(postActivity) {
-                          
-                  // The object was retrieved successfully.
-                  console.log("in activity query");
-                          
-                  // get all follow activities related to the author
-                  notifyFollowersQuery.equalTo("type", "follow");
-                  notifyFollowersQuery.equalTo("toUser", postAuthor);
-                  notifyFollowersQuery.include("fromUser");
-                  
-                  notifyFollowersQuery.find({
-                                            
-                    success: function(results) {
-                                            
-                        console.log("in follow");
-                        
-                        // use to keep track of duplicate followers
-                        var notifiedUsers = [];
-                                            
-                        // loop through all followers
-                        for (var i = 0; i < results.length; i++) {
-                                            
-                                var follower = results[i].get("fromUser");
-                                
-                                // notify follower
-                                var installationQuery = new Parse.Query(Parse.Installation);
-                                installationQuery.equalTo("user", follower);
-                                            
-                                // save notice in follower table
-                                var FollowerObj = Parse.Object.extend("Follower");
-                                var followerObj = new FollowerObj();
-                                
-                                // set and save the new follower object
-                                followerObj.set("follower", follower);
-                                followerObj.set("following", postAuthor);
-                                followerObj.set("postActivity", postActivity);
-                                            
-                                // check if we've already sent notification
-                                if(notifiedUsers.indexOf(follower.id) == -1)
-                                {
-                                    // add to list of users we sent pushes
-                                    notifiedUsers.push(follower.id);
-                                            
-                                    followerObj.save(null, {
-                                                     success: function(newFollowerObj) {
-                                                     
-                                                     
-                                                         console.log("in follow obj");
-                                                         
-                                                         /* add follower as a subscriber in post activity.
-                                                          This is so we can pull in activity feed from
-                                                          client side. Similar to comment subscription. */
-                                                         
-                                                         postActivity.add("subscribers", newFollowerObj);
-                                                     
-                                                     console.log("saving act in subs");
-                                                     
-                                                     
-                                                         postActivity.save(null, {
-                                                                           success: function(obj) {
-                                                                           
-                                                                           console.log("saved act in subs");
-                                                                                // check if
-                                                                           
-
-                                                                           
-                                                                           f++;
-                                                                           console.log(results.length);
-                                                                               if(f == results.length){
-                                                                           
-                                                                                    console.log("success!");
-                                                                                    status.success();
-                                                                               }
-                                                                           },
-                                                                           error: function(obj, error) {
-                                                                           console.log(error);
-                                                                           }
-                                                         });
-                                                      
-                                                     },
-                                                     error: function(newFollowerObj, error) {
-                                                     // Execute any logic that should take place if the save fails.
-                                                     // error is a Parse.Error with an error code and message.
-                                                     alert('Failed to create new object, with error code: ' + error.message);
-                                                     }
-                                    });
-                                                
-                                     // update activity badge for follower
-                                     var newActivityBadge = follower.get("activityBadge") + 1;
-                                     follower.set("activityBadge", newActivityBadge);
-                                     follower.save();
-                                     
-                                     // send push notification with proper message
-                                     Parse.Push.send({
-                                         where: installationQuery,
-                                         data: pushData
-                                         }).then(function() {
-                                         console.log('Sent follower push');
-                                     }, function(error) {
-                                     throw "Push Error" + error.code + " : " + error.message;
-                                     });
-                                }
-                            }
-                    },
-                    error: function(error) {
-
-                        console.error("Error: " + error.code + " " + error.message);
-                    }
-                    });
-              },
-              error: function(object, error) {
-
-              }
-    });
-                
-            
+                var f = 0;
                 
                 
-   
                 
-});
+                var pushMsg = displayName + ' posted a ' + postType;
+                
+                var pushData = {
+                alert: pushMsg, // Set our alert message.
+                badge: 'Increment', // Increment the target device's badge count.
+                // The following keys help load the correct data in response to this push notification.
+                p: 'a', // Payload Type: Activity
+                t: 'po', // Post Type: post
+                fu: postAuthor.id, // From User
+                pid: postId, // Photo Id
+                aid: activityId // Activity Id
+                };
+                
+                
+                console.log("in notify");
+                
+                postActivityQuery.get(activityId, {
+                                      success: function(postActivity) {
+                                      
+                                      // The object was retrieved successfully.
+                                      console.log("in activity query");
+                                      
+                                      // get all follow activities related to the author
+                                      notifyFollowersQuery.equalTo("type", "follow");
+                                      notifyFollowersQuery.equalTo("toUser", postAuthor);
+                                      notifyFollowersQuery.include("fromUser");
+                                      
+                                      notifyFollowersQuery.find({
+                                                                
+                                                                success: function(results) {
+                                                                
+                                                                console.log("in follow");
+                                                                
+                                                                // use to keep track of duplicate followers
+                                                                var notifiedUsers = [];
+                                                                
+                                                                // loop through all followers
+                                                                for (var i = 0; i < results.length; i++) {
+                                                                
+                                                                var follower = results[i].get("fromUser");
+                                                                
+                                                                // notify follower
+                                                                var installationQuery = new Parse.Query(Parse.Installation);
+                                                                installationQuery.equalTo("user", follower);
+                                                                
+                                                                // save notice in follower table
+                                                                var FollowerObj = Parse.Object.extend("Follower");
+                                                                var followerObj = new FollowerObj();
+                                                                
+                                                                // set and save the new follower object
+                                                                followerObj.set("follower", follower);
+                                                                followerObj.set("following", postAuthor);
+                                                                followerObj.set("postActivity", postActivity);
+                                                                
+                                                                // check if we've already sent notification
+                                                                if(notifiedUsers.indexOf(follower.id) == -1)
+                                                                {
+                                                                // add to list of users we sent pushes
+                                                                notifiedUsers.push(follower.id);
+                                                                
+                                                                followerObj.save(null, {
+                                                                                 success: function(newFollowerObj) {
+                                                                                 
+                                                                                 
+                                                                                 console.log("in follow obj");
+                                                                                 
+                                                                                 /* add follower as a subscriber in post activity.
+                                                                                  This is so we can pull in activity feed from
+                                                                                  client side. Similar to comment subscription. */
+                                                                                 
+                                                                                 postActivity.add("subscribers", newFollowerObj);
+                                                                                 
+                                                                                 console.log("saving act in subs");
+                                                                                 
+                                                                                 
+                                                                                 postActivity.save(null, {
+                                                                                                   success: function(obj) {
+                                                                                                   
+                                                                                                   console.log("saved act in subs");
+                                                                                                   // check if
+                                                                                                   
+                                                                                                   
+                                                                                                   
+                                                                                                   f++;
+                                                                                                   console.log(results.length);
+                                                                                                   if(f == results.length){
+                                                                                                   
+                                                                                                   console.log("success!");
+                                                                                                   status.success();
+                                                                                                   }
+                                                                                                   },
+                                                                                                   error: function(obj, error) {
+                                                                                                   console.log(error);
+                                                                                                   }
+                                                                                                   });
+                                                                                 
+                                                                                 },
+                                                                                 error: function(newFollowerObj, error) {
+                                                                                 // Execute any logic that should take place if the save fails.
+                                                                                 // error is a Parse.Error with an error code and message.
+                                                                                 alert('Failed to create new object, with error code: ' + error.message);
+                                                                                 }
+                                                                                 });
+                                                                
+                                                                // update activity badge for follower
+                                                                var newActivityBadge = follower.get("activityBadge") + 1;
+                                                                follower.set("activityBadge", newActivityBadge);
+                                                                follower.save();
+                                                                
+                                                                // send push notification with proper message
+                                                                Parse.Push.send({
+                                                                                where: installationQuery,
+                                                                                data: pushData
+                                                                                }).then(function() {
+                                                                                        console.log('Sent follower push');
+                                                                                        }, function(error) {
+                                                                                        throw "Push Error" + error.code + " : " + error.message;
+                                                                                        });
+                                                                }
+                                                                }
+                                                                },
+                                                                error: function(error) {
+                                                                
+                                                                console.error("Error: " + error.code + " " + error.message);
+                                                                }
+                                                                });
+                                      },
+                                      error: function(object, error) {
+                                      
+                                      }
+                                      });
+                
+                
+                
+                
+                
+                
+                });
 
 
 Parse.Cloud.beforeSave('Activity', function(request, response) {
@@ -283,77 +283,77 @@ Parse.Cloud.beforeSave('Activity', function(request, response) {
                        var objectUser = request.object.get('fromUser');
                        
                        if(currentUser && currentUser.id != objectUser.id){
-                        response.error('Cannot set fromUser on Activity to a user other than the current user.');
+                       response.error('Cannot set fromUser on Activity to a user other than the current user.');
                        }else{
-                        response.success();
+                       response.success();
                        }
-});
+                       });
 
 Parse.Cloud.afterSave('Activity', function(request) {
                       
                       // check if activity is of type post
                       if(request.object.get('type') == "post"){
                       
-                          /* when user is present, post has just created so notify followers. If not then post activity is being saved so just return */
-                          if(request.user){
-                              request.user.increment("postCount");
-                              request.user.save();
+                      /* when user is present, post has just created so notify followers. If not then post activity is being saved so just return */
+                      if(request.user){
+                      request.user.increment("postCount");
+                      request.user.save();
                       
-                              console.log("in notify followers");
-                              // get picture object so we can find type of picture
-                              var post = request.object.get("photo");
+                      console.log("in notify followers");
+                      // get picture object so we can find type of picture
+                      var post = request.object.get("photo");
                       
-                              // parse keys
-                              var dev_app_id = Parse.applicationId;
-                              var dev_master_key = Parse.masterKey;
+                      // parse keys
+                      var dev_app_id = Parse.applicationId;
+                      var dev_master_key = Parse.masterKey;
                       
-                              post.fetch({
-                                         success: function(post) {
-                                         
-                                         // change wording "picture" to "moment"
-                                         var postType = post.get("type") == "picture" ? "moment" : post.get("type");
-                                         
-                                         
-                                         Parse.Cloud.httpRequest({
-                                                                 method: "POST",
-                                                                 url: "https://api.parse.com/1/jobs/notifyFollowersJob",
-                                                                 headers: {
-                                                                 "X-Parse-Application-Id": dev_app_id,
-                                                                 "X-Parse-Master-Key": dev_master_key,
-                                                                 "Content-Type": "application/json"
-                                                                 },
-                                                                 body: {
-                                                                 "activityId": request.object.id,
-                                                                 "postAuthorId": request.object.get("fromUser").id,
-                                                                 "postType": postType,
-                                                                 "displayName": request.user.get("displayName"),
-                                                                 "postId": request.object.get("photo").id,
-                                                                 
-                                                                 },
-                                                                 success: function(httpResponse) {
-                                                                 console.log("SUCCESS");
-                                                                 },
-                                                                 error: function(error) {
-                                                                 console.log("ERROR");
-                                                                 }
-                                                                 });
-                                         
-                                         
-                                         }
-                                         });
-
-                            }
+                      post.fetch({
+                                 success: function(post) {
+                                 
+                                 // change wording "picture" to "moment"
+                                 var postType = post.get("type") == "picture" ? "moment" : post.get("type");
+                                 
+                                 
+                                 Parse.Cloud.httpRequest({
+                                                         method: "POST",
+                                                         url: "https://api.parse.com/1/jobs/notifyFollowersJob",
+                                                         headers: {
+                                                         "X-Parse-Application-Id": dev_app_id,
+                                                         "X-Parse-Master-Key": dev_master_key,
+                                                         "Content-Type": "application/json"
+                                                         },
+                                                         body: {
+                                                         "activityId": request.object.id,
+                                                         "postAuthorId": request.object.get("fromUser").id,
+                                                         "postType": postType,
+                                                         "displayName": request.user.get("displayName"),
+                                                         "postId": request.object.get("photo").id,
+                                                         
+                                                         },
+                                                         success: function(httpResponse) {
+                                                         console.log("SUCCESS");
+                                                         },
+                                                         error: function(error) {
+                                                         console.log("ERROR");
+                                                         }
+                                                         });
+                                 
+                                 
+                                 }
+                                 });
                       
-                        return;
+                      }
+                      
+                      return;
                       }
                       
                       
                       var toUser = request.object.get("toUser");
                       var toUserId = toUser != undefined ? request.object.get("toUser").id : "";
-                    
+                      
                       var fromUser = request.object.get("fromUser");
                       var fromUserId = fromUser != undefined ? request.object.get("fromUser").id : "";
-                      var fromUserEmail = fromUser != undefined ? request.user.get("email") : "";
+                      var fromUserEmail = (fromUser != undefined) && (request.user != undefined) ? request.user.get("email") : "";
                       
                       if (request.object.get("type") === "membership") {
                       var Mailgun = require('mailgun');
@@ -633,18 +633,32 @@ Parse.Cloud.define ('incrementCounter', function(request, response) {
                     var query = new Parse.Query('Photo');
                     query.get(request.params.currentObjectId, {
                               success: function(counter) {
-                              var points;
+                              
+                              // init what we need to increment and add extra points
+                              var photoOwner = counter.get('user');
+                              var points = 0;
+                              var commentCount = getCommentCount(counter);
+                              var newDiscoverTotalPoints = 0;
+                              
                               if (request.params.type === 'comment') {
-                              points = 2;
+                                points = 2;
+                              
+                                 // update & get new comment count for photo
+                                commentCount = incrementCommentCounter(counter);
+                              
                               } else {
-                              points = 1;
+                                points = 1;
                               }
                               
                               if (counter.get('discoverCount') === undefined) {
-                              counter.set('discoverCount', points);
+                                  counter.set('discoverCount', points);
                               } else {
-                              counter.set('discoverCount', counter.get('discoverCount') + points);
+                                  newDiscoverTotalPoints = counter.get('discoverCount') + points;
+                                  counter.set('discoverCount', newDiscoverTotalPoints);
                               }
+                              
+                              // check if new totals qualify for extra profile activity points
+                              evaluateActivityForPoints(photoOwner, counter, commentCount, newDiscoverTotalPoints);
                               
                               return counter.save({
                                                   success:function () {
@@ -658,4 +672,145 @@ Parse.Cloud.define ('incrementCounter', function(request, response) {
                               response.error('could not be saved');
                               }
                               });
-                    });
+        
+        function evaluateActivityForPoints(owner, photoObj, photoCommentCount, discoverCount){
+            
+            // criteria for extra activity points
+            var isExtraForComments = photoCommentCount > 5;
+            var isExtraForDiscoverPoints = discoverCount > 30;
+                    
+            // add one after the other if all activities pass, if not add the one that passed
+            if(isExtraForComments && isExtraForDiscoverPoints){
+                    console.log("in both");
+                addExtraActivityPoints("comments", owner, photoObj, function(){
+                                       
+                    console.log("going to discover");
+                    addExtraActivityPoints("discoverCount", owner, photoObj);
+                });
+            }else if(isExtraForComments){
+                    
+                    console.log("in comments");
+                addExtraActivityPoints("comments", owner, photoObj);
+            }else if(isExtraForDiscoverPoints){
+                    
+                                        console.log("in discover");
+                addExtraActivityPoints("discoverCount", owner, photoObj);
+            }
+        }
+        
+                    
+                    
+        function incrementCommentCounter(photoObj){
+             
+            // get, incremement, update, and return with new total
+            var commentCount = getCommentCount(photoObj);
+            var photoCommentCount = commentCount !== undefined ? commentCount + 1 : 1;
+            photoObj.set('commentCount', photoCommentCount);
+
+                    
+            return photoCommentCount;
+        }
+                    
+        function getCommentCount(photoObj){
+            return photoObj.get('commentCount');
+        }
+                    
+        function checkExtraActivityPoints(type, photoObj){
+                    
+            // checks if we've already added the extra points based on type for the photo
+            // points get awarded only once after a certain number of activity
+            var extraPointsList = photoObj.get('extraActivityPoints');
+            var hasExtraActivityPoints = false;
+            
+            if(extraPointsList !== undefined && extraPointsList.indexOf(type) !== -1){
+                hasExtraActivityPoints = true;
+            }
+           return hasExtraActivityPoints;
+        }
+                    
+                    
+        function addExtraActivityPoints(type, owner, photoObj, callback){
+            
+            // make sure we're rewarding this type of activity for the first time
+            var hasExtraActivityPoints = checkExtraActivityPoints(type, photoObj);
+                    
+            if(!hasExtraActivityPoints){
+                   
+                // set points based on type
+                var extraPoints = 0;
+                
+                if(type === "comments"){
+                    extraPoints = 1;
+                }else if(type === "discoverCount"){
+                    extraPoints = 5;
+                }
+            
+                savePointsToUserProfile(extraPoints, type, owner, photoObj, function(){
+                                        
+                                        
+                                        
+                                        console.log("calling 1");
+                    if(callback){
+                                        
+                                        console.log("going back grom save user points");
+                      callback();
+                    }
+                });
+                    
+            }else{
+                if(callback){
+                    callback();
+                }
+            }
+        }
+                    
+        function savePointsToUserProfile(extraPoints, type, owner, photoObj, callback){
+                    
+            // get and set new values for post owner
+            var ownerQuery = new Parse.Query('User');
+                    
+            ownerQuery.get(owner.id,{
+                   success: function(photoOwner) {
+                   
+                   // save new points
+                   var newActivityPointsTotal = photoOwner.get('activityPoints') + extraPoints;
+                   photoOwner.set('activityPoints', newActivityPointsTotal);
+                   photoOwner.save();
+                   
+                   }
+            });
+                    
+            // refactor: this should be triggered after we're sure that the user's points are saved
+            // problem: does not trigger within photoOwner.save I suspect it's a callback issue
+            saveActivityExtraToPostList(type, photoObj, function(){
+                if(callback){
+                  callback();
+                }
+            });
+        }
+                    
+        function saveActivityExtraToPostList(type, photoObj, callback){
+                    
+            // get our list of what's been added already
+            var photoObjActivityExtra = photoObj.get('extraActivityPoints');
+            
+            // set to empty if this is the first activity
+            if(photoObjActivityExtra === undefined){
+              photoObjActivityExtra = [];
+            }
+                    
+            // add new activity the photos list after points have been awarded to user
+            photoObjActivityExtra.push(type);
+                    
+            photoObj.set('extraActivityPoints', photoObjActivityExtra);
+                    
+            photoObj.save(null, {
+                      success: function(gameScore) {
+                          if(callback){
+                            callback();
+                          }
+                          
+                }
+            });
+        }
+});

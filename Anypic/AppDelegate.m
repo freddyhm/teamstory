@@ -1,6 +1,6 @@
 //
 //  AppDelegate.m
-//  TeamStory
+//  TeamStory 
 //
 
 
@@ -24,6 +24,8 @@
 #import "PAPMessageListViewController.h"
 #import "PAPMessagingViewController.h"
 #import "PAPMessageListCell.h"
+#import <Parse/Parse.h>
+#import <ParseCrashReporting/ParseCrashReporting.h>
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import "PAPLoginSelectionViewController.h"
 
@@ -44,6 +46,7 @@
 @property (nonatomic, strong) PhotoTimelineViewController *photoTimelineViewController;
 @property (nonatomic, strong) PAPMessageListCell *messageListCell;
 @property (nonatomic, strong) PAPMessagingViewController *messagingViewController;
+@property (nonatomic, strong) PAPMessageListViewController *messageListViewController;
 
 @property (nonatomic, strong) NSDictionary *currentUserInfo;
 
@@ -220,7 +223,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     // load users for mention
     AtMention *one = [AtMention sharedAtMention];
     [one getAllUsers:^(NSArray *objects, BOOL succeeded, NSError *error) {}];
-    
+
     // Flight recorder
     [[FlightRecorder sharedInstance] setAccessKey:FLIGHT_RECORDER_ACCESS_KEY secretKey:FLIGHT_RECORDER_SECRET_KEY];
     [[FlightRecorder sharedInstance] setShouldStartLocationManager:YES];
@@ -433,30 +436,39 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     PAPTabBarController *tabBar = (PAPTabBarController *)aTabBarController;
     UINavigationController *selectedNav = (UINavigationController *)viewController;
     
-    // get selected controller and current controller
-    BOOL isHomeViewSelected = [[[selectedNav viewControllers] objectAtIndex:0] isKindOfClass:[PAPHomeViewController class]];
-    BOOL isCurrentViewHome = (int)self.tabBarController.selectedIndex == 0 ? YES : NO;
-    BOOL isDiscoverViewSelected = [[[selectedNav viewControllers] objectAtIndex:0] isKindOfClass:[discoverViewController class]];
-    
-    // scroll to top and refresh if source and destination are the same
-    if(isHomeViewSelected && isCurrentViewHome){
-        [[[selectedNav viewControllers] objectAtIndex:0] refreshCurrentFeed];
-    }else if (isDiscoverViewSelected && selectedNav.tabBarItem.tag == 1){
+    // make sure our nav controller actually has view controllers
+    /* I suspect this happens when memory is low and view controllers are released - need to repo */
+    if([[selectedNav viewControllers] count] > 0){
+            
+        // get selected controller and current controller
+        BOOL isHomeViewSelected = [[[selectedNav viewControllers] objectAtIndex:0] isKindOfClass:[PAPHomeViewController class]];
+        BOOL isCurrentViewHome = (int)self.tabBarController.selectedIndex == 0 ? YES : NO;
+        BOOL isDiscoverViewSelected = [[[selectedNav viewControllers] objectAtIndex:0] isKindOfClass:[discoverViewController class]];
         
-        // mixpanel analytics - tapped discover glow, reset tag
-        [[Mixpanel sharedInstance] track:@"Test: Tapped Discover Glow"];
-        [selectedNav.tabBarItem setTag:0];
+        // scroll to top and refresh if source and destination are the same
+        if(isHomeViewSelected && isCurrentViewHome){
+            [[[selectedNav viewControllers] objectAtIndex:0] refreshCurrentFeed];
+        }else if (isDiscoverViewSelected && selectedNav.tabBarItem.tag == 1){
+            
+            // mixpanel analytics - tapped discover glow, reset tag
+            [[Mixpanel sharedInstance] track:@"Test: Tapped Discover Glow"];
+            [selectedNav.tabBarItem setTag:0];
+        }
     }
-
+    
     /* This is a fail-safe: PAPTabBarController's "Handle outside tap gesture" should handle this before it reaches this method. Hiding and showing the tabbar is affecting this function so fail-safe is used. */
     
     // check if tab bar post menu is present, do not change tabs if so
     if(!tabBar.postMenu.hidden){
         return false;
-    }else{
+    }
+    
+    /*
+    else{
         // The empty UITabBarItem behind our Camera button should not load a view controller
         return ![viewController isEqual:aTabBarController.viewControllers[PAPEmptyTabBarItemIndex]];
-    }
+    }*/
+    return true;
 }
 
 
@@ -559,6 +571,8 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     [self.homeViewController setFirstLaunch:firstLaunch];
     self.activityViewController = [[PAPActivityFeedViewController alloc] initWithStyle:UITableViewStylePlain];
     self.accountViewController_tabBar = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
+    self.messageListViewController = [[PAPMessageListViewController alloc] init];
+
 
     self.discoverViewController = [[discoverPageViewController alloc] init];
     
@@ -566,7 +580,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     [accountViewController_tabBar setUser:[PFUser currentUser]];
     
     UINavigationController *homeNavigationController = [[UINavigationController alloc] initWithRootViewController:self.homeViewController];
-    UINavigationController *emptyNavigationController = [[UINavigationController alloc] init];
+    UINavigationController *messageNavigationController = [[UINavigationController alloc] initWithRootViewController:self.messageListViewController];
     UINavigationController *activityFeedNavigationController = [[UINavigationController alloc] initWithRootViewController:self.activityViewController];
     UINavigationController *discoverNavigationController = [[UINavigationController alloc] initWithRootViewController:self.discoverViewController];
     UINavigationController *accountNavigationController = [[UINavigationController alloc] initWithRootViewController:self.accountViewController_tabBar];
@@ -588,6 +602,12 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     [activityFeedTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconActivitySelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
 
     activityFeedTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
+    
+    
+    UITabBarItem *messageTabBarItem = [[UITabBarItem alloc] init];
+    [messageTabBarItem setImage:[[UIImage imageNamed:@"nav_chat.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [messageTabBarItem setSelectedImage:[[UIImage imageNamed:@"nav_chat_selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    messageTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
     
     
     UITabBarItem *discoverTabbarItem = [[UITabBarItem alloc] init];
@@ -652,10 +672,11 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     [activityFeedNavigationController setTabBarItem:activityFeedTabBarItem];
     [discoverNavigationController setTabBarItem:discoverTabbarItem];
     [accountNavigationController setTabBarItem:accountTabBarItem];
+    [messageNavigationController setTabBarItem:messageTabBarItem];
 
 
     self.tabBarController.delegate = self;
-    self.tabBarController.viewControllers = @[ homeNavigationController, discoverNavigationController, emptyNavigationController, activityFeedNavigationController, accountNavigationController ];
+    self.tabBarController.viewControllers = @[ homeNavigationController, discoverNavigationController, messageNavigationController, activityFeedNavigationController, accountNavigationController ];
     
     
     [self.navController setViewControllers:@[ self.welcomeViewController, self.tabBarController ] animated:NO];
@@ -730,6 +751,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
 
 #pragma mark - ()
 
+
 - (void)setUserCurrentScreen:(NSString *)currentScreen setTargetRoom:(PFObject *)targetRoom setTargetUser:(PFUser *)user setNavigationController:(UINavigationController *)navigationController{
     self.userView = currentScreen;
     self.targetChatRoom = targetRoom;
@@ -739,17 +761,18 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
 
 - (void)setupAppearance {
     
+    
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     
-    [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:0.498f green:0.388f blue:0.329f alpha:1.0f]];
+    [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f]];
     
     NSDictionary *navBarAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
 
     [[UINavigationBar appearance] setTitleTextAttributes:navBarAttributes];
     
     [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"OriginalBackgroundNavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
-    
+
     NSDictionary *barButtonItemAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
     
     [[UIButton appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -757,6 +780,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     [[UIBarButtonItem appearance] setTitleTextAttributes:barButtonItemAttributes forState:UIControlStateNormal];
     
     [[UISearchBar appearance] setTintColor:[UIColor colorWithRed:32.0f/255.0f green:19.0f/255.0f blue:16.0f/255.0f alpha:1.0f]];    
+    
 }
 
 - (void)monitorReachability {

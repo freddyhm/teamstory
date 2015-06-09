@@ -12,6 +12,7 @@
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
 #import "PAPLoginSelectionViewController.h"
+#import "PAPMessageListViewController.h"
 
 @interface PAPTabBarController ()
 @property (nonatomic,strong) NSString *imageSource;
@@ -30,7 +31,9 @@
 @property (nonatomic, strong) UIImageView *thoughtPostButtonIcon;
 @property (nonatomic, strong) UILabel *photoPostTitle;
 @property (nonatomic, strong) UILabel *thoughtPostTitle;
-
+@property (nonatomic, strong) UIView *photoPostView;
+@property (nonatomic, strong) UIView *thoughtPostView;
+@property (nonatomic, strong) UIView *linkPostView;
 
 @end
 
@@ -41,7 +44,6 @@
 @synthesize imageSource;
 @synthesize popoverController;
 @synthesize linkPostButton;
-@synthesize postButton;
 
 #pragma mark - UIViewController
 
@@ -59,36 +61,82 @@
     
     self.navController = [[UINavigationController alloc] init];
     
+    float screenHeight = [UIScreen mainScreen].bounds.size.height;
+    float offsetImage = 30.0f;
+    float offsetLabel = 15.0f;
+    UIFont *labelFonts = [UIFont fontWithName:@"HelveticaNeue-Bold" size:10.0f];
+    
+    UIImage *postButtonImage = [UIImage imageNamed:@"btn_new_post.png"];
+    
+    self.postMenuButton = [[UIButton alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 80.0f, screenHeight - 125.0f, postButtonImage.size.width, postButtonImage.size.height)];
+    [self.postMenuButton setBackgroundImage:postButtonImage forState:UIControlStateNormal];
+    [self.postMenuButton setBackgroundImage:[UIImage imageNamed:@"btn_new_post_tap.png"] forState:UIControlStateHighlighted];
+    [self.postMenuButton setBackgroundImage:[UIImage imageNamed:@"btn_post_close.png"] forState:UIControlStateSelected];
+    [self.postMenuButton addTarget:self action:@selector(postMenuButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.postMenuButton];
+    
     // create post menu
     self.postMenu = [[UIView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    
-    float screenHeight = [UIScreen mainScreen].bounds.size.height;
-    // photo button
+    self.postMenu.backgroundColor = [UIColor colorWithRed:54.0f/255.0f green:54.0f/255.0f blue:56.0f/255.0f alpha:0.9f];
+
     UIImage *photoPostImage = [UIImage imageNamed:@"Moment Popup.png"];
-    self.photoPostButton = [[UIButton alloc] initWithFrame:CGRectMake(35.0f, screenHeight - 135.0f, photoPostImage.size.width, photoPostImage.size.height)];
+    
+    self.photoPostView = [[UIView alloc] initWithFrame:CGRectMake(35.0f, screenHeight / 2 - offsetImage, photoPostImage.size.width, photoPostImage.size.height + offsetLabel)];
+    [self.postMenu addSubview:self.photoPostView];
+    // photo button
+
+    self.photoPostButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, photoPostImage.size.width, photoPostImage.size.height)];
     [self.photoPostButton setBackgroundImage:photoPostImage forState:UIControlStateNormal];
     [self.photoPostButton setBackgroundImage:[UIImage imageNamed:@"Moment Popup_selected.png"] forState:UIControlStateSelected];
     [self.photoPostButton addTarget:self action:@selector(cameraButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
-    [self.postMenu addSubview:self.photoPostButton];
+    [self.photoPostView addSubview:self.photoPostButton];
+    
+    UILabel *photoPostLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, photoPostImage.size.height, photoPostImage.size.width, offsetLabel)];
+    [photoPostLabel setText:@"Moment"];
+    [photoPostLabel setTextColor:[UIColor colorWithWhite:1.0f alpha:0.7f]];
+    [photoPostLabel setFont:labelFonts];
+    photoPostLabel.textAlignment = NSTextAlignmentCenter;
+    [self.photoPostView addSubview:photoPostLabel];
     
     // thought button
     UIImage *thoughtPostImage = [UIImage imageNamed:@"Thought Popup.png"];
-    self.thoughtPostButton = [[UIButton alloc] initWithFrame:CGRectMake(120.0f, screenHeight - 135.0f, thoughtPostImage.size.width, thoughtPostImage.size.height)];
+    self.thoughtPostView = [[UIView alloc] initWithFrame:CGRectMake(120.0f, screenHeight / 2 - offsetImage, thoughtPostImage.size.width, thoughtPostImage.size.height + offsetLabel)];
+    [self.postMenu addSubview:self.thoughtPostView];
+    
+    self.thoughtPostButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, thoughtPostImage.size.width, thoughtPostImage.size.height)];
     [self.thoughtPostButton setBackgroundImage:thoughtPostImage forState:UIControlStateNormal];
     [self.thoughtPostButton setBackgroundImage:[UIImage imageNamed:@"Thought Popup_selected.png"] forState:UIControlStateSelected];
     [self.thoughtPostButton addTarget:self action:@selector(thoughtButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
-    [self.postMenu addSubview:self.thoughtPostButton];
+    [self.thoughtPostView addSubview:self.thoughtPostButton];
+    
+    UILabel *thoughtPostLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, thoughtPostImage.size.height, thoughtPostImage.size.width, offsetLabel)];
+    [thoughtPostLabel setText:@"Thought"];
+    [thoughtPostLabel setTextColor:[UIColor colorWithWhite:1.0f alpha:0.7f]];
+    [thoughtPostLabel setFont:labelFonts];
+    thoughtPostLabel.textAlignment = NSTextAlignmentCenter;
+    [self.thoughtPostView addSubview:thoughtPostLabel];
     
     // link post button
     
     UIImage *linkPostImage = [UIImage imageNamed:@"Link Popup.png"];
-    self.linkPostButton = [[UIButton alloc] initWithFrame:CGRectMake(205.0f, screenHeight - 135.0f, linkPostImage.size.width, linkPostImage.size.height)];
+    
+    self.linkPostView = [[UIView alloc] initWithFrame:CGRectMake(205.0f, screenHeight / 2 - offsetImage, linkPostImage.size.width, linkPostImage.size.height + offsetLabel)];
+    [self.postMenu addSubview:self.linkPostView];
+    
+    self.linkPostButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, linkPostImage.size.width, linkPostImage.size.height)];
     [self.linkPostButton setBackgroundImage:linkPostImage forState:UIControlStateNormal];
     [self.linkPostButton setBackgroundImage:[UIImage imageNamed:@"Link Popup_selected.png"] forState:UIControlStateSelected];
     [self.linkPostButton addTarget:self action:@selector(linkPostButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.postMenu addSubview:self.linkPostButton];
+    [self.linkPostView addSubview:self.linkPostButton];
+    
+    UILabel *linkPostLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, linkPostImage.size.height, linkPostImage.size.width, offsetLabel)];
+    [linkPostLabel setText:@"Link"];
+    [linkPostLabel setTextColor:[UIColor colorWithWhite:1.0f alpha:0.7f]];
+    [linkPostLabel setFont:labelFonts];
+    linkPostLabel.textAlignment = NSTextAlignmentCenter;
+    [self.linkPostView addSubview:linkPostLabel];
     
     // hide by default
     self.postMenu.hidden = YES;
@@ -99,28 +147,41 @@
     [self.postMenu addGestureRecognizer:postMenuOutside];
     [self.postMenu setUserInteractionEnabled:YES];
     [self.view addSubview:self.postMenu];
+    [self.view bringSubviewToFront:self.postMenuButton];
 }
 
+
+-(void)postMenuButtonAction:(id)sender {
+    self.postMenu.hidden = self.postMenu.hidden ? NO : YES;
+    
+    if (self.postMenuButton.selected == NO) {
+        [self.postMenuButton setBackgroundImage:[UIImage imageNamed:@"btn_post_close_tap.png"] forState:UIControlStateHighlighted|UIControlStateSelected];
+        self.postMenuButton.selected = YES;
+    } else {
+        [self.postMenuButton setBackgroundImage:[UIImage imageNamed:@"btn_new_post_tap.png"] forState:UIControlStateHighlighted|UIControlStateSelected];
+        self.postMenuButton.selected = NO;
+    }
+}
 
 
 #pragma mark - UITabBarController
 
 - (void)setViewControllers:(NSArray *)viewControllers animated:(BOOL)animated {
     [super setViewControllers:viewControllers animated:animated];
+    /*
+    self.messageButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.messageButton setImage:[UIImage imageNamed:@"nav_chat.png"] forState:UIControlStateNormal];
+    [self.messageButton setImage:[UIImage imageNamed:@"nav_chat_selected.png"] forState:UIControlStateSelected];
+    self.messageButton.frame = CGRectMake( (self.tabBar.bounds.size.width / 5) * 2, 0.0f, 63.0f, 50.0f);
     
-    self.postButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.postButton setImage:[UIImage imageNamed:@"nav_post.png"] forState:UIControlStateNormal];
-    [self.postButton setImage:[UIImage imageNamed:@"btn_close_timeline.png"] forState:UIControlStateSelected];
-    self.postButton.frame = CGRectMake( (self.tabBar.bounds.size.width / 5) * 2, 0.0f, 63.0f, 50.0f);
-    self.postButton.backgroundColor = [UIColor colorWithRed:88.0f/255.0f green:186.0f/255.0f blue:159.0f/255.0f alpha:1.0f];
-    
-    [self.postButton addTarget:self action:@selector(postButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.tabBar addSubview:self.postButton];
+    [self.messageButton addTarget:self action:@selector(messageButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.tabBar addSubview:self.messageButton];
     
     UISwipeGestureRecognizer *swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
     [swipeUpGestureRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
     [swipeUpGestureRecognizer setNumberOfTouchesRequired:1];
-    [self.postButton addGestureRecognizer:swipeUpGestureRecognizer];
+    [self.messageButton addGestureRecognizer:swipeUpGestureRecognizer];
+     */
 }
 
 
@@ -155,19 +216,18 @@
 #pragma mark - ()
 
 - (void)postMenuOutsideAction:(id)sender {
-    self.postButton.selected = self.postButton.selected ? NO : YES;
+    self.postMenuButton.selected = self.postMenuButton.selected ? NO : YES;
     self.postMenu.hidden = self.postMenu.hidden ? NO : YES;
 }
 
-- (void)postButtonAction:(id)sender {
+- (void)messageButtonAction:(id)sender {
     // new analytics
-    [[Mixpanel sharedInstance] track:@"Viewed Post Menu" properties:@{}];
+    //[[Mixpanel sharedInstance] track:@"Viewed Post Menu" properties:@{}];
     
-    self.postButton.selected = self.postButton.selected ? NO : YES;
-    
-    // hide/show post menu toggle
-    self.postMenu.hidden = self.postMenu.hidden ? NO : YES;
-    [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
+    PAPMessageListViewController *messageListViewController = [[PAPMessageListViewController alloc] init];
+    [self.navigationController pushViewController:messageListViewController animated:YES];
+
+    //[[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
 }
 
 - (void)cameraButtonAction:(id)sender{
@@ -177,7 +237,7 @@
     // new analytics
     [[Mixpanel sharedInstance] track:@"Viewed Post Menu" properties:@{@"Selected": @"Camera"}];
     
-    postButton.selected = self.postButton.selected ? NO : YES;
+    self.postMenuButton.selected = self.postMenuButton.selected ? NO : YES;
     
     self.postMenu.hidden = YES;
     
@@ -226,7 +286,7 @@
     [[Mixpanel sharedInstance] track:@"Viewed Post Menu" properties:@{@"Selected": @"Link"}];
     
     self.postMenu.hidden = YES;
-    postButton.selected = self.postButton.selected ? NO : YES;
+    self.postMenuButton.selected = self.postMenuButton.selected ? NO : YES;
     
     PAPlinkPostViewController *linkPostViewController = [[PAPlinkPostViewController alloc] init];
     [self.navigationController pushViewController:linkPostViewController animated:YES];
@@ -266,7 +326,7 @@
     // new analytics
     [[Mixpanel sharedInstance] track:@"Viewed Post Menu" properties:@{@"Selected": @"Thought"}];
     
-    postButton.selected = self.postButton.selected ? NO : YES;
+    self.postMenuButton.selected = self.postMenuButton.selected ? NO : YES;
     self.postMenu.hidden = YES;
     
     ThoughtPostViewController *thoughtPostViewController = [[ThoughtPostViewController alloc] init];

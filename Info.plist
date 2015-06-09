@@ -40,7 +40,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.5.5</string>
+	<string>2.7</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -55,7 +55,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2.5.5</string>
+	<string>2.7</string>
 	<key>FacebookAppID</key>
 	<string>${FACEBOOK_ID}</string>
 	<key>FacebookDisplayName</key>
@@ -65,7 +65,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
-	<string>© 2014 Growple, inc</string>
+	<string>© 2015 Growple, inc</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>GPS Detection</string>
 	<key>UIApplicationExitsOnSuspend</key>
@@ -122,10 +122,6 @@
 	<key>UIViewEdgeAntialiasing</key>
 	<false/>
 	<key>VersionChanges</key>
-	<string>• New! Browse before joining
-• New! Leaderboard for activity points
-• Fixed truncating date for older posts
-• Fixed truncating longer names  
-• Fixed followers posting notification</string>
+	<string>• New! Redesigned tab bar • Improved point system: earn points by posting and commenting. Get extra points by posting popular posts. Giving likes doesn&apos;t add to your score.</string>
 </dict>
 </plist>

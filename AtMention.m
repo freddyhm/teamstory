@@ -41,33 +41,6 @@
     return self;
 }
 
-- (void)getActivityPointsOnFirstRun{
-    
-    // get points from user
-    self.activityPoints = [[PFUser currentUser] objectForKey:@"activityPoints"];
-    
-    // check if we have points already, set 100 as default if not
-    if(self.activityPoints == nil){
-        [self setDefaultPoints];
-    }
-}
-
-- (void)setDefaultPoints{
-    // start with 100
-    self.activityPoints = [NSNumber numberWithInt:100];
-    [self saveCurrentActivityPoints];
-}
-
-- (void)addPointToActivityCount{
-    self.activityPoints = [NSNumber numberWithInt:[self.activityPoints intValue] + 1];
-    [self saveCurrentActivityPoints];
-}
-
-- (void)saveCurrentActivityPoints{
-    [[PFUser currentUser] setObject:self.activityPoints forKey:@"activityPoints"];
-    [[PFUser currentUser] saveInBackground];
-}
-
 - (void)getAllUsers:(void (^)(NSArray *objects, BOOL succeeded, NSError *error))completionBlock {
     
     // get all user objects in database

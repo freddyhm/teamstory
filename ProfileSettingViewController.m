@@ -8,15 +8,20 @@
 
 #import "ProfileSettingViewController.h"
 
+#define LOCATION_TAG_NUM 3
+#define BIO_TAG_NUM 4
 #define WEBSITE_TAG_NUM 6
 #define TWITTER_TAG_NUM 7
 #define LINKEDIN_TAG_NUM 8
 #define ANGELIST_TAG_NUM 9
+#define MAX_TEXTFIELD_CHAR 50
+#define MAX_TEXTVIEW_CHAR 118
 
 @interface ProfileSettingViewController ()
 
 @property (nonatomic, strong) PFUser *user;
 @property BOOL didEditProfile;
+@property UIColor *defaultTextColor;
 
 // picker variables
 
@@ -39,6 +44,7 @@
 @property (nonatomic, strong) NSString *website_user;
 @property (nonatomic, strong) NSString *displayName_user;
 @property (nonatomic, strong) NSString *description_user;
+@property (nonatomic, strong) NSMutableDictionary *fieldState;
 
 @end
 
@@ -57,6 +63,9 @@
         
         // flag to check for changes
         self.didEditProfile = NO;
+        
+        // set valid state to default yes for fields
+        self.fieldState = [[NSMutableDictionary alloc] initWithObjects:@[@YES, @YES, @YES] forKeys:@[@"location", @"website", @"bio"]];
     }
     return self;
 }
@@ -66,6 +75,9 @@
     
     // set logo on nav bar
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
+    
+    // set default text color to teamstory's color
+    self.defaultTextColor = [UIColor colorWithRed:87.0f/255.0f green:185.0f/255.0f blue:158.0f/255.0f alpha:1.0f];
 
     // set back button
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -157,7 +169,7 @@
             if([self.user[@"description"] length] > 0 ){
                 self.userDescription.text = self.user[@"description"];
                 // set text color to teamstory color
-                [self.userDescription setTextColor:[UIColor colorWithRed:87.0f/255.0f green:185.0f/255.0f blue:158.0f/255.0f alpha:1.0f]];
+                [self.userDescription setTextColor:self.defaultTextColor];
             }else{
                 // set text color to light gray for placeholder
                 [self.userDescription setTextColor:[UIColor lightGrayColor]];
@@ -220,11 +232,12 @@
 
     // validate email
     BOOL isEmailValid = [self validateEmail:self.email_address.text];
+    BOOL areFieldsValid = [self validateFields];
   
     // validate name and wait for the callback
     [self validateDisplayName:self.displayName.text block:^(BOOL succeeded) {
        
-        if(succeeded && isEmailValid){
+        if(succeeded && isEmailValid && areFieldsValid){
             
             /* get current text and set server variables */
             
@@ -261,6 +274,10 @@
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:messageTitle message:messageBody delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                 [alert show];
             }];
+        }else{
+            
+            // output alert if display, email, or fields are not valid
+            [self errorMsgForInput:succeeded email:isEmailValid fields:areFieldsValid];
         }
         
         self.saveButton.userInteractionEnabled = YES;
@@ -325,14 +342,105 @@
     [SVProgressHUD dismiss];
 }
 
+#pragma mark - Validation Methods
 
--(BOOL)validateEmail:(NSString *)checkString {
+- (BOOL)validateEmail:(NSString *)checkString {
     BOOL stricterFilter = YES;
     NSString *stricterFilterString = @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}";
     NSString *laxString = @".+@([A-Za-z0-9]+\\.)+[A-Za-z]{2}[A-Za-z]*";
     NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
     return [emailTest evaluateWithObject:checkString];
+}
+
+- (BOOL)validateLength:(NSString *)input type:(NSString *)type{
+    NSUInteger maxChar = [type isEqualToString:@"textfield"] ? MAX_TEXTFIELD_CHAR : MAX_TEXTVIEW_CHAR;
+    return input.length <= maxChar;
+}
+
+- (BOOL)validateFields{
+    return [[self.fieldState allKeysForObject:@NO] count] == 0;
+}
+
+- (void)toggleTextColorForInput:(NSObject *)textInput{
+    
+    // method variables to hold custom object properties
+    UIColor *textColor = [UIColor whiteColor];
+    NSString *text = @"";
+    NSString *type = @"";
+    UITextView *textViewInput = [[UITextView alloc]init];
+    UITextField *textFieldInput = [[UITextField alloc] init];
+    NSInteger tagNum = 0;
+    int maxChar = 0;
+    
+    // determine if we're given a textview or a textfield
+    
+    /* Similar properties but both objects inherit from different parents */
+    
+    if([textInput isKindOfClass:UITextView.class]){
+        textViewInput = (UITextView *)textInput;
+        text = textViewInput.text;
+        textColor = textViewInput.textColor;
+        type = @"textview";
+        tagNum = textViewInput.tag;
+        maxChar = MAX_TEXTVIEW_CHAR;
+    }else if([textInput isKindOfClass:UITextField.class]){
+        textFieldInput = (UITextField *)textInput;
+        text = textFieldInput.text;
+        textColor = textFieldInput.textColor;
+        type = @"textfield";
+        tagNum = textFieldInput.tag;
+        maxChar = MAX_TEXTFIELD_CHAR;
+    }
+    
+    // avoid all other types of objects
+    if([type isEqualToString:@"textview"] || [type isEqualToString:@"textfield"]){
+    
+        // only show prompt once when characters go from valid to non-valid (green & validate returns NO)
+        if([textColor isEqual:self.defaultTextColor] && ![self validateLength:text type:type]){
+            
+            // save invalid state for field - need later to check before submitting
+            [self saveFieldState:tagNum state:@NO];
+            
+            // change color based
+            if([type isEqualToString:@"textview"]){
+                textViewInput.textColor = [UIColor redColor];
+            }else if([type isEqualToString:@"textfield"]){
+                textFieldInput.textColor = [UIColor redColor];
+            }
+        
+            // notify member of maximum characters
+            NSNumber *maxNum = [NSNumber numberWithInt:maxChar];
+            NSString *maxLengthMsg = [@"Max characters is " stringByAppendingString:[maxNum stringValue]];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:maxLengthMsg delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+            
+        }else if([self validateLength:text type:type]){
+            
+            // save valid state for field
+            [self saveFieldState:tagNum state:@YES];
+            
+            // keep default color
+            if([type isEqualToString:@"textview"]){
+                textViewInput.textColor = self.defaultTextColor;
+            }else if([type isEqualToString:@"textfield"]){
+                textFieldInput.textColor = self.defaultTextColor;
+            }
+        }
+    }
+}
+
+- (void)saveFieldState:(NSInteger)tagNum state:(id)state{
+    
+    // keep track of valid/invalid state for fields
+    
+    if(tagNum == WEBSITE_TAG_NUM){
+        [self.fieldState setObject:state forKey:@"website"];
+    }else if (tagNum == LOCATION_TAG_NUM){
+        [self.fieldState setObject:state forKey:@"location"];
+    }else if (tagNum == BIO_TAG_NUM){
+        [self.fieldState setObject:state forKey:@"bio"];
+    }
 }
 
 - (void)validateDisplayName:(NSString *)name block:(void (^)(BOOL succeeded))completionBlock{
@@ -345,18 +453,35 @@
     
         if (!error) {
             if ((number > 0 || [name length] == 0) && (![[[PFUser currentUser] objectForKey:@"displayName"] isEqualToString:name])) {
-        
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Name is already in use. Please choose another." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                alert.alertViewStyle = UIAlertViewStyleDefault;
-                [alert show];
+                return completionBlock(NO);
             }else{
                 return completionBlock(YES);
             }
-        } else {
-            return completionBlock(NO);
         }
-        
     }];
+}
+
+- (void)errorMsgForInput:(BOOL)isValidDisplayName email:(BOOL)isValidEmail fields:(BOOL)areValidFields{
+    
+    NSString *errorMsg = @"Please check the following:";
+    NSString *email = @"\n- Email isn't formatted correctly";
+    NSString *displayName = @"\n- Name has already been taken";
+    NSString *fields = @"\n- Field exceeds max characters";
+    
+    if (!isValidDisplayName){
+        errorMsg = [errorMsg stringByAppendingString:displayName];
+    }
+    
+    if (!areValidFields){
+        errorMsg = [errorMsg stringByAppendingString:fields];
+    }
+    
+    if(!isValidEmail){
+        errorMsg = [errorMsg stringByAppendingString:email];
+    }
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:errorMsg delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    [alert show];
 }
 
 #pragma mark - TextField Delegate
@@ -384,16 +509,47 @@
     }
 }
 
+- (void)locationChanged:(UITextField *)sender{
+    [self toggleTextColorForInput:sender];
+}
+
+- (void)websiteChanged:(UITextField *)sender{
+    [self toggleTextColorForInput:sender];
+}
+
 #pragma mark - TextView Delegate
 - (void)textViewDidBeginEditing:(UITextView *)textView {
     
     // flag to detect changes
     self.didEditProfile = YES;
     
+    // checking if member editing bio
     if([textView.text isEqualToString:@"What's your story?"]){
         textView.text = @"";
         // set text color to teamstory color
-        [self.userDescription setTextColor:[UIColor colorWithRed:87.0f/255.0f green:185.0f/255.0f blue:158.0f/255.0f alpha:1.0f]];
+        [self.userDescription setTextColor:self.defaultTextColor];
+    }
+    
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:    (NSString *)text {
+    
+    // disable default return key behavior for newline characters
+    if( [text rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]].location == NSNotFound ) {
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (void)textViewDidChange:(UITextView *)textView{
+    
+    // get unique tag for textfield
+    NSInteger tagNum = textView.tag;
+    
+    // apply validating check for bio
+    if(tagNum == BIO_TAG_NUM){
+        [self toggleTextColorForInput:textView];
     }
 }
 
@@ -404,7 +560,6 @@
         textView.text = @"What's your story?";
     }
 }
-
 
 #pragma mark - Keyboard Related Methods
 
@@ -641,6 +796,5 @@
     [viewController.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
     
 }
-
 
 @end

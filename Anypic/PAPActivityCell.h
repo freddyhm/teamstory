@@ -29,5 +29,6 @@
  @param activity the PFObject of the activity that was tapped
  */
 - (void)cell:(PAPActivityCell *)cellView didTapActivityButton:(PFObject *)activity;
+- (void)cell:(PAPBaseTextCell *)cellView didTapUserButton:(PFObject *)activity;
 
 @end

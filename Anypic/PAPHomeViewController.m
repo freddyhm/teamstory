@@ -70,53 +70,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    /*
-    // Bar hides on scroll
-    [self.navigationController setHidesBarsOnSwipe:YES];
-    //[self.navigationController.bar]
-    
-    UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
-    
-    // height 20 is the status bar's height.
-    UIView *statusBarOverlay = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 20)];
-    [statusBarOverlay setBackgroundColor:teamStoryColor];
-    [self.view addSubview:statusBarOverlay];
-    */
-    
     // set analytics and first run flag
     [self setUserInfoAnalytics];
     self.firstRun = YES;
     self.isOpeningFeedback = NO;
     
-    // get activity points from server on first run
-    [[AtMention sharedAtMention] getActivityPointsOnFirstRun];
+    // load activity points for current user
+    [[ActivityPointSystem sharedActivityPointSystem] getActivityPointsOnFirstRun];
     
     // button image for feedback
-    self.feedbackImg = [UIImage imageNamed:@"btn_message_empty.png"];
-    self.feedbackImgBadge = [UIImage imageNamed:@"btn_message_count.png"];
-    self.feedbackBtn = [[UIButton alloc] initWithFrame:CGRectMake(282, 0, self.feedbackImg.size.width, self.feedbackImg.size.height)];
-    self.feedbackBtn.titleEdgeInsets = UIEdgeInsetsMake(-2.0f, 1.0f, 0.0f, 0.0f);
-    self.feedbackBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
-    [self.feedbackBtn.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:10.0f]];
+    self.feedbackImg = [UIImage imageNamed:@"btn_main_invite.png"];
+    self.feedbackBtn = [[UIButton alloc] initWithFrame:CGRectMake(282, 7, self.feedbackImg.size.width, self.feedbackImg.size.height)];
+    [self.feedbackBtn setBackgroundImage:self.feedbackImg forState:UIControlStateNormal];
     [self.feedbackBtn addTarget:self action:@selector(promptFeedback:) forControlEvents:UIControlEventTouchUpInside];
-    
-    if ([[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue] > 0) {
-        [self.feedbackBtn setTitle:[[[PFUser currentUser] objectForKey:@"messagingBadge"] stringValue] forState:UIControlStateNormal];
-        self.feedbackBtn.frame = CGRectMake(275, 1, self.feedbackImgBadge.size.width, self.feedbackImgBadge.size.height);
-        [self.feedbackBtn setBackgroundImage:self.feedbackImgBadge forState:UIControlStateNormal];
-    } else {
-        self.feedbackBtn.frame = CGRectMake(275, 1, self.feedbackImg.size.width, self.feedbackImg.size.height);
-        [self.feedbackBtn setBackgroundImage:self.feedbackImg forState:UIControlStateNormal];
-        [self.feedbackBtn setTitle:nil forState:UIControlStateNormal];
-    }
 
     // feed title ui
     self.feedFontSelected = [UIFont boldSystemFontOfSize:15.0f];
     self.feedFontDeselected = [UIFont systemFontOfSize:15.0f];
-    
-    // timeline logo
-    //UIImage *logoImg = [UIImage imageNamed:@"timelineLogo.png"];
-    //self.logoBtn = [[UIButton alloc]initWithFrame:CGRectMake(15.0f, 10.0f, logoImg.size.width, logoImg.size.height)];
     
     UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
     
@@ -196,34 +166,8 @@
     [self.switchWhiteOverlay setHidden:YES];
     [self.view addSubview:self.switchWhiteOverlay];
     
-    
-    
     // stream selected by default
     [self switchSelectedButton:@"explore"];
-    
-    // diabling notification bar for now.
-    /*
-    self.notificationBar = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 64.0f, 320.0f, 0.0f)];
-    [self.notificationBar setBackgroundColor:[UIColor colorWithRed:251.0f/255.0f green:176.0f/255.0f blue:70.0f/255.0f alpha:1.0f]];
-    [self.notificationBar addTarget:self action:@selector(notificationBarButton:) forControlEvents:UIControlEventTouchUpInside];
-    [self.notificationBar.titleLabel setFont:[UIFont systemFontOfSize:13.0f]];
-    self.notificationBar.titleEdgeInsets = UIEdgeInsetsMake(0.0f, 30.0f, 0.0f, 30.0f);
-    self.notificationBar.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [self.notificationBar.titleLabel setLineBreakMode:NSLineBreakByTruncatingTail];
-    self.notificationBar.hidden = YES;
-    
-    self.notificationExitButton = [[UIButton alloc] initWithFrame:CGRectMake(285.0f, 0.0f, 45.0f, 45.0f)];
-    [self.notificationExitButton addTarget:self action:@selector(notificationExitButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.notificationExitButton setBackgroundImage:[UIImage imageNamed:@"notif_close.png"] forState:UIControlStateNormal];
-    self.notificationExitButton.hidden = YES;
-    [self.notificationBar addSubview:self.notificationExitButton];
-    
-    self.notificationStar = [[UIImageView alloc] initWithFrame:CGRectMake(-9.0f, 0.0f, 45.0f, 45.0f)];
-    [self.notificationStar setImage:[UIImage imageNamed:@"notif_star.png"]];
-    self.notificationStar.hidden = YES;
-    [self.notificationBar addSubview:self.notificationStar];
-    
-     */
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -267,44 +211,6 @@
     [[FlightRecorder sharedInstance] trackPageView:@"Home"];
     
     [self refreshBadge];
-    
-    
-    // disabling notification bar for now.
-    /*
-    PFQuery *notificationQuery = [PFQuery queryWithClassName:@"Notification"];
-    [notificationQuery orderByDescending:@"createdAt"];
-    
-    [notificationQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        if (!error) {
-            notificationContent = [object objectForKey:@"Content"];
-            NSString *notificationCachedResult = [[PAPCache sharedCache] notificationContent];
-            
-            if (![notificationCachedResult isEqualToString:notificationContent]) {
-                [[[[UIApplication sharedApplication] delegate] window] addSubview:self.notificationBar];
-                [self.notificationBar setTag:100];
-                [self.notificationBar setTitle:nil forState:UIControlStateNormal];
-                self.notificationBar.frame = CGRectMake(0.0f, 64.0f, 320.0f, 0.0f);
-                currentScrollPosition = 0;
-            }
-            if ([object objectForKey:@"Photo"]) {
-                PFQuery *notificationPhotoQuery = [PFQuery queryWithClassName:@"Photo"];
-                [notificationPhotoQuery whereKey:@"objectId" equalTo:[[object objectForKey:@"Photo"] objectId]];
-                
-                [notificationPhotoQuery getFirstObjectInBackgroundWithBlock:^(PFObject *photoObject, NSError *error) {
-                    if (!error) {
-                        notificationPhoto = photoObject;
-                    } else {
-                        NSLog(@"%@", error);
-                    }
-                }];
-            } else {
-                notificationPhoto = nil;
-            }
-        } else {
-            NSLog(@"%@", error);
-        }
-    }];
-     */
 }
 
 - (void) updateMessageButton:(NSNotification *)notification {
@@ -314,14 +220,27 @@
 - (void) refreshBadge {
     [[PFUser currentUser] fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if ([[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue] > 0) {
-            [self.feedbackBtn setTitle:[[[PFUser currentUser] objectForKey:@"messagingBadge"] stringValue] forState:UIControlStateNormal];
-            self.feedbackBtn.frame = CGRectMake(275, 1, self.feedbackImgBadge.size.width, self.feedbackImgBadge.size.height);
-            [self.feedbackBtn setBackgroundImage:self.feedbackImgBadge forState:UIControlStateNormal];
-            [self.feedbackBtn setTitle:[[[PFUser currentUser] objectForKey:@"messagingBadge"] stringValue] forState:UIControlStateNormal];
+            UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPMessageTabBarItemIndex] tabBarItem];
+            NSNumber *messagingBadgeNumber = [[PFUser currentUser] objectForKey:@"messagingBadge"];
+            
+            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+            
+            if ([messagingBadgeNumber intValue] > 0) {
+                tabBarItem.badgeValue = [numberFormatter stringFromNumber:messagingBadgeNumber];
+            } else {
+                tabBarItem.badgeValue = nil;
+            }
+            
+            // get current selected tab
+            NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
+            
+            // current view is tabbar, clear the badge.
+            if(selectedtabIndex == PAPMessageTabBarItemIndex){
+                tabBarItem.badgeValue = nil;
+            }
         } else {
-            self.feedbackBtn.frame = CGRectMake(275, 1, self.feedbackImg.size.width, self.feedbackImg.size.height);
-            [self.feedbackBtn setBackgroundImage:self.feedbackImg forState:UIControlStateNormal];
-            [self.feedbackBtn setTitle:nil forState:UIControlStateNormal];
+            UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPMessageTabBarItemIndex] tabBarItem];
+            tabBarItem.badgeValue = nil;
         }
     }];
 }
@@ -375,7 +294,7 @@
 - (void)getActivityPoints{
     
     // get current points
-    NSNumber *activityCount = [[AtMention sharedAtMention] activityPoints];
+    NSNumber *activityCount = [[ActivityPointSystem sharedActivityPointSystem] activityPoints];
     
     // check if the points have changed so we can trigger animation
     if(![self.prevPointCount isEqualToNumber:activityCount]){
@@ -401,95 +320,6 @@
     }
 }
 
-
-#pragma mark - UIScrollViewDelegate
-/*
--(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    
-    [super scrollViewDidScroll:scrollView];
-    
-    // disabling notification bar for now.
-
-    [self scrollViewWillBeginDragging:scrollView];
-    self.notificationExitButton.hidden = YES;
-    self.notificationStar.hidden = YES;
-    
-    if (scrollView.contentOffset.y > 0) {
-         if (scrollView.contentOffset.y < scrollPosition) {
-              currentScrollDirectionDown = NO;
-             
-             // Detect scrolling up.
-             if (scrollDirectionDown == NO) {
-               currentScrollPosition += 2.5;
-                 self.notificationBar.hidden = NO;
-             }
-         } else if (scrollView.contentOffset.y > scrollPosition) {
-              currentScrollDirectionDown = YES;
-             // Detect scrolling down.
-             if (currentScrollPosition == 0) {
-                 
-             } else {
-                 if (scrollDirectionDown == YES) {
-                     currentScrollPosition -= 2.5;
-                 }
-             }
-         
-         }
-        
-        if (currentScrollPosition < 0) {
-            currentScrollPosition = 0;
-        } else if (currentScrollPosition > 45) {
-            currentScrollPosition = 45;
-        }
-        
-        if (currentScrollPosition > 37) {
-            self.notificationExitButton.hidden = NO;
-            self.notificationStar.hidden = NO;
-        }
-        
-        if (currentScrollPosition > 30) {
-            [self.notificationBar setTitle:notificationContent forState:UIControlStateNormal];
-        } else {
-            [self.notificationBar setTitle:nil forState:UIControlStateNormal];
-        }
-        
-        if (scrollView.contentOffset.y <= 45) {
-            currentScrollPosition = 0;
-            self.notificationExitButton.hidden = YES;
-            self.notificationStar.hidden = YES;
-            [self.notificationBar setTitle:nil forState:UIControlStateNormal];
-            
-            [UIView animateWithDuration:0.5 animations:^{
-                self.notificationBar.frame = CGRectMake(0.0f, 64.0f, 320.0f, currentScrollPosition);
-            }];
-        }
-        
-        scrollPosition = scrollView.contentOffset.y;
-        self.notificationBar.frame = CGRectMake(0.0f, 64.0f, 320.0f, currentScrollPosition);
-    }
- 
-}
- 
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    
-    if (currentScrollDirectionDown == NO){
-        // Detect scrolling down.
-        scrollDirectionDown = NO;
-    } else {
-        scrollDirectionDown = YES;
-    }
-}
-
-
--(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    if (currentScrollDirectionDown == NO){
-        // Detect scrolling down.
-        scrollDirectionDown = NO;
-    } else {
-        scrollDirectionDown = YES;
-    }
-}
-*/
 #pragma mark - ()
 
 -(void)setUserInfoAnalytics{
@@ -566,14 +396,53 @@
         [self.view.window.rootViewController presentViewController:loginSelectionViewController animated:YES completion:nil];
         return;
     }
-    PAPMessageListViewController *messageListViewController = [[PAPMessageListViewController alloc] init];
-    messageListViewController.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:messageListViewController animated:YES];
+    
+    [SVProgressHUD show];
+    self.inviteButtonCheckForShare = YES;
+    
+    NSArray *activityItems = @[self];
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+    activityVC.excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypePrint];
+    [activityVC setValue:@"Join me on Teamstory!" forKey:@"subject"];
+    
+    [self.navigationController presentViewController:activityVC animated:YES completion:^{
+        [SVProgressHUD dismiss];
+    }];
+    
+    // this gets handled after an activity is completed.
+    [activityVC setCompletionHandler:^(NSString *activityType, BOOL completed) {
+        if (completed) {
+            if ([activityType isEqualToString:UIActivityTypePostToFacebook]) {
+                
+                [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Discover", @"Platform": @"Facebook"}];
+                
+                NSLog(@"facebook");
+            } else if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
+                
+                [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Discover", @"Platform": @"Twitter"}];
+                
+                NSLog(@"twitter");
+            } else if ([activityType isEqualToString:UIActivityTypeMail]) {
+                
+                [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Discover", @"Platform": @"Email"}];
+                
+                NSLog(@"email");
+            } else {
+                // all other activities.
+            }
+        }
+    }];
+    
+    if ([activityVC respondsToSelector:@selector(popoverPresentationController)])
+    {
+        // iOS 8+
+        UIPopoverPresentationController *presentationController = [activityVC popoverPresentationController];
+        presentationController.sourceView = self.view; // if button or change to self.view.
+    }
 }
 
 -(void)notificationBarButton:(id)sender {
     [[PAPCache sharedCache] notificationCache:notificationContent];
-    //[[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
     
     if (notificationPhoto) {
         PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:notificationPhoto source:@"Notification"];
@@ -718,11 +587,6 @@
 
 -(void)notificationExitButtonAction:(id)sender {
     [[PAPCache sharedCache] notificationCache:notificationContent];
-    //[[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
 }
-
-
-
-
 
 @end

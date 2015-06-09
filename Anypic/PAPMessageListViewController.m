@@ -13,6 +13,8 @@
 #import "AppDelegate.h"
 #import "Mixpanel.h"
 #import <FlightRecorder/FlightRecorder.h>
+#import "PAPLoginSelectionViewController.h"
+#import "PAPTabBarController.h"
 
 
 #define APP ((AppDelegate *)[[UIApplication sharedApplication] delegate])
@@ -40,6 +42,8 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
+    
+    ((PAPTabBarController *)self.tabBarController).postMenuButton.hidden = YES;
         
     // google analytics
     [PAPUtility captureScreenGA:@"Messaging List"];
@@ -72,6 +76,9 @@
         self.badgeLabel.hidden = YES;
         self.notificationView.titleEdgeInsets = UIEdgeInsetsMake(0.0f, -130.0f, 0.0f, 0.0f);
     }
+    
+    UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPMessageTabBarItemIndex] tabBarItem];
+    tabBarItem.badgeValue = nil;
     
     [self updateListViewQuery];
     
@@ -110,6 +117,8 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:YES];
     
+    ((PAPTabBarController *)self.tabBarController).postMenuButton.hidden = NO;
+    
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCurrentScreen:nil setTargetRoom:nil setTargetUser:nil setNavigationController:nil];
     
     [[PFUser currentUser] setObject:[NSNumber numberWithInt:totalBadgeNumber] forKey:@"messagingBadge"];
@@ -122,6 +131,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // Handling Anonymous users
+    if ([PFAnonymousUtils isLinkedWithUser:[PFUser currentUser]]) {
+        PAPLoginSelectionViewController *loginSelectionViewController = [[PAPLoginSelectionViewController alloc] initWithNibName:@"PAPLoginSelectionViewController" bundle:nil];
+        [self.navigationController presentViewController:loginSelectionViewController animated:YES completion:nil];
+        return;
+    }
+    
     self.edgesForExtendedLayout = UIRectEdgeNone;
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -130,12 +147,16 @@
     self.userNumberList = [[NSMutableArray alloc] init];
     self.messageList = [[NSMutableArray alloc] init];
     
-    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [backButton setFrame:CGRectMake(0, 0, 22.0f, 22.0f)];
-    [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
-    [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    // backbutton should only be available when the the view wasn't created for PAPtabbarcontroller.
+    if (self.navigationController.parentViewController != self.tabBarController) {
+        UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [backButton setFrame:CGRectMake(0, 0, 22.0f, 22.0f)];
+        [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [backButton setBackgroundImage:[UIImage imageNamed:@"button_back.png"] forState:UIControlStateNormal];
+        [backButton setBackgroundImage:[UIImage imageNamed:@"button_back_selected.png"] forState:UIControlStateHighlighted];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    }
+    
     self.navigationController.navigationBar.backgroundColor = [UIColor whiteColor];
     
     UIColor *teamStoryColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
@@ -175,7 +196,7 @@
     [notificationArrow setImage:notificationArrowImage];
     [self.notificationView addSubview:notificationArrow];
     
-    self.messageListTV = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, notificationBarHeight, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - navBarHeight - notificationBarHeight)];
+    self.messageListTV = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, notificationBarHeight, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - navBarHeight - notificationBarHeight - tabBarHeight)];
     [self.messageListTV setBackgroundColor:[UIColor whiteColor]];
     self.messageListTV.dataSource = self;
     self.messageListTV.delegate = self;
@@ -192,9 +213,21 @@
     [placeHolderImageView setImage:placeHolderImage];
     [self.placeHolder addSubview:placeHolderImageView];
     
+    UITapGestureRecognizer *tapNewMessage = [[UITapGestureRecognizer alloc]
+                                          initWithTarget:self
+                                          action:@selector(newMessage)];
+    
+    [self.placeHolder addGestureRecognizer:tapNewMessage];
+    
 }
 
 #pragma - ()
+
+- (void) newMessage {
+    PAPMessagingSeachUsersViewController *searchBarViewController = [[PAPMessagingSeachUsersViewController alloc] init];
+    [searchBarViewController setNavigationController:self.navigationController];
+    [self presentViewController:searchBarViewController animated:YES completion:nil];
+}
 
 - (void) notificationButtonAction:(id)sender {
     [[[[[UIApplication sharedApplication] delegate] window] viewWithTag:100] removeFromSuperview];
@@ -228,6 +261,7 @@
     PAPMessagingViewController *messageViewController = [[PAPMessagingViewController alloc] init];
     [messageViewController setTargetUser:[[self.messageList objectAtIndex:view.tag] objectForKey:userNumber] setUserNumber:userNumber];
     [messageViewController setRoomInfo:[self.messageList objectAtIndex:view.tag]];
+    messageViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:messageViewController animated:YES];
 }
 
@@ -287,7 +321,7 @@
     [self.timeIntervalFormatter setUsesAbbreviatedCalendarUnits:YES];
     NSString *timestamp = [self.timeIntervalFormatter stringForTimeInterval:timeInterval];
     
-    if (fabsf(timeInterval) > (12 * 60 * 60)) {
+    if (fabs(timeInterval) > (12 * 60 * 60)) {
         cell.timeStampLabel.text = timestamp;
     } else {
         cell.timeStampLabel.text = [dateFormat stringFromDate:updatedDate];

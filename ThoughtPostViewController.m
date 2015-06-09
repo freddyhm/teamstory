@@ -257,9 +257,8 @@
 - (void)saveEdit:(id)sender {
     
     // increment activity point
-    [[AtMention sharedAtMention] addPointToActivityCount];
-    
-    
+    [[ActivityPointSystem sharedActivityPointSystem] addPointToActivityCount:@"post"];
+
     if(self.thoughtTextView.contentSize.height < self.thoughtTextView.frame.size.height){
         
         // disable save button so duplicates are not sent by mistake

@@ -109,21 +109,21 @@ enum ActionSheetTags {
     self.feed.backgroundView = self.texturedBackgroundView;
     
     // pull-to-refresh
-    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-    refreshControl.tintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:0.5f];
-    [refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
-    refreshControl.backgroundColor = [UIColor whiteColor];
-    [self.feed addSubview:refreshControl];
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.tintColor = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:0.5f];
+    [self.refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl.backgroundColor = [UIColor whiteColor];
+    [self.feed addSubview:self.refreshControl];
     
     // creating view for extending white background
     CGRect frame = self.feed.bounds;
     frame.origin.y = -frame.size.height;
-    UIView* bgView = [[UIView alloc] initWithFrame:frame];
-    bgView.backgroundColor = [UIColor whiteColor];
+    self.extendBgView = [[UIView alloc] initWithFrame:frame];
+    self.extendBgView.backgroundColor = [UIColor whiteColor];
     
     // adding the view below the refresh control
-    [self.feed insertSubview:bgView atIndex:0];
-
+    [self.feed insertSubview:self.extendBgView atIndex:0];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidPublishPhoto:) name:PAPTabBarControllerDidFinishEditingPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidDeletePhoto:) name:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLikeOrUnlikePhoto:) name:PAPPhotoDetailsViewControllerUserLikedUnlikedPhotoNotification object:nil];
@@ -152,19 +152,6 @@ enum ActionSheetTags {
 }
 
 #pragma mark - Custom
-
-- (void)updateActivityPoints{
-    
-    [[AtMention sharedAtMention] addPointToActivityCount];
-    
-    // check if home controller is in the stack before updating points
-    for (int i = 0; i < self.navigationController.viewControllers.count; i++) {
-        if([[self.navigationController.viewControllers objectAtIndex:i] isKindOfClass:PAPHomeViewController.class]){
-            PAPHomeViewController *homeViewController = [self.navigationController.viewControllers objectAtIndex:i];
-            [homeViewController getActivityPoints];
-        }
-    }
-}
 
 - (NSIndexPath *)indexPathForObject:(PFObject *)targetObject {
     for (int i = 0; i < self.objects.count; i++) {
@@ -310,6 +297,7 @@ enum ActionSheetTags {
     [SVProgressHUD show];
     self.twitterName = nil;
     
+    self.inviteButtonCheckForShare = NO;
     // getting image so that we can share
     [[photo objectForKey:@"image"] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
         [SVProgressHUD dismiss];
@@ -366,27 +354,44 @@ enum ActionSheetTags {
 }
 
 - (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType {
-    if ([activityType isEqualToString:UIActivityTypePostToFacebook]) {
-        NSString *theText = @"#startup #moment shared on #teamstoryapp - Join the global #entrepreneurship #community for #founders: goo.gl/F2QSoJ @teamstory";
-        return theText;
-    }
     
-    if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
-        NSString *theText;
-        if (self.twitterName.length > 0) {
-            theText = [NSString stringWithFormat:@"#startup moment on @teamstoryapp via @%@. Join the global startup community: http://goo.gl/UApT1i", self.twitterName];
-        } else {
-            theText = @"#startup moment on @teamstoryapp. Join the global startup community: http://goo.gl/UApT1i";
+    if (!self.inviteButtonCheckForShare) {
+        if ([activityType isEqualToString:UIActivityTypePostToFacebook]) {
+            NSString *theText = @"#startup #moment shared on #teamstoryapp - Join the global #entrepreneurship #community for #founders: goo.gl/F2QSoJ @teamstory";
+            return theText;
         }
-        return theText;
+        
+        if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
+            NSString *theText;
+            if (self.twitterName.length > 0) {
+                theText = [NSString stringWithFormat:@"#startup moment on @teamstoryapp via @%@. Join the global startup community: http://goo.gl/F2QSoJ", self.twitterName];
+            } else {
+                theText = @"#startup moment on @teamstoryapp. Join the global startup community: http://goo.gl/F2QSoJ";
+            }
+            return theText;
+        }
+        
+        if ([activityType isEqualToString:UIActivityTypeMail]) {
+            NSString *theText = @"Hey there!\nThis is a startup moment shared on Teamstory (http://teamstoryapp.com) - A community for startups & founders! Would love for you to join the community with me: http://goo.gl/F2QSoJ";
+            return theText;
+        }
+        
+        return @"Startup moment shared on Teamstory - A community for startups & founders! Join the community with me: goo.gl/F2QSoJ";
+        
+    } else {
+        if ([activityType isEqualToString:UIActivityTypePostToFacebook]) {
+            NSString *theText = @"Join me and hundreds of #entrepreneurs and #founders on @teamstory!:goo.gl/F2QSoJ" ;
+            return theText;
+        }
+        
+        if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
+            NSString *theText;
+            theText = @"Join me and hundreds of #entrepreneurs and #founders on @teamstoryapp!:goo.gl/F2QSoJ";
+            return theText;
+        }
+        
+        return @"Join me and hundreds of entrepreneurs and founders on teamstoryapp!:http://goo.gl/F2QSoJ";
     }
-    
-    if ([activityType isEqualToString:UIActivityTypeMail]) {
-        NSString *theText = @"Hey there!\nThis is a startup moment shared on Teamstory (http://teamstoryapp.com) - A community for startups & founders! Would love for you to join the community with me: http://goo.gl/F2QSoJ";
-        return theText;
-    }
-    
-    return @"Startup moment shared on Teamstory - A community for startups & founders! Join the community with me: goo.gl/F2QSoJ";
 }
 
 #pragma mark - Refresh
@@ -798,9 +803,8 @@ enum ActionSheetTags {
 - (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapUserButton:(UIButton *)button user:(PFUser *)user {
     PAPAccountViewController *accountViewController = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
     [accountViewController setUser:user];
-    self.hidesBottomBarWhenPushed = YES;
+    accountViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:accountViewController animated:YES];
-    self.hidesBottomBarWhenPushed = NO;
 }
 
 #pragma mark - PostFooterView Delegate
@@ -826,15 +830,6 @@ enum ActionSheetTags {
     
     if (liked) {
         
-        // check if the post author is the same as current user
-        NSString *postAuthorId = [[photo objectForKey:@"user"] objectId];
-        BOOL isAuthor = [[[PFUser currentUser] objectId] isEqualToString:postAuthorId];
-        
-        // only increment by one when post author is not the same as current user
-        if(!isAuthor){
-            [self updateActivityPoints];
-        }
-    
         // get post type
         NSString *postType = [photo objectForKey:@"type"] != nil ? [photo objectForKey:@"type"] : @"";
         

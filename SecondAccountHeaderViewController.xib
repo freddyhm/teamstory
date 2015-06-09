@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="13F1077" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SecondAccountHeaderViewController">
+            <connections>
+                <outlet property="angelList" destination="Nwl-cn-8sq" id="Kvz-0U-UdF"/>
+                <outlet property="industryInfo" destination="VPS-f2-PGz" id="HC0-Ol-WU4"/>
+                <outlet property="industryLabel" destination="WUw-Rc-Un3" id="eg4-94-ys2"/>
+                <outlet property="linkedIn" destination="hRw-pZ-YvA" id="IyL-0V-a30"/>
+                <outlet property="twitter" destination="GFB-fa-wxV" id="BcC-yt-C9b"/>
+                <outlet property="view" destination="iN0-l3-epB" id="fwA-jg-dXT"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="197"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GFB-fa-wxV" userLabel="Twitter">
+                    <rect key="frame" x="76" y="96" width="40" height="40"/>
+                    <state key="normal" backgroundImage="profile_twitter_on.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hRw-pZ-YvA" userLabel="LinkedIn">
+                    <rect key="frame" x="140" y="96" width="40" height="40"/>
+                    <state key="normal" backgroundImage="profile_linkedin_on.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nwl-cn-8sq" userLabel="AngelList">
+                    <rect key="frame" x="204" y="96" width="40" height="40"/>
+                    <state key="normal" backgroundImage="profile_angellist_on.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qlc-h7-9Mx">
+                    <rect key="frame" x="72" y="29" width="177" height="54"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Industry" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WUw-Rc-Un3">
+                            <rect key="frame" x="0.0" y="16" width="56" height="21"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="21" id="7a7-M0-ObB"/>
+                                <constraint firstAttribute="width" constant="56" id="cUN-WZ-Fau"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Internet Software" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VPS-f2-PGz" userLabel="Industry Info">
+                            <rect key="frame" x="66" y="18" width="111" height="17"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.3411764706" green="0.72549019609999998" blue="0.61960784310000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstItem="WUw-Rc-Un3" firstAttribute="baseline" secondItem="VPS-f2-PGz" secondAttribute="baseline" constant="2" id="51W-eQ-wWg"/>
+                        <constraint firstAttribute="trailing" secondItem="VPS-f2-PGz" secondAttribute="trailing" id="6C7-1n-bbK"/>
+                        <constraint firstItem="WUw-Rc-Un3" firstAttribute="leading" secondItem="qlc-h7-9Mx" secondAttribute="leading" id="BVu-eS-hoz"/>
+                        <constraint firstItem="WUw-Rc-Un3" firstAttribute="top" secondItem="qlc-h7-9Mx" secondAttribute="top" constant="16" id="HZf-EV-oJz"/>
+                        <constraint firstAttribute="bottom" secondItem="WUw-Rc-Un3" secondAttribute="bottom" constant="17" id="J1l-YK-EoH"/>
+                        <constraint firstItem="WUw-Rc-Un3" firstAttribute="baseline" secondItem="VPS-f2-PGz" secondAttribute="baseline" constant="2" id="Luv-aK-KI6"/>
+                        <constraint firstItem="WUw-Rc-Un3" firstAttribute="leading" secondItem="qlc-h7-9Mx" secondAttribute="leading" id="WNt-9v-ZsT"/>
+                        <constraint firstItem="WUw-Rc-Un3" firstAttribute="leading" secondItem="qlc-h7-9Mx" secondAttribute="leading" id="dvg-pD-Xna"/>
+                        <constraint firstItem="WUw-Rc-Un3" firstAttribute="leading" secondItem="qlc-h7-9Mx" secondAttribute="leading" id="iCB-co-7Uw"/>
+                        <constraint firstItem="VPS-f2-PGz" firstAttribute="leading" secondItem="WUw-Rc-Un3" secondAttribute="trailing" constant="10" id="qYy-Cs-epp"/>
+                        <constraint firstAttribute="height" constant="54" id="zsZ-aZ-cXf"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="0.3411764705882353" green="0.72941176470588232" blue="0.60784313725490191" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="GFB-fa-wxV" firstAttribute="baseline" secondItem="Nwl-cn-8sq" secondAttribute="baseline" id="23e-9t-O2N"/>
+                <constraint firstItem="GFB-fa-wxV" firstAttribute="baseline" secondItem="hRw-pZ-YvA" secondAttribute="baseline" id="3NC-BI-aMs"/>
+                <constraint firstItem="GFB-fa-wxV" firstAttribute="baseline" secondItem="hRw-pZ-YvA" secondAttribute="baseline" id="3z1-Jf-IBY"/>
+                <constraint firstItem="hRw-pZ-YvA" firstAttribute="top" secondItem="GFB-fa-wxV" secondAttribute="top" id="4B9-3D-9AP"/>
+                <constraint firstItem="qlc-h7-9Mx" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="29" id="5ev-xl-g2T"/>
+                <constraint firstItem="GFB-fa-wxV" firstAttribute="baseline" secondItem="hRw-pZ-YvA" secondAttribute="baseline" id="6FI-cX-KdA"/>
+                <constraint firstItem="GFB-fa-wxV" firstAttribute="baseline" secondItem="Nwl-cn-8sq" secondAttribute="baseline" id="6jt-VD-ZhT"/>
+                <constraint firstItem="GFB-fa-wxV" firstAttribute="baseline" secondItem="Nwl-cn-8sq" secondAttribute="baseline" id="6m2-J3-qKj"/>
+                <constraint firstItem="hRw-pZ-YvA" firstAttribute="baseline" secondItem="GFB-fa-wxV" secondAttribute="baseline" id="8DH-93-l2j"/>
+                <constraint firstItem="Nwl-cn-8sq" firstAttribute="leading" secondItem="hRw-pZ-YvA" secondAttribute="trailing" constant="24" id="8ba-me-ka9"/>
+                <constraint firstItem="qlc-h7-9Mx" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="45" id="IbD-XL-blA"/>
+                <constraint firstAttribute="bottom" secondItem="GFB-fa-wxV" secondAttribute="bottom" constant="45" id="Lsv-5g-o72"/>
+                <constraint firstItem="hRw-pZ-YvA" firstAttribute="leading" secondItem="GFB-fa-wxV" secondAttribute="trailing" constant="24" id="QFy-OP-STx"/>
+                <constraint firstItem="Nwl-cn-8sq" firstAttribute="baseline" secondItem="GFB-fa-wxV" secondAttribute="baseline" id="RHB-xc-gb8"/>
+                <constraint firstItem="GFB-fa-wxV" firstAttribute="top" secondItem="qlc-h7-9Mx" secondAttribute="bottom" constant="13" id="Sa1-O3-KZT"/>
+                <constraint firstItem="hRw-pZ-YvA" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="TR9-We-pni"/>
+                <constraint firstItem="GFB-fa-wxV" firstAttribute="baseline" secondItem="hRw-pZ-YvA" secondAttribute="baseline" id="Tku-d9-4eU"/>
+                <constraint firstItem="hRw-pZ-YvA" firstAttribute="baseline" secondItem="Nwl-cn-8sq" secondAttribute="baseline" id="U9k-Pd-GwB"/>
+                <constraint firstItem="hRw-pZ-YvA" firstAttribute="baseline" secondItem="GFB-fa-wxV" secondAttribute="baseline" id="XqI-dc-8Ua"/>
+                <constraint firstItem="hRw-pZ-YvA" firstAttribute="top" secondItem="Nwl-cn-8sq" secondAttribute="top" id="clc-m1-FsT"/>
+                <constraint firstItem="hRw-pZ-YvA" firstAttribute="baseline" secondItem="Nwl-cn-8sq" secondAttribute="baseline" id="dqC-6L-t1s"/>
+                <constraint firstItem="GFB-fa-wxV" firstAttribute="baseline" secondItem="Nwl-cn-8sq" secondAttribute="baseline" id="fKp-2q-iZ4"/>
+                <constraint firstItem="hRw-pZ-YvA" firstAttribute="baseline" secondItem="Nwl-cn-8sq" secondAttribute="baseline" id="jFb-WW-cWz"/>
+                <constraint firstItem="Nwl-cn-8sq" firstAttribute="baseline" secondItem="hRw-pZ-YvA" secondAttribute="baseline" id="jZX-Az-Jzx"/>
+                <constraint firstItem="Nwl-cn-8sq" firstAttribute="baseline" secondItem="GFB-fa-wxV" secondAttribute="baseline" id="mwf-yA-v1z"/>
+                <constraint firstItem="Nwl-cn-8sq" firstAttribute="top" secondItem="qlc-h7-9Mx" secondAttribute="bottom" constant="13" id="nqB-0O-qUj"/>
+                <constraint firstItem="hRw-pZ-YvA" firstAttribute="top" secondItem="qlc-h7-9Mx" secondAttribute="bottom" constant="13" id="ond-pu-s6j"/>
+                <constraint firstItem="Nwl-cn-8sq" firstAttribute="baseline" secondItem="hRw-pZ-YvA" secondAttribute="baseline" id="tFi-cG-nSw"/>
+                <constraint firstItem="Nwl-cn-8sq" firstAttribute="baseline" secondItem="hRw-pZ-YvA" secondAttribute="baseline" id="vrc-pD-Xvn"/>
+                <constraint firstItem="hRw-pZ-YvA" firstAttribute="centerX" secondItem="qlc-h7-9Mx" secondAttribute="centerX" id="yID-al-qZ1"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="IbD-XL-blA"/>
+                    <exclude reference="Lsv-5g-o72"/>
+                </mask>
+            </variation>
+            <point key="canvasLocation" x="-1403" y="-174.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="profile_angellist_on.png" width="40" height="40"/>
+        <image name="profile_linkedin_on.png" width="40" height="40"/>
+        <image name="profile_twitter_on.png" width="40" height="40"/>
+    </resources>
+</document>

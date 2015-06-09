@@ -474,6 +474,9 @@
     [self.navigationController pushViewController:accountViewController animated:YES];
 }
 
+#pragma mark - PAPBaseTextCellDelegate via PAPActivityCellDelegate Methods
+
+
 
 #pragma mark - PAPActivityFeedViewController
 
@@ -504,8 +507,15 @@
         // add post type to item in title
         NSString *begTitle = @"posted a ";
         
-        // change wording "picture" to "moment" 
-        NSString *postType = [[post objectForKey:@"type"] isEqualToString:@"picture"] ? @"moment": [post objectForKey:@"type"];
+        NSString *postType = [post objectForKey:@"type"];
+        
+        // post type wasn't set until "thoughts" were introduced so for old posts set to "moment"
+        if(postType){
+            // change wording "picture" to "moment"
+            postType = [postType isEqualToString:@"picture"] ? @"moment": [post objectForKey:@"type"];
+        }else{
+            postType = @"moment";
+        }
         
         NSString *fullTitle = [begTitle stringByAppendingString:postType];
     
@@ -519,8 +529,12 @@
 #pragma mark - ()
 
 - (void)scrollToTop{
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
-                      atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    
+    // check if table is empty by checking index path of the first row
+    if([self.tableView indexPathForRowAtPoint:CGPointMake(0, 0)]){
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
+                              atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    }
 }
 
 - (void)setActivityBadge:(NSString *)badge{
@@ -718,6 +732,5 @@
 - (void)removeActivitiesInReadList:(NSMutableArray *)activities{
     [self.activityReadList removeObjectsForKeys:activities];
 }
-
-
+    
 @end
