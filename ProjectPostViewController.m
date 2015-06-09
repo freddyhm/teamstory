@@ -112,57 +112,6 @@
     }
 }
 
-- (void)changeInputColor:(UIColor *)color{
-    self.projectGoal.textColor = color;
-}
-
-- (void)changePlaceholderColor:(UIColor *)color{
-    [self.projectGoalPlaceholder setTextColor:color];
-}
-
-- (void)changeLabelColor:(UIColor *)color{
-    self.projectGoalLabel.textColor = color;
-}
-
-
-- (void)updateTextColor{
-    
-    [self updateNavControlColors:@"light"];
-    
-    /*
-    
-    self.placeholderColor = [UIColor colorWithRed:255.0f/255.0f green:255.0f/255.0f blue:255.0f/255.0f alpha:0.6];
-    
-    // chck if current background is white
-    if(super.prevBkgdIndex == 0){
-        [self changeLabelColor:[UIColor blackColor]];
-        [self changeInputColor:[UIColor blackColor]];
-        [self changePlaceholderColor:[UIColor grayColor]];
-        
-        [self updateNavControlColors:@"dark"];
-
-    }else{
-        [self changeLabelColor:[UIColor whiteColor]];
-        //[self changeInputColor:[UIColor whiteColor]];
-        [self changePlaceholderColor:self.placeholderColor];
-
-        [self updateNavControlColors:@"light"];
-    }
-     */
-}
-
-
-
-- (void)updateNavControlColors:(NSString *)type{
-    if([type isEqualToString:@"light"]){
-        [self.leftNavSelector setImage:[UIImage imageNamed:@"arrows_left_white.png"] forState:UIControlStateNormal];
-        [self.rightNavSelector setImage:[UIImage imageNamed:@"arrows_right_white.png"] forState:UIControlStateNormal];
-    }else if([type isEqualToString:@"dark"]){
-        [self.leftNavSelector setImage:[UIImage imageNamed:@"arrows_left.png"] forState:UIControlStateNormal];
-        [self.rightNavSelector setImage:[UIImage imageNamed:@"arrows_right.png"] forState:UIControlStateNormal];
-    }
-}
-
 #pragma mark - Textfield and Textview Delegates
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{

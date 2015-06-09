@@ -54,7 +54,7 @@
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hse-na-Kmj" userLabel="Right Button - Button">
                     <rect key="frame" x="290" y="141" width="25" height="25"/>
-                    <state key="normal" image="arrows_right.png">
+                    <state key="normal" image="arrows_right_white.png">
                         <color key="titleColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -64,7 +64,7 @@
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L3r-dl-eFg" userLabel="Left Button - Button">
                     <rect key="frame" x="5" y="141" width="25" height="25"/>
-                    <state key="normal" image="arrows_left.png">
+                    <state key="normal" image="arrows_left_white.png">
                         <color key="titleColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -134,8 +134,8 @@
         <swipeGestureRecognizer direction="right" id="YP5-J5-ut2"/>
     </objects>
     <resources>
-        <image name="arrows_left.png" width="25" height="25"/>
-        <image name="arrows_right.png" width="25" height="25"/>
+        <image name="arrows_left_white.png" width="25" height="25"/>
+        <image name="arrows_right_white.png" width="25" height="25"/>
         <image name="bg_thought.png" width="320" height="186"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

@@ -117,8 +117,6 @@
     [self.placeholder setText:[self.suggOptions objectAtIndex:randomSuggOption]];
 
     [self.view addGestureRecognizer:tapOutside];
-    
-    [self updateTextColor];
 }
 
 - (int)generateRandomNumFromCount:(NSUInteger)count{
@@ -234,21 +232,6 @@
     self.navigationItem.rightBarButtonItem = [textView.text isEqualToString:@""] ? nil : self.rightNavButton;
 }
 
-- (void)updateTextColor{
-    
-    // check if current bkgd is white or not, change arrows and text color
-    if(self.prevBkgdIndex != 0){
-        self.thoughtTextView.textColor = [UIColor whiteColor];
-        [self.leftNavSelector setImage:[UIImage imageNamed:@"arrows_left_white.png"] forState:UIControlStateNormal];
-        [self.rightNavSelector setImage:[UIImage imageNamed:@"arrows_right_white.png"] forState:UIControlStateNormal];
-        [self.placeholder setTextColor:[UIColor whiteColor]];
-    }else{
-        self.thoughtTextView.textColor = [UIColor blackColor];
-        [self.leftNavSelector setImage:[UIImage imageNamed:@"arrows_left.png"] forState:UIControlStateNormal];
-        [self.rightNavSelector setImage:[UIImage imageNamed:@"arrows_right.png"] forState:UIControlStateNormal];
-        [self.placeholder setTextColor:[UIColor grayColor]];
-    }
-}
 
 #pragma mark - Saving Related Methods
 
@@ -471,9 +454,6 @@
         [self setBkgIndex:0];
         self.prevBkgdIndex = 0;
     }
-    
-    // change present text color
-    [self updateTextColor];
 }
 
 - (IBAction)leftNav:(id)sender{
@@ -488,9 +468,6 @@
         self.prevBkgdIndex = (int)[self.bkgdOptions count] - 1;
         [self setBkgIndex:self.prevBkgdIndex];
     }
-    
-    // change present text color
-    [self updateTextColor];
 }
 
 

@@ -270,7 +270,7 @@
     postButton.selected = self.postButton.selected ? NO : YES;
     self.postMenu.hidden = YES;
     
-    ThoughtPostViewController *thoughtPostViewController = [[ThoughtPostViewController alloc] init];
+    ProjectPostViewController *thoughtPostViewController = [[ProjectPostViewController alloc] init];
     thoughtPostViewController.delegate = self;
     
     // nav controller here serves to display nav bar easily
