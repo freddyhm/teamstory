@@ -280,7 +280,8 @@
     
     BOOL isValid = YES;
     
-    if(self.thoughtTextView.contentSize.height < self.thoughtTextView.frame.size.height){
+    // make sure our content is always smaller than the actual frame
+    if(self.thoughtTextView.contentSize.height > self.thoughtTextView.frame.size.height){
         isValid = NO;
         [self showFailValidateBeforeSaveAlert];
     }
