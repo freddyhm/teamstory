@@ -688,6 +688,20 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 #pragma mark - PAPPhotoDetailsHeaderViewDelegate
 
+- (void)openPhotoDetailView:(PFObject *)post {
+    
+    PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:post source:@"detailsHeaderLink"];
+    
+    // hides tab bar so we can add custom keyboard
+    photoDetailsVC.hidesBottomBarWhenPushed = YES;
+    
+    [self.navigationController pushViewController:photoDetailsVC animated:YES];
+}
+
+-(void)photoDetailsHeaderView:(PAPPhotoDetailsHeaderView *)headerView didTapProjectLink:(PFObject *)post{
+    [self openPhotoDetailView:post];
+}
+
 -(void)photoDetailsHeaderView:(PAPPhotoDetailsHeaderView *)headerView didTapUserButton:(UIButton *)button user:(PFUser *)user {
     [self shouldPresentAccountViewForUser:user];
 }
@@ -886,6 +900,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:[self.current_photo objectId]];
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+#pragma mark - Project Related Methods
 
 - (void)deleteProjectIfPresent:(PFObject *)post{
     

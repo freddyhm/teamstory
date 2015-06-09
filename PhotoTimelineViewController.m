@@ -892,7 +892,7 @@ enum ActionSheetTags {
 
 - (void)openPhotoDetailView:(PFObject *)photo {
     
-    PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"commentButton"];
+    PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"timelineHeaderLink"];
     
     // hides tab bar so we can add custom keyboard
     photoDetailsVC.hidesBottomBarWhenPushed = YES;
