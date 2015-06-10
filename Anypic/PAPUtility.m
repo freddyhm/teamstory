@@ -17,6 +17,16 @@
 
 #pragma mark - PAPUtility
 
+#pragma mark - iPhone 4 & 4S Methods
+
++ (BOOL)checkForPreIphone5{
+    if ([UIScreen mainScreen].bounds.size.height > 480) {
+        return NO;
+    }else{
+        return YES;
+    }
+}
+
 
 #pragma mark Google Analytics
 

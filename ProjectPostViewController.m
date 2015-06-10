@@ -9,7 +9,7 @@
 #import "ProjectPostViewController.h"
 
 #define MAX_GOAL_LENGTH 35
-#define MAX_TITLE_LENGTH 30
+#define MAX_TITLE_LENGTH 200
 #define TITLE_TAG_NUM 1
 
 @interface ThoughtPostViewController ()
@@ -25,23 +25,25 @@
 
 @interface ProjectPostViewController ()
 
-// input fields
+// input field
 @property (weak, nonatomic) IBOutlet UITextView *projectGoal;
 
-// input labels
+// labels
 @property (weak, nonatomic) IBOutlet UILabel *projectGoalLabel;
 @property (weak, nonatomic) IBOutlet UITextField *projectTitle;
 @property (weak, nonatomic) IBOutlet UILabel *projectTitleLabel;
-
-@property (weak, nonatomic) NSString *postType;
-@property (weak, nonatomic) PFUser *user;
-@property (strong, nonatomic) UIColor *placeholderColor;
-@property (strong, nonatomic) NSMutableArray *bkgdImgOptions;
 
 // textfield placeholders
 @property (weak, nonatomic) IBOutlet UILabel *projectGoalPlaceholder;
 @property (weak, nonatomic) IBOutlet UILabel *projecTitlePlaceholder;
 @property (weak, nonatomic) IBOutlet UIImageView *projectBkgdImgView;
+
+
+@property (strong, nonatomic) NSString *postType;
+@property (strong, nonatomic) PFUser *user;
+@property (strong, nonatomic) UIColor *placeholderColor;
+@property (strong, nonatomic) NSMutableArray *bkgdImgOptions;
+@property (strong, nonatomic) UIScrollView *kbAvoidingScrollView;
 
 @end
 
@@ -49,14 +51,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     self.postType = @"project";
     self.user = [PFUser currentUser];
     self.navigationItem.title = @"Create Project";
     
-    [self.projectGoalPlaceholder setText:@"It'll make the world a better place"];
+    // keyboard properties set in IB but not responding for unknown reason so we set here
+    [self setKeyboardDefaultSettingsForInput];
     
     [super showSaveButtonOnStart];
+    
+    self.kbAvoidingScrollView = (UIScrollView *)self.view;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -118,35 +123,57 @@
     [self hidePlaceholderIfPresent:textField];
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    return true;
+}
+
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     [self checkInputTextIsLessThanMaxLength:textField.text type:@"title"];
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView{
+    
+    if([PAPUtility checkForPreIphone5]){
+        [self moveKeyboardWhenSizingForOldIphones];
+    }
+    
     if(!self.projectGoalPlaceholder.hidden){
         [self.projectGoalPlaceholder setHidden:YES];
     }
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView{
-    [self checkInputTextIsLessThanMaxLength:textView.text type:@"goal"];
+    if(![self checkGoalContentIsSmallerThanFrame]){
+        [self showGoalTooLongAlert];
+    }
 }
 
 #pragma mark - Error Checking Methods
 
 - (BOOL)isInputTypeValid:(NSString *)type{
-    return [type isEqualToString:@"goal"];
+    return [type isEqualToString:@"goal"] || [type isEqualToString:@"title"];
+}
+
+- (BOOL)checkGoalContentIsSmallerThanFrame{
     
+   // NSLog(@"%f", self.projectGoal.contentSize.height);
+   // NSLog(@"%f", self.projectGoal.frame.size.height);
+
+    return YES;
 }
 
 - (BOOL)checkInputTextIsLessThanMaxLength:(NSString *)text type:(NSString *)type{
-    
+
     BOOL isUnderMax = YES;
     
     if([self isInputTypeValid:type]){
         if([type isEqualToString:@"goal"] && [text length] > MAX_GOAL_LENGTH){
             isUnderMax = NO;
             [self showOverMaxLengthAlert:type maxLength:MAX_GOAL_LENGTH];
+        }else if([type isEqualToString:@"title"] && [text length] > MAX_TITLE_LENGTH){
+            isUnderMax = NO;
+            [self showOverMaxLengthAlert:type maxLength:MAX_TITLE_LENGTH];
         }
     }
     
@@ -156,9 +183,14 @@
 - (BOOL)validateBeforeSaving{
     
     BOOL areInputsNotEmpty = [self checkInputTextIsNotEmpty:self.projectTitle.text] && [self checkInputTextIsNotEmpty:self.projectGoal.text];
+    BOOL isGoalContentSmallerThanFrameSize = [self checkGoalContentIsSmallerThanFrame];
     
     if(!areInputsNotEmpty){
         [self showEmptyInputAlert];
+    }
+    
+    if(!isGoalContentSmallerThanFrameSize){
+        [self showGoalTooLongAlert];
     }
     
     BOOL areInputsLessThanMax = [self checkInputTextIsLessThanMaxLength:self.projectTitle.text type:@"title"] && [self checkInputTextIsLessThanMaxLength:self.projectGoal.text type:@"goal"];
@@ -233,6 +265,16 @@
     [alert show];
 }
 
+- (void)showGoalTooLongAlert{
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning"
+                                                    message:@"Your goal is too long"
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+}
+
 - (void)showOverMaxLengthAlert:(NSString *)type maxLength:(NSUInteger)maxLength{
     
     if(maxLength > 0){
@@ -248,6 +290,18 @@
     }
 }
 
+#pragma mark - Keyboard Default Settings Method
 
+- (void)setKeyboardDefaultSettingsForInput{
+    [self.projectTitle setTintColor:[UIColor whiteColor]];
+    [self.projectGoal setTintColor:[UIColor whiteColor]];
+    [self.projectTitle setAutocorrectionType:UITextAutocorrectionTypeNo];
+    [self.projectGoal setAutocorrectionType:UITextAutocorrectionTypeNo];
+    [self.projectGoal.textContainer setMaximumNumberOfLines:4];
+}
+
+- (void)moveKeyboardWhenSizingForOldIphones{
+    [self.kbAvoidingScrollView setContentInset:UIEdgeInsetsMake(-100.0f, 0, 0, 0)];
+}
 
 @end

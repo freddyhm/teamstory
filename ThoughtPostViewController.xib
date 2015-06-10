@@ -124,7 +124,7 @@
                 <outletCollection property="gestureRecognizers" destination="5XT-Ua-Fft" appends="YES" id="png-kn-Q9Y"/>
                 <outletCollection property="gestureRecognizers" destination="YP5-J5-ut2" appends="YES" id="ULu-6o-mHq"/>
             </connections>
-            <point key="canvasLocation" x="-528" y="129"/>
+            <point key="canvasLocation" x="-736" y="112"/>
         </view>
         <swipeGestureRecognizer direction="left" id="5XT-Ua-Fft"/>
         <swipeGestureRecognizer direction="right" id="YP5-J5-ut2"/>

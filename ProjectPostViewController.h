@@ -8,6 +8,6 @@
 
 #import "ThoughtPostViewController.h"
 
-@interface ProjectPostViewController : ThoughtPostViewController <UITextFieldDelegate>
+@interface ProjectPostViewController : ThoughtPostViewController <UITextFieldDelegate, UIScrollViewDelegate>
 
 @end

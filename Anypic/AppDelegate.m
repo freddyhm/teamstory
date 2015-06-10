@@ -187,7 +187,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     NSString *installationId = [[PFInstallation currentInstallation] objectId];
     
     if(installationId != nil){
-        [Crashlytics setUserIdentifier:installationId];
+        [[Crashlytics sharedInstance] setUserIdentifier:installationId];
         [[Mixpanel sharedInstance] registerSuperProperties:@{@"InstallationObjId": installationId}];
     }
     
