@@ -31,7 +31,7 @@
 
 // labels
 @property (weak, nonatomic) IBOutlet UILabel *projectGoalLabel;
-@property (weak, nonatomic) IBOutlet UITextField *projectTitle;
+@property (weak, nonatomic) IBOutlet UITextView *projectTitle;
 @property (weak, nonatomic) IBOutlet UILabel *projectTitleLabel;
 
 // textfield placeholders
