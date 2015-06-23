@@ -136,6 +136,6 @@
 	<key>UIViewEdgeAntialiasing</key>
 	<false/>
 	<key>VersionChanges</key>
-	<string>• Improved point system: earn points by posting and commenting. Get extra points by posting popular posts. Giving likes doesn't add to your score.</string>
+	<string>• New! Redesigned tab bar • Improved point system: earn points by posting and commenting. Get extra points by posting popular posts. Giving likes doesn&apos;t add to your score.</string>
 </dict>
 </plist>

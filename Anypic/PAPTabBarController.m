@@ -12,6 +12,7 @@
 #import "SVProgressHUD.h"
 #import "Mixpanel.h"
 #import "PAPLoginSelectionViewController.h"
+#import "PAPMessageListViewController.h"
 #import "ProjectPostViewController.h"
 
 @interface PAPTabBarController ()
