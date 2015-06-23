@@ -9,6 +9,7 @@
 #import "PAPwebviewViewController.h"
 #import "OpenInChromeController.h"
 #import "Mixpanel.h"
+#import "PAPTabBarController.h"
 
 @interface PAPwebviewViewController ()
 @property (nonatomic, strong) UIWebView *webview;
@@ -42,6 +43,19 @@
     }
     return self;
 }
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:NO];
+    
+    // removing tabbar posting control
+    ((PAPTabBarController *)self.tabBarController).postMenuButton.hidden = YES;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:NO];
+    ((PAPTabBarController *)self.tabBarController).postMenuButton.hidden = NO;
+}
+
 
 - (void)viewDidLoad
 {

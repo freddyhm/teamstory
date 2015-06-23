@@ -24,6 +24,8 @@
 #import "PAPMessageListViewController.h"
 #import "PAPMessagingViewController.h"
 #import "PAPMessageListCell.h"
+#import <Parse/Parse.h>
+#import <ParseCrashReporting/ParseCrashReporting.h>
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import "PAPLoginSelectionViewController.h"
 
@@ -44,6 +46,7 @@
 @property (nonatomic, strong) PhotoTimelineViewController *photoTimelineViewController;
 @property (nonatomic, strong) PAPMessageListCell *messageListCell;
 @property (nonatomic, strong) PAPMessagingViewController *messagingViewController;
+@property (nonatomic, strong) PAPMessageListViewController *messageListViewController;
 
 @property (nonatomic, strong) NSDictionary *currentUserInfo;
 
@@ -458,10 +461,14 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     // check if tab bar post menu is present, do not change tabs if so
     if(!tabBar.postMenu.hidden){
         return false;
-    }else{
+    }
+    
+    /*
+    else{
         // The empty UITabBarItem behind our Camera button should not load a view controller
         return ![viewController isEqual:aTabBarController.viewControllers[PAPEmptyTabBarItemIndex]];
-    }
+    }*/
+    return true;
 }
 
 
@@ -564,6 +571,8 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     [self.homeViewController setFirstLaunch:firstLaunch];
     self.activityViewController = [[PAPActivityFeedViewController alloc] initWithStyle:UITableViewStylePlain];
     self.accountViewController_tabBar = [[PAPAccountViewController alloc] initWithNibName:@"PhotoTimelineViewController" bundle:nil];
+    self.messageListViewController = [[PAPMessageListViewController alloc] init];
+
 
     self.discoverViewController = [[discoverPageViewController alloc] init];
     
@@ -571,7 +580,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     [accountViewController_tabBar setUser:[PFUser currentUser]];
     
     UINavigationController *homeNavigationController = [[UINavigationController alloc] initWithRootViewController:self.homeViewController];
-    UINavigationController *emptyNavigationController = [[UINavigationController alloc] init];
+    UINavigationController *messageNavigationController = [[UINavigationController alloc] initWithRootViewController:self.messageListViewController];
     UINavigationController *activityFeedNavigationController = [[UINavigationController alloc] initWithRootViewController:self.activityViewController];
     UINavigationController *discoverNavigationController = [[UINavigationController alloc] initWithRootViewController:self.discoverViewController];
     UINavigationController *accountNavigationController = [[UINavigationController alloc] initWithRootViewController:self.accountViewController_tabBar];
@@ -593,6 +602,12 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     [activityFeedTabBarItem setSelectedImage:[[UIImage imageNamed:@"IconActivitySelected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
 
     activityFeedTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
+    
+    
+    UITabBarItem *messageTabBarItem = [[UITabBarItem alloc] init];
+    [messageTabBarItem setImage:[[UIImage imageNamed:@"nav_chat.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [messageTabBarItem setSelectedImage:[[UIImage imageNamed:@"nav_chat_selected.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    messageTabBarItem.imageInsets = UIEdgeInsetsMake(imageOffset, 0.0f, -imageOffset, 0.0f);
     
     
     UITabBarItem *discoverTabbarItem = [[UITabBarItem alloc] init];
@@ -657,10 +672,11 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     [activityFeedNavigationController setTabBarItem:activityFeedTabBarItem];
     [discoverNavigationController setTabBarItem:discoverTabbarItem];
     [accountNavigationController setTabBarItem:accountTabBarItem];
+    [messageNavigationController setTabBarItem:messageTabBarItem];
 
 
     self.tabBarController.delegate = self;
-    self.tabBarController.viewControllers = @[ homeNavigationController, discoverNavigationController, emptyNavigationController, activityFeedNavigationController, accountNavigationController ];
+    self.tabBarController.viewControllers = @[ homeNavigationController, discoverNavigationController, messageNavigationController, activityFeedNavigationController, accountNavigationController ];
     
     
     [self.navController setViewControllers:@[ self.welcomeViewController, self.tabBarController ] animated:NO];
@@ -1016,6 +1032,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
         }
     }
     
+    
     // if we have a local copy of this photo, this won't result in a network fetch
     [targetPhoto fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if (!error) {
@@ -1024,7 +1041,8 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
             [self.tabBarController setSelectedViewController:homeNavigationController];
             
             PAPPhotoDetailsViewController *detailViewController;
-            NSString *sourceType;
+            
+            NSString *sourceType = @"";
             
             if([type isEqualToString:kPAPPushPayloadActivityCommentKey]){
                 sourceType = @"notificationComment";
@@ -1035,7 +1053,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
             }else if([type isEqualToString:kPAPPushPayloadActivityPostKey]){
                 sourceType = @"notificationPost";
             }
-            
+                        
             detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:sourceType];
             
             // hides tab bar so we can add custom keyboard

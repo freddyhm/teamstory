@@ -215,7 +215,6 @@ static NSString *const EMBEDLY_APP_ID = @"5cf1f13ea680488fb54b346ffef85f93";
     [PAPUtility captureScreenGA:@"Link Upload"];
 }
 
-
 # pragma mark - ()
 - (void)cancelButtonAction:(id)sender {
     if ([self.titleLabel.text length] > 0) {

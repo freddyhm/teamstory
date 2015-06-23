@@ -79,23 +79,10 @@
     [[ActivityPointSystem sharedActivityPointSystem] getActivityPointsOnFirstRun];
     
     // button image for feedback
-    self.feedbackImg = [UIImage imageNamed:@"btn_message_empty.png"];
-    self.feedbackImgBadge = [UIImage imageNamed:@"btn_message_count.png"];
-    self.feedbackBtn = [[UIButton alloc] initWithFrame:CGRectMake(282, 0, self.feedbackImg.size.width, self.feedbackImg.size.height)];
-    self.feedbackBtn.titleEdgeInsets = UIEdgeInsetsMake(-2.0f, 1.0f, 0.0f, 0.0f);
-    self.feedbackBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
-    [self.feedbackBtn.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:10.0f]];
+    self.feedbackImg = [UIImage imageNamed:@"btn_main_invite.png"];
+    self.feedbackBtn = [[UIButton alloc] initWithFrame:CGRectMake(282, 7, self.feedbackImg.size.width, self.feedbackImg.size.height)];
+    [self.feedbackBtn setBackgroundImage:self.feedbackImg forState:UIControlStateNormal];
     [self.feedbackBtn addTarget:self action:@selector(promptFeedback:) forControlEvents:UIControlEventTouchUpInside];
-    
-    if ([[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue] > 0) {
-        [self.feedbackBtn setTitle:[[[PFUser currentUser] objectForKey:@"messagingBadge"] stringValue] forState:UIControlStateNormal];
-        self.feedbackBtn.frame = CGRectMake(275, 1, self.feedbackImgBadge.size.width, self.feedbackImgBadge.size.height);
-        [self.feedbackBtn setBackgroundImage:self.feedbackImgBadge forState:UIControlStateNormal];
-    } else {
-        self.feedbackBtn.frame = CGRectMake(275, 1, self.feedbackImg.size.width, self.feedbackImg.size.height);
-        [self.feedbackBtn setBackgroundImage:self.feedbackImg forState:UIControlStateNormal];
-        [self.feedbackBtn setTitle:nil forState:UIControlStateNormal];
-    }
 
     // feed title ui
     self.feedFontSelected = [UIFont boldSystemFontOfSize:15.0f];
@@ -233,14 +220,27 @@
 - (void) refreshBadge {
     [[PFUser currentUser] fetchInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if ([[[PFUser currentUser] objectForKey:@"messagingBadge"] intValue] > 0) {
-            [self.feedbackBtn setTitle:[[[PFUser currentUser] objectForKey:@"messagingBadge"] stringValue] forState:UIControlStateNormal];
-            self.feedbackBtn.frame = CGRectMake(275, 1, self.feedbackImgBadge.size.width, self.feedbackImgBadge.size.height);
-            [self.feedbackBtn setBackgroundImage:self.feedbackImgBadge forState:UIControlStateNormal];
-            [self.feedbackBtn setTitle:[[[PFUser currentUser] objectForKey:@"messagingBadge"] stringValue] forState:UIControlStateNormal];
+            UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPMessageTabBarItemIndex] tabBarItem];
+            NSNumber *messagingBadgeNumber = [[PFUser currentUser] objectForKey:@"messagingBadge"];
+            
+            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+            
+            if ([messagingBadgeNumber intValue] > 0) {
+                tabBarItem.badgeValue = [numberFormatter stringFromNumber:messagingBadgeNumber];
+            } else {
+                tabBarItem.badgeValue = nil;
+            }
+            
+            // get current selected tab
+            NSUInteger selectedtabIndex = self.tabBarController.selectedIndex;
+            
+            // current view is tabbar, clear the badge.
+            if(selectedtabIndex == PAPMessageTabBarItemIndex){
+                tabBarItem.badgeValue = nil;
+            }
         } else {
-            self.feedbackBtn.frame = CGRectMake(275, 1, self.feedbackImg.size.width, self.feedbackImg.size.height);
-            [self.feedbackBtn setBackgroundImage:self.feedbackImg forState:UIControlStateNormal];
-            [self.feedbackBtn setTitle:nil forState:UIControlStateNormal];
+            UITabBarItem *tabBarItem = [[self.tabBarController.viewControllers objectAtIndex:PAPMessageTabBarItemIndex] tabBarItem];
+            tabBarItem.badgeValue = nil;
         }
     }];
 }
@@ -396,9 +396,49 @@
         [self.view.window.rootViewController presentViewController:loginSelectionViewController animated:YES completion:nil];
         return;
     }
-    PAPMessageListViewController *messageListViewController = [[PAPMessageListViewController alloc] init];
-    messageListViewController.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:messageListViewController animated:YES];
+    
+    [SVProgressHUD show];
+    self.inviteButtonCheckForShare = YES;
+    
+    NSArray *activityItems = @[self];
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+    activityVC.excludedActivityTypes = @[UIActivityTypeAssignToContact, UIActivityTypePrint];
+    [activityVC setValue:@"Join me on Teamstory!" forKey:@"subject"];
+    
+    [self.navigationController presentViewController:activityVC animated:YES completion:^{
+        [SVProgressHUD dismiss];
+    }];
+    
+    // this gets handled after an activity is completed.
+    [activityVC setCompletionHandler:^(NSString *activityType, BOOL completed) {
+        if (completed) {
+            if ([activityType isEqualToString:UIActivityTypePostToFacebook]) {
+                
+                [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Discover", @"Platform": @"Facebook"}];
+                
+                NSLog(@"facebook");
+            } else if ([activityType isEqualToString:UIActivityTypePostToTwitter]) {
+                
+                [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Discover", @"Platform": @"Twitter"}];
+                
+                NSLog(@"twitter");
+            } else if ([activityType isEqualToString:UIActivityTypeMail]) {
+                
+                [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Shared Post", @"Source": @"Discover", @"Platform": @"Email"}];
+                
+                NSLog(@"email");
+            } else {
+                // all other activities.
+            }
+        }
+    }];
+    
+    if ([activityVC respondsToSelector:@selector(popoverPresentationController)])
+    {
+        // iOS 8+
+        UIPopoverPresentationController *presentationController = [activityVC popoverPresentationController];
+        presentationController.sourceView = self.view; // if button or change to self.view.
+    }
 }
 
 -(void)notificationBarButton:(id)sender {
@@ -548,9 +588,5 @@
 -(void)notificationExitButtonAction:(id)sender {
     [[PAPCache sharedCache] notificationCache:notificationContent];
 }
-
-
-
-
 
 @end

@@ -103,7 +103,6 @@
 }
 
 - (void)resetTextViewHeight{
-    
     // set the view frame
     [self.view setFrame:CGRectMake(0.0f, [UIScreen mainScreen].bounds.size.height - (64.0f + messageTextViewHeight), [UIScreen mainScreen].bounds.size.width, messageTextViewHeight)];
     
