@@ -8,9 +8,10 @@
 
 #import "ProjectPostViewController.h"
 
-#define MAX_GOAL_LENGTH 35
+#define MAX_GOAL_LENGTH 200
 #define MAX_TITLE_LENGTH 200
 #define TITLE_TAG_NUM 1
+#define GOAL_TAG_NUM 2
 
 @interface ThoughtPostViewController ()
 
@@ -110,38 +111,29 @@
 
 #pragma mark - Placeholder Methods
 
-- (void)hidePlaceholderIfPresent:(UITextField *)textField{
+- (void)hidePlaceholderIfPresent:(UITextView *)textView{
     
-    NSUInteger fieldNum = textField.tag;
+    NSUInteger tagNum = textView.tag;
     
-    if(fieldNum == TITLE_TAG_NUM){
-        [self.projecTitlePlaceholder setHidden:YES];
+    if(tagNum == GOAL_TAG_NUM){
+        if(!self.projectGoalPlaceholder.hidden){
+            [self.projectGoalPlaceholder setHidden:YES];
+        }
+    }else if(tagNum == TITLE_TAG_NUM){
+        if(!self.projecTitlePlaceholder.hidden){
+            [self.projecTitlePlaceholder setHidden:YES];
+        }
     }
 }
 
 #pragma mark - Textfield and Textview Delegates
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField{
-    [self hidePlaceholderIfPresent:textField];
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField{
-    [textField resignFirstResponder];
-    return true;
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField{
-    [self checkInputTextIsLessThanMaxLength:textField.text type:@"title"];
-}
-
 - (void)textViewDidBeginEditing:(UITextView *)textView{
     
+    [self hidePlaceholderIfPresent:textView];
+
     if([PAPUtility checkForPreIphone5]){
         [self moveKeyboardWhenSizingForOldIphones];
-    }
-    
-    if(!self.projectGoalPlaceholder.hidden){
-        [self.projectGoalPlaceholder setHidden:YES];
     }
 }
 
@@ -297,9 +289,14 @@
 - (void)setKeyboardDefaultSettingsForInput{
     [self.projectTitle setTintColor:[UIColor whiteColor]];
     [self.projectGoal setTintColor:[UIColor whiteColor]];
+    
     [self.projectTitle setAutocorrectionType:UITextAutocorrectionTypeNo];
+    [self.projectTitle.textContainer setMaximumNumberOfLines:2];
+    [self.projectTitle.textContainer setLineBreakMode:NSLineBreakByClipping];
+    
     [self.projectGoal setAutocorrectionType:UITextAutocorrectionTypeNo];
     [self.projectGoal.textContainer setMaximumNumberOfLines:4];
+    [self.projectGoal.textContainer setLineBreakMode:NSLineBreakByClipping];
 }
 
 - (void)moveKeyboardWhenSizingForOldIphones{
