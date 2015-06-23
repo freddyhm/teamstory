@@ -17,6 +17,7 @@
 - (void)saveEdit:(id)sender;
 - (void)showSaveButtonOnStart;
 - (void)setBkgIndex:(int)index;
+- (int)generateRandomNumFromCount:(NSUInteger)count;
 
 @property int prevBkgdIndex;
 
@@ -79,7 +80,8 @@
         [self setBackgroundImgOptions:[self createBackgroundImgOptions]];
     }
     
-    self.projectBkgdImgView.image = [self.bkgdImgOptions objectAtIndex:index];
+    int randomBkgdOption = [super generateRandomNumFromCount:self.bkgdImgOptions.count];
+    self.projectBkgdImgView.image = [self.bkgdImgOptions objectAtIndex:randomBkgdOption];
 }
 
 - (void)setBackgroundImgOptions:(NSMutableArray *)bkgdOptions{
