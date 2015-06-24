@@ -105,7 +105,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" tag="2" contentMode="center" fixedFrame="YES" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="xzn-3r-69N" userLabel="Goal">
-                    <rect key="frame" x="32" y="177" width="256" height="100"/>
+                    <rect key="frame" x="32" y="177" width="256" height="50"/>
                     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="16"/>
