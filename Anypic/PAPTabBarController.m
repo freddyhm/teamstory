@@ -28,6 +28,7 @@
 @property (nonatomic, strong) UIButton *photoPostButton;
 @property (nonatomic, strong) UIButton *thoughtPostButton;
 @property (nonatomic, strong) UIButton *linkPostButton;
+@property (nonatomic, strong) UIButton *projectPostButton;
 @property (nonatomic, strong) UIImageView *photoPostButtonIcon;
 @property (nonatomic, strong) UIImageView *thoughtPostButtonIcon;
 @property (nonatomic, strong) UILabel *photoPostTitle;
@@ -35,6 +36,7 @@
 @property (nonatomic, strong) UIView *photoPostView;
 @property (nonatomic, strong) UIView *thoughtPostView;
 @property (nonatomic, strong) UIView *linkPostView;
+@property (nonatomic, strong) UIView *projectPostView;
 
 @end
 
@@ -82,10 +84,10 @@
 
     UIImage *photoPostImage = [UIImage imageNamed:@"Moment Popup.png"];
     
-    self.photoPostView = [[UIView alloc] initWithFrame:CGRectMake(35.0f, screenHeight / 2 - offsetImage, photoPostImage.size.width, photoPostImage.size.height + offsetLabel)];
+    self.photoPostView = [[UIView alloc] initWithFrame:CGRectMake(65.0f, screenHeight / 3 - offsetImage, photoPostImage.size.width, photoPostImage.size.height + offsetLabel)];
     [self.postMenu addSubview:self.photoPostView];
-    // photo button
 
+    // photo button
     self.photoPostButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, photoPostImage.size.width, photoPostImage.size.height)];
     [self.photoPostButton setBackgroundImage:photoPostImage forState:UIControlStateNormal];
     [self.photoPostButton setBackgroundImage:[UIImage imageNamed:@"Moment Popup_selected.png"] forState:UIControlStateSelected];
@@ -102,7 +104,7 @@
     
     // thought button
     UIImage *thoughtPostImage = [UIImage imageNamed:@"Thought Popup.png"];
-    self.thoughtPostView = [[UIView alloc] initWithFrame:CGRectMake(120.0f, screenHeight / 2 - offsetImage, thoughtPostImage.size.width, thoughtPostImage.size.height + offsetLabel)];
+    self.thoughtPostView = [[UIView alloc] initWithFrame:CGRectMake(175.0f, screenHeight / 3 - offsetImage, thoughtPostImage.size.width, thoughtPostImage.size.height + offsetLabel)];
     [self.postMenu addSubview:self.thoughtPostView];
     
     self.thoughtPostButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, thoughtPostImage.size.width, thoughtPostImage.size.height)];
@@ -123,7 +125,7 @@
     
     UIImage *linkPostImage = [UIImage imageNamed:@"Link Popup.png"];
     
-    self.linkPostView = [[UIView alloc] initWithFrame:CGRectMake(205.0f, screenHeight / 2 - offsetImage, linkPostImage.size.width, linkPostImage.size.height + offsetLabel)];
+    self.linkPostView = [[UIView alloc] initWithFrame:CGRectMake(65.0f, screenHeight / 3 - offsetImage + 110.0f, linkPostImage.size.width, linkPostImage.size.height + offsetLabel)];
     [self.postMenu addSubview:self.linkPostView];
     
     self.linkPostButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, linkPostImage.size.width, linkPostImage.size.height)];
@@ -138,6 +140,25 @@
     [linkPostLabel setFont:labelFonts];
     linkPostLabel.textAlignment = NSTextAlignmentCenter;
     [self.linkPostView addSubview:linkPostLabel];
+    
+    // project post button
+    
+    UIImage *projectPostImage = [UIImage imageNamed:@"project_popup.png"];
+    
+    self.projectPostView = [[UIView alloc] initWithFrame:CGRectMake(175.0f, screenHeight / 3 - offsetImage + 110.0f, projectPostImage.size.width, projectPostImage.size.height + offsetLabel)];
+    [self.postMenu addSubview:self.projectPostView];
+    
+    self.projectPostButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, projectPostImage.size.width, projectPostImage.size.height)];
+    [self.projectPostButton setBackgroundImage:projectPostImage forState:UIControlStateNormal];
+    [self.projectPostButton addTarget:self action:@selector(projectPostButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.projectPostView addSubview:self.projectPostButton];
+    
+    UILabel *projectPostLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, projectPostImage.size.height, projectPostImage.size.width, offsetLabel)];
+    [projectPostLabel setText:@"Project"];
+    [projectPostLabel setTextColor:[UIColor colorWithWhite:1.0f alpha:0.7f]];
+    [projectPostLabel setFont:labelFonts];
+    projectPostLabel.textAlignment = NSTextAlignmentCenter;
+    [self.projectPostView addSubview:projectPostLabel];
     
     // hide by default
     self.postMenu.hidden = YES;
@@ -330,7 +351,7 @@
     self.postMenuButton.selected = self.postMenuButton.selected ? NO : YES;
     self.postMenu.hidden = YES;
     
-    ProjectPostViewController *thoughtPostViewController = [[ProjectPostViewController alloc] init];
+    ThoughtPostViewController *thoughtPostViewController = [[ThoughtPostViewController alloc] init];
     thoughtPostViewController.delegate = self;
     
     // nav controller here serves to display nav bar easily
@@ -338,6 +359,26 @@
     
     [self.navigationController presentViewController:thoughtNavController animated:YES completion:nil];
 }
+
+- (void)projectPostButtonAction:(id)sender{
+    // If the user is logged in with an anonymous account, show login page.
+    [self navigateToLoginPage];
+    
+    // new analytics
+    [[Mixpanel sharedInstance] track:@"Viewed Post Menu" properties:@{@"Selected": @"Project"}];
+    
+    self.postMenuButton.selected = self.postMenuButton.selected ? NO : YES;
+    self.postMenu.hidden = YES;
+    
+    ProjectPostViewController *projectPostViewController = [[ProjectPostViewController alloc] init];
+    projectPostViewController.delegate = self;
+    
+    // nav controller here serves to display nav bar easily
+    UINavigationController *projectNavController = [[UINavigationController alloc]initWithRootViewController:projectPostViewController];
+    
+    [self.navigationController presentViewController:projectNavController animated:YES completion:nil];
+}
+
 
 -(void)didUploadThought{
     
