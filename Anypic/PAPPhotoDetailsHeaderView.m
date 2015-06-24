@@ -440,7 +440,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
             
             [self hideProjectInfoPrefix];
             
-            self.projContainer = [[UILabel alloc] initWithFrame:CGRectMake(self.projInfoLabel.frame.origin.x + self.projInfoLabel.frame.size.width + 2.0f, self.projInfoLabel.frame.origin.y, 200.0f, self.projInfoLabel.frame.size.height)];
+            self.projContainer = [[UILabel alloc] initWithFrame:CGRectMake(self.projInfoLabel.frame.origin.x + self.projInfoLabel.frame.size.width + 2.0f, self.projInfoLabel.frame.origin.y, 180.0f, self.projInfoLabel.frame.size.height)];
             [self.projContainer setTextColor:[UIColor colorWithRed:74.0f/255.0f green:144.0f/255.0f blue:226.0f/255.0f alpha:1]];
             [self.projContainer setFont:self.projInfoLabel.font];
             self.projContainer.text = @"";

@@ -132,7 +132,7 @@
     
     [self hidePlaceholderIfPresent:textView];
 
-    if([PAPUtility checkForPreIphone5]){
+    if(textView.tag == GOAL_TAG_NUM && [PAPUtility checkForPreIphone5]){
         [self moveKeyboardWhenSizingForOldIphones];
     }
 }
@@ -295,7 +295,7 @@
     [self.projectTitle.textContainer setLineBreakMode:NSLineBreakByClipping];
     
     [self.projectGoal setAutocorrectionType:UITextAutocorrectionTypeNo];
-    [self.projectGoal.textContainer setMaximumNumberOfLines:4];
+    [self.projectGoal.textContainer setMaximumNumberOfLines:2];
     [self.projectGoal.textContainer setLineBreakMode:NSLineBreakByClipping];
 }
 

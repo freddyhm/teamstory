@@ -17,7 +17,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.photoHeaderView = [[PAPPhotoHeaderView alloc] initWithFrame:CGRectMake(11.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, photoHeaderViewHeight) buttons:PAPPhotoHeaderButtonsDefault];
+        self.photoHeaderView = [[PAPPhotoHeaderView alloc] initWithFrame:CGRectMake(11.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, photoHeaderViewHeight) buttons:PAPPhotoHeaderButtonsDefault type:@"activityPoints"];
         self.photoHeaderView.delegate = self;
         [self addSubview:self.photoHeaderView];
         
