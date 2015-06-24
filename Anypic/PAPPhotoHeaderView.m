@@ -120,7 +120,7 @@
     
     [self hideProjectInfoPrefix];
     
-    // change width depending on container size
+    // change width depending on controller creating header
     float containerWidth = type != nil && [type isEqualToString:@"activityPoints"] ? 130.0f : 180.0f;
     
     self.projContainer = [[UILabel alloc] initWithFrame:CGRectMake(self.projInfoLabel.frame.origin.x + self.projInfoLabel.frame.size.width + 2.0f, self.projInfoLabel.frame.origin.y, containerWidth, self.projInfoLabel.frame.size.height)];
