@@ -24,6 +24,7 @@ typedef enum {
  @param buttons A bitmask specifying the interaction elements which are enabled in the view
  */
 - (id)initWithFrame:(CGRect)frame buttons:(PAPPhotoHeaderButtons)otherButtons;
+- (id)initWithFrame:(CGRect)frame buttons:(PAPPhotoHeaderButtons)otherButtons type:(NSString *)headerType;
 - (void)setUserForHeaderView:(PFUser *)auser;
 - (void)setForActivityPointView:(PFUser *)aUser;
 - (void)setPhoto:(PFObject *)aPhoto;
