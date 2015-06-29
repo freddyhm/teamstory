@@ -106,7 +106,7 @@
     [self.activityPoints addGestureRecognizer:tapActivity];
     
     // set activity count
-    NSNumber *initActivityPointCount = [[AtMention sharedAtMention] activityPoints];
+    NSNumber *initActivityPointCount = [[ActivityPointSystem sharedActivityPointSystem] activityPoints];
     self.activityPoints.text = [initActivityPointCount stringValue];
     
     // flag to track and trigger animation
