@@ -90,7 +90,6 @@
     // photo button
     self.photoPostButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, photoPostImage.size.width, photoPostImage.size.height)];
     [self.photoPostButton setBackgroundImage:photoPostImage forState:UIControlStateNormal];
-    [self.photoPostButton setBackgroundImage:[UIImage imageNamed:@"Moment Popup_selected.png"] forState:UIControlStateSelected];
     [self.photoPostButton addTarget:self action:@selector(cameraButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
     [self.photoPostView addSubview:self.photoPostButton];
@@ -109,7 +108,6 @@
     
     self.thoughtPostButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, thoughtPostImage.size.width, thoughtPostImage.size.height)];
     [self.thoughtPostButton setBackgroundImage:thoughtPostImage forState:UIControlStateNormal];
-    [self.thoughtPostButton setBackgroundImage:[UIImage imageNamed:@"Thought Popup_selected.png"] forState:UIControlStateSelected];
     [self.thoughtPostButton addTarget:self action:@selector(thoughtButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
     [self.thoughtPostView addSubview:self.thoughtPostButton];
@@ -130,7 +128,6 @@
     
     self.linkPostButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, linkPostImage.size.width, linkPostImage.size.height)];
     [self.linkPostButton setBackgroundImage:linkPostImage forState:UIControlStateNormal];
-    [self.linkPostButton setBackgroundImage:[UIImage imageNamed:@"Link Popup_selected.png"] forState:UIControlStateSelected];
     [self.linkPostButton addTarget:self action:@selector(linkPostButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.linkPostView addSubview:self.linkPostButton];
     
