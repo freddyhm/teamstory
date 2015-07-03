@@ -394,6 +394,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
     
+    NSLog(@"%@", object);
+    
     static NSString *CellIdentifier = @"ActivityCell";
 
     PAPActivityCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
