@@ -7,6 +7,7 @@
 //
 
 #import "ProfileSettingViewController.h"
+#import "PAPTabBarController.h"
 
 #define LOCATION_TAG_NUM 3
 #define BIO_TAG_NUM 4
@@ -70,6 +71,11 @@
     return self;
 }
 
+
+-(void)viewWillDisappear:(BOOL)animated {
+    ((PAPTabBarController *)self.tabBarController).postMenuButton.hidden = YES;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -123,6 +129,7 @@
     
     // flightrecorder event analytics
     [[FlightRecorder sharedInstance] trackEventWithCategory:@"edit_profile_screen" action:@"viewed_edit_profile" label:@"" value:@""];
+    ((PAPTabBarController *)self.tabBarController).postMenuButton.hidden = YES;
 }
 
 - (void)didReceiveMemoryWarning {
