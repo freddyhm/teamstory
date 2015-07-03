@@ -179,6 +179,8 @@ Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                                                                 
                                                                 var follower = results[i].get("fromUser");
                                                                 
+                                                                if(follower){
+                                                                
                                                                 // notify follower
                                                                 var installationQuery = new Parse.Query(Parse.Installation);
                                                                 installationQuery.equalTo("user", follower);
@@ -256,8 +258,9 @@ Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                                                                                         }, function(error) {
                                                                                         throw "Push Error" + error.code + " : " + error.message;
                                                                                         });
-                                                                }
-                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
                                                                 },
                                                                 error: function(error) {
                                                                 
