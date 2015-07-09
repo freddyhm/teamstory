@@ -505,7 +505,7 @@ static NSString *const freddy_account = @"rblDQcdZcY";
 - (void)displayPoints{
     
     // get activity points for profile owner
-    NSNumber *activityPoints = self.isProfileOwner ? [[AtMention sharedAtMention] activityPoints] : [self.user objectForKey:@"activityPoints"];
+    NSNumber *activityPoints = self.isProfileOwner ? [[ActivityPointSystem sharedActivityPointSystem] activityPoints] : [self.user objectForKey:@"activityPoints"];
     
     if(activityPoints){
         [self.firstHeaderViewController.pointCountLabel setText:[activityPoints stringValue]];

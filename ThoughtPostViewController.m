@@ -10,11 +10,7 @@
 #import "SVProgressHUD.h"
 #import "PAPTabBarController.h"
 #import "PAPHomeViewController.h"
-#import "Mixpanel.h"
-#import <FlightRecorder/FlightRecorder.h>
-#import "ParseFacebookUtils/PFFacebookUtils.h"
 #include <stdlib.h>
-#import "AtMention.h"
 #import "AppDelegate.h"
 
 @interface ThoughtPostViewController ()
@@ -27,7 +23,9 @@
 @property (nonatomic, strong) NSMutableArray *suggOptions;
 @property (nonatomic, strong) UIBarButtonItem *rightNavButton;
 @property (nonatomic, strong) NSString *placeholderSuggestion;
+@property (nonatomic, strong) NSString *postType;
 @property int prevBkgdIndex;
+@property BOOL isSaveButtonShownOnStart;
 
 @end
 
@@ -47,6 +45,8 @@
     
     [super viewDidLoad];
     
+    self.postType = @"thought";
+    
     // set color of nav bar to custom grey
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:(79/255.0) green:(91/255.0) blue:(100/255.0) alpha:(0.0/255.0)];
@@ -58,24 +58,10 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_cancel.png"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonAction:)];
     [self.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
     
+    self.isSaveButtonShownOnStart = NO;
     self.rightNavButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"button_done.png"] style:UIBarButtonItemStylePlain target:self action:@selector(saveEdit:)];
     self.rightNavButton.tintColor = [UIColor whiteColor];
     
-    
-    
-    // set colors
-    UIColor *black = [UIColor colorWithRed:255.0f/255.0f green:255.0f/255.0f blue:255.0f/255.0f alpha:1];
-    UIColor *gray = [UIColor colorWithRed:42.0f/255.0f green:42.0f/255.0f blue:42.0f/255.0f alpha:1];
-    UIColor *green = [UIColor colorWithRed:75.0f/255.0f green:82.0f/255.0f blue:95.0f/255.0f alpha:1];
-    UIColor *teal = [UIColor colorWithRed:98.0f/255.0f green:195.0f/255.0f blue:112.0f/255.0f alpha:1];
-    UIColor *orange = [UIColor colorWithRed:132.0f/255.0f green:198.0f/255.0f blue:201.0f/255.0f alpha:1];
-    UIColor *redOrange = [UIColor colorWithRed:249.0f/255.0f green:175.0f/255.0f blue:54.0f/255.0f alpha:1];
-    UIColor *purple = [UIColor colorWithRed:243.0f/255.0f green:137.0f/255.0f blue:100.0f/255.0f alpha:1];
-    UIColor *pink = [UIColor colorWithRed:125.0f/255.0f green:112.0f/255.0f blue:186.0f/255.0f alpha:1];
-    UIColor *blue = [UIColor colorWithRed:237.0f/255.0f green:86.0f/255.0f blue:118.0f/255.0f alpha:1];
-    UIColor *brown = [UIColor colorWithRed:144.0f/255.0f green:190.0f/255.0f blue:222.0f/255.0f alpha:1];
-    UIColor *olive = [UIColor colorWithRed:85.0f/255.0f green:67.0f/255.0f blue:72.0f/255.0f alpha:1];
-    UIColor *white = [UIColor colorWithRed:107.0f/255.0f green:163.0f/255.0f blue:104.0f/255.0f alpha:1];
     
     // personalize suggestion, check if name is not empty
     NSString *userName = ![[[PFUser currentUser] objectForKey:@"displayName"] isEqualToString:@" "] ? [[PFUser currentUser] objectForKey:@"displayName"] : @"You";
@@ -105,15 +91,16 @@
     // suggestion selection
     self.suggOptions = [[NSMutableArray alloc]initWithObjects:sugg1, sugg2, sugg3, sugg4, sugg5, sugg6, sugg7, sugg8, sugg9, sugg10, sugg11, sugg12, sugg13, sugg14, sugg15, sugg16, sugg17, sugg18, sugg19, nil];
     
-    // color selection
-    self.bkgdOptions = [[NSMutableArray alloc]initWithObjects:black, gray, green, teal, orange, redOrange, purple, pink, blue, brown, olive, white, nil];
+    // create and set background options
+    [self setBackgroundOptions:[self createBackgroundOptions]];
     
     // random suggestion within selection bounds
-    int randomSuggOption = arc4random_uniform((int)self.suggOptions.count);
-    int randomBkgdOption = arc4random_uniform((int)self.bkgdOptions.count);
+    int randomSuggOption = [self generateRandomNumFromCount:self.suggOptions.count];
+    int randomBkgdOption = [self generateRandomNumFromCount:self.bkgdOptions.count];
     
+    [self setBkgIndex:randomBkgdOption];
     
-    self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:randomBkgdOption];
+    // used to keep track of current background color 
     self.prevBkgdIndex = randomBkgdOption;
     
     UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
@@ -130,8 +117,38 @@
     [self.placeholder setText:[self.suggOptions objectAtIndex:randomSuggOption]];
 
     [self.view addGestureRecognizer:tapOutside];
+}
+
+- (int)generateRandomNumFromCount:(NSUInteger)count{
+    int randomNum = arc4random_uniform((int)count);
+    return randomNum;
+}
+
+- (void)setBkgIndex:(int)index{
+    self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:index];
+}
+
+- (void)setBackgroundOptions:(NSMutableArray *)bkgdOptions{
+    self.bkgdOptions = bkgdOptions;
+}
+
+- (NSMutableArray *)createBackgroundOptions{
     
-    [self updateTextColor];
+    // set colors
+    UIColor *gray = [UIColor colorWithRed:42.0f/255.0f green:42.0f/255.0f blue:42.0f/255.0f alpha:1];
+    UIColor *green = [UIColor colorWithRed:75.0f/255.0f green:82.0f/255.0f blue:95.0f/255.0f alpha:1];
+    UIColor *teal = [UIColor colorWithRed:98.0f/255.0f green:195.0f/255.0f blue:112.0f/255.0f alpha:1];
+    UIColor *orange = [UIColor colorWithRed:132.0f/255.0f green:198.0f/255.0f blue:201.0f/255.0f alpha:1];
+    UIColor *redOrange = [UIColor colorWithRed:249.0f/255.0f green:175.0f/255.0f blue:54.0f/255.0f alpha:1];
+    UIColor *purple = [UIColor colorWithRed:243.0f/255.0f green:137.0f/255.0f blue:100.0f/255.0f alpha:1];
+    UIColor *pink = [UIColor colorWithRed:125.0f/255.0f green:112.0f/255.0f blue:186.0f/255.0f alpha:1];
+    UIColor *blue = [UIColor colorWithRed:237.0f/255.0f green:86.0f/255.0f blue:118.0f/255.0f alpha:1];
+    UIColor *olive = [UIColor colorWithRed:85.0f/255.0f green:67.0f/255.0f blue:72.0f/255.0f alpha:1];
+    
+    // color selection
+    NSMutableArray *bckgdColorOptions = [[NSMutableArray alloc]initWithObjects:gray, green, teal, orange, redOrange, purple, pink, blue, olive, nil];
+    
+    return bckgdColorOptions;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -147,6 +164,11 @@
     
     // flightrecorder analytics
     [[FlightRecorder sharedInstance] trackPageView:@"Thought"];
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
 }
 
 #pragma mark - UITextViewDelegate & TextView related methods
@@ -178,12 +200,18 @@
 
 - (void)textViewDidChange:(UITextView *)textView {
     
-    self.navigationItem.rightBarButtonItem = [textView.text isEqualToString:@""] ? nil : self.rightNavButton;
-
+    if(!self.isSaveButtonShownOnStart){
+        [self showSaveButtonAfterEditingTextView:textView];
+    }
+    
     // align cursor vertically dynamically
     [self verticalAlignTextview];
 }
 
+- (void)showSaveButtonOnStart{
+    self.navigationItem.rightBarButtonItem = self.rightNavButton;
+    self.isSaveButtonShownOnStart = YES;
+}
 
 
 -(void)verticalAlignTextview{
@@ -200,161 +228,119 @@
     [self.view endEditing:YES];
 }
 
-
-#pragma mark - ()
-
-- (void)updateTextColor{
-    
-    // check if current bkgd is white or not, change arrows and text color
-    if(self.prevBkgdIndex != 0){
-        self.thoughtTextView.textColor = [UIColor whiteColor];
-        [self.leftNavSelector setImage:[UIImage imageNamed:@"arrows_left_white.png"] forState:UIControlStateNormal];
-        [self.rightNavSelector setImage:[UIImage imageNamed:@"arrows_right_white.png"] forState:UIControlStateNormal];
-        [self.placeholder setTextColor:[UIColor whiteColor]];
-    }else{
-        self.thoughtTextView.textColor = [UIColor blackColor];
-        [self.leftNavSelector setImage:[UIImage imageNamed:@"arrows_left.png"] forState:UIControlStateNormal];
-        [self.rightNavSelector setImage:[UIImage imageNamed:@"arrows_right.png"] forState:UIControlStateNormal];
-        [self.placeholder setTextColor:[UIColor grayColor]];
-    }
+- (void)showSaveButtonAfterEditingTextView:(UITextView *)textView{
+    self.navigationItem.rightBarButtonItem = [textView.text isEqualToString:@""] ? nil : self.rightNavButton;
 }
 
 
-- (IBAction)rightNav:(id)sender{
-    
-    // update index, reset to first if reached end of array
-    int currentBkgdIndex = self.prevBkgdIndex + 1;
-    
-    if(currentBkgdIndex < [self.bkgdOptions count]){
-        self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:currentBkgdIndex];
-        self.prevBkgdIndex = currentBkgdIndex;
-    }else{
-        self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:0];
-        self.prevBkgdIndex = 0;
-    }
-    
-    // change present text color
-    [self updateTextColor];
-}
+#pragma mark - Saving Related Methods
 
-- (IBAction)leftNav:(id)sender{
+- (void)trackAnalytics:(NSString *)type{
     
-    // update index, set to last if reached end of array
-    int currentBkgdIndex = self.prevBkgdIndex - 1;
+    NSString *postedAction = [type isEqualToString:@"thought"] ? @"Posted Thought" : @"Posted Project";
+    NSString *eventTitle = [type isEqualToString:@"thought"] ? @"posted-thought" : @"posted-project";
+    NSString *postCountTitle = [type isEqualToString:@"thought"] ? @"Thought Count" : @"Project Count";
     
-    if(currentBkgdIndex > -1){
-        self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:currentBkgdIndex];
-        self.prevBkgdIndex = currentBkgdIndex;
-    }else{
-        self.prevBkgdIndex = (int)[self.bkgdOptions count] - 1;
-        self.backgroundImg.backgroundColor = [self.bkgdOptions objectAtIndex:self.prevBkgdIndex];
-    }
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": postedAction}];
     
-    // change present text color
-    [self updateTextColor];
-}
-
-- (void)saveEdit:(id)sender {
+    // intercom analytics
+    [Intercom logEventWithName:eventTitle metaData:@{@"":@""}];
     
-    // increment activity point
-    [[ActivityPointSystem sharedActivityPointSystem] addPointToActivityCount:@"post"];
-
-    if(self.thoughtTextView.contentSize.height < self.thoughtTextView.frame.size.height){
-        
-        // disable save button so duplicates are not sent by mistake
-        [self.rightNavButton setEnabled:NO];
+    // track selected color and current suggestion
+    [[Mixpanel sharedInstance] track:@"Uploaded Color Index" properties:@{@"Type": [[NSNumber numberWithInt:self.prevBkgdIndex] stringValue]}];
     
-        // dismiss keyboard before taking picture
-        [self dismissKeyboard];
-        
-        // mixpanel analytics
-        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type": @"Core", @"Action": @"Posted Thought"}];
-        
-        // intercom analytics
-        [Intercom logEventWithName:@"posted-thought" metaData:@{@"":@""}];
-
-        
-        // track selected color and current suggestion   
-        [[Mixpanel sharedInstance] track:@"Uploaded Color Index" properties:@{@"Type": [[NSNumber numberWithInt:self.prevBkgdIndex] stringValue]}];
-        
+    if([type isEqualToString:@"thought"]){
         [[Mixpanel sharedInstance] track:@"Uploaded Suggestion" properties:@{@"Type": self.placeholder.text}];
-        
-        // increment user thought count by one
-        [[Mixpanel sharedInstance].people increment:@"Thought Count" by:[NSNumber numberWithInt:1]];
-       
-        // add label to background image for picture
-        [self.backgroundImg addSubview:self.thoughtTextView];
-        
-        // create image
-        UIGraphicsBeginImageContextWithOptions(self.backgroundImg.bounds.size, NO, 0.0); //retina res
-        [self.backgroundImg.layer renderInContext:UIGraphicsGetCurrentContext()];
-        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
-        [SVProgressHUD show];
-        
-        [self shouldUploadImage:image block:^(BOOL completed) {
-            
-            if(completed){
-                if (!self.photoFile || !self.thumbnailFile) {
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
-                    [alert show];
-                    return;
-                }
-                
-                // both files have finished uploading
-                
-                // create a photo object
-                PFObject *photo = [PFObject objectWithClassName:kPAPPhotoClassKey];
-                [photo setObject:[PFUser currentUser] forKey:kPAPPhotoUserKey];
-                [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
-                [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
-                [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
-                [photo setObject:@"thought" forKey:kPAPPhotoType];
-                [photo setObject:[NSNumber numberWithInt:0] forKey:@"discoverCount"];
-                
-                // photos are public, but may only be modified by the user who uploaded them
-                PFACL *photoACL = [PFACL ACLWithUser:[PFUser currentUser]];
-                [photoACL setPublicReadAccess:YES];
-                photo.ACL = photoACL;
-                
-                // Request a background execution task to allow us to finish uploading the photo even if the app is backgrounded
-                self.photoPostBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-                    [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
-                }];
-                
-                // save
-                [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                    if (succeeded) {
-                        
-                        NSLog(@"Photo uploaded");
-                        
-                        // create activity for posted
-                        [PAPUtility posted:photo];
-                        
-                        [[PAPCache sharedCache] setAttributesForPhoto:photo likers:[NSArray array] commenters:[NSArray array] likedByCurrentUser:NO];
-                        [[NSNotificationCenter defaultCenter] postNotificationName:PAPTabBarControllerDidFinishEditingPhotoNotification object:photo];
-                    } else {
-                        NSLog(@"Photo failed to save: %@", error);
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
-                        [alert show];
-                    }
-                    [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
-                }];
-                
-                [self exitPost];
-            }else{
-                [SVProgressHUD dismiss];
-                [self.rightNavButton setEnabled:YES];
-            }
-        }];
-        
-    }else{
-        
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:[NSString stringWithFormat:@"Your post is too long"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alert show];
-        
     }
+    
+    // increment user thought count by one
+    [[Mixpanel sharedInstance].people increment:postCountTitle by:[NSNumber numberWithInt:1]];
+    
+}
+
+- (BOOL)validateBeforeSaving{
+    
+    BOOL isValid = YES;
+    
+    // make sure our content is always smaller than the actual frame
+    if(self.thoughtTextView.contentSize.height > self.thoughtTextView.frame.size.height){
+        isValid = NO;
+        [self showFailValidateBeforeSaveAlert];
+    }
+    
+    return isValid;
+}
+
+
+
+- (UIImageView *)buildImageWithSubviews:(UIImageView *)backgroundView{
+    [backgroundView addSubview:self.thoughtTextView];
+    return backgroundView;
+}
+
+- (UIImage *)createImage:(UIImageView *)backgroundView{
+    // create image
+    UIGraphicsBeginImageContextWithOptions(backgroundView.bounds.size, NO, 0.0); //retina res
+    [backgroundView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
+
+// overwritten by inerited objects
+- (void)addExtraValueToPost:(PFObject *)post{}
+
+- (PFObject *)createPostObj:(NSString *)type{
+    // create a photo object
+    PFObject *photo = [PFObject objectWithClassName:kPAPPhotoClassKey];
+    [photo setObject:[PFUser currentUser] forKey:kPAPPhotoUserKey];
+    [photo setObject:self.photoFile forKey:kPAPPhotoPictureKey];
+    [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
+    [photo setObject:self.thumbnailFile forKey:kPAPPhotoThumbnailKey];
+    [photo setObject:type forKey:kPAPPhotoType];
+    [photo setObject:[NSNumber numberWithInt:0] forKey:@"discoverCount"];
+    
+    // photos are public, but may only be modified by the user who uploaded them
+    PFACL *photoACL = [PFACL ACLWithUser:[PFUser currentUser]];
+    [photoACL setPublicReadAccess:YES];
+    photo.ACL = photoACL;
+    
+    [self addExtraValueToPost:photo];
+
+    return photo;
+}
+
+- (void)savePostObj:(PFObject *)post{
+    
+    // Request a background execution task to allow us to finish uploading the photo even if the app is backgrounded
+    self.photoPostBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
+    }];
+    
+    // save
+    [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            
+            NSLog(@"Photo uploaded");
+            
+            // create activity for posted
+            [PAPUtility posted:post];
+            
+            // set cache
+            [[PAPCache sharedCache] setAttributesForPhoto:post likers:[NSArray array] commenters:[NSArray array] likedByCurrentUser:NO];
+            [[NSNotificationCenter defaultCenter] postNotificationName:PAPTabBarControllerDidFinishEditingPhotoNotification object:post];
+            
+        } else {
+            
+            // error alert box
+            NSLog(@"Post failed to save: %@", error);
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+            [alert show];
+        }
+        [[UIApplication sharedApplication] endBackgroundTask:self.photoPostBackgroundTaskId];
+    }];
 }
 
 - (void)shouldUploadImage:(UIImage *)anImage block:(void (^)(BOOL))completed
@@ -396,6 +382,56 @@
     }];
 }
 
+
+- (void)saveEdit:(id)sender {
+    
+    // increment activity point
+    [[ActivityPointSystem sharedActivityPointSystem] addPointToActivityCount:@"post"];
+    
+    // track analytics
+    [self trackAnalytics:self.postType];
+    
+    if([self validateBeforeSaving]){
+        
+        // disable save button so duplicates are not sent by mistake
+        [self.rightNavButton setEnabled:NO];
+    
+        // dismiss keyboard before taking picture
+        [self dismissKeyboard];
+        
+        // add label to background image for picture
+        UIImage *renderedBkgdImg = [self createImage:[self buildImageWithSubviews:self.backgroundImg]];
+        
+        [SVProgressHUD show];
+        
+        // prepare image for upload
+        [self shouldUploadImage:renderedBkgdImg block:^(BOOL completed) {
+            
+            if(completed){
+                if (!self.photoFile || !self.thumbnailFile) {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+                    [alert show];
+                    return;
+                }
+                
+                // create, save post, and exit
+                [self savePostObj:[self createPostObj:self.postType]];
+                [self exitPost];
+            }else{
+                [SVProgressHUD dismiss];
+                [self.rightNavButton setEnabled:YES];
+            }
+        }];
+    }
+}
+
+- (void)showFailValidateBeforeSaveAlert{
+    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:[NSString stringWithFormat:@"Your post is too long"] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    [alert show];
+}
+
+#pragma mark - Navigation Related Methods
+
 - (void)exitPost{
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] settingRootViewAsTabBarController];
 }
@@ -406,9 +442,33 @@
 }
 
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
+- (IBAction)rightNav:(id)sender{
+    
+    // update index, reset to first if reached end of array
+    int currentBkgdIndex = self.prevBkgdIndex + 1;
+    
+    if(currentBkgdIndex < [self.bkgdOptions count]){
+        [self setBkgIndex:currentBkgdIndex];
+        self.prevBkgdIndex = currentBkgdIndex;
+    }else{
+        [self setBkgIndex:0];
+        self.prevBkgdIndex = 0;
+    }
 }
+
+- (IBAction)leftNav:(id)sender{
+    
+    // update index, set to last if reached end of array
+    int currentBkgdIndex = self.prevBkgdIndex - 1;
+    
+    if(currentBkgdIndex > -1){
+        [self setBkgIndex:currentBkgdIndex];
+        self.prevBkgdIndex = currentBkgdIndex;
+    }else{
+        self.prevBkgdIndex = (int)[self.bkgdOptions count] - 1;
+        [self setBkgIndex:self.prevBkgdIndex];
+    }
+}
+
 
 @end

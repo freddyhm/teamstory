@@ -190,7 +190,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
     NSString *installationId = [[PFInstallation currentInstallation] objectId];
     
     if(installationId != nil){
-        [Crashlytics setUserIdentifier:installationId];
+        [[Crashlytics sharedInstance] setUserIdentifier:installationId];
         [[Mixpanel sharedInstance] registerSuperProperties:@{@"InstallationObjId": installationId}];
     }
     
@@ -1032,6 +1032,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
         }
     }
     
+    
     // if we have a local copy of this photo, this won't result in a network fetch
     [targetPhoto fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if (!error) {
@@ -1040,7 +1041,8 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
             [self.tabBarController setSelectedViewController:homeNavigationController];
             
             PAPPhotoDetailsViewController *detailViewController;
-            NSString *sourceType;
+            
+            NSString *sourceType = @"";
             
             if([type isEqualToString:kPAPPushPayloadActivityCommentKey]){
                 sourceType = @"notificationComment";
@@ -1051,7 +1053,7 @@ static NSString *const FLIGHT_RECORDER_SECRET_KEY = @"bb15b7b3-0990-4eea-b531-17
             }else if([type isEqualToString:kPAPPushPayloadActivityPostKey]){
                 sourceType = @"notificationPost";
             }
-            
+                        
             detailViewController = [[PAPPhotoDetailsViewController alloc] initWithPhoto:object source:sourceType];
             
             // hides tab bar so we can add custom keyboard

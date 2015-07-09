@@ -9,8 +9,6 @@
 #import "TTTTimeIntervalFormatter.h"
 #import "MBProgressHUD.h"
 #import "PAPwebviewViewController.h"
-#import "Mixpanel.h"
-#import "AtMention.h"
 
 #define baseHorizontalOffset 0.0f
 #define baseWidth 320.0f
@@ -85,6 +83,12 @@ static CGSize expectedSize;
 @property (nonatomic, strong) UIButton *shareButton;
 @property BOOL isPhotographer;
 
+// project related properties
+@property (nonatomic, strong) UILabel *projInfoLabel;
+@property (nonatomic, strong) UILabel *projContainer;
+@property (nonatomic, strong) PFObject *projPost;
+@property (nonatomic, strong) PFUser *user;
+
 // Redeclare for edit
 @property (nonatomic, strong, readwrite) PFUser *photographer;
 
@@ -127,6 +131,10 @@ static TTTTimeIntervalFormatter *timeFormatter;
         
         self.photo = aPhoto;
         self.photographer = [self.photo objectForKey:kPAPPhotoUserKey];
+        
+        /* used in project feature - need to refactor creating an external object to create proper label */
+        self.user = self.photographer;
+            
         self.likeUsers = nil;
         
         // check if current user is pic author
@@ -418,24 +426,35 @@ static TTTTimeIntervalFormatter *timeFormatter;
             [self.userInfoLabel setFont:[UIFont systemFontOfSize:11.0f]];
             [self.userInfoLabel setBackgroundColor:[UIColor clearColor]];
             [self.userInfoLabel setAdjustsFontSizeToFitWidth:YES];
-            
-            NSString *industry = [object objectForKey:@"industry"];
-            NSString *location = [object objectForKey:@"location"];
-            NSString *userInfoSeparator = @" • ";
-            NSString *allInfo = @"";
-            
-            if(industry && location){
-                allInfo = [[industry stringByAppendingString:userInfoSeparator] stringByAppendingString:location];
-            }else if(!industry && location){
-                allInfo = location;
-            }else if(industry && !location){
-                allInfo = location;
-            }
-            
-            [self.userInfoLabel setText:allInfo];
-            
-            
             [self.nameHeaderView addSubview:self.userInfoLabel];
+            
+            [self hideExtraInfo];
+            
+            /* need to refactor this */
+            
+            self.projInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.userInfoLabel.frame.origin.x, self.userInfoLabel.frame.origin.y, 60.0f, self.userInfoLabel.frame.size.height)];
+            [self.projInfoLabel setTextColor:self.userInfoLabel.textColor];
+            [self.projInfoLabel setFont:self.userInfoLabel.font];
+            self.projInfoLabel.text = @"Working on ";
+            [self.nameHeaderView addSubview:self.projInfoLabel];
+            
+            [self hideProjectInfoPrefix];
+            
+            self.projContainer = [[UILabel alloc] initWithFrame:CGRectMake(self.projInfoLabel.frame.origin.x + self.projInfoLabel.frame.size.width + 2.0f, self.projInfoLabel.frame.origin.y, 180.0f, self.projInfoLabel.frame.size.height)];
+            [self.projContainer setTextColor:[UIColor colorWithRed:74.0f/255.0f green:144.0f/255.0f blue:226.0f/255.0f alpha:1]];
+            [self.projContainer setFont:self.projInfoLabel.font];
+            self.projContainer.text = @"";
+            [self.projContainer setUserInteractionEnabled:YES];
+            
+            // create tap gesture and add to project container
+            UITapGestureRecognizer *tapProject = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(didTapProjectLinkAction)];
+            [self.projContainer addGestureRecognizer:tapProject];
+            [self.nameHeaderView addSubview:self.projContainer];
+            
+            [self hideProjectInfo];
+            
+            [self checkForActiveProject];
+            
         }];
     
         /*
@@ -642,6 +661,109 @@ static TTTTimeIntervalFormatter *timeFormatter;
     
     NSString *modifiedString = [NSString stringWithFormat:@"<iframe width='305' height='200' src='//www.youtube.com/embed/%@' frameborder='0' allowfullscreen></iframe>", substringForFirstMatch];
     return modifiedString;
+}
+
+- (void)setExtraInfo{
+    NSString *industry = [self.user objectForKey:@"industry"];
+    NSString *location = [self.user objectForKey:@"location"];
+    NSString *separator = @" • ";
+    NSString *allInfo = @"";
+    
+    if(industry.length > 0 && location.length > 0){
+        allInfo = [[industry stringByAppendingString:separator] stringByAppendingString:location];
+    }else if(industry.length == 0 && location.length > 0){
+        allInfo = location;
+    }else if(industry.length > 0 && location.length == 0){
+        allInfo = industry;
+    }
+    
+    [self.userInfoLabel setText:allInfo];
+}
+
+#pragma mark - Project Methods
+
+- (void)checkForActiveProject{
+    
+    NSString *activeProject = [self.user objectForKey:@"projectTitle"];
+    BOOL hasProject = [activeProject length] > 0;
+    [self replaceUserInfoWithProject:hasProject];
+}
+
+- (void)replaceUserInfoWithProject:(BOOL)willReplace{
+    if(willReplace){
+        [self hideExtraInfo];
+        [self showProjectInfoPrefix];
+        [self setActiveProject];
+    }else{
+        [self hideActiveProject];
+        [self setExtraInfo];
+        [self showExtraInfo];
+    }
+}
+
+- (void)hideExtraInfo{
+    [self.userInfoLabel setHidden:YES];
+}
+
+- (void)showExtraInfo{
+    [self.userInfoLabel setHidden:NO];
+}
+
+- (void)hideActiveProject{
+    [self hideProjectInfoPrefix];
+    [self hideProjectInfo];
+}
+
+- (void)setActiveProject{
+    // need to set post for project link before we display project title
+    [self getProjectPost];
+}
+
+- (void)getProjectPost{
+    
+    // get post object from server
+    PFQuery *postQuery = [PFQuery queryWithClassName:@"Photo"];
+    [postQuery whereKey:@"projectTitle" equalTo:[self.user objectForKey:@"projectTitle"]];
+    [postQuery whereKey:@"type" equalTo:@"project"];
+    [postQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if(!error && object){
+            self.projPost = object;
+            [self getProjectTitle];
+        }
+    }];
+}
+
+- (void)getProjectTitle{
+    NSString *projectTitle = [self.user objectForKey:@"projectTitle"];
+    [self setProjectTitleContainer:projectTitle];
+}
+
+- (void)setProjectTitleContainer:(NSString *)projTitle{
+    self.projContainer.text = projTitle;
+    [self showProjectInfo];
+}
+
+- (void)showProjectInfoPrefix{
+    [self.projInfoLabel setHidden:NO];
+}
+
+- (void)hideProjectInfoPrefix{
+    [self.projInfoLabel setHidden:YES];
+}
+
+- (void)showProjectInfo{
+    [self.projContainer setHidden:NO];
+}
+
+- (void)hideProjectInfo{
+    [self.projContainer setHidden:YES];
+}
+
+/* Inform delegate that the project link was tapped */
+- (void)didTapProjectLinkAction{
+    if (delegate && [delegate respondsToSelector:@selector(photoDetailsHeaderView:didTapProjectLink:)]) {
+        [delegate photoDetailsHeaderView:self didTapProjectLink:self.projPost];
+    }
 }
 
 

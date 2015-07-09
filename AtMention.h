@@ -11,7 +11,6 @@
 @interface AtMention : NSObject
 
 @property (nonatomic, strong) NSMutableArray *userList;
-@property (nonatomic, strong) NSNumber *activityPoints;
 + (id)sharedAtMention;
 - (void)getAllUsers:(void (^)(NSArray *objectsm, BOOL succeeded, NSError *error))completionBlock;
 

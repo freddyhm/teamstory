@@ -51,6 +51,7 @@ enum ActionSheetTags {
 @property (nonatomic, strong) UIView *dimView;
 @property (nonatomic, strong) UIView *hideCommentsView;
 @property (nonatomic, strong) NSString *twitterName;
+@property (nonatomic, strong) NSString *postType;
 @property CGFloat previousKbHeight;
 @end
 
@@ -84,13 +85,17 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     if (self) {
         
         self.photo = aPhoto;
-        
         self.likersQueryInProgress = NO;
         
         // notification or activity item source
         self.source = source;
         
         self.postDetails = [[UITableView alloc] init];
+        
+        // set our post type
+        if([self isPostObjPresent]){
+            self.postType = [self.photo objectForKey:@"type"];
+        }
     }
     return self;
 }
@@ -111,11 +116,14 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     [super viewDidLoad];
     
+    // get post type
+    NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
+    
     // mixpanel analytics
-    [[Mixpanel sharedInstance] track:@"Viewed Details" properties:@{@"Type":[self.photo objectForKey:@"type"], @"Source": self.source}];
+    [[Mixpanel sharedInstance] track:@"Viewed Details" properties:@{@"Type":postType, @"Source": self.source}];
     
     // flightrecorder event analytics
-    [[FlightRecorder sharedInstance] trackEventWithCategory:@"details_screen" action:@"viewing_post_details" label:[self.photo objectForKey:@"type"] value:self.source];
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"details_screen" action:@"viewing_post_details" label:postType value:self.source];
     
     [self.postDetails setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     self.postDetails.delegate = self;
@@ -124,12 +132,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     [self.postDetails setContentInset:UIEdgeInsetsMake(0, 0, 50, 0)];
     [self.view addSubview:self.postDetails];
     
-    
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     [self.navigationItem.titleView setUserInteractionEnabled:YES];
-    
-    UITapGestureRecognizer *tapNavTitle = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollToTop)];
-    [self.navigationItem.titleView addGestureRecognizer:tapNavTitle];
     
     // set current default back button to nil and set new one
     self.navigationItem.leftBarButtonItem = nil;
@@ -145,32 +149,99 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     texturedBackgroundView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg.png"]];
     self.postDetails.backgroundView = texturedBackgroundView;
     
-    
-    NSString *caption_local = [self.photo objectForKey:@"caption"];
-    
-    if ([caption_local length] > 0) {
+    // make sure both post object and its type are set before setting post details
+    if(![self isPostObjPresent] || ![self isPostTypePresent]){
+        [self setAnalyticsForMissingPostObj];
+        [self showWarningPostNotLoadedProperly];
+    }else{
         
-        CGSize maximumLabelSize = CGSizeMake(320.0f - 7.5f * 4, MAXFLOAT);
+        [self setAnalyticsWithSource:self.source];
+
+        UITapGestureRecognizer *tapNavTitle = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollToTop)];
+        [self.navigationItem.titleView addGestureRecognizer:tapNavTitle];
         
+        NSString *caption_local = [self.photo objectForKey:@"caption"];
         
-        CGSize expectedSize = ([caption_local boundingRectWithSize:maximumLabelSize options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]} context:nil]).size;
-        
-        // Set table header
-        if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"] && ([[self.photo objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[self.photo objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound)) {
-            self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 246.0f + expectedSize.height + 56.0f + 15.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
-        } else {
-            self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 351.0f + expectedSize.height + 43.0f + 37.0f + 15.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
-        }
-        self.headerView.delegate = self;
-        self.postDetails.tableHeaderView = self.headerView;
-    } else {
-        if ([[self.photo objectForKey:@"type"] isEqualToString:@"link"] && ([[self.photo objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[self.photo objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound)) {
-                self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 307.0f) photo:self.photo description:nil navigationController:self.navigationController];
+        if ([caption_local length] > 0) {
+            
+            CGSize maximumLabelSize = CGSizeMake(320.0f - 7.5f * 4, MAXFLOAT);
+            
+            
+            CGSize expectedSize = ([caption_local boundingRectWithSize:maximumLabelSize options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]} context:nil]).size;
+            
+            // Set table header
+            if ([self.postType isEqualToString:@"link"] && ([[self.photo objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[self.photo objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound)) {
+                self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 246.0f + expectedSize.height + 56.0f + 15.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
             } else {
-                self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:[PAPPhotoDetailsHeaderView rectForView] photo:self.photo description:nil navigationController:self.navigationController];
+                self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 351.0f + expectedSize.height + 43.0f + 37.0f + 15.0f) photo:self.photo description:caption_local navigationController:self.navigationController];
             }
-        self.headerView.delegate = self;
-        self.postDetails.tableHeaderView = self.headerView;
+            self.headerView.delegate = self;
+            self.postDetails.tableHeaderView = self.headerView;
+        } else {
+            if ([self.postType isEqualToString:@"link"] && ([[self.photo objectForKey:@"link"] rangeOfString:@"youtube.com"].location != NSNotFound || [[self.photo objectForKey:@"link"] rangeOfString:@"youtu.be"].location != NSNotFound)) {
+                    self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, [UIScreen mainScreen].bounds.size.width, 307.0f) photo:self.photo description:nil navigationController:self.navigationController];
+                } else {
+                    self.headerView = [[PAPPhotoDetailsHeaderView alloc] initWithFrame:[PAPPhotoDetailsHeaderView rectForView] photo:self.photo description:nil navigationController:self.navigationController];
+                }
+            self.headerView.delegate = self;
+            self.postDetails.tableHeaderView = self.headerView;
+        }
+        
+        self.dimView = [[UIView alloc] init];
+        self.dimView.hidden = YES;
+        self.dimView.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.8f];
+        [self.view addSubview:self.dimView];
+        
+        self.autocompleteTableView = [[UITableView alloc] init];
+        self.autocompleteTableView.delegate = self;
+        self.autocompleteTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        self.autocompleteTableView.dataSource = self;
+        self.autocompleteTableView.scrollEnabled = YES;
+        self.autocompleteTableView.hidden = YES;
+        [self.view addSubview:self.autocompleteTableView];
+        
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLikedOrUnlikedPhoto:) name:PAPUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:self.photo];
+        
+        UITapGestureRecognizer *tapOutside = [[UITapGestureRecognizer alloc]
+                                              initWithTarget:self
+                                              action:@selector(dismissKeyboard)];
+        
+        [self.view addGestureRecognizer:tapOutside];
+        
+        
+        // set comment block view for spinner
+        float tableCommentVerticalPos = self.postDetails.tableHeaderView.frame.origin.y + self.postDetails.tableHeaderView.frame.size.height;
+        
+        // make this tall enough to cover all comments
+        float tableCommentHeight = self.postDetails.frame.size.height * 4;
+        self.hideCommentsView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, tableCommentVerticalPos, 320.0f, tableCommentHeight)];
+        [self.hideCommentsView setBackgroundColor:[UIColor whiteColor]];
+        
+        // set spinner
+        self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.postDetails.frame.size.width/2 - 50,0,100,100)];
+        self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+        self.spinner.color = [UIColor colorWithRed:86.0f/255.0f green:185.0f/255.0f blue:157.0f/255.0f alpha:1.0f];
+        [self.hideCommentsView addSubview:self.spinner];
+        
+        self.spinner.hidesWhenStopped = YES;
+        self.postDetails.showsVerticalScrollIndicator = NO;
+        
+        [self loadObjects];
+        
+        self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
+        self.customKeyboard.delegate = self;
+        [self.customKeyboard setTextViewPosition:64];
+        [self.customKeyboard setPostType:self.postType];
+        [self.customKeyboard.sendButton setTitle:@"Post" forState:UIControlStateNormal];
+        self.customKeyboard.view.layer.zPosition = 100;
+        [self.customKeyboard setBackgroundTable:self.postDetails];
+        [self.view addSubview:self.customKeyboard.view];
+        
+        // at mention
+        self.filteredArray = [[NSMutableArray alloc]init];
+        self.atmentionUserArray = [[NSMutableArray alloc] init];
+        self.autocompleteTableView.backgroundColor = [UIColor clearColor];
     }
     
     self.dimView = [[UIView alloc] init];
@@ -215,8 +286,6 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     
     [self loadObjects];
     
-    NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
-    
     self.customKeyboard = [[CustomKeyboardViewController alloc] initWithNibName:@"CustomKeyboardViewController" bundle:nil];
     self.customKeyboard.delegate = self;
     [self.customKeyboard setTextViewPosition:64];
@@ -230,18 +299,19 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     self.filteredArray = [[NSMutableArray alloc]init];
     self.atmentionUserArray = [[NSMutableArray alloc] init];
     self.autocompleteTableView.backgroundColor = [UIColor clearColor];
-
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    [self.headerView reloadLikeBar];
-    
-    // we will only hit the network if we have no cached data for this photo
-    BOOL hasCachedLikers = [[PAPCache sharedCache] attributesForPhoto:self.photo] != nil;
-    if (!hasCachedLikers) {
-        [self loadLikers];
+    // make sure both post object and its type are set before setting post details
+    if([self isPostObjPresent] && [self isPostTypePresent]){
+        [self.headerView reloadLikeBar];
+        // we will only hit the network if we have no cached data for this photo
+        BOOL hasCachedLikers = [[PAPCache sharedCache] attributesForPhoto:self.photo] != nil;
+        if (!hasCachedLikers) {
+            [self loadLikers];
+        }
     }
 }
 
@@ -420,11 +490,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 
 - (void)keyboardDidBeginEditing{
     
-    // get post type
-    NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
-    
     // mixpanel analytics
-    [[Mixpanel sharedInstance] track:@"Started Writing Comment" properties:@{@"Post Type" : postType}];
+    [[Mixpanel sharedInstance] track:@"Started Writing Comment" properties:@{@"Post Type" : self.postType}];
 }
 
 - (BOOL)keyboardShouldChangeTextInRange:(NSRange)range replacementText:(NSString*)text{
@@ -547,11 +614,8 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
         // increment activity point
         [[ActivityPointSystem sharedActivityPointSystem] addPointToActivityCount:@"comment"];
         
-        // get post type
-        NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
-        
         // mixpanel analytics
-        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Commented", @"Post Type" : postType}];
+        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Core", @"Action": @"Commented", @"Post Type" : self.postType}];
         
         // intercome analytics
         [Intercom logEventWithName:@"commented" metaData:@{@"":@""}];
@@ -641,12 +705,9 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
     NSNumber *likeCommentCount = [numberFormatter numberFromString:cellLikeCommentCount.text];
     
     if (liked) {
-                
-        // get post type
-        NSString *postType = [self.photo objectForKey:@"type"] != nil ? [self.photo objectForKey:@"type"] : @"";
         
         // mixpanel analytics
-        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Liked Comment", @"Post Type": postType}];
+        [[Mixpanel sharedInstance] track:@"Engaged" properties:@{@"Type":@"Passive", @"Action": @"Liked Comment", @"Post Type": self.postType}];
     
         // increment user like comment count by one
         [[Mixpanel sharedInstance].people increment:@"Like Comment Count" by:[NSNumber numberWithInt:1]];
@@ -698,6 +759,20 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 }
 
 #pragma mark - PAPPhotoDetailsHeaderViewDelegate
+
+- (void)openPhotoDetailView:(PFObject *)post {
+    
+    PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:post source:@"detailsHeaderLink"];
+    
+    // hides tab bar so we can add custom keyboard
+    photoDetailsVC.hidesBottomBarWhenPushed = YES;
+    
+    [self.navigationController pushViewController:photoDetailsVC animated:YES];
+}
+
+-(void)photoDetailsHeaderView:(PAPPhotoDetailsHeaderView *)headerView didTapProjectLink:(PFObject *)post{
+    [self openPhotoDetailView:post];
+}
 
 -(void)photoDetailsHeaderView:(PAPPhotoDetailsHeaderView *)headerView didTapUserButton:(UIButton *)button user:(PFUser *)user {
     [self shouldPresentAccountViewForUser:user];
@@ -888,11 +963,26 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             }
         }
         
-        // Delete photo
+        // Delete project title associated with photo in user table if present
+        [self deleteProjectIfPresent:self.current_photo];
+        
+        // Delete post
         [self.current_photo deleteEventually];
     }];
     [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:[self.current_photo objectId]];
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - Project Related Methods
+
+- (void)deleteProjectIfPresent:(PFObject *)post{
+    
+    NSUInteger postLength = [[post objectForKey:@"projectTitle"] length];
+    
+    if(postLength > 0){
+        [[PFUser currentUser] removeObjectForKey:@"projectTitle"];
+        [[PFUser currentUser] saveEventually];
+    }
 }
 
 #pragma mark - UIActionSheetDelegate
@@ -904,12 +994,12 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
             actionSheet.delegate = self;
             
             if ([self currentUserOwnsPhoto]){
-                [actionSheet setTitle:NSLocalizedString(@"Are you sure you want to delete this photo?", nil)];
+                [actionSheet setTitle:NSLocalizedString(@"Are you sure you want to delete this post?", nil)];
                 [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Yes, delete post", nil)]];
                 [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
                 actionSheet.tag = deletePhoto;
             } else {
-                [actionSheet addButtonWithTitle:@"I don't like this photo"];
+                [actionSheet addButtonWithTitle:@"I don't like this post"];
                 [actionSheet addButtonWithTitle:@"Spam or scam"];
                 [actionSheet addButtonWithTitle:@"Nudity or pornography"];
                 [actionSheet addButtonWithTitle:@"Graphic violence"];
@@ -1101,6 +1191,51 @@ static const CGFloat kPAPCellInsetWidth = 7.5f;
 - (NSString *) getTwitterNameFromURL:(NSString *)url{
     NSString *twitterAccount = [url substringFromIndex:20];
     return twitterAccount;
+}
+
+- (BOOL)isPostObjPresent{
+    return self.photo != nil;
+}
+
+- (BOOL)isPostTypePresent{
+    return self.postType != nil;
+}
+
+- (void)showWarningPostNotLoadedProperly{
+    
+    UIAlertView *postLoadingFailAlert = [[UIAlertView alloc]initWithTitle:@"Error!" message:@"The post could not be loaded properly. Please let Teamstory know by message or email info@teamstoryapp.com" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+    
+    [postLoadingFailAlert show];
+}
+
+- (void)setAnalyticsWithSource:(NSString *)source{
+    if([source length] > 0){
+        // mixpanel analytics
+        [[Mixpanel sharedInstance] track:@"Viewed Details" properties:@{@"Type":self.postType, @"Source": source}];
+        
+        // flightrecorder event analytics
+        [[FlightRecorder sharedInstance] trackEventWithCategory:@"details_screen" action:@"viewing_post_details" label:self.postType value:source];
+    }else{
+        [self setAnalyticsForMissingSource];
+    }
+}
+
+- (void)setAnalyticsForMissingPostObj{
+    // mixpanel analytics
+      [[Mixpanel sharedInstance] track:@"Error" properties:@{@"Type": @"Missing Post Object In Details Or Type"}];
+    // flightrecorder event analytics
+     [[FlightRecorder sharedInstance] trackEventWithCategory:@"details_screen" action:@"error_missing_post_obj_or_type" label:@"" value:@""];
+}
+
+- (void)setAnalyticsForMissingSource{
+    // mixpanel analytics
+    [[Mixpanel sharedInstance] track:@"Error" properties:@{@"Type": @"Missing Source In Details"}];
+    // flightrecorder event analytics
+    [[FlightRecorder sharedInstance] trackEventWithCategory:@"details_screen" action:@"error_missing_source" label:@"" value:@""];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    [self backButtonAction:nil];
 }
 
 

@@ -106,7 +106,7 @@
     [self.activityPoints addGestureRecognizer:tapActivity];
     
     // set activity count
-    NSNumber *initActivityPointCount = [[AtMention sharedAtMention] activityPoints];
+    NSNumber *initActivityPointCount = [[ActivityPointSystem sharedActivityPointSystem] activityPoints];
     self.activityPoints.text = [initActivityPointCount stringValue];
     
     // flag to track and trigger animation
@@ -340,8 +340,8 @@
     [[Mixpanel sharedInstance] identify:currentUserObjectId];
     
     // info for crashes
-    [Crashlytics setUserName:displayName];
-    [Crashlytics setUserEmail:email];
+    [[Crashlytics sharedInstance] setUserName:displayName];
+    [[Crashlytics sharedInstance] setUserEmail:email];
     
     // mixpanel analytics - Sets user
     [[Mixpanel sharedInstance].people set:@{@"$name": displayName, @"$email": email, @"industry": industry, @"created": createdAt, @"userObjId": currentUserObjectId}];

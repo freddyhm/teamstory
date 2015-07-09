@@ -262,7 +262,7 @@ enum ActionSheetTags {
     actionSheet.tag = MainActionSheetTag;
     
     if ([self currentUserOwnsPhoto]) {
-        [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Delete Photo"]];
+        [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:@"Delete Post"]];
     } else {
         [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Report Inappropriate", nil)]];
     }
@@ -286,11 +286,30 @@ enum ActionSheetTags {
             }
         }
         
-        // Delete photo
+        // Delete project title associated with photo in user table if present
+        [self deleteProjectIfPresent:self.current_photo];
+        
+        // Delete post
         [self.current_photo deleteEventually];
     }];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:PAPPhotoDetailsViewControllerUserDeletedPhotoNotification object:[self.current_photo objectId]];
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)deleteProjectIfPresent:(PFObject *)post{
+    
+    NSUInteger postLength = [[post objectForKey:@"projectTitle"] length];
+    
+    if(postLength > 0){
+        [post removeObjectForKey:@"projectTitle"];
+        [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if(succeeded){
+                [[PFUser currentUser] removeObjectForKey:@"projectTitle"];
+                [[PFUser currentUser] saveEventually];
+            }
+        }];
+    }
 }
 
 - (void) shareButton:(PFUser *)shareUser setPhoto:(PFObject *)photo {
@@ -807,6 +826,10 @@ enum ActionSheetTags {
     [self.navigationController pushViewController:accountViewController animated:YES];
 }
 
+- (void)photoHeaderView:(PAPPhotoHeaderView *)photoHeaderView didTapProjectLink:(PFObject *)post{
+    [self openPhotoDetailView:post];
+}
+
 #pragma mark - PostFooterView Delegate
 
 - (void)postFooterView:(PostFooterView *)postFooterView didTapLikePhotoButton:(UIButton *)button photo:(PFObject *)photo {
@@ -887,7 +910,7 @@ enum ActionSheetTags {
 
 - (void)openPhotoDetailView:(PFObject *)photo {
     
-    PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"commentButton"];
+    PAPPhotoDetailsViewController *photoDetailsVC = [[PAPPhotoDetailsViewController alloc] initWithPhoto:photo source:@"timelineHeaderLink"];
     
     // hides tab bar so we can add custom keyboard
     photoDetailsVC.hidesBottomBarWhenPushed = YES;
@@ -905,12 +928,12 @@ enum ActionSheetTags {
             actionSheet.delegate = self;
             
             if ([self currentUserOwnsPhoto]){
-                [actionSheet setTitle:NSLocalizedString(@"Are you sure you want to delete this photo?", nil)];
+                [actionSheet setTitle:NSLocalizedString(@"Are you sure you want to delete this post?", nil)];
                 [actionSheet setDestructiveButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Yes, delete post", nil)]];
                 [actionSheet setCancelButtonIndex:[actionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)]];
                 actionSheet.tag = deletePhoto;
             } else {
-                [actionSheet addButtonWithTitle:@"I don't like this photo"];
+                [actionSheet addButtonWithTitle:@"I don't like this post"];
                 [actionSheet addButtonWithTitle:@"Spam or scam"];
                 [actionSheet addButtonWithTitle:@"Nudity or pornography"];
                 [actionSheet addButtonWithTitle:@"Graphic violence"];

@@ -1,3 +1,28 @@
+Parse.Cloud.job("addDefaultTypeToPosts", function(request, status) {
+                // Set up to modify user data
+                Parse.Cloud.useMasterKey();
+                
+                var photo = Parse.Object.extend("Photo");
+                var query = new Parse.Query(photo);
+                query.doesNotExist("type");
+                query.limit("1000");
+                query.find({
+                           success: function(results) {
+                             // Do something with the returned Parse.Object values
+                             for (var i = 0; i < results.length; i++) {
+                               var emptyTypePhoto = results[i];
+                               emptyTypePhoto.set("type", "picture");
+                               emptyTypePhoto.save();
+                             }
+                           },
+                           error: function(error) {
+                           }
+                           });
+                
+                
+});
+
+
 Parse.Cloud.job("photoCount", function(request, status) {
                 // Set up to modify user data
                 Parse.Cloud.useMasterKey();
@@ -179,6 +204,8 @@ Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                                                                 
                                                                 var follower = results[i].get("fromUser");
                                                                 
+                                                                if(follower){
+                                                                
                                                                 // notify follower
                                                                 var installationQuery = new Parse.Query(Parse.Installation);
                                                                 installationQuery.equalTo("user", follower);
@@ -256,8 +283,9 @@ Parse.Cloud.job("notifyFollowersJob", function(request, status) {
                                                                                         }, function(error) {
                                                                                         throw "Push Error" + error.code + " : " + error.message;
                                                                                         });
-                                                                }
-                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
                                                                 },
                                                                 error: function(error) {
                                                                 
@@ -813,4 +841,4 @@ Parse.Cloud.define ('incrementCounter', function(request, response) {
                                   }
                                   });
                     }
-                    });x
+                    });

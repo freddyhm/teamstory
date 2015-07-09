@@ -6,7 +6,7 @@
 
 @interface PAPUtility : NSObject
 
-
++ (BOOL)checkForPreIphone5;
 + (void)captureScreenGA:(NSString *)screen;
 + (void)posted:(id)post;
 + (UIImage *)resizeImage:(UIImage *)image width:(int)w height:(int)h;
